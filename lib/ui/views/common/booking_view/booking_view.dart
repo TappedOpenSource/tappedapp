@@ -309,6 +309,15 @@ class BookingView extends StatelessWidget {
                             )
                           : const SizedBox.shrink(),
                 ),
+                const SliverToBoxAdapter(
+                  child: Text(
+                    'to modify the booking, please contact support@tapped.ai',
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                      color: Colors.grey,
+                    ),
+                  ),
+                ),
                 if (booking.status != BookingStatus.canceled)
                   SliverToBoxAdapter(
                     child: CupertinoButton(
@@ -332,6 +341,9 @@ class BookingView extends StatelessWidget {
                   const SliverToBoxAdapter(
                     child: SizedBox.shrink(),
                   ),
+                const SliverToBoxAdapter(
+                  child: SizedBox(height: 20),
+                ),
               ],
             ),
           ),
