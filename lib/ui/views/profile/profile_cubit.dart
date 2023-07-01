@@ -12,6 +12,7 @@ import 'package:intheloopapp/domains/models/badge.dart' as badge;
 import 'package:intheloopapp/domains/models/booking.dart';
 import 'package:intheloopapp/domains/models/loop.dart';
 import 'package:intheloopapp/domains/models/option.dart';
+import 'package:intheloopapp/domains/models/review.dart';
 import 'package:intheloopapp/domains/models/user_model.dart';
 
 part 'profile_state.dart';
@@ -174,6 +175,62 @@ class ProfileCubit extends Cubit<ProfileState> {
 
   Booking _getLatestBooking(Booking b1, Booking b2) {
     return b1.startTime.isAfter(b2.startTime) ? b1 : b2;
+  }
+
+  Future<void> getLatestReview() async {
+    final trace = logger.createTrace('getLatestReview');
+    await trace.start();
+    try {
+      final performerReviews =
+          await databaseRepository.getPerformerReviewsByPerformerId(
+        visitedUser.id,
+        limit: 1,
+      );
+      final bookerReviews =
+          await databaseRepository.getBookerReviewsByBookerId(
+        visitedUser.id,
+        limit: 1,
+      );
+
+      final latestPerformerReview = performerReviews.isNotEmpty
+          ? Some(performerReviews.first)
+          : const None<PerformerReview>();
+
+      final latestBookerReview = bookerReviews.isNotEmpty
+          ? Some(bookerReviews.first)
+          : const None<BookerReview>();
+
+      final _ = switch ((latestPerformerReview, latestBookerReview)) {
+        (None(), None()) => emit(state.copyWith(latestReview: const None())),
+        (Some(:final value), None()) =>
+          emit(state.copyWith(latestReview: Some(value))),
+        (None(), Some(:final value)) => emit(
+            state.copyWith(
+              latestReview: Some(value),
+            ),
+          ),
+        (Some(), Some()) => () {
+            final latest = _getLatestReview(
+              latestPerformerReview.unwrap,
+              latestBookerReview.unwrap,
+            );
+            emit(state.copyWith(latestReview: Some(latest)));
+          }(),
+      };
+    } catch (e, s) {
+      logger.error(
+        'fetchMoreReviews error',
+        error: e,
+        stackTrace: s,
+      );
+      // emit(state.copyWith(reviewsStatus: ReviewssStatus.failure));
+    } finally {
+      await trace.stop();
+    }
+  }
+
+  Review _getLatestReview(Review r1, Review r2) {
+    return r1.timestamp.isAfter(r2.timestamp) ? r1 : r2;
   }
 
   Future<void> initBadges({bool clearBadges = true}) async {

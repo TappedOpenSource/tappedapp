@@ -72,6 +72,20 @@ class PushBookings extends NavigationEvent {
   List<Object> get props => [userId];
 }
 
+class PushReviews extends NavigationEvent {
+  const PushReviews({
+    required this.userId,
+  });
+
+  final String userId;
+
+  @override
+  String toString() => 'PushReviews { userId : $userId }';
+
+  @override
+  List<Object> get props => [userId];
+}
+
 class PushSettings extends NavigationEvent {
   const PushSettings();
 
