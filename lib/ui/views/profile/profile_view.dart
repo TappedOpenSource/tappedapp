@@ -23,6 +23,7 @@ import 'package:intheloopapp/ui/widgets/profile_view/loops_sliver.dart';
 import 'package:intheloopapp/ui/widgets/profile_view/more_options_button.dart';
 import 'package:intheloopapp/ui/widgets/profile_view/opportunity_sliver.dart';
 import 'package:intheloopapp/ui/widgets/profile_view/request_to_book.dart';
+import 'package:intheloopapp/ui/widgets/profile_view/reviews_sliver.dart';
 import 'package:intheloopapp/ui/widgets/profile_view/social_media_icons.dart';
 import 'package:intheloopapp/utils.dart';
 
@@ -304,6 +305,12 @@ class ProfileView extends StatelessWidget {
               if (visitedUser.epkUrl.isSome) const EPKButton(),
             ],
           ),
+        ),
+        const SliverToBoxAdapter(
+          child: SizedBox(height: 12),
+        ),
+        const SliverToBoxAdapter(
+          child: ReviewsSliver(),
         ),
         const SliverToBoxAdapter(
           child: SizedBox(height: 12),
