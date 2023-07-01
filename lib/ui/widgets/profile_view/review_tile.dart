@@ -31,6 +31,7 @@ class ReviewTile extends StatelessWidget {
           Some(:final value) => () {
               return ListTile(
                 leading: UserAvatar(
+                  pushId: Some(value.id),
                   imageUrl: value.profilePicture,
                   radius: 20,
                 ),
