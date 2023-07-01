@@ -40,7 +40,7 @@ final _leadersRef = _firestore.collection('leaderboard');
 final _opportunitiesRef = _firestore.collection('opportunities');
 final _blockerRef = _firestore.collection('blockers');
 // final _blockeeRef = _firestore.collection('blockees');
-final _reviewsRef = _firestore.collection('bookerReviews');
+final _reviewsRef = _firestore.collection('reviews');
 
 const verifiedBadgeId = '0aa46576-1fbe-4312-8b69-e2fef3269083';
 
