@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:enum_to_string/enum_to_string.dart';
 import 'package:intheloopapp/app_logger.dart';
+import 'package:intheloopapp/domains/models/option.dart';
 import 'package:intheloopapp/utils.dart';
 
 sealed class Review {
@@ -44,7 +45,7 @@ sealed class Review {
   final String id;
   final String bookerId;
   final String performerId;
-  final String bookingId;
+  final Option<String> bookingId;
 
   final DateTime timestamp;
 
@@ -80,7 +81,9 @@ final class BookerReview extends Review {
       id: doc.id,
       bookerId: doc.get('bookerId') as String,
       performerId: doc.get('performerId') as String,
-      bookingId: doc.get('bookingId') as String,
+      bookingId: Option.fromNullable(
+        doc.getOrElse('bookingId', null) as String?,
+      ),
       timestamp: (doc.get('timestamp') as Timestamp).toDate(),
       overallRating: doc.get('overallRating') as int,
       overallReview: doc.get('overallReview') as String,
@@ -123,7 +126,9 @@ final class PerformerReview extends Review {
       id: doc.id,
       bookerId: doc.get('bookerId') as String,
       performerId: doc.get('performerId') as String,
-      bookingId: doc.get('bookingId') as String,
+      bookingId: Option.fromNullable(
+        doc.getOrElse('bookingId', null) as String?,
+      ),
       timestamp: (doc.get('timestamp') as Timestamp).toDate(),
       overallRating: doc.get('overallRating') as int,
       overallReview: doc.get('overallReview') as String,
