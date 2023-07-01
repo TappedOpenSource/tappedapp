@@ -13,6 +13,7 @@ import 'package:intheloopapp/domains/models/booking.dart';
 import 'package:intheloopapp/domains/models/comment.dart';
 import 'package:intheloopapp/domains/models/loop.dart';
 import 'package:intheloopapp/domains/models/option.dart';
+import 'package:intheloopapp/domains/models/review.dart';
 import 'package:intheloopapp/domains/models/service.dart';
 import 'package:intheloopapp/domains/models/user_model.dart';
 import 'package:intheloopapp/utils.dart';
@@ -39,6 +40,7 @@ final _leadersRef = _firestore.collection('leaderboard');
 final _opportunitiesRef = _firestore.collection('opportunities');
 final _blockerRef = _firestore.collection('blockers');
 // final _blockeeRef = _firestore.collection('blockees');
+final _reviewsRef = _firestore.collection('bookerReviews');
 
 const verifiedBadgeId = '0aa46576-1fbe-4312-8b69-e2fef3269083';
 
@@ -48,6 +50,9 @@ const feedSubcollection = 'userFeed';
 
 const blockerSubcollection = 'blockedUsers';
 const blockeeSubcollection = 'blockedByUsers';
+
+const bookerReviewsSubcollection = 'bookerReviews';
+const performerReviewsSubcollection = 'performerReviews';
 
 /// Database implementation using Firebase's FirestoreDB
 class FirestoreDatabaseImpl extends DatabaseRepository {
@@ -1955,7 +1960,7 @@ class FirestoreDatabaseImpl extends DatabaseRepository {
         .delete();
   }
 
-  @override 
+  @override
   Future<bool> isBlocked({
     required String blockedUserId,
     required String currentUserId,
@@ -2001,6 +2006,257 @@ class FirestoreDatabaseImpl extends DatabaseRepository {
         'html': reportHtml,
       },
     });
+  }
+
+  @override
+  Future<void> createBookerReview(BookerReview review) async {
+    await _analytics.logEvent(
+      name: 'create_booker_review',
+      parameters: {
+        'reviewer': review.performerId,
+        'reviewee': review.bookerId,
+        'type': review.type,
+      },
+    );
+
+    await _reviewsRef
+        .doc(review.bookerId)
+        .collection(bookerReviewsSubcollection)
+        .doc(review.id)
+        .set(review.toMap());
+  }
+
+  @override
+  Future<void> createPerformerReview(PerformerReview review) async {
+    await _analytics.logEvent(
+      name: 'create_performer_review',
+      parameters: {
+        'reviewer': review.bookerId,
+        'reviewee': review.performerId,
+        'type': review.type,
+      },
+    );
+
+    await _reviewsRef
+        .doc(review.performerId)
+        .collection(performerReviewsSubcollection)
+        .doc(review.id)
+        .set(review.toMap());
+  }
+
+  @override
+  Future<Option<BookerReview>> getBookerReviewById({
+    required String revieweeId,
+    required String reviewId,
+  }) async {
+    try {
+      final reviewSnapshot = await _reviewsRef
+          .doc(revieweeId)
+          .collection(bookerReviewsSubcollection)
+          .doc(reviewId)
+          .get();
+      return reviewSnapshot.exists
+          ? Some(BookerReview.fromDoc(reviewSnapshot))
+          : const None();
+    } catch (e, s) {
+      logger.error(
+        'error getting booker review by id',
+        error: e,
+        stackTrace: s,
+      );
+      return const None();
+    }
+  }
+
+  @override
+  Future<List<BookerReview>> getBookerReviewsByBookerId(
+    String bookerId, {
+    int limit = 20,
+    String? lastReviewId,
+  }) async {
+    try {
+      final reviewsQuery = _reviewsRef
+          .doc(bookerId)
+          .collection(bookerReviewsSubcollection)
+          .orderBy('timestamp', descending: true)
+          .limit(limit);
+
+      if (lastReviewId != null) {
+        final lastReviewSnapshot = await _reviewsRef
+            .doc(bookerId)
+            .collection(bookerReviewsSubcollection)
+            .doc(lastReviewId)
+            .get();
+        reviewsQuery.startAfterDocument(lastReviewSnapshot);
+      }
+
+      final reviewsSnapshot = await reviewsQuery.get();
+      return reviewsSnapshot.docs.map(BookerReview.fromDoc).toList();
+    } catch (e, s) {
+      logger.error(
+        'error getting booker reviews by booker id',
+        error: e,
+        stackTrace: s,
+      );
+      return [];
+    }
+  }
+
+  @override
+  Stream<BookerReview> getBookerReviewsByBookerIdObserver(
+    String bookerId, {
+    int limit = 20,
+  }) async* {
+    try {
+      final reviewsSnapshotObserver = _reviewsRef
+          .doc(bookerId)
+          .collection(bookerReviewsSubcollection)
+          .orderBy('timestamp', descending: true)
+          .limit(limit)
+          .snapshots();
+
+      final reviewsObserver = reviewsSnapshotObserver.map((event) {
+        return event.docChanges
+            .where(
+          (DocumentChange<Map<String, dynamic>> element) =>
+              element.type == DocumentChangeType.added,
+        )
+            .map((DocumentChange<Map<String, dynamic>> element) async {
+          final reviewId = element.doc.id;
+          // print('REVIEW ID { $reviewId }');
+
+          final reviewSnapshot = await _reviewsRef
+              .doc(bookerId)
+              .collection(bookerReviewsSubcollection)
+              .doc(reviewId)
+              .get();
+
+          return BookerReview.fromDoc(reviewSnapshot);
+        });
+      }).flatMap(Stream.fromIterable);
+
+      await for (final review in reviewsObserver) {
+        try {
+          yield await review;
+        } catch (error, stack) {
+          yield* Stream.error(error, stack);
+        }
+      }
+    } catch (e, s) {
+      logger.error(
+        'error getting booker reviews by booker id',
+        error: e,
+        stackTrace: s,
+      );
+      yield* const Stream.empty();
+    }
+  }
+
+  @override
+  Future<Option<PerformerReview>> getPerformerReviewById({
+    required String revieweeId,
+    required String reviewId,
+  }) async {
+    try {
+      final reviewSnapshot = await _reviewsRef
+          .doc(revieweeId)
+          .collection(performerReviewsSubcollection)
+          .doc(reviewId)
+          .get();
+      return reviewSnapshot.exists
+          ? Some(PerformerReview.fromDoc(reviewSnapshot))
+          : const None();
+    } catch (e, s) {
+      logger.error(
+        'error getting performer review by id',
+        error: e,
+        stackTrace: s,
+      );
+      return const None();
+    }
+  }
+
+  @override
+  Future<List<PerformerReview>> getPerformerReviewsByPerformerId(
+    String performerId, {
+    int limit = 20,
+    String? lastReviewId,
+  }) async {
+    try {
+      final reviewsQuery = _reviewsRef
+          .doc(performerId)
+          .collection(performerReviewsSubcollection)
+          .orderBy('timestamp', descending: true)
+          .limit(limit);
+
+      if (lastReviewId != null) {
+        final lastReviewSnapshot = await _reviewsRef
+            .doc(performerId)
+            .collection(performerReviewsSubcollection)
+            .doc(lastReviewId)
+            .get();
+        reviewsQuery.startAfterDocument(lastReviewSnapshot);
+      }
+
+      final reviewsSnapshot = await reviewsQuery.get();
+      return reviewsSnapshot.docs.map(PerformerReview.fromDoc).toList();
+    } catch (e, s) {
+      logger.error(
+        'error getting performer reviews by performer id',
+        error: e,
+        stackTrace: s,
+      );
+      return [];
+    }
+  }
+
+  @override
+  Stream<PerformerReview> getPerformerReviewsByPerformerIdObserver(
+    String performerId, {
+    int limit = 20,
+  }) async* {
+    try {
+      final reviewsSnapshotObserver = _reviewsRef
+          .doc(performerId)
+          .collection(performerReviewsSubcollection)
+          .orderBy('timestamp', descending: true)
+          .limit(limit)
+          .snapshots();
+
+      final reviewsObserver = reviewsSnapshotObserver.map((event) {
+        return event.docChanges
+            .where(
+          (DocumentChange<Map<String, dynamic>> element) =>
+              element.type == DocumentChangeType.added,
+        )
+            .map((DocumentChange<Map<String, dynamic>> element) async {
+          final reviewId = element.doc.id;
+          // print('REVIEW ID { $reviewId }');
+          final reviewSnapshot = await _reviewsRef
+              .doc(performerId)
+              .collection(performerReviewsSubcollection)
+              .doc(reviewId)
+              .get();
+
+          return PerformerReview.fromDoc(reviewSnapshot);
+        });
+      }).flatMap(Stream.fromIterable);
+
+      await for (final review in reviewsObserver) {
+        try {
+          yield await review;
+        } catch (error, stack) {
+          yield* Stream.error(error, stack);
+        }
+      }
+    } catch (e, s) {
+      logger.error(
+        'error getting performer reviews by performer id',
+        error: e,
+        stackTrace: s,
+      );
+      yield* const Stream.empty();
+    }
   }
 }
 

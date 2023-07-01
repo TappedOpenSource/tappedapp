@@ -4,6 +4,7 @@ import 'package:intheloopapp/domains/models/booking.dart';
 import 'package:intheloopapp/domains/models/comment.dart';
 import 'package:intheloopapp/domains/models/loop.dart';
 import 'package:intheloopapp/domains/models/option.dart';
+import 'package:intheloopapp/domains/models/review.dart';
 import 'package:intheloopapp/domains/models/service.dart';
 // import 'package:intheloopapp/domains/models/tag.dart';
 import 'package:intheloopapp/domains/models/user_model.dart';
@@ -265,5 +266,41 @@ abstract class DatabaseRepository {
   Future<void> reportUser({
     required UserModel reported,
     required UserModel reporter,
+  });
+
+  // Performer Review related stuff
+  Future<void> createPerformerReview(
+    PerformerReview review,
+  );
+  Future<Option<PerformerReview>> getPerformerReviewById({
+    required String revieweeId,
+    required String reviewId,
+  });
+  Future<List<PerformerReview>> getPerformerReviewsByPerformerId(
+    String performerId, {
+    int limit = 20,
+    String? lastReviewId,
+  });
+  Stream<PerformerReview> getPerformerReviewsByPerformerIdObserver(
+    String performerId, {
+    int limit = 20,
+  });
+
+  // Booker Review related stuff
+  Future<void> createBookerReview(
+    BookerReview review,
+  );
+  Future<Option<BookerReview>> getBookerReviewById({
+    required String revieweeId,
+    required String reviewId,
+  });
+  Future<List<BookerReview>> getBookerReviewsByBookerId(
+    String bookerId, {
+    int limit = 20,
+    String? lastReviewId,
+  });
+  Stream<BookerReview> getBookerReviewsByBookerIdObserver(
+    String bookerId, {
+    int limit = 20,
   });
 }

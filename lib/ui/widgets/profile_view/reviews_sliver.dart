@@ -4,17 +4,17 @@ import 'package:intheloopapp/domains/models/option.dart';
 import 'package:intheloopapp/domains/navigation_bloc/navigation_bloc.dart';
 import 'package:intheloopapp/ui/themes.dart';
 import 'package:intheloopapp/ui/views/profile/profile_cubit.dart';
-import 'package:intheloopapp/ui/widgets/profile_view/booking_tile.dart';
+import 'package:intheloopapp/ui/widgets/profile_view/review_tile.dart';
 
-class BookingsSliver extends StatelessWidget {
-  const BookingsSliver({super.key});
+class ReviewsSliver extends StatelessWidget {
+  const ReviewsSliver({super.key});
 
   @override
   Widget build(BuildContext context) {
     final nav = context.read<NavigationBloc>();
     return BlocBuilder<ProfileCubit, ProfileState>(
       builder: (context, state) {
-        return switch (state.latestBooking) {
+        return switch (state.latestReview) {
           None() => const SizedBox.shrink(),
           Some(:final value) => () {
               return Column(
@@ -28,13 +28,13 @@ class BookingsSliver extends StatelessWidget {
                     child: GestureDetector(
                       onTap: () {
                         nav.add(
-                          PushBookings(userId: state.visitedUser.id),
+                          PushReviews(userId: state.visitedUser.id),
                         );
                       },
                       child: const Row(
                         children: [
                           Text(
-                            'Booking History',
+                            'Reviews',
                             style: TextStyle(
                               fontSize: 24,
                               fontWeight: FontWeight.bold,
@@ -60,9 +60,8 @@ class BookingsSliver extends StatelessWidget {
                       ),
                     ),
                   ),
-                  BookingTile(
-                    visitedUser: state.visitedUser,
-                    booking: value,
+                  ReviewTile(
+                    review: value,
                   ),
                 ],
               );

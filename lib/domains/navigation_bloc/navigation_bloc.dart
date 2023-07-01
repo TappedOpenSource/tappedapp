@@ -28,6 +28,7 @@ import 'package:intheloopapp/ui/views/onboarding/onboarding_view.dart';
 import 'package:intheloopapp/ui/views/opportunities/interested_view.dart';
 import 'package:intheloopapp/ui/views/profile/profile_view.dart';
 import 'package:intheloopapp/ui/views/profile/profile_view.dart';
+import 'package:intheloopapp/ui/views/reviews/user_reviews_feed.dart';
 import 'package:intheloopapp/ui/views/settings/settings_view.dart';
 import 'package:intheloopapp/ui/widgets/common/forms/location_form/location_form_view.dart';
 import 'package:intheloopapp/ui/widgets/profile_view/service_selection_view.dart';
@@ -160,6 +161,15 @@ class NavigationBloc extends Bloc<NavigationEvent, NavigationState> {
         MaterialPageRoute<UserBookingsFeed>(
           settings: RouteSettings(name: '/bookings/${event.userId}'),
           builder: (context) => UserBookingsFeed(userId: event.userId),
+        ),
+      );
+      emit(state);
+    });
+    on<PushReviews>((event, emit) {
+      navigationKey.currentState?.push(
+        MaterialPageRoute<UserReviewsFeed>(
+          settings: RouteSettings(name: '/reviews/${event.userId}'),
+          builder: (context) => UserReviewsFeed(userId: event.userId),
         ),
       );
       emit(state);

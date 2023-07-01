@@ -60,6 +60,7 @@ class ProfileView extends StatelessWidget {
           ..getLatestLoop()
           ..getLatestOpportunity()
           ..getLatestBooking()
+          ..getLatestReview()
           ..initBadges()
           ..loadIsFollowing(currentUser.id, visitedUser.id)
           ..loadIsBlocked()
@@ -126,6 +127,7 @@ class ProfileView extends StatelessWidget {
               cubit.getLatestLoop(),
               cubit.getLatestOpportunity(),
               cubit.getLatestBooking(),
+              cubit.getLatestReview(),
               cubit.initBadges(),
               cubit.refetchVisitedUser(),
               cubit.loadIsFollowing(currentUser.id, visitedUser.id),
