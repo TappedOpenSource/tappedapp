@@ -68,6 +68,7 @@ dependencies:
   package_info_plus: ^3.0.2
   path: ^1.8.2
   path_provider: ^2.0.2
+  pull_down_button: ^0.9.1
   quiver: ^3.0.1
   rxdart: ^0.27.5
   share_plus: ^6.3.0

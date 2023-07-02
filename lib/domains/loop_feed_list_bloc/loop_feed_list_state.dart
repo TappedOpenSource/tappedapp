@@ -2,25 +2,25 @@ part of 'loop_feed_list_bloc.dart';
 
 class LoopFeedListState extends Equatable {
   const LoopFeedListState({
-    required this.index,
+    required this.feed,
     required this.feedParamsList,
   });
 
-  final List<FeedParams> feedParamsList;
-  final int index;
+  final Map<LoopFeed, FeedParams> feedParamsList;
+  final LoopFeed feed;
 
   @override
   List<Object> get props => [
-        index,
+        feed,
         feedParamsList,
       ];
 
   LoopFeedListState copyWith({
-    int? index,
-    List<FeedParams>? feedParamsList,
+    LoopFeed? feed,
+    Map<LoopFeed, FeedParams>? feedParamsList,
   }) {
     return LoopFeedListState(
-      index: index ?? this.index,
+      feed: feed ?? this.feed,
       feedParamsList: feedParamsList ?? this.feedParamsList,
     );
   }
@@ -30,13 +30,11 @@ class FeedParams {
   FeedParams({
     required this.sourceFunction,
     required this.sourceStream,
-    required this.tabTitle,
-    required this.feedKey,
+    required this.label,
     required this.scrollController,
   });
 
-  final String tabTitle;
-  final String feedKey;
+  final String label;
   final ScrollController scrollController;
   final Future<List<Loop>> Function(
     String currentUserId, {
@@ -49,4 +47,9 @@ class FeedParams {
     int limit,
     bool ignoreCache,
   }) sourceStream;
+}
+
+enum LoopFeed {
+  following,
+  forYou,
 }

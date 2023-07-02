@@ -11,11 +11,11 @@ class ScrollToTop extends LoopFeedListEvent {}
 
 class ChangeFeed extends LoopFeedListEvent {
   const ChangeFeed({
-    required this.index,
+    required this.feed,
   });
 
-  final int index;
+  final LoopFeed feed;
 
   @override
-  List<Object> get props => [index];
+  List<Object> get props => [feed];
 }

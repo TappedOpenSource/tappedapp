@@ -8,27 +8,27 @@ part 'loop_feed_list_state.dart';
 
 class LoopFeedListBloc extends Bloc<LoopFeedListEvent, LoopFeedListState> {
   LoopFeedListBloc({
-    required this.initialIndex,
+    required this.initialFeed,
     required this.feedParamsList,
   }) : super(
           LoopFeedListState(
-            index: initialIndex,
+            feed: initialFeed,
             feedParamsList: feedParamsList,
           ),
         ) {
     on<ScrollToTop>((event, emit) {
-      final tabIndex = state.index;
-      feedParamsList[tabIndex].scrollController.animateTo(
+      final feed = state.feed;
+      feedParamsList[feed]?.scrollController.animateTo(
             0,
             duration: const Duration(milliseconds: 500),
             curve: Curves.linear,
           );
     });
     on<ChangeFeed>((event, emit) {
-      emit(state.copyWith(index: event.index));
+      emit(state.copyWith(feed: event.feed));
     });
   }
 
-  final int initialIndex;
-  final List<FeedParams> feedParamsList;
+  final LoopFeed initialFeed;
+  final Map<LoopFeed, FeedParams> feedParamsList;
 }
