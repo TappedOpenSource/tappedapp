@@ -56,7 +56,10 @@ List<RepositoryProvider<Object>> buildRepositories({
       create: (_) => ImagePickerImpl(),
     ),
     RepositoryProvider<SearchRepository>(
-      create: (_) => AlgoliaSearchImpl(),
+      create: (_) => AlgoliaSearchImpl(
+        applicationId: 'GCNFAI2WB6',
+        apiKey: 'c89ebf37b46a3683405be3ed0901f217',
+      ),
     ),
     RepositoryProvider<DynamicLinkRepository>(
       create: (_) => FirebaseDynamicLinkImpl(),

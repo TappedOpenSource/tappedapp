@@ -9,12 +9,18 @@ final _analytics = FirebaseAnalytics.instance;
 final _fireStore = FirebaseFirestore.instance;
 final usersRef = _fireStore.collection('users');
 final loopsRef = _fireStore.collection('loops');
-final Algolia _algolia = const Algolia.init(
-  applicationId: 'GCNFAI2WB6',
-  apiKey: 'c89ebf37b46a3683405be3ed0901f217',
-).instance;
 
 class AlgoliaSearchImpl extends SearchRepository {
+  AlgoliaSearchImpl({
+    required String applicationId,
+    required String apiKey,
+  }) : algolia = Algolia.init(
+          applicationId: applicationId,
+          apiKey: apiKey,
+        ).instance;
+
+  final Algolia algolia;
+
   Future<UserModel> _getUser(String userId) async {
     final userSnapshot = await usersRef.doc(userId).get();
     final user = UserModel.fromDoc(userSnapshot);
@@ -34,7 +40,7 @@ class AlgoliaSearchImpl extends SearchRepository {
     var results = <AlgoliaObjectSnapshot>[];
 
     try {
-      final query = _algolia.index('prod_loops').query(input)
+      final query = algolia.index('prod_loops').query(input)
         ..filters('deleted:false');
 
       final snap = await query.getObjects();
@@ -93,7 +99,7 @@ class AlgoliaSearchImpl extends SearchRepository {
     try {
       // print(filters.join(' AND '));
 
-      var query = _algolia.index('prod_users').query(input).filters(
+      var query = algolia.index('prod_users').query(input).filters(
             filters.join(' AND '),
           );
 
