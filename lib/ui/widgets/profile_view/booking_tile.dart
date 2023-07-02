@@ -104,6 +104,11 @@ class BookingTile extends StatelessWidget {
                     booking.startTime,
                     allowFromNow: true,
                   ),
+                  style: const TextStyle(
+                    fontSize: 12,
+                    fontWeight: FontWeight.w200,
+                    color: Colors.grey,
+                  ),
                 ),
               ],
             ),
