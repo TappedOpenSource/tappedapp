@@ -15,16 +15,14 @@ class LoopFeedView extends StatefulWidget {
     required this.sourceFunction,
     required this.sourceStream,
     required this.feedKey,
-    required this.nested,
-    required this.header,
+    required this.headerSliver,
+    this.floatingActionButton,
     ScrollController? scrollController,
     super.key,
   }) {
     this.scrollController = scrollController ?? ScrollController();
   }
 
-  final bool nested;
-  final bool header;
   final Future<List<Loop>> Function(
     String currentUserId, {
     int limit,
@@ -37,6 +35,8 @@ class LoopFeedView extends StatefulWidget {
     bool ignoreCache,
   }) sourceStream;
   final String feedKey;
+  final Widget? headerSliver;
+  final FloatingActionButton? floatingActionButton;
 
   late final ScrollController scrollController;
 
@@ -68,14 +68,15 @@ class _LoopFeedViewState extends State<LoopFeedView>
           )..initLoops(),
           child: Scaffold(
             backgroundColor: Theme.of(context).colorScheme.background,
-            appBar: widget.header
+            floatingActionButton: widget.floatingActionButton,
+            appBar: widget.headerSliver == null
                 ? const TappedAppBar(
                     title: 'Loops',
                   )
                 : null,
             body: LoopList(
-              nested: widget.nested,
               feedKey: widget.feedKey,
+              headerSliver: widget.headerSliver,
               scrollController: widget.scrollController,
             ),
           ),

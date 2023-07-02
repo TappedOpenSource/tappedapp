@@ -90,8 +90,6 @@ class NavigationBloc extends Bloc<NavigationEvent, NavigationState> {
         MaterialPageRoute<LoopFeedView>(
           settings: RouteSettings(name: '/loops/${event.userId}'),
           builder: (context) => LoopFeedView(
-            nested: false,
-            header: true,
             sourceFunction: (
               String userId, {
               String? lastLoopId,
@@ -114,6 +112,7 @@ class NavigationBloc extends Bloc<NavigationEvent, NavigationState> {
             },
             feedKey: 'user_loops',
             scrollController: ScrollController(),
+            headerSliver: null,
           ),
         ),
       );
@@ -124,8 +123,6 @@ class NavigationBloc extends Bloc<NavigationEvent, NavigationState> {
         MaterialPageRoute<LoopFeedView>(
           settings: RouteSettings(name: '/opportunities/${event.userId}'),
           builder: (context) => LoopFeedView(
-            nested: false,
-            header: true,
             sourceFunction: (
               String userId, {
               String? lastLoopId,
@@ -151,6 +148,7 @@ class NavigationBloc extends Bloc<NavigationEvent, NavigationState> {
             },
             feedKey: 'user_opportunities',
             scrollController: ScrollController(),
+            headerSliver: null,
           ),
         ),
       );

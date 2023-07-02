@@ -16,8 +16,12 @@ class LoopFeedsListView extends StatelessWidget {
     return BlocBuilder<LoopFeedListBloc, LoopFeedListState>(
       builder: (context, state) {
         final feedParams = state.feedParamsList[state.feed];
-        return Scaffold(
-          backgroundColor: Theme.of(context).colorScheme.background,
+        if (feedParams == null) return const ErrorView();
+        return LoopFeedView(
+          sourceFunction: feedParams.sourceFunction,
+          sourceStream: feedParams.sourceStream,
+          feedKey: EnumToString.convertToString(state.feed),
+          scrollController: feedParams.scrollController,
           floatingActionButton: FloatingActionButton(
             heroTag: 'pushCreateLoopButton',
             child: const Icon(Icons.edit_outlined),
@@ -25,78 +29,58 @@ class LoopFeedsListView extends StatelessWidget {
                   const PushCreateLoop(),
                 ),
           ),
-          body: NestedScrollView(
-            // physics: const ClampingScrollPhysics(),
-            floatHeaderSlivers: true,
-            headerSliverBuilder: (context, innerBoxIsScrolled) {
-              return [
-                SliverAppBar(
-                  floating: true,
-                  forceElevated: innerBoxIsScrolled,
-                  title: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      GestureDetector(
-                        onTap: () async {
-                          await showPullDownMenu(
-                            context: context,
-                            items: state.feedParamsList.entries.map((entry) {
-                              return PullDownMenuItem(
-                                onTap: () {
-                                  context.read<LoopFeedListBloc>().add(
-                                        ChangeFeed(
-                                          feed: entry.key,
-                                        ),
-                                      );
-                                },
-                                title: entry.value.label,
-                              );
-                            }).toList(),
-                            position: const Rect.fromLTWH(
-                              10,
-                              10,
-                              100,
-                              100,
-                            ),
-                          );
-                        },
-                        child: RichText(
-                          text: TextSpan(
-                            children: [
-                              TextSpan(
-                                text: feedParams?.label ?? 'For You',
-                                style: const TextStyle(
-                                  fontSize: 32,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              ),
-                              const WidgetSpan(
-                                child: Icon(
-                                  Icons.arrow_drop_down,
-                                  size: 32,
-                                ),
-                              ),
-                            ],
+          headerSliver: SliverAppBar(
+            floating: true,
+            title: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                GestureDetector(
+                  onTap: () {
+                    showPullDownMenu(
+                      context: context,
+                      items: state.feedParamsList.entries.map((entry) {
+                        return PullDownMenuItem(
+                          onTap: () {
+                            context.read<LoopFeedListBloc>().add(
+                                  ChangeFeed(
+                                    feed: entry.key,
+                                  ),
+                                );
+                          },
+                          title: entry.value.label,
+                        );
+                      }).toList(),
+                      position: const Rect.fromLTWH(
+                        10,
+                        10,
+                        100,
+                        100,
+                      ),
+                    );
+                  },
+                  child: RichText(
+                    text: TextSpan(
+                      children: [
+                        TextSpan(
+                          text: feedParams.label,
+                          style: const TextStyle(
+                            fontSize: 32,
+                            fontWeight: FontWeight.bold,
                           ),
                         ),
-                      ),
-                      const NotificationIconButton(),
-                    ],
+                        const WidgetSpan(
+                          child: Icon(
+                            Icons.arrow_drop_down,
+                            size: 32,
+                          ),
+                        ),
+                      ],
+                    ),
                   ),
                 ),
-              ];
-            },
-            body: feedParams != null
-                ? LoopFeedView(
-                    nested: false,
-                    header: false,
-                    sourceFunction: feedParams.sourceFunction,
-                    sourceStream: feedParams.sourceStream,
-                    feedKey: EnumToString.convertToString(state.feed),
-                    scrollController:
-                        state.feedParamsList[state.feed]?.scrollController,
-                  )
-                : const ErrorView(),
+                const NotificationIconButton(),
+              ],
+            ),
           ),
         );
       },
