@@ -77,35 +77,41 @@ class BookingTile extends StatelessWidget {
           Some(:final value) => value.title,
         };
 
-        return Card(
-          child: ListTile(
-            leading: const Icon(Icons.book),
-            title: visitedUser.id == booking.requesteeId
-                ? const Text(
-                    'Performer',
+        return ListTile(
+          leading: const Icon(Icons.book),
+          title: RichText(
+            text: TextSpan(
+              children: [
+                if (visitedUser.id == booking.requesteeId)
+                  const TextSpan(
+                    text: 'Performer',
                     style: TextStyle(
                       fontSize: 16,
                       fontWeight: FontWeight.bold,
                     ),
                   )
-                : const Text(
-                    'Booker',
+                else
+                  const TextSpan(
+                    text: 'Booker',
                     style: TextStyle(
                       fontSize: 16,
                       fontWeight: FontWeight.bold,
                     ),
                   ),
-            subtitle: Linkify(
-              text:
-                  // ignore: lines_longer_than_80_chars
-                  '$requesterUsername booked $requesteeUsername for service "$serviceTitle"',
+                const WidgetSpan(child: SizedBox(width: 8)),
+                TextSpan(
+                  text: timeago.format(
+                    booking.startTime,
+                    allowFromNow: true,
+                  ),
+                ),
+              ],
             ),
-            trailing: Text(
-              timeago.format(
-                booking.startTime,
-                allowFromNow: true,
-              ),
-            ),
+          ),
+          subtitle: Linkify(
+            text:
+                // ignore: lines_longer_than_80_chars
+                '$requesterUsername booked $requesteeUsername for service "$serviceTitle"',
           ),
         );
       },

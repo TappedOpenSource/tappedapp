@@ -152,6 +152,11 @@ class _CommentContainerState extends State<CommentContainer> {
                               TextSpan(
                                 text: value.displayName,
                               ),
+                              const WidgetSpan(
+                                child: SizedBox(
+                                  width: 8,
+                                ),
+                              ),
                               TextSpan(
                                 text: timeago.format(
                                   widget.comment.timestamp.toDate(),

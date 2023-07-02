@@ -100,24 +100,29 @@ class LoopFeedsListView extends StatelessWidget {
                       ),
                     );
                   },
-                  child: RichText(
-                    text: TextSpan(
-                      children: [
-                        TextSpan(
-                          text: feedParams.label,
-                          style: TextStyle(
-                            fontSize: 32,
-                            fontWeight: FontWeight.bold,
-                            color: theme.colorScheme.onSurface,
-                          ),
+                  child: Card(
+                    child: Padding(
+                      padding: const EdgeInsets.all(12),
+                      child: RichText(
+                        text: TextSpan(
+                          children: [
+                            TextSpan(
+                              text: feedParams.label,
+                              style: TextStyle(
+                                fontSize: 24,
+                                fontWeight: FontWeight.bold,
+                                color: theme.colorScheme.onSurface,
+                              ),
+                            ),
+                            const WidgetSpan(
+                              child: Icon(
+                                Icons.arrow_drop_down,
+                                size: 24,
+                              ),
+                            ),
+                          ],
                         ),
-                        const WidgetSpan(
-                          child: Icon(
-                            Icons.arrow_drop_down,
-                            size: 32,
-                          ),
-                        ),
-                      ],
+                      ),
                     ),
                   ),
                 ),
