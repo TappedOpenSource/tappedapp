@@ -19,7 +19,7 @@ class NotificationIconButton extends StatelessWidget {
             badgeContent: Text('${state.unreadActivitiesCount}'),
             showBadge: state.unreadActivities,
             child: Icon(
-              Icons.notifications,
+              Icons.notifications_outlined,
               color: Theme.of(context).colorScheme.outline,
               size: 30,
             ),

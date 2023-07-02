@@ -46,24 +46,40 @@ class BottomToolbar extends StatelessWidget {
             BottomNavigationBarItem(
               icon: BlocBuilder<LoopFeedListBloc, LoopFeedListState>(
                 builder: (context, state) {
-                  return BlocBuilder<ActivityBloc, ActivityState>(
-                    builder: (context, state) {
-                      return GestureDetector(
-                        onDoubleTap: () {
-                          context.read<NavigationBloc>().add(
-                                const ChangeTab(selectedTab: 0),
-                              );
-                          context.read<LoopFeedListBloc>().add(
-                                ScrollToTop(),
-                              );
-                        },
-                        child: badges.Badge(
-                          position: badges.BadgePosition.topEnd(top: 0, end: 0),
-                          showBadge: state.unreadActivities,
-                          child: const Icon(
-                            CupertinoIcons.waveform,
-                          ),
+                  return StreamBuilder<int?>(
+                    stream: StreamChat.of(context)
+                        .client
+                        .on()
+                        .where((event) => event.unreadChannels != null)
+                        .map(
+                          (event) => event.unreadChannels,
                         ),
+                    builder: (context, snapshot) {
+                      final unreadMessagesCount = snapshot.data ?? 0;
+                      return BlocBuilder<ActivityBloc, ActivityState>(
+                        builder: (context, state) {
+                          return GestureDetector(
+                            onDoubleTap: () {
+                              context.read<NavigationBloc>().add(
+                                    const ChangeTab(selectedTab: 0),
+                                  );
+                              context.read<LoopFeedListBloc>().add(
+                                    ScrollToTop(),
+                                  );
+                            },
+                            child: badges.Badge(
+                              position: badges.BadgePosition.topEnd(
+                                top: 0,
+                                end: 0,
+                              ),
+                              showBadge: state.unreadActivities ||
+                                  unreadMessagesCount > 0,
+                              child: const Icon(
+                                CupertinoIcons.waveform,
+                              ),
+                            ),
+                          );
+                        },
                       );
                     },
                   );
@@ -82,35 +98,21 @@ class BottomToolbar extends StatelessWidget {
               ),
             ),
             BottomNavigationBarItem(
-              icon: StreamBuilder<int?>(
-                stream: StreamChat.of(context)
-                    .client
-                    .on()
-                    .where((event) => event.unreadChannels != null)
-                    .map(
-                      (event) => event.unreadChannels,
+              icon: BlocBuilder<BookingsBloc, BookingsState>(
+                builder: (context, state) {
+                  final pendingBookings = state.bookings.where((booking) {
+                    return (booking.status == BookingStatus.pending) &&
+                        (user.id == booking.requesteeId);
+                  }).toList();
+                  return badges.Badge(
+                    position: badges.BadgePosition.topEnd(top: -4, end: -5),
+                    showBadge: pendingBookings.isNotEmpty,
+                    badgeContent: Text(
+                      pendingBookings.length.toString(),
                     ),
-                builder: (context, snapshot) {
-                  final unreadMessagesCount = snapshot.data ?? 0;
-                  return BlocBuilder<BookingsBloc, BookingsState>(
-                    builder: (context, state) {
-                      final pendingBookings = state.bookings.where((booking) {
-                        return (booking.status == BookingStatus.pending) &&
-                            (user.id == booking.requesteeId);
-                      }).toList();
-                      return badges.Badge(
-                        position: badges.BadgePosition.topEnd(top: -4, end: -5),
-                        showBadge: pendingBookings.isNotEmpty ||
-                            unreadMessagesCount > 0,
-                        badgeContent: Text(
-                          (pendingBookings.length + unreadMessagesCount)
-                              .toString(),
-                        ),
-                        child: const Icon(
-                          CupertinoIcons.tickets,
-                        ),
-                      );
-                    },
+                    child: const Icon(
+                      CupertinoIcons.tickets,
+                    ),
                   );
                 },
               ),
