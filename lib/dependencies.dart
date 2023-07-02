@@ -138,25 +138,23 @@ List<BlocProvider> buildBlocs({
     ),
     BlocProvider<LoopFeedListBloc>(
       create: (context) => LoopFeedListBloc(
-        initialIndex: 1,
-        feedParamsList: [
-          FeedParams(
+        initialFeed: LoopFeed.forYou,
+        feedParamsList: {
+          LoopFeed.forYou: FeedParams(
+            sourceFunction: context.read<DatabaseRepository>().getAllLoops,
+            sourceStream: context.read<DatabaseRepository>().allLoopsObserver,
+            label: 'For You',
+            scrollController: ScrollController(),
+          ),
+          LoopFeed.following: FeedParams(
             sourceFunction:
                 context.read<DatabaseRepository>().getFollowingLoops,
             sourceStream:
                 context.read<DatabaseRepository>().followingLoopsObserver,
-            tabTitle: 'Following',
-            feedKey: 'following-feed',
+            label: 'Following',
             scrollController: ScrollController(),
           ),
-          FeedParams(
-            sourceFunction: context.read<DatabaseRepository>().getAllLoops,
-            sourceStream: context.read<DatabaseRepository>().allLoopsObserver,
-            tabTitle: 'For You',
-            feedKey: 'for-you-feed',
-            scrollController: ScrollController(),
-          ),
-        ],
+        },
       ),
     ),
     BlocProvider<SearchBloc>(
