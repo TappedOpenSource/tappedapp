@@ -53,8 +53,8 @@ class LoopFeedsListView extends StatelessWidget {
                               );
                             }).toList(),
                             position: const Rect.fromLTWH(
-                              0,
-                              0,
+                              10,
+                              10,
                               100,
                               100,
                             ),
