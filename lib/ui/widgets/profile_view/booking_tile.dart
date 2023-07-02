@@ -77,32 +77,34 @@ class BookingTile extends StatelessWidget {
           Some(:final value) => value.title,
         };
 
-        return ListTile(
-          leading: const Icon(Icons.book),
-          title: visitedUser.id == booking.requesteeId
-              ? const Text(
-                  'Performer',
-                  style: TextStyle(
-                    fontSize: 16,
-                    fontWeight: FontWeight.bold,
+        return Card(
+          child: ListTile(
+            leading: const Icon(Icons.book),
+            title: visitedUser.id == booking.requesteeId
+                ? const Text(
+                    'Performer',
+                    style: TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  )
+                : const Text(
+                    'Booker',
+                    style: TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.bold,
+                    ),
                   ),
-                )
-              : const Text(
-                  'Booker',
-                  style: TextStyle(
-                    fontSize: 16,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-          subtitle: Linkify(
-            text:
-                // ignore: lines_longer_than_80_chars
-                '$requesterUsername booked $requesteeUsername for service "$serviceTitle"',
-          ),
-          trailing: Text(
-            timeago.format(
-              booking.startTime,
-              allowFromNow: true,
+            subtitle: Linkify(
+              text:
+                  // ignore: lines_longer_than_80_chars
+                  '$requesterUsername booked $requesteeUsername for service "$serviceTitle"',
+            ),
+            trailing: Text(
+              timeago.format(
+                booking.startTime,
+                allowFromNow: true,
+              ),
             ),
           ),
         );
