@@ -12,7 +12,7 @@ import 'package:intheloopapp/domains/navigation_bloc/navigation_bloc.dart';
 import 'package:intheloopapp/domains/onboarding_bloc/onboarding_bloc.dart';
 import 'package:intheloopapp/ui/error/error_view.dart';
 import 'package:intheloopapp/ui/user_tile.dart';
-import 'package:intheloopapp/utils.dart';
+import 'package:intheloopapp/utils/geohash.dart';
 import 'package:intl/intl.dart';
 import 'package:skeletons/skeletons.dart';
 import 'package:timeago/timeago.dart' as timeago;

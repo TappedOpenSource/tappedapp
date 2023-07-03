@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:formz/formz.dart';
-import 'package:intheloopapp/app_logger.dart';
+import 'package:intheloopapp/utils/app_logger.dart';
 import 'package:intheloopapp/domains/authentication_bloc/authentication_bloc.dart';
 import 'package:intheloopapp/domains/models/option.dart';
 import 'package:intheloopapp/ui/forms/artist_name_text_field.dart';

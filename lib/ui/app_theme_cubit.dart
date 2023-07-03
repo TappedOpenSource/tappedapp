@@ -1,5 +1,5 @@
 import 'package:hydrated_bloc/hydrated_bloc.dart';
-import 'package:intheloopapp/app_logger.dart';
+import 'package:intheloopapp/utils/app_logger.dart';
 
 /// The Cubit responsible for changing the app's theme
 class AppThemeCubit extends HydratedCubit<bool> {

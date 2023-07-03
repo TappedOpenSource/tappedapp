@@ -1,5 +1,5 @@
 import 'package:flutter_google_places_sdk/flutter_google_places_sdk.dart';
-import 'package:intheloopapp/app_logger.dart';
+import 'package:intheloopapp/utils/app_logger.dart';
 import 'package:intheloopapp/data/places_repository.dart';
 
 const _placesKey = 'AIzaSyAh3GEqDEv4lfnAgeT19-7sgyF7JxLF34g';

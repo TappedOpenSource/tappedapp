@@ -1,7 +1,7 @@
 
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/foundation.dart';
-import 'package:intheloopapp/app_logger.dart';
+import 'package:intheloopapp/utils/app_logger.dart';
 
 Future<void> configureError() async {
   FlutterError.onError = (errorDetails) {

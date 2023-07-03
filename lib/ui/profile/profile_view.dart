@@ -8,7 +8,6 @@ import 'package:intheloopapp/data/places_repository.dart';
 import 'package:intheloopapp/domains/models/option.dart';
 import 'package:intheloopapp/domains/models/user_model.dart';
 import 'package:intheloopapp/domains/onboarding_bloc/onboarding_bloc.dart';
-import 'package:intheloopapp/linkify.dart';
 import 'package:intheloopapp/ui/error/error_view.dart';
 import 'package:intheloopapp/ui/loading/loading_view.dart';
 import 'package:intheloopapp/ui/profile/components/badges_sliver.dart';
@@ -25,7 +24,8 @@ import 'package:intheloopapp/ui/profile/components/reviews_sliver.dart';
 import 'package:intheloopapp/ui/profile/components/social_media_icons.dart';
 import 'package:intheloopapp/ui/profile/profile_cubit.dart';
 import 'package:intheloopapp/ui/themes.dart';
-import 'package:intheloopapp/utils.dart';
+import 'package:intheloopapp/utils/geohash.dart';
+import 'package:intheloopapp/utils/linkify.dart';
 
 class ProfileView extends StatelessWidget {
   ProfileView({
