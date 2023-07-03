@@ -9,29 +9,27 @@ import 'package:intheloopapp/domains/models/loop.dart';
 import 'package:intheloopapp/domains/models/option.dart';
 import 'package:intheloopapp/domains/models/service.dart';
 import 'package:intheloopapp/domains/models/user_model.dart';
-import 'package:intheloopapp/ui/views/activity/activity_view.dart';
-import 'package:intheloopapp/ui/views/advanced_search/advanced_search_view.dart';
-import 'package:intheloopapp/ui/views/badge/badge_view.dart';
-import 'package:intheloopapp/ui/views/bookings/user_bookings_feed.dart';
-import 'package:intheloopapp/ui/views/common/booking_view/booking_view.dart';
-import 'package:intheloopapp/ui/views/common/loop_view/loop_view.dart';
-import 'package:intheloopapp/ui/views/create_booking/create_booking_view.dart';
-import 'package:intheloopapp/ui/views/create_loop/create_loop_view.dart';
-import 'package:intheloopapp/ui/views/create_service/create_service_view.dart';
-import 'package:intheloopapp/ui/views/likes/likes_view.dart';
-import 'package:intheloopapp/ui/views/login/forgot_password_view.dart';
-import 'package:intheloopapp/ui/views/login/signup_view.dart';
-import 'package:intheloopapp/ui/views/loop_feed/loop_feed_view.dart';
-import 'package:intheloopapp/ui/views/loop_feed/user_loop_feed.dart';
-import 'package:intheloopapp/ui/views/messaging/channel_view.dart';
-import 'package:intheloopapp/ui/views/onboarding/onboarding_view.dart';
-import 'package:intheloopapp/ui/views/opportunities/interested_view.dart';
-import 'package:intheloopapp/ui/views/profile/profile_view.dart';
-import 'package:intheloopapp/ui/views/profile/profile_view.dart';
-import 'package:intheloopapp/ui/views/reviews/user_reviews_feed.dart';
-import 'package:intheloopapp/ui/views/settings/settings_view.dart';
-import 'package:intheloopapp/ui/widgets/common/forms/location_form/location_form_view.dart';
-import 'package:intheloopapp/ui/widgets/profile_view/service_selection_view.dart';
+import 'package:intheloopapp/ui/activity/activity_view.dart';
+import 'package:intheloopapp/ui/advanced_search/advanced_search_view.dart';
+import 'package:intheloopapp/ui/badge/badge_view.dart';
+import 'package:intheloopapp/ui/booking_view/booking_view.dart';
+import 'package:intheloopapp/ui/bookings/user_bookings_feed.dart';
+import 'package:intheloopapp/ui/create_booking/create_booking_view.dart';
+import 'package:intheloopapp/ui/create_loop/create_loop_view.dart';
+import 'package:intheloopapp/ui/create_service/create_service_view.dart';
+import 'package:intheloopapp/ui/forms/location_form/location_form_view.dart';
+import 'package:intheloopapp/ui/likes/likes_view.dart';
+import 'package:intheloopapp/ui/login/forgot_password_view.dart';
+import 'package:intheloopapp/ui/login/signup_view.dart';
+import 'package:intheloopapp/ui/loop_feed/loop_feed_view.dart';
+import 'package:intheloopapp/ui/loop_view/loop_view.dart';
+import 'package:intheloopapp/ui/messaging/channel_view.dart';
+import 'package:intheloopapp/ui/onboarding/onboarding_view.dart';
+import 'package:intheloopapp/ui/opportunities/interested_view.dart';
+import 'package:intheloopapp/ui/profile/components/service_selection_view.dart';
+import 'package:intheloopapp/ui/profile/profile_view.dart';
+import 'package:intheloopapp/ui/reviews/user_reviews_feed.dart';
+import 'package:intheloopapp/ui/settings/settings_view.dart';
 import 'package:stream_chat_flutter/stream_chat_flutter.dart';
 
 part 'navigation_event.dart';
@@ -166,7 +164,7 @@ class NavigationBloc extends Bloc<NavigationEvent, NavigationState> {
     on<PushReviews>((event, emit) {
       navigationKey.currentState?.push(
         MaterialPageRoute<UserReviewsFeed>(
-          settings: RouteSettings(name: '/reviews/${event.userId}'),
+          settings: RouteSettings(name: '/revies${event.userId}'),
           builder: (context) => UserReviewsFeed(userId: event.userId),
         ),
       );
