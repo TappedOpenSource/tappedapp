@@ -173,6 +173,20 @@ class PushBadge extends NavigationEvent {
   List<Object> get props => [];
 }
 
+class PushBadges extends NavigationEvent {
+  const PushBadges({
+    required this.badges,
+  });
+
+  final List<badge_model.Badge> badges;
+
+  @override
+  String toString() => 'PushBadges { $badges}';
+
+  @override
+  List<Object> get props => [];
+}
+
 class PushOnboarding extends NavigationEvent {
   const PushOnboarding();
 
