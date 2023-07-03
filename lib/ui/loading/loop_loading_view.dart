@@ -3,7 +3,6 @@ import 'package:skeleton_animation/skeleton_animation.dart';
 
 class LoopLoadingView extends StatelessWidget {
   const LoopLoadingView({super.key});
-  // const ProgressSpinner = new ProgressSpinner();
 
   @override
   Widget build(BuildContext context) {

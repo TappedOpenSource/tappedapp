@@ -30,6 +30,7 @@ class BadgesView extends StatelessWidget {
               itemBuilder: (context, index) {
                 return BadgeCard(
                   badge: badges[index],
+                  index: index,
                 );
               },
             ),

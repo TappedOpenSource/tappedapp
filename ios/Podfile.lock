@@ -1054,6 +1054,8 @@ PODS:
   - PromisesSwift (2.2.0):
     - PromisesObjC (= 2.2.0)
   - ReachabilitySwift (5.0.0)
+  - rive_common (0.0.1):
+    - Flutter
   - SDWebImage (5.16.0):
     - SDWebImage/Core (= 5.16.0)
   - SDWebImage/Core (5.16.0)
@@ -1143,6 +1145,7 @@ DEPENDENCIES:
   - package_info_plus (from `.symlinks/plugins/package_info_plus/ios`)
   - path_provider_foundation (from `.symlinks/plugins/path_provider_foundation/darwin`)
   - photo_manager (from `.symlinks/plugins/photo_manager/ios`)
+  - rive_common (from `.symlinks/plugins/rive_common/ios`)
   - share_plus (from `.symlinks/plugins/share_plus/ios`)
   - sign_in_with_apple (from `.symlinks/plugins/sign_in_with_apple/ios`)
   - sqflite (from `.symlinks/plugins/sqflite/ios`)
@@ -1267,6 +1270,8 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/path_provider_foundation/darwin"
   photo_manager:
     :path: ".symlinks/plugins/photo_manager/ios"
+  rive_common:
+    :path: ".symlinks/plugins/rive_common/ios"
   share_plus:
     :path: ".symlinks/plugins/share_plus/ios"
   sign_in_with_apple:
@@ -1357,6 +1362,7 @@ SPEC CHECKSUMS:
   PromisesObjC: 09985d6d70fbe7878040aa746d78236e6946d2ef
   PromisesSwift: cf9eb58666a43bbe007302226e510b16c1e10959
   ReachabilitySwift: 985039c6f7b23a1da463388634119492ff86c825
+  rive_common: 8a159d68033a8b073e5853acc50f03aa486a2888
   SDWebImage: 2aea163b50bfcb569a2726b6a754c54a4506fcf6
   SDWebImageWebPCoder: f0f287cee4cd96a59937fbf3c77a8cfda9ba67b0
   share_plus: 056a1e8ac890df3e33cb503afffaf1e9b4fbae68

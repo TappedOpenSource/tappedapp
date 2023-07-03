@@ -56,16 +56,19 @@ class BadgesSliver extends StatelessWidget {
                           color: Theme.of(context).colorScheme.background,
                           borderRadius: BorderRadius.circular(13),
                         ),
-                        child: CachedNetworkImage(
-                          imageUrl: badge.imageUrl,
-                          width: 50,
-                          height: 50,
-                          imageBuilder: (context, imageProvider) => Container(
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(10),
-                              image: DecorationImage(
-                                image: imageProvider,
-                                fit: BoxFit.cover,
+                        child: Hero(
+                          tag: '${badge.imageUrl}-$index',
+                          child: CachedNetworkImage(
+                            imageUrl: badge.imageUrl,
+                            width: 50,
+                            height: 50,
+                            imageBuilder: (context, imageProvider) => Container(
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(10),
+                                image: DecorationImage(
+                                  image: imageProvider,
+                                  fit: BoxFit.cover,
+                                ),
                               ),
                             ),
                           ),
