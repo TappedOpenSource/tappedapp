@@ -381,10 +381,10 @@ packages:
     dependency: "direct main"
     description:
       name: connectivity_plus
-      sha256: b74247fad72c171381dbe700ca17da24deac637ab6d43c343b42867acb95c991
+      sha256: "8599ae9edca5ff96163fca3e36f8e481ea917d1e71cdad912c084b5579913f34"
       url: "https://pub.dev"
     source: hosted
-    version: "3.0.6"
+    version: "4.0.1"
   connectivity_plus_platform_interface:
     dependency: transitive
     description:
@@ -1300,10 +1300,10 @@ packages:
     dependency: transitive
     description:
       name: image_gallery_saver
-      sha256: be812580c7a320d3bf583af89cac6b376f170d48000aca75215a73285a3223a0
+      sha256: "0aba74216a4d9b0561510cb968015d56b701ba1bd94aace26aacdd8ae5761816"
       url: "https://pub.dev"
     source: hosted
-    version: "1.7.1"
+    version: "2.0.3"
   image_picker:
     dependency: "direct main"
     description:
@@ -1901,10 +1901,10 @@ packages:
     dependency: transitive
     description:
       name: shimmer
-      sha256: "1f1009b5845a1f88f1c5630212279540486f97409e9fc3f63883e71070d107bf"
+      sha256: "5f88c883a22e9f9f299e5ba0e4f7e6054857224976a5d9f839d4ebdc94a14ac9"
       url: "https://pub.dev"
     source: hosted
-    version: "2.0.0"
+    version: "3.0.0"
   sign_in_with_apple:
     dependency: "direct main"
     description:
@@ -2042,18 +2042,18 @@ packages:
     dependency: "direct main"
     description:
       name: stream_chat_flutter
-      sha256: f485fafd6831edf241e6bbb1256aeb6899702f12a784c6e5d29e0fb1447f8837
+      sha256: "86b6437b7179573c8345c13230a0d1e5a2f143b2bb30af09ed000353fbb71490"
       url: "https://pub.dev"
     source: hosted
-    version: "6.1.0"
+    version: "6.4.0"
   stream_chat_flutter_core:
     dependency: transitive
     description:
       name: stream_chat_flutter_core
-      sha256: "9592593d1c206268fe0f0809207b1768f5466a0e5a48f47cb54ab2ca2a7c8975"
+      sha256: ae289e542eb3d1eeee4772773c62c607ddebf5f9c37223b227d04c143754b72f
       url: "https://pub.dev"
     source: hosted
-    version: "6.1.0"
+    version: "6.4.0"
   stream_transform:
     dependency: transitive
     description:

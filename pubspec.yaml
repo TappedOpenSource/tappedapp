@@ -17,7 +17,7 @@ dependencies:
   card_banner: ^0.0.1+2
   cloud_firestore: ^4.3.1
   cloud_functions: ^4.0.7
-  connectivity_plus: ^3.0.2
+  connectivity_plus: ^4.0.0
   crypto: ^3.0.1
   cupertino_icons: ^1.0.3
   currency_text_input_formatter: ^2.1.8
@@ -76,7 +76,7 @@ dependencies:
   skeleton_animation: ^0.1.4
   skeleton_text: ^3.0.0
   skeletons: ^0.0.3
-  stream_chat_flutter: ^6.1.0
+  stream_chat_flutter: ^6.4.0
   timeago: ^3.1.0
   transparent_pointer: ^1.0.0
   url_launcher: ^6.0.9

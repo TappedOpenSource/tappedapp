@@ -2,6 +2,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intheloopapp/domains/models/badge.dart' as badge;
+import 'package:intheloopapp/domains/navigation_bloc/navigation_bloc.dart';
 import 'package:intheloopapp/ui/profile/profile_cubit.dart';
 import 'package:intheloopapp/utils/interable_indexed.dart';
 
@@ -10,6 +11,7 @@ class BadgesSliver extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final nav = BlocProvider.of<NavigationBloc>(context);
     return BlocBuilder<ProfileCubit, ProfileState>(
       builder: (context, state) {
         if (state.userBadges.isEmpty) {
@@ -32,37 +34,46 @@ class BadgesSliver extends StatelessWidget {
                 ),
               ),
               const SizedBox(height: 4),
-              Stack(
-                children: state.userBadges.mapIndexed((
-                  int index,
-                  badge.Badge badge,
-                ) {
-                  final offset = index * 45.0;
-                  return Container(
-                    margin: EdgeInsets.only(left: offset),
-                    child: Container(
-                      padding: const EdgeInsets.all(3),
-                      decoration: BoxDecoration(
-                        color: Theme.of(context).colorScheme.background,
-                        borderRadius: BorderRadius.circular(13),
-                      ),
-                      child: CachedNetworkImage(
-                        imageUrl: badge.imageUrl,
-                        width: 50,
-                        height: 50,
-                        imageBuilder: (context, imageProvider) => Container(
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(10),
-                            image: DecorationImage(
-                              image: imageProvider,
-                              fit: BoxFit.cover,
+              GestureDetector(
+                onTap: () {
+                  nav.add(
+                    PushBadges(
+                      badges: state.userBadges,
+                    ),
+                  );
+                },
+                child: Stack(
+                  children: state.userBadges.mapIndexed((
+                    int index,
+                    badge.Badge badge,
+                  ) {
+                    final offset = index * 45.0;
+                    return Container(
+                      margin: EdgeInsets.only(left: offset),
+                      child: Container(
+                        padding: const EdgeInsets.all(3),
+                        decoration: BoxDecoration(
+                          color: Theme.of(context).colorScheme.background,
+                          borderRadius: BorderRadius.circular(13),
+                        ),
+                        child: CachedNetworkImage(
+                          imageUrl: badge.imageUrl,
+                          width: 50,
+                          height: 50,
+                          imageBuilder: (context, imageProvider) => Container(
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(10),
+                              image: DecorationImage(
+                                image: imageProvider,
+                                fit: BoxFit.cover,
+                              ),
                             ),
                           ),
                         ),
                       ),
-                    ),
-                  );
-                }).toList(),
+                    );
+                  }).toList(),
+                ),
               ),
             ],
           ),

@@ -12,6 +12,7 @@ import 'package:intheloopapp/domains/models/user_model.dart';
 import 'package:intheloopapp/ui/activity/activity_view.dart';
 import 'package:intheloopapp/ui/advanced_search/advanced_search_view.dart';
 import 'package:intheloopapp/ui/badge/badge_view.dart';
+import 'package:intheloopapp/ui/badge/badges_view.dart';
 import 'package:intheloopapp/ui/booking_view/booking_view.dart';
 import 'package:intheloopapp/ui/bookings/user_bookings_feed.dart';
 import 'package:intheloopapp/ui/create_booking/create_booking_view.dart';
@@ -65,6 +66,19 @@ class NavigationBloc extends Bloc<NavigationEvent, NavigationState> {
           builder: (context) => Material(
             child: BadgeView(
               badge: event.badge,
+            ),
+          ),
+        ),
+      );
+      emit(state);
+    });
+    on<PushBadges>((event, emit) {
+      navigationKey.currentState?.push(
+        MaterialPageRoute<BadgesView>(
+          settings: const RouteSettings(name: '/badges'),
+          builder: (context) => Material(
+            child: BadgesView(
+              badges: event.badges,
             ),
           ),
         ),
