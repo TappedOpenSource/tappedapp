@@ -1,0 +1,74 @@
+import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:intheloopapp/data/dynamic_link_repository.dart';
+import 'package:intheloopapp/domains/models/loop.dart';
+import 'package:intheloopapp/domains/models/user_model.dart';
+import 'package:intheloopapp/ui/loop_view/components/follow_action_button.dart';
+import 'package:intheloopapp/ui/loop_view/components/social_action_button.dart';
+import 'package:intheloopapp/ui/loop_view/loop_view_cubit.dart';
+import 'package:share_plus/share_plus.dart';
+
+class ActionsToolbar extends StatelessWidget {
+  const ActionsToolbar({
+    required this.user,
+    required this.loop,
+    super.key,
+  });
+  final UserModel user;
+  final Loop loop;
+
+  static const double actionWidgetSize = 60;
+  static const double actionIconSize = 35;
+  static const double profileImageSize = 50;
+  static const double plusIconSize = 20;
+
+  @override
+  Widget build(BuildContext context) {
+    final dynamicLinkRepository =
+        RepositoryProvider.of<DynamicLinkRepository>(context);
+    return BlocBuilder<LoopViewCubit, LoopViewState>(
+      builder: (context, state) {
+        return SizedBox(
+          width: 100,
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              const FollowActionButton(),
+              SocialActionButton(
+                icon: state.isLiked
+                    ? CupertinoIcons.heart_fill
+                    : CupertinoIcons.heart,
+                color: state.isLiked ? Colors.red : Colors.grey[300],
+                title: state.likeCount.toString(),
+                onTap: () => context.read<LoopViewCubit>().toggleLikeLoop(),
+              ),
+              SocialActionButton(
+                icon: CupertinoIcons.bubble_right,
+                title: state.commentsCount.toString(),
+                color: Colors.grey[300],
+                onTap: () => context.read<LoopViewCubit>().toggleComments(),
+              ),
+              // SocialActionButton(
+              //   icon: Icons.download,
+              //   title: state.loop.comments.toString(),
+              //   onTap: null,
+              // ),
+              SocialActionButton(
+                icon: CupertinoIcons.share,
+                title: 'Share',
+                color: Colors.grey[300],
+                onTap: () async {
+                  await context.read<LoopViewCubit>().incrementShares();
+                  final link =
+                      await dynamicLinkRepository.getShareLoopDynamicLink(loop);
+                  await Share.share('Check out this loop on Tapped $link');
+                },
+              ),
+            ],
+          ),
+        );
+      },
+    );
+  }
+}
