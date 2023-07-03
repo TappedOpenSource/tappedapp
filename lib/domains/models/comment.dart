@@ -1,6 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:intheloopapp/domains/models/option.dart';
-import 'package:intheloopapp/utils.dart';
+import 'package:intheloopapp/utils/default_value.dart';
 import 'package:uuid/uuid.dart';
 
 class Comment {

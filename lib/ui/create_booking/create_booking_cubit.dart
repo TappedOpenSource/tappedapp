@@ -3,7 +3,6 @@ import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_google_places_sdk/flutter_google_places_sdk.dart';
 import 'package:formz/formz.dart';
-import 'package:intheloopapp/app_logger.dart';
 import 'package:intheloopapp/data/database_repository.dart';
 import 'package:intheloopapp/data/payment_repository.dart';
 import 'package:intheloopapp/data/stream_repository.dart';
@@ -17,7 +16,8 @@ import 'package:intheloopapp/ui/create_booking/components/booking_end_time.dart'
 import 'package:intheloopapp/ui/create_booking/components/booking_name.dart';
 import 'package:intheloopapp/ui/create_booking/components/booking_note.dart';
 import 'package:intheloopapp/ui/create_booking/components/booking_start_time.dart';
-import 'package:intheloopapp/utils.dart';
+import 'package:intheloopapp/utils/app_logger.dart';
+import 'package:intheloopapp/utils/geohash.dart';
 import 'package:intl/intl.dart';
 import 'package:stream_chat_flutter/stream_chat_flutter.dart';
 

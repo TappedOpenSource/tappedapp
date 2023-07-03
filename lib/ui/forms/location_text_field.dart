@@ -3,7 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_google_places_sdk/flutter_google_places_sdk.dart';
 import 'package:intheloopapp/domains/navigation_bloc/navigation_bloc.dart';
 import 'package:intheloopapp/ui/themes.dart';
-import 'package:intheloopapp/utils.dart';
+import 'package:intheloopapp/utils/geohash.dart';
 
 class LocationTextField extends StatelessWidget {
   const LocationTextField({

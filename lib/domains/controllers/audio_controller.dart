@@ -3,7 +3,7 @@ import 'dart:io';
 
 import 'package:audio_service/audio_service.dart';
 import 'package:flutter_cache_manager/flutter_cache_manager.dart';
-import 'package:intheloopapp/app_logger.dart';
+import 'package:intheloopapp/utils/app_logger.dart';
 import 'package:intheloopapp/data/audio_repository.dart';
 import 'package:just_audio/just_audio.dart';
 

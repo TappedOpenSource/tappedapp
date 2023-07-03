@@ -5,7 +5,7 @@ import 'package:intheloopapp/domains/models/booking.dart';
 import 'package:intheloopapp/domains/models/option.dart';
 import 'package:intheloopapp/domains/models/service.dart';
 import 'package:intheloopapp/domains/models/user_model.dart';
-import 'package:intheloopapp/linkify.dart';
+import 'package:intheloopapp/utils/linkify.dart';
 import 'package:timeago/timeago.dart' as timeago;
 
 class BookingTile extends StatelessWidget {

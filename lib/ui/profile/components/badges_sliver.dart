@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intheloopapp/domains/models/badge.dart' as badge;
 import 'package:intheloopapp/ui/profile/profile_cubit.dart';
-import 'package:intheloopapp/utils.dart';
+import 'package:intheloopapp/utils/interable_indexed.dart';
 
 class BadgesSliver extends StatelessWidget {
   const BadgesSliver({super.key});
