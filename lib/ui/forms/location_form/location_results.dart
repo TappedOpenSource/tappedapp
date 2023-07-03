@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:intheloopapp/ui/forms/location_form/location_cubit.dart';
+import 'package:intheloopapp/ui/loading/logo_wave.dart';
 
 class LocationResults extends StatelessWidget {
   const LocationResults({super.key});
@@ -13,10 +14,7 @@ class LocationResults extends StatelessWidget {
       builder: (context, state) {
         if (state.loading) {
           return const Center(
-            child: SpinKitWave(
-              color: Colors.white,
-              size: 25,
-            ),
+            child: LogoWave(),
           );
         }
 

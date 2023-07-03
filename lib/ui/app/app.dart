@@ -102,6 +102,7 @@ class App extends StatelessWidget {
               home:
                   BlocBuilder<DownForMaintenanceBloc, DownForMaintenanceState>(
                 builder: (context, downState) {
+
                   if (downState.downForMaintenance) {
                     return const DownForMainenanceView();
                   }
