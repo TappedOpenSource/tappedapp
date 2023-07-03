@@ -64,8 +64,8 @@ class LoopFeedsListView extends StatelessWidget {
                         ),
                       ),
                       icon: const Icon(
-                        Icons.message_outlined,
-                        size: 25,
+                        CupertinoIcons.chat_bubble,
+                        size: 30,
                         semanticLabel: 'Messages',
                       ),
                     ),
