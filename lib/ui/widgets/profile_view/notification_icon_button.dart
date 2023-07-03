@@ -1,4 +1,5 @@
 import 'package:badges/badges.dart' as badges;
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intheloopapp/domains/activity_bloc/activity_bloc.dart';
@@ -19,9 +20,10 @@ class NotificationIconButton extends StatelessWidget {
             badgeContent: Text('${state.unreadActivitiesCount}'),
             showBadge: state.unreadActivities,
             child: Icon(
-              Icons.notifications_outlined,
+              CupertinoIcons.bell,
               color: Theme.of(context).colorScheme.outline,
               size: 30,
+              semanticLabel: 'Notifications',
             ),
           ),
         );
