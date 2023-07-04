@@ -1,4 +1,5 @@
 import 'package:flutter/cupertino.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:intheloopapp/domains/models/option.dart';
 
 class TitleText extends StatelessWidget {
@@ -18,9 +19,9 @@ class TitleText extends StatelessWidget {
             const SizedBox(height: 14),
             Text(
               value,
-              style: const TextStyle(
-                fontSize: 20,
-                fontWeight: FontWeight.bold,
+              style: GoogleFonts.manrope(
+                fontSize: 22,
+                fontWeight: FontWeight.w900,
               ),
             ),
           ],
