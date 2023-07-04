@@ -82,6 +82,10 @@ class _LoopContainerState extends State<LoopContainer>
                       style: GoogleFonts.nunito(
                         fontSize: 18,
                       ),
+                      linkStyle: GoogleFonts.nunito(
+                        fontSize: 18,
+                        color: Colors.lightBlue,
+                      ),
                     ),
                     const SizedBox(height: 14),
                   ],

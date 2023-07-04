@@ -20,7 +20,7 @@ class NotificationIconButton extends StatelessWidget {
             badgeContent: Text('${state.unreadActivitiesCount}'),
             showBadge: state.unreadActivities,
             child: Icon(
-              CupertinoIcons.bell,
+              CupertinoIcons.heart,
               color: Theme.of(context).colorScheme.outline,
               size: 30,
               semanticLabel: 'Notifications',
