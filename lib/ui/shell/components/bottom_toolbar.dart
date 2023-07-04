@@ -15,12 +15,10 @@ import 'package:stream_chat_flutter/stream_chat_flutter.dart';
 class BottomToolbar extends StatelessWidget {
   BottomToolbar({
     required this.user,
-    required this.searchFocusNode,
     super.key,
   });
 
   final UserModel user;
-  final FocusNode searchFocusNode;
 
   final cupertinoTabController = CupertinoTabController();
 
@@ -88,12 +86,12 @@ class BottomToolbar extends StatelessWidget {
             ),
             BottomNavigationBarItem(
               icon: GestureDetector(
-                onDoubleTap: () {
-                  context.read<NavigationBloc>().add(
-                        const ChangeTab(selectedTab: 1),
-                      );
-                  searchFocusNode.requestFocus();
-                },
+                // onDoubleTap: () {
+                //   context.read<NavigationBloc>().add(
+                //         const ChangeTab(selectedTab: 1),
+                //       );
+                //   searchFocusNode.requestFocus();
+                // },
                 child: const Icon(CupertinoIcons.search),
               ),
             ),

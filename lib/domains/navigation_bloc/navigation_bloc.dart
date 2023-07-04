@@ -359,3 +359,9 @@ class NavigationBloc extends Bloc<NavigationEvent, NavigationState> {
   final DatabaseRepository database;
   final GlobalKey<NavigatorState> navigationKey;
 }
+
+extension Routing on BuildContext {
+  void push(String routeName) {
+    this.read<NavigationBloc>().add(Push(routeName));
+  }
+}

@@ -14,6 +14,18 @@ class Pop extends NavigationEvent {
   List<Object> get props => [];
 }
 
+class Push extends NavigationEvent {
+  const Push(this.route);
+
+  final Route route;
+
+  @override
+  String toString() => 'Push { route: $route }';
+
+  @override
+  List<Object?> get props => [route];
+}
+
 class PushProfile extends NavigationEvent {
   const PushProfile(
     this.userId,
@@ -181,7 +193,7 @@ class PushBadges extends NavigationEvent {
   final List<badge_model.Badge> badges;
 
   @override
-  String toString() => 'PushBadges { $badges}';
+  String toString() => 'PushBadges { $badges }';
 
   @override
   List<Object> get props => [];

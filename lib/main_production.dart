@@ -48,7 +48,6 @@ Future<void> main() async {
         navigatorKey: navigatorKey,
       ),
       streamClient: client,
-      navigatorKey: navigatorKey,
     ),
   );
 }
