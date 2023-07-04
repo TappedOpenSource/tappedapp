@@ -22,7 +22,10 @@ class TappedSearchBar extends StatelessWidget {
         return SearchBar(
           focusNode: searchFocusNode,
           hintText: 'Search...',
-          leading: const Icon(CupertinoIcons.search),
+          leading: IconButton(
+            onPressed: () {},
+            icon: const Icon(CupertinoIcons.search),
+          ),
           trailing: [
             IconButton(
               onPressed: () {

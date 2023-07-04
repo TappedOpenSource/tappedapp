@@ -23,6 +23,7 @@ import 'package:intheloopapp/ui/login/signup_view.dart';
 import 'package:intheloopapp/ui/loop_feed/loop_feed_view.dart';
 import 'package:intheloopapp/ui/loop_view/loop_view.dart';
 import 'package:intheloopapp/ui/messaging/channel_view.dart';
+import 'package:intheloopapp/ui/messaging/messaging_view.dart';
 import 'package:intheloopapp/ui/onboarding/onboarding_view.dart';
 import 'package:intheloopapp/ui/opportunities/interested_view.dart';
 import 'package:intheloopapp/ui/profile/components/service_selection_view.dart';
@@ -113,6 +114,7 @@ final class LoopsPage extends TappedRoute {
                 limit: limit,
               );
             },
+            userId: userId,
             feedKey: 'user_loops',
             scrollController: ScrollController(),
             headerSliver: null,
@@ -153,6 +155,7 @@ final class OpportunitiesPage extends TappedRoute {
                 limit: limit,
               );
             },
+            userId: userId,
             feedKey: 'user_opportunities',
             scrollController: ScrollController(),
             headerSliver: null,
@@ -361,4 +364,12 @@ final class StreamChannelPage extends TappedRoute {
         );
 
   final Channel channel;
+}
+
+final class MessagingChannelListPage extends TappedRoute {
+  MessagingChannelListPage()
+      : super(
+          routeName: '/messaging_channel_list',
+          view: const MessagingChannelListView(),
+        );
 }

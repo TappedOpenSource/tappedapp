@@ -3,6 +3,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:intheloopapp/data/database_repository.dart';
 import 'package:intheloopapp/data/places_repository.dart';
 import 'package:intheloopapp/domains/models/option.dart';
@@ -149,10 +150,11 @@ class ProfileView extends StatelessWidget {
             centerTitle: false,
             title: Text.rich(
               TextSpan(
-                text: visitedUser.artistName,
-                style: const TextStyle(
+                text: visitedUser.displayName,
+                style: GoogleFonts.manrope(
                   color: Colors.white,
                   fontSize: 32,
+                  fontWeight: FontWeight.w900,
                 ),
                 children: [
                   if (state.isVerified)

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 // const itlAccent = Color(0xff6200ee);
 const tappedAccent = Color(0xff0086CC);
@@ -62,6 +63,10 @@ class Themes {
   static final themeDark = ThemeData.dark().copyWith(
     useMaterial3: true,
 
+    // textTheme: GoogleFonts.nunitoTextTheme(
+    //   ThemeData.dark().textTheme,
+    // ),
+
     // selected color
     primaryColor: primaryColor,
     colorScheme: const ColorScheme.dark().copyWith(
@@ -99,5 +104,6 @@ class Themes {
       thumbShape: RoundSliderThumbShape(enabledThumbRadius: 6),
       trackHeight: 2,
     ),
+
   );
 }

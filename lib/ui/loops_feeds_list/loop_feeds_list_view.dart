@@ -4,8 +4,11 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intheloopapp/domains/loop_feed_list_bloc/loop_feed_list_bloc.dart';
+import 'package:intheloopapp/domains/models/option.dart';
+import 'package:intheloopapp/domains/models/user_model.dart';
 import 'package:intheloopapp/domains/navigation_bloc/navigation_bloc.dart';
 import 'package:intheloopapp/domains/navigation_bloc/tapped_route.dart';
+import 'package:intheloopapp/domains/onboarding_bloc/onboarding_bloc.dart';
 import 'package:intheloopapp/ui/error/error_view.dart';
 import 'package:intheloopapp/ui/loop_feed/loop_feed_view.dart';
 import 'package:intheloopapp/ui/messaging/messaging_view.dart';
@@ -19,113 +22,123 @@ class LoopFeedsListView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    return BlocBuilder<LoopFeedListBloc, LoopFeedListState>(
+    return BlocSelector<OnboardingBloc, OnboardingState, Option<UserModel>>(
+      selector: (state) =>
+          state is Onboarded ? Some(state.currentUser) : const None(),
       builder: (context, state) {
-        final feedParams = state.feedParamsList[state.feed];
-        if (feedParams == null) return const ErrorView();
-        return LoopFeedView(
-          sourceFunction: feedParams.sourceFunction,
-          sourceStream: feedParams.sourceStream,
-          feedKey: EnumToString.convertToString(state.feed),
-          scrollController: feedParams.scrollController,
-          floatingActionButton: FloatingActionButton(
-            heroTag: 'pushCreateLoopButton',
-            child: const Icon(Icons.edit_outlined),
-            onPressed: () => context.push(
-              CreateLoopPage(),
-            ),
-          ),
-          headerSliver: SliverAppBar(
-            floating: true,
-            actions: [
-              const NotificationIconButton(),
-              StreamBuilder<int?>(
-                stream: StreamChat.of(context)
-                    .client
-                    .on()
-                    .where((event) => event.unreadChannels != null)
-                    .map(
-                      (event) => event.unreadChannels,
-                    ),
-                builder: (context, snapshot) {
-                  final unreadMessagesCount = snapshot.data ?? 0;
-
-                  return badges.Badge(
-                    showBadge: unreadMessagesCount > 0,
-                    position: badges.BadgePosition.topEnd(
-                      top: -1,
-                      end: 2,
-                    ),
-                    badgeContent: Text('$unreadMessagesCount'),
-                    child: IconButton(
-                      onPressed: () => Navigator.push(
-                        context,
-                        MaterialPageRoute<MessagingChannelListView>(
-                          builder: (_) => const MessagingChannelListView(),
-                        ),
+        return switch (state) {
+          None() => const ErrorView(),
+          Some(:final value) => () {
+              return BlocBuilder<LoopFeedListBloc, LoopFeedListState>(
+                builder: (context, state) {
+                  final feedParams = state.feedParamsList[state.feed];
+                  if (feedParams == null) return const ErrorView();
+                  return LoopFeedView(
+                    userId: value.id,
+                    sourceFunction: feedParams.sourceFunction,
+                    sourceStream: feedParams.sourceStream,
+                    feedKey: EnumToString.convertToString(state.feed),
+                    scrollController: feedParams.scrollController,
+                    floatingActionButton: FloatingActionButton(
+                      heroTag: 'pushCreateLoopButton',
+                      child: const Icon(Icons.edit_outlined),
+                      onPressed: () => context.push(
+                        CreateLoopPage(),
                       ),
-                      icon: const Icon(
-                        CupertinoIcons.chat_bubble,
-                        size: 30,
-                        semanticLabel: 'Messages',
+                    ),
+                    headerSliver: SliverAppBar(
+                      floating: true,
+                      actions: [
+                        const NotificationIconButton(),
+                        StreamBuilder<int?>(
+                          stream: StreamChat.of(context)
+                              .client
+                              .on()
+                              .where((event) => event.unreadChannels != null)
+                              .map(
+                                (event) => event.unreadChannels,
+                              ),
+                          builder: (context, snapshot) {
+                            final unreadMessagesCount = snapshot.data ?? 0;
+
+                            return badges.Badge(
+                              showBadge: unreadMessagesCount > 0,
+                              position: badges.BadgePosition.topEnd(
+                                top: -1,
+                                end: 2,
+                              ),
+                              badgeContent: Text('$unreadMessagesCount'),
+                              child: IconButton(
+                                onPressed: () => context.push(
+                                  MessagingChannelListPage(),
+                                ),
+                                icon: const Icon(
+                                  CupertinoIcons.chat_bubble,
+                                  size: 24,
+                                  semanticLabel: 'Messages',
+                                ),
+                              ),
+                            );
+                          },
+                        ),
+                      ],
+                      title: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          GestureDetector(
+                            onTap: () {
+                              showPullDownMenu(
+                                context: context,
+                                items:
+                                    state.feedParamsList.entries.map((entry) {
+                                  return PullDownMenuItem(
+                                    onTap: () {
+                                      context.read<LoopFeedListBloc>().add(
+                                            ChangeFeed(
+                                              feed: entry.key,
+                                            ),
+                                          );
+                                    },
+                                    title: entry.value.label,
+                                  );
+                                }).toList(),
+                                position: const Rect.fromLTWH(
+                                  10,
+                                  10,
+                                  100,
+                                  100,
+                                ),
+                              );
+                            },
+                            child: RichText(
+                              text: TextSpan(
+                                children: [
+                                  TextSpan(
+                                    text: feedParams.label,
+                                    style: TextStyle(
+                                      fontSize: 24,
+                                      fontWeight: FontWeight.bold,
+                                      color: theme.colorScheme.onSurface,
+                                    ),
+                                  ),
+                                  const WidgetSpan(
+                                    child: Icon(
+                                      Icons.arrow_drop_down,
+                                      size: 24,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
+                        ],
                       ),
                     ),
                   );
                 },
-              ),
-            ],
-            title: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                GestureDetector(
-                  onTap: () {
-                    showPullDownMenu(
-                      context: context,
-                      items: state.feedParamsList.entries.map((entry) {
-                        return PullDownMenuItem(
-                          onTap: () {
-                            context.read<LoopFeedListBloc>().add(
-                                  ChangeFeed(
-                                    feed: entry.key,
-                                  ),
-                                );
-                          },
-                          title: entry.value.label,
-                        );
-                      }).toList(),
-                      position: const Rect.fromLTWH(
-                        10,
-                        10,
-                        100,
-                        100,
-                      ),
-                    );
-                  },
-                  child: RichText(
-                    text: TextSpan(
-                      children: [
-                        TextSpan(
-                          text: feedParams.label,
-                          style: TextStyle(
-                            fontSize: 24,
-                            fontWeight: FontWeight.bold,
-                            color: theme.colorScheme.onSurface,
-                          ),
-                        ),
-                        const WidgetSpan(
-                          child: Icon(
-                            Icons.arrow_drop_down,
-                            size: 24,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-              ],
-            ),
-          ),
-        );
+              );
+            }(),
+        };
       },
     );
   }
