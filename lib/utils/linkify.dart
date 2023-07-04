@@ -4,6 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intheloopapp/data/database_repository.dart';
 import 'package:intheloopapp/domains/models/option.dart';
 import 'package:intheloopapp/domains/navigation_bloc/navigation_bloc.dart';
+import 'package:intheloopapp/domains/navigation_bloc/tapped_route.dart';
 import 'package:linkify/linkify.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -102,7 +103,7 @@ class Linkify extends StatelessWidget {
   /// Defines how to measure the width of the rendered text.
   final TextWidthBasis textWidthBasis;
 
-  /// Defines how the paragraph will apply TextStyle.height to the 
+  /// Defines how the paragraph will apply TextStyle.height to the
   /// ascent of the first line and descent of the last line.
   final TextHeightBehavior? textHeightBehavior;
 
@@ -142,7 +143,12 @@ class Linkify extends StatelessWidget {
                     throw Exception('User not found');
                   }
 
-                  nav.add(PushProfile(user.unwrap.id, user));
+                  nav.push(
+                    ProfilePage(
+                      userId: user.unwrap.id,
+                      user: user,
+                    ),
+                  );
                 }
               } catch (e) {
                 ScaffoldMessenger.of(context).showSnackBar(
@@ -263,7 +269,7 @@ class SelectableLinkify extends StatelessWidget {
   /// Whether to show cursor
   final bool showCursor;
 
-  /// Whether this text field should focus 
+  /// Whether this text field should focus
   /// itself if nothing else is already focused.
   final bool autofocus;
 
@@ -288,7 +294,7 @@ class SelectableLinkify extends StatelessWidget {
 
   final ScrollPhysics? scrollPhysics;
 
-  /// Defines how the paragraph will apply TextStyle.height to the 
+  /// Defines how the paragraph will apply TextStyle.height to the
   /// ascent of the first line and descent of the last line.
   final TextHeightBehavior? textHeightBehavior;
 

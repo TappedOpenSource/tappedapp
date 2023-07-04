@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intheloopapp/data/database_repository.dart';
 import 'package:intheloopapp/domains/models/service.dart';
 import 'package:intheloopapp/domains/navigation_bloc/navigation_bloc.dart';
+import 'package:intheloopapp/domains/navigation_bloc/tapped_route.dart';
 import 'package:intheloopapp/ui/common/easter_egg_placeholder.dart';
 import 'package:intheloopapp/ui/common/tapped_app_bar.dart';
 import 'package:skeletons/skeletons.dart';
@@ -19,7 +20,6 @@ class ServiceSelectionView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final navigationBloc = context.read<NavigationBloc>();
     return Scaffold(
       backgroundColor: Theme.of(context).colorScheme.background,
       appBar: const TappedAppBar(
@@ -58,15 +58,13 @@ class ServiceSelectionView extends StatelessWidget {
                     color: Colors.green,
                   ),
                 ),
-                onTap: () {
-                  navigationBloc.add(
-                    PushCreateBooking(
-                      service: service,
-                      requesteeStripeConnectedAccountId:
-                          requesteeStripeConnectedAccountId,
-                    ),
-                  );
-                },
+                onTap: () => context.push(
+                  CreateBookingPage(
+                    service: service,
+                    requesteeStripeConnectedAccountId:
+                        requesteeStripeConnectedAccountId,
+                  ),
+                ),
               );
             },
           );

@@ -48,6 +48,6 @@ class LocationCubit extends Cubit<LocationState> {
 
     onSelected(place, placeId);
 
-    navigationBloc.add(const Pop());
+    navigationBloc.pop();
   }
 }

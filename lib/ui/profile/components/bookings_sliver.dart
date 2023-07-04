@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intheloopapp/domains/models/option.dart';
 import 'package:intheloopapp/domains/navigation_bloc/navigation_bloc.dart';
+import 'package:intheloopapp/domains/navigation_bloc/tapped_route.dart';
 import 'package:intheloopapp/ui/profile/components/booking_tile.dart';
 import 'package:intheloopapp/ui/profile/profile_cubit.dart';
 import 'package:intheloopapp/ui/themes.dart';
@@ -11,7 +12,6 @@ class BookingsSliver extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final nav = context.read<NavigationBloc>();
     return BlocBuilder<ProfileCubit, ProfileState>(
       builder: (context, state) {
         return switch (state.latestBooking) {
@@ -27,8 +27,8 @@ class BookingsSliver extends StatelessWidget {
                     ),
                     child: GestureDetector(
                       onTap: () {
-                        nav.add(
-                          PushBookings(userId: state.visitedUser.id),
+                        context.push(
+                          BookingsPage(userId: state.visitedUser.id),
                         );
                       },
                       child: const Row(

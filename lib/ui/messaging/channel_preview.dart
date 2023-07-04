@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intheloopapp/domains/navigation_bloc/navigation_bloc.dart';
+import 'package:intheloopapp/domains/navigation_bloc/tapped_route.dart';
 import 'package:stream_chat_flutter/stream_chat_flutter.dart';
 
 class ChannelPreview extends StatelessWidget {
@@ -19,12 +20,10 @@ class ChannelPreview extends StatelessWidget {
     final subtitle = lastMessage == null ? 'nothing yet' : lastMessage.text!;
     // final opacity = (channel.state?.unreadCount ?? 0) > 0 ? 1.0 : 0.5;
 
-    final navigationBloc = context.read<NavigationBloc>();
-
     return ListTile(
       tileColor: Theme.of(context).colorScheme.background,
       onTap: () {
-        navigationBloc.add(PushStreamChannel(channel));
+        context.push(StreamChannelPage(channel: channel));
       },
       leading: StreamChannelAvatar(channel: channel),
       title: StreamChannelName(

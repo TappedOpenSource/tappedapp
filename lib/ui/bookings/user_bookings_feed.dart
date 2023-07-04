@@ -174,9 +174,7 @@ class _UserBookingsFeedState extends State<UserBookingsFeed> {
                   stretch: true,
                   leading: IconButton(
                     icon: const Icon(Icons.arrow_back),
-                    onPressed: () => context.read<NavigationBloc>().add(
-                          const Pop(),
-                        ),
+                    onPressed: () => context.pop(),
                   ),
                   title: Text(
                     user.artistName,

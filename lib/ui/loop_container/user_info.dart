@@ -4,6 +4,7 @@ import 'package:intheloopapp/data/database_repository.dart';
 import 'package:intheloopapp/domains/models/option.dart';
 import 'package:intheloopapp/domains/models/user_model.dart';
 import 'package:intheloopapp/domains/navigation_bloc/navigation_bloc.dart';
+import 'package:intheloopapp/domains/navigation_bloc/tapped_route.dart';
 import 'package:intheloopapp/ui/app_theme_cubit.dart';
 import 'package:intheloopapp/ui/user_avatar.dart';
 import 'package:timeago/timeago.dart' as timeago;
@@ -20,7 +21,6 @@ class UserInfo extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final navigationBloc = context.read<NavigationBloc>();
     final database = context.read<DatabaseRepository>();
 
     return FutureBuilder<bool>(
@@ -33,10 +33,10 @@ class UserInfo extends StatelessWidget {
         final verified = snapshot.data!;
 
         return GestureDetector(
-          onTap: () => navigationBloc.add(
-            PushProfile(
-              loopUser.id,
-              Some(loopUser),
+          onTap: () => context.push(
+            ProfilePage(
+              userId: loopUser.id,
+              user: Some(loopUser),
             ),
           ),
           child: Row(

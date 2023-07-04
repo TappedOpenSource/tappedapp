@@ -48,13 +48,13 @@ class LoopView extends StatelessWidget {
                 'Check out this loop on Tapped $link',
               );
 
-              nav.add(const Pop());
+              nav.pop();
             },
             child: const Text('Share'),
           ),
           CupertinoActionSheetAction(
             onPressed: () async {
-              nav.add(const Pop());
+              nav.pop();
 
               ScaffoldMessenger.of(context).showSnackBar(
                 const SnackBar(
@@ -76,7 +76,7 @@ class LoopView extends StatelessWidget {
               isDestructiveAction: true,
               onPressed: () async {
                 await database.deleteLoop(loop);
-                nav.add(const Pop());
+                nav.pop();
               },
               child: const Text('Delete Loop'),
             ),

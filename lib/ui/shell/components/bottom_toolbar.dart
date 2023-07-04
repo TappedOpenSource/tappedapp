@@ -31,9 +31,7 @@ class BottomToolbar extends StatelessWidget {
       builder: (context, state) {
         return CupertinoTabBar(
           onTap: (index) {
-            context.read<NavigationBloc>().add(
-                  ChangeTab(selectedTab: index),
-                );
+            context.changeTab(selectedTab: index);
           },
           activeColor: theme.primaryColor,
           inactiveColor:
@@ -60,9 +58,7 @@ class BottomToolbar extends StatelessWidget {
                         builder: (context, state) {
                           return GestureDetector(
                             onDoubleTap: () {
-                              context.read<NavigationBloc>().add(
-                                    const ChangeTab(selectedTab: 0),
-                                  );
+                              context.changeTab(selectedTab: 0);
                               context.read<LoopFeedListBloc>().add(
                                     ScrollToTop(),
                                   );
@@ -89,9 +85,7 @@ class BottomToolbar extends StatelessWidget {
             BottomNavigationBarItem(
               icon: GestureDetector(
                 onDoubleTap: () {
-                  context.read<NavigationBloc>().add(
-                        const ChangeTab(selectedTab: 1),
-                      );
+                  context.changeTab(selectedTab: 1);
                   searchFocusNode.requestFocus();
                 },
                 child: const Icon(CupertinoIcons.search),

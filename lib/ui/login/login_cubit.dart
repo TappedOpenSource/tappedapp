@@ -89,7 +89,7 @@ class LoginCubit extends Cubit<LoginState> {
     emit(
       state.copyWith(status: FormzSubmissionStatus.success),
     );
-    navigationBloc.add(const Pop());
+    navigationBloc.pop();
   }
 
   Future<void> signInWithApple() async {

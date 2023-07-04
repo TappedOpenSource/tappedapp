@@ -1,5 +1,6 @@
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
+import 'package:intheloopapp/domains/navigation_bloc/tapped_route.dart';
 import 'package:intheloopapp/utils/app_logger.dart';
 import 'package:intheloopapp/data/database_repository.dart';
 import 'package:intheloopapp/data/dynamic_link_repository.dart';
@@ -24,24 +25,29 @@ class DynamicLinkBloc extends Bloc<DynamicLinkEvent, DynamicLinkState> {
           logger.debug('new dynamic link');
           switch (event.type) {
             case DynamicLinkType.createPost:
-              navigationBloc.add(const ChangeTab(selectedTab: 2));
+              navigationBloc.changeTab(selectedTab: 2);
             case DynamicLinkType.shareLoop:
               if (event.id != null) {
                 final shareLoop = await databaseRepository.getLoopById(
                   event.id ?? '',
                 );
                 if (shareLoop.isSome) {
-                  navigationBloc.add(
-                    PushLoop(
-                      shareLoop.unwrap,
-                      const None(),
+                  navigationBloc.push(
+                    LoopPage(
+                      loop: shareLoop.unwrap,
+                      loopUser: const None(),
                     ),
                   );
                 }
               }
             case DynamicLinkType.shareProfile:
               if (event.id != null) {
-                navigationBloc.add(PushProfile(event.id!, const None()));
+                navigationBloc.push(
+                  ProfilePage(
+                    userId: event.id!,
+                    user: const None(),
+                  ),
+                );
               }
             case DynamicLinkType.connectStripeRedirect:
               if (event.id == null || event.id == '') {
@@ -63,7 +69,7 @@ class DynamicLinkBloc extends Bloc<DynamicLinkEvent, DynamicLinkState> {
                 ),
               );
 
-              navigationBloc.add(const PushSettings());
+              navigationBloc.push(SettingsPage());
             case DynamicLinkType.connectStripeRefresh:
               if (event.id != null) {
                 // resend the create account request?

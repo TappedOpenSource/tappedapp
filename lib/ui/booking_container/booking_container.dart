@@ -7,6 +7,7 @@ import 'package:intheloopapp/domains/models/booking.dart';
 import 'package:intheloopapp/domains/models/option.dart';
 import 'package:intheloopapp/domains/models/user_model.dart';
 import 'package:intheloopapp/domains/navigation_bloc/navigation_bloc.dart';
+import 'package:intheloopapp/domains/navigation_bloc/tapped_route.dart';
 import 'package:intheloopapp/domains/onboarding_bloc/onboarding_bloc.dart';
 import 'package:intheloopapp/ui/user_avatar.dart';
 import 'package:skeletons/skeletons.dart';
@@ -44,7 +45,7 @@ class BookingContainer extends StatelessWidget {
 
                   return ListTile(
                     onTap: () {
-                      context.read<NavigationBloc>().add(PushBooking(booking));
+                      context.push(BookingPage(booking: booking));
                     },
                     enabled: booking.status != BookingStatus.canceled,
                     leading: UserAvatar(
@@ -101,7 +102,7 @@ class BookingContainer extends StatelessWidget {
 
                   return ListTile(
                     onTap: () {
-                      context.read<NavigationBloc>().add(PushBooking(booking));
+                      context.push(BookingPage(booking: booking));
                     },
                     leading: UserAvatar(
                       radius: 20,

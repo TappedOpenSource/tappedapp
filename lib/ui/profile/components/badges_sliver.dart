@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intheloopapp/domains/models/badge.dart' as badge;
 import 'package:intheloopapp/domains/navigation_bloc/navigation_bloc.dart';
+import 'package:intheloopapp/domains/navigation_bloc/tapped_route.dart';
 import 'package:intheloopapp/ui/profile/profile_cubit.dart';
 import 'package:intheloopapp/utils/interable_indexed.dart';
 
@@ -11,7 +12,6 @@ class BadgesSliver extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final nav = BlocProvider.of<NavigationBloc>(context);
     return BlocBuilder<ProfileCubit, ProfileState>(
       builder: (context, state) {
         if (state.userBadges.isEmpty) {
@@ -36,8 +36,8 @@ class BadgesSliver extends StatelessWidget {
               const SizedBox(height: 4),
               GestureDetector(
                 onTap: () {
-                  nav.add(
-                    PushBadges(
+                  context.push(
+                    BadgesPage(
                       badges: state.userBadges,
                     ),
                   );

@@ -11,7 +11,7 @@ class SearchButton extends StatelessWidget {
     return FilledButton(
       onPressed: () {
         context.read<SearchBloc>().add(const Search(query: ''));
-        context.read<NavigationBloc>().add(const Pop());
+        context.pop();
       },
       child: const Row(
         mainAxisAlignment: MainAxisAlignment.center,

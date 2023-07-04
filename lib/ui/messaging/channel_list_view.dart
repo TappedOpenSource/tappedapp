@@ -4,6 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intheloopapp/data/stream_repository.dart';
 import 'package:intheloopapp/domains/models/user_model.dart';
 import 'package:intheloopapp/domains/navigation_bloc/navigation_bloc.dart';
+import 'package:intheloopapp/domains/navigation_bloc/tapped_route.dart';
 import 'package:intheloopapp/domains/onboarding_bloc/onboarding_bloc.dart';
 import 'package:intheloopapp/ui/error/error_view.dart';
 import 'package:intheloopapp/ui/loading/loading_view.dart';
@@ -16,8 +17,6 @@ class ChannelListView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final navigationBloc = context.read<NavigationBloc>();
-
     return BlocSelector<OnboardingBloc, OnboardingState, UserModel?>(
       selector: (state) => (state is Onboarded) ? state.currentUser : null,
       builder: (context, currentUser) {
@@ -58,7 +57,7 @@ class ChannelListView extends StatelessWidget {
                 return ChannelPreview(channel: channel);
               },
               onChannelTap: (channel) {
-                navigationBloc.add(PushStreamChannel(channel));
+                context.push(StreamChannelPage(channel: channel));
               },
             );
           },

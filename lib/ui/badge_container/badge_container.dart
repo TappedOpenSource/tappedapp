@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intheloopapp/domains/models/badge.dart' as badge_model;
 import 'package:intheloopapp/domains/navigation_bloc/navigation_bloc.dart';
+import 'package:intheloopapp/domains/navigation_bloc/tapped_route.dart';
 import 'package:timeago/timeago.dart' as timeago;
 
 class BadgeContainer extends StatelessWidget {
@@ -18,8 +19,8 @@ class BadgeContainer extends StatelessWidget {
     return BlocBuilder<NavigationBloc, NavigationState>(
       builder: (context, state) {
         return GestureDetector(
-          onTap: () => context.read<NavigationBloc>().add(
-                PushBadge(badge),
+          onTap: () => context.push(
+                BadgePage(badge: badge),
               ),
           child: ListTile(
             leading: Hero(

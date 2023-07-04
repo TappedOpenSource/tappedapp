@@ -5,6 +5,7 @@ import 'package:intheloopapp/data/database_repository.dart';
 import 'package:intheloopapp/domains/models/option.dart';
 import 'package:intheloopapp/domains/models/user_model.dart';
 import 'package:intheloopapp/domains/navigation_bloc/navigation_bloc.dart';
+import 'package:intheloopapp/domains/navigation_bloc/tapped_route.dart';
 import 'package:intheloopapp/domains/onboarding_bloc/onboarding_bloc.dart';
 import 'package:intheloopapp/ui/user_avatar.dart';
 
@@ -106,10 +107,10 @@ class _UserTileState extends State<UserTile> {
                     currentUser,
                     database,
                   ),
-              onTap: () => navigationBloc.add(
-                PushProfile(
-                  widget.user.id,
-                  Some(
+              onTap: () => context.push(
+                ProfilePage(
+                  userId: widget.user.id,
+                  user: Some(
                     widget.user,
                   ),
                 ),
