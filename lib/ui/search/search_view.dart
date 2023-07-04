@@ -63,17 +63,6 @@ class _SearchViewState extends State<SearchView> with TickerProviderStateMixin {
         title: TappedSearchBar(
           searchFocusNode: widget.searchFocusNode,
         ),
-        actions: [
-          IconButton(
-            onPressed: () {
-              context.push(
-                AdvancedSearchPage(),
-              );
-            },
-            icon: const Icon(CupertinoIcons.doc_text_search),
-            color: tappedAccent,
-          ),
-        ],
         bottom: TabBar(
           controller: _tabController,
           indicatorColor: tappedAccent,
