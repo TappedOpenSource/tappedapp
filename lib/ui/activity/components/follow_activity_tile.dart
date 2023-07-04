@@ -6,6 +6,7 @@ import 'package:intheloopapp/domains/models/activity.dart';
 import 'package:intheloopapp/domains/models/option.dart';
 import 'package:intheloopapp/domains/models/user_model.dart';
 import 'package:intheloopapp/domains/navigation_bloc/navigation_bloc.dart';
+import 'package:intheloopapp/domains/navigation_bloc/tapped_route.dart';
 import 'package:intheloopapp/ui/user_avatar.dart';
 import 'package:timeago/timeago.dart' as timeago;
 
@@ -18,10 +19,10 @@ class FollowActivityTile extends StatelessWidget {
   final Follow activity;
 
   void onClick(BuildContext context, Option<UserModel> fromUser) {
-    context.read<NavigationBloc>().add(
-          PushProfile(
-            activity.fromUserId,
-            fromUser,
+    context.push(
+          ProfilePage(
+            userId: activity.fromUserId,
+            user: fromUser,
           ),
         );
   }

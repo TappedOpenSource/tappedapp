@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_google_places_sdk/flutter_google_places_sdk.dart';
 import 'package:intheloopapp/domains/navigation_bloc/navigation_bloc.dart';
+import 'package:intheloopapp/domains/navigation_bloc/tapped_route.dart';
 import 'package:intheloopapp/ui/themes.dart';
 import 'package:intheloopapp/utils/geohash.dart';
 
@@ -19,11 +20,9 @@ class LocationTextField extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final navigationBloc = context.read<NavigationBloc>();
     return GestureDetector(
       onTap: () {
-        navigationBloc.add(
-          PushLocationForm(
+        context.push(LocationFormPage(
             initialPlace: initialPlace,
             onSelected: onChanged,
           ),

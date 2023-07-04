@@ -4,6 +4,7 @@ import 'package:intheloopapp/data/stream_repository.dart';
 import 'package:intheloopapp/domains/models/option.dart';
 import 'package:intheloopapp/domains/models/user_model.dart';
 import 'package:intheloopapp/domains/navigation_bloc/navigation_bloc.dart';
+import 'package:intheloopapp/domains/navigation_bloc/tapped_route.dart';
 import 'package:intheloopapp/ui/user_avatar.dart';
 
 class UserTile extends StatelessWidget {
@@ -29,7 +30,7 @@ class UserTile extends StatelessWidget {
           await channel.watch();
         }
 
-        navigationBloc.add(PushStreamChannel(channel));
+        navigationBloc.push(StreamChannelPage(channel: channel));
       },
     );
   }

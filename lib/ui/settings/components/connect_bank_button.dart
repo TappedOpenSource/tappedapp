@@ -62,7 +62,7 @@ class _ConnectBankButtonState extends State<ConnectBankButton> {
             ),
           );
 
-          navigationBloc.add(const Pop());
+          navigationBloc.pop();
 
           await launchUrl(
             Uri.parse(res.url),

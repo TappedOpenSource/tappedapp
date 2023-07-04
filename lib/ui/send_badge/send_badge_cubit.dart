@@ -97,7 +97,7 @@ class SendBadgeCubit extends Cubit<SendBadgeState> {
       } catch (e) {
         emit(state.copyWith(status: FormzSubmissionStatus.success));
       } finally {
-        navigationBloc.add(const Pop());
+        navigationBloc.pop();
       }
     }
   }

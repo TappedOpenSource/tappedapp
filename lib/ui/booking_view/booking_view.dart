@@ -303,7 +303,7 @@ class BookingView extends StatelessWidget {
                                 );
                                 await database.updateBooking(updated);
                                 onConfirm?.call(updated);
-                                navigationBloc.add(const Pop());
+                                navigationBloc.pop();
                               },
                               child: const Text('Confirm Booking'),
                             )
@@ -327,7 +327,7 @@ class BookingView extends StatelessWidget {
                         );
                         await database.updateBooking(updated);
                         onDeny?.call(updated);
-                        navigationBloc.add(const Pop());
+                        navigationBloc.pop();
                       },
                       child: const Text(
                         'Cancel Booking',

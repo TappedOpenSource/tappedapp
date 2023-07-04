@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intheloopapp/domains/models/option.dart';
 import 'package:intheloopapp/domains/navigation_bloc/navigation_bloc.dart';
+import 'package:intheloopapp/domains/navigation_bloc/tapped_route.dart';
 import 'package:intheloopapp/ui/loop_container/loop_container_cubit.dart';
 
 class Comments extends StatelessWidget {
@@ -11,12 +12,10 @@ class Comments extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocBuilder<LoopContainerCubit, LoopContainerState>(
       builder: (context, state) {
-        final navigationBloc = context.read<NavigationBloc>();
         return GestureDetector(
-          onTap: () => navigationBloc.add(
-            PushLoop(
-              state.loop,
-              const None(),
+          onTap: () => context.push(LoopPage(
+              loop: state.loop,
+              loopUser: const None(),
             ),
           ),
           child: Row(

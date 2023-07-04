@@ -275,7 +275,7 @@ class SettingsCubit extends Cubit<SettingsState> {
 
       onboardingBloc.add(UpdateOnboardedUser(user: user));
       emit(state.copyWith(status: FormzSubmissionStatus.success));
-      navigationBloc.add(const Pop());
+      navigationBloc.pop();
     } else {
       // print('invalid');
     }

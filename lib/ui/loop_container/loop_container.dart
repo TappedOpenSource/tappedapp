@@ -1,6 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:intheloopapp/domains/navigation_bloc/tapped_route.dart';
 import 'package:intheloopapp/utils/app_logger.dart';
 import 'package:intheloopapp/data/audio_repository.dart';
 import 'package:intheloopapp/data/database_repository.dart';
@@ -47,13 +48,15 @@ class _LoopContainerState extends State<LoopContainer>
       );
 
   Widget _loopContainer({
-    required NavigationBloc navigationBloc,
     required UserModel loopUser,
     required String currentUserId,
   }) =>
       GestureDetector(
-        onTap: () => navigationBloc.add(
-          PushLoop(widget.loop, Some(loopUser)),
+        onTap: () => context.push(
+          LoopPage(
+            loop: widget.loop,
+            loopUser: Some(loopUser),
+          ),
         ),
         child: Padding(
           padding: const EdgeInsets.symmetric(
@@ -99,13 +102,15 @@ class _LoopContainerState extends State<LoopContainer>
       );
 
   Widget _audioLoopContainer({
-    required NavigationBloc navigationBloc,
     required UserModel loopUser,
     required String currentUserId,
   }) =>
       GestureDetector(
-        onTap: () => navigationBloc.add(
-          PushLoop(widget.loop, Some(loopUser)),
+        onTap: () => context.push(
+          LoopPage(
+            loop: widget.loop,
+            loopUser: Some(loopUser),
+          ),
         ),
         child: Padding(
           padding: const EdgeInsets.symmetric(vertical: 8),
@@ -175,7 +180,6 @@ class _LoopContainerState extends State<LoopContainer>
   @override
   Widget build(BuildContext context) {
     super.build(context);
-    final navigationBloc = context.read<NavigationBloc>();
     final databaseRepository =
         RepositoryProvider.of<DatabaseRepository>(context);
 
@@ -240,7 +244,6 @@ class _LoopContainerState extends State<LoopContainer>
                         condition: widget.loop.isOpportunity,
                         conditionalBuilder: _opportunity,
                         child: _loopContainer(
-                          navigationBloc: navigationBloc,
                           loopUser: value,
                           currentUserId: currentUser.id,
                         ),

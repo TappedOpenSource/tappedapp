@@ -38,13 +38,13 @@ class ControlButtons extends StatelessWidget {
                 'Check out this loop on Tapped $link',
               );
 
-              nav.add(const Pop());
+              nav.pop();
             },
             child: const Text('Share'),
           ),
           CupertinoActionSheetAction(
             onPressed: () async {
-              nav.add(const Pop());
+              nav.pop();
               ScaffoldMessenger.of(context).showSnackBar(
                 const SnackBar(
                   content: Text('Loop Reported'),

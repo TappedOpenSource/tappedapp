@@ -4,6 +4,7 @@ import 'package:intheloopapp/data/payment_repository.dart';
 import 'package:intheloopapp/domains/models/option.dart';
 import 'package:intheloopapp/domains/models/payment_user.dart';
 import 'package:intheloopapp/domains/navigation_bloc/navigation_bloc.dart';
+import 'package:intheloopapp/domains/navigation_bloc/tapped_route.dart';
 import 'package:intheloopapp/ui/profile/profile_cubit.dart';
 
 class RequestToBookButton extends StatelessWidget {
@@ -11,7 +12,6 @@ class RequestToBookButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final navigationBloc = context.read<NavigationBloc>();
     final payments = context.read<PaymentRepository>();
     return BlocBuilder<ProfileCubit, ProfileState>(
       builder: (context, state) {
@@ -51,15 +51,13 @@ class RequestToBookButton extends StatelessWidget {
                           }
 
                           return FilledButton(
-                            onPressed: () {
-                              navigationBloc.add(
-                                PushServiceSelection(
-                                  userId: state.visitedUser.id,
-                                  requesteeStripeConnectedAccountId: state
-                                      .visitedUser.stripeConnectedAccountId!,
-                                ),
-                              );
-                            },
+                            onPressed: () => context.push(
+                              ServiceSelectionPage(
+                                userId: state.visitedUser.id,
+                                requesteeStripeConnectedAccountId:
+                                    state.visitedUser.stripeConnectedAccountId!,
+                              ),
+                            ),
                             child: const Text('Request to Book'),
                           );
                         }(),

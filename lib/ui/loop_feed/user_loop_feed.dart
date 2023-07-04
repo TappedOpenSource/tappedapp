@@ -155,9 +155,7 @@ class _UserLoopFeedState extends State<UserLoopFeed> {
                   stretch: true,
                   leading: IconButton(
                     icon: const Icon(Icons.arrow_back),
-                    onPressed: () => context.read<NavigationBloc>().add(
-                          const Pop(),
-                        ),
+                    onPressed: () => context.pop(),
                   ),
                   title: Text(
                     user.artistName,

@@ -6,6 +6,7 @@ import 'package:intheloopapp/domains/models/comment.dart';
 import 'package:intheloopapp/domains/models/option.dart';
 import 'package:intheloopapp/domains/models/user_model.dart';
 import 'package:intheloopapp/domains/navigation_bloc/navigation_bloc.dart';
+import 'package:intheloopapp/domains/navigation_bloc/tapped_route.dart';
 import 'package:intheloopapp/domains/onboarding_bloc/onboarding_bloc.dart';
 import 'package:intheloopapp/utils/linkify.dart';
 import 'package:intheloopapp/ui/error/error_view.dart';
@@ -61,7 +62,6 @@ class _CommentContainerState extends State<CommentContainer> {
   Widget build(BuildContext context) {
     final databaseRepository =
         RepositoryProvider.of<DatabaseRepository>(context);
-    final navigationBloc = RepositoryProvider.of<NavigationBloc>(context);
 
     return BlocSelector<OnboardingBloc, OnboardingState, UserModel?>(
       selector: (state) => (state is Onboarded) ? state.currentUser : null,
@@ -88,10 +88,9 @@ class _CommentContainerState extends State<CommentContainer> {
                         horizontal: 10,
                       ),
                       child: ListTile(
-                        onTap: () => navigationBloc.add(
-                          PushProfile(
-                            value.id,
-                            user,
+                        onTap: () => context.push(ProfilePage(
+                            userId: value.id,
+                            user: user,
                           ),
                         ),
                         leading: UserAvatar(

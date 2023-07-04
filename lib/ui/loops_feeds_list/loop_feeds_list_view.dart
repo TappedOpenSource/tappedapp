@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intheloopapp/domains/loop_feed_list_bloc/loop_feed_list_bloc.dart';
 import 'package:intheloopapp/domains/navigation_bloc/navigation_bloc.dart';
+import 'package:intheloopapp/domains/navigation_bloc/tapped_route.dart';
 import 'package:intheloopapp/ui/error/error_view.dart';
 import 'package:intheloopapp/ui/loop_feed/loop_feed_view.dart';
 import 'package:intheloopapp/ui/messaging/messaging_view.dart';
@@ -30,9 +31,9 @@ class LoopFeedsListView extends StatelessWidget {
           floatingActionButton: FloatingActionButton(
             heroTag: 'pushCreateLoopButton',
             child: const Icon(Icons.edit_outlined),
-            onPressed: () => context.read<NavigationBloc>().add(
-                  const PushCreateLoop(),
-                ),
+            onPressed: () => context.push(
+              CreateLoopPage(),
+            ),
           ),
           headerSliver: SliverAppBar(
             floating: true,

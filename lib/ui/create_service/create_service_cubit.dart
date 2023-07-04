@@ -67,7 +67,7 @@ class CreateServiceCubit extends Cubit<CreateServiceState> {
 
       emit(state.copyWith(status: FormzSubmissionStatus.success));
 
-      nav.add(const Pop());
+      nav.pop();
     } catch (e) {
       emit(state.copyWith(status: FormzSubmissionStatus.failure));
       rethrow;

@@ -29,14 +29,14 @@ class MoreOptionsButton extends StatelessWidget {
             onPressed: () async {
               final link = await dynamic.getShareProfileDynamicLink(user);
               await Share.share('Check out this profile on Tapped $link');
-              nav.add(const Pop());
+              nav.pop();
             },
             child: const Text('Share'),
           ),
           if (user.id != currentUser.id)
             CupertinoActionSheetAction(
               onPressed: () {
-                nav.add(const Pop());
+                nav.pop();
                 database
                     .reportUser(
                   reported: user,
@@ -59,7 +59,7 @@ class MoreOptionsButton extends StatelessWidget {
               /// the action's text color to red.
               isDestructiveAction: true,
               onPressed: () {
-                nav.add(const Pop());
+                nav.pop();
                 context.read<ProfileCubit>().block().then((value) {
                   ScaffoldMessenger.of(context).showSnackBar(
                     const SnackBar(

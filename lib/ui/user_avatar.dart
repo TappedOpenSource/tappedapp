@@ -5,6 +5,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intheloopapp/domains/models/option.dart';
 import 'package:intheloopapp/domains/models/user_model.dart';
 import 'package:intheloopapp/domains/navigation_bloc/navigation_bloc.dart';
+import 'package:intheloopapp/domains/navigation_bloc/tapped_route.dart';
 import 'package:intheloopapp/ui/conditional_parent_widget.dart';
 import 'package:intheloopapp/ui/themes.dart';
 
@@ -37,19 +38,19 @@ class UserAvatar extends StatelessWidget {
       return switch ((pushId, pushUser)) {
         (None(), None()) => child,
         (Some(:final value), None()) => GestureDetector(
-            onTap: () => context.read<NavigationBloc>().add(
-                  PushProfile(
-                    value,
-                    const None(),
+            onTap: () => context.push(
+                  ProfilePage(
+                    userId: value,
+                    user: const None(),
                   ),
                 ),
             child: child,
           ),
         (_, Some(:final value)) => GestureDetector(
-            onTap: () => context.read<NavigationBloc>().add(
-                  PushProfile(
-                    value.id,
-                    pushUser,
+            onTap: () => context.push(
+                  ProfilePage(
+                    userId: value.id,
+                    user: pushUser,
                   ),
                 ),
             child: child,
