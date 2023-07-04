@@ -38,7 +38,9 @@ class LoopView extends StatelessWidget {
       context: context,
       builder: (BuildContext context) => CupertinoActionSheet(
         title: Text(loop.title.asNullable() ?? 'Untitled Loop'),
-        message: Text(loop.description),
+        message: Text(
+          loop.description,
+        ),
         actions: <CupertinoActionSheetAction>[
           CupertinoActionSheetAction(
             onPressed: () async {

@@ -1,6 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:intheloopapp/domains/navigation_bloc/tapped_route.dart';
 import 'package:intheloopapp/utils/app_logger.dart';
 import 'package:intheloopapp/data/audio_repository.dart';
@@ -70,14 +71,16 @@ class _LoopContainerState extends State<LoopContainer>
                 loopUser: loopUser,
                 timestamp: widget.loop.timestamp,
               ),
-              TitleText(title: widget.loop.title),
+              TitleText(
+                title: widget.loop.title,
+              ),
               if (widget.loop.description.isNotEmpty)
                 Column(
                   children: [
                     Linkify(
                       text: widget.loop.description,
-                      style: const TextStyle(
-                        fontSize: 14,
+                      style: GoogleFonts.nunito(
+                        fontSize: 18,
                       ),
                     ),
                     const SizedBox(height: 14),
