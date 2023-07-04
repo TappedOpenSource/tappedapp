@@ -16,6 +16,7 @@ class LoopFeedView extends StatefulWidget {
     required this.sourceStream,
     required this.feedKey,
     required this.headerSliver,
+    required this.userId,
     this.floatingActionButton,
     ScrollController? scrollController,
     super.key,
@@ -24,16 +25,17 @@ class LoopFeedView extends StatefulWidget {
   }
 
   final Future<List<Loop>> Function(
-    String currentUserId, {
+    String userId, {
     int limit,
     String? lastLoopId,
     bool ignoreCache,
   }) sourceFunction;
   final Stream<Loop> Function(
-    String currentUserId, {
+    String userId, {
     int limit,
     bool ignoreCache,
   }) sourceStream;
+  final String userId;
   final String feedKey;
   final Widget? headerSliver;
   final FloatingActionButton? floatingActionButton;
@@ -53,35 +55,26 @@ class _LoopFeedViewState extends State<LoopFeedView>
   Widget build(BuildContext context) {
     super.build(context);
 
-    return BlocSelector<OnboardingBloc, OnboardingState, UserModel?>(
-      selector: (state) => (state is Onboarded) ? state.currentUser : null,
-      builder: (context, currentUser) {
-        if (currentUser == null) {
-          return const ErrorView();
-        }
-
-        return BlocProvider(
-          create: (context) => LoopFeedCubit(
-            currentUserId: currentUser.id,
-            sourceFunction: widget.sourceFunction,
-            sourceStream: widget.sourceStream,
-          )..initLoops(),
-          child: Scaffold(
-            backgroundColor: Theme.of(context).colorScheme.background,
-            floatingActionButton: widget.floatingActionButton,
-            appBar: widget.headerSliver == null
-                ? const TappedAppBar(
-                    title: 'Loops',
-                  )
-                : null,
-            body: LoopList(
-              feedKey: widget.feedKey,
-              headerSliver: widget.headerSliver,
-              scrollController: widget.scrollController,
-            ),
-          ),
-        );
-      },
+    return BlocProvider(
+      create: (context) => LoopFeedCubit(
+        userId: widget.userId,
+        sourceFunction: widget.sourceFunction,
+        sourceStream: widget.sourceStream,
+      )..initLoops(),
+      child: Scaffold(
+        backgroundColor: Theme.of(context).colorScheme.background,
+        floatingActionButton: widget.floatingActionButton,
+        appBar: widget.headerSliver == null
+            ? const TappedAppBar(
+                title: 'Loops',
+              )
+            : null,
+        body: LoopList(
+          feedKey: widget.feedKey,
+          headerSliver: widget.headerSliver,
+          scrollController: widget.scrollController,
+        ),
+      ),
     );
   }
 }

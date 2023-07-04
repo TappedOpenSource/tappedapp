@@ -160,7 +160,9 @@ class Booking extends Equatable {
 
   bool get isPending => status == BookingStatus.pending;
   bool get isConfirmed => status == BookingStatus.confirmed;
-  bool get isCancaled => status == BookingStatus.canceled;
+  bool get isCanceled => status == BookingStatus.canceled;
+
+  bool get isExpired => DateTime.now().isAfter(endTime);
 
   Duration get duration => endTime.difference(startTime);
 

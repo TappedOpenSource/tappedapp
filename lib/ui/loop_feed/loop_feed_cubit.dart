@@ -4,27 +4,27 @@ import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
 import 'package:hydrated_bloc/hydrated_bloc.dart';
-import 'package:intheloopapp/utils/app_logger.dart';
 import 'package:intheloopapp/domains/models/loop.dart';
+import 'package:intheloopapp/utils/app_logger.dart';
 
 part 'loop_feed_state.dart';
 
 class LoopFeedCubit extends Cubit<LoopFeedState> {
   LoopFeedCubit({
-    required this.currentUserId,
+    required this.userId,
     required this.sourceFunction,
     required this.sourceStream,
   }) : super(const LoopFeedState());
 
-  final String currentUserId;
+  final String userId;
   final Future<List<Loop>> Function(
-    String currentUserId, {
+    String userId, {
     int limit,
     String? lastLoopId,
     bool ignoreCache,
   }) sourceFunction;
   final Stream<Loop> Function(
-    String currentUserId, {
+    String userId, {
     int limit,
     bool ignoreCache,
   }) sourceStream;
@@ -46,7 +46,7 @@ class LoopFeedCubit extends Cubit<LoopFeedState> {
       }
 
       final loopsAvailable = await sourceFunction(
-        currentUserId,
+        userId,
         limit: 1,
       );
       if (loopsAvailable.isEmpty) {
@@ -54,7 +54,7 @@ class LoopFeedCubit extends Cubit<LoopFeedState> {
       }
 
       loopListener = sourceStream(
-        currentUserId,
+        userId,
         ignoreCache: true,
       ).listen((Loop event) {
         logger.debug('loop { ${event.id} : ${event.title} }');
@@ -99,7 +99,7 @@ class LoopFeedCubit extends Cubit<LoopFeedState> {
       }
 
       final loops = await sourceFunction(
-        currentUserId,
+        userId,
         lastLoopId: state.loops.last.id,
       );
       loops.isEmpty

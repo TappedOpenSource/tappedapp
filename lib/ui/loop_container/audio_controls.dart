@@ -41,9 +41,13 @@ class AudioControls extends StatelessWidget {
 
         final audioController = snapshot.data!;
 
-        return Column(
-          children: [
-            Row(
+        return Card(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(25),
+          ),
+          child: Padding(
+            padding: const EdgeInsets.all(12),
+            child: Row(
               children: [
                 PlayPauseButton(
                   audioController: audioController,
@@ -55,8 +59,7 @@ class AudioControls extends StatelessWidget {
                 ),
               ],
             ),
-            const SizedBox(height: 14),
-          ],
+          ),
         );
       },
     );
