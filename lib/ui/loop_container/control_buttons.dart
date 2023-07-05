@@ -93,58 +93,63 @@ class ControlButtons extends StatelessWidget {
 
         return BlocBuilder<LoopContainerCubit, LoopContainerState>(
           builder: (context, state) {
-            return Row(
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
-              children: [
-                LikeButton(
-                  isLiked: isLiked,
-                  likeCount: state.likeCount,
-                  onLike: context.read<LoopContainerCubit>().toggleLoopLike,
-                ),
-                Row(
-                  children: [
-                    const Icon(
-                      CupertinoIcons.bubble_middle_bottom,
-                      size: 18,
-                      color: Color(0xFF757575),
-                    ),
-                    const SizedBox(width: 6),
-                    Text(
-                      '${state.commentCount}',
-                      style: const TextStyle(
+            return Card(
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(20),
+              ),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                children: [
+                  LikeButton(
+                    isLiked: isLiked,
+                    likeCount: state.likeCount,
+                    onLike: context.read<LoopContainerCubit>().toggleLoopLike,
+                  ),
+                  Row(
+                    children: [
+                      const Icon(
+                        CupertinoIcons.bubble_middle_bottom,
+                        size: 18,
                         color: Color(0xFF757575),
                       ),
-                    ),
-                  ],
-                ),
-                GestureDetector(
-                  // onTap: null,
-                  child: const Row(
-                    children: [
-                      Icon(
-                        CupertinoIcons.arrow_2_squarepath,
-                        color: Color(0xFF444444),
-                        size: 18,
-                      ),
-                      SizedBox(width: 6),
+                      const SizedBox(width: 6),
                       Text(
-                        'soon',
-                        style: TextStyle(
-                          color: Color(0xFF444444),
+                        '${state.commentCount}',
+                        style: const TextStyle(
+                          color: Color(0xFF757575),
                         ),
                       ),
                     ],
                   ),
-                ),
-                IconButton(
-                  onPressed: () => _showActionSheet(context),
-                  icon: const Icon(
-                    CupertinoIcons.ellipsis,
-                    size: 18,
-                    color: Color(0xFF757575),
+                  GestureDetector(
+                    // onTap: null,
+                    child: const Row(
+                      children: [
+                        Icon(
+                          CupertinoIcons.arrow_2_squarepath,
+                          color: Color(0xFF444444),
+                          size: 18,
+                        ),
+                        SizedBox(width: 6),
+                        Text(
+                          'soon',
+                          style: TextStyle(
+                            color: Color(0xFF444444),
+                          ),
+                        ),
+                      ],
+                    ),
                   ),
-                ),
-              ],
+                  IconButton(
+                    onPressed: () => _showActionSheet(context),
+                    icon: const Icon(
+                      CupertinoIcons.ellipsis,
+                      size: 18,
+                      color: Color(0xFF757575),
+                    ),
+                  ),
+                ],
+              ),
             );
           },
         );

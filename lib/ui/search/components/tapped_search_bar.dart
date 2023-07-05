@@ -9,10 +9,12 @@ import 'package:intheloopapp/ui/themes.dart';
 class TappedSearchBar extends StatelessWidget {
   const TappedSearchBar({
     required this.searchFocusNode,
+    required this.searchController,
     super.key,
   });
 
   final FocusNode searchFocusNode;
+  final TextEditingController searchController;
 
   @override
   Widget build(BuildContext context) {
@@ -20,6 +22,7 @@ class TappedSearchBar extends StatelessWidget {
     return BlocBuilder<SearchBloc, SearchState>(
       builder: (context, state) {
         return SearchBar(
+          controller: searchController,
           focusNode: searchFocusNode,
           hintText: 'Search...',
           leading: IconButton(
