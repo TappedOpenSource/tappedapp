@@ -67,9 +67,7 @@ class _UserTileState extends State<UserTile> {
 
   @override
   Widget build(BuildContext context) {
-    final navigationBloc = context.read<NavigationBloc>();
     final database = context.read<DatabaseRepository>();
-
     if (widget.user.deleted) return const SizedBox.shrink();
 
     return BlocSelector<OnboardingBloc, OnboardingState, UserModel?>(

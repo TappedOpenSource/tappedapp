@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intheloopapp/data/database_repository.dart';
 import 'package:intheloopapp/domains/models/user_model.dart';
+import 'package:intheloopapp/ui/user_card.dart';
 import 'package:intheloopapp/ui/user_tile.dart';
 
 class DiscoverView extends StatelessWidget {
@@ -30,7 +31,7 @@ class DiscoverView extends StatelessWidget {
                   horizontal: 8,
                 ),
                 child: Text(
-                  'Most Booked',
+                  'Top Performers',
                   style: TextStyle(
                     fontSize: 28,
                     fontWeight: FontWeight.bold,
@@ -40,15 +41,30 @@ class DiscoverView extends StatelessWidget {
               if (bookingLeaders.isEmpty)
                 const Center(
                   child: Text('None rn'),
+                )
+              else
+                SizedBox(
+                  height: 200,
+                  child: ListView.builder(
+                    scrollDirection: Axis.horizontal,
+                    itemCount: bookingLeaders.length,
+                    itemBuilder: (context, index) {
+                      return Padding(
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 12,
+                        ),
+                        child: UserCard(user: bookingLeaders[index]),
+                      );
+                    },
+                  ),
                 ),
-              ...bookingLeaders.map((e) => UserTile(user: e)),
               const Padding(
                 padding: EdgeInsets.symmetric(
                   vertical: 16,
                   horizontal: 8,
                 ),
                 child: Text(
-                  'Most Viewed',
+                  'Top Creators',
                   style: TextStyle(
                     fontSize: 28,
                     fontWeight: FontWeight.bold,
@@ -58,8 +74,23 @@ class DiscoverView extends StatelessWidget {
               if (viewLeaders.isEmpty)
                 const Center(
                   child: Text('None rn'),
+                )
+              else
+                SizedBox(
+                  height: 200,
+                  child: ListView.builder(
+                    scrollDirection: Axis.horizontal,
+                    itemCount: viewLeaders.length,
+                    itemBuilder: (context, index) {
+                      return Padding(
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 12,
+                        ),
+                        child: UserCard(user: viewLeaders[index]),
+                      );
+                    },
+                  ),
                 ),
-              ...viewLeaders.map((e) => UserTile(user: e)),
             ],
           ),
         );
