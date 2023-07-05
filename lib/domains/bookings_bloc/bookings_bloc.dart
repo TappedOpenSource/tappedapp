@@ -1,9 +1,9 @@
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
-import 'package:intheloopapp/utils/app_logger.dart';
 import 'package:intheloopapp/data/database_repository.dart';
 import 'package:intheloopapp/domains/authentication_bloc/authentication_bloc.dart';
 import 'package:intheloopapp/domains/models/booking.dart';
+import 'package:intheloopapp/utils/app_logger.dart';
 
 part 'bookings_event.dart';
 part 'bookings_state.dart';

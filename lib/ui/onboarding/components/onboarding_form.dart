@@ -1,16 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:formz/formz.dart';
-import 'package:intheloopapp/utils/app_logger.dart';
 import 'package:intheloopapp/domains/authentication_bloc/authentication_bloc.dart';
 import 'package:intheloopapp/domains/models/option.dart';
 import 'package:intheloopapp/ui/forms/artist_name_text_field.dart';
-import 'package:intheloopapp/ui/forms/bio_text_field.dart';
 import 'package:intheloopapp/ui/forms/location_text_field.dart';
 import 'package:intheloopapp/ui/forms/username_text_field.dart';
 import 'package:intheloopapp/ui/onboarding/components/eula_button.dart';
 import 'package:intheloopapp/ui/onboarding/components/profile_picture_uploader.dart';
 import 'package:intheloopapp/ui/onboarding/onboarding_flow_cubit.dart';
+import 'package:intheloopapp/utils/app_logger.dart';
 
 class OnboardingForm extends StatelessWidget {
   const OnboardingForm({super.key});
@@ -53,12 +52,12 @@ class OnboardingForm extends StatelessWidget {
                         .locationChange(place, placeId),
                   ),
                   const SizedBox(height: 20),
-                  BioTextField(
-                    initialValue: state.bio.value,
-                    onChanged: (input) => context
-                        .read<OnboardingFlowCubit>()
-                        .bioChange(input ?? ''),
-                  ),
+                  // BioTextField(
+                  //   initialValue: state.bio.value,
+                  //   onChanged: (input) => context
+                  //       .read<OnboardingFlowCubit>()
+                  //       .bioChange(input ?? ''),
+                  // ),
                   const SizedBox(height: 20),
                   EULAButton(
                     initialValue: state.eula,

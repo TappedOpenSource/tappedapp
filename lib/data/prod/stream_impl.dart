@@ -1,8 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart' as firestore;
 import 'package:cloud_functions/cloud_functions.dart';
-import 'package:intheloopapp/utils/app_logger.dart';
 import 'package:intheloopapp/data/stream_repository.dart';
 import 'package:intheloopapp/domains/models/user_model.dart';
+import 'package:intheloopapp/utils/app_logger.dart';
 import 'package:stream_chat_flutter/stream_chat_flutter.dart';
 
 final _functions = FirebaseFunctions.instance;

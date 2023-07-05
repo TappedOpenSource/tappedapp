@@ -12,7 +12,6 @@ import 'package:intheloopapp/domains/onboarding_bloc/onboarding_bloc.dart';
 import 'package:intheloopapp/ui/app_theme_cubit.dart';
 import 'package:intheloopapp/ui/common/down_for_maintenance_view.dart';
 import 'package:intheloopapp/ui/loading/loading_view.dart';
-import 'package:intheloopapp/ui/login/login_view.dart';
 import 'package:intheloopapp/ui/onboarding/onboarding_view.dart';
 import 'package:intheloopapp/ui/shell/shell_view.dart';
 import 'package:intheloopapp/ui/splash/splash_view.dart';
@@ -103,7 +102,8 @@ class App extends StatelessWidget {
               home:
                   BlocBuilder<DownForMaintenanceBloc, DownForMaintenanceState>(
                 builder: (context, downState) {
-                  // return const SplashView();
+                  return const SplashView();
+                  // return const OnboardingView();
 
                   if (downState.downForMaintenance) {
                     return const DownForMainenanceView();
@@ -119,7 +119,7 @@ class App extends StatelessWidget {
                               context,
                               authState.currentAuthUser.uid,
                             ),
-                          Unauthenticated() => const LoginView(),
+                          Unauthenticated() => const SplashView(),
                         };
                       } catch (e, s) {
                         FirebaseCrashlytics.instance.recordError(

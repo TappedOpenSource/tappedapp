@@ -3,10 +3,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intheloopapp/domains/models/loop.dart';
-import 'package:intheloopapp/domains/models/user_model.dart';
-import 'package:intheloopapp/domains/onboarding_bloc/onboarding_bloc.dart';
 import 'package:intheloopapp/ui/common/tapped_app_bar.dart';
-import 'package:intheloopapp/ui/error/error_view.dart';
 import 'package:intheloopapp/ui/loop_feed/loop_feed_cubit.dart';
 import 'package:intheloopapp/ui/loop_feed/loop_list.dart';
 

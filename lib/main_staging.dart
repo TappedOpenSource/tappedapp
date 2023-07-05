@@ -4,9 +4,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:hydrated_bloc/hydrated_bloc.dart';
 import 'package:intheloopapp/dependencies.dart';
-import 'package:intheloopapp/utils/error.dart';
 import 'package:intheloopapp/firebase_options.dart';
 import 'package:intheloopapp/ui/app/app.dart';
+import 'package:intheloopapp/utils/error.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:stream_chat_flutter/stream_chat_flutter.dart';
 

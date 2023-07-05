@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:intheloopapp/ui/loading/logo_wave.dart';
-import 'package:rive/rive.dart';
 
 class LoadingView extends StatelessWidget {
   const LoadingView({super.key});
