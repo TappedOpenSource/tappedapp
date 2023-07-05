@@ -44,3 +44,5 @@ class SetAdvancedSearchFilters extends SearchEvent {
 }
 
 class ClearFilters extends SearchEvent {}
+
+class ClearSearch extends SearchEvent {}
