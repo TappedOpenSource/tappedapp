@@ -1,6 +1,8 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:formz/formz.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:intheloopapp/domains/authentication_bloc/authentication_bloc.dart';
 import 'package:intheloopapp/domains/models/option.dart';
 import 'package:intheloopapp/ui/forms/artist_name_text_field.dart';
@@ -30,12 +32,25 @@ class OnboardingForm extends StatelessWidget {
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  ArtistNameTextField(
-                    onChanged: (input) => context
-                        .read<OnboardingFlowCubit>()
-                        .aristNameChange(input ?? ''),
-                    initialValue: state.artistName.value,
+                  // ArtistNameTextField(
+                  //   onChanged: (input) => context
+                  //       .read<OnboardingFlowCubit>()
+                  //       .aristNameChange(input ?? ''),
+                  //   initialValue: state.artistName.value,
+                  // ),
+                  Row(
+                    children: [
+                      Text(
+                        'start your journey...',
+                        style: GoogleFonts.manrope(
+                          fontSize: 28,
+                          fontWeight: FontWeight.w900,
+                        ),
+                      ),
+                    ],
                   ),
+                  const SizedBox(height: 20),
+                  const ProfilePictureUploader(),
                   const SizedBox(height: 20),
                   UsernameTextField(
                     onChanged: (input) => context
@@ -44,31 +59,29 @@ class OnboardingForm extends StatelessWidget {
                     initialValue: state.username.value,
                   ),
                   const SizedBox(height: 20),
-                  LocationTextField(
-                    initialPlaceId: state.placeId.asNullable(),
-                    initialPlace: state.place.asNullable(),
-                    onChanged: (place, placeId) => context
-                        .read<OnboardingFlowCubit>()
-                        .locationChange(place, placeId),
-                  ),
-                  const SizedBox(height: 20),
+                  // LocationTextField(
+                  //   initialPlaceId: state.placeId.asNullable(),
+                  //   initialPlace: state.place.asNullable(),
+                  //   onChanged: (place, placeId) => context
+                  //       .read<OnboardingFlowCubit>()
+                  //       .locationChange(place, placeId),
+                  // ),
+                  // const SizedBox(height: 20),
                   // BioTextField(
                   //   initialValue: state.bio.value,
                   //   onChanged: (input) => context
                   //       .read<OnboardingFlowCubit>()
                   //       .bioChange(input ?? ''),
                   // ),
-                  const SizedBox(height: 20),
+                  // const SizedBox(height: 20),
                   EULAButton(
                     initialValue: state.eula,
                     onChanged: (input) => context
                         .read<OnboardingFlowCubit>()
                         .eulaChange(input ?? false),
                   ),
-                  const SizedBox(height: 50),
-                  const ProfilePictureUploader(),
-                  const SizedBox(height: 50),
-                  FilledButton(
+                  const SizedBox(height: 20),
+                  CupertinoButton.filled(
                     onPressed: () async {
                       try {
                         await context
