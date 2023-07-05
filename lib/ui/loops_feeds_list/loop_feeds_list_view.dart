@@ -11,7 +11,6 @@ import 'package:intheloopapp/domains/navigation_bloc/tapped_route.dart';
 import 'package:intheloopapp/domains/onboarding_bloc/onboarding_bloc.dart';
 import 'package:intheloopapp/ui/error/error_view.dart';
 import 'package:intheloopapp/ui/loop_feed/loop_feed_view.dart';
-import 'package:intheloopapp/ui/messaging/messaging_view.dart';
 import 'package:intheloopapp/ui/profile/components/notification_icon_button.dart';
 import 'package:pull_down_button/pull_down_button.dart';
 import 'package:stream_chat_flutter/stream_chat_flutter.dart';

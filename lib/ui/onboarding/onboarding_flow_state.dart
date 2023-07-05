@@ -5,7 +5,7 @@ class OnboardingFlowState extends Equatable with FormzMixin {
     required this.currentUserId,
     this.username = const UsernameInput.pure(),
     this.artistName = const ArtistNameInput.pure(),
-    this.bio = const BioInput.pure(),
+    // this.bio = const BioInput.pure(),
     this.eula = false,
     this.placeId = const None(),
     // this.musicianType = const [],
@@ -22,7 +22,7 @@ class OnboardingFlowState extends Equatable with FormzMixin {
   final String currentUserId;
   final UsernameInput username;
   final ArtistNameInput artistName;
-  final BioInput bio;
+  // final BioInput bio;
   final bool eula;
   final Option<String> placeId;
   final Option<File> pickedPhoto;
@@ -40,7 +40,7 @@ class OnboardingFlowState extends Equatable with FormzMixin {
         eula,
         placeId,
         place,
-        bio,
+        // bio,
         pickedPhoto,
         status,
         formKey,
@@ -62,7 +62,7 @@ class OnboardingFlowState extends Equatable with FormzMixin {
       artistName: artistName ?? this.artistName,
       placeId: placeId ?? this.placeId,
       place: place ?? this.place,
-      bio: bio ?? this.bio,
+      // bio: bio ?? this.bio,
       eula: eula ?? this.eula,
       // musicianType: musicianType ?? this.musicianType,
       pickedPhoto: pickedPhoto ?? this.pickedPhoto,
@@ -76,6 +76,6 @@ class OnboardingFlowState extends Equatable with FormzMixin {
   List<FormzInput<String, Object>> get inputs => [
     username,
     artistName,
-    bio,
+    // bio,
   ];
 }

@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:intheloopapp/utils/app_logger.dart';
 import 'package:intheloopapp/domains/authentication_bloc/authentication_bloc.dart';
 import 'package:intheloopapp/ui/common/tapped_app_bar.dart';
+import 'package:intheloopapp/utils/app_logger.dart';
 
 class ErrorView extends StatelessWidget {
   const ErrorView({super.key});

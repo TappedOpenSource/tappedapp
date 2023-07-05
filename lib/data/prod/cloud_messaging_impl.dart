@@ -4,8 +4,8 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 // ignore: unused_import
 import 'package:firebase_in_app_messaging/firebase_in_app_messaging.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
-import 'package:intheloopapp/utils/app_logger.dart';
 import 'package:intheloopapp/data/notification_repository.dart';
+import 'package:intheloopapp/utils/app_logger.dart';
 import 'package:stream_chat_flutter/stream_chat_flutter.dart';
 
 final fcm = FirebaseMessaging.instance;

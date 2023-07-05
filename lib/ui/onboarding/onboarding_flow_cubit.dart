@@ -7,7 +7,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_google_places_sdk/flutter_google_places_sdk.dart';
 import 'package:formz/formz.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:intheloopapp/utils/app_logger.dart';
 import 'package:intheloopapp/data/database_repository.dart';
 import 'package:intheloopapp/data/storage_repository.dart';
 import 'package:intheloopapp/domains/authentication_bloc/authentication_bloc.dart';
@@ -19,6 +18,7 @@ import 'package:intheloopapp/domains/onboarding_bloc/onboarding_bloc.dart';
 import 'package:intheloopapp/ui/onboarding/artist_name_input.dart';
 import 'package:intheloopapp/ui/onboarding/bio_input.dart';
 import 'package:intheloopapp/ui/onboarding/username_input.dart';
+import 'package:intheloopapp/utils/app_logger.dart';
 import 'package:intheloopapp/utils/geohash.dart';
 
 part 'onboarding_flow_state.dart';
@@ -139,7 +139,7 @@ class OnboardingFlowCubit extends Cubit<OnboardingFlowState> {
         username: Username.fromString(state.username.value),
         artistName: state.artistName.value,
         profilePicture: profilePictureUrl.asNullable(),
-        bio: state.bio.value,
+        // bio: state.bio.value,
         placeId: state.placeId,
         geohash: Option.fromNullable(geohash),
         lat: Option.fromNullable(lat),

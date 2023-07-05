@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
 
 // const itlAccent = Color(0xff6200ee);
 const tappedAccent = Color(0xff0086CC);
