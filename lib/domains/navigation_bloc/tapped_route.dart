@@ -19,6 +19,7 @@ import 'package:intheloopapp/ui/create_service/create_service_view.dart';
 import 'package:intheloopapp/ui/forms/location_form/location_form_view.dart';
 import 'package:intheloopapp/ui/likes/likes_view.dart';
 import 'package:intheloopapp/ui/login/forgot_password_view.dart';
+import 'package:intheloopapp/ui/login/login_view.dart';
 import 'package:intheloopapp/ui/login/signup_view.dart';
 import 'package:intheloopapp/ui/loop_feed/loop_feed_view.dart';
 import 'package:intheloopapp/ui/loop_view/loop_view.dart';
@@ -325,6 +326,14 @@ final class ActivitiesPage extends TappedRoute {
       : super(
           routeName: '/activities',
           view: const ActivityView(),
+        );
+}
+
+final class LoginPage extends TappedRoute {
+  LoginPage()
+      : super(
+          routeName: '/login',
+          view: const LoginView(),
         );
 }
 
