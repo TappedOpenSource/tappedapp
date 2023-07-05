@@ -19,46 +19,7 @@ class LoginView extends StatelessWidget {
           authRepository: context.read<AuthRepository>(),
           navigationBloc: context.read<NavigationBloc>(),
         ),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            const LoginForm(),
-            const SizedBox(height: 15),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                TextButton(
-                  child: const Text(
-                    'Privacy Policy',
-                    style: TextStyle(
-                      color: tappedAccent,
-                    ),
-                  ),
-                  onPressed: () => launchUrl(
-                    Uri(
-                      scheme: 'https',
-                      path: 'tapped.ai/privacy',
-                    ),
-                  ),
-                ),
-                TextButton(
-                  child: const Text(
-                    'Terms of Service',
-                    style: TextStyle(
-                      color: tappedAccent,
-                    ),
-                  ),
-                  onPressed: () => launchUrl(
-                    Uri(
-                      scheme: 'https',
-                      path: 'tapped.ai/terms',
-                    ),
-                  ),
-                ),
-              ],
-            ),
-          ],
-        ),
+        child: const LoginForm(),
       ),
     );
   }

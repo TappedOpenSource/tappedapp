@@ -102,7 +102,7 @@ class App extends StatelessWidget {
               home:
                   BlocBuilder<DownForMaintenanceBloc, DownForMaintenanceState>(
                 builder: (context, downState) {
-                  // return const SplashView();
+                  return const SplashView();
                   // return const OnboardingView();
 
                   if (downState.downForMaintenance) {
