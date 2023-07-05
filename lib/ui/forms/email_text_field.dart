@@ -13,18 +13,26 @@ class EmailTextField extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return TextFormField(
-      decoration: InputDecoration(
-        prefixIcon: const Icon(Icons.lock),
-        labelText: labelText,
+    return Card(
+      child: Padding(
+        padding: const EdgeInsets.all(
+          18,
+        ),
+        child: TextFormField(
+          decoration: InputDecoration.collapsed(
+            // prefixIcon: const Icon(Icons.lock),
+            // labelText: labelText,
+            hintText: labelText,
+          ),
+          keyboardType: TextInputType.emailAddress,
+          validator: (value) => EmailValidator.validate(value ?? '')
+              ? null
+              : 'Please enter a valid email',
+          onChanged: (input) async {
+            onChanged?.call(input);
+          },
+        ),
       ),
-      keyboardType: TextInputType.emailAddress,
-      validator: (value) => EmailValidator.validate(value ?? '')
-          ? null
-          : 'Please enter a valid email',
-      onChanged: (input) async {
-        onChanged?.call(input);
-      },
     );
   }
 }

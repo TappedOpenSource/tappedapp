@@ -14,22 +14,30 @@ class PasswordTextField extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return TextFormField(
-      obscureText: true,
-      decoration: InputDecoration(
-        prefixIcon: const Icon(Icons.lock),
-        labelText: labelText,
+    return Card(
+      child: Padding(
+        padding: const EdgeInsets.all(
+          18,
+        ),
+        child: TextFormField(
+          obscureText: true,
+          decoration: InputDecoration.collapsed(
+            // prefixIcon: const Icon(Icons.lock),
+            // labelText: labelText,
+            hintText: labelText,
+          ),
+          validator: (input) {
+            if (input!.trim().length < 8) {
+              return 'please enter a valid handle';
+            }
+          
+            return null;
+          },
+          onChanged: (input) async {
+            onChanged?.call(input);
+          },
+        ),
       ),
-      validator: (input) {
-        if (input!.trim().length < 8) {
-          return 'please enter a valid handle';
-        }
-
-        return null;
-      },
-      onChanged: (input) async {
-        onChanged?.call(input);
-      },
     );
   }
 }

@@ -37,7 +37,7 @@ class LoginView extends StatelessWidget {
                   onPressed: () => launchUrl(
                     Uri(
                       scheme: 'https',
-                      path: 'tapped.jonaylor.xyz/privacy',
+                      path: 'tapped.ai/privacy',
                     ),
                   ),
                 ),
@@ -51,7 +51,7 @@ class LoginView extends StatelessWidget {
                   onPressed: () => launchUrl(
                     Uri(
                       scheme: 'https',
-                      path: 'intheloopstudio.com/terms',
+                      path: 'tapped.ai/terms',
                     ),
                   ),
                 ),

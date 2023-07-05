@@ -8,6 +8,7 @@ import 'package:intheloopapp/ui/forms/apple_login_button.dart';
 import 'package:intheloopapp/ui/forms/email_text_field.dart';
 import 'package:intheloopapp/ui/forms/google_login_button.dart';
 import 'package:intheloopapp/ui/forms/password_text_field.dart';
+import 'package:intheloopapp/ui/loading/logo_wave.dart';
 import 'package:intheloopapp/ui/login/components/confirm_signup_button.dart';
 import 'package:intheloopapp/ui/login/login_cubit.dart';
 
@@ -34,10 +35,7 @@ class SignUpView extends StatelessWidget {
                     mainAxisSize: MainAxisSize.min,
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      Image.asset(
-                        'assets/tapped_logo_reversed.png',
-                        height: 96,
-                      ),
+                      const LogoWave(),
                       const SizedBox(height: 50),
                       EmailTextField(
                         onChanged: (input) =>

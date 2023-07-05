@@ -5,6 +5,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:formz/formz.dart';
 import 'package:intheloopapp/ui/forms/apple_login_button.dart';
 import 'package:intheloopapp/ui/forms/google_login_button.dart';
+import 'package:intheloopapp/ui/loading/logo_wave.dart';
 import 'package:intheloopapp/ui/login/components/traditional_login.dart';
 import 'package:intheloopapp/ui/login/login_cubit.dart';
 
@@ -38,10 +39,7 @@ class LoginForm extends StatelessWidget {
               mainAxisSize: MainAxisSize.min,
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Image.asset(
-                  'assets/tapped_logo_reversed.png',
-                  height: 96,
-                ),
+                const LogoWave(),
                 const SizedBox(height: 50),
                 const TraditionalLogin(),
                 const SizedBox(height: 20),

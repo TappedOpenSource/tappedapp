@@ -95,7 +95,7 @@ class ControlButtons extends StatelessWidget {
           builder: (context, state) {
             return Card(
               shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(20),
+                borderRadius: BorderRadius.circular(25),
               ),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceAround,

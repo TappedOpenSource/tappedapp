@@ -15,6 +15,7 @@ import 'package:intheloopapp/ui/loading/loading_view.dart';
 import 'package:intheloopapp/ui/login/login_view.dart';
 import 'package:intheloopapp/ui/onboarding/onboarding_view.dart';
 import 'package:intheloopapp/ui/shell/shell_view.dart';
+import 'package:intheloopapp/ui/splash/splash_view.dart';
 import 'package:intheloopapp/ui/themes.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:stream_chat_flutter/stream_chat_flutter.dart';
@@ -102,6 +103,7 @@ class App extends StatelessWidget {
               home:
                   BlocBuilder<DownForMaintenanceBloc, DownForMaintenanceState>(
                 builder: (context, downState) {
+                  // return const SplashView();
 
                   if (downState.downForMaintenance) {
                     return const DownForMainenanceView();
