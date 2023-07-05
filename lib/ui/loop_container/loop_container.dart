@@ -79,11 +79,11 @@ class _LoopContainerState extends State<LoopContainer>
                   children: [
                     Linkify(
                       text: widget.loop.description,
-                      style: GoogleFonts.nunito(
-                        fontSize: 18,
+                      style: GoogleFonts.arimo(
+                        fontSize: 16,
                       ),
-                      linkStyle: GoogleFonts.nunito(
-                        fontSize: 18,
+                      linkStyle: GoogleFonts.arimo(
+                        fontSize: 16,
                         color: Colors.lightBlue,
                       ),
                     ),

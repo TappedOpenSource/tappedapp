@@ -4,7 +4,6 @@ import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_google_places_sdk/flutter_google_places_sdk.dart';
 import 'package:formz/formz.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:intheloopapp/data/database_repository.dart';
@@ -15,11 +14,8 @@ import 'package:intheloopapp/domains/models/user_model.dart';
 import 'package:intheloopapp/domains/models/username.dart';
 import 'package:intheloopapp/domains/navigation_bloc/navigation_bloc.dart';
 import 'package:intheloopapp/domains/onboarding_bloc/onboarding_bloc.dart';
-import 'package:intheloopapp/ui/onboarding/artist_name_input.dart';
-import 'package:intheloopapp/ui/onboarding/bio_input.dart';
 import 'package:intheloopapp/ui/onboarding/username_input.dart';
 import 'package:intheloopapp/utils/app_logger.dart';
-import 'package:intheloopapp/utils/geohash.dart';
 
 part 'onboarding_flow_state.dart';
 
@@ -34,9 +30,9 @@ class OnboardingFlowCubit extends Cubit<OnboardingFlowState> {
   }) : super(
           OnboardingFlowState(
             currentUserId: currentAuthUser.uid,
-            artistName: ArtistNameInput.dirty(
-              value: currentAuthUser.displayName ?? '',
-            ),
+            // artistName: ArtistNameInput.dirty(
+            //   value: currentAuthUser.displayName ?? '',
+            // ),
           ),
         );
 
@@ -52,19 +48,19 @@ class OnboardingFlowCubit extends Cubit<OnboardingFlowState> {
           username: UsernameInput.dirty(value: input),
         ),
       );
-  void aristNameChange(String input) => emit(
-        state.copyWith(
-          artistName: ArtistNameInput.dirty(value: input),
-        ),
-      );
-  void locationChange(Place? place, String placeId) {
-    emit(
-      state.copyWith(
-        place: Option.fromNullable(place),
-        placeId: Some(placeId),
-      ),
-    );
-  }
+  // void aristNameChange(String input) => emit(
+  //       state.copyWith(
+  //         artistName: ArtistNameInput.dirty(value: input),
+  //       ),
+  //     );
+  // void locationChange(Place? place, String placeId) {
+  //   emit(
+  //     state.copyWith(
+  //       place: Option.fromNullable(place),
+  //       placeId: Some(placeId),
+  //     ),
+  //   );
+  // }
 
   // ignore: avoid_positional_boolean_parameters
   void eulaChange(bool input) => emit(
@@ -73,11 +69,11 @@ class OnboardingFlowCubit extends Cubit<OnboardingFlowState> {
         ),
       );
 
-  void bioChange(String input) => emit(
-        state.copyWith(
-          bio: BioInput.dirty(value: input),
-        ),
-      );
+  // void bioChange(String input) => emit(
+  //       state.copyWith(
+  //         bio: BioInput.dirty(value: input),
+  //       ),
+  //     );
 
   Future<void> handleImageFromGallery() async {
     try {
@@ -126,24 +122,24 @@ class OnboardingFlowCubit extends Cubit<OnboardingFlowState> {
         None() => Future.value(const None<String>()),
       };
 
-      final lat = state.place.asNullable()?.latLng?.lat;
-      final lng = state.place.asNullable()?.latLng?.lng;
-      final geohash = (lat != null && lng != null)
-          ? geocodeEncode(lat: lat, lng: lng)
-          : null;
+      // final lat = state.place.asNullable()?.latLng?.lat;
+      // final lng = state.place.asNullable()?.latLng?.lng;
+      // final geohash = (lat != null && lng != null)
+      //     ? geocodeEncode(lat: lat, lng: lng)
+      //     : null;
 
       final emptyUser = UserModel.empty();
       final currentUser = emptyUser.copyWith(
         id: currentAuthUser.uid,
         email: currentAuthUser.email,
         username: Username.fromString(state.username.value),
-        artistName: state.artistName.value,
+        artistName: currentAuthUser.displayName ?? state.username.value,
         profilePicture: profilePictureUrl.asNullable(),
         // bio: state.bio.value,
-        placeId: state.placeId,
-        geohash: Option.fromNullable(geohash),
-        lat: Option.fromNullable(lat),
-        lng: Option.fromNullable(lng),
+        // placeId: state.placeId,
+        // geohash: Option.fromNullable(geohash),
+        // lat: Option.fromNullable(lat),
+        // lng: Option.fromNullable(lng),
       );
 
       await databaseRepository.createUser(currentUser);

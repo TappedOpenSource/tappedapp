@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intheloopapp/domains/bookings_bloc/bookings_bloc.dart';
 import 'package:intheloopapp/ui/bookings/components/bookings_list.dart';
@@ -11,6 +12,7 @@ class BookingsView extends StatelessWidget {
     return RefreshIndicator(
       onRefresh: () {
         context.read<BookingsBloc>().add(FetchBookings());
+        HapticFeedback.mediumImpact();
         return Future<void>(() => null);
       },
       child: Scaffold(

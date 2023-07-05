@@ -35,16 +35,15 @@ class OnboardingView extends StatelessWidget {
               // ..initFollowRecommendations(),
               child: Scaffold(
                 backgroundColor: Theme.of(context).colorScheme.background,
-                appBar: const TappedAppBar(
-                  title: 'Onboarding',
-                ),
+                // appBar: const TappedAppBar(
+                //   title: 'Onboarding',
+                // ),
                 // floatingActionButton: const ControlButtons(),
                 body: Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 20),
-                  child: const Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 20, vertical: 20),
-                    child: OnboardingForm(),
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 30,
                   ),
+                  child: const OnboardingForm(),
                 ),
               ),
             ),
