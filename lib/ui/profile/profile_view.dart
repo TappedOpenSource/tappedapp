@@ -118,6 +118,7 @@ class ProfileView extends StatelessWidget {
   ) =>
       [
         SliverAppBar(
+          backgroundColor: Theme.of(context).colorScheme.background,
           expandedHeight: expandedBarHeight,
           collapsedHeight: collapsedBarHeight,
           pinned: true,
@@ -137,7 +138,6 @@ class ProfileView extends StatelessWidget {
             ]);
           },
           // automaticallyImplyLeading: false,
-          backgroundColor: Colors.black,
           flexibleSpace: FlexibleSpaceBar(
             stretchModes: const [
               StretchMode.zoomBackground,
@@ -355,6 +355,7 @@ class ProfileView extends StatelessWidget {
           collapsedHeight: collapsedBarHeight,
           pinned: true,
           stretch: true,
+          backgroundColor: Theme.of(context).colorScheme.background,
           onStretchTrigger: () async {
             final cubit = context.read<ProfileCubit>();
             await Future.wait([
