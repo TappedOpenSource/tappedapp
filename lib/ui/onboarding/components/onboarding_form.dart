@@ -101,7 +101,14 @@ class OnboardingForm extends StatelessWidget {
                         );
                       }
                     },
-                    child: const Text('Complete Onboarding'),
+                    borderRadius: BorderRadius.circular(15),
+                    child: const Text(
+                      'Complete Onboarding',
+                      style: TextStyle(
+                        fontWeight: FontWeight.w700,
+                        color: Colors.white,
+                      ),
+                    ),
                   ),
                   TextButton(
                     onPressed: () {

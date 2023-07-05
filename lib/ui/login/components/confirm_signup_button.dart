@@ -11,7 +11,7 @@ class ConfirmSignUpButton extends StatelessWidget {
     return BlocBuilder<LoginCubit, LoginState>(
       builder: (context, state) {
         return CupertinoButton.filled(
-          child: const Text('Sign Up'),
+          borderRadius: BorderRadius.circular(15),
           onPressed: () async {
             try {
               await context.read<LoginCubit>().signUpWithCredentials();
@@ -23,6 +23,7 @@ class ConfirmSignUpButton extends StatelessWidget {
               );
             }
           },
+          child: const Text('Sign Up'),
         );
       },
     );

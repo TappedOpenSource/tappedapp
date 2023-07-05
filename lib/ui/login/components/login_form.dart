@@ -34,7 +34,7 @@ class LoginForm extends StatelessWidget {
         alignment: const Alignment(0, -1 / 3),
         child: SingleChildScrollView(
           child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 50),
+            padding: const EdgeInsets.symmetric(horizontal: 30),
             child: Column(
               mainAxisSize: MainAxisSize.min,
               mainAxisAlignment: MainAxisAlignment.center,
@@ -42,48 +42,72 @@ class LoginForm extends StatelessWidget {
                 const LogoWave(),
                 const SizedBox(height: 50),
                 const TraditionalLogin(),
-                const SizedBox(height: 20),
+                const SizedBox(height: 10),
                 Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    GoogleLoginButton(
-                      onPressed: () async {
-                        try {
-                          await context.read<LoginCubit>().signInWithGoogle();
-                        } catch (e) {
-                          ScaffoldMessenger.of(context)
-                            ..hideCurrentSnackBar()
-                            ..showSnackBar(
-                              const SnackBar(
-                                backgroundColor: Colors.redAccent,
-                                content: Text('Authentication Failure'),
-                              ),
-                            );
-                        }
-                      },
+                    Expanded(
+                      child: Divider(
+                        height: 0,
+                        thickness: 0.5,
+                        color: Colors.white.withOpacity(0.5),
+                      ),
                     ),
-                    const SizedBox(width: 20),
-                    if (Platform.isIOS)
-                      AppleLoginButton(
-                        onPressed: () async {
-                          try {
-                            await context.read<LoginCubit>().signInWithApple();
-                          } catch (e) {
-                            ScaffoldMessenger.of(context)
-                              ..hideCurrentSnackBar()
-                              ..showSnackBar(
-                                const SnackBar(
-                                  backgroundColor: Colors.redAccent,
-                                  content: Text('Authentication Failure'),
-                                ),
-                              );
-                          }
-                        },
-                      )
-                    else
-                      const SizedBox.shrink(),
+                    const SizedBox(width: 5),
+                    Text(
+                      'or',
+                      style: TextStyle(
+                        color: Colors.white.withOpacity(0.5),
+                      ),
+                    ),
+                    const SizedBox(width: 5),
+                    Expanded(
+                      child: Divider(
+                        height: 0,
+                        thickness: 0.5,
+                        color: Colors.white.withOpacity(0.5),
+                      ),
+                    ),
                   ],
                 ),
+                const SizedBox(
+                  height: 20,
+                ),
+                GoogleLoginButton(
+                  onPressed: () async {
+                    try {
+                      await context.read<LoginCubit>().signInWithGoogle();
+                    } catch (e) {
+                      ScaffoldMessenger.of(context)
+                        ..hideCurrentSnackBar()
+                        ..showSnackBar(
+                          const SnackBar(
+                            backgroundColor: Colors.redAccent,
+                            content: Text('Authentication Failure'),
+                          ),
+                        );
+                    }
+                  },
+                ),
+                const SizedBox(height: 20),
+                if (Platform.isIOS)
+                  AppleLoginButton(
+                    onPressed: () async {
+                      try {
+                        await context.read<LoginCubit>().signInWithApple();
+                      } catch (e) {
+                        ScaffoldMessenger.of(context)
+                          ..hideCurrentSnackBar()
+                          ..showSnackBar(
+                            const SnackBar(
+                              backgroundColor: Colors.redAccent,
+                              content: Text('Authentication Failure'),
+                            ),
+                          );
+                      }
+                    },
+                  )
+                else
+                  const SizedBox.shrink(),
               ],
             ),
           ),

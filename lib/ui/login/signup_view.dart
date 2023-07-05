@@ -11,6 +11,8 @@ import 'package:intheloopapp/ui/forms/password_text_field.dart';
 import 'package:intheloopapp/ui/loading/logo_wave.dart';
 import 'package:intheloopapp/ui/login/components/confirm_signup_button.dart';
 import 'package:intheloopapp/ui/login/login_cubit.dart';
+import 'package:intheloopapp/ui/themes.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class SignUpView extends StatelessWidget {
   const SignUpView({super.key});
@@ -30,7 +32,7 @@ class SignUpView extends StatelessWidget {
               alignment: const Alignment(0, -1 / 3),
               child: SingleChildScrollView(
                 child: Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 50),
+                  padding: const EdgeInsets.symmetric(horizontal: 30),
                   child: Column(
                     mainAxisSize: MainAxisSize.min,
                     mainAxisAlignment: MainAxisAlignment.center,
@@ -63,45 +65,100 @@ class SignUpView extends StatelessWidget {
                       ),
                       const ConfirmSignUpButton(),
                       const SizedBox(
-                        height: 50,
+                        height: 25,
                       ),
+                      Row(
+                        children: [
+                          Expanded(
+                            child: Divider(
+                              height: 0,
+                              thickness: 0.5,
+                              color: Colors.white.withOpacity(0.5),
+                            ),
+                          ),
+                          const SizedBox(width: 5),
+                          Text(
+                            'or',
+                            style: TextStyle(
+                              color: Colors.white.withOpacity(0.5),
+                            ),
+                          ),
+                          const SizedBox(width: 5),
+                          Expanded(
+                            child: Divider(
+                              height: 0,
+                              thickness: 0.5,
+                              color: Colors.white.withOpacity(0.5),
+                            ),
+                          ),
+                        ],
+                      ),
+                      const SizedBox(
+                        height: 25,
+                      ),
+                      GoogleLoginButton(
+                        onPressed: () async {
+                          try {
+                            await context.read<LoginCubit>().signInWithGoogle();
+                          } catch (e) {
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              SnackBar(
+                                content: Text(e.toString()),
+                              ),
+                            );
+                          }
+                        },
+                      ),
+                      const SizedBox(height: 20),
+                      if (Platform.isIOS)
+                        AppleLoginButton(
+                          onPressed: () async {
+                            try {
+                              await context
+                                  .read<LoginCubit>()
+                                  .signInWithApple();
+                            } catch (e) {
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                SnackBar(
+                                  content: Text(e.toString()),
+                                ),
+                              );
+                            }
+                          },
+                        )
+                      else
+                        const SizedBox.shrink(),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          GoogleLoginButton(
-                            onPressed: () async {
-                              try {
-                                await context
-                                    .read<LoginCubit>()
-                                    .signInWithGoogle();
-                              } catch (e) {
-                                ScaffoldMessenger.of(context).showSnackBar(
-                                  SnackBar(
-                                    content: Text(e.toString()),
-                                  ),
-                                );
-                              }
-                            },
+                          TextButton(
+                            child: const Text(
+                              'Privacy Policy',
+                              style: TextStyle(
+                                color: tappedAccent,
+                              ),
+                            ),
+                            onPressed: () => launchUrl(
+                              Uri(
+                                scheme: 'https',
+                                path: 'tapped.ai/privacy',
+                              ),
+                            ),
                           ),
-                          const SizedBox(width: 20),
-                          if (Platform.isIOS)
-                            AppleLoginButton(
-                              onPressed: () async {
-                                try {
-                                  await context
-                                      .read<LoginCubit>()
-                                      .signInWithApple();
-                                } catch (e) {
-                                  ScaffoldMessenger.of(context).showSnackBar(
-                                    SnackBar(
-                                      content: Text(e.toString()),
-                                    ),
-                                  );
-                                }
-                              },
-                            )
-                          else
-                            const SizedBox.shrink(),
+                          TextButton(
+                            child: const Text(
+                              'Terms of Service',
+                              style: TextStyle(
+                                color: tappedAccent,
+                              ),
+                            ),
+                            onPressed: () => launchUrl(
+                              Uri(
+                                scheme: 'https',
+                                path: 'tapped.ai/terms',
+                              ),
+                            ),
+                          ),
                         ],
                       ),
                     ],
