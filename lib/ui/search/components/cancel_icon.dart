@@ -42,7 +42,7 @@ class _CancelIconState extends State<CancelIcon> {
   Widget build(BuildContext context) {
     return BlocBuilder<SearchBloc, SearchState>(
       builder: (context, state) {
-        if (!_isFocused) {
+        if (!_isFocused && state.searchTerm.isEmpty) {
           return const SizedBox.shrink();
         }
 

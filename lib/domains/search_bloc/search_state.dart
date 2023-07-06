@@ -34,6 +34,13 @@ class SearchState extends Equatable {
   final int tabIndex;
   final bool loading;
 
+  bool get isNotSearching => searchTerm.isEmpty &&
+      occupations.isEmpty &&
+      genres.isEmpty &&
+      labels.isEmpty &&
+      place == null &&
+      placeId == null;
+
   @override
   List<Object?> get props => [
         tabIndex,
