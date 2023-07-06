@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intheloopapp/domains/search_bloc/search_bloc.dart';
 import 'package:intheloopapp/ui/loading/logo_wave.dart';
+import 'package:intheloopapp/ui/search/location_discover_view.dart';
 import 'package:intheloopapp/ui/user_tile.dart';
 
 class ByLocationResultsList extends StatelessWidget {
@@ -16,6 +17,10 @@ class ByLocationResultsList extends StatelessWidget {
           return const Center(
             child: LogoWave(),
           );
+        }
+
+        if (state.isNotSearching) {
+          return const LocationDiscoverView();
         }
 
         if (state.searchTerm.isEmpty) {

@@ -18,27 +18,8 @@ class ByUsernameResultsList extends StatelessWidget {
           );
         }
 
-        if (state.searchTerm.isEmpty) {
-          return const Center(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Icon(
-                  Icons.search,
-                  size: 200,
-                  color: Color(0xFF757575),
-                ),
-                Text(
-                  'Search Location',
-                  style: TextStyle(
-                    fontSize: 22,
-                    fontWeight: FontWeight.w400,
-                    color: Color(0xFF757575),
-                  ),
-                ),
-              ],
-            ),
-          );
+        if (state.isNotSearching) {
+          return const DiscoverView();
         }
 
         return state.searchResults.isEmpty

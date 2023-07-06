@@ -259,6 +259,7 @@ class SearchBloc extends Bloc<SearchEvent, SearchState> {
     emit(
       state.copyWith(
         locationResults: [],
+        searchTerm: mainText,
         searchResultsByLocation: searchRes,
         loading: false,
       ),
