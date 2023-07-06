@@ -30,6 +30,7 @@ import 'package:intheloopapp/ui/opportunities/interested_view.dart';
 import 'package:intheloopapp/ui/profile/components/service_selection_view.dart';
 import 'package:intheloopapp/ui/profile/profile_view.dart';
 import 'package:intheloopapp/ui/reviews/user_reviews_feed.dart';
+import 'package:intheloopapp/ui/search/search_view.dart';
 import 'package:intheloopapp/ui/settings/settings_view.dart';
 import 'package:stream_chat_flutter/stream_chat_flutter.dart';
 
@@ -241,6 +242,14 @@ final class BookingsPage extends TappedRoute {
         );
 
   final String userId;
+}
+
+final class SearchPage extends TappedRoute {
+  SearchPage()
+      : super(
+          routeName: '/search',
+          view: SearchView(),
+        );
 }
 
 final class AdvancedSearchPage extends TappedRoute {

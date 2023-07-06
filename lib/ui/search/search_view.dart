@@ -9,10 +9,10 @@ import 'package:intheloopapp/ui/search/components/tapped_search_bar.dart';
 import 'package:intheloopapp/ui/themes.dart';
 
 class SearchView extends StatefulWidget {
-  const SearchView({
-    required this.searchFocusNode,
+  SearchView({
+    FocusNode? searchFocusNode,
     super.key,
-  });
+  }): searchFocusNode = searchFocusNode ?? FocusNode();
 
   final FocusNode searchFocusNode;
 

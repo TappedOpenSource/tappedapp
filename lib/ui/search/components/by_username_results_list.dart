@@ -18,25 +18,37 @@ class ByUsernameResultsList extends StatelessWidget {
           );
         }
 
-        if (state.searchTerm.isEmpty &&
-            state.occupations.isEmpty &&
-            state.genres.isEmpty &&
-            state.labels.isEmpty &&
-            state.place == null &&
-            state.placeId == null) {
-          return const DiscoverView();
-        } else if (state.searchResults.isEmpty) {
+        if (state.searchTerm.isEmpty) {
           return const Center(
-            child: Text('No users found'),
-          );
-        } else {
-          return ListView.builder(
-            itemCount: state.searchResults.length,
-            itemBuilder: (BuildContext context, int index) {
-              return UserTile(user: state.searchResults[index]);
-            },
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Icon(
+                  Icons.search,
+                  size: 200,
+                  color: Color(0xFF757575),
+                ),
+                Text(
+                  'Search Location',
+                  style: TextStyle(
+                    fontSize: 22,
+                    fontWeight: FontWeight.w400,
+                    color: Color(0xFF757575),
+                  ),
+                ),
+              ],
+            ),
           );
         }
+
+        return state.searchResults.isEmpty
+            ? const Center(child: Text('No users found'))
+            : ListView.builder(
+                itemCount: state.searchResults.length,
+                itemBuilder: (BuildContext context, int index) {
+                  return UserTile(user: state.searchResults[index]);
+                },
+              );
       },
     );
   }
