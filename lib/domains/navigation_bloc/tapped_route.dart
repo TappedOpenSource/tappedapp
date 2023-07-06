@@ -11,8 +11,9 @@ import 'package:intheloopapp/ui/activity/activity_view.dart';
 import 'package:intheloopapp/ui/advanced_search/advanced_search_view.dart';
 import 'package:intheloopapp/ui/badge/badge_view.dart';
 import 'package:intheloopapp/ui/badge/badges_view.dart';
-import 'package:intheloopapp/ui/booking_view/booking_view.dart';
+import 'package:intheloopapp/ui/booking/booking_view.dart';
 import 'package:intheloopapp/ui/bookings/user_bookings_feed.dart';
+import 'package:intheloopapp/ui/create_booking/booking_confirmation_view.dart';
 import 'package:intheloopapp/ui/create_booking/create_booking_view.dart';
 import 'package:intheloopapp/ui/create_loop/create_loop_view.dart';
 import 'package:intheloopapp/ui/create_service/create_service_view.dart';
@@ -226,6 +227,17 @@ final class BookingPage extends TappedRoute {
   }) : super(
           routeName: '/booking/${booking.id}',
           view: BookingView(booking: booking),
+        );
+
+  final Booking booking;
+}
+
+final class BookingConfirmationPage extends TappedRoute {
+  BookingConfirmationPage({
+    required this.booking,
+  }) : super(
+          routeName: '/booking_confirmation/${booking.id}',
+          view: BookingConfirmationView(booking: booking),
         );
 
   final Booking booking;

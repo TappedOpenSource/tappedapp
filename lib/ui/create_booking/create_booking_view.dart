@@ -10,6 +10,7 @@ import 'package:intheloopapp/domains/models/option.dart';
 import 'package:intheloopapp/domains/models/service.dart';
 import 'package:intheloopapp/domains/models/user_model.dart';
 import 'package:intheloopapp/domains/navigation_bloc/navigation_bloc.dart';
+import 'package:intheloopapp/domains/navigation_bloc/tapped_route.dart';
 import 'package:intheloopapp/domains/onboarding_bloc/onboarding_bloc.dart';
 import 'package:intheloopapp/ui/create_booking/components/create_booking_form.dart';
 import 'package:intheloopapp/ui/create_booking/create_booking_cubit.dart';
@@ -32,6 +33,7 @@ class CreateBookingView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final database = RepositoryProvider.of<DatabaseRepository>(context);
+    final nav = RepositoryProvider.of<NavigationBloc>(context);
     final remote = RepositoryProvider.of<RemoteConfigRepository>(context);
 
     return BlocSelector<OnboardingBloc, OnboardingState, UserModel?>(
@@ -85,9 +87,13 @@ class CreateBookingView extends StatelessWidget {
                       heroTag: 'createBookingButton',
                       onPressed: () async {
                         try {
-                          await context
+                          final booking = await context
                               .read<CreateBookingCubit>()
                               .createBooking();
+
+                          nav.push(
+                            BookingConfirmationPage(booking: booking),
+                          );
                         } on StripeException catch (e, s) {
                           if (e.error.code == FailureCode.Canceled) {
                             return;
