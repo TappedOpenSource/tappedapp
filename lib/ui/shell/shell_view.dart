@@ -8,7 +8,6 @@ import 'package:intheloopapp/ui/bookings/bookings_view.dart';
 import 'package:intheloopapp/ui/error/error_view.dart';
 import 'package:intheloopapp/ui/loops_feeds_list/loop_feeds_list_view.dart';
 import 'package:intheloopapp/ui/profile/profile_view.dart';
-import 'package:intheloopapp/ui/search/components/discover_view.dart';
 import 'package:intheloopapp/ui/search/search_view.dart';
 import 'package:intheloopapp/ui/shell/components/bottom_toolbar.dart';
 
@@ -54,10 +53,9 @@ class _ShellViewState extends State<ShellView> {
                     index: state.selectedTab,
                     children: [
                       const LoopFeedsListView(), // getstream.io activity feed?
-                      // SearchView(
-                      //   searchFocusNode: searchFocusNode,
-                      // ),
-                      const DiscoverView(),
+                      SearchView(
+                        searchFocusNode: searchFocusNode,
+                      ),
                       const BookingsView(),
                       ProfileView(
                         visitedUserId: value.id,
