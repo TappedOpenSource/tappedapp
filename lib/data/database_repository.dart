@@ -30,6 +30,7 @@ abstract class DatabaseRepository {
 
   Future<List<UserModel>> getViewLeaders();
   Future<List<UserModel>> getBookingLeaders();
+  Future<List<UserModel>> getBookerLeaders();
 
   // Loop related stuff
   Future<Option<Loop>> getLoopById(
