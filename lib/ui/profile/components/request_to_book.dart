@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intheloopapp/data/payment_repository.dart';
@@ -36,21 +37,33 @@ class RequestToBookButton extends StatelessWidget {
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [CircularProgressIndicator()],
                         ),
-                      None() => const FilledButton(
+                      None() => const CupertinoButton.filled(
                           onPressed: null,
-                          child: Text('Payment Info not Connected'),
+                          child: Text(
+                            'Payment Info not Connected',
+                            style: TextStyle(
+                              fontWeight: FontWeight.w700,
+                              color: Colors.white,
+                            ),
+                          ),
                         ),
                       Some(:final value) => () {
                           final enabled = value.payoutsEnabled;
 
                           if (!enabled) {
-                            return const FilledButton(
+                            return const CupertinoButton.filled(
                               onPressed: null,
-                              child: Text('Payment Info not Connected'),
+                              child: Text(
+                                'Payment Info not Connected',
+                                style: TextStyle(
+                                  fontWeight: FontWeight.w700,
+                                  color: Colors.white,
+                                ),
+                              ),
                             );
                           }
 
-                          return FilledButton(
+                          return CupertinoButton.filled(
                             onPressed: () => context.push(
                               ServiceSelectionPage(
                                 userId: state.visitedUser.id,
@@ -58,7 +71,13 @@ class RequestToBookButton extends StatelessWidget {
                                     state.visitedUser.stripeConnectedAccountId!,
                               ),
                             ),
-                            child: const Text('Request to Book'),
+                            child: const Text(
+                              'Request to Book',
+                              style: TextStyle(
+                                fontWeight: FontWeight.w700,
+                                color: Colors.white,
+                              ),
+                            ),
                           );
                         }(),
                     };
