@@ -1,7 +1,5 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:intheloopapp/data/database_repository.dart';
 import 'package:intheloopapp/domains/models/booking.dart';
 import 'package:intheloopapp/domains/models/option.dart';
 import 'package:intheloopapp/domains/models/user_model.dart';
@@ -42,7 +40,13 @@ class BookingConfirmationView extends StatelessWidget {
             ),
             const SizedBox(height: 50),
             const Text(
-              'You can view your bookings in the "Bookings" tab and an email containing next steps has been sent to you',
+          'Your bookings will be confirmed once the Performer accepts!\n\n'
+
+          ' In the meantime, a DM channel has been created' 
+          
+          ' for you and the Performer and'
+
+          ' an email containing additional steps has been sent to you.',
               textAlign: TextAlign.center,
               style: TextStyle(
                 fontSize: 16,
