@@ -179,13 +179,13 @@ class CreateLoopCubit extends Cubit<CreateLoopState> {
     );
   }
 
-  Future<void> createLoop() async {
+  Future<Option<Loop>> createLoop() async {
     try {
       if (!state.isValid) {
         throw Exception('Invalid form');
       }
 
-      if (state.status.isInProgress) return;
+      if (state.status.isInProgress) return const None();
 
       emit(
         state.copyWith(
@@ -237,11 +237,7 @@ class CreateLoopCubit extends Cubit<CreateLoopState> {
       );
 
       onboardingBloc.add(UpdateOnboardedUser(user: user));
-
-      // Navigate back to the feed page
-      navigationBloc
-        ..add(const ChangeTab(selectedTab: 0))
-        ..add(const Pop());
+      return Some(loop);
     } catch (e, s) {
       logger.error('error creating loop', error: e, stackTrace: s);
       emit(
