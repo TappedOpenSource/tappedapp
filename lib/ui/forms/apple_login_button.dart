@@ -24,6 +24,7 @@ class AppleLoginButton extends StatelessWidget {
             'Continue with Apple',
             style: TextStyle(
               color: Colors.black,
+              fontWeight: FontWeight.w700,
             ),
           ),
         ],
