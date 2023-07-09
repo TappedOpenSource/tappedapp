@@ -5,6 +5,7 @@ import 'package:intheloopapp/domains/models/option.dart';
 import 'package:intheloopapp/domains/navigation_bloc/navigation_bloc.dart';
 import 'package:intheloopapp/domains/navigation_bloc/tapped_route.dart';
 import 'package:intheloopapp/ui/create_loop/cubit/create_loop_cubit.dart';
+import 'package:intheloopapp/ui/themes.dart';
 
 class SubmitLoopButton extends StatelessWidget {
   const SubmitLoopButton({super.key});
@@ -31,10 +32,11 @@ class SubmitLoopButton extends StatelessWidget {
 
                     ScaffoldMessenger.of(context).showSnackBar(
                       SnackBar(
-                        backgroundColor: Colors.green,
+                        behavior: SnackBarBehavior.floating,
+                        backgroundColor: tappedAccent,
                         content: const Text('Loop Created'),
                         action: SnackBarAction(
-                          onPressed: () => context.push(
+                          onPressed: () => nav.push(
                             LoopPage(
                               loop: value,
                               loopUser: const None(),

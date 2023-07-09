@@ -23,7 +23,12 @@ class ConfirmSignUpButton extends StatelessWidget {
               );
             }
           },
-          child: const Text('Sign Up'),
+          child: const Text(
+            'Sign Up',
+            style: TextStyle(
+              fontWeight: FontWeight.w700,
+            ),
+          ),
         );
       },
     );
