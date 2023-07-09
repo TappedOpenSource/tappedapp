@@ -6,6 +6,7 @@ import 'package:intheloopapp/data/dynamic_link_repository.dart';
 import 'package:intheloopapp/domains/models/user_model.dart';
 import 'package:intheloopapp/domains/navigation_bloc/navigation_bloc.dart';
 import 'package:intheloopapp/ui/profile/profile_cubit.dart';
+import 'package:intheloopapp/ui/themes.dart';
 import 'package:share_plus/share_plus.dart';
 
 class MoreOptionsButton extends StatelessWidget {
@@ -45,6 +46,8 @@ class MoreOptionsButton extends StatelessWidget {
                     .then((value) {
                   ScaffoldMessenger.of(context).showSnackBar(
                     const SnackBar(
+                      behavior: SnackBarBehavior.floating,
+                      backgroundColor: tappedAccent,
                       content: Text('User Reported'),
                     ),
                   );
@@ -63,6 +66,8 @@ class MoreOptionsButton extends StatelessWidget {
                 context.read<ProfileCubit>().block().then((value) {
                   ScaffoldMessenger.of(context).showSnackBar(
                     const SnackBar(
+                      behavior: SnackBarBehavior.floating,
+                      backgroundColor: Colors.red,
                       content: Text('User Blocked'),
                     ),
                   );

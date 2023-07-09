@@ -18,6 +18,7 @@ class SaveButton extends StatelessWidget {
             } on HandleAlreadyExistsException {
               ScaffoldMessenger.of(context).showSnackBar(
                 const SnackBar(
+                  behavior: SnackBarBehavior.floating,
                   content: Text(
                     'Username already exists',
                     style: TextStyle(color: Colors.white),

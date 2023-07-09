@@ -23,6 +23,7 @@ class LoginForm extends StatelessWidget {
             ..hideCurrentSnackBar()
             ..showSnackBar(
               const SnackBar(
+                behavior: SnackBarBehavior.floating,
                 backgroundColor: Colors.redAccent,
                 content: Text('Authentication Failure'),
               ),
@@ -81,6 +82,7 @@ class LoginForm extends StatelessWidget {
                         ..hideCurrentSnackBar()
                         ..showSnackBar(
                           const SnackBar(
+                            behavior: SnackBarBehavior.floating,
                             backgroundColor: Colors.redAccent,
                             content: Text('Authentication Failure'),
                           ),
@@ -99,6 +101,7 @@ class LoginForm extends StatelessWidget {
                           ..hideCurrentSnackBar()
                           ..showSnackBar(
                             const SnackBar(
+                              behavior: SnackBarBehavior.floating,
                               backgroundColor: Colors.redAccent,
                               content: Text('Authentication Failure'),
                             ),
