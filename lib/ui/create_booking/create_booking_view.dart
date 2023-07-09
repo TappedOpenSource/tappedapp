@@ -106,6 +106,7 @@ class CreateBookingView extends StatelessWidget {
                           );
                           ScaffoldMessenger.of(context).showSnackBar(
                             SnackBar(
+                              behavior: SnackBarBehavior.floating,
                               backgroundColor: Colors.red,
                               content:
                                   Text('Error: ${e.error.localizedMessage}'),
@@ -119,6 +120,7 @@ class CreateBookingView extends StatelessWidget {
                           );
                           ScaffoldMessenger.of(context).showSnackBar(
                             const SnackBar(
+                              behavior: SnackBarBehavior.floating,
                               backgroundColor: Colors.red,
                               content: Text('Error making payment'),
                             ),

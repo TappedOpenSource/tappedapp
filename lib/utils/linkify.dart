@@ -153,6 +153,8 @@ class Linkify extends StatelessWidget {
               } catch (e) {
                 ScaffoldMessenger.of(context).showSnackBar(
                   const SnackBar(
+                    behavior: SnackBarBehavior.floating,
+                    backgroundColor: Colors.red,
                     content: Text('User not found'),
                   ),
                 );

@@ -47,6 +47,8 @@ class ControlButtons extends StatelessWidget {
               nav.pop();
               ScaffoldMessenger.of(context).showSnackBar(
                 const SnackBar(
+                  behavior: SnackBarBehavior.floating,
+                  backgroundColor: Colors.red,
                   content: Text('Loop Reported'),
                 ),
               );

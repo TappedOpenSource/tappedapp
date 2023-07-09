@@ -95,6 +95,7 @@ class OnboardingForm extends StatelessWidget {
                         );
                         ScaffoldMessenger.of(context).showSnackBar(
                           SnackBar(
+                            behavior: SnackBarBehavior.floating,
                             backgroundColor: Colors.red,
                             content: Text(e.toString()),
                           ),

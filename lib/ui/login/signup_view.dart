@@ -103,6 +103,8 @@ class SignUpView extends StatelessWidget {
                           } catch (e) {
                             ScaffoldMessenger.of(context).showSnackBar(
                               SnackBar(
+                                behavior: SnackBarBehavior.floating,
+                                backgroundColor: Colors.red,
                                 content: Text(e.toString()),
                               ),
                             );
@@ -120,6 +122,8 @@ class SignUpView extends StatelessWidget {
                             } catch (e) {
                               ScaffoldMessenger.of(context).showSnackBar(
                                 SnackBar(
+                                  behavior: SnackBarBehavior.floating,
+                                  backgroundColor: Colors.red,
                                   content: Text(e.toString()),
                                 ),
                               );

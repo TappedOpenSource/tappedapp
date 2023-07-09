@@ -15,6 +15,7 @@ import 'package:intheloopapp/ui/error/error_view.dart';
 import 'package:intheloopapp/ui/loading/loop_loading_view.dart';
 import 'package:intheloopapp/ui/loop_container/loop_container.dart';
 import 'package:intheloopapp/ui/loop_view/loop_view_cubit.dart';
+import 'package:intheloopapp/ui/themes.dart';
 import 'package:share_plus/share_plus.dart';
 
 class LoopView extends StatelessWidget {
@@ -60,6 +61,8 @@ class LoopView extends StatelessWidget {
 
               ScaffoldMessenger.of(context).showSnackBar(
                 const SnackBar(
+                  behavior: SnackBarBehavior.floating,
+                  backgroundColor: tappedAccent,
                   content: Text('Loop Reported'),
                 ),
               );

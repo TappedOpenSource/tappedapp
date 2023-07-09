@@ -51,6 +51,7 @@ class SubmitLoopButton extends StatelessWidget {
             } catch (e) {
               ScaffoldMessenger.of(context).showSnackBar(
                 const SnackBar(
+                  behavior: SnackBarBehavior.floating,
                   backgroundColor: Colors.red,
                   content: Text('Error Uploading Loop'),
                 ),
