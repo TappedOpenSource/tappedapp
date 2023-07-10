@@ -15,6 +15,7 @@ class UserModel extends Equatable {
   const UserModel({
     required this.id,
     required this.email,
+    required this.timestamp,
     required this.username,
     required this.artistName,
     required this.profilePicture,
@@ -28,6 +29,7 @@ class UserModel extends Equatable {
     required this.lng,
     required this.loopsCount,
     required this.badgesCount,
+    required this.reviewCount,
     required this.followerCount,
     required this.followingCount,
     required this.deleted,
@@ -53,6 +55,7 @@ class UserModel extends Equatable {
   factory UserModel.empty() => UserModel(
         id: const Uuid().v4(),
         email: '',
+        timestamp: DateTime.now(),
         username: Username.fromString('anonymous'),
         artistName: '',
         bio: '',
@@ -66,6 +69,7 @@ class UserModel extends Equatable {
         lng: null,
         loopsCount: 0,
         badgesCount: 0,
+        reviewCount: 0,
         followerCount: 0,
         followingCount: 0,
         deleted: false,
@@ -102,9 +106,15 @@ class UserModel extends Equatable {
       accountType = AccountType.free;
     }
 
+    final tmpTimestamp = doc.getOrElse(
+      'timestamp',
+      Timestamp.now(),
+    ) as Timestamp;
+
     return UserModel(
       id: doc.id,
       email: doc.getOrElse('email', '') as String,
+      timestamp: tmpTimestamp.toDate(),
       username:
           Username.fromString(doc.getOrElse('username', 'anonymous') as String),
       artistName: doc.getOrElse('artistName', '') as String,
@@ -128,6 +138,7 @@ class UserModel extends Equatable {
       lng: doc.getOrElse('lng', null) as double?,
       loopsCount: doc.getOrElse('loopsCount', 0) as int,
       badgesCount: doc.getOrElse('badgesCount', 0) as int,
+      reviewCount: doc.getOrElse('reviewCount', 0) as int,
       followerCount: doc.getOrElse('followerCount', 0) as int,
       followingCount: doc.getOrElse('followingCount', 0) as int,
       deleted: doc.getOrElse('deleted', false) as bool,
@@ -164,6 +175,7 @@ class UserModel extends Equatable {
   }
   final String id;
   final String email;
+  final DateTime timestamp;
 
   @JsonKey(fromJson: Username.fromJson, toJson: Username.usernameToString)
   final Username username;
@@ -183,6 +195,7 @@ class UserModel extends Equatable {
 
   final int loopsCount;
   final int badgesCount;
+  final int reviewCount;
   final int followerCount;
   final int followingCount;
 
@@ -215,6 +228,7 @@ class UserModel extends Equatable {
   List<Object?> get props => [
         id,
         email,
+        timestamp,
         username,
         artistName,
         profilePicture,
@@ -228,6 +242,7 @@ class UserModel extends Equatable {
         lng,
         loopsCount,
         badgesCount,
+        reviewCount,
         followerCount,
         followingCount,
         deleted,
@@ -263,6 +278,7 @@ class UserModel extends Equatable {
   UserModel copyWith({
     String? id,
     String? email,
+    DateTime? timestamp,
     Username? username,
     String? artistName,
     String? profilePicture,
@@ -276,6 +292,7 @@ class UserModel extends Equatable {
     Option<double>? lng,
     int? loopsCount,
     int? badgesCount,
+    int? reviewCount,
     int? followerCount,
     int? followingCount,
     bool? deleted,
@@ -300,6 +317,7 @@ class UserModel extends Equatable {
     return UserModel(
       id: id ?? this.id,
       email: email ?? this.email,
+      timestamp: timestamp ?? this.timestamp,
       username: username ?? this.username,
       artistName: artistName ?? this.artistName,
       profilePicture: profilePicture ?? this.profilePicture,
@@ -313,6 +331,7 @@ class UserModel extends Equatable {
       lng: lng != null ? lng.asNullable() : this.lng,
       loopsCount: loopsCount ?? this.loopsCount,
       badgesCount: badgesCount ?? this.badgesCount,
+      reviewCount: reviewCount ?? this.reviewCount,
       followerCount: followerCount ?? this.followerCount,
       followingCount: followingCount ?? this.followingCount,
       deleted: deleted ?? this.deleted,
@@ -348,6 +367,7 @@ class UserModel extends Equatable {
     return {
       'id': id,
       'email': email,
+      'timestamp': timestamp,
       'username': username.toString(),
       'artistName': artistName,
       'bio': bio,
@@ -361,6 +381,7 @@ class UserModel extends Equatable {
       'lng': lng,
       'loopsCount': loopsCount,
       'badgesCount': badgesCount,
+      'reviewCount': reviewCount,
       'followerCount': followerCount,
       'followingCount': followingCount,
       'deleted': deleted,

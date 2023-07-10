@@ -17,6 +17,7 @@ import 'package:intheloopapp/ui/create_booking/booking_confirmation_view.dart';
 import 'package:intheloopapp/ui/create_booking/create_booking_view.dart';
 import 'package:intheloopapp/ui/create_loop/create_loop_view.dart';
 import 'package:intheloopapp/ui/create_service/create_service_view.dart';
+import 'package:intheloopapp/ui/follow_relationship/follow_relationship_view.dart';
 import 'package:intheloopapp/ui/forms/location_form/location_form_view.dart';
 import 'package:intheloopapp/ui/likes/likes_view.dart';
 import 'package:intheloopapp/ui/login/forgot_password_view.dart';
@@ -402,4 +403,20 @@ final class MessagingChannelListPage extends TappedRoute {
           routeName: '/messaging_channel_list',
           view: const MessagingChannelListView(),
         );
+}
+
+final class FollowRelationshipPage extends TappedRoute {
+  FollowRelationshipPage({
+    required this.userId,
+    required this.index,
+  }) : super(
+          routeName: '/followers/$userId',
+          view: FollowRelationshipView(
+            visitedUserId: userId,
+            initialIndex: index,
+          ),
+        );
+
+  final String userId;
+  final int index;
 }

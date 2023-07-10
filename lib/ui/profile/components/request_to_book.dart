@@ -33,9 +33,9 @@ class RequestToBookButton extends StatelessWidget {
                     final paymentUser = snapshot.data;
 
                     return switch (paymentUser) {
-                      null => const Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [CircularProgressIndicator()],
+                      null => const CupertinoButton.filled(
+                          onPressed: null,
+                          child: CupertinoActivityIndicator(),
                         ),
                       None() => const CupertinoButton.filled(
                           onPressed: null,

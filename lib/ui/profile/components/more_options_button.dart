@@ -84,19 +84,11 @@ class MoreOptionsButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocBuilder<ProfileCubit, ProfileState>(
       builder: (context, state) {
-        return IconButton.filled(
+        return IconButton(
           onPressed: () => _showActionSheet(
             context,
             state.visitedUser,
             state.currentUser,
-          ),
-          style: ButtonStyle(
-            backgroundColor: MaterialStateProperty.all(
-              Colors.white.withOpacity(0.1),
-            ),
-            shape: MaterialStateProperty.all(
-              const CircleBorder(),
-            ),
           ),
           icon: const Icon(
             CupertinoIcons.ellipsis,

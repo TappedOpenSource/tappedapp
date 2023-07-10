@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intheloopapp/data/stream_repository.dart';
@@ -14,22 +15,37 @@ class MessageButton extends StatelessWidget {
     final nav = context.read<NavigationBloc>();
     return BlocBuilder<ProfileCubit, ProfileState>(
       builder: (context, state) {
-        return IconButton.filled(
+        return CupertinoButton(
           onPressed: () async {
             final channel = await stream.createSimpleChat(state.visitedUser.id);
             nav.push(StreamChannelPage(channel: channel));
           },
-          style: ButtonStyle(
-            backgroundColor: MaterialStateProperty.all(
-              Colors.white.withOpacity(0.1),
-            ),
-            shape: MaterialStateProperty.all(
-              const CircleBorder(),
-            ),
+          color: Colors.white.withOpacity(0.1),
+          padding: const EdgeInsets.all(
+            12,
           ),
-          icon: const Icon(
-            Icons.mail_outline,
-            color: Colors.white,
+          // style: ButtonStyle(
+          //   backgroundColor: MaterialStateProperty.all(
+          //     Colors.white.withOpacity(0.1),
+          //   ),
+          //   shape: MaterialStateProperty.all(
+          //     const CircleBorder(),
+          //   ),
+          // ),
+          // icon: const Icon(
+          //   Icons.mail_outline,
+          //   color: Colors.white,
+          // ),
+          // child: const Icon(
+          //   Icons.mail_outline,
+          //   color: Colors.white,
+          // ),
+          child: const Text(
+            'Message',
+            style: TextStyle(
+              fontWeight: FontWeight.bold,
+              color: Colors.white,
+            ),
           ),
         );
       },
