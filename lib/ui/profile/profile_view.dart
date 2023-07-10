@@ -17,6 +17,8 @@ import 'package:intheloopapp/ui/profile/components/epk_button.dart';
 import 'package:intheloopapp/ui/profile/components/follow_button.dart';
 import 'package:intheloopapp/ui/profile/components/follower_count.dart';
 import 'package:intheloopapp/ui/profile/components/following_count.dart';
+import 'package:intheloopapp/ui/profile/components/header_sliver.dart';
+import 'package:intheloopapp/ui/profile/components/info_sliver.dart';
 import 'package:intheloopapp/ui/profile/components/loops_sliver.dart';
 import 'package:intheloopapp/ui/profile/components/message_button.dart';
 import 'package:intheloopapp/ui/profile/components/more_options_button.dart';
@@ -188,129 +190,8 @@ class ProfileView extends StatelessWidget {
             ),
           ),
         ),
-        SliverToBoxAdapter(
-          child: Padding(
-            padding: const EdgeInsets.only(
-              top: 8,
-            ),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
-              children: [
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      '@${visitedUser.username}',
-                      style: const TextStyle(
-                        fontSize: 12,
-                        fontWeight: FontWeight.normal,
-                        color: Color(0xFF757575),
-                      ),
-                    ),
-                    const SizedBox(
-                      height: 5,
-                    ),
-                    if (visitedUser.label != 'None')
-                      Text(
-                        visitedUser.label,
-                        style: const TextStyle(
-                          fontSize: 12,
-                          fontWeight: FontWeight.normal,
-                          color: Color(0xFF757575),
-                        ),
-                      ),
-                  ],
-                ),
-                const MoreOptionsButton(),
-                if (state.visitedUser.id != state.currentUser.id)
-                  const MessageButton(),
-                const FollowButton(),
-              ],
-            ),
-          ),
-        ),
-        if (visitedUser.occupations.isNotEmpty)
-          SliverToBoxAdapter(
-            child: Padding(
-              padding: const EdgeInsets.symmetric(
-                vertical: 8,
-                horizontal: 16,
-              ),
-              child: Text(
-                visitedUser.occupations.join(', '),
-                style: const TextStyle(
-                  fontSize: 16,
-                  fontWeight: FontWeight.normal,
-                  color: tappedAccent,
-                ),
-              ),
-            ),
-          ),
-        if (visitedUser.bio.isNotEmpty)
-          SliverToBoxAdapter(
-            child: Padding(
-              padding: const EdgeInsets.symmetric(
-                vertical: 8,
-                horizontal: 16,
-              ),
-              child: Linkify(
-                text: visitedUser.bio,
-                maxLines: 6,
-                style: const TextStyle(
-                  fontSize: 16,
-                  fontWeight: FontWeight.normal,
-                  // color: Color(0xFF757575),
-                ),
-              ),
-            ),
-          ),
-        SliverToBoxAdapter(
-          child: Padding(
-            padding: const EdgeInsets.only(top: 8),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
-              children: [
-                const FollowerCount(),
-                const FollowingCount(),
-                Row(
-                  children: [
-                    const Icon(
-                      CupertinoIcons.location,
-                      color: tappedAccent,
-                      size: 16,
-                    ),
-                    const SizedBox(width: 6),
-                    Text(
-                      formattedAddress(
-                        state.place.addressComponents,
-                      ),
-                      overflow: TextOverflow.ellipsis,
-                      style: const TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.w700,
-                        color: tappedAccent,
-                      ),
-                    ),
-                  ],
-                ),
-              ],
-            ),
-          ),
-        ),
         const SliverToBoxAdapter(
-          child: Padding(
-            padding: EdgeInsets.only(bottom: 8),
-            child: SocialMediaIcons(),
-          ),
-        ),
-        SliverToBoxAdapter(
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: [
-              const RequestToBookButton(),
-              if (visitedUser.epkUrl.isSome) const EPKButton(),
-            ],
-          ),
+          child: HeaderSliver(),
         ),
         const SliverToBoxAdapter(
           child: SizedBox(height: 12),
@@ -337,7 +218,7 @@ class ProfileView extends StatelessWidget {
           child: SizedBox(height: 18),
         ),
         const SliverToBoxAdapter(
-          child: BadgesSliver(),
+          child: InfoSliver(),
         ),
         const SliverToBoxAdapter(
           child: SizedBox(
@@ -455,9 +336,17 @@ class ProfileView extends StatelessWidget {
 
     return Scaffold(
       backgroundColor: Theme.of(context).colorScheme.background,
-      body: BlocSelector<OnboardingBloc, OnboardingState, UserModel?>(
-        selector: (state) => (state is Onboarded) ? state.currentUser : null,
-        builder: (context, currentUser) {
+      body: BlocBuilder<OnboardingBloc, OnboardingState>(
+        // selector: (state) => (state is Onboarded) ? state.currentUser : null,
+        buildWhen: (previous, current) {
+          if (previous is Onboarded && current is Onboarded) {
+            return previous.currentUser.id != current.currentUser.id;
+          }
+
+          return true;
+        },
+        builder: (context, state) {
+          final currentUser = (state is Onboarded) ? state.currentUser : null;
           if (currentUser == null) {
             return const ErrorView();
           }

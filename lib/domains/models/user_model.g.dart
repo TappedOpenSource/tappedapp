@@ -9,6 +9,7 @@ part of 'user_model.dart';
 UserModel _$UserModelFromJson(Map<String, dynamic> json) => UserModel(
       id: json['id'] as String,
       email: json['email'] as String,
+      timestamp: DateTime.parse(json['timestamp'] as String),
       username: Username.fromJson(json['username'] as Map<String, dynamic>),
       artistName: json['artistName'] as String,
       profilePicture: json['profilePicture'] as String?,
@@ -26,6 +27,7 @@ UserModel _$UserModelFromJson(Map<String, dynamic> json) => UserModel(
       lng: (json['lng'] as num?)?.toDouble(),
       loopsCount: json['loopsCount'] as int,
       badgesCount: json['badgesCount'] as int,
+      reviewCount: json['reviewCount'] as int,
       followerCount: json['followerCount'] as int,
       followingCount: json['followingCount'] as int,
       deleted: json['deleted'] as bool,
@@ -55,6 +57,7 @@ UserModel _$UserModelFromJson(Map<String, dynamic> json) => UserModel(
 Map<String, dynamic> _$UserModelToJson(UserModel instance) => <String, dynamic>{
       'id': instance.id,
       'email': instance.email,
+      'timestamp': instance.timestamp.toIso8601String(),
       'username': Username.usernameToString(instance.username),
       'artistName': instance.artistName,
       'bio': instance.bio,
@@ -68,6 +71,7 @@ Map<String, dynamic> _$UserModelToJson(UserModel instance) => <String, dynamic>{
       'lng': instance.lng,
       'loopsCount': instance.loopsCount,
       'badgesCount': instance.badgesCount,
+      'reviewCount': instance.reviewCount,
       'followerCount': instance.followerCount,
       'followingCount': instance.followingCount,
       'deleted': instance.deleted,

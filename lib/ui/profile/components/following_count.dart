@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:intheloopapp/domains/navigation_bloc/navigation_bloc.dart';
+import 'package:intheloopapp/domains/navigation_bloc/tapped_route.dart';
 import 'package:intheloopapp/ui/follow_relationship/follow_relationship_view.dart';
 import 'package:intheloopapp/ui/profile/profile_cubit.dart';
 import 'package:intl/intl.dart';
@@ -12,27 +14,25 @@ class FollowingCount extends StatelessWidget {
     return BlocBuilder<ProfileCubit, ProfileState>(
       builder: (context, state) {
         return GestureDetector(
-          onTap: () {
-            Navigator.of(context).push(
-              MaterialPageRoute<FollowRelationshipView>(
-                settings: RouteSettings(
-                    name: '/following/${state.visitedUser.username}',),
-                builder: (context) => FollowRelationshipView(
-                  visitedUserId: state.visitedUser.id,
-                  initialIndex: 1,
+          onTap: () => context.push(
+              FollowRelationshipPage(
+                userId: state.visitedUser.id,
+                index: 1,
+              ),
+            ),
+          child: Column(
+            children: [
+              Text(
+                NumberFormat.compactCurrency(
+                  decimalDigits: 0,
+                  symbol: '',
+                ).format(state.followingCount),
+                style: const TextStyle(
+                  fontSize: 24,
                 ),
               ),
-            );
-          },
-          child: Text(
-            '${NumberFormat.compactCurrency(
-              decimalDigits: 0,
-              symbol: '',
-            ).format(state.followingCount)} Following',
-            style: const TextStyle(
-              fontSize: 14,
-              fontWeight: FontWeight.w500,
-            ),
+              const Text('Following'),
+            ],
           ),
         );
       },
