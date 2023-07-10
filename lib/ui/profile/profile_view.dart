@@ -18,6 +18,7 @@ import 'package:intheloopapp/ui/profile/components/follow_button.dart';
 import 'package:intheloopapp/ui/profile/components/follower_count.dart';
 import 'package:intheloopapp/ui/profile/components/following_count.dart';
 import 'package:intheloopapp/ui/profile/components/loops_sliver.dart';
+import 'package:intheloopapp/ui/profile/components/message_button.dart';
 import 'package:intheloopapp/ui/profile/components/more_options_button.dart';
 import 'package:intheloopapp/ui/profile/components/opportunity_sliver.dart';
 import 'package:intheloopapp/ui/profile/components/request_to_book.dart';
@@ -221,6 +222,8 @@ class ProfileView extends StatelessWidget {
                   ],
                 ),
                 const MoreOptionsButton(),
+                if (state.visitedUser.id != state.currentUser.id)
+                  const MessageButton(),
                 const FollowButton(),
               ],
             ),
