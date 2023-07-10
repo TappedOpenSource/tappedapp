@@ -19,7 +19,7 @@ class TitleText extends StatelessWidget {
             const SizedBox(height: 14),
             Text(
               value,
-              style: GoogleFonts.manrope(
+              style: const TextStyle(
                 fontSize: 22,
                 fontWeight: FontWeight.w900,
               ),

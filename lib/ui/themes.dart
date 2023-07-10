@@ -63,10 +63,6 @@ class Themes {
   static final themeDark = ThemeData.dark().copyWith(
     useMaterial3: true,
 
-    // textTheme: GoogleFonts.nunitoTextTheme(
-    //   ThemeData.dark().textTheme,
-    // ),
-
     textTheme: GoogleFonts.arimoTextTheme(
       ThemeData.dark().textTheme,
     ),

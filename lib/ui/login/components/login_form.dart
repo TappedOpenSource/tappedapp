@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:formz/formz.dart';
+import 'package:intheloopapp/domains/navigation_bloc/navigation_bloc.dart';
 import 'package:intheloopapp/ui/forms/apple_login_button.dart';
 import 'package:intheloopapp/ui/forms/google_login_button.dart';
 import 'package:intheloopapp/ui/loading/logo_wave.dart';
@@ -16,6 +17,7 @@ class LoginForm extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final nav = context.read<NavigationBloc>();
     return BlocListener<LoginCubit, LoginState>(
       listener: (context, state) {
         if (state.status.isFailure) {
@@ -77,6 +79,7 @@ class LoginForm extends StatelessWidget {
                   onPressed: () async {
                     try {
                       await context.read<LoginCubit>().signInWithGoogle();
+                        nav.pop();
                     } catch (e) {
                       ScaffoldMessenger.of(context)
                         ..hideCurrentSnackBar()
@@ -96,6 +99,7 @@ class LoginForm extends StatelessWidget {
                     onPressed: () async {
                       try {
                         await context.read<LoginCubit>().signInWithApple();
+                        nav.pop();
                       } catch (e) {
                         ScaffoldMessenger.of(context)
                           ..hideCurrentSnackBar()
