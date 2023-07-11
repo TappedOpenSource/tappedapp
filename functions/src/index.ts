@@ -504,11 +504,14 @@ const _createPaymentIntent = async (data: {
   };
 };
 
-const _createStripeAccount = async () => {
+const _createStripeAccount = async ({ countryCode } : {
+  countryCode?: string;
+}) => {
   const stripe = new Stripe(stripeKey.value(), {
     apiVersion: "2022-11-15",
   });
 
+  const country = countryCode || "US";
   const account = await stripe.accounts.create({
     type: "express",
     settings: {
@@ -520,25 +523,26 @@ const _createStripeAccount = async () => {
     },
     // cross border payments only work with
     // recipient accounts
-    // tos_acceptance: {
-    //   service_agreement: "recipient",
-    // },
+    country: country,
   });
 
   return account.id;
 }
 
-const _createConnectedAccount = async (data: {
+const _createConnectedAccount = async ({ accountId, country }: {
   accountId: string;
+  country?: string;
 }) => {
 
   const stripe = new Stripe(stripeKey.value(), {
     apiVersion: "2022-11-15",
   });
 
-  const accountId = (data.accountId === undefined || data.accountId === null || data.accountId === "")
-    ? (await _createStripeAccount())
-    : data.accountId
+  const account = (accountId === undefined || accountId === null || accountId === "")
+    ? (await _createStripeAccount({
+      countryCode: country,
+    }))
+    : accountId
 
   const subdomain = "tappednetwork";
   const deepLink = "https://tappednetwork.page.link/connect_payment";
@@ -548,7 +552,7 @@ const _createConnectedAccount = async (data: {
   const returnUrl = `https://${subdomain}.page.link/?link=${deepLink}?account_id=${accountId}`;
 
   const accountLinks = await stripe.accountLinks.create({
-    account: accountId,
+    account: account,
     refresh_url: refreshUrl,
     return_url: returnUrl,
     type: "account_onboarding",

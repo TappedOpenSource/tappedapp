@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intheloopapp/data/payment_repository.dart';
+import 'package:intheloopapp/data/places_repository.dart';
 import 'package:intheloopapp/domains/models/option.dart';
 import 'package:intheloopapp/domains/models/payment_user.dart';
 import 'package:intheloopapp/domains/models/user_model.dart';
@@ -23,57 +24,76 @@ class _ConnectBankButtonState extends State<ConnectBankButton> {
   bool loading = false;
 
   Widget _connectBankAccountButton({
-    required PaymentRepository payments,
+    required BuildContext context,
     required UserModel currentUser,
-    required OnboardingBloc onboardingBloc,
-    required NavigationBloc navigationBloc,
-  }) =>
-      FilledButton(
-        child: loading
-            ? const CircularProgressIndicator(
-                color: Colors.white,
-              )
-            : const Text(
-                'Connect Bank Account',
-              ),
-        onPressed: () async {
-          if (loading) {
-            return;
-          }
-
-          setState(() {
-            loading = true;
-          });
-
-          // create connected account
-          final res = await payments.createConnectedAccount();
-
-          if (!res.success) {
-            logger.warning('create connected account failed');
-          }
-
-          final updatedUser = currentUser.copyWith(
-            stripeConnectedAccountId: res.accountId,
-          );
-
-          onboardingBloc.add(
-            UpdateOnboardedUser(
-              user: updatedUser,
+    String? accountId,
+  }) {
+    final payments = context.read<PaymentRepository>();
+    final places = context.read<PlacesRepository>();
+    final onboarding = context.read<OnboardingBloc>();
+    final nav = context.read<NavigationBloc>();
+    return FilledButton(
+      child: loading
+          ? const CircularProgressIndicator(
+              color: Colors.white,
+            )
+          : const Text(
+              'Connect Bank Account',
             ),
-          );
+      onPressed: () async {
+        if (loading) {
+          return;
+        }
 
-          navigationBloc.pop();
+        setState(() {
+          loading = true;
+        });
 
-          await launchUrl(
-            Uri.parse(res.url),
-            mode: LaunchMode.externalApplication,
-          );
+        final placeId = currentUser.placeId;
+        final place =
+            placeId != null ? await places.getPlaceById(placeId) : null;
 
-          setState(() {
-            loading = false;
-          });
-        },
-      );
+        final addressComponents = place?.addressComponents ?? [];
+        final countryCode = addressComponents
+            .where(
+              (element) => element.types.contains('country'),
+            )
+            .firstOrNull
+            ?.shortName;
+
+        // create connected account
+        final res = await payments.createConnectedAccount(
+          accountId: accountId,
+          countryCode: countryCode,
+        );
+
+        if (!res.success) {
+          logger.warning('create connected account failed');
+        }
+
+        final updatedUser = currentUser.copyWith(
+          stripeConnectedAccountId: res.accountId,
+        );
+
+        onboarding.add(
+          UpdateOnboardedUser(
+            user: updatedUser,
+          ),
+        );
+
+        nav.pop();
+
+        await launchUrl(
+          Uri.parse(res.url),
+          mode: LaunchMode.externalApplication,
+        );
+
+        setState(() {
+          loading = false;
+        });
+      },
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -91,10 +111,8 @@ class _ConnectBankButtonState extends State<ConnectBankButton> {
 
         if (currentUser.stripeConnectedAccountId == null) {
           return _connectBankAccountButton(
-            payments: payments,
+            context: context,
             currentUser: currentUser,
-            onboardingBloc: context.read<OnboardingBloc>(),
-            navigationBloc: context.read<NavigationBloc>(),
           );
         }
 
@@ -111,24 +129,22 @@ class _ConnectBankButtonState extends State<ConnectBankButton> {
             return switch (paymentUser) {
               null => const CircularProgressIndicator(),
               None() => _connectBankAccountButton(
-                  payments: payments,
+                  context: context,
                   currentUser: currentUser,
-                  onboardingBloc: context.read<OnboardingBloc>(),
-                  navigationBloc: context.read<NavigationBloc>(),
                 ),
               Some(:final value) => () {
                   if (!value.payoutsEnabled) {
                     return _connectBankAccountButton(
-                      payments: payments,
+                      context: context,
                       currentUser: currentUser,
-                      onboardingBloc: context.read<OnboardingBloc>(),
-                      navigationBloc: context.read<NavigationBloc>(),
+                      accountId: value.id,
                     );
                   }
 
-                  return const CupertinoButton(
+                  return CupertinoButton(
                     onPressed: null,
-                    child: Text('✅ Bank Account Connected'),
+                    color: Colors.white.withOpacity(0.1),
+                    child: const Text('✅ Bank Account Connected'),
                   );
                 }(),
             };

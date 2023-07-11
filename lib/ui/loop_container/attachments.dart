@@ -1,4 +1,5 @@
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:intheloopapp/domains/models/loop.dart';
 import 'package:intheloopapp/domains/models/option.dart';
@@ -47,9 +48,8 @@ class Attachments extends StatelessWidget {
               // tag: heroTag,
               child: CachedNetworkImage(
                 imageUrl: imagePath,
-                placeholder: (context, url) => const CircularProgressIndicator(
-                  color: tappedAccent,
-                ),
+                placeholder: (context, url) =>
+                    const CupertinoActivityIndicator(),
                 errorWidget: (context, url, error) => const Icon(
                   Icons.error,
                   color: Colors.red,
