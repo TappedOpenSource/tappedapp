@@ -21,6 +21,7 @@ class LoopFeedsListView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+    final streamClient = StreamChat.of(context).client;
     return BlocSelector<OnboardingBloc, OnboardingState, Option<UserModel>>(
       selector: (state) =>
           state is Onboarded ? Some(state.currentUser) : const None(),
@@ -50,13 +51,13 @@ class LoopFeedsListView extends StatelessWidget {
                       actions: [
                         const NotificationIconButton(),
                         StreamBuilder<int?>(
-                          stream: StreamChat.of(context)
-                              .client
+                          stream: streamClient
                               .on()
-                              .where((event) => event.unreadChannels != null)
+                              .where((event) => event.totalUnreadCount != null)
                               .map(
-                                (event) => event.unreadChannels,
+                                (event) => event.totalUnreadCount,
                               ),
+                          initialData: streamClient.state.totalUnreadCount,
                           builder: (context, snapshot) {
                             final unreadMessagesCount = snapshot.data ?? 0;
 
