@@ -58,7 +58,10 @@ class HeaderSliver extends StatelessWidget {
                   ],
                 )
               else
-                const FollowButton(),
+                const SizedBox(
+                  width: double.infinity,
+                  child: FollowButton(),
+                ),
               const SizedBox(
                 width: double.infinity,
                 child: RequestToBookButton(),

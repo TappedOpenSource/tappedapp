@@ -68,10 +68,14 @@ const tokensRef = db.collection("device_tokens")
 const servicesRef = db.collection("services");
 const mailRef = db.collection("mail");
 const queuedWritesRef = db.collection("queued_writes");
+// const reviewsRef = db.collection("reviews");
 
 // const loopLikesSubcollection = "loopLikes";
 // const loopCommentsSubcollection = "loopComments";
 const loopsFeedSubcollection = "userFeed";
+
+const bookerReviewsSubcollection = "bookerReviews";
+const performerReviewsSubcollection = "performerReviews";
 
 const bookingBotUuid = "90dc0775-3a0d-4e92-8573-9c7aa6832d94";
 const verifiedBotUuid = "1c0d9380-873c-493a-a3f8-1283d5408673";
@@ -1582,4 +1586,28 @@ export const unfollowUserOnBlock = functions
       .get();
 
     await doc.ref.delete();
+  });
+
+export const incrementReviewCountOnPerformerReview = functions
+  .firestore
+  .document(`reviews/{userId}/${performerReviewsSubcollection}/{reviewId}`)
+  .onCreate(async (data, context) => {
+    const userId = context.params.userId;
+    const userRef = usersRef.doc(userId);
+
+    await userRef.update({
+      reviewCount: FieldValue.increment(1),
+    });
+  });
+
+export const incrementReviewCountOnBookerReview = functions
+  .firestore
+  .document(`reviews/{userId}/${bookerReviewsSubcollection}/{reviewId}`)
+  .onCreate(async (data, context) => {
+    const userId = context.params.userId;
+    const userRef = usersRef.doc(userId);
+
+    await userRef.update({
+      reviewCount: FieldValue.increment(1),
+    });
   });
