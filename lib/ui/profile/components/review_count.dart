@@ -21,7 +21,10 @@ class ReviewCount extends StatelessWidget {
                 fontSize: 24,
               ),
             ),
-            const Text('Reviews'),
+            if (state.visitedUser.reviewCount == 1)
+              const Text('Review')
+            else
+              const Text('Reviews'),
           ],
         );
       },
