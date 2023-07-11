@@ -32,14 +32,7 @@ class _ConnectBankButtonState extends State<ConnectBankButton> {
     final places = context.read<PlacesRepository>();
     final onboarding = context.read<OnboardingBloc>();
     final nav = context.read<NavigationBloc>();
-    return FilledButton(
-      child: loading
-          ? const CircularProgressIndicator(
-              color: Colors.white,
-            )
-          : const Text(
-              'Connect Bank Account',
-            ),
+    return CupertinoButton.filled(
       onPressed: () async {
         if (loading) {
           return;
@@ -92,6 +85,18 @@ class _ConnectBankButtonState extends State<ConnectBankButton> {
           loading = false;
         });
       },
+      borderRadius: BorderRadius.circular(15),
+      child: loading
+          ? const CupertinoActivityIndicator(
+              color: Colors.white,
+            )
+          : const Text(
+              'Connect Bank Account',
+              style: TextStyle(
+                color: Colors.white,
+                fontWeight: FontWeight.w700,
+              ),
+            ),
     );
   }
 
@@ -103,9 +108,16 @@ class _ConnectBankButtonState extends State<ConnectBankButton> {
       selector: (state) => (state is Onboarded) ? state.currentUser : null,
       builder: (context, currentUser) {
         if (currentUser == null) {
-          return const CupertinoButton.filled(
+          return CupertinoButton(
             onPressed: null,
-            child: Text('An error has occured :/'),
+            borderRadius: BorderRadius.circular(15),
+            child: const Text(
+              'An error has occured :/',
+              style: TextStyle(
+                color: Colors.red,
+                fontWeight: FontWeight.w700,
+              ),
+            ),
           );
         }
 
@@ -122,12 +134,22 @@ class _ConnectBankButtonState extends State<ConnectBankButton> {
           ),
           builder: (context, snapshot) {
             if (!snapshot.hasData) {
-              return const CircularProgressIndicator();
+              return CupertinoButton(
+                onPressed: null,
+                color: Colors.white.withOpacity(0.1),
+                borderRadius: BorderRadius.circular(15),
+                child: const CupertinoActivityIndicator(),
+              );
             }
 
             final paymentUser = snapshot.data;
             return switch (paymentUser) {
-              null => const CircularProgressIndicator(),
+              null => CupertinoButton(
+                onPressed: null,
+                color: Colors.white.withOpacity(0.1),
+                borderRadius: BorderRadius.circular(15),
+                child: const CupertinoActivityIndicator(),
+              ),
               None() => _connectBankAccountButton(
                   context: context,
                   currentUser: currentUser,
@@ -144,7 +166,14 @@ class _ConnectBankButtonState extends State<ConnectBankButton> {
                   return CupertinoButton(
                     onPressed: null,
                     color: Colors.white.withOpacity(0.1),
-                    child: const Text('✅ Bank Account Connected'),
+                    borderRadius: BorderRadius.circular(15),
+                    child: const Text(
+                      '✅ Bank Account Connected',
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontWeight: FontWeight.w700,
+                      ),
+                    ),
                   );
                 }(),
             };
