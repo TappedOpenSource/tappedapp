@@ -12,7 +12,8 @@ abstract class PaymentRepository {
   Future<void> presentPaymentSheet();
   Future<void> confirmPaymentSheetPayment();
   Future<ConnectedAccountResponse> createConnectedAccount({
-    String accountId,
+    String? accountId,
+    String? countryCode,
   });
 
   Future<Option<PaymentUser>> getAccountById(String id);

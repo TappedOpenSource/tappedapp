@@ -4,6 +4,7 @@ import 'package:flutter_stripe/flutter_stripe.dart';
 import 'package:intheloopapp/data/payment_repository.dart';
 import 'package:intheloopapp/domains/models/option.dart';
 import 'package:intheloopapp/domains/models/payment_user.dart';
+import 'package:intheloopapp/utils/app_logger.dart';
 
 final _functions = FirebaseFunctions.instance;
 final _stripe = Stripe.instance;
@@ -13,7 +14,8 @@ final _analytics = FirebaseAnalytics.instance;
 // const _publishableTestKey = 'pk_test_51MjqoRIdnJ3C1QPEjac68utViyu6vQcJfRfEyNesdoi9eKZP5hKnxbuyHCcSFVH8mBjYAxN0qyMdn2P8ZQb5OuZo00Bfy49Ebc';
 
 // ignore: lines_longer_than_80_chars
-const _publishableKey = 'pk_live_51MjqoRIdnJ3C1QPEjW2tlrF663G7QXTjZN0de769CrMXhaGMjw8fxwKOOo0k72nYZcmNI211knjPHTxIDLlvqDx800rdRODGrz';
+const _publishableKey =
+    'pk_live_51MjqoRIdnJ3C1QPEjW2tlrF663G7QXTjZN0de769CrMXhaGMjw8fxwKOOo0k72nYZcmNI211knjPHTxIDLlvqDx800rdRODGrz';
 
 class StripePaymentImpl implements PaymentRepository {
   @override
@@ -110,11 +112,13 @@ class StripePaymentImpl implements PaymentRepository {
   @override
   Future<ConnectedAccountResponse> createConnectedAccount({
     String? accountId,
+    String? countryCode,
   }) async {
     final callable = _functions.httpsCallable('createConnectedAccount');
 
     final results = await callable<Map<String, dynamic>>({
       'accountId': accountId ?? '',
+      'countryCode': countryCode ?? 'US',
     });
     final data = results.data;
 
