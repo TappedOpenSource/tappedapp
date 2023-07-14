@@ -523,6 +523,9 @@ const _createStripeAccount = async ({ countryCode } : {
     },
     // cross border payments only work with
     // recipient accounts
+    // tos_acceptance: {
+    //   service_agreement: "recipient", 
+    // },
     country: country,
   });
 

@@ -32,7 +32,10 @@ class ReviewTile extends StatelessWidget {
               return Card(
                 child: Column(
                   children: [
-                    UserTile(user: value),
+                    UserTile(
+                      userId: value.id,
+                      user: Some(value),
+                    ),
                     Padding(
                       padding: const EdgeInsets.only(
                         left: 16,

@@ -4,7 +4,10 @@ import 'package:intheloopapp/data/audio_repository.dart';
 import 'package:intheloopapp/domains/controllers/audio_controller.dart';
 import 'package:intheloopapp/ui/loop_container/loop_seek_bar.dart';
 import 'package:intheloopapp/ui/loop_container/play_pause_button.dart';
+import 'package:intheloopapp/utils/app_logger.dart';
 import 'package:skeletons/skeletons.dart';
+import 'package:uuid/uuid.dart';
+import 'package:visibility_detector/visibility_detector.dart';
 
 class AudioControls extends StatelessWidget {
   const AudioControls({
@@ -40,24 +43,39 @@ class AudioControls extends StatelessWidget {
         }
 
         final audioController = snapshot.data!;
+        final uuid = const Uuid().v4();
 
-        return Card(
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(25),
-          ),
-          child: Padding(
-            padding: const EdgeInsets.all(12),
-            child: Row(
-              children: [
-                PlayPauseButton(
-                  audioController: audioController,
-                ),
-                Expanded(
-                  child: LoopSeekBar(
+        return VisibilityDetector(
+          key: Key('$uuid-$audioPath'),
+          onVisibilityChanged: (visibilityInfo) {
+            final visiblePercentage = visibilityInfo.visibleFraction * 100;
+            // logger.debug(
+            //   'Widget ${visibilityInfo.key} is ${visiblePercentage}% visible',
+            // );
+            if (visiblePercentage > 50) {
+              audioController.play();
+            } else {
+              audioController.pause();
+            }
+          },
+          child: Card(
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(25),
+            ),
+            child: Padding(
+              padding: const EdgeInsets.all(12),
+              child: Row(
+                children: [
+                  PlayPauseButton(
                     audioController: audioController,
                   ),
-                ),
-              ],
+                  Expanded(
+                    child: LoopSeekBar(
+                      audioController: audioController,
+                    ),
+                  ),
+                ],
+              ),
             ),
           ),
         );

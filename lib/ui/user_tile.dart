@@ -8,9 +8,11 @@ import 'package:intheloopapp/domains/navigation_bloc/navigation_bloc.dart';
 import 'package:intheloopapp/domains/navigation_bloc/tapped_route.dart';
 import 'package:intheloopapp/domains/onboarding_bloc/onboarding_bloc.dart';
 import 'package:intheloopapp/ui/user_avatar.dart';
+import 'package:skeletons/skeletons.dart';
 
 class UserTile extends StatefulWidget {
   const UserTile({
+    required this.userId,
     required this.user,
     this.showFollowButton = true,
     this.subtitle,
@@ -18,7 +20,8 @@ class UserTile extends StatefulWidget {
     super.key,
   });
 
-  final UserModel user;
+  final String userId;
+  final Option<UserModel> user;
   final bool showFollowButton;
   final Widget? subtitle;
   final Widget? trailing;
@@ -34,11 +37,11 @@ class _UserTileState extends State<UserTile> {
     UserModel currentUser,
     DatabaseRepository database,
   ) =>
-      (currentUser.id != widget.user.id) && widget.showFollowButton
+      (currentUser.id != widget.userId) && widget.showFollowButton
           ? FutureBuilder<bool>(
               future: database.isFollowingUser(
                 currentUser.id,
-                widget.user.id,
+                widget.userId,
               ),
               builder: (context, snapshot) {
                 if (!snapshot.hasData) return const SizedBox.shrink();
@@ -50,7 +53,7 @@ class _UserTileState extends State<UserTile> {
                       ? () async {
                           await database.followUser(
                             currentUser.id,
-                            widget.user.id,
+                            widget.userId,
                           );
                           setState(() {
                             followingOverride = true;
@@ -65,11 +68,13 @@ class _UserTileState extends State<UserTile> {
             )
           : const SizedBox.shrink();
 
-  @override
-  Widget build(BuildContext context) {
-    final database = context.read<DatabaseRepository>();
-    if (widget.user.deleted) return const SizedBox.shrink();
+  Widget _buildUserTile(
+    BuildContext context,
+    UserModel user,
+  ) {
+    if (user.deleted) return const SizedBox.shrink();
 
+    final database = context.read<DatabaseRepository>();
     return BlocSelector<OnboardingBloc, OnboardingState, UserModel?>(
       selector: (state) => (state is Onboarded) ? state.currentUser : null,
       builder: (context, currentUser) {
@@ -84,21 +89,21 @@ class _UserTileState extends State<UserTile> {
         }
 
         return FutureBuilder<bool>(
-          future: database.isVerified(widget.user.id),
+          future: database.isVerified(widget.userId),
           builder: (context, snapshot) {
             final verified = snapshot.data ?? false;
 
             return ListTile(
               leading: UserAvatar(
                 radius: 25,
-                pushUser: Some(widget.user),
-                imageUrl: widget.user.profilePicture,
+                pushUser: Some(user),
+                imageUrl: user.profilePicture,
                 verified: verified,
               ),
-              title: Text(widget.user.displayName),
+              title: Text(user.displayName),
               subtitle: widget.subtitle ??
                   Text(
-                    '${widget.user.followerCount} followers',
+                    '${user.followerCount} followers',
                   ),
               trailing: widget.trailing ??
                   _followButton(
@@ -107,9 +112,9 @@ class _UserTileState extends State<UserTile> {
                   ),
               onTap: () => context.push(
                 ProfilePage(
-                  userId: widget.user.id,
+                  userId: user.id,
                   user: Some(
-                    widget.user,
+                    user,
                   ),
                 ),
               ),
@@ -118,5 +123,26 @@ class _UserTileState extends State<UserTile> {
         );
       },
     );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final database = context.read<DatabaseRepository>();
+    return switch (widget.user) {
+      None() => () {
+          return FutureBuilder<Option<UserModel>>(
+            future: database.getUserById(widget.userId),
+            builder: (context, snapshot) {
+              final data = snapshot.data;
+              return switch (data) {
+                null => SkeletonListTile(),
+                None() => SkeletonListTile(),
+                Some(:final value) => _buildUserTile(context, value),
+              };
+            },
+          );
+        }(),
+      Some(:final value) => _buildUserTile(context, value),
+    };
   }
 }

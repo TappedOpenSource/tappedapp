@@ -16,8 +16,6 @@ class PaymentSettingsForm extends StatelessWidget {
         return Column(
           children: [
             const ConnectBankButton(),
-            const SizedBox(height: 20),
-            const ServicesList(),
             if (state.status.isInProgress)
               const CircularProgressIndicator(
                 valueColor: AlwaysStoppedAnimation(tappedAccent),

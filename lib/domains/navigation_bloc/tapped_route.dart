@@ -33,6 +33,7 @@ import 'package:intheloopapp/ui/profile/components/service_selection_view.dart';
 import 'package:intheloopapp/ui/profile/profile_view.dart';
 import 'package:intheloopapp/ui/reviews/user_reviews_feed.dart';
 import 'package:intheloopapp/ui/search/search_view.dart';
+import 'package:intheloopapp/ui/services/service_view.dart';
 import 'package:intheloopapp/ui/settings/settings_view.dart';
 import 'package:stream_chat_flutter/stream_chat_flutter.dart';
 
@@ -292,15 +293,18 @@ final class ServiceSelectionPage extends TappedRoute {
 
 final class CreateServicePage extends TappedRoute {
   CreateServicePage({
-    required this.onCreated,
+    required this.onSubmit,
+    required this.service,
   }) : super(
           routeName: '/create_service',
           view: CreateServiceView(
-            onCreated: onCreated,
+            onSubmit: onSubmit,
+            service: service,
           ),
         );
 
-  final void Function(Service) onCreated;
+  final void Function(Service) onSubmit;
+  final Option<Service> service;
 }
 
 final class LocationFormPage extends TappedRoute {
@@ -419,4 +423,20 @@ final class FollowRelationshipPage extends TappedRoute {
 
   final String userId;
   final int index;
+}
+
+final class ServicePage extends TappedRoute {
+  ServicePage({
+    required this.service,
+    required this.serviceUser,
+  }) : super(
+          routeName: '/service/${service.id}',
+          view: ServiceView(
+            service: service,
+            serviceUser: serviceUser,
+          ),
+        );
+
+  final Service service;
+  final Option<UserModel> serviceUser;
 }

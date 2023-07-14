@@ -1,11 +1,16 @@
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_stripe/flutter_stripe.dart';
 import 'package:intheloopapp/domains/models/option.dart';
 import 'package:intheloopapp/domains/models/service.dart';
+import 'package:intheloopapp/domains/navigation_bloc/navigation_bloc.dart';
+import 'package:intheloopapp/domains/navigation_bloc/tapped_route.dart';
 import 'package:intheloopapp/ui/create_booking/components/booking_name_text_field.dart';
 import 'package:intheloopapp/ui/create_booking/components/booking_note_text_field.dart';
 import 'package:intheloopapp/ui/create_booking/create_booking_cubit.dart';
 import 'package:intheloopapp/ui/forms/location_text_field.dart';
+import 'package:intheloopapp/utils/app_logger.dart';
 
 class CreateBookingForm extends StatefulWidget {
   const CreateBookingForm({super.key});
@@ -43,6 +48,7 @@ class _CreateBookingFormState extends State<CreateBookingForm> {
 
   @override
   Widget build(BuildContext context) {
+    final nav = context.read<NavigationBloc>();
     return BlocBuilder<CreateBookingCubit, CreateBookingState>(
       builder: (context, state) {
         return Form(
@@ -177,6 +183,60 @@ class _CreateBookingFormState extends State<CreateBookingForm> {
               ),
               BookingNoteTextField(
                 controller: noteController,
+              ),
+              SizedBox(
+                width: double.infinity,
+                child: CupertinoButton.filled(
+                  onPressed: () async {
+                    try {
+                      final booking = await context
+                          .read<CreateBookingCubit>()
+                          .createBooking();
+              
+                      nav.push(
+                        BookingConfirmationPage(booking: booking),
+                      );
+                    } on StripeException catch (e, s) {
+                      if (e.error.code == FailureCode.Canceled) {
+                        return;
+                      }
+              
+                      logger.error(
+                        'error create booking',
+                        error: e,
+                        stackTrace: s,
+                      );
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(
+                          behavior: SnackBarBehavior.floating,
+                          backgroundColor: Colors.red,
+                          content: Text('Error: ${e.error.localizedMessage}'),
+                        ),
+                      );
+                    } catch (e, s) {
+                      logger.error(
+                        'error create booking',
+                        error: e,
+                        stackTrace: s,
+                      );
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(
+                          behavior: SnackBarBehavior.floating,
+                          backgroundColor: Colors.red,
+                          content: Text('Error making payment'),
+                        ),
+                      );
+                    }
+                  },          
+                  borderRadius: BorderRadius.circular(15),
+                  child: const Text(
+                    'Confirm Booking',
+                      style: TextStyle(
+                        fontWeight: FontWeight.w700,
+                        color: Colors.white,
+                      ),
+                  ),
+                ),
               ),
             ],
           ),

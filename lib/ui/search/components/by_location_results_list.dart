@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:intheloopapp/domains/models/option.dart';
 import 'package:intheloopapp/domains/search_bloc/search_bloc.dart';
 import 'package:intheloopapp/ui/loading/logo_wave.dart';
 import 'package:intheloopapp/ui/search/location_discover_view.dart';
@@ -71,7 +72,11 @@ class ByLocationResultsList extends StatelessWidget {
           return ListView.builder(
             itemCount: state.searchResultsByLocation.length,
             itemBuilder: (BuildContext context, int index) {
-              return UserTile(user: state.searchResultsByLocation[index]);
+              final user = state.searchResultsByLocation[index];
+              return UserTile(
+                userId: user.id,
+                user: Some(user),
+              );
             },
           );
         }

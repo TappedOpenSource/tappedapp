@@ -25,7 +25,6 @@ class SettingsState extends Equatable {
     this.emailNotificationsITLUpdates = true,
     this.email = '',
     this.password = '',
-    this.services = const [],
     Place? place,
     ImagePicker? picker,
     GlobalKey<FormState>? formKey,
@@ -68,7 +67,6 @@ class SettingsState extends Equatable {
   final String email;
   final String password;
 
-  final List<Service> services;
 
   @override
   List<Object?> get props => [
@@ -96,7 +94,6 @@ class SettingsState extends Equatable {
         emailNotificationsITLUpdates,
         email,
         password,
-        services,
       ];
 
   SettingsState copyWith({
@@ -124,7 +121,6 @@ class SettingsState extends Equatable {
     bool? emailNotificationsITLUpdates,
     String? email,
     String? password,
-    List<Service>? services,
   }) {
     return SettingsState(
       username: username ?? this.username,
@@ -160,7 +156,6 @@ class SettingsState extends Equatable {
       formKey: formKey,
       email: email ?? this.email,
       password: password ?? this.password,
-      services: services ?? this.services,
     );
   }
 }
