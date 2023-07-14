@@ -529,6 +529,8 @@ const _createStripeAccount = async ({ countryCode } : {
     country: country,
   });
 
+  functions.logger.info(`Created Stripe account ${account.id} for ${country}`);
+
   return account.id;
 }
 
