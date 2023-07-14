@@ -36,7 +36,11 @@ class LikesView extends StatelessWidget {
                 child: ListView.builder(
                   itemCount: state.likes.length,
                   itemBuilder: (BuildContext context, int index) {
-                    return UserTile(user: state.likes[index]);
+                    final user = state.likes[index];
+                    return UserTile(
+                      userId: user.id,
+                      user: Some(user),
+                    );
                   },
                 ),
               ),

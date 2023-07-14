@@ -82,6 +82,7 @@ class MoreOptionsButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
     return BlocBuilder<ProfileCubit, ProfileState>(
       builder: (context, state) {
         return IconButton(
@@ -90,9 +91,9 @@ class MoreOptionsButton extends StatelessWidget {
             state.visitedUser,
             state.currentUser,
           ),
-          icon: const Icon(
+          icon: Icon(
             CupertinoIcons.ellipsis,
-            color: Colors.white,
+            color: theme.colorScheme.onSurface,
           ),
         );
       },

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:intheloopapp/domains/models/option.dart';
 import 'package:intheloopapp/ui/follow_relationship/follow_relationship_cubit.dart';
 import 'package:intheloopapp/ui/user_tile.dart';
 
@@ -20,7 +21,11 @@ class FollowingTab extends StatelessWidget {
                 : ListView.builder(
                     itemCount: state.following.length,
                     itemBuilder: (BuildContext context, int index) {
-                      return UserTile(user: state.following[index]);
+                      final user = state.following[index];
+                      return UserTile(
+                        userId: user.id,
+                        user: Some(user),
+                      );
                     },
                   ),
           ),

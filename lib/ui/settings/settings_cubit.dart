@@ -84,11 +84,6 @@ class SettingsCubit extends Cubit<SettingsState> {
     }
   }
 
-  Future<void> initServices() async {
-    final services = await databaseRepository.getUserServices(currentUser.id);
-    emit(state.copyWith(services: services));
-  }
-
   void changeBio(String value) => emit(state.copyWith(bio: value));
   void changeUsername(String value) => emit(state.copyWith(username: value));
   void changeArtistName(String value) =>
@@ -173,34 +168,7 @@ class SettingsCubit extends Cubit<SettingsState> {
         ),
       );
 
-  void onServiceCreated(Service service) {
-    emit(
-      state.copyWith(
-        services: List.of(state.services)..insert(0, service),
-      ),
-    );
-  }
 
-  Future<void> removeService(Service service) async {
-    try {
-      await databaseRepository.deleteService(
-        currentUser.id,
-        service.id,
-      );
-      emit(
-        state.copyWith(
-          services: List.of(state.services)..remove(service),
-        ),
-      );
-    } catch (e, s) {
-      logger.error(
-        'Error removing service',
-        error: e,
-        stackTrace: s,
-      );
-      rethrow;
-    }
-  }
 
   Future<void> handleImageFromGallery() async {
     try {

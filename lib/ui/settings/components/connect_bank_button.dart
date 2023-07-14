@@ -32,6 +32,7 @@ class _ConnectBankButtonState extends State<ConnectBankButton> {
     final places = context.read<PlacesRepository>();
     final onboarding = context.read<OnboardingBloc>();
     final nav = context.read<NavigationBloc>();
+    final onSurfaceColor = Theme.of(context).colorScheme.onSurface;
     return CupertinoButton.filled(
       onPressed: () async {
         if (loading) {
@@ -87,13 +88,13 @@ class _ConnectBankButtonState extends State<ConnectBankButton> {
       },
       borderRadius: BorderRadius.circular(15),
       child: loading
-          ? const CupertinoActivityIndicator(
-              color: Colors.white,
+          ? CupertinoActivityIndicator(
+              color: onSurfaceColor,
             )
-          : const Text(
+          : Text(
               'Connect Bank Account',
               style: TextStyle(
-                color: Colors.white,
+                color: onSurfaceColor,
                 fontWeight: FontWeight.w700,
               ),
             ),
@@ -103,6 +104,7 @@ class _ConnectBankButtonState extends State<ConnectBankButton> {
   @override
   Widget build(BuildContext context) {
     final payments = RepositoryProvider.of<PaymentRepository>(context);
+    final onSurfaceColor = Theme.of(context).colorScheme.onSurface;
 
     return BlocSelector<OnboardingBloc, OnboardingState, UserModel?>(
       selector: (state) => (state is Onboarded) ? state.currentUser : null,
@@ -136,7 +138,7 @@ class _ConnectBankButtonState extends State<ConnectBankButton> {
             if (!snapshot.hasData) {
               return CupertinoButton(
                 onPressed: null,
-                color: Colors.white.withOpacity(0.1),
+                color: onSurfaceColor.withOpacity(0.1),
                 borderRadius: BorderRadius.circular(15),
                 child: const CupertinoActivityIndicator(),
               );
@@ -146,7 +148,7 @@ class _ConnectBankButtonState extends State<ConnectBankButton> {
             return switch (paymentUser) {
               null => CupertinoButton(
                 onPressed: null,
-                color: Colors.white.withOpacity(0.1),
+                color: onSurfaceColor.withOpacity(0.1),
                 borderRadius: BorderRadius.circular(15),
                 child: const CupertinoActivityIndicator(),
               ),
@@ -165,12 +167,12 @@ class _ConnectBankButtonState extends State<ConnectBankButton> {
 
                   return CupertinoButton(
                     onPressed: null,
-                    color: Colors.white.withOpacity(0.1),
+                    color: onSurfaceColor.withOpacity(0.1),
                     borderRadius: BorderRadius.circular(15),
                     child: const Text(
-                      '✅ Bank Account Connected',
+                      '✅ Bank Connected',
                       style: TextStyle(
-                        color: Colors.white,
+                        color: Colors.grey,
                         fontWeight: FontWeight.w700,
                       ),
                     ),

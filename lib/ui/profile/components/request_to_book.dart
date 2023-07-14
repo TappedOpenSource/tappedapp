@@ -4,54 +4,65 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intheloopapp/data/payment_repository.dart';
 import 'package:intheloopapp/domains/models/option.dart';
 import 'package:intheloopapp/domains/models/payment_user.dart';
+import 'package:intheloopapp/domains/models/service.dart';
+import 'package:intheloopapp/domains/models/user_model.dart';
 import 'package:intheloopapp/domains/navigation_bloc/navigation_bloc.dart';
 import 'package:intheloopapp/domains/navigation_bloc/tapped_route.dart';
+import 'package:intheloopapp/domains/onboarding_bloc/onboarding_bloc.dart';
 import 'package:intheloopapp/ui/profile/profile_cubit.dart';
 
 class RequestToBookButton extends StatelessWidget {
-  const RequestToBookButton({super.key});
+  const RequestToBookButton({
+    required this.userId,
+    required this.service,
+    required this.stripeConnectedAccountId,
+    super.key,
+  });
+
+  final String userId;
+  final Option<Service> service;
+  final Option<String> stripeConnectedAccountId;
 
   @override
   Widget build(BuildContext context) {
     final payments = context.read<PaymentRepository>();
-    return BlocBuilder<ProfileCubit, ProfileState>(
-      builder: (context, state) {
-        return (state.currentUser.id != state.visitedUser.id)
-            ? Padding(
-                padding: const EdgeInsets.symmetric(vertical: 8),
-                child: FutureBuilder<Option<PaymentUser>>(
-                  future: () async {
-                    if (state.visitedUser.stripeConnectedAccountId == null) {
-                      return const None<PaymentUser>();
+
+    return switch (stripeConnectedAccountId) {
+      None() => const CupertinoButton.filled(
+          onPressed: null,
+          child: Text(
+            'Payment Info not Connected',
+            style: TextStyle(
+              fontWeight: FontWeight.w700,
+              color: Colors.white,
+            ),
+          ),
+        ),
+      Some(:final value) => () {
+          final stripeAccountId = value;
+          return BlocSelector<OnboardingBloc, OnboardingState,
+              Option<UserModel>>(
+            selector: (state) =>
+                state is Onboarded ? Some(state.currentUser) : const None(),
+            builder: (context, currentUser) {
+              return switch (currentUser) {
+                None() => const SizedBox.shrink(),
+                Some(:final value) => () {
+                    if (value.id == userId) {
+                      return const SizedBox.shrink();
                     }
 
-                    return payments.getAccountById(
-                      state.visitedUser.stripeConnectedAccountId!,
-                    );
-                  }(),
-                  builder: (context, snapshot) {
-                    final paymentUser = snapshot.data;
+                    return FutureBuilder<Option<PaymentUser>>(
+                      future: payments.getAccountById(stripeAccountId),
+                      builder: (context, snapshot) {
+                        final paymentUser = snapshot.data;
 
-                    return switch (paymentUser) {
-                      null => const CupertinoButton.filled(
-                          onPressed: null,
-                          child: CupertinoActivityIndicator(),
-                        ),
-                      None() => const CupertinoButton.filled(
-                          onPressed: null,
-                          child: Text(
-                            'Payment Info not Connected',
-                            style: TextStyle(
-                              fontWeight: FontWeight.w700,
-                              color: Colors.white,
+                        return switch (paymentUser) {
+                          null => const CupertinoButton.filled(
+                              onPressed: null,
+                              child: CupertinoActivityIndicator(),
                             ),
-                          ),
-                        ),
-                      Some(:final value) => () {
-                          final enabled = value.payoutsEnabled;
-
-                          if (!enabled) {
-                            return const CupertinoButton.filled(
+                          None() => const CupertinoButton.filled(
                               onPressed: null,
                               child: Text(
                                 'Payment Info not Connected',
@@ -60,34 +71,56 @@ class RequestToBookButton extends StatelessWidget {
                                   color: Colors.white,
                                 ),
                               ),
-                            );
-                          }
+                            ),
+                          Some(:final value) => () {
+                              final enabled = value.payoutsEnabled;
 
-                          return CupertinoButton.filled(
-                            onPressed: () => context.push(
-                              ServiceSelectionPage(
-                                userId: state.visitedUser.id,
-                                requesteeStripeConnectedAccountId:
-                                    state.visitedUser.stripeConnectedAccountId!,
-                              ),
-                            ),
-                            child: const Text(
-                              'Request to Book',
-                              style: TextStyle(
-                                fontWeight: FontWeight.w700,
-                                color: Colors.white,
-                              ),
-                            ),
-                          );
-                        }(),
-                    };
-                  },
-                ),
-              )
-            : const SizedBox(
-                height: 2,
-              );
-      },
-    );
+                              if (!enabled) {
+                                return const CupertinoButton.filled(
+                                  onPressed: null,
+                                  child: Text(
+                                    'Payment Info not Connected',
+                                    style: TextStyle(
+                                      fontWeight: FontWeight.w700,
+                                      color: Colors.white,
+                                    ),
+                                  ),
+                                );
+                              }
+
+                              return CupertinoButton.filled(
+                                onPressed: () {
+                                  final nextPage = switch (service) {
+                                    None() => ServiceSelectionPage(
+                                        userId: userId,
+                                        requesteeStripeConnectedAccountId:
+                                            stripeAccountId,
+                                      ),
+                                    Some(:final value) => CreateBookingPage(
+                                        service: value,
+                                        requesteeStripeConnectedAccountId:
+                                            stripeAccountId,
+                                      ),
+                                  };
+                                  context.push(nextPage);
+                                },
+                                child: const Text(
+                                  'Request to Book',
+                                  style: TextStyle(
+                                    fontWeight: FontWeight.w700,
+                                    color: Colors.white,
+                                  ),
+                                ),
+                              );
+                            }(),
+                        };
+                      },
+                    );
+                  }(),
+              };
+            },
+          );
+        }(),
+    };
   }
 }

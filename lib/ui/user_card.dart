@@ -53,9 +53,11 @@ class _UserCardState extends State<UserCard> {
                   icon: isFollowing 
                   ? const Icon(
                     Icons.check_circle,
+                    color: Colors.white,
                   )
                   : const Icon(
                     Icons.add_circle,
+                    color: Colors.white,
                   ),
                 );
               },

@@ -93,7 +93,8 @@ class BookingView extends StatelessWidget {
                         null => SkeletonListTile(),
                         None() => SkeletonListTile(),
                         Some(:final value) => UserTile(
-                            user: value,
+                            userId: value.id,
+                            user: Some(value),
                             showFollowButton: false,
                           ),
                       };
@@ -121,7 +122,8 @@ class BookingView extends StatelessWidget {
                         null => SkeletonListTile(),
                         None() => SkeletonListTile(),
                         Some(:final value) => UserTile(
-                            user: value,
+                            userId: value.id,
+                            user: Some(value),
                             showFollowButton: false,
                           ),
                       };

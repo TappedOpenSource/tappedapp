@@ -12,6 +12,7 @@ import 'package:intheloopapp/domains/models/booking.dart';
 import 'package:intheloopapp/domains/models/loop.dart';
 import 'package:intheloopapp/domains/models/option.dart';
 import 'package:intheloopapp/domains/models/review.dart';
+import 'package:intheloopapp/domains/models/service.dart';
 import 'package:intheloopapp/domains/models/user_model.dart';
 import 'package:intheloopapp/utils/app_logger.dart';
 
@@ -186,8 +187,7 @@ class ProfileCubit extends Cubit<ProfileState> {
         visitedUser.id,
         limit: 1,
       );
-      final bookerReviews =
-          await databaseRepository.getBookerReviewsByBookerId(
+      final bookerReviews = await databaseRepository.getBookerReviewsByBookerId(
         visitedUser.id,
         limit: 1,
       );
@@ -231,6 +231,64 @@ class ProfileCubit extends Cubit<ProfileState> {
 
   Review _getLatestReview(Review r1, Review r2) {
     return r1.timestamp.isAfter(r2.timestamp) ? r1 : r2;
+  }
+
+  Future<void> initServices() async {
+    final services = await databaseRepository.getUserServices(visitedUser.id);
+    emit(
+      state.copyWith(
+        services: services
+          ..sort(
+            (a, b) => a.rate.compareTo(b.rate),
+          ),
+      ),
+    );
+  }
+
+  void onServiceCreated(Service service) {
+    emit(
+      state.copyWith(
+        services: List.of(state.services)
+          ..insert(0, service)
+          ..sort(
+            (a, b) => a.rate.compareTo(b.rate),
+          ),
+      ),
+    );
+  }
+
+  void onServiceEdited(Service service) {
+    emit(
+      state.copyWith(
+        services: List.of(state.services)
+          ..removeWhere((s) => s.id == service.id)
+          ..insert(0, service)
+          ..sort(
+            (a, b) => a.rate.compareTo(b.rate),
+          ),
+      ),
+    );
+  }
+
+  Future<void> removeService(Service service) async {
+    try {
+      await databaseRepository.deleteService(
+        currentUser.id,
+        service.id,
+      );
+      emit(
+        state.copyWith(
+          services: List.of(state.services)..remove(service),
+        ),
+      );
+    } catch (e, s) {
+      logger.error(
+        'Error removing service',
+        error: e,
+        stackTrace: s,
+      );
+      rethrow;
+    }
   }
 
   Future<void> initBadges({bool clearBadges = true}) async {

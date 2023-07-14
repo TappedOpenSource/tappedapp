@@ -1,12 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intheloopapp/data/database_repository.dart';
+import 'package:intheloopapp/domains/models/option.dart';
 import 'package:intheloopapp/domains/models/service.dart';
 import 'package:intheloopapp/domains/models/user_model.dart';
 import 'package:intheloopapp/domains/navigation_bloc/navigation_bloc.dart';
 import 'package:intheloopapp/domains/onboarding_bloc/onboarding_bloc.dart';
 import 'package:intheloopapp/ui/common/tapped_app_bar.dart';
 import 'package:intheloopapp/ui/create_service/components/description_text_field.dart';
+import 'package:intheloopapp/ui/create_service/components/edit_service_button.dart';
 import 'package:intheloopapp/ui/create_service/components/rate_type_selector.dart';
 import 'package:intheloopapp/ui/create_service/components/submit_service_button.dart';
 import 'package:intheloopapp/ui/create_service/components/title_text_field.dart';
@@ -16,11 +18,13 @@ import 'package:intheloopapp/ui/forms/rate_text_field.dart';
 
 class CreateServiceView extends StatelessWidget {
   const CreateServiceView({
-    required this.onCreated,
+    required this.service,
+    required this.onSubmit,
     super.key,
   });
 
-  final void Function(Service) onCreated;
+  final Option<Service> service;
+  final void Function(Service) onSubmit;
 
   @override
   Widget build(BuildContext context) {
@@ -38,7 +42,7 @@ class CreateServiceView extends StatelessWidget {
             database: database,
             nav: nav,
             currentUserId: currentUser.id,
-          ),
+          )..initFields(service),
           child: Scaffold(
             backgroundColor: Theme.of(context).colorScheme.background,
             appBar: const TappedAppBar(
@@ -59,6 +63,7 @@ class CreateServiceView extends StatelessWidget {
                     BlocBuilder<CreateServiceCubit, CreateServiceState>(
                       builder: (context, state) {
                         return RateTextField(
+                          initialValue: state.rate,
                           onChanged: (input) => context
                               .read<CreateServiceCubit>()
                               .onRateChange(input),
@@ -68,9 +73,15 @@ class CreateServiceView extends StatelessWidget {
                     const SizedBox(height: 16),
                     const RateTypeSelector(),
                     const SizedBox(height: 16),
-                    SubmitServiceButton(
-                      onCreated: onCreated,
-                    ),
+                    switch (service) {
+                      None() => SubmitServiceButton(
+                          onCreated: onSubmit,
+                        ),
+                      Some(:final value) => EditServiceButton(
+                          onEdited: onSubmit,
+                          service: value,
+                        ),
+                    },
                   ],
                 ),
               ),

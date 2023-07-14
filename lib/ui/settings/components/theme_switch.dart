@@ -15,8 +15,8 @@ class ThemeSwitch extends StatelessWidget {
         return CupertinoSlidingSegmentedControl(
           groupValue: isDark,
           // backgroundColor: Colors.grey[300]!,
-          backgroundColor: Theme.of(context).colorScheme.background,
-          thumbColor: Colors.blue.withOpacity(0.2),
+          // backgroundColor: Theme.of(context).colorScheme.background,
+          // thumbColor: Colors.blue.withOpacity(0.2),
           onValueChanged: (bool? value) {
             context
                 .read<AppThemeCubit>()
@@ -30,12 +30,12 @@ class ThemeSwitch extends StatelessWidget {
                 children: [
                   Icon(
                     FontAwesomeIcons.solidSun,
-                    color: tappedAccent,
+                    // color: tappedAccent,
                   ),
                   Text(
                     'Light',
                     style: TextStyle(
-                      color: tappedAccent,
+                      // color: tappedAccent,
                       fontSize: 14,
                     ),
                   ),
@@ -49,12 +49,12 @@ class ThemeSwitch extends StatelessWidget {
                 children: [
                   Icon(
                     FontAwesomeIcons.solidMoon,
-                    color: tappedAccent,
+                    // color: tappedAccent,
                   ),
                   Text(
                     'Dark',
                     style: TextStyle(
-                      color: tappedAccent,
+                      // color: tappedAccent,
                       fontSize: 14,
                     ),
                   ),

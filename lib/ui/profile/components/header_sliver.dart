@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:intheloopapp/domains/models/option.dart';
 import 'package:intheloopapp/ui/profile/components/badges_chip.dart';
 import 'package:intheloopapp/ui/profile/components/follow_button.dart';
 import 'package:intheloopapp/ui/profile/components/follower_count.dart';
@@ -62,9 +63,16 @@ class HeaderSliver extends StatelessWidget {
                   width: double.infinity,
                   child: FollowButton(),
                 ),
-              const SizedBox(
+              const SizedBox(height: 8),
+              SizedBox(
                 width: double.infinity,
-                child: RequestToBookButton(),
+                child: RequestToBookButton(
+                  userId: state.visitedUser.id,
+                  stripeConnectedAccountId: Option.fromNullable(
+                    state.visitedUser.stripeConnectedAccountId,
+                  ),
+                  service: const None(),
+                ),
               ),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,

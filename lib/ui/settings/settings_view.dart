@@ -46,7 +46,6 @@ class SettingsView extends StatelessWidget {
             currentUser: currentUser,
           )
             ..initUserData()
-            ..initServices()
             ..initPlace(),
           child: Scaffold(
             backgroundColor: theme.colorScheme.background,

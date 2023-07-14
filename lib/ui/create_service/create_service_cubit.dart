@@ -2,6 +2,7 @@ import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:formz/formz.dart';
 import 'package:intheloopapp/data/database_repository.dart';
+import 'package:intheloopapp/domains/models/option.dart';
 import 'package:intheloopapp/domains/models/service.dart';
 import 'package:intheloopapp/domains/navigation_bloc/navigation_bloc.dart';
 import 'package:intheloopapp/ui/create_service/components/service_description.dart';
@@ -20,6 +21,19 @@ class CreateServiceCubit extends Cubit<CreateServiceState> {
   final NavigationBloc nav;
 
   final String currentUserId;
+
+  void initFields(Option<Service> service) {
+    if (service is Some<Service>) {
+      emit(
+        state.copyWith(
+          title: ServiceTitle.dirty(service.value.title),
+          description: ServiceDescription.dirty(service.value.description),
+          rate: service.value.rate,
+          rateType: service.value.rateType,
+        ),
+      );
+    }
+  }
 
   void onTitleChange(String title) => emit(
         state.copyWith(
@@ -43,7 +57,39 @@ class CreateServiceCubit extends Cubit<CreateServiceState> {
         ),
       );
 
-  Future<void> submit(void Function(Service) onCreated) async {
+  Future<void> edit(
+    Service service,
+    void Function(Service) onEdited,
+  ) async {
+    try {
+      if (state.status.isInProgress) return;
+
+      if (!state.isValid) {
+        throw Exception('Invalid form');
+      }
+
+      emit(state.copyWith(status: FormzSubmissionStatus.inProgress));
+
+      final newServie = service.copyWith(
+        title: state.title.value,
+        description: state.description.value,
+        rate: state.rate,
+        rateType: state.rateType,
+      );
+      await database.updateService(newServie);
+
+      onEdited.call(newServie);
+
+      emit(state.copyWith(status: FormzSubmissionStatus.success));
+
+      nav.pop();
+    } catch (e) {
+      emit(state.copyWith(status: FormzSubmissionStatus.failure));
+      rethrow;
+    }
+  }
+
+  Future<void> create(void Function(Service) onCreated) async {
     // add validation
     try {
       if (state.status.isInProgress) return;

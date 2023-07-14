@@ -11,6 +11,7 @@ class FollowButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
     return BlocBuilder<ProfileCubit, ProfileState>(
       builder: (context, state) {
         return state.currentUser.id != state.visitedUser.id
@@ -30,11 +31,11 @@ class FollowButton extends StatelessWidget {
               )
             : CupertinoButton(
                 onPressed: () => context.push(SettingsPage()),
-                color: Colors.white.withOpacity(0.1),
-                child: const Text(
+                color: theme.colorScheme.onSurface.withOpacity(0.1),
+                child: Text(
                   'Edit Profile',
                   style: TextStyle(
-                    color: Colors.white,
+                    color: theme.colorScheme.onSurface,
                     fontWeight: FontWeight.bold,
                   ),
                 ),

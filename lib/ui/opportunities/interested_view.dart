@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intheloopapp/data/database_repository.dart';
 import 'package:intheloopapp/domains/models/loop.dart';
+import 'package:intheloopapp/domains/models/option.dart';
 import 'package:intheloopapp/domains/models/user_model.dart';
 import 'package:intheloopapp/ui/user_tile.dart';
 
@@ -34,7 +35,11 @@ class InterestedView extends StatelessWidget {
           return ListView.builder(
             itemCount: users.length,
             itemBuilder: (BuildContext context, int index) {
-              return UserTile(user: users[index]);
+              final user = users[index];
+              return UserTile(
+                userId: user.id,
+                user: Some(user),
+              );
             },
           );
         },

@@ -25,6 +25,7 @@ import 'package:intheloopapp/ui/profile/components/more_options_button.dart';
 import 'package:intheloopapp/ui/profile/components/opportunity_sliver.dart';
 import 'package:intheloopapp/ui/profile/components/request_to_book.dart';
 import 'package:intheloopapp/ui/profile/components/reviews_sliver.dart';
+import 'package:intheloopapp/ui/profile/components/services_sliver.dart';
 import 'package:intheloopapp/ui/profile/components/social_media_icons.dart';
 import 'package:intheloopapp/ui/profile/profile_cubit.dart';
 import 'package:intheloopapp/ui/themes.dart';
@@ -67,6 +68,7 @@ class ProfileView extends StatelessWidget {
           ..getLatestBooking()
           ..getLatestReview()
           ..initBadges()
+          ..initServices()
           ..loadIsFollowing(currentUser.id, visitedUser.id)
           ..loadIsBlocked()
           ..loadIsVerified(visitedUser.id)
@@ -135,6 +137,7 @@ class ProfileView extends StatelessWidget {
               cubit.getLatestBooking(),
               cubit.getLatestReview(),
               cubit.initBadges(),
+              cubit.initServices(),
               cubit.refetchVisitedUser(),
               cubit.loadIsFollowing(currentUser.id, visitedUser.id),
               cubit.loadIsVerified(visitedUser.id),
@@ -197,6 +200,12 @@ class ProfileView extends StatelessWidget {
           child: SizedBox(height: 12),
         ),
         const SliverToBoxAdapter(
+          child: ServicesSliver(),
+        ),
+        const SliverToBoxAdapter(
+          child: SizedBox(height: 12),
+        ),
+        const SliverToBoxAdapter(
           child: ReviewsSliver(),
         ),
         const SliverToBoxAdapter(
@@ -247,6 +256,7 @@ class ProfileView extends StatelessWidget {
               cubit.getLatestOpportunity(),
               cubit.getLatestBooking(),
               cubit.initBadges(),
+              cubit.initServices(),
               cubit.refetchVisitedUser(),
               cubit.loadIsFollowing(currentUser.id, visitedUser.id),
               cubit.loadIsVerified(visitedUser.id),

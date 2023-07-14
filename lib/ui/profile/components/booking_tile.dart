@@ -76,26 +76,28 @@ class BookingTile extends StatelessWidget {
           None() => 'UNKNOWN',
           Some(:final value) => value.title,
         };
-
+        final onSurfaceColor = Theme.of(context).colorScheme.onSurface;
         return ListTile(
           leading: const Icon(Icons.book),
           title: RichText(
             text: TextSpan(
               children: [
                 if (visitedUser.id == booking.requesteeId)
-                  const TextSpan(
+                  TextSpan(
                     text: 'Performer',
                     style: TextStyle(
                       fontSize: 16,
                       fontWeight: FontWeight.bold,
+                      color: onSurfaceColor,
                     ),
                   )
                 else
-                  const TextSpan(
+                  TextSpan(
                     text: 'Booker',
                     style: TextStyle(
                       fontSize: 16,
                       fontWeight: FontWeight.bold,
+                      color: onSurfaceColor,
                     ),
                   ),
                 const WidgetSpan(child: SizedBox(width: 8)),
