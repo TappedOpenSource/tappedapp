@@ -26,17 +26,17 @@ class Service extends Equatable {
   factory Service.fromDoc(DocumentSnapshot<Map<String, dynamic>> doc) {
     return Service(
       id: doc.id,
-      userId: doc.getOrElse('userId', '') as String,
-      title: doc.getOrElse('title', '') as String,
-      description: doc.getOrElse('description', '') as String,
-      rate: doc.getOrElse('rate', 0) as int,
+      userId: doc.getOrElse('userId', ''),
+      title: doc.getOrElse('title', ''),
+      description: doc.getOrElse('description', ''),
+      rate: doc.getOrElse('rate', 0),
       rateType: EnumToString.fromString(
             RateType.values,
-            doc.getOrElse('rateType', '') as String,
+            doc.getOrElse('rateType', ''),
           ) ??
           RateType.hourly,
-      count: doc.getOrElse('count', 0) as int,
-      deleted: doc.getOrElse('deleted', false) as bool,
+      count: doc.getOrElse('count', 0),
+      deleted: doc.getOrElse('deleted', false),
     );
   }
 

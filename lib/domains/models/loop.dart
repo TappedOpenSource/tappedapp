@@ -66,26 +66,26 @@ class Loop extends Equatable {
 
       return Loop(
         id: doc.id,
-        userId: doc.getOrElse('userId', '') as String,
-        title: Option.fromNullable(doc.getOrElse('title', null) as String?),
-        description: doc.getOrElse('description', '') as String,
+        userId: doc.getOrElse('userId', ''),
+        title: Option.fromNullable(doc.getOrElse<String?>('title', null)),
+        description: doc.getOrElse('description', ''),
         audioPath:
-            Option.fromNullable(doc.getOrElse('audioPath', null) as String?),
+            Option.fromNullable(doc.getOrElse<String?>('audioPath', null)),
         imagePaths: List.from(
-          doc.getOrElse(
+          doc.getOrElse<Iterable<dynamic>>(
             'imagePaths',
-            <dynamic>[],
-          ) as Iterable<dynamic>,
+            [],
+          ),
         ),
         timestamp: tmpTimestamp.toDate(),
-        likeCount: doc.getOrElse('likeCount', 0) as int,
-        commentCount: doc.getOrElse('commentCount', 0) as int,
-        shareCount: doc.getOrElse('shareCount', 0) as int,
-        isOpportunity: doc.getOrElse('isOpportunity', false) as bool,
+        likeCount: doc.getOrElse('likeCount', 0),
+        commentCount: doc.getOrElse('commentCount', 0),
+        shareCount: doc.getOrElse('shareCount', 0),
+        isOpportunity: doc.getOrElse('isOpportunity', false),
         // tags: List.from(
         //   doc.getOrElse('tags', <dynamic>[]) as Iterable<dynamic>,
         // ),
-        deleted: doc.getOrElse('deleted', false) as bool,
+        deleted: doc.getOrElse('deleted', false),
       );
     } catch (e, s) {
       logger.error(

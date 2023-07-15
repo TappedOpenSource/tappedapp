@@ -18,7 +18,7 @@ sealed class Review {
 
   factory Review.fromDoc(DocumentSnapshot<Map<String, dynamic>> doc) {
     try {
-      final rawType = doc.getOrElse('type', null) as String?;
+      final rawType = doc.getOrElse<String?>('type', null);
       if (rawType == null) {
         throw Exception('Activity.fromDoc: type is null');
       }
@@ -82,7 +82,7 @@ final class BookerReview extends Review {
       bookerId: doc.get('bookerId') as String,
       performerId: doc.get('performerId') as String,
       bookingId: Option.fromNullable(
-        doc.getOrElse('bookingId', null) as String?,
+        doc.getOrElse<String?>('bookingId', null),
       ),
       timestamp: (doc.get('timestamp') as Timestamp).toDate(),
       overallRating: doc.get('overallRating') as int,

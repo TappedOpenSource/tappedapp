@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:enum_to_string/enum_to_string.dart';
 import 'package:equatable/equatable.dart';
+import 'package:flutter/widgets.dart';
 import 'package:intheloopapp/domains/models/genre.dart';
 import 'package:intheloopapp/domains/models/option.dart';
 import 'package:intheloopapp/domains/models/username.dart';
@@ -111,18 +112,23 @@ class UserModel extends Equatable {
     final tmpTimestamp = doc.getOrElse(
       'timestamp',
       Timestamp.now(),
-    ) as Timestamp;
+    );
+
+    final tmpOverallRating = doc.getOrElse<int?>('overallRating', null);
+    final overallRating = tmpOverallRating != null
+        ? Some<double>(tmpOverallRating.toDouble())
+        : const None<double>();
 
     return UserModel(
       id: doc.id,
-      email: doc.getOrElse('email', '') as String,
+      email: doc.getOrElse('email', ''),
       timestamp: tmpTimestamp.toDate(),
       username:
-          Username.fromString(doc.getOrElse('username', 'anonymous') as String),
-      artistName: doc.getOrElse('artistName', '') as String,
-      profilePicture: doc.getOrElse('profilePicture', null) as String?,
-      bio: doc.getOrElse('bio', '') as String,
-      genres: (doc.getOrElse('genres', <dynamic>[]) as List<dynamic>)
+          Username.fromString(doc.getOrElse('username', 'anonymous')),
+      artistName: doc.getOrElse('artistName', ''),
+      profilePicture: doc.getOrElse<String?>('profilePicture', null),
+      bio: doc.getOrElse<String>('bio', ''),
+      genres: (doc.getOrElse<List<dynamic>>('genres', []))
           .map(
             (dynamic e) =>
                 EnumToString.fromString<Genre>(Genre.values, e as String),
@@ -130,52 +136,50 @@ class UserModel extends Equatable {
           .where((element) => element != null)
           .whereType<Genre>()
           .toList(),
-      occupations: (doc.getOrElse('occupations', <dynamic>[]) as List<dynamic>)
+      occupations: (doc.getOrElse<List<dynamic>>('occupations', []))
           .whereType<String>()
           .toList(),
-      label: doc.getOrElse('label', 'None') as String,
-      placeId: doc.getOrElse('placeId', null) as String?,
-      geohash: doc.getOrElse('geohash', null) as String?,
-      lat: doc.getOrElse('lat', null) as double?,
-      lng: doc.getOrElse('lng', null) as double?,
-      loopsCount: doc.getOrElse('loopsCount', 0) as int,
-      badgesCount: doc.getOrElse('badgesCount', 0) as int,
-      reviewCount: doc.getOrElse('reviewCount', 0) as int,
-      followerCount: doc.getOrElse('followerCount', 0) as int,
-      followingCount: doc.getOrElse('followingCount', 0) as int,
-      overallRating: Option.fromNullable(
-        doc.getOrElse('overallRating', null) as double?,
-      ),
-      deleted: doc.getOrElse('deleted', false) as bool,
-      shadowBanned: doc.getOrElse('shadowBanned', false) as bool,
+      label: doc.getOrElse<String>('label', 'None'),
+      placeId: doc.getOrElse<String?>('placeId', null),
+      geohash: doc.getOrElse<String?>('geohash', null),
+      lat: doc.getOrElse<double?>('lat', null),
+      lng: doc.getOrElse<double?>('lng', null),
+      loopsCount: doc.getOrElse<int>('loopsCount', 0),
+      badgesCount: doc.getOrElse<int>('badgesCount', 0),
+      reviewCount: doc.getOrElse<int>('reviewCount', 0),
+      followerCount: doc.getOrElse<int>('followerCount', 0),
+      followingCount: doc.getOrElse<int>('followingCount', 0),
+      overallRating: overallRating,
+      deleted: doc.getOrElse<bool>('deleted', false),
+      shadowBanned: doc.getOrElse<bool>('shadowBanned', false),
       accountType: accountType,
       epkUrl: Option.fromNullable(
-        doc.getOrElse('epkUrl', null) as String?,
+        doc.getOrElse<String?>('epkUrl', null),
       ),
-      youtubeChannelId: doc.getOrElse('youtubeChannelId', null) as String?,
-      tiktokHandle: doc.getOrElse('tiktokHandle', null) as String?,
-      instagramHandle: doc.getOrElse('instagramHandle', null) as String?,
-      twitterHandle: doc.getOrElse('twitterHandle', null) as String?,
-      spotifyId: doc.getOrElse('spotifyId', null) as String?,
+      youtubeChannelId: doc.getOrElse<String?>('youtubeChannelId', null),
+      tiktokHandle: doc.getOrElse<String?>('tiktokHandle', null),
+      instagramHandle: doc.getOrElse<String?>('instagramHandle', null),
+      twitterHandle: doc.getOrElse<String?>('twitterHandle', null),
+      spotifyId: doc.getOrElse<String?>('spotifyId', null),
       pushNotificationsLikes:
-          doc.getOrElse('pushNotificationsLikes', true) as bool,
+          doc.getOrElse('pushNotificationsLikes', true),
       pushNotificationsComments:
-          doc.getOrElse('pushNotificationsComments', true) as bool,
+          doc.getOrElse('pushNotificationsComments', true),
       pushNotificationsFollows:
-          doc.getOrElse('pushNotificationsFollows', true) as bool,
+          doc.getOrElse('pushNotificationsFollows', true),
       pushNotificationsDirectMessages:
-          doc.getOrElse('pushNotificationsDirectMessages', true) as bool,
+          doc.getOrElse('pushNotificationsDirectMessages', true),
       pushNotificationsITLUpdates:
-          doc.getOrElse('pushNotificationsITLUpdates', true) as bool,
+          doc.getOrElse('pushNotificationsITLUpdates', true),
       emailNotificationsAppReleases:
-          doc.getOrElse('emailNotificationsAppReleases', true) as bool,
+          doc.getOrElse('emailNotificationsAppReleases', true),
       emailNotificationsITLUpdates:
-          doc.getOrElse('emailNotificationsITLUpdates', true) as bool,
-      stripeConnectedAccountId: doc.getOrElse(
+          doc.getOrElse('emailNotificationsITLUpdates', true),
+      stripeConnectedAccountId: doc.getOrElse<String?>(
         'stripeConnectedAccountId',
         null,
-      ) as String?,
-      stripeCustomerId: doc.getOrElse('stripeCustomerId', null) as String?,
+      ),
+      stripeCustomerId: doc.getOrElse<String?>('stripeCustomerId', null),
     );
   }
   final String id;

@@ -30,6 +30,8 @@ UserModel _$UserModelFromJson(Map<String, dynamic> json) => UserModel(
       reviewCount: json['reviewCount'] as int,
       followerCount: json['followerCount'] as int,
       followingCount: json['followingCount'] as int,
+      overallRating: const OptionalDoubleConverter()
+          .fromJson(json['overallRating'] as double?),
       deleted: json['deleted'] as bool,
       shadowBanned: json['shadowBanned'] as bool,
       accountType: $enumDecode(_$AccountTypeEnumMap, json['accountType']),
@@ -74,6 +76,8 @@ Map<String, dynamic> _$UserModelToJson(UserModel instance) => <String, dynamic>{
       'reviewCount': instance.reviewCount,
       'followerCount': instance.followerCount,
       'followingCount': instance.followingCount,
+      'overallRating':
+          const OptionalDoubleConverter().toJson(instance.overallRating),
       'deleted': instance.deleted,
       'shadowBanned': instance.shadowBanned,
       'accountType': _$AccountTypeEnumMap[instance.accountType]!,

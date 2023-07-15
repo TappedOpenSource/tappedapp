@@ -28,36 +28,36 @@ class Booking extends Equatable {
 
   factory Booking.fromDoc(DocumentSnapshot<Map<String, dynamic>> doc) {
     final tmpTimestamp =
-        doc.getOrElse('timestamp', Timestamp.now()) as Timestamp;
+        doc.getOrElse('timestamp', Timestamp.now()) ;
     final tmpStartTime =
-        doc.getOrElse('startTime', Timestamp.now()) as Timestamp;
-    final tmpEndTime = doc.getOrElse('endTime', Timestamp.now()) as Timestamp;
+        doc.getOrElse('startTime', Timestamp.now()) ;
+    final tmpEndTime = doc.getOrElse('endTime', Timestamp.now()) ;
     return Booking(
       id: doc.id,
       serviceId: Option.fromNullable(
-        doc.getOrElse('serviceId', null) as String?,
+        doc.getOrElse<String?>('serviceId', null),
       ),
-      name: doc.getOrElse('name', '') as String,
-      note: doc.getOrElse('note', '') as String,
-      requesterId: doc.getOrElse('requesterId', '') as String,
-      requesteeId: doc.getOrElse('requesteeId', '') as String,
-      rate: doc.getOrElse('rate', 0) as int,
+      name: doc.getOrElse('name', '') ,
+      note: doc.getOrElse('note', '') ,
+      requesterId: doc.getOrElse('requesterId', '') ,
+      requesteeId: doc.getOrElse('requesteeId', '') ,
+      rate: doc.getOrElse('rate', 0) ,
       status: EnumToString.fromString(
             BookingStatus.values,
-            doc.getOrElse('status', '') as String,
+            doc.getOrElse('status', '') ,
           ) ??
           BookingStatus.pending,
       placeId: Option.fromNullable(
-        doc.getOrElse('placeId', null) as String?,
+        doc.getOrElse<String?>('placeId', null),
       ),
       geohash: Option.fromNullable(
-        doc.getOrElse('geohash', null) as String?,
+        doc.getOrElse<String?>('geohash', null),
       ),
       lat: Option.fromNullable(
-        doc.getOrElse('lat', null) as double?,
+        doc.getOrElse<double?>('lat', null),
       ),
       lng: Option.fromNullable(
-        doc.getOrElse('lng', null) as double?,
+        doc.getOrElse<double?>('lng', null),
       ),
       startTime: tmpStartTime.toDate(),
       endTime: tmpEndTime.toDate(),
