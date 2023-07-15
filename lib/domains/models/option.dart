@@ -139,3 +139,14 @@ class OptionalStringConverter
   @override
   String? toJson(Option<String> option) => option.asNullable();
 }
+
+class OptionalDoubleConverter
+    implements JsonConverter<Option<double>, double?> {
+  const OptionalDoubleConverter();
+
+  @override
+  Option<double> fromJson(double? value) => Option.fromNullable(value);
+
+  @override
+  double? toJson(Option<double> option) => option.asNullable();
+}

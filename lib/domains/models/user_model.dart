@@ -32,6 +32,7 @@ class UserModel extends Equatable {
     required this.reviewCount,
     required this.followerCount,
     required this.followingCount,
+    required this.overallRating,
     required this.deleted,
     required this.shadowBanned,
     required this.accountType,
@@ -72,6 +73,7 @@ class UserModel extends Equatable {
         reviewCount: 0,
         followerCount: 0,
         followingCount: 0,
+        overallRating: const None<double>(),
         deleted: false,
         shadowBanned: false,
         accountType: AccountType.free,
@@ -141,6 +143,9 @@ class UserModel extends Equatable {
       reviewCount: doc.getOrElse('reviewCount', 0) as int,
       followerCount: doc.getOrElse('followerCount', 0) as int,
       followingCount: doc.getOrElse('followingCount', 0) as int,
+      overallRating: Option.fromNullable(
+        doc.getOrElse('overallRating', null) as double?,
+      ),
       deleted: doc.getOrElse('deleted', false) as bool,
       shadowBanned: doc.getOrElse('shadowBanned', false) as bool,
       accountType: accountType,
@@ -199,6 +204,9 @@ class UserModel extends Equatable {
   final int followerCount;
   final int followingCount;
 
+  @OptionalDoubleConverter()
+  final Option<double> overallRating;
+
   final bool deleted;
   final bool shadowBanned;
   final AccountType accountType;
@@ -245,6 +253,7 @@ class UserModel extends Equatable {
         reviewCount,
         followerCount,
         followingCount,
+        overallRating,
         deleted,
         shadowBanned,
         accountType,
@@ -295,6 +304,7 @@ class UserModel extends Equatable {
     int? reviewCount,
     int? followerCount,
     int? followingCount,
+    Option<double>? overallRating,
     bool? deleted,
     bool? shadowBanned,
     AccountType? accountType,
@@ -334,6 +344,7 @@ class UserModel extends Equatable {
       reviewCount: reviewCount ?? this.reviewCount,
       followerCount: followerCount ?? this.followerCount,
       followingCount: followingCount ?? this.followingCount,
+      overallRating: overallRating ?? this.overallRating,
       deleted: deleted ?? this.deleted,
       shadowBanned: shadowBanned ?? this.shadowBanned,
       accountType: accountType ?? this.accountType,
@@ -384,6 +395,7 @@ class UserModel extends Equatable {
       'reviewCount': reviewCount,
       'followerCount': followerCount,
       'followingCount': followingCount,
+      'overallRating': overallRating.asNullable(),
       'deleted': deleted,
       'shadowBanned': shadowBanned,
       'accountType': _$AccountTypeEnumMap[accountType],
