@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:enum_to_string/enum_to_string.dart';
 import 'package:equatable/equatable.dart';
 import 'package:intheloopapp/domains/models/booking.dart';
+import 'package:intheloopapp/domains/models/option.dart';
 import 'package:intheloopapp/utils/app_logger.dart';
 import 'package:intheloopapp/utils/default_value.dart';
 
@@ -16,7 +17,7 @@ sealed class Activity extends Equatable {
 
   factory Activity.fromDoc(DocumentSnapshot<Map<String, dynamic>> doc) {
     try {
-      final rawType = doc.getOrElse('type', null) as String?;
+      final rawType = doc.getOrElse<String?>('type', null);
       if (rawType == null) {
         throw Exception('Activity.fromDoc: type is null');
       }
@@ -88,21 +89,20 @@ final class Follow extends Activity {
 
   factory Follow.fromDoc(DocumentSnapshot<Map<String, dynamic>> doc) {
     try {
-      final tmpTimestamp =
-          doc.getOrElse('timestamp', Timestamp.now()) as Timestamp;
+      final tmpTimestamp = doc.getOrElse('timestamp', Timestamp.now());
       return Follow(
         id: doc.id,
         toUserId: doc.get('toUserId') as String,
         timestamp: tmpTimestamp.toDate(),
         type: EnumToString.fromString(
               ActivityType.values,
-              doc.getOrElse('type', 'free') as String,
+              doc.getOrElse('type', 'free'),
             ) ??
             ActivityType.like,
         fromUserId: doc.get(
           'fromUserId',
         ) as String,
-        markedRead: doc.getOrElse('markedRead', false) as bool,
+        markedRead: doc.getOrElse('markedRead', false),
       );
     } catch (e, s) {
       logger.error('FollowActivity.fromDoc', error: e, stackTrace: s);
@@ -138,18 +138,17 @@ final class Like extends Activity {
 
   factory Like.fromDoc(DocumentSnapshot<Map<String, dynamic>> doc) {
     try {
-      final tmpTimestamp =
-          doc.getOrElse('timestamp', Timestamp.now()) as Timestamp;
+      final tmpTimestamp = doc.getOrElse('timestamp', Timestamp.now());
       return Like(
         id: doc.id,
         toUserId: doc.get('toUserId') as String,
         timestamp: tmpTimestamp.toDate(),
         type: EnumToString.fromString(
               ActivityType.values,
-              doc.getOrElse('type', 'free') as String,
+              doc.getOrElse('type', 'free'),
             ) ??
             ActivityType.like,
-        markedRead: doc.getOrElse('markedRead', false) as bool,
+        markedRead: doc.getOrElse('markedRead', false),
         fromUserId: doc.get(
           'fromUserId',
         ) as String,
@@ -194,8 +193,7 @@ final class CommentActivity extends Activity {
 
   factory CommentActivity.fromDoc(DocumentSnapshot<Map<String, dynamic>> doc) {
     try {
-      final tmpTimestamp =
-          doc.getOrElse('timestamp', Timestamp.now()) as Timestamp;
+      final tmpTimestamp = doc.getOrElse('timestamp', Timestamp.now());
       return CommentActivity(
         id: doc.id,
         toUserId: doc.get('toUserId') as String,
@@ -256,25 +254,22 @@ final class BookingRequest extends Activity {
     DocumentSnapshot<Map<String, dynamic>> doc,
   ) {
     try {
-      final tmpTimestamp =
-          doc.getOrElse('timestamp', Timestamp.now()) as Timestamp;
+      final tmpTimestamp = doc.getOrElse('timestamp', Timestamp.now());
       return BookingRequest(
         id: doc.id,
         toUserId: doc.get('toUserId') as String,
         timestamp: tmpTimestamp.toDate(),
         type: EnumToString.fromString(
               ActivityType.values,
-              doc.getOrElse('type', 'free') as String,
+              doc.getOrElse('type', 'free'),
             ) ??
             ActivityType.like,
-        markedRead: doc.getOrElse('markedRead', false) as bool,
-        fromUserId: doc.getOrElse(
+        markedRead: doc.getOrElse('markedRead', false),
+        fromUserId: doc.get(
           'fromUserId',
-          null,
         ) as String,
-        bookingId: doc.getOrElse(
+        bookingId: doc.get(
           'bookingId',
-          null,
         ) as String,
       );
     } catch (e, s) {
@@ -316,18 +311,17 @@ final class BookingUpdate extends Activity {
     DocumentSnapshot<Map<String, dynamic>> doc,
   ) {
     try {
-      final tmpTimestamp =
-          doc.getOrElse('timestamp', Timestamp.now()) as Timestamp;
+      final tmpTimestamp = doc.getOrElse('timestamp', Timestamp.now());
       return BookingUpdate(
         id: doc.id,
         toUserId: doc.get('toUserId') as String,
         timestamp: tmpTimestamp.toDate(),
         type: EnumToString.fromString(
               ActivityType.values,
-              doc.getOrElse('type', 'free') as String,
+              doc.getOrElse('type', 'free'),
             ) ??
             ActivityType.like,
-        markedRead: doc.getOrElse('markedRead', false) as bool,
+        markedRead: doc.getOrElse('markedRead', false),
         fromUserId: doc.get(
           'fromUserId',
         ) as String,
@@ -380,13 +374,13 @@ final class LoopMention extends Activity {
   ) {
     try {
       final tmpTimestamp =
-          doc.getOrElse('timestamp', Timestamp.now()) as Timestamp;
+          doc.getOrElse('timestamp', Timestamp.now()) ;
       return LoopMention(
         id: doc.id,
         toUserId: doc.get('toUserId') as String,
         timestamp: tmpTimestamp.toDate(),
         type: ActivityType.loopMention,
-        markedRead: doc.getOrElse('markedRead', false) as bool,
+        markedRead: doc.getOrElse('markedRead', false) ,
         fromUserId: doc.get(
           'fromUserId',
         ) as String,
@@ -434,13 +428,13 @@ final class CommentMention extends Activity {
   ) {
     try {
       final tmpTimestamp =
-          doc.getOrElse('timestamp', Timestamp.now()) as Timestamp;
+          doc.getOrElse('timestamp', Timestamp.now()) ;
       return CommentMention(
         id: doc.id,
         toUserId: doc.get('toUserId') as String,
         timestamp: tmpTimestamp.toDate(),
         type: ActivityType.commentMention,
-        markedRead: doc.getOrElse('markedRead', false) as bool,
+        markedRead: doc.getOrElse('markedRead', false) ,
         rootId: doc.get(
           'rootId',
         ) as String,
@@ -493,13 +487,13 @@ final class CommentLike extends Activity {
   ) {
     try {
       final tmpTimestamp =
-          doc.getOrElse('timestamp', Timestamp.now()) as Timestamp;
+          doc.getOrElse('timestamp', Timestamp.now()) ;
       return CommentLike(
         id: doc.id,
         toUserId: doc.get('toUserId') as String,
         timestamp: tmpTimestamp.toDate(),
         type: ActivityType.commentLike,
-        markedRead: doc.getOrElse('markedRead', false) as bool,
+        markedRead: doc.getOrElse('markedRead', false) ,
         rootId: doc.get(
           'rootId',
         ) as String,
@@ -551,13 +545,13 @@ final class OpportunityInterest extends Activity {
   ) {
     try {
       final tmpTimestamp =
-          doc.getOrElse('timestamp', Timestamp.now()) as Timestamp;
+          doc.getOrElse('timestamp', Timestamp.now()) ;
       return OpportunityInterest(
         id: doc.id,
         toUserId: doc.get('toUserId') as String,
         timestamp: tmpTimestamp.toDate(),
         type: ActivityType.opportunityInterest,
-        markedRead: doc.getOrElse('markedRead', false) as bool,
+        markedRead: doc.getOrElse('markedRead', false) ,
         fromUserId: doc.get(
           'fromUserId',
         ) as String,
@@ -608,13 +602,13 @@ final class BookingReminder extends Activity {
   ) {
     try {
       final tmpTimestamp =
-          doc.getOrElse('timestamp', Timestamp.now()) as Timestamp;
+          doc.getOrElse('timestamp', Timestamp.now()) ;
       return BookingReminder(
         id: doc.id,
         toUserId: doc.get('toUserId') as String,
         timestamp: tmpTimestamp.toDate(),
         type: ActivityType.bookingReminder,
-        markedRead: doc.getOrElse('markedRead', false) as bool,
+        markedRead: doc.getOrElse('markedRead', false) ,
         fromUserId: doc.get(
           'fromUserId',
         ) as String,
@@ -664,13 +658,13 @@ final class SearchAppearance extends Activity {
   ) {
     try {
       final tmpTimestamp =
-          doc.getOrElse('timestamp', Timestamp.now()) as Timestamp;
+          doc.getOrElse('timestamp', Timestamp.now()) ;
       return SearchAppearance(
         id: doc.id,
         toUserId: doc.get('toUserId') as String,
         timestamp: tmpTimestamp.toDate(),
         type: ActivityType.opportunityInterest,
-        markedRead: doc.getOrElse('markedRead', false) as bool,
+        markedRead: doc.getOrElse('markedRead', false) ,
         count: doc.get('count') as int,
       );
     } catch (e, s) {

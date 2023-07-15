@@ -19,14 +19,13 @@ class Badge extends Equatable {
   factory Badge.fromJson(Map<String, dynamic> json) => _$BadgeFromJson(json);
 
   factory Badge.fromDoc(DocumentSnapshot<Map<String, dynamic>> doc) {
-    final tmpTimestamp =
-        doc.getOrElse('timestamp', Timestamp.now()) as Timestamp;
+    final tmpTimestamp = doc.getOrElse('timestamp', Timestamp.now());
     return Badge(
       id: doc.id,
-      creatorId: doc.getOrElse('creatorId', '') as String,
-      imageUrl: doc.getOrElse('imageUrl', '') as String,
-      name: doc.getOrElse('name', '') as String,
-      description: doc.getOrElse('description', '') as String,
+      creatorId: doc.getOrElse('creatorId', ''),
+      imageUrl: doc.getOrElse('imageUrl', ''),
+      name: doc.getOrElse('name', ''),
+      description: doc.getOrElse('description', ''),
       timestamp: tmpTimestamp.toDate(),
     );
   }
@@ -73,7 +72,7 @@ class Badge extends Equatable {
       'imageUrl': imageUrl,
       'name': name,
       'description': description,
-      'timestamp': timestamp.toIso8601String()
+      'timestamp': timestamp.toIso8601String(),
     };
   }
 }
