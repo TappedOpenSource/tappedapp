@@ -127,7 +127,7 @@ final class PerformerReview extends Review {
       bookerId: doc.get('bookerId') as String,
       performerId: doc.get('performerId') as String,
       bookingId: Option.fromNullable(
-        doc.getOrElse('bookingId', null) as String?,
+        doc.getOrElse<String?>('bookingId', null),
       ),
       timestamp: (doc.get('timestamp') as Timestamp).toDate(),
       overallRating: doc.get('overallRating') as int,
