@@ -27,7 +27,14 @@ class LoginButton extends StatelessWidget {
               );
             }
           },
-          child: const Text('Login'),
+          borderRadius: BorderRadius.circular(15),
+          child: const Text(
+            'Login',
+            style: TextStyle(
+              color: Colors.white,
+              fontWeight: FontWeight.w700,
+            ),
+          ),
         );
       },
     );
