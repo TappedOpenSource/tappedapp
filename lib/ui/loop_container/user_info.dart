@@ -6,6 +6,7 @@ import 'package:intheloopapp/domains/models/user_model.dart';
 import 'package:intheloopapp/domains/navigation_bloc/navigation_bloc.dart';
 import 'package:intheloopapp/domains/navigation_bloc/tapped_route.dart';
 import 'package:intheloopapp/ui/app_theme_cubit.dart';
+import 'package:intheloopapp/ui/common/rating_chip.dart';
 import 'package:intheloopapp/ui/user_avatar.dart';
 import 'package:timeago/timeago.dart' as timeago;
 
@@ -31,6 +32,21 @@ class UserInfo extends StatelessWidget {
         }
 
         final verified = snapshot.data!;
+        final overallRatingWidgets = switch (loopUser.overallRating) {
+          None() => [
+              const WidgetSpan(
+                child: SizedBox.shrink(),
+              ),
+            ],
+          Some(:final value) => [
+              WidgetSpan(
+                alignment: PlaceholderAlignment.middle,
+                child: RatingChip(
+                  rating: value,
+                ),
+              ),
+            ],
+        };
 
         return GestureDetector(
           onTap: () => context.push(
@@ -62,11 +78,14 @@ class UserInfo extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       if (loopUser.artistName.isNotEmpty)
-                        Text(
-                          loopUser.artistName,
-                          style: const TextStyle(
-                            fontSize: 16,
-                            fontWeight: FontWeight.bold,
+                        RichText(
+                          text: TextSpan(
+                            text: loopUser.artistName,
+                            style: const TextStyle(
+                              fontSize: 16,
+                              fontWeight: FontWeight.bold,
+                            ),
+                            children: overallRatingWidgets,
                           ),
                         ),
                       Text(

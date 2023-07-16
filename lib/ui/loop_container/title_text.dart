@@ -1,5 +1,4 @@
 import 'package:flutter/cupertino.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:intheloopapp/domains/models/option.dart';
 
 class TitleText extends StatelessWidget {
