@@ -49,6 +49,17 @@ class LocationDiscoverView extends StatelessWidget {
             ),
             SizedBox(height: 20),
             LocationCard(
+              title: 'Atlanta',
+              image: AssetImage('assets/atlanta.jpg'),
+              prediction: AutocompletePrediction(
+                placeId: 'ChIJjQmTaV0E9YgRC2MLmS_e_mY',
+                primaryText: 'Atlanta',
+                secondaryText: 'Georgia, USA',
+                fullText: 'Atlanta, Georgia, USA',
+              ),
+            ),
+            SizedBox(height: 20),
+            LocationCard(
               title: 'Barcelona',
               image: AssetImage('assets/barcelona.png'),
               prediction: AutocompletePrediction(

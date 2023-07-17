@@ -56,6 +56,7 @@ class ByLocationResultsList extends StatelessWidget {
             itemCount: state.locationResults.length,
             itemBuilder: (BuildContext context, int index) {
               final prediction = state.locationResults[index];
+              // print('PRED $prediction');
               return ListTile(
                 onTap: () {
                   context
