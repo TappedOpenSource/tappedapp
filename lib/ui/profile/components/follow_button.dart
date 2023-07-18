@@ -14,32 +14,36 @@ class FollowButton extends StatelessWidget {
     final theme = Theme.of(context);
     return BlocBuilder<ProfileCubit, ProfileState>(
       builder: (context, state) {
-        return state.currentUser.id != state.visitedUser.id
-            ? CupertinoButton(
-                onPressed: () => context.read<ProfileCubit>()
-                  ..toggleFollow(state.currentUser.id, state.visitedUser.id),
-                color: Colors.white.withOpacity(0.1),
-                padding: const EdgeInsets.all(12),
-                child: Text(
-                  state.isFollowing ? 'Following' : 'Follow',
-                  style: TextStyle(
-                    fontSize: 17,
-                    color: state.isFollowing ? Colors.green : Colors.white,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-              )
-            : CupertinoButton(
-                onPressed: () => context.push(SettingsPage()),
-                color: theme.colorScheme.onSurface.withOpacity(0.1),
-                child: Text(
-                  'Edit Profile',
-                  style: TextStyle(
-                    color: theme.colorScheme.onSurface,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-              );
+        if (state.currentUser.id != state.visitedUser.id) {
+          return CupertinoButton(
+            onPressed: () => context.read<ProfileCubit>()
+              ..toggleFollow(state.currentUser.id, state.visitedUser.id),
+            color: state.isFollowing
+                ? tappedAccent
+                : Colors.white.withOpacity(0.1),
+            padding: const EdgeInsets.all(12),
+            child: Text(
+              state.isFollowing ? 'Following' : 'Follow',
+              style: TextStyle(
+                fontSize: 17,
+                color: state.isFollowing ? Colors.green : Colors.white,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+          );
+        }
+
+        return CupertinoButton(
+          onPressed: () => context.push(SettingsPage()),
+          color: theme.colorScheme.onSurface.withOpacity(0.1),
+          child: Text(
+            'Edit Profile',
+            style: TextStyle(
+              color: theme.colorScheme.onSurface,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+        );
       },
     );
   }
