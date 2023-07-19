@@ -194,9 +194,17 @@ class FirestoreDatabaseImpl extends DatabaseRepository {
       return const None();
     }
 
-    final user = UserModel.fromDoc(userSnapshot);
-
-    return Some(user);
+    try {
+      final user = UserModel.fromDoc(userSnapshot);
+      return Some(user);
+    } catch (e, s) {
+      logger.error(
+        'getUserById',
+        error: e,
+        stackTrace: s,
+      );
+      return const None();
+    }
   }
 
   @override
