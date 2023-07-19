@@ -115,15 +115,15 @@ class UserModel extends Equatable {
 
     final tmpOverallRating = doc.getOrElse<dynamic?>('overallRating', null);
 
+    // firestore can suck my nuts for this
+    // firestore only stores "numbers" so I have to figure out if
+    // it's an int or double
     final overallRating = switch (tmpOverallRating) {
       null => const None<double>(),
       == double => Some<double>(tmpOverallRating as double),
       == int => Some<double>((tmpOverallRating as int).toDouble()),
       _ => const None<double>(),
     };
-    // final overallRating = tmpOverallRating != null
-    //     ? Some<double>(tmpOverallRating.toDouble())
-    //     : const None<double>();
 
     return UserModel(
       id: doc.id,
