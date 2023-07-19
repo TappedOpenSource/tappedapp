@@ -23,6 +23,7 @@ class UserInfo extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final database = context.read<DatabaseRepository>();
+    final theme = Theme.of(context);
 
     return FutureBuilder<bool>(
       future: database.isVerified(loopUser.id),
@@ -81,9 +82,10 @@ class UserInfo extends StatelessWidget {
                         RichText(
                           text: TextSpan(
                             text: loopUser.artistName,
-                            style: const TextStyle(
+                            style: TextStyle(
                               fontSize: 16,
                               fontWeight: FontWeight.bold,
+                              color: theme.colorScheme.onSurface,
                             ),
                             children: overallRatingWidgets,
                           ),

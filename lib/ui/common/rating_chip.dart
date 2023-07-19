@@ -30,6 +30,7 @@ class RatingChip extends StatelessWidget {
           children: [
             const Icon(
               Icons.star,
+              color: Colors.white,
               size: 8,
             ),
             const SizedBox(width: 2),
