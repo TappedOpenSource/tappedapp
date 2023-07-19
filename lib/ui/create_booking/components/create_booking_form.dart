@@ -192,7 +192,7 @@ class _CreateBookingFormState extends State<CreateBookingForm> {
                       final booking = await context
                           .read<CreateBookingCubit>()
                           .createBooking();
-              
+
                       nav.push(
                         BookingConfirmationPage(booking: booking),
                       );
@@ -200,7 +200,7 @@ class _CreateBookingFormState extends State<CreateBookingForm> {
                       if (e.error.code == FailureCode.Canceled) {
                         return;
                       }
-              
+
                       logger.error(
                         'error create booking',
                         error: e,
@@ -227,15 +227,23 @@ class _CreateBookingFormState extends State<CreateBookingForm> {
                         ),
                       );
                     }
-                  },          
+                  },
                   borderRadius: BorderRadius.circular(15),
                   child: const Text(
                     'Confirm Booking',
-                      style: TextStyle(
-                        fontWeight: FontWeight.w700,
-                        color: Colors.white,
-                      ),
+                    style: TextStyle(
+                      fontWeight: FontWeight.w700,
+                      color: Colors.white,
+                    ),
                   ),
+                ),
+              ),
+              const SizedBox(height: 4),
+              const Text(
+                'powered by stripe',
+                style: TextStyle(
+                  fontSize: 12,
+                  color: CupertinoColors.inactiveGray,
                 ),
               ),
             ],

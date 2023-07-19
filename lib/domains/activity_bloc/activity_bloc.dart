@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
+import 'package:flutter_app_badger/flutter_app_badger.dart';
 import 'package:intheloopapp/data/database_repository.dart';
 import 'package:intheloopapp/domains/authentication_bloc/authentication_bloc.dart';
 import 'package:intheloopapp/domains/models/activity.dart';
@@ -18,12 +19,13 @@ class ActivityBloc extends Bloc<ActivityEvent, ActivityState> {
     currentUserId =
         (authenticationBloc.state as Authenticated).currentAuthUser.uid;
     on<AddActivityEvent>(
-      (event, emit) {
+      (event, emit) async {
         emit(
           ActivitySuccess(
             activities: List.of(state.activities)..add(event.activity),
           ),
         );
+        await FlutterAppBadger.updateBadgeCount(state.unreadActivitiesCount);
       },
     );
     on<InitListenerEvent>(
@@ -36,11 +38,12 @@ class ActivityBloc extends Bloc<ActivityEvent, ActivityState> {
       (event, emit) => _mapMarkActivityAsReadEventToState(emit, event.activity),
     );
     on<MarkAllAsReadEvent>(
-      (event, emit) {
+      (event, emit) async {
         if (state is ActivitySuccess) {
+          await FlutterAppBadger.updateBadgeCount(0);
           final activities = (state as ActivitySuccess).activities;
           for (final activity in activities) {
-            _mapMarkActivityAsReadEventToState(emit, activity);
+            await _mapMarkActivityAsReadEventToState(emit, activity);
           }
         }
       },
@@ -125,6 +128,7 @@ class ActivityBloc extends Bloc<ActivityEvent, ActivityState> {
       final updatedActivity = activity.copyAsRead();
 
       if (idx != -1) {
+        await FlutterAppBadger.removeBadge();
         emit(
           ActivitySuccess(
             activities: state.activities..[idx] = updatedActivity,

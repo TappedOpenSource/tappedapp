@@ -4,6 +4,7 @@ import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:firebase_dynamic_links/firebase_dynamic_links.dart';
 import 'package:intheloopapp/data/dynamic_link_repository.dart';
 import 'package:intheloopapp/domains/models/loop.dart';
+import 'package:intheloopapp/domains/models/option.dart';
 import 'package:intheloopapp/domains/models/user_model.dart';
 import 'package:intheloopapp/utils/app_logger.dart';
 
@@ -27,6 +28,7 @@ class FirebaseDynamicLinkImpl extends DynamicLinkRepository {
     }
 
     _dynamicLinks.onLink.listen((PendingDynamicLinkData? dynamicLinkData) {
+      logger.debug('new dynamic link - ${dynamicLinkData?.link}');
       final redirect = _handleDeepLink(dynamicLinkData);
 
       if (redirect != null) {
@@ -114,7 +116,7 @@ class FirebaseDynamicLinkImpl extends DynamicLinkRepository {
         bundleId: 'com.intheloopstudio',
       ),
       socialMetaTagParameters: SocialMetaTagParameters(
-        title: 'Tapped Network | ${loop.title}',
+        title: 'Tapped Network | ${loop.title.unwrapOr('')}',
         description:
             '''Tapped Network - The online platform tailored for producers and creators to share their loops to the world, get feedback on their music, and join the world-wide community of artists to collaborate with''',
         imageUrl: imageUri,
