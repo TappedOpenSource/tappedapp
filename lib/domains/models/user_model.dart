@@ -118,10 +118,10 @@ class UserModel extends Equatable {
     // firestore can suck my nuts for this
     // firestore only stores "numbers" so I have to figure out if
     // it's an int or double
-    final overallRating = switch (tmpOverallRating) {
-      null => const None<double>(),
-      == double => Some<double>(tmpOverallRating as double),
-      == int => Some<double>((tmpOverallRating as int).toDouble()),
+    final overallRating = switch (tmpOverallRating.runtimeType) {
+      String => const None<double>(),
+      double => Some<double>(tmpOverallRating as double),
+      int => Some<double>((tmpOverallRating as int).toDouble()),
       _ => const None<double>(),
     };
 
