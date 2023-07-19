@@ -113,17 +113,23 @@ class UserModel extends Equatable {
       Timestamp.now(),
     );
 
-    final tmpOverallRating = doc.getOrElse<int?>('overallRating', null);
-    final overallRating = tmpOverallRating != null
-        ? Some<double>(tmpOverallRating.toDouble())
-        : const None<double>();
+    final tmpOverallRating = doc.getOrElse<dynamic?>('overallRating', null);
+
+    final overallRating = switch (tmpOverallRating) {
+      null => const None<double>(),
+      == double => Some<double>(tmpOverallRating as double),
+      == int => Some<double>((tmpOverallRating as int).toDouble()),
+      _ => const None<double>(),
+    };
+    // final overallRating = tmpOverallRating != null
+    //     ? Some<double>(tmpOverallRating.toDouble())
+    //     : const None<double>();
 
     return UserModel(
       id: doc.id,
       email: doc.getOrElse('email', ''),
       timestamp: tmpTimestamp.toDate(),
-      username:
-          Username.fromString(doc.getOrElse('username', 'anonymous')),
+      username: Username.fromString(doc.getOrElse('username', 'anonymous')),
       artistName: doc.getOrElse('artistName', ''),
       profilePicture: doc.getOrElse<String?>('profilePicture', null),
       bio: doc.getOrElse<String>('bio', ''),
@@ -160,12 +166,10 @@ class UserModel extends Equatable {
       instagramHandle: doc.getOrElse<String?>('instagramHandle', null),
       twitterHandle: doc.getOrElse<String?>('twitterHandle', null),
       spotifyId: doc.getOrElse<String?>('spotifyId', null),
-      pushNotificationsLikes:
-          doc.getOrElse('pushNotificationsLikes', true),
+      pushNotificationsLikes: doc.getOrElse('pushNotificationsLikes', true),
       pushNotificationsComments:
           doc.getOrElse('pushNotificationsComments', true),
-      pushNotificationsFollows:
-          doc.getOrElse('pushNotificationsFollows', true),
+      pushNotificationsFollows: doc.getOrElse('pushNotificationsFollows', true),
       pushNotificationsDirectMessages:
           doc.getOrElse('pushNotificationsDirectMessages', true),
       pushNotificationsITLUpdates:
