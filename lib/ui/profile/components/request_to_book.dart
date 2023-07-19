@@ -31,7 +31,8 @@ class RequestToBookButton extends StatelessWidget {
       None() => const CupertinoButton.filled(
           onPressed: null,
           child: Text(
-            'Payment Info not Connected',
+            'Payments Disabled',
+            textAlign: TextAlign.center,
             style: TextStyle(
               fontWeight: FontWeight.w700,
               color: Colors.white,
@@ -65,7 +66,7 @@ class RequestToBookButton extends StatelessWidget {
                           None() => const CupertinoButton.filled(
                               onPressed: null,
                               child: Text(
-                                'Payment Info not Connected',
+                                'Payments Disabled',
                                 style: TextStyle(
                                   fontWeight: FontWeight.w700,
                                   color: Colors.white,
@@ -79,7 +80,7 @@ class RequestToBookButton extends StatelessWidget {
                                 return const CupertinoButton.filled(
                                   onPressed: null,
                                   child: Text(
-                                    'Payment Info not Connected',
+                                    'Payments Disabled',
                                     style: TextStyle(
                                       fontWeight: FontWeight.w700,
                                       color: Colors.white,

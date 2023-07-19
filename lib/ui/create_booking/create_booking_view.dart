@@ -29,7 +29,6 @@ class CreateBookingView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final database = RepositoryProvider.of<DatabaseRepository>(context);
-    final nav = RepositoryProvider.of<NavigationBloc>(context);
     final remote = RepositoryProvider.of<RemoteConfigRepository>(context);
 
     return BlocSelector<OnboardingBloc, OnboardingState, UserModel?>(

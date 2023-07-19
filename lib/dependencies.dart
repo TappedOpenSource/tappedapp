@@ -117,10 +117,10 @@ List<BlocProvider> buildBlocs({
     BlocProvider<DynamicLinkBloc>(
       create: (context) => DynamicLinkBloc(
         onboardingBloc: context.read<OnboardingBloc>(),
-        navigationBloc: context.read<NavigationBloc>(),
+        navBloc: context.read<NavigationBloc>(),
         dynamicLinkRepository: context.read<DynamicLinkRepository>(),
         databaseRepository: context.read<DatabaseRepository>(),
-      ),
+      )..add(MonitorDynamicLinks()),
     ),
     BlocProvider<DownForMaintenanceBloc>(
       create: (context) => DownForMaintenanceBloc(
