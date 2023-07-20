@@ -1,9 +1,7 @@
 import 'package:flutter/cupertino.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:intheloopapp/ui/app_theme_cubit.dart';
-import 'package:intheloopapp/ui/themes.dart';
 
 class ThemeSwitch extends StatelessWidget {
   const ThemeSwitch({super.key});

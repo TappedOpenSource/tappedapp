@@ -64,7 +64,7 @@ class Loop extends Equatable {
       final tmpTimestamp = doc.getOrElse(
         'timestamp',
         Timestamp.now(),
-      ) as Timestamp;
+      );
 
       return Loop(
         id: doc.id,

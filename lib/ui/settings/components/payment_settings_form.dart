@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:formz/formz.dart';
 import 'package:intheloopapp/ui/settings/components/connect_bank_button.dart';
-import 'package:intheloopapp/ui/settings/components/services_list.dart';
 import 'package:intheloopapp/ui/settings/settings_cubit.dart';
 import 'package:intheloopapp/ui/themes.dart';
 

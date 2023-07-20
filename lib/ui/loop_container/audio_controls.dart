@@ -4,7 +4,6 @@ import 'package:intheloopapp/data/audio_repository.dart';
 import 'package:intheloopapp/domains/controllers/audio_controller.dart';
 import 'package:intheloopapp/ui/loop_container/loop_seek_bar.dart';
 import 'package:intheloopapp/ui/loop_container/play_pause_button.dart';
-import 'package:intheloopapp/utils/app_logger.dart';
 import 'package:skeletons/skeletons.dart';
 import 'package:uuid/uuid.dart';
 import 'package:visibility_detector/visibility_detector.dart';

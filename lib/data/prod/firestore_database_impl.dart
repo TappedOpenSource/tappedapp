@@ -310,7 +310,7 @@ class FirestoreDatabaseImpl extends DatabaseRepository {
     final leadersSnapshot = await _leadersRef.doc('leaders').get();
 
     final leadingUsernames =
-        leadersSnapshot.getOrElse('viewLeaders', <dynamic>[]) as List<dynamic>;
+        leadersSnapshot.getOrElse('viewLeaders', <dynamic>[]);
 
     final leaders = await Future.wait(
       leadingUsernames.map(
@@ -329,7 +329,7 @@ class FirestoreDatabaseImpl extends DatabaseRepository {
     final leadersSnapshot = await _leadersRef.doc('leaders').get();
 
     final leadingUsernames = leadersSnapshot
-        .getOrElse('bookingLeaders', <dynamic>[]) as List<dynamic>;
+        .getOrElse('bookingLeaders', <dynamic>[]);
 
     final leaders = await Future.wait(
       leadingUsernames.map(
@@ -348,7 +348,7 @@ class FirestoreDatabaseImpl extends DatabaseRepository {
     final leadersSnapshot = await _leadersRef.doc('leaders').get();
 
     final leadingUsernames = leadersSnapshot
-        .getOrElse('bookerLeaders', <dynamic>[]) as List<dynamic>;
+        .getOrElse('bookerLeaders', <dynamic>[]);
 
     final leaders = await Future.wait(
       leadingUsernames.map(
@@ -1546,7 +1546,7 @@ class FirestoreDatabaseImpl extends DatabaseRepository {
 
       final userBadges = Future.wait(
         userBadgesSnapshot.docs.map((doc) async {
-          final badgeId = doc.getOrElse('badgeId', '') as String;
+          final badgeId = doc.getOrElse('badgeId', '');
           final badgeSnapshot = await _badgesRef.doc(badgeId).get();
           return Badge.fromDoc(badgeSnapshot);
         }).toList(),
