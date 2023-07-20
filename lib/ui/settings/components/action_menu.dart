@@ -30,7 +30,7 @@ class ActionMenu extends StatelessWidget {
               onTap: () => launchUrl(
                 Uri(
                   scheme: 'mailto',
-                  path: 'intheloopstudios2021@gmail.com',
+                  path: 'support@tapped.ai',
                   query: encodeQueryParameters(<String, String>{
                     'subject': 'Tapped User Feedback',
                   }),
@@ -47,7 +47,7 @@ class ActionMenu extends StatelessWidget {
               onTap: () => launchUrl(
                 Uri(
                   scheme: 'https',
-                  path: 'www.instagram.com/tappednetwork/',
+                  path: 'open.instagram.com/tappedapp/',
                 ),
               ),
             ),
@@ -110,7 +110,7 @@ class ActionMenu extends StatelessWidget {
                         Navigator.pop(context);
                         Navigator.pop(context);
                       },
-                    )
+                    ),
                   ],
                 ),
               ),

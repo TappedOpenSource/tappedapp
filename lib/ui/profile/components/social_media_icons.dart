@@ -71,7 +71,7 @@ class SocialMediaIcons extends StatelessWidget {
                     Uri(
                       scheme: 'https',
                       path:
-                          'instagram.com/${state.visitedUser.instagramHandle}',
+                          'open.instagram.com/${state.visitedUser.instagramHandle}',
                     ),
                   );
                 },
