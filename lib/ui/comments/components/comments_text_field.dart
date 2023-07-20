@@ -20,8 +20,47 @@ class CommentsTextFieldState extends State<CommentsTextField> {
 
   @override
   Widget build(BuildContext context) {
+    final lightWhite = Colors.white.withOpacity(0.5);
     return BlocBuilder<CommentsCubit, CommentsState>(
       builder: (context, state) {
+        if (!state.loop.commentsLocked) {
+          return Column(
+            children: [
+              Divider(
+                height: 0,
+                thickness: 0.5,
+                color: lightWhite,
+              ),
+              const SizedBox(
+                height: 8,
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  Text(
+                    'comments have been locked for this loop',
+                    style: TextStyle(
+                      color: lightWhite,
+                    ),
+                  ),
+                  Icon(
+                    Icons.lock,
+                    color: lightWhite,
+                  ),
+                ],
+              ),
+              const SizedBox(
+                height: 8,
+              ),
+              Divider(
+                height: 0,
+                thickness: 0.5,
+                color: lightWhite,
+              ),
+            ],
+          );
+        }
+
         return Row(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [

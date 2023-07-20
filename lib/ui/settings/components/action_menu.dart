@@ -47,7 +47,7 @@ class ActionMenu extends StatelessWidget {
               onTap: () => launchUrl(
                 Uri(
                   scheme: 'https',
-                  path: 'open.instagram.com/tappedapp/',
+                  path: 'instagram.com/tappedapp/',
                 ),
               ),
             ),
