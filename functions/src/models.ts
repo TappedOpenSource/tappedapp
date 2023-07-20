@@ -13,7 +13,9 @@ export type UserModel = {
   onboarded?: boolean;
   loopsCount?: number;
   badgesCount?: number;
+  reviewCount?: number;
   deleted?: boolean;
+  overallRating?: number;
   shadowBanned?: boolean;
   accountType?: AccountType;
   twitterHandle?: string;
@@ -28,7 +30,6 @@ export type UserModel = {
   pushNotificationsITLUpdates?: boolean;
   emailNotificationsAppReleases?: boolean;
   emailNotificationsITLUpdates?: boolean;
-  bookingRate?: number;
   stripeConnectedAccountId?: string;
   stripeCustomerId?: string;
 };
@@ -99,3 +100,25 @@ export type BookingReminderActivity = UserToUserActivity & { type: "bookingRemin
 export type SearchAppearanceActivity = Activity & { type: "searchAppearance", count: number; }
 
 export type BookingStatus = "pending" | "confirmed" | "canceled"
+
+export type BookerReview = {
+  id: string;
+  bookingId: string;
+  performerId: string;
+  bookerId: string;
+  timestamp: firestore.Timestamp;
+  overallRating: number;
+  overallReview: string;
+  type: "booker";
+};
+
+export type PerformerReview = {
+  id: string;
+  bookingId: string;
+  performerId: string;
+  bookerId: string;
+  timestamp: firestore.Timestamp;
+  overallRating: number;
+  overallReview: string;
+  type: "performer";
+};

@@ -17,22 +17,24 @@ import { HttpsError } from "firebase-functions/v1/auth";
 import { onSchedule } from "firebase-functions/v2/scheduler";
 
 import Stripe from "stripe";
-import { 
-  Booking, 
-  Loop, 
-  Comment, 
-  FollowActivity, 
-  LikeActivity, 
-  CommentActivity, 
-  BookingRequestActivity, 
-  BookingUpdateActivity, 
-  CommentMentionActivity, 
-  LoopMentionActivity, 
-  BookingStatus, 
-  CommentLikeActivity, 
+import {
+  Booking,
+  Loop,
+  Comment,
+  FollowActivity,
+  LikeActivity,
+  CommentActivity,
+  BookingRequestActivity,
+  BookingUpdateActivity,
+  CommentMentionActivity,
+  LoopMentionActivity,
+  BookingStatus,
+  CommentLikeActivity,
   OpportunityInterest,
   SearchAppearanceActivity,
   BookingReminderActivity,
+  // UserModel,
+  // BookerReview,
 } from "./models";
 
 import { v4 as uuidv4 } from "uuid";
@@ -504,7 +506,7 @@ const _createPaymentIntent = async (data: {
   };
 };
 
-const _createStripeAccount = async ({ countryCode } : {
+const _createStripeAccount = async ({ countryCode }: {
   countryCode?: string;
 }) => {
   const stripe = new Stripe(stripeKey.value(), {
@@ -609,6 +611,24 @@ const _sendBookingRequestSentEmail = async (toEmail: string) => {
     },
   })
 }
+
+const _updateOverallRating = async ({ 
+  userId,
+  currOverallRating, 
+  reviewCount, 
+  newRating, 
+}: {
+  userId: string;
+  currOverallRating: number;
+  reviewCount: number;
+  newRating: number;
+}) => {
+  const overallRating = (currOverallRating * (reviewCount - 1) + newRating) / (reviewCount);
+
+  await usersRef.doc(userId).update({
+    overallRating: overallRating,
+  });
+};
 
 // --------------------------------------------------------
 export const sendToDevice = functions.firestore
@@ -1607,6 +1627,17 @@ export const incrementReviewCountOnPerformerReview = functions
     await userRef.update({
       reviewCount: FieldValue.increment(1),
     });
+
+    const currOverallRating = (await userRef.get()).data()?.overallRating || 0;
+    const reviewCount = (await userRef.get()).data()?.reviewCount || 0;
+    const newRating = data.data()?.overallRating || 0;
+
+    _updateOverallRating({
+      userId,
+      currOverallRating,
+      reviewCount,
+      newRating,
+    });
   });
 
 export const incrementReviewCountOnBookerReview = functions
@@ -1618,5 +1649,16 @@ export const incrementReviewCountOnBookerReview = functions
 
     await userRef.update({
       reviewCount: FieldValue.increment(1),
+    });
+
+    const currOverallRating = (await userRef.get()).data()?.overallRating || 0;
+    const reviewCount = (await userRef.get()).data()?.reviewCount || 0;
+    const newRating = data.data()?.overallRating || 0;
+
+    _updateOverallRating({
+      userId,
+      currOverallRating,
+      reviewCount,
+      newRating,
     });
   });
