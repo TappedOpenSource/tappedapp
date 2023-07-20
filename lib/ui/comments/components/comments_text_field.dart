@@ -23,7 +23,7 @@ class CommentsTextFieldState extends State<CommentsTextField> {
     final lightWhite = Colors.white.withOpacity(0.5);
     return BlocBuilder<CommentsCubit, CommentsState>(
       builder: (context, state) {
-        if (!state.loop.commentsLocked) {
+        if (state.loop.commentsLocked) {
           return Column(
             children: [
               Divider(
