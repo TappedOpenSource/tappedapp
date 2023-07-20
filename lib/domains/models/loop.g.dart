@@ -21,6 +21,7 @@ Loop _$LoopFromJson(Map<String, dynamic> json) => Loop(
       commentCount: json['commentCount'] as int,
       shareCount: json['shareCount'] as int,
       isOpportunity: json['isOpportunity'] as bool,
+      commentsLocked: json['commentsLocked'] as bool,
       deleted: json['deleted'] as bool,
     );
 
@@ -36,5 +37,6 @@ Map<String, dynamic> _$LoopToJson(Loop instance) => <String, dynamic>{
       'commentCount': instance.commentCount,
       'shareCount': instance.shareCount,
       'isOpportunity': instance.isOpportunity,
+      'commentsLocked': instance.commentsLocked,
       'deleted': instance.deleted,
     };

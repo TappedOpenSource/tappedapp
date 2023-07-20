@@ -28,6 +28,7 @@ class Loop extends Equatable {
     required this.commentCount,
     required this.shareCount,
     required this.isOpportunity,
+    required this.commentsLocked,
     // required this.tags,
     required this.deleted,
   });
@@ -49,6 +50,7 @@ class Loop extends Equatable {
         commentCount: 0,
         shareCount: 0,
         isOpportunity: false,
+        commentsLocked: false,
         // tags: const [],
         deleted: false,
       );
@@ -82,6 +84,7 @@ class Loop extends Equatable {
         commentCount: doc.getOrElse('commentCount', 0),
         shareCount: doc.getOrElse('shareCount', 0),
         isOpportunity: doc.getOrElse('isOpportunity', false),
+        commentsLocked: doc.getOrElse('commentsLocked', false),
         // tags: List.from(
         //   doc.getOrElse('tags', <dynamic>[]) as Iterable<dynamic>,
         // ),
@@ -118,6 +121,7 @@ class Loop extends Equatable {
         'commentCount': commentCount,
         'shareCount': shareCount,
         'isOpportunity': isOpportunity,
+        'commentsLocked': commentsLocked,
         // 'tags': tags,
         'deleted': deleted,
       };
@@ -159,6 +163,11 @@ class Loop extends Equatable {
   /// users
   final bool isOpportunity;
 
+  /// If the [Loop] was locked for comments
+  /// this would prevent users from adding
+  /// comments to the [Loop]
+  final bool commentsLocked;
+
   /// The tags associated with this [Loop]
   // final List<String> tags;
 
@@ -177,6 +186,7 @@ class Loop extends Equatable {
         commentCount,
         shareCount,
         isOpportunity,
+        commentsLocked,
         // tags,
         deleted,
       ];
@@ -198,6 +208,7 @@ class Loop extends Equatable {
     int? commentCount,
     int? shareCount,
     bool? isOpportunity,
+    bool? commentsLocked,
     // List<String>? tags,
     bool? deleted,
   }) {
@@ -213,6 +224,7 @@ class Loop extends Equatable {
       commentCount: commentCount ?? this.commentCount,
       shareCount: shareCount ?? this.shareCount,
       isOpportunity: isOpportunity ?? this.isOpportunity,
+      commentsLocked: commentsLocked ?? this.commentsLocked,
       // tags: tags ?? this.tags,
       deleted: deleted ?? this.deleted,
     );
