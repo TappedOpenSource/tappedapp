@@ -2,7 +2,6 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:enum_to_string/enum_to_string.dart';
 import 'package:equatable/equatable.dart';
 import 'package:intheloopapp/domains/models/booking.dart';
-import 'package:intheloopapp/domains/models/option.dart';
 import 'package:intheloopapp/utils/app_logger.dart';
 import 'package:intheloopapp/utils/default_value.dart';
 
@@ -200,10 +199,10 @@ final class CommentActivity extends Activity {
         timestamp: tmpTimestamp.toDate(),
         type: EnumToString.fromString(
               ActivityType.values,
-              doc.getOrElse('type', 'free') as String,
+              doc.getOrElse('type', 'free'),
             ) ??
             ActivityType.like,
-        markedRead: doc.getOrElse('markedRead', false) as bool,
+        markedRead: doc.getOrElse('markedRead', false),
         fromUserId: doc.get(
           'fromUserId',
         ) as String,

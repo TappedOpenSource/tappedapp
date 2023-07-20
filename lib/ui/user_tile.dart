@@ -8,7 +8,6 @@ import 'package:intheloopapp/domains/navigation_bloc/navigation_bloc.dart';
 import 'package:intheloopapp/domains/navigation_bloc/tapped_route.dart';
 import 'package:intheloopapp/domains/onboarding_bloc/onboarding_bloc.dart';
 import 'package:intheloopapp/ui/common/rating_chip.dart';
-import 'package:intheloopapp/ui/themes.dart';
 import 'package:intheloopapp/ui/user_avatar.dart';
 import 'package:skeletons/skeletons.dart';
 

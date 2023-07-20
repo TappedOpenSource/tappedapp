@@ -1,5 +1,4 @@
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -11,26 +10,15 @@ import 'package:intheloopapp/domains/models/user_model.dart';
 import 'package:intheloopapp/domains/onboarding_bloc/onboarding_bloc.dart';
 import 'package:intheloopapp/ui/error/error_view.dart';
 import 'package:intheloopapp/ui/loading/loading_view.dart';
-import 'package:intheloopapp/ui/profile/components/badges_sliver.dart';
 import 'package:intheloopapp/ui/profile/components/bookings_sliver.dart';
-import 'package:intheloopapp/ui/profile/components/epk_button.dart';
-import 'package:intheloopapp/ui/profile/components/follow_button.dart';
-import 'package:intheloopapp/ui/profile/components/follower_count.dart';
-import 'package:intheloopapp/ui/profile/components/following_count.dart';
 import 'package:intheloopapp/ui/profile/components/header_sliver.dart';
 import 'package:intheloopapp/ui/profile/components/info_sliver.dart';
 import 'package:intheloopapp/ui/profile/components/loops_sliver.dart';
-import 'package:intheloopapp/ui/profile/components/message_button.dart';
-import 'package:intheloopapp/ui/profile/components/more_options_button.dart';
 import 'package:intheloopapp/ui/profile/components/opportunity_sliver.dart';
-import 'package:intheloopapp/ui/profile/components/request_to_book.dart';
 import 'package:intheloopapp/ui/profile/components/reviews_sliver.dart';
 import 'package:intheloopapp/ui/profile/components/services_sliver.dart';
-import 'package:intheloopapp/ui/profile/components/social_media_icons.dart';
 import 'package:intheloopapp/ui/profile/profile_cubit.dart';
 import 'package:intheloopapp/ui/themes.dart';
-import 'package:intheloopapp/utils/geohash.dart';
-import 'package:intheloopapp/utils/linkify.dart';
 
 class ProfileView extends StatelessWidget {
   ProfileView({

@@ -6,7 +6,6 @@ import 'package:intheloopapp/domains/models/option.dart';
 import 'package:intheloopapp/domains/models/user_model.dart';
 import 'package:intheloopapp/ui/common/insta_image_viewer.dart';
 import 'package:intheloopapp/ui/loop_container/audio_controls.dart';
-import 'package:intheloopapp/ui/themes.dart';
 
 class Attachments extends StatelessWidget {
   const Attachments({

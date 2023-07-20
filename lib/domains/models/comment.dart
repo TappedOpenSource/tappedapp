@@ -23,20 +23,20 @@ class Comment {
     final tmpTimestamp = doc.getOrElse(
       'timestamp',
       Timestamp.now(),
-    ) as Timestamp;
+    );
 
     return Comment(
       id: doc.id,
       timestamp: tmpTimestamp,
-      content: doc.getOrElse('content', '') as String,
-      userId: doc.getOrElse('userId', '') as String,
-      parentId: Option.fromNullable(doc.getOrElse('parentId', null) as String?),
-      rootId: doc.getOrElse('rootId', '') as String,
+      content: doc.getOrElse('content', ''),
+      userId: doc.getOrElse('userId', ''),
+      parentId: Option.fromNullable(doc.getOrElse('parentId', null)),
+      rootId: doc.getOrElse('rootId', ''),
       children: List.from(
-        doc.getOrElse('children', <dynamic>[]) as Iterable<dynamic>,
+        doc.getOrElse('children', <dynamic>[]),
       ),
-      deleted: doc.getOrElse('deleted', false) as bool,
-      likeCount: doc.getOrElse('likeCount', 0) as int,
+      deleted: doc.getOrElse('deleted', false),
+      likeCount: doc.getOrElse('likeCount', 0),
     );
   }
 

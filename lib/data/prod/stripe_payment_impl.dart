@@ -4,7 +4,6 @@ import 'package:flutter_stripe/flutter_stripe.dart';
 import 'package:intheloopapp/data/payment_repository.dart';
 import 'package:intheloopapp/domains/models/option.dart';
 import 'package:intheloopapp/domains/models/payment_user.dart';
-import 'package:intheloopapp/utils/app_logger.dart';
 
 final _functions = FirebaseFunctions.instance;
 final _stripe = Stripe.instance;

@@ -9,7 +9,6 @@ import 'package:intheloopapp/ui/conditional_parent_widget.dart';
 import 'package:intheloopapp/ui/profile/profile_cubit.dart';
 import 'package:intheloopapp/ui/settings/components/create_service_button.dart';
 import 'package:intheloopapp/ui/settings/components/service_card.dart';
-import 'package:intheloopapp/ui/settings/settings_cubit.dart';
 
 class ServicesList extends StatelessWidget {
   const ServicesList({
