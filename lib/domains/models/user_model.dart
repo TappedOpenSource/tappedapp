@@ -113,7 +113,7 @@ class UserModel extends Equatable {
       Timestamp.now(),
     );
 
-    final tmpOverallRating = doc.getOrElse<dynamic?>('overallRating', null);
+    final tmpOverallRating = doc.getOrElse<dynamic>('overallRating', null);
 
     // firestore can suck my nuts for this
     // firestore only stores "numbers" so I have to figure out if

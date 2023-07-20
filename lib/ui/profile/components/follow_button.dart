@@ -26,7 +26,7 @@ class FollowButton extends StatelessWidget {
               state.isFollowing ? 'Following' : 'Follow',
               style: TextStyle(
                 fontSize: 17,
-                color: state.isFollowing ? Colors.white : Colors.green,
+                color: state.isFollowing ? Colors.green : Colors.white,
                 fontWeight: FontWeight.bold,
               ),
             ),
