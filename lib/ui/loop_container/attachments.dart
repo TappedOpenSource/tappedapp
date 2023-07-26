@@ -35,24 +35,21 @@ class Attachments extends StatelessWidget {
     final imagePath = loop.imagePaths[0];
 
     if (imagePath.isNotEmpty) {
-      return ClipRRect(
-        borderRadius: BorderRadius.circular(15),
-        child: SizedBox(
-          height: 300,
-          width: double.infinity,
-          child: FittedBox(
-            fit: BoxFit.fitWidth,
-            clipBehavior: Clip.hardEdge,
-            child: InstaImageViewer(
-              // tag: heroTag,
-              child: CachedNetworkImage(
-                imageUrl: imagePath,
-                placeholder: (context, url) =>
-                    const CupertinoActivityIndicator(),
-                errorWidget: (context, url, error) => const Icon(
-                  Icons.error,
-                  color: Colors.red,
-                ),
+      return SizedBox(
+        height: 300,
+        width: double.infinity,
+        child: FittedBox(
+          fit: BoxFit.fitWidth,
+          clipBehavior: Clip.hardEdge,
+          child: InstaImageViewer(
+            // tag: heroTag,
+            child: CachedNetworkImage(
+              imageUrl: imagePath,
+              placeholder: (context, url) =>
+                  const CupertinoActivityIndicator(),
+              errorWidget: (context, url, error) => const Icon(
+                Icons.error,
+                color: Colors.red,
               ),
             ),
           ),

@@ -58,51 +58,75 @@ class _LoopContainerState extends State<LoopContainer>
             loopUser: Some(loopUser),
           ),
         ),
-        child: Padding(
-          padding: const EdgeInsets.symmetric(
-            horizontal: 12,
-            vertical: 8,
+        child: Card(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(25),
           ),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              UserInfo(
-                loopUser: loopUser,
-                timestamp: widget.loop.timestamp,
-              ),
-              TitleText(
-                title: widget.loop.title,
-              ),
-              if (widget.loop.description.isNotEmpty)
-                Column(
-                  children: [
-                    Linkify(
-                      text: widget.loop.description,
-                      style: const TextStyle(
-                        fontSize: 16,
-                      ),
-                      linkStyle: const TextStyle(
-                        fontSize: 16,
-                        color: Colors.lightBlue,
-                      ),
+          child: Padding(
+            padding: const EdgeInsets.symmetric(
+              vertical: 8,
+            ),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Padding(
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 12,
+                  ),
+                  child: UserInfo(
+                    loopUser: loopUser,
+                    timestamp: widget.loop.timestamp,
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 12,
+                  ),
+                  child: TitleText(
+                    title: widget.loop.title,
+                  ),
+                ),
+                if (widget.loop.description.isNotEmpty)
+                  Padding(
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 12,
                     ),
-                    const SizedBox(height: 14),
-                  ],
-                )
-              else
-                const SizedBox.shrink(),
-              Attachments(
-                loop: widget.loop,
-                loopUser: loopUser,
-              ),
-              ShowInterestButton(
-                loop: widget.loop,
-              ),
-              ControlButtons(
-                loop: widget.loop,
-                currentUserId: currentUserId,
-              ),
-            ],
+                    child: Column(
+                      children: [
+                        Linkify(
+                          text: widget.loop.description,
+                          style: const TextStyle(
+                            fontSize: 16,
+                          ),
+                          linkStyle: const TextStyle(
+                            fontSize: 16,
+                            color: Colors.lightBlue,
+                          ),
+                        ),
+                        const SizedBox(height: 14),
+                      ],
+                    ),
+                  )
+                else
+                  const SizedBox.shrink(),
+                Attachments(
+                  loop: widget.loop,
+                  loopUser: loopUser,
+                ),
+                ShowInterestButton(
+                  loop: widget.loop,
+                ),
+                Padding(
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 12,
+                  ),
+                  child: ControlButtons(
+                    loop: widget.loop,
+                    currentUserId: currentUserId,
+                  ),
+                ),
+              ],
+            ),
           ),
         ),
       );
