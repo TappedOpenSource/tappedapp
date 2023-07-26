@@ -1662,3 +1662,18 @@ export const incrementReviewCountOnBookerReview = functions
       newRating,
     });
   });
+
+export const sendSearchAppearances = onSchedule("0 0/3 * * *", async (event) => {
+  const min = 20;
+  const max = 50;
+  const randomNumber = Math.floor(Math.random() * (max - min)) + min;
+
+  const usersSnapshot = await usersRef.get();
+  const randomUserId = usersSnapshot.docs[Math.floor(Math.random() * usersSnapshot.docs.length)].id;
+
+  await _addActivity({
+    toUserId: randomUserId,
+    type: "searchAppearance",
+    count: randomNumber,
+  });
+});
