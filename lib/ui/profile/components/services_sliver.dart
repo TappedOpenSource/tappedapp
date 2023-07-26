@@ -11,10 +11,6 @@ class ServicesSliver extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocBuilder<ProfileCubit, ProfileState>(
       builder: (context, state) {
-        if (state.services.isEmpty) {
-          return const SizedBox.shrink();
-        }
-
         return Column(
           children: [
             const Padding(
