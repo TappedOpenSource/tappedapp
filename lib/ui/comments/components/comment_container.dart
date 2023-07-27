@@ -15,8 +15,9 @@ import 'package:skeletons/skeletons.dart';
 import 'package:timeago/timeago.dart' as timeago;
 
 class CommentContainer extends StatefulWidget {
-  const CommentContainer({required this.comment, super.key});
+  const CommentContainer({required this.comment, super.key, this.abbreviateText = false,});
   final Comment comment;
+  final bool abbreviateText;
 
   @override
   State<CommentContainer> createState() => _CommentContainerState();

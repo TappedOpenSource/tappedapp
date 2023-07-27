@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intheloopapp/data/audio_repository.dart';
 import 'package:intheloopapp/data/database_repository.dart';
+import 'package:intheloopapp/domains/models/comment.dart';
 import 'package:intheloopapp/domains/models/loop.dart';
 import 'package:intheloopapp/domains/models/option.dart';
 import 'package:intheloopapp/domains/models/user_model.dart';
@@ -21,14 +22,18 @@ import 'package:intheloopapp/ui/user_avatar.dart';
 import 'package:intheloopapp/utils/app_logger.dart';
 import 'package:intheloopapp/utils/linkify.dart';
 
+import '../comments/components/comment_container.dart';
+
 class LoopContainer extends StatefulWidget {
   const LoopContainer({
     required this.loop,
     this.commentStream,
+    this.showCommentPreview = false,
     super.key,
   });
 
   final Loop loop;
+  final bool showCommentPreview;
   final Stream<int>? commentStream;
 
   @override
@@ -207,6 +212,46 @@ class _LoopContainerState extends State<LoopContainer>
         ),
       );
 
+  Widget _commentPreview(
+    BuildContext context,
+    String loopId,
+    
+  ) {
+    final database = context.read<DatabaseRepository>();
+    return FutureBuilder<List<Comment>>(
+      future: database.getComments(loopId),
+      builder: (context, snapshot) {
+        final comments = snapshot.data ?? [];
+        if (comments.isEmpty) {
+          return const SizedBox.shrink();
+        }
+        comments.sort((a, b) {
+          return b.likeCount.compareTo(a.likeCount);
+        });
+        final mostLikedComment = comments.first;
+        //final userOfMlC = _commentPreview2(context, loopId); 
+        // this^ is how I get the username of the 
+        // TODO: add username
+        // Stylize colors and alignment
+        // if the comment is too long, add a "..." at the end
+        // etc. etc.
+        return  Transform.scale(
+          scale: 0.7,
+          //child: SizedBox(
+            //height: 60,
+                  child: CommentContainer(comment: mostLikedComment, abbreviateText: true)
+                  ,
+        
+          //),
+        );
+        
+      },
+    );
+  }
+
+
+
+
   @override
   Widget build(BuildContext context) {
     super.build(context);
@@ -273,9 +318,13 @@ class _LoopContainerState extends State<LoopContainer>
                       return ConditionalParentWidget(
                         condition: widget.loop.isOpportunity,
                         conditionalBuilder: _opportunity,
-                        child: _loopContainer(
-                          loopUser: value,
-                          currentUserId: currentUser.id,
+                        child: Column(
+                          children: [_loopContainer(
+                            loopUser: value,
+                            currentUserId: currentUser.id,
+                          ),
+                          if(widget.showCommentPreview) _commentPreview(context, widget.loop.id),
+                          ]
                         ),
                       );
                     },
