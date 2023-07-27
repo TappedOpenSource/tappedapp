@@ -96,6 +96,7 @@ class _LoopListState extends State<LoopList> {
                         (BuildContext context, int index) {
                           return LoopContainer(
                             loop: state.loops[index],
+                            showCommentPreview: true,
                           );
                         },
                         childCount: state.loops.length,
