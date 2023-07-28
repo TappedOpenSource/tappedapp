@@ -239,7 +239,9 @@ class _LoopContainerState extends State<LoopContainer>
           scale: 0.7,
           //child: SizedBox(
             //height: 60,
-                  child: CommentContainer(comment: mostLikedComment, abbreviateText: true)
+                  child: CommentContainer(
+                    comment: mostLikedComment, 
+                    maxLines: 2,)
                   ,
         
           //),

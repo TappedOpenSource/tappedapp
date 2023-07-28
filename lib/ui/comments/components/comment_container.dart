@@ -15,9 +15,9 @@ import 'package:skeletons/skeletons.dart';
 import 'package:timeago/timeago.dart' as timeago;
 
 class CommentContainer extends StatefulWidget {
-  const CommentContainer({required this.comment, super.key, this.abbreviateText = false,});
+  const CommentContainer({required this.comment, super.key, this.maxLines = null});
   final Comment comment;
-  final bool abbreviateText;
+  final int? maxLines;
 
   @override
   State<CommentContainer> createState() => _CommentContainerState();
@@ -58,6 +58,12 @@ class _CommentContainerState extends State<CommentContainer> {
       return false;
     }
   }
+
+String expandibleTextGen (String comment, bool inLoop){
+if(inLoop) return (comment.substring(0,40)+'...');
+else return comment;
+}
+
 
   @override
   Widget build(BuildContext context) {
@@ -161,6 +167,7 @@ class _CommentContainerState extends State<CommentContainer> {
                                 text: timeago.format(
                                   widget.comment.timestamp.toDate(),
                                   locale: 'en_short',
+                                  
                                 ),
                                 style: const TextStyle(
                                   color: Colors.grey,
@@ -171,6 +178,7 @@ class _CommentContainerState extends State<CommentContainer> {
                         ),
                         subtitle: Linkify(
                           text: widget.comment.content,
+                          maxLines: widget.maxLines,
                         ),
                       ),
                     );
