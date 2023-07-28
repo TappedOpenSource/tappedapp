@@ -9,6 +9,7 @@ import 'package:intheloopapp/domains/navigation_bloc/navigation_bloc.dart';
 import 'package:intheloopapp/domains/navigation_bloc/tapped_route.dart';
 import 'package:intheloopapp/domains/onboarding_bloc/onboarding_bloc.dart';
 import 'package:intheloopapp/ui/error/error_view.dart';
+import 'package:intheloopapp/ui/loop_view/loop_view.dart';
 import 'package:intheloopapp/ui/user_avatar.dart';
 import 'package:intheloopapp/utils/linkify.dart';
 import 'package:skeletons/skeletons.dart';
@@ -59,9 +60,20 @@ class _CommentContainerState extends State<CommentContainer> {
     }
   }
 
-String expandibleTextGen (String comment, bool inLoop){
-if(inLoop) return (comment.substring(0,40)+'...');
-else return comment;
+void linkToPorL (BuildContext context, String id, Option<UserModel> user, Comment comment){
+                            //if(widget.maxLines == null){
+                            context.push(ProfilePage(
+                            userId: id,
+                            user: user,
+                          ),
+                        );
+                        //}
+                       // else {context.push(LoopPage(
+                        //  loopUser: user,
+                        //  loop: comment.rootId,
+                       //   ),
+                      //  );
+                   // }
 }
 
 
@@ -95,11 +107,7 @@ else return comment;
                         horizontal: 10,
                       ),
                       child: ListTile(
-                        onTap: () => context.push(ProfilePage(
-                            userId: value.id,
-                            user: user,
-                          ),
-                        ),
+                        //onTap: () => linkToPorL(context, value.id, user, widget.comment),
                         leading: UserAvatar(
                           radius: 20,
                           pushUser: user,
@@ -168,7 +176,7 @@ else return comment;
                                   widget.comment.timestamp.toDate(),
                                   locale: 'en_short',
                                   
-                                ),
+                                ), 
                                 style: const TextStyle(
                                   color: Colors.grey,
                                 ),
