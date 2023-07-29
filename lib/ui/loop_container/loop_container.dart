@@ -10,6 +10,7 @@ import 'package:intheloopapp/domains/models/user_model.dart';
 import 'package:intheloopapp/domains/navigation_bloc/navigation_bloc.dart';
 import 'package:intheloopapp/domains/navigation_bloc/tapped_route.dart';
 import 'package:intheloopapp/domains/onboarding_bloc/onboarding_bloc.dart';
+import 'package:intheloopapp/ui/comments/components/comment_container.dart';
 import 'package:intheloopapp/ui/conditional_parent_widget.dart';
 import 'package:intheloopapp/ui/loading/loading_container.dart';
 import 'package:intheloopapp/ui/loop_container/attachments.dart';
@@ -21,8 +22,6 @@ import 'package:intheloopapp/ui/loop_container/user_info.dart';
 import 'package:intheloopapp/ui/user_avatar.dart';
 import 'package:intheloopapp/utils/app_logger.dart';
 import 'package:intheloopapp/utils/linkify.dart';
-
-import '../comments/components/comment_container.dart';
 
 class LoopContainer extends StatefulWidget {
   const LoopContainer({
@@ -215,7 +214,6 @@ class _LoopContainerState extends State<LoopContainer>
   Widget _commentPreview(
     BuildContext context,
     String loopId,
-    
   ) {
     final database = context.read<DatabaseRepository>();
     return FutureBuilder<List<Comment>>(
@@ -229,30 +227,44 @@ class _LoopContainerState extends State<LoopContainer>
           return b.likeCount.compareTo(a.likeCount);
         });
         final mostLikedComment = comments.first;
-        //final userOfMlC = _commentPreview2(context, loopId); 
-        // this^ is how I get the username of the 
+        //final userOfMlC = _commentPreview2(context, loopId);
+        // this^ is how I get the username of the
         // TODO: add username
         // Stylize colors and alignment
         // if the comment is too long, add a "..." at the end
         // etc. etc.
-        return  Transform.scale(
-          scale: 0.7,
-          //child: SizedBox(
-            //height: 60,
+        return Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            const Padding(
+              padding: EdgeInsets.only(left: 20),
+              child: ColoredBox(
+                color: Colors.grey,
+                child: SizedBox(
+                  width: 5,
+                  height: 60,
+                ),
+              ),
+            ),
+            Expanded(
+              child: Transform.scale(
+                scale: 0.95,
+                //child: SizedBox(
+                //height: 60,
+                child: Card(
                   child: CommentContainer(
-                    comment: mostLikedComment, 
-                    maxLines: 2,)
-                  ,
-        
-          //),
+                    comment: mostLikedComment,
+                    previewLoop: Some(widget.loop),
+                    maxLines: 2,
+                  ),
+                ),
+              ),
+            ),
+          ],
         );
-        
       },
     );
   }
-
-
-
 
   @override
   Widget build(BuildContext context) {
@@ -321,12 +333,17 @@ class _LoopContainerState extends State<LoopContainer>
                         condition: widget.loop.isOpportunity,
                         conditionalBuilder: _opportunity,
                         child: Column(
-                          children: [_loopContainer(
-                            loopUser: value,
-                            currentUserId: currentUser.id,
-                          ),
-                          if(widget.showCommentPreview) _commentPreview(context, widget.loop.id),
-                          ]
+                          children: [
+                            _loopContainer(
+                              loopUser: value,
+                              currentUserId: currentUser.id,
+                            ),
+                            if (widget.showCommentPreview)
+                              _commentPreview(
+                                context,
+                                widget.loop.id,
+                              ),
+                          ],
                         ),
                       );
                     },
