@@ -241,7 +241,7 @@ class _LoopContainerState extends State<LoopContainer>
               child: ColoredBox(
                 color: Colors.grey,
                 child: SizedBox(
-                  width: 5,
+                  width: 1,
                   height: 60,
                 ),
               ),
