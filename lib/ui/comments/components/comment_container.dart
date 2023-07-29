@@ -3,22 +3,28 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intheloopapp/data/database_repository.dart';
 import 'package:intheloopapp/domains/models/comment.dart';
+import 'package:intheloopapp/domains/models/loop.dart';
 import 'package:intheloopapp/domains/models/option.dart';
 import 'package:intheloopapp/domains/models/user_model.dart';
 import 'package:intheloopapp/domains/navigation_bloc/navigation_bloc.dart';
 import 'package:intheloopapp/domains/navigation_bloc/tapped_route.dart';
 import 'package:intheloopapp/domains/onboarding_bloc/onboarding_bloc.dart';
 import 'package:intheloopapp/ui/error/error_view.dart';
-import 'package:intheloopapp/ui/loop_view/loop_view.dart';
 import 'package:intheloopapp/ui/user_avatar.dart';
 import 'package:intheloopapp/utils/linkify.dart';
 import 'package:skeletons/skeletons.dart';
 import 'package:timeago/timeago.dart' as timeago;
 
 class CommentContainer extends StatefulWidget {
-  const CommentContainer({required this.comment, super.key, this.maxLines = null});
+  const CommentContainer({
+    required this.comment,
+    super.key,
+    this.maxLines,
+    this.previewLoop = const None(),
+  });
   final Comment comment;
   final int? maxLines;
+  final Option<Loop> previewLoop;
 
   @override
   State<CommentContainer> createState() => _CommentContainerState();
@@ -60,28 +66,11 @@ class _CommentContainerState extends State<CommentContainer> {
     }
   }
 
-void linkToPorL (BuildContext context, String id, Option<UserModel> user, Comment comment){
-                            //if(widget.maxLines == null){
-                            context.push(ProfilePage(
-                            userId: id,
-                            user: user,
-                          ),
-                        );
-                        //}
-                       // else {context.push(LoopPage(
-                        //  loopUser: user,
-                        //  loop: comment.rootId,
-                       //   ),
-                      //  );
-                   // }
-}
-
-
   @override
   Widget build(BuildContext context) {
     final databaseRepository =
         RepositoryProvider.of<DatabaseRepository>(context);
-
+    //final loop =  databaseRepository.getLoopById(widget.comment.rootId);
     return BlocSelector<OnboardingBloc, OnboardingState, UserModel?>(
       selector: (state) => (state is Onboarded) ? state.currentUser : null,
       builder: (context, currentUser) {
@@ -107,7 +96,22 @@ void linkToPorL (BuildContext context, String id, Option<UserModel> user, Commen
                         horizontal: 10,
                       ),
                       child: ListTile(
-                        //onTap: () => linkToPorL(context, value.id, user, widget.comment),
+                        onTap: () {
+                          return switch (widget.previewLoop) {
+                            None() => context.push(
+                                ProfilePage(
+                                  userId: value.id,
+                                  user: user,
+                                ),
+                              ),
+                            Some(:final value) => context.push(
+                                LoopPage(
+                                  loop: value,
+                                  loopUser: user,
+                                ),
+                              ),
+                          };
+                        },
                         leading: UserAvatar(
                           radius: 20,
                           pushUser: user,
@@ -175,8 +179,7 @@ void linkToPorL (BuildContext context, String id, Option<UserModel> user, Commen
                                 text: timeago.format(
                                   widget.comment.timestamp.toDate(),
                                   locale: 'en_short',
-                                  
-                                ), 
+                                ),
                                 style: const TextStyle(
                                   color: Colors.grey,
                                 ),
