@@ -19,6 +19,7 @@ import 'package:intheloopapp/ui/loop_container/loop_container_cubit.dart';
 import 'package:intheloopapp/ui/loop_container/show_interest_button.dart';
 import 'package:intheloopapp/ui/loop_container/title_text.dart';
 import 'package:intheloopapp/ui/loop_container/user_info.dart';
+import 'package:intheloopapp/ui/themes.dart';
 import 'package:intheloopapp/ui/user_avatar.dart';
 import 'package:intheloopapp/utils/app_logger.dart';
 import 'package:intheloopapp/utils/linkify.dart';
@@ -47,7 +48,13 @@ class _LoopContainerState extends State<LoopContainer>
   Widget _opportunity({
     required Widget child,
   }) =>
-      Card(
+      Container(
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(25),
+          border: Border.all(
+            color: tappedAccent,
+          ),
+        ),
         child: child,
       );
 
