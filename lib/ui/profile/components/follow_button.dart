@@ -19,7 +19,7 @@ class FollowButton extends StatelessWidget {
             onPressed: () => context.read<ProfileCubit>()
               ..toggleFollow(state.currentUser.id, state.visitedUser.id),
             color: state.isFollowing
-                ? Colors.white.withOpacity(0.1)
+                ? theme.colorScheme.onSurface.withOpacity(0.1)
                 : tappedAccent,
             padding: const EdgeInsets.all(12),
             child: Text(

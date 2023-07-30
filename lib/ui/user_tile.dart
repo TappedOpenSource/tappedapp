@@ -119,6 +119,10 @@ class _UserTileState extends State<UserTile> {
               title: RichText(
                 text: TextSpan(
                   text: user.displayName,
+                  style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                    color: Theme.of(context).colorScheme.onSurface,
+                  ),
                   children: [
                     ...overallRatingWidgets,
                   ],

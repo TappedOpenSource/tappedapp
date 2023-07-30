@@ -169,6 +169,10 @@ class _CommentContainerState extends State<CommentContainer> {
                             children: [
                               TextSpan(
                                 text: value.displayName,
+                                style: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  color: Theme.of(context).colorScheme.onSurface,
+                                ),
                               ),
                               const WidgetSpan(
                                 child: SizedBox(
