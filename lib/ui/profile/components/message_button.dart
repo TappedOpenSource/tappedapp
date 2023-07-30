@@ -13,6 +13,7 @@ class MessageButton extends StatelessWidget {
   Widget build(BuildContext context) {
     final stream = context.read<StreamRepository>();
     final nav = context.read<NavigationBloc>();
+    final theme = Theme.of(context);
     return BlocBuilder<ProfileCubit, ProfileState>(
       builder: (context, state) {
         return CupertinoButton(
@@ -20,7 +21,7 @@ class MessageButton extends StatelessWidget {
             final channel = await stream.createSimpleChat(state.visitedUser.id);
             nav.push(StreamChannelPage(channel: channel));
           },
-          color: Colors.white.withOpacity(0.1),
+          color: theme.colorScheme.onSurface.withOpacity(0.1),
           padding: const EdgeInsets.all(
             12,
           ),
@@ -40,11 +41,11 @@ class MessageButton extends StatelessWidget {
           //   Icons.mail_outline,
           //   color: Colors.white,
           // ),
-          child: const Text(
+          child: Text(
             'Message',
             style: TextStyle(
               fontWeight: FontWeight.bold,
-              color: Colors.white,
+              color: theme.colorScheme.onSurface,
             ),
           ),
         );

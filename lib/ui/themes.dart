@@ -17,6 +17,10 @@ class Themes {
   static final themeLight = ThemeData.light().copyWith(
     useMaterial3: true,
 
+    textTheme: GoogleFonts.arimoTextTheme(
+      ThemeData.light().textTheme,
+    ),
+
     // selected color
     primaryColor: primaryColor,
 
