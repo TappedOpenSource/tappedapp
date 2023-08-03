@@ -109,10 +109,10 @@ class _LoopContainerState extends State<LoopContainer>
                         Linkify(
                           text: widget.loop.description,
                           style: const TextStyle(
-                            fontSize: 16,
+                            fontSize: 14,
                           ),
                           linkStyle: const TextStyle(
-                            fontSize: 16,
+                            fontSize: 14,
                             color: Colors.lightBlue,
                           ),
                         ),
@@ -140,82 +140,6 @@ class _LoopContainerState extends State<LoopContainer>
                 ),
               ],
             ),
-          ),
-        ),
-      );
-
-  Widget _audioLoopContainer({
-    required UserModel loopUser,
-    required String currentUserId,
-  }) =>
-      GestureDetector(
-        onTap: () => context.push(
-          LoopPage(
-            loop: widget.loop,
-            loopUser: Some(loopUser),
-          ),
-        ),
-        child: Padding(
-          padding: const EdgeInsets.symmetric(vertical: 8),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              DecoratedBox(
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(25),
-                  image: DecorationImage(
-                    image: CachedNetworkImageProvider(
-                      loopUser.profilePicture!,
-                    ),
-                    fit: BoxFit.cover,
-                  ),
-                ),
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 12,
-                    vertical: 8,
-                  ),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      UserInfo(
-                        loopUser: loopUser,
-                        timestamp: widget.loop.timestamp,
-                      ),
-                      TitleText(title: widget.loop.title),
-                      const SizedBox(height: 14),
-                      if (widget.loop.description.isNotEmpty)
-                        Column(
-                          children: [
-                            Linkify(
-                              text: widget.loop.description,
-                              style: const TextStyle(
-                                fontSize: 14,
-                              ),
-                            ),
-                            const SizedBox(height: 14),
-                          ],
-                        )
-                      else
-                        const SizedBox.shrink(),
-                      Attachments(
-                        loop: widget.loop,
-                        loopUser: loopUser,
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-              ShowInterestButton(
-                loop: widget.loop,
-              ),
-              const SizedBox(height: 8),
-              ControlButtons(
-                loop: widget.loop,
-                currentUserId: currentUserId,
-              ),
-              const SizedBox(height: 8),
-            ],
           ),
         ),
       );
