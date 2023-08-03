@@ -6,6 +6,7 @@ import 'package:intheloopapp/domains/models/option.dart';
 import 'package:intheloopapp/domains/models/user_model.dart';
 import 'package:intheloopapp/domains/onboarding_bloc/onboarding_bloc.dart';
 import 'package:intheloopapp/utils/app_logger.dart';
+import 'package:intheloopapp/utils/current_user_builder.dart';
 
 class BadgeReceiverTextField extends StatefulWidget {
   const BadgeReceiverTextField({
@@ -28,16 +29,11 @@ class _BadgeReceiverTextFieldState extends State<BadgeReceiverTextField> {
 
   @override
   Widget build(BuildContext context) {
-    return BlocSelector<OnboardingBloc, OnboardingState, UserModel?>(
-      selector: (state) => (state is Onboarded) ? state.currentUser : null,
+    return CurrentUserBuilder(
+      errorWidget: const Text(
+        'An error has occured :/ the developer has been notified',
+      ),
       builder: (context, currentUser) {
-        if (currentUser == null) {
-          logger.error('currentUser is null', stackTrace: StackTrace.current);
-          return const Text(
-            'An error has occured :/ the developer has been notified',
-          );
-        }
-
         return TextFormField(
           inputFormatters: [
             FilteringTextInputFormatter.allow(RegExp(r'[a-z0-9_\.\-\$]')),

@@ -12,6 +12,7 @@ import 'package:intheloopapp/domains/navigation_bloc/navigation_bloc.dart';
 import 'package:intheloopapp/domains/onboarding_bloc/onboarding_bloc.dart';
 import 'package:intheloopapp/ui/error/error_view.dart';
 import 'package:intheloopapp/ui/user_tile.dart';
+import 'package:intheloopapp/utils/current_user_builder.dart';
 import 'package:intheloopapp/utils/geohash.dart';
 import 'package:intl/intl.dart';
 import 'package:skeletons/skeletons.dart';
@@ -49,13 +50,8 @@ class BookingView extends StatelessWidget {
   Widget build(BuildContext context) {
     final database = RepositoryProvider.of<DatabaseRepository>(context);
     final navigationBloc = context.read<NavigationBloc>();
-    return BlocSelector<OnboardingBloc, OnboardingState, UserModel?>(
-      selector: (state) => (state is Onboarded) ? state.currentUser : null,
+    return CurrentUserBuilder(
       builder: (context, currentUser) {
-        if (currentUser == null) {
-          return const ErrorView();
-        }
-
         return Scaffold(
           backgroundColor: Theme.of(context).colorScheme.background,
           appBar: AppBar(

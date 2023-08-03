@@ -19,6 +19,7 @@ import 'package:intheloopapp/ui/settings/components/payment_settings_form.dart';
 import 'package:intheloopapp/ui/settings/components/save_button.dart';
 import 'package:intheloopapp/ui/settings/components/settings_form.dart';
 import 'package:intheloopapp/ui/settings/settings_cubit.dart';
+import 'package:intheloopapp/utils/current_user_builder.dart';
 
 class SettingsView extends StatelessWidget {
   const SettingsView({super.key});
@@ -27,13 +28,8 @@ class SettingsView extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
 
-    return BlocSelector<OnboardingBloc, OnboardingState, UserModel?>(
-      selector: (state) => (state is Onboarded) ? state.currentUser : null,
+    return CurrentUserBuilder(
       builder: (context, currentUser) {
-        if (currentUser == null) {
-          return const ErrorView();
-        }
-
         return BlocProvider(
           create: (_) => SettingsCubit(
             authenticationBloc: context.read<AuthenticationBloc>(),

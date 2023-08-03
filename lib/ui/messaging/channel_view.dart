@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:intheloopapp/data/stream_repository.dart';
 import 'package:intheloopapp/domains/models/option.dart';
 import 'package:intheloopapp/domains/navigation_bloc/navigation_bloc.dart';
 import 'package:intheloopapp/domains/navigation_bloc/tapped_route.dart';
@@ -10,6 +12,31 @@ class ChannelView extends StatelessWidget {
     super.key,
   });
 
+  void _startCall(BuildContext context) async {
+    final currentUser = StreamChat.of(context).currentUser;
+    final channel = StreamChannel.of(context).channel;
+    final stream = context.read<StreamRepository>();
+
+    final call = stream.makeVideoCall(
+      participantIds: [],
+    );
+
+    await channel.sendMessage(
+      Message(
+        attachments: [
+          Attachment(
+            type: 'custom',
+            authorName: currentUser?.name ?? '',
+            uploadState: const UploadState.success(),
+            extraData: {
+              'callCid': call.callCid,
+            },
+          ),
+        ],
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -17,7 +44,7 @@ class ChannelView extends StatelessWidget {
         onImageTap: () {
           final channel = StreamChannel.of(context).channel;
           final currentUserId =
-              StreamChat.of(context).client.state.currentUser?.id;
+              StreamChat.of(context).currentUser?.id;
 
           if (currentUserId == null) {
             return;
@@ -45,7 +72,8 @@ class ChannelView extends StatelessWidget {
       body: const Column(
         children: [
           Expanded(
-            child: StreamMessageListView(),
+            child: StreamMessageListView(
+            ),
           ),
           StreamMessageInput(),
         ],

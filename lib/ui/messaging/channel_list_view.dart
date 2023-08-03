@@ -9,6 +9,7 @@ import 'package:intheloopapp/domains/onboarding_bloc/onboarding_bloc.dart';
 import 'package:intheloopapp/ui/error/error_view.dart';
 import 'package:intheloopapp/ui/loading/loading_view.dart';
 import 'package:intheloopapp/ui/messaging/channel_preview.dart';
+import 'package:intheloopapp/utils/current_user_builder.dart';
 import 'package:stream_chat_flutter/stream_chat_flutter.dart'
     hide ChannelName, ChannelPreview;
 
@@ -17,13 +18,8 @@ class ChannelListView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocSelector<OnboardingBloc, OnboardingState, UserModel?>(
-      selector: (state) => (state is Onboarded) ? state.currentUser : null,
+    return CurrentUserBuilder(
       builder: (context, currentUser) {
-        if (currentUser == null) {
-          return const ErrorView();
-        }
-
         final future = CancelableRetry(
           () => context.read<StreamRepository>().connectUser(currentUser.id),
           retryIf: (bool result) => !result,

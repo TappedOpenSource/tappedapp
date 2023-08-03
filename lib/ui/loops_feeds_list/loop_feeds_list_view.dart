@@ -12,6 +12,7 @@ import 'package:intheloopapp/domains/onboarding_bloc/onboarding_bloc.dart';
 import 'package:intheloopapp/ui/error/error_view.dart';
 import 'package:intheloopapp/ui/loop_feed/loop_feed_view.dart';
 import 'package:intheloopapp/ui/profile/components/notification_icon_button.dart';
+import 'package:intheloopapp/utils/current_user_builder.dart';
 import 'package:pull_down_button/pull_down_button.dart';
 import 'package:stream_chat_flutter/stream_chat_flutter.dart';
 
@@ -22,123 +23,115 @@ class LoopFeedsListView extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final streamClient = StreamChat.of(context).client;
-    return BlocSelector<OnboardingBloc, OnboardingState, Option<UserModel>>(
-      selector: (state) =>
-          state is Onboarded ? Some(state.currentUser) : const None(),
-      builder: (context, state) {
-        return switch (state) {
-          None() => const ErrorView(),
-          Some(:final value) => () {
-              return BlocBuilder<LoopFeedListBloc, LoopFeedListState>(
-                builder: (context, state) {
-                  final feedParams = state.feedParamsList[state.feed];
-                  if (feedParams == null) return const ErrorView();
-                  return LoopFeedView(
-                    userId: value.id,
-                    sourceFunction: feedParams.sourceFunction,
-                    sourceStream: feedParams.sourceStream,
-                    feedKey: EnumToString.convertToString(state.feed),
-                    scrollController: feedParams.scrollController,
-                    floatingActionButton: FloatingActionButton(
-                      heroTag: 'pushCreateLoopButton',
-                      child: const Icon(Icons.edit_outlined),
-                      onPressed: () => context.push(
-                        CreateLoopPage(),
-                      ),
-                    ),
-                    headerSliver: SliverAppBar(
-                      floating: true,
-                      actions: [
-                        const NotificationIconButton(),
-                        StreamBuilder<int?>(
-                          stream: streamClient
-                              .on()
-                              .where((event) => event.totalUnreadCount != null)
-                              .map(
-                                (event) => event.totalUnreadCount,
-                              ),
-                          initialData: streamClient.state.totalUnreadCount,
-                          builder: (context, snapshot) {
-                            final unreadMessagesCount = snapshot.data ?? 0;
-
-                            return badges.Badge(
-                              showBadge: unreadMessagesCount > 0,
-                              position: badges.BadgePosition.topEnd(
-                                top: -1,
-                                end: 2,
-                              ),
-                              badgeContent: Text('$unreadMessagesCount'),
-                              child: IconButton(
-                                onPressed: () => context.push(
-                                  MessagingChannelListPage(),
-                                ),
-                                icon: const Icon(
-                                  CupertinoIcons.chat_bubble,
-                                  size: 24,
-                                  semanticLabel: 'Messages',
-                                ),
-                              ),
-                            );
-                          },
+    return CurrentUserBuilder(
+      builder: (context, currentUser) {
+        return BlocBuilder<LoopFeedListBloc, LoopFeedListState>(
+          builder: (context, state) {
+            final feedParams = state.feedParamsList[state.feed];
+            if (feedParams == null) return const ErrorView();
+            return LoopFeedView(
+              userId: currentUser.id,
+              sourceFunction: feedParams.sourceFunction,
+              sourceStream: feedParams.sourceStream,
+              feedKey: EnumToString.convertToString(state.feed),
+              scrollController: feedParams.scrollController,
+              floatingActionButton: FloatingActionButton(
+                heroTag: 'pushCreateLoopButton',
+                child: const Icon(Icons.edit_outlined),
+                onPressed: () => context.push(
+                  CreateLoopPage(),
+                ),
+              ),
+              headerSliver: SliverAppBar(
+                floating: true,
+                actions: [
+                  const NotificationIconButton(),
+                  StreamBuilder<int?>(
+                    stream: streamClient
+                        .on()
+                        .where((event) => event.totalUnreadCount != null)
+                        .map(
+                          (event) => event.totalUnreadCount,
                         ),
-                      ],
-                      title: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          GestureDetector(
-                            onTap: () {
-                              showPullDownMenu(
-                                context: context,
-                                items:
-                                    state.feedParamsList.entries.map((entry) {
-                                  return PullDownMenuItem(
-                                    onTap: () {
-                                      context.read<LoopFeedListBloc>().add(
-                                            ChangeFeed(
-                                              feed: entry.key,
-                                            ),
-                                          );
-                                    },
-                                    title: entry.value.label,
-                                  );
-                                }).toList(),
-                                position: const Rect.fromLTWH(
-                                  10,
-                                  10,
-                                  100,
-                                  100,
-                                ),
-                              );
-                            },
-                            child: RichText(
-                              text: TextSpan(
-                                children: [
-                                  TextSpan(
-                                    text: feedParams.label,
-                                    style: TextStyle(
-                                      fontSize: 24,
-                                      fontWeight: FontWeight.bold,
-                                      color: theme.colorScheme.onSurface,
-                                    ),
-                                  ),
-                                  const WidgetSpan(
-                                    child: Icon(
-                                      Icons.arrow_drop_down,
-                                      size: 24,
-                                    ),
-                                  ),
-                                ],
+                    initialData: streamClient.state.totalUnreadCount,
+                    builder: (context, snapshot) {
+                      final unreadMessagesCount = snapshot.data ?? 0;
+
+                      return badges.Badge(
+                        showBadge: unreadMessagesCount > 0,
+                        position: badges.BadgePosition.topEnd(
+                          top: -1,
+                          end: 2,
+                        ),
+                        badgeContent: Text('$unreadMessagesCount'),
+                        child: IconButton(
+                          onPressed: () => context.push(
+                            MessagingChannelListPage(),
+                          ),
+                          icon: const Icon(
+                            CupertinoIcons.chat_bubble,
+                            size: 24,
+                            semanticLabel: 'Messages',
+                          ),
+                        ),
+                      );
+                    },
+                  ),
+                ],
+                title: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    GestureDetector(
+                      onTap: () {
+                        showPullDownMenu(
+                          context: context,
+                          items: state.feedParamsList.entries.map((entry) {
+                            return PullDownMenuItem(
+                              onTap: () {
+                                context.read<LoopFeedListBloc>().add(
+                                      ChangeFeed(
+                                        feed: entry.key,
+                                      ),
+                                    );
+                              },
+                              title: entry.value.label,
+                            );
+                          }).toList(),
+                          position: const Rect.fromLTWH(
+                            10,
+                            10,
+                            100,
+                            100,
+                          ),
+                        );
+                      },
+                      child: RichText(
+                        text: TextSpan(
+                          children: [
+                            TextSpan(
+                              text: feedParams.label,
+                              style: TextStyle(
+                                fontSize: 24,
+                                fontWeight: FontWeight.bold,
+                                color: theme.colorScheme.onSurface,
                               ),
                             ),
-                          ),
-                        ],
+                            const WidgetSpan(
+                              child: Icon(
+                                Icons.arrow_drop_down,
+                                size: 24,
+                              ),
+                            ),
+                          ],
+                        ),
                       ),
                     ),
-                  );
-                },
-              );
-            }(),
-        };
+                  ],
+                ),
+              ),
+            );
+          },
+        );
       },
     );
   }

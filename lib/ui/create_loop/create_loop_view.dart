@@ -15,19 +15,15 @@ import 'package:intheloopapp/ui/create_loop/components/submit_loop_button.dart';
 import 'package:intheloopapp/ui/create_loop/cubit/create_loop_cubit.dart';
 import 'package:intheloopapp/ui/error/error_view.dart';
 import 'package:intheloopapp/ui/user_avatar.dart';
+import 'package:intheloopapp/utils/current_user_builder.dart';
 
 class CreateLoopView extends StatelessWidget {
   const CreateLoopView({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return BlocSelector<OnboardingBloc, OnboardingState, UserModel?>(
-      selector: (state) => (state is Onboarded) ? state.currentUser : null,
+    return CurrentUserBuilder(
       builder: (context, currentUser) {
-        if (currentUser == null) {
-          return const ErrorView();
-        }
-
         return BlocProvider(
           create: (context) => CreateLoopCubit(
             currentUser: currentUser,

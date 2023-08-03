@@ -9,6 +9,7 @@ import 'package:intheloopapp/domains/models/user_model.dart';
 import 'package:intheloopapp/domains/navigation_bloc/navigation_bloc.dart';
 import 'package:intheloopapp/domains/navigation_bloc/tapped_route.dart';
 import 'package:intheloopapp/domains/onboarding_bloc/onboarding_bloc.dart';
+import 'package:intheloopapp/utils/current_user_builder.dart';
 
 class RequestToBookButton extends StatelessWidget {
   const RequestToBookButton({
@@ -40,84 +41,75 @@ class RequestToBookButton extends StatelessWidget {
         ),
       Some(:final value) => () {
           final stripeAccountId = value;
-          return BlocSelector<OnboardingBloc, OnboardingState,
-              Option<UserModel>>(
-            selector: (state) =>
-                state is Onboarded ? Some(state.currentUser) : const None(),
+          return CurrentUserBuilder(
             builder: (context, currentUser) {
-              return switch (currentUser) {
-                None() => const SizedBox.shrink(),
-                Some(:final value) => () {
-                    if (value.id == userId) {
-                      return const SizedBox.shrink();
-                    }
+              if (currentUser.id == userId) {
+                return const SizedBox.shrink();
+              }
+              return FutureBuilder<Option<PaymentUser>>(
+                future: payments.getAccountById(stripeAccountId),
+                builder: (context, snapshot) {
+                  final paymentUser = snapshot.data;
 
-                    return FutureBuilder<Option<PaymentUser>>(
-                      future: payments.getAccountById(stripeAccountId),
-                      builder: (context, snapshot) {
-                        final paymentUser = snapshot.data;
+                  return switch (paymentUser) {
+                    null => const CupertinoButton.filled(
+                        onPressed: null,
+                        child: CupertinoActivityIndicator(),
+                      ),
+                    None() => const CupertinoButton.filled(
+                        onPressed: null,
+                        child: Text(
+                          'Payments Disabled',
+                          style: TextStyle(
+                            fontWeight: FontWeight.w700,
+                            color: Colors.white,
+                          ),
+                        ),
+                      ),
+                    Some(:final value) => () {
+                        final enabled = value.payoutsEnabled;
 
-                        return switch (paymentUser) {
-                          null => const CupertinoButton.filled(
-                              onPressed: null,
-                              child: CupertinoActivityIndicator(),
-                            ),
-                          None() => const CupertinoButton.filled(
-                              onPressed: null,
-                              child: Text(
-                                'Payments Disabled',
-                                style: TextStyle(
-                                  fontWeight: FontWeight.w700,
-                                  color: Colors.white,
-                                ),
+                        if (!enabled) {
+                          return const CupertinoButton.filled(
+                            onPressed: null,
+                            child: Text(
+                              'Payments Disabled',
+                              style: TextStyle(
+                                fontWeight: FontWeight.w700,
+                                color: Colors.white,
                               ),
                             ),
-                          Some(:final value) => () {
-                              final enabled = value.payoutsEnabled;
+                          );
+                        }
 
-                              if (!enabled) {
-                                return const CupertinoButton.filled(
-                                  onPressed: null,
-                                  child: Text(
-                                    'Payments Disabled',
-                                    style: TextStyle(
-                                      fontWeight: FontWeight.w700,
-                                      color: Colors.white,
-                                    ),
-                                  ),
-                                );
-                              }
-
-                              return CupertinoButton.filled(
-                                onPressed: () {
-                                  final nextPage = switch (service) {
-                                    None() => ServiceSelectionPage(
-                                        userId: userId,
-                                        requesteeStripeConnectedAccountId:
-                                            stripeAccountId,
-                                      ),
-                                    Some(:final value) => CreateBookingPage(
-                                        service: value,
-                                        requesteeStripeConnectedAccountId:
-                                            stripeAccountId,
-                                      ),
-                                  };
-                                  context.push(nextPage);
-                                },
-                                child: const Text(
-                                  'Request to Book',
-                                  style: TextStyle(
-                                    fontWeight: FontWeight.w700,
-                                    color: Colors.white,
-                                  ),
+                        return CupertinoButton.filled(
+                          onPressed: () {
+                            final nextPage = switch (service) {
+                              None() => ServiceSelectionPage(
+                                  userId: userId,
+                                  requesteeStripeConnectedAccountId:
+                                      stripeAccountId,
                                 ),
-                              );
-                            }(),
-                        };
-                      },
-                    );
-                  }(),
-              };
+                              Some(:final value) => CreateBookingPage(
+                                  service: value,
+                                  requesteeStripeConnectedAccountId:
+                                      stripeAccountId,
+                                ),
+                            };
+                            context.push(nextPage);
+                          },
+                          child: const Text(
+                            'Request to Book',
+                            style: TextStyle(
+                              fontWeight: FontWeight.w700,
+                              color: Colors.white,
+                            ),
+                          ),
+                        );
+                      }(),
+                  };
+                },
+              );
             },
           );
         }(),

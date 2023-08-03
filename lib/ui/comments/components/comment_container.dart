@@ -11,6 +11,7 @@ import 'package:intheloopapp/domains/navigation_bloc/tapped_route.dart';
 import 'package:intheloopapp/domains/onboarding_bloc/onboarding_bloc.dart';
 import 'package:intheloopapp/ui/error/error_view.dart';
 import 'package:intheloopapp/ui/user_avatar.dart';
+import 'package:intheloopapp/utils/current_user_builder.dart';
 import 'package:intheloopapp/utils/linkify.dart';
 import 'package:skeletons/skeletons.dart';
 import 'package:timeago/timeago.dart' as timeago;
@@ -71,13 +72,8 @@ class _CommentContainerState extends State<CommentContainer> {
     final databaseRepository =
         RepositoryProvider.of<DatabaseRepository>(context);
     //final loop =  databaseRepository.getLoopById(widget.comment.rootId);
-    return BlocSelector<OnboardingBloc, OnboardingState, UserModel?>(
-      selector: (state) => (state is Onboarded) ? state.currentUser : null,
+    return CurrentUserBuilder(
       builder: (context, currentUser) {
-        if (currentUser == null) {
-          return const ErrorView();
-        }
-
         return FutureBuilder<Option<UserModel>>(
           future: databaseRepository.getUserById(widget.comment.userId),
           builder: (context, snapshot) {
