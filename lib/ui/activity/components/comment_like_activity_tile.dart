@@ -9,6 +9,7 @@ import 'package:intheloopapp/domains/navigation_bloc/navigation_bloc.dart';
 import 'package:intheloopapp/domains/navigation_bloc/tapped_route.dart';
 import 'package:intheloopapp/domains/onboarding_bloc/onboarding_bloc.dart';
 import 'package:intheloopapp/ui/user_avatar.dart';
+import 'package:intheloopapp/utils/current_user_builder.dart';
 import 'package:timeago/timeago.dart' as timeago;
 
 class CommentLikeActivityTile extends StatelessWidget {
@@ -21,7 +22,7 @@ class CommentLikeActivityTile extends StatelessWidget {
 
   Future<void> onClick(
     BuildContext context,
-    Option<UserModel> loopUser,
+    UserModel loopUser,
   ) async {
     final nav = context.read<NavigationBloc>();
 
@@ -34,7 +35,7 @@ class CommentLikeActivityTile extends StatelessWidget {
     nav.push(
       LoopPage(
         loop: loop.unwrap,
-        loopUser: loopUser,
+        loopUser: Some(loopUser),
       ),
     );
   }
@@ -45,11 +46,8 @@ class CommentLikeActivityTile extends StatelessWidget {
 
     var markedRead = activity.markedRead;
 
-    return BlocSelector<OnboardingBloc, OnboardingState, Option<UserModel>>(
-      selector: (state) =>
-          state is Onboarded ? Some(state.currentUser) : const None(),
-      builder: (context, state) {
-        final currentUser = state;
+    return CurrentUserBuilder(
+      builder: (context, currentUser) {
         return BlocBuilder<ActivityBloc, ActivityState>(
           builder: (context, state) {
             return FutureBuilder<Option<UserModel>>(

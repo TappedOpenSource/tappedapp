@@ -10,6 +10,7 @@ import 'package:intheloopapp/ui/loops_feeds_list/loop_feeds_list_view.dart';
 import 'package:intheloopapp/ui/profile/profile_view.dart';
 import 'package:intheloopapp/ui/search/search_view.dart';
 import 'package:intheloopapp/ui/shell/components/bottom_toolbar.dart';
+import 'package:intheloopapp/utils/current_user_builder.dart';
 
 class ShellView extends StatefulWidget {
   const ShellView({
@@ -40,13 +41,9 @@ class _ShellViewState extends State<ShellView> {
 
   @override
   Widget build(BuildContext context) {
-    return BlocSelector<OnboardingBloc, OnboardingState, Option<UserModel>>(
-      selector: (state) =>
-          (state is Onboarded) ? Some(state.currentUser) : const None(),
+    return CurrentUserBuilder(
       builder: (context, currentUser) {
-        return switch (currentUser) {
-          None() => const ErrorView(),
-          Some(:final value) => BlocBuilder<NavigationBloc, NavigationState>(
+        return BlocBuilder<NavigationBloc, NavigationState>(
               builder: (context, state) {
                 return Scaffold(
                   body: IndexedStack(
@@ -58,20 +55,19 @@ class _ShellViewState extends State<ShellView> {
                       ),
                       const BookingsView(),
                       ProfileView(
-                        visitedUserId: value.id,
-                        visitedUser: currentUser,
+                        visitedUserId: currentUser.id,
+                        visitedUser: Some(currentUser),
                       ),
                       // ProfileView(visitedUserId: currentUser.id),
                     ],
                   ),
                   bottomNavigationBar: BottomToolbar(
-                    user: value,
+                    user: currentUser,
                     searchFocusNode: searchFocusNode,
                   ),
                 );
               },
-            ),
-        };
+        );
       },
     );
   }

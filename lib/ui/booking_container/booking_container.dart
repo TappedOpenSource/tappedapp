@@ -10,6 +10,7 @@ import 'package:intheloopapp/domains/navigation_bloc/navigation_bloc.dart';
 import 'package:intheloopapp/domains/navigation_bloc/tapped_route.dart';
 import 'package:intheloopapp/domains/onboarding_bloc/onboarding_bloc.dart';
 import 'package:intheloopapp/ui/user_avatar.dart';
+import 'package:intheloopapp/utils/current_user_builder.dart';
 import 'package:skeletons/skeletons.dart';
 import 'package:timeago/timeago.dart' as timeago;
 
@@ -174,19 +175,15 @@ class BookingContainer extends StatelessWidget {
     final databaseRepository =
         RepositoryProvider.of<DatabaseRepository>(context);
 
-    return BlocSelector<OnboardingBloc, OnboardingState, UserModel?>(
-      selector: (state) => (state is Onboarded) ? state.currentUser : null,
+    return CurrentUserBuilder(
+      errorWidget: const ListTile(
+        leading: UserAvatar(
+          radius: 25,
+        ),
+        title: Text('ERROR'),
+        subtitle: Text("something isn't working right :/"),
+      ),
       builder: (context, currentUser) {
-        if (currentUser == null) {
-          return const ListTile(
-            leading: UserAvatar(
-              radius: 25,
-            ),
-            title: Text('ERROR'),
-            subtitle: Text("something isn't working right :/"),
-          );
-        }
-
         return currentUser.id == booking.requesterId
             ? venueTile(databaseRepository)
             : freeTile(databaseRepository);

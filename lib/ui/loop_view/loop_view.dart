@@ -13,6 +13,7 @@ import 'package:intheloopapp/ui/error/error_view.dart';
 import 'package:intheloopapp/ui/loading/loop_loading_view.dart';
 import 'package:intheloopapp/ui/loop_container/loop_container.dart';
 import 'package:intheloopapp/ui/loop_view/loop_view_cubit.dart';
+import 'package:intheloopapp/utils/current_user_builder.dart';
 
 class LoopView extends StatelessWidget {
   const LoopView({
@@ -83,15 +84,9 @@ class LoopView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final nav = context.read<NavigationBloc>();
     final database = RepositoryProvider.of<DatabaseRepository>(context);
-    return BlocSelector<OnboardingBloc, OnboardingState, UserModel?>(
-      selector: (state) => (state is Onboarded) ? state.currentUser : null,
+    return CurrentUserBuilder(
       builder: (context, currentUser) {
-        if (currentUser == null) {
-          return const ErrorView();
-        }
-
         return switch (loopUser) {
           None() => FutureBuilder<Option<UserModel>>(
               future: database.getUserById(loop.userId),

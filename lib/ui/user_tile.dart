@@ -9,6 +9,7 @@ import 'package:intheloopapp/domains/navigation_bloc/tapped_route.dart';
 import 'package:intheloopapp/domains/onboarding_bloc/onboarding_bloc.dart';
 import 'package:intheloopapp/ui/common/rating_chip.dart';
 import 'package:intheloopapp/ui/user_avatar.dart';
+import 'package:intheloopapp/utils/current_user_builder.dart';
 import 'package:skeletons/skeletons.dart';
 
 class UserTile extends StatefulWidget {
@@ -76,19 +77,15 @@ class _UserTileState extends State<UserTile> {
     if (user.deleted) return const SizedBox.shrink();
 
     final database = context.read<DatabaseRepository>();
-    return BlocSelector<OnboardingBloc, OnboardingState, UserModel?>(
-      selector: (state) => (state is Onboarded) ? state.currentUser : null,
+    return CurrentUserBuilder(
+      errorWidget: const ListTile(
+        leading: UserAvatar(
+          radius: 25,
+        ),
+        title: Text('ERROR'),
+        subtitle: Text("something isn't working right :/"),
+      ),
       builder: (context, currentUser) {
-        if (currentUser == null) {
-          return const ListTile(
-            leading: UserAvatar(
-              radius: 25,
-            ),
-            title: Text('ERROR'),
-            subtitle: Text("something isn't working right :/"),
-          );
-        }
-
         return FutureBuilder<bool>(
           future: database.isVerified(widget.userId),
           builder: (context, snapshot) {

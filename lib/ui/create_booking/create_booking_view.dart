@@ -14,6 +14,7 @@ import 'package:intheloopapp/ui/create_booking/create_booking_cubit.dart';
 import 'package:intheloopapp/ui/error/error_view.dart';
 import 'package:intheloopapp/ui/loading/loading_view.dart';
 import 'package:intheloopapp/ui/user_tile.dart';
+import 'package:intheloopapp/utils/current_user_builder.dart';
 import 'package:skeletons/skeletons.dart';
 
 class CreateBookingView extends StatelessWidget {
@@ -31,13 +32,8 @@ class CreateBookingView extends StatelessWidget {
     final database = RepositoryProvider.of<DatabaseRepository>(context);
     final remote = RepositoryProvider.of<RemoteConfigRepository>(context);
 
-    return BlocSelector<OnboardingBloc, OnboardingState, UserModel?>(
-      selector: (state) => (state is Onboarded) ? state.currentUser : null,
+    return CurrentUserBuilder(
       builder: (context, currentUser) {
-        if (currentUser == null) {
-          return const ErrorView();
-        }
-
         return FutureBuilder<double>(
           future: remote.getBookingFee(),
           builder: (context, snapshot) {

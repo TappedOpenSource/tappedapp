@@ -9,6 +9,7 @@ import 'package:intheloopapp/domains/models/user_model.dart';
 import 'package:intheloopapp/domains/navigation_bloc/navigation_bloc.dart';
 import 'package:intheloopapp/domains/onboarding_bloc/onboarding_bloc.dart';
 import 'package:intheloopapp/utils/app_logger.dart';
+import 'package:intheloopapp/utils/current_user_builder.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class ConnectBankButton extends StatefulWidget {
@@ -106,23 +107,19 @@ class _ConnectBankButtonState extends State<ConnectBankButton> {
     final payments = RepositoryProvider.of<PaymentRepository>(context);
     final onSurfaceColor = Theme.of(context).colorScheme.onSurface;
 
-    return BlocSelector<OnboardingBloc, OnboardingState, UserModel?>(
-      selector: (state) => (state is Onboarded) ? state.currentUser : null,
+    return CurrentUserBuilder(
+      errorWidget: CupertinoButton(
+        onPressed: null,
+        borderRadius: BorderRadius.circular(15),
+        child: const Text(
+          'An error has occured :/',
+          style: TextStyle(
+            color: Colors.red,
+            fontWeight: FontWeight.w700,
+          ),
+        ),
+      ),
       builder: (context, currentUser) {
-        if (currentUser == null) {
-          return CupertinoButton(
-            onPressed: null,
-            borderRadius: BorderRadius.circular(15),
-            child: const Text(
-              'An error has occured :/',
-              style: TextStyle(
-                color: Colors.red,
-                fontWeight: FontWeight.w700,
-              ),
-            ),
-          );
-        }
-
         if (currentUser.stripeConnectedAccountId == null) {
           return _connectBankAccountButton(
             context: context,
@@ -147,11 +144,11 @@ class _ConnectBankButtonState extends State<ConnectBankButton> {
             final paymentUser = snapshot.data;
             return switch (paymentUser) {
               null => CupertinoButton(
-                onPressed: null,
-                color: onSurfaceColor.withOpacity(0.1),
-                borderRadius: BorderRadius.circular(15),
-                child: const CupertinoActivityIndicator(),
-              ),
+                  onPressed: null,
+                  color: onSurfaceColor.withOpacity(0.1),
+                  borderRadius: BorderRadius.circular(15),
+                  child: const CupertinoActivityIndicator(),
+                ),
               None() => _connectBankAccountButton(
                   context: context,
                   currentUser: currentUser,

@@ -8,6 +8,7 @@ import 'package:intheloopapp/domains/navigation_bloc/navigation_bloc.dart';
 import 'package:intheloopapp/domains/navigation_bloc/tapped_route.dart';
 import 'package:intheloopapp/domains/onboarding_bloc/onboarding_bloc.dart';
 import 'package:intheloopapp/ui/user_avatar.dart';
+import 'package:intheloopapp/utils/current_user_builder.dart';
 
 class UserCard extends StatefulWidget {
   const UserCard({
@@ -50,15 +51,15 @@ class _UserCardState extends State<UserCard> {
                             followingOverride = true;
                           });
                         },
-                  icon: isFollowing 
-                  ? const Icon(
-                    Icons.check_circle,
-                    color: Colors.white,
-                  )
-                  : const Icon(
-                    Icons.add_circle,
-                    color: Colors.white,
-                  ),
+                  icon: isFollowing
+                      ? const Icon(
+                          Icons.check_circle,
+                          color: Colors.white,
+                        )
+                      : const Icon(
+                          Icons.add_circle,
+                          color: Colors.white,
+                        ),
                 );
               },
             )
@@ -70,19 +71,15 @@ class _UserCardState extends State<UserCard> {
     final imageUrl = widget.user.profilePicture;
     if (widget.user.deleted) return const SizedBox.shrink();
 
-    return BlocSelector<OnboardingBloc, OnboardingState, UserModel?>(
-      selector: (state) => (state is Onboarded) ? state.currentUser : null,
+    return CurrentUserBuilder(
+      errorWidget: const ListTile(
+        leading: UserAvatar(
+          radius: 25,
+        ),
+        title: Text('ERROR'),
+        subtitle: Text("something isn't working right :/"),
+      ),
       builder: (context, currentUser) {
-        if (currentUser == null) {
-          return const ListTile(
-            leading: UserAvatar(
-              radius: 25,
-            ),
-            title: Text('ERROR'),
-            subtitle: Text("something isn't working right :/"),
-          );
-        }
-
         return FutureBuilder<bool>(
           future: database.isVerified(widget.user.id),
           builder: (context, snapshot) {

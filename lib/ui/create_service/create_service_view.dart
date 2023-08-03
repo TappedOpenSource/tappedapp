@@ -15,6 +15,7 @@ import 'package:intheloopapp/ui/create_service/components/title_text_field.dart'
 import 'package:intheloopapp/ui/create_service/create_service_cubit.dart';
 import 'package:intheloopapp/ui/error/error_view.dart';
 import 'package:intheloopapp/ui/forms/rate_text_field.dart';
+import 'package:intheloopapp/utils/current_user_builder.dart';
 
 class CreateServiceView extends StatelessWidget {
   const CreateServiceView({
@@ -30,13 +31,8 @@ class CreateServiceView extends StatelessWidget {
   Widget build(BuildContext context) {
     final database = context.read<DatabaseRepository>();
     final nav = context.read<NavigationBloc>();
-    return BlocSelector<OnboardingBloc, OnboardingState, UserModel?>(
-      selector: (state) => (state is Onboarded) ? state.currentUser : null,
+    return CurrentUserBuilder(
       builder: (context, currentUser) {
-        if (currentUser == null) {
-          return const ErrorView();
-        }
-
         return BlocProvider<CreateServiceCubit>(
           create: (context) => CreateServiceCubit(
             database: database,

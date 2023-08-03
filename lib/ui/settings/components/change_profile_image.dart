@@ -6,6 +6,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intheloopapp/domains/models/user_model.dart';
 import 'package:intheloopapp/domains/onboarding_bloc/onboarding_bloc.dart';
 import 'package:intheloopapp/ui/settings/settings_cubit.dart';
+import 'package:intheloopapp/utils/current_user_builder.dart';
 
 class ChangeProfileImage extends StatelessWidget {
   const ChangeProfileImage({super.key});
@@ -27,15 +28,11 @@ class ChangeProfileImage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocSelector<OnboardingBloc, OnboardingState, UserModel?>(
-      selector: (state) => (state is Onboarded) ? state.currentUser : null,
+    return CurrentUserBuilder(
+      errorWidget: const Center(
+        child: Text('An error has occured :/'),
+      ),
       builder: (context, currentUser) {
-        if (currentUser == null) {
-          return const Center(
-            child: Text('An error has occured :/'),
-          );
-        }
-
         return BlocBuilder<SettingsCubit, SettingsState>(
           builder: (context, state) {
             return GestureDetector(

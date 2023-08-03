@@ -13,6 +13,7 @@ import 'package:intheloopapp/ui/send_badge/components/badge_name_text_field.dart
 import 'package:intheloopapp/ui/send_badge/components/badge_receiver_text_field.dart';
 import 'package:intheloopapp/ui/send_badge/send_badge_cubit.dart';
 import 'package:intheloopapp/ui/themes.dart';
+import 'package:intheloopapp/utils/current_user_builder.dart';
 
 /// The screen for sending a badge
 class SendBadgeView extends StatelessWidget {
@@ -21,13 +22,8 @@ class SendBadgeView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocSelector<OnboardingBloc, OnboardingState, UserModel?>(
-      selector: (state) => (state is Onboarded) ? state.currentUser : null,
+    return CurrentUserBuilder(
       builder: (context, currentUser) {
-        if (currentUser == null) {
-          return const ErrorView();
-        }
-
         return BlocProvider(
           create: (context) => SendBadgeCubit(
             currentUser: currentUser,

@@ -1,4 +1,5 @@
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intheloopapp/data/audio_repository.dart';
@@ -22,6 +23,7 @@ import 'package:intheloopapp/ui/loop_container/user_info.dart';
 import 'package:intheloopapp/ui/themes.dart';
 import 'package:intheloopapp/ui/user_avatar.dart';
 import 'package:intheloopapp/utils/app_logger.dart';
+import 'package:intheloopapp/utils/current_user_builder.dart';
 import 'package:intheloopapp/utils/linkify.dart';
 
 class LoopContainer extends StatefulWidget {
@@ -279,20 +281,15 @@ class _LoopContainerState extends State<LoopContainer>
     final databaseRepository =
         RepositoryProvider.of<DatabaseRepository>(context);
 
-    return BlocSelector<OnboardingBloc, OnboardingState, UserModel?>(
-      selector: (state) => (state is Onboarded) ? state.currentUser : null,
+    return CurrentUserBuilder(
+      errorWidget: const ListTile(
+        leading: UserAvatar(
+          radius: 25,
+        ),
+        title: Text('ERROR'),
+        subtitle: Text("something isn't working right :/"),
+      ),
       builder: (context, currentUser) {
-        if (currentUser == null) {
-          logger.error('currentUser is null', stackTrace: StackTrace.current);
-          return const ListTile(
-            leading: UserAvatar(
-              radius: 25,
-            ),
-            title: Text('ERROR'),
-            subtitle: Text("something isn't working right :/"),
-          );
-        }
-
         return FutureBuilder<(Option<UserModel>, bool)>(
           future: () async {
             final userId = widget.loop.userId;
