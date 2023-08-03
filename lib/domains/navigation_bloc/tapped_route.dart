@@ -27,6 +27,7 @@ import 'package:intheloopapp/ui/loop_feed/loop_feed_view.dart';
 import 'package:intheloopapp/ui/loop_view/loop_view.dart';
 import 'package:intheloopapp/ui/messaging/channel_view.dart';
 import 'package:intheloopapp/ui/messaging/messaging_view.dart';
+import 'package:intheloopapp/ui/messaging/video_call_view.dart';
 import 'package:intheloopapp/ui/onboarding/onboarding_view.dart';
 import 'package:intheloopapp/ui/opportunities/interested_view.dart';
 import 'package:intheloopapp/ui/profile/components/service_selection_view.dart';
@@ -36,6 +37,7 @@ import 'package:intheloopapp/ui/search/search_view.dart';
 import 'package:intheloopapp/ui/services/service_view.dart';
 import 'package:intheloopapp/ui/settings/settings_view.dart';
 import 'package:stream_chat_flutter/stream_chat_flutter.dart';
+import 'package:stream_video_flutter/stream_video_flutter.dart';
 
 sealed class TappedRoute {
   TappedRoute({
@@ -439,4 +441,17 @@ final class ServicePage extends TappedRoute {
 
   final Service service;
   final Option<UserModel> serviceUser;
+}
+
+final class VideoCallPage extends TappedRoute {
+  VideoCallPage({
+    required this.call,
+  }) : super(
+          routeName: '/video_call/${call.id}',
+          view: VideoCallView(
+            call: call,
+          ),
+        );
+
+  final Call call;
 }

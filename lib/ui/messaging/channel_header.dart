@@ -1,4 +1,9 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:intheloopapp/data/stream_repository.dart';
+import 'package:intheloopapp/domains/navigation_bloc/navigation_bloc.dart';
+import 'package:intheloopapp/domains/navigation_bloc/tapped_route.dart';
 import 'package:intheloopapp/ui/messaging/channel_name.dart';
 import 'package:stream_chat_flutter/stream_chat_flutter.dart' hide ChannelName;
 
@@ -99,6 +104,7 @@ class ChannelHeader extends StatelessWidget implements PreferredSizeWidget {
   @override
   Widget build(BuildContext context) {
     final channel = StreamChannel.of(context).channel;
+    final video = context.read<StreamRepository>();
 
     final leadingWidget = leading ??
         (showBackButton
@@ -131,6 +137,30 @@ class ChannelHeader extends StatelessWidget implements PreferredSizeWidget {
             leading: leadingWidget,
             actions: actions ??
                 [
+                  IconButton(
+                    onPressed: () {
+                      final call = video.makeVideoCall(
+                        participantIds: channel.state!.members
+                            .where(
+                              (e) =>
+                                  e.userId !=
+                                  channel.client.state.currentUser?.id,
+                            )
+                            .map((e) => e.userId)
+                            .whereType<String>()
+                            .toList(),
+                      );
+                      context.push(
+                        VideoCallPage(
+                          call: call,
+                        ),
+                      );
+                    },
+                    icon: const Icon(
+                      CupertinoIcons.video_camera,
+                      size: 30,
+                    ),
+                  ),
                   Padding(
                     padding: const EdgeInsets.only(right: 10),
                     child: Center(
@@ -156,6 +186,10 @@ class ChannelHeader extends StatelessWidget implements PreferredSizeWidget {
                         StreamChannelInfo(
                           showTypingIndicator: showTypingIndicator,
                           channel: channel,
+                          textStyle: TextStyle(
+                            color: Colors.white.withOpacity(.5),
+                            fontSize: 12,
+                          ),
                         ),
                   ],
                 ),
