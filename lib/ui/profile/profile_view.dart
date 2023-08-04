@@ -19,6 +19,7 @@ import 'package:intheloopapp/ui/profile/components/reviews_sliver.dart';
 import 'package:intheloopapp/ui/profile/components/services_sliver.dart';
 import 'package:intheloopapp/ui/profile/profile_cubit.dart';
 import 'package:intheloopapp/ui/themes.dart';
+import 'package:intheloopapp/ui/user_card.dart';
 
 class ProfileView extends StatelessWidget {
   ProfileView({
@@ -183,6 +184,18 @@ class ProfileView extends StatelessWidget {
         ),
         const SliverToBoxAdapter(
           child: HeaderSliver(),
+        ),
+        //const
+         SliverToBoxAdapter(
+          child: Column(
+            children: [_displayCommonFollowers(
+              context, 
+              currentUser, 
+              visitedUser),
+              //Text('what'),
+            ]
+          ), 
+          //put method here
         ),
         const SliverToBoxAdapter(
           child: SizedBox(height: 12),
@@ -384,4 +397,51 @@ class ProfileView extends StatelessWidget {
       ),
     );
   }
+
+Widget _displayCommonFollowers (BuildContext context, UserModel currentUser, UserModel visitedUser)  {
+    
+    
+    final databaseRepository =
+        RepositoryProvider.of<DatabaseRepository>(context);
+        return FutureBuilder(
+      future: databaseRepository.getCommonFollowers(currentUser.id, visitedUser.id),
+      
+      builder: (context, snapshot) {
+        if(snapshot.connectionState == ConnectionState.waiting){return CircularProgressIndicator();}
+        else{
+        final feaUsers = snapshot.data ?? [];
+        return switch(feaUsers.length){
+         0 => CircularProgressIndicator(),
+         1 => Text(feaUsers[0].username.toString()),
+         2 => Text(feaUsers[0].username.toString() + feaUsers[1].username.toString()),
+         >3 => Text(feaUsers[0].username.toString() + feaUsers[1].username.toString() + feaUsers[2].username.toString()),
+         _ => Text(feaUsers.length.toString()),
+        };
+        }
+      },
+      
+    );
+    return Text('PROMBLEM');
+    
+    /*return Column(
+      children: [Text('followed by: '),
+        Transform.scale(
+        scale: .5,
+        child:
+            Row(
+              children: [
+                
+              UserCard(user: currentUser), 
+              UserCard(user: visitedUser),],),
+          
+        ),],
+    );*/ 
+    /*
+        Future<List<UserModel>> commons = await databaseRepository.getCommonFollowers(currentUser.id, visitedUser.id);*/
+
+  //return Text('followers');
+}
+
+
+
 }

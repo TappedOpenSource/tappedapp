@@ -534,6 +534,27 @@ class FirestoreDatabaseImpl extends DatabaseRepository {
   }
 
   @override
+  Future<List<UserModel>> getCommonFollowers (
+      String currentUserID, 
+      String observedUserId,
+    ) async {
+      final userFollowingSnapshot = await getFollowing(currentUserID); 
+      //current user must follow a person to qualify
+      final followsViewedSnapshot = await getFollowers(observedUserId);
+      //person must follow the observed to qualify
+      final result = userFollowingSnapshot.toSet().intersection(followsViewedSnapshot.toSet());
+      final intersection = result.map((id) async {
+      final user = await getUserById(id.id);
+      switch(user){
+        case None(): break;
+        case Some(:final value): {return value;}
+        }
+});
+      
+      return Future.wait<UserModel?>(intersection).then((intersection) => intersection.whereType<UserModel>().toList());
+    }
+
+  @override
   Future<void> addLoop(Loop loop) async {
     logger.debug('addLoop $loop');
     await _analytics.logEvent(
