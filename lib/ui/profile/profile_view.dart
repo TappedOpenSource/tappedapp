@@ -19,6 +19,7 @@ import 'package:intheloopapp/ui/profile/components/reviews_sliver.dart';
 import 'package:intheloopapp/ui/profile/components/services_sliver.dart';
 import 'package:intheloopapp/ui/profile/profile_cubit.dart';
 import 'package:intheloopapp/ui/themes.dart';
+import 'package:intheloopapp/ui/user_avatar.dart';
 import 'package:intheloopapp/ui/user_card.dart';
 
 class ProfileView extends StatelessWidget {
@@ -187,13 +188,20 @@ class ProfileView extends StatelessWidget {
         ),
         //const
          SliverToBoxAdapter(
-          child: Column(
-            children: [_displayCommonFollowers(
-              context, 
-              currentUser, 
-              visitedUser),
+          child: Row(
+            
+            children:[
+              Text('followed by: ', //textScaleFactor: 2
+              ),
+             Transform.scale(
+                scale: .5,
+               child: _displayCommonFollowers(
+                context, 
+                currentUser, 
+                visitedUser,),
+             ),
               //Text('what'),
-            ]
+            ],
           ), 
           //put method here
         ),
@@ -411,11 +419,32 @@ Widget _displayCommonFollowers (BuildContext context, UserModel currentUser, Use
         else{
         final feaUsers = snapshot.data ?? [];
         return switch(feaUsers.length){
-         0 => CircularProgressIndicator(),
+        0 => CircularProgressIndicator(),
+         1 => getAvatar(feaUsers[0]),
+         2 => Row(
+           children: [
+             getAvatar(feaUsers[0]),
+             getAvatar(feaUsers[1]),
+           ],
+         ),
+         >3 => Row(
+           children: [
+             getAvatar(feaUsers[0]),
+             getAvatar(feaUsers[1]),
+             getAvatar(feaUsers[2]),
+           ],),
+           
+         _ => Text('problem switch'),
+        
+        
+        
+        /* 
+        0 => CircularProgressIndicator(),
          1 => Text(feaUsers[0].username.toString()),
          2 => Text(feaUsers[0].username.toString() + feaUsers[1].username.toString()),
          >3 => Text(feaUsers[0].username.toString() + feaUsers[1].username.toString() + feaUsers[2].username.toString()),
          _ => Text(feaUsers.length.toString()),
+         */
         };
         }
       },
@@ -441,7 +470,13 @@ Widget _displayCommonFollowers (BuildContext context, UserModel currentUser, Use
 
   //return Text('followers');
 }
-
+Widget getAvatar(UserModel user){
+  return UserAvatar(
+    radius: 30,
+    pushUser: Some(user),
+    imageUrl: user.profilePicture,
+    );
+}
 
 
 }
