@@ -171,14 +171,15 @@ class ChannelHeader extends StatelessWidget implements PreferredSizeWidget {
             actions: actions ??
                 [
                   IconButton(
-                    onPressed: () {
-                      final call = _startCall(context);
-                      context.push(
-                        VideoCallPage(
-                          call: call,
-                        ),
-                      );
-                    },
+                    onPressed: null,
+                    // onPressed: () {
+                    //   final call = _startCall(context);
+                    //   context.push(
+                    //     VideoCallPage(
+                    //       call: call,
+                    //     ),
+                    //   );
+                    // },
                     icon: const Icon(
                       CupertinoIcons.video_camera,
                       size: 30,
