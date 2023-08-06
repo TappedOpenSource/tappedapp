@@ -58,7 +58,6 @@ class _ShellViewState extends State<ShellView> {
                         visitedUserId: currentUser.id,
                         visitedUser: Some(currentUser),
                       ),
-                      // ProfileView(visitedUserId: currentUser.id),
                     ],
                   ),
                   bottomNavigationBar: BottomToolbar(

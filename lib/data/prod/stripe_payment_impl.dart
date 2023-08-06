@@ -14,7 +14,7 @@ final _analytics = FirebaseAnalytics.instance;
 
 // ignore: lines_longer_than_80_chars
 const _publishableKey =
-    'pk_live_51MjqoRIdnJ3C1QPEjW2tlrF663G7QXTjZN0de769CrMXhaGMjw8fxwKOOo0k72nYZcmNI211knjPHTxIDLlvqDx800rdRODGrz';
+    'pk_live_51IWSJmJgkuWqwX75uIMi6sg7q2y1McOYvHtHjzlhLGciGTlaLIsssJ0smKiHKkwADinTPuz9MFfVPRuqTDQpGqGk00KsoDkV8z';
 
 class StripePaymentImpl implements PaymentRepository {
   @override
