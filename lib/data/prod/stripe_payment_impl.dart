@@ -10,7 +10,7 @@ final _stripe = Stripe.instance;
 final _analytics = FirebaseAnalytics.instance;
 
 // ignore: lines_longer_than_80_chars
-// const _publishableTestKey = 'pk_test_51MjqoRIdnJ3C1QPEjac68utViyu6vQcJfRfEyNesdoi9eKZP5hKnxbuyHCcSFVH8mBjYAxN0qyMdn2P8ZQb5OuZo00Bfy49Ebc';
+// const _publishedableTestKey = 'pk_test_51IWSJmJgkuWqwX75nxNjPEZdOsPrjWf27ANkGzSRcJXIPCtjZNYasmmyvWqcLYBCchzaHGQmuawvf8wD7y11nyPQ00GzXLWgTz';
 
 // ignore: lines_longer_than_80_chars
 const _publishableKey =
