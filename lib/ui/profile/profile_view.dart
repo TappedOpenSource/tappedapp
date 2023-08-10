@@ -188,23 +188,19 @@ class ProfileView extends StatelessWidget {
         ),
         //const
          SliverToBoxAdapter(
-          child: Row(
+          
+            child:
+               
+                  _displayCommonFollowers(
+                  context, 
+                  currentUser, 
+                  visitedUser,),
+               
+                //Text('what'),
             
-            children:[
-              Text('followed by: ', //textScaleFactor: 2
-              ),
-             Transform.scale(
-                scale: .5,
-               child: _displayCommonFollowers(
-                context, 
-                currentUser, 
-                visitedUser,),
-             ),
-              //Text('what'),
-            ],
           ), 
           //put method here
-        ),
+        
         const SliverToBoxAdapter(
           child: SizedBox(height: 12),
         ),
@@ -411,47 +407,48 @@ Widget _displayCommonFollowers (BuildContext context, UserModel currentUser, Use
     
     final databaseRepository =
         RepositoryProvider.of<DatabaseRepository>(context);
-        return FutureBuilder(
-      future: databaseRepository.getCommonFollowers(currentUser.id, visitedUser.id),
-      
-      builder: (context, snapshot) {
-        if(snapshot.connectionState == ConnectionState.waiting){return CircularProgressIndicator();}
-        else{
-        final feaUsers = snapshot.data ?? [];
-        return switch(feaUsers.length){
-        0 => CircularProgressIndicator(),
-         1 => getAvatar(feaUsers[0]),
-         2 => Row(
-           children: [
-             getAvatar(feaUsers[0]),
-             getAvatar(feaUsers[1]),
-           ],
-         ),
-         >3 => Row(
-           children: [
-             getAvatar(feaUsers[0]),
-             getAvatar(feaUsers[1]),
-             getAvatar(feaUsers[2]),
-           ],),
-           
-         _ => Text('problem switch'),
-        
-        
-        
-        /* 
-        0 => CircularProgressIndicator(),
-         1 => Text(feaUsers[0].username.toString()),
-         2 => Text(feaUsers[0].username.toString() + feaUsers[1].username.toString()),
-         >3 => Text(feaUsers[0].username.toString() + feaUsers[1].username.toString() + feaUsers[2].username.toString()),
-         _ => Text(feaUsers.length.toString()),
-         */
-        };
-        }
-      },
-      
-    );
+        return Container(
+          child: FutureBuilder(
+              future: databaseRepository.getCommonFollowers(currentUser.id, visitedUser.id),
+              builder: (context, snapshot) {
+          if(snapshot.connectionState == ConnectionState.waiting){
+            return SizedBox.shrink();
+            //return CircularProgressIndicator();
+            }
+          else{
+          final feaUsers = snapshot.data ?? [];
+          return switch(feaUsers.length){
+          0 => SizedBox.shrink(),
+          >0  => listAvatar(context, feaUsers),
+           /*
+           1 => Row(children: [getAvatar(feaUsers[0])]),
+           2 => Row(
+             children: [
+               getAvatar(feaUsers[0]),
+               getAvatar(feaUsers[1]),
+             ],
+           ),
+           >3 => Row(
+             children: [
+               getAvatar(feaUsers[0]),
+               getAvatar(feaUsers[1]),
+               getAvatar(feaUsers[2]),
+             ],),
+           */  
+           _ => SizedBox.shrink(),
+          /* 
+          0 => CircularProgressIndicator(),
+           1 => Text(feaUsers[0].username.toString()),
+           2 => Text(feaUsers[0].username.toString() + feaUsers[1].username.toString()),
+           >3 => Text(feaUsers[0].username.toString() + feaUsers[1].username.toString() + feaUsers[2].username.toString()),
+           _ => Text(feaUsers.length.toString()),
+           */
+          };
+          }
+              },
+            ),
+        );
     return Text('PROMBLEM');
-    
     /*return Column(
       children: [Text('followed by: '),
         Transform.scale(
@@ -470,13 +467,38 @@ Widget _displayCommonFollowers (BuildContext context, UserModel currentUser, Use
 
   //return Text('followers');
 }
-Widget getAvatar(UserModel user){
-  return UserAvatar(
-    radius: 30,
-    pushUser: Some(user),
-    imageUrl: user.profilePicture,
-    );
+Widget getAvatar(BuildContext context, UserModel user){
+  return Container(
+    padding: const EdgeInsets.all(3),
+    decoration: BoxDecoration(
+      color: Theme.of(context).colorScheme.background,
+      borderRadius: BorderRadius.circular(25)
+    ),
+    child: UserAvatar(
+      radius: 20,
+      pushUser: Some(user),
+      imageUrl: user.profilePicture,
+      ),
+  );
 }
+
+Widget listAvatar(BuildContext context, List<UserModel> users){
+  List<UserModel> Dusers;
+  List<Widget> result = [];
+  if(users.length > 3) {Dusers = users.sublist(0, 3);}
+  else {Dusers = users;}
+  for(int i = 0; i < Dusers.length; i++){
+    result.add(Padding(padding: EdgeInsets.only(left: i*30), child: getAvatar(context, Dusers[i])));
+  }
+  if(users.length > 3){
+    var r = users.length - 3;
+  return Row(children: [Text('Followed by: '), Stack(children: result), Text('and ' + r.toString() + ' more') ] );}
+  else{return Row(children: [Text('Followed by: '), Stack(children: result), ] );}
+
+
+
+}
+
 
 
 }
