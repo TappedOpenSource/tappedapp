@@ -7,6 +7,7 @@ import 'package:intheloopapp/data/database_repository.dart';
 import 'package:intheloopapp/data/places_repository.dart';
 import 'package:intheloopapp/domains/models/option.dart';
 import 'package:intheloopapp/domains/models/user_model.dart';
+import 'package:intheloopapp/domains/navigation_bloc/navigation_bloc.dart';
 import 'package:intheloopapp/domains/onboarding_bloc/onboarding_bloc.dart';
 import 'package:intheloopapp/ui/error/error_view.dart';
 import 'package:intheloopapp/ui/loading/loading_view.dart';
@@ -21,6 +22,8 @@ import 'package:intheloopapp/ui/profile/profile_cubit.dart';
 import 'package:intheloopapp/ui/themes.dart';
 import 'package:intheloopapp/ui/user_avatar.dart';
 import 'package:intheloopapp/ui/user_card.dart';
+
+import '../../domains/navigation_bloc/tapped_route.dart';
 
 class ProfileView extends StatelessWidget {
   ProfileView({
@@ -187,23 +190,31 @@ class ProfileView extends StatelessWidget {
           child: HeaderSliver(),
         ),
         //const
+        const SliverToBoxAdapter(
+          child: SizedBox(height: 8),
+        ),
          SliverToBoxAdapter(
           
             child:
                
-                  _displayCommonFollowers(
-                  context, 
-                  currentUser, 
-                  visitedUser,),
+                  GestureDetector(
+                    onTap: () => context.push(
+              FollowRelationshipPage(
+                userId: state.visitedUser.id,
+                index: 0,
+              ),),
+                    child: _displayCommonFollowers(
+                    context, 
+                    currentUser, 
+                    visitedUser,),
+                  ),
                
                 //Text('what'),
             
           ), 
           //put method here
         
-        const SliverToBoxAdapter(
-          child: SizedBox(height: 12),
-        ),
+        
         const SliverToBoxAdapter(
           child: ServicesSliver(),
         ),
@@ -419,7 +430,8 @@ Widget _displayCommonFollowers (BuildContext context, UserModel currentUser, Use
           final feaUsers = snapshot.data ?? [];
           return switch(feaUsers.length){
           0 => SizedBox.shrink(),
-          >0  => listAvatar(context, feaUsers),
+          >0  =>   listAvatar(context, feaUsers),
+                    
            /*
            1 => Row(children: [getAvatar(feaUsers[0])]),
            2 => Row(
@@ -465,17 +477,16 @@ Widget _displayCommonFollowers (BuildContext context, UserModel currentUser, Use
     /*
         Future<List<UserModel>> commons = await databaseRepository.getCommonFollowers(currentUser.id, visitedUser.id);*/
 
-  //return Text('followers');
 }
 Widget getAvatar(BuildContext context, UserModel user){
   return Container(
     padding: const EdgeInsets.all(3),
     decoration: BoxDecoration(
       color: Theme.of(context).colorScheme.background,
-      borderRadius: BorderRadius.circular(25)
+      borderRadius: BorderRadius.circular(17)
     ),
     child: UserAvatar(
-      radius: 20,
+      radius: 14,
       pushUser: Some(user),
       imageUrl: user.profilePicture,
       ),
@@ -485,20 +496,33 @@ Widget getAvatar(BuildContext context, UserModel user){
 Widget listAvatar(BuildContext context, List<UserModel> users){
   List<UserModel> Dusers;
   List<Widget> result = [];
-  if(users.length > 3) {Dusers = users.sublist(0, 3);}
-  else {Dusers = users;}
-  for(int i = 0; i < Dusers.length; i++){
-    result.add(Padding(padding: EdgeInsets.only(left: i*30), child: getAvatar(context, Dusers[i])));
+  if(users.length > 3) {
+    Dusers = users.sublist(0, 3);
+    }else {
+    Dusers = users;
+    }
+    for(int i = 0; i < Dusers.length; i++){
+    result.add(Padding(
+      padding: EdgeInsets.only(left: i*20), 
+      child: getAvatar(context, Dusers[i])
+      ));
   }
   if(users.length > 3){
-    var r = users.length - 3;
-  return Row(children: [Text('Followed by: '), Stack(children: result), Text('and ' + r.toString() + ' more') ] );}
-  else{return Row(children: [Text('Followed by: '), Stack(children: result), ] );}
-
-
-
+     var r = users.length - 3;
+  return Row(
+    mainAxisAlignment: MainAxisAlignment.center,
+    children: [
+      Text('Followed by: '), 
+      Stack(children: result), 
+      Text('and ' + r.toString() + ' others') ]
+       );
+       }
+  else{
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        Text('Followed by: '), Stack(children: result), ] );
+    }
 }
-
-
 
 }
