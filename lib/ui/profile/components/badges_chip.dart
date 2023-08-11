@@ -16,7 +16,7 @@ class BadgesChip extends StatelessWidget {
       builder: (context, state) {
         return GestureDetector(
           onTap: () {
-            context.push(
+              context.push(
               BadgesPage(
                 badges: state.userBadges,
               ),
