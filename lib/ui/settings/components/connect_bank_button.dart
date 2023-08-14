@@ -64,6 +64,7 @@ class _ConnectBankButtonState extends State<ConnectBankButton> {
 
         if (!res.success) {
           logger.error('create connected account failed');
+          return;
         }
 
         final updatedUser = currentUser.copyWith(
