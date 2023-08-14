@@ -2,6 +2,7 @@ import 'package:badges/badges.dart' as badges;
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:intheloopapp/domains/activity_bloc/activity_bloc.dart';
 import 'package:intheloopapp/domains/bookings_bloc/bookings_bloc.dart';
 import 'package:intheloopapp/domains/loop_feed_list_bloc/loop_feed_list_bloc.dart';
@@ -112,6 +113,12 @@ class BottomToolbar extends StatelessWidget {
               ),
             ),
             // const BottomNavigationBarItem(icon: Icon(Icons.person)),
+            const BottomNavigationBarItem(
+              icon: Icon(
+                Icons.smart_toy_outlined,
+                // FontAwesomeIcons.userXmark,
+              ),
+            ),
             BottomNavigationBarItem(
               activeIcon: Container(
                 height: 35,
