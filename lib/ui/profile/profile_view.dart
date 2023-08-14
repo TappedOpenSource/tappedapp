@@ -7,10 +7,13 @@ import 'package:intheloopapp/data/database_repository.dart';
 import 'package:intheloopapp/data/places_repository.dart';
 import 'package:intheloopapp/domains/models/option.dart';
 import 'package:intheloopapp/domains/models/user_model.dart';
+import 'package:intheloopapp/domains/navigation_bloc/navigation_bloc.dart';
+import 'package:intheloopapp/domains/navigation_bloc/tapped_route.dart';
 import 'package:intheloopapp/domains/onboarding_bloc/onboarding_bloc.dart';
 import 'package:intheloopapp/ui/error/error_view.dart';
 import 'package:intheloopapp/ui/loading/loading_view.dart';
 import 'package:intheloopapp/ui/profile/components/bookings_sliver.dart';
+import 'package:intheloopapp/ui/profile/components/common_followers_sliver.dart';
 import 'package:intheloopapp/ui/profile/components/header_sliver.dart';
 import 'package:intheloopapp/ui/profile/components/info_sliver.dart';
 import 'package:intheloopapp/ui/profile/components/loops_sliver.dart';
@@ -19,6 +22,7 @@ import 'package:intheloopapp/ui/profile/components/reviews_sliver.dart';
 import 'package:intheloopapp/ui/profile/components/services_sliver.dart';
 import 'package:intheloopapp/ui/profile/profile_cubit.dart';
 import 'package:intheloopapp/ui/themes.dart';
+import 'package:intheloopapp/ui/user_avatar.dart';
 
 class ProfileView extends StatelessWidget {
   ProfileView({
@@ -184,8 +188,20 @@ class ProfileView extends StatelessWidget {
         const SliverToBoxAdapter(
           child: HeaderSliver(),
         ),
+        //const
         const SliverToBoxAdapter(
-          child: SizedBox(height: 12),
+          child: SizedBox(height: 8),
+        ),
+        SliverToBoxAdapter(
+          child: GestureDetector(
+            onTap: () => context.push(
+              FollowRelationshipPage(
+                userId: state.visitedUser.id,
+                index: 0,
+              ),
+            ),
+            child: const CommonFollowersSliver(),
+          ),
         ),
         const SliverToBoxAdapter(
           child: ServicesSliver(),

@@ -328,8 +328,8 @@ class FirestoreDatabaseImpl extends DatabaseRepository {
   Future<List<UserModel>> getBookingLeaders() async {
     final leadersSnapshot = await _leadersRef.doc('leaders').get();
 
-    final leadingUsernames = leadersSnapshot
-        .getOrElse('bookingLeaders', <dynamic>[]);
+    final leadingUsernames =
+        leadersSnapshot.getOrElse('bookingLeaders', <dynamic>[]);
 
     final leaders = await Future.wait(
       leadingUsernames.map(
@@ -347,8 +347,8 @@ class FirestoreDatabaseImpl extends DatabaseRepository {
   Future<List<UserModel>> getBookerLeaders() async {
     final leadersSnapshot = await _leadersRef.doc('leaders').get();
 
-    final leadingUsernames = leadersSnapshot
-        .getOrElse('bookerLeaders', <dynamic>[]);
+    final leadingUsernames =
+        leadersSnapshot.getOrElse('bookerLeaders', <dynamic>[]);
 
     final leaders = await Future.wait(
       leadingUsernames.map(
@@ -531,6 +531,31 @@ class FirestoreDatabaseImpl extends DatabaseRepository {
     final followers = await Future.wait(followerFutures);
 
     return followers;
+  }
+
+  @override
+  Future<List<UserModel>> getCommonFollowers(
+    String currentUserID,
+    String observedUserId,
+  ) async {
+    final [userFollowingSnapshot, followsViewedSnapshot] = await Future.wait([
+      //current user must follow a person to qualify
+      getFollowing(currentUserID),
+
+      //person must follow the observed to qualify
+      getFollowers(observedUserId),
+    ]);
+    final result = userFollowingSnapshot
+        .toSet()
+        .intersection(followsViewedSnapshot.toSet());
+    final intersection = await Future.wait(
+      result.map((id) async {
+        final user = await getUserById(id.id);
+        return user.asNullable();
+      }),
+    );
+
+    return intersection.whereType<UserModel>().toList();
   }
 
   @override
