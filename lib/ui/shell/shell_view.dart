@@ -44,28 +44,34 @@ class _ShellViewState extends State<ShellView> {
     return CurrentUserBuilder(
       builder: (context, currentUser) {
         return BlocBuilder<NavigationBloc, NavigationState>(
-              builder: (context, state) {
-                return Scaffold(
-                  body: IndexedStack(
-                    index: state.selectedTab,
-                    children: [
-                      const LoopFeedsListView(), // getstream.io activity feed?
-                      SearchView(
-                        searchFocusNode: searchFocusNode,
-                      ),
-                      const BookingsView(),
-                      ProfileView(
-                        visitedUserId: currentUser.id,
-                        visitedUser: Some(currentUser),
-                      ),
-                    ],
-                  ),
-                  bottomNavigationBar: BottomToolbar(
-                    user: currentUser,
+          builder: (context, state) {
+            return Scaffold(
+              body: IndexedStack(
+                index: state.selectedTab,
+                children: [
+                  const LoopFeedsListView(), // getstream.io activity feed?
+                  SearchView(
                     searchFocusNode: searchFocusNode,
                   ),
-                );
-              },
+                  const BookingsView(),
+                  Scaffold(
+                    backgroundColor: Theme.of(context).colorScheme.background,
+                    body: const Center(
+                      child: Text('coming soon'),
+                    ),
+                  ),
+                  ProfileView(
+                    visitedUserId: currentUser.id,
+                    visitedUser: Some(currentUser),
+                  ),
+                ],
+              ),
+              bottomNavigationBar: BottomToolbar(
+                user: currentUser,
+                searchFocusNode: searchFocusNode,
+              ),
+            );
+          },
         );
       },
     );
