@@ -53,11 +53,15 @@ class CommonFollowersSliver extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             const Text('Followed by: '),
-            for (int i = 0; i < 3; i++)
-              Padding(
-                padding: EdgeInsets.only(left: i * 20),
-                child: _userAvatar(context, intersects[i]),
-              ),
+            Stack(
+              children: [
+                for (int i = 0; i < 3; i++)
+                  Padding(
+                    padding: EdgeInsets.only(left: i * 20),
+                    child: _userAvatar(context, intersects[i]),
+                  ),
+              ],
+            ),
             Text('and ${intersects.length - 3} others'),
           ],
         ),
@@ -65,11 +69,15 @@ class CommonFollowersSliver extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             const Text('Followed by: '),
-            for (int i = 0; i < intersects.length; i++)
-              Padding(
-                padding: EdgeInsets.only(left: i * 20),
-                child: _userAvatar(context, intersects[i]),
-              ),
+            Stack(
+              children: [
+                for (int i = 0; i < intersects.length; i++)
+                  Padding(
+                    padding: EdgeInsets.only(left: i * 20),
+                    child: _userAvatar(context, intersects[i]),
+                  ),
+              ],
+            ),
           ],
         ),
       _ => const SizedBox.shrink(),
@@ -80,6 +88,10 @@ class CommonFollowersSliver extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocBuilder<ProfileCubit, ProfileState>(
       builder: (context, state) {
+        if (state.currentUser.id == state.visitedUser.id) {
+          return const SizedBox.shrink();
+        }
+
         return _displayCommonFollowers(
           context,
           state.currentUser,
