@@ -36,57 +36,76 @@ class _ConnectBankButtonState extends State<ConnectBankButton> {
     final onSurfaceColor = Theme.of(context).colorScheme.onSurface;
     return CupertinoButton.filled(
       onPressed: () async {
-        if (loading) {
-          return;
+        try {
+          if (loading) {
+            return;
+          }
+
+          setState(() {
+            loading = true;
+          });
+
+          final placeId = currentUser.placeId;
+          final place =
+              placeId != null ? await places.getPlaceById(placeId) : null;
+
+          final addressComponents = place?.addressComponents ?? [];
+          final countryCode = addressComponents
+              .where(
+                (element) => element.types.contains('country'),
+              )
+              .firstOrNull
+              ?.shortName;
+
+          // create connected account
+          final res = await payments.createConnectedAccount(
+            accountId: accountId,
+            countryCode: countryCode,
+          );
+
+          if (!res.success) {
+            throw Exception('create connected account failed');
+          }
+
+          final updatedUser = currentUser.copyWith(
+            stripeConnectedAccountId: res.accountId,
+          );
+
+          onboarding.add(
+            UpdateOnboardedUser(
+              user: updatedUser,
+            ),
+          );
+
+          nav.pop();
+
+          await launchUrl(
+            Uri.parse(res.url),
+            mode: LaunchMode.externalApplication,
+          );
+
+          setState(() {
+            loading = false;
+          });
+        } catch (e, s) {
+          logger.error(
+            'error connecting bank account',
+            error: e,
+            stackTrace: s,
+          );
+          setState(() {
+            loading = false;
+          });
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(
+              behavior: SnackBarBehavior.floating,
+              backgroundColor: Colors.red,
+              content: Text(
+                'Error connecting bank account',
+              ),
+            ),
+          );
         }
-
-        setState(() {
-          loading = true;
-        });
-
-        final placeId = currentUser.placeId;
-        final place =
-            placeId != null ? await places.getPlaceById(placeId) : null;
-
-        final addressComponents = place?.addressComponents ?? [];
-        final countryCode = addressComponents
-            .where(
-              (element) => element.types.contains('country'),
-            )
-            .firstOrNull
-            ?.shortName;
-
-        // create connected account
-        final res = await payments.createConnectedAccount(
-          accountId: accountId,
-          countryCode: countryCode,
-        );
-
-        if (!res.success) {
-          logger.error('create connected account failed');
-          return;
-        }
-
-        final updatedUser = currentUser.copyWith(
-          stripeConnectedAccountId: res.accountId,
-        );
-
-        onboarding.add(
-          UpdateOnboardedUser(
-            user: updatedUser,
-          ),
-        );
-
-        nav.pop();
-
-        await launchUrl(
-          Uri.parse(res.url),
-          mode: LaunchMode.externalApplication,
-        );
-
-        setState(() {
-          loading = false;
-        });
       },
       borderRadius: BorderRadius.circular(15),
       child: loading
