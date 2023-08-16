@@ -26,7 +26,7 @@ class ActionsToolbar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final dynamicLinkRepository =
-        RepositoryProvider.of<DynamicLinkRepository>(context);
+        RepositoryProvider.of<UniLinkRepository>(context);
     return BlocBuilder<LoopViewCubit, LoopViewState>(
       builder: (context, state) {
         return SizedBox(
@@ -61,7 +61,7 @@ class ActionsToolbar extends StatelessWidget {
                 onTap: () async {
                   await context.read<LoopViewCubit>().incrementShares();
                   final link =
-                      await dynamicLinkRepository.getShareLoopDynamicLink(loop);
+                      await dynamicLinkRepository.getShareLoopUniLink(loop);
                   await Share.share('Check out this loop on Tapped $link');
                 },
               ),

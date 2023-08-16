@@ -21,7 +21,7 @@ class ControlButtons extends StatelessWidget {
   final String currentUserId;
 
   void _showActionSheet(BuildContext context) {
-    final dynamic = context.read<DynamicLinkRepository>();
+    final dynamic = context.read<UniLinkRepository>();
     final database = context.read<DatabaseRepository>();
     final nav = context.read<NavigationBloc>();
     showCupertinoModalPopup<void>(
@@ -32,7 +32,7 @@ class ControlButtons extends StatelessWidget {
         actions: <CupertinoActionSheetAction>[
           CupertinoActionSheetAction(
             onPressed: () async {
-              final link = await dynamic.getShareLoopDynamicLink(loop);
+              final link = await dynamic.getShareLoopUniLink(loop);
 
               await Share.share(
                 'Check out this loop on Tapped $link',

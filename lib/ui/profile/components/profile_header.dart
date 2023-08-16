@@ -19,7 +19,7 @@ class ProfileHeader extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final dynamicLinkRepository =
-        RepositoryProvider.of<DynamicLinkRepository>(context);
+        RepositoryProvider.of<UniLinkRepository>(context);
 
     return BlocBuilder<ProfileCubit, ProfileState>(
       builder: (context, state) {
@@ -80,7 +80,7 @@ class ProfileHeader extends StatelessWidget {
                                 child: GestureDetector(
                                   onTap: () async {
                                     final link = await dynamicLinkRepository
-                                        .getShareProfileDynamicLink(
+                                        .getShareProfileUniLink(
                                       state.visitedUser,
                                     );
                                     await Share.share(
