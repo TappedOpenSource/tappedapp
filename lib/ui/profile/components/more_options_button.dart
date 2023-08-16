@@ -17,7 +17,7 @@ class MoreOptionsButton extends StatelessWidget {
     UserModel user,
     UserModel currentUser,
   ) {
-    final dynamic = context.read<DynamicLinkRepository>();
+    final dynamic = context.read<UniLinkRepository>();
     final database = context.read<DatabaseRepository>();
     final nav = context.read<NavigationBloc>();
     showCupertinoModalPopup<void>(
@@ -28,7 +28,7 @@ class MoreOptionsButton extends StatelessWidget {
         actions: <CupertinoActionSheetAction>[
           CupertinoActionSheetAction(
             onPressed: () async {
-              final link = await dynamic.getShareProfileDynamicLink(user);
+              final link = await dynamic.getShareProfileUniLink(user);
               await Share.share('Check out this profile on Tapped $link');
               nav.pop();
             },

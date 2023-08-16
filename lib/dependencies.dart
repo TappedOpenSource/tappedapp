@@ -3,7 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intheloopapp/data/audio_repository.dart';
 import 'package:intheloopapp/data/auth_repository.dart';
 import 'package:intheloopapp/data/database_repository.dart';
-import 'package:intheloopapp/data/dynamic_link_repository.dart';
+import 'package:intheloopapp/data/dynamic_link_repository.dart';   //Depreciated
 import 'package:intheloopapp/data/image_picker_repository.dart';
 import 'package:intheloopapp/data/notification_repository.dart';
 import 'package:intheloopapp/data/payment_repository.dart';
@@ -12,7 +12,7 @@ import 'package:intheloopapp/data/prod/algolia_search_impl.dart';
 import 'package:intheloopapp/data/prod/audio_service_impl.dart';
 import 'package:intheloopapp/data/prod/cloud_messaging_impl.dart';
 import 'package:intheloopapp/data/prod/firebase_auth_impl.dart';
-import 'package:intheloopapp/data/prod/firebase_dynamic_link_impl.dart';
+import 'package:intheloopapp/data/prod/firebase_dynamic_link_impl.dart';  //Depreciated
 import 'package:intheloopapp/data/prod/firebase_storage_impl.dart';
 import 'package:intheloopapp/data/prod/firestore_database_impl.dart';
 import 'package:intheloopapp/data/prod/google_places_impl.dart';
@@ -29,7 +29,7 @@ import 'package:intheloopapp/domains/authentication_bloc/authentication_bloc.dar
 import 'package:intheloopapp/domains/bookings_bloc/bookings_bloc.dart';
 import 'package:intheloopapp/domains/confirm_email_bloc/confirm_email_bloc.dart';
 import 'package:intheloopapp/domains/down_for_maintenance_bloc/down_for_maintenance_bloc.dart';
-import 'package:intheloopapp/domains/dynamic_link_bloc/dynamic_link_bloc.dart';
+import 'package:intheloopapp/domains/dynamic_link_bloc/dynamic_link_bloc.dart';  //Depreciated
 import 'package:intheloopapp/domains/loop_feed_list_bloc/loop_feed_list_bloc.dart';
 import 'package:intheloopapp/domains/navigation_bloc/navigation_bloc.dart';
 import 'package:intheloopapp/domains/onboarding_bloc/onboarding_bloc.dart';
@@ -61,7 +61,7 @@ List<RepositoryProvider<Object>> buildRepositories({
         apiKey: 'c89ebf37b46a3683405be3ed0901f217',
       ),
     ),
-    RepositoryProvider<DynamicLinkRepository>(
+    RepositoryProvider<UniLinkRepository>(
       create: (_) => FirebaseDynamicLinkImpl(),
     ),
     RepositoryProvider<StreamRepository>(
@@ -114,14 +114,26 @@ List<BlocProvider> buildBlocs({
         databaseRepository: context.read<DatabaseRepository>(),
       ),
     ),
-    BlocProvider<DynamicLinkBloc>(
+    BlocProvider<DynamicLinkBloc>(         //Depreciated
       create: (context) => DynamicLinkBloc(
         onboardingBloc: context.read<OnboardingBloc>(),
         navBloc: context.read<NavigationBloc>(),
-        dynamicLinkRepository: context.read<DynamicLinkRepository>(),
+        dynamicLinkRepository: context.read<UniLinkRepository>(),
         databaseRepository: context.read<DatabaseRepository>(),
       )..add(MonitorDynamicLinks()),
     ),
+
+  BlocProvider<DynamicLinkBloc>(         //Depreciated CHANGE THIS ONE
+      create: (context) => DynamicLinkBloc(
+        onboardingBloc: context.read<OnboardingBloc>(),
+        navBloc: context.read<NavigationBloc>(),
+        dynamicLinkRepository: context.read<UniLinkRepository>(),
+        databaseRepository: context.read<DatabaseRepository>(),
+      )..add(MonitorDynamicLinks()),
+    ),
+
+
+
     BlocProvider<DownForMaintenanceBloc>(
       create: (context) => DownForMaintenanceBloc(
         remoteConfigRepository: context.read<RemoteConfigRepository>(),
