@@ -1,8 +1,9 @@
 
-import * as logger from "firebase-functions/logger";
+import * as functions from "firebase-functions";
 import { OpenAI } from "langchain/llms/openai";
 import { PromptTemplate } from "langchain/prompts";
 import { LLMChain } from "langchain/chains";
+import { ChainValues } from "langchain/dist/schema";
 
 
 const llm = {
@@ -18,7 +19,7 @@ const llm = {
     igFollowerCount: number;
     apiKey: string;
     template: string;
-}) => {
+}): Promise<ChainValues> => {
     process.env.OPENAI_API_KEY = apiKey;
 
     const model = new OpenAI({ temperature: 0 });
@@ -41,7 +42,7 @@ const llm = {
       ARTIST_GENRES: artistGenres,
       IG_FOLLOWER_COUNT: igFollowerCount,
     });
-    logger.log({ res });
+    functions.logger.log({ res });
 
     return res;
   },
