@@ -2,7 +2,7 @@
 import { messaging, auth } from "firebase-admin";
 
 import * as functions from "firebase-functions";
-import { initializeApp } from "firebase-admin/app";
+import { getApp, getApps, initializeApp } from "firebase-admin/app";
 import {
   getFirestore,
   FieldValue,
@@ -15,6 +15,7 @@ import { StreamChat } from "stream-chat";
 import { defineSecret } from "firebase-functions/params";
 import { HttpsError } from "firebase-functions/v1/auth";
 import { onSchedule } from "firebase-functions/v2/scheduler";
+import { onCall, onRequest } from "firebase-functions/v2/https";
 
 import Stripe from "stripe";
 import { v4 as uuidv4 } from "uuid";
@@ -43,7 +44,10 @@ import {
 import { llm } from "./openai";
 import { sd } from "./leapai";
 
-const app = initializeApp();
+const app = getApps().length <= 0 ?
+  initializeApp() :
+  getApp();
+
 
 const streamKey = defineSecret("STREAM_KEY");
 const streamSecret = defineSecret("STREAM_SECRET");
@@ -96,8 +100,6 @@ const founderIds = [
   "8yYVxpQ7cURSzNfBsaBGF7A7kkv2", // Johannes
   "n4zIL6bOuPTqRC3dtsl6gyEBPQl1", // Ilias
 ];
-
-
 
 const _getFileFromURL = (fileURL: string): string => {
   const fSlashes = fileURL.split("/");
@@ -1803,64 +1805,62 @@ export const onTeamCreated = functions
       });
     });
 
-export const onTrainingJobCompletedWebhook = functions
-  .https
-  .onRequest(
-    async (req) => {
+export const onTrainingJobCompletedWebhook = onRequest(
+  async (req) => {
     // get model id from request
-      const { id, state } = req.body;
-      await _updateTeamStatus({ modelId: id, state });
-    });
+    const { id, state } = req.body;
+    await _updateTeamStatus({ modelId: id, state });
+  });
 
-export const generateAlbumName = functions
-  .runWith({ secrets: [ OPEN_AI_KEY ] })
-  .https 
-  .onCall(
-    async (request) => {
-      const oak = OPEN_AI_KEY.value();
-      const {
-        artistName,
-        artistGenres,
-        igFollowerCount,
-      } = request.data;
+export const generateAlbumName = onCall(
+  {
+    secrets: [ OPEN_AI_KEY ],
+  },
+  async (request) => {
+    const oak = OPEN_AI_KEY.value();
+    const {
+      artistName,
+      artistGenres,
+      igFollowerCount,
+    } = request.data;
 
-      if (!(typeof artistName === "string") || artistName.length === 0) {
+    if (!(typeof artistName === "string") || artistName.length === 0) {
       // Throwing an HttpsError so that the client gets the error details.
-        throw new HttpsError("invalid-argument", "The function must be called " +
+      throw new HttpsError("invalid-argument", "The function must be called " +
         "with argument \"artistName\".");
-      }
+    }
 
-      if (!Array.isArray(artistGenres) || artistGenres.length === 0) {
+    if (!Array.isArray(artistGenres) || artistGenres.length === 0) {
       // Throwing an HttpsError so that the client gets the error details.
-        throw new HttpsError("invalid-argument", "The function must be called " +
+      throw new HttpsError("invalid-argument", "The function must be called " +
         "with argument \"artistGenres\".");
-      }
+    }
 
-      if (!(typeof igFollowerCount === "number") || artistName.length <= 0) {
+    if (!(typeof igFollowerCount === "number") || artistName.length <= 0) {
       // Throwing an HttpsError so that the client gets the error details.
-        throw new HttpsError("invalid-argument", "The function must be called " +
+      throw new HttpsError("invalid-argument", "The function must be called " +
         "with argument \"igFollowerCount\".");
-      }
+    }
 
-      // Checking that the user is authenticated.
-      if (!request.auth) {
+    // Checking that the user is authenticated.
+    if (!request.auth) {
       // Throwing an HttpsError so that the client gets the error details.
-        throw new HttpsError("failed-precondition", "The function must be " +
+      throw new HttpsError("failed-precondition", "The function must be " +
         "called while authenticated.");
-      }
+    }
 
-      const genres = artistGenres.join(", ");
+    const genres = artistGenres.join(", ");
 
-      const res = await llm.generateAlbumName({
-        artistName,
-        artistGenres: genres,
-        igFollowerCount,
-        apiKey: oak,
-      });
-      functions.logger.log({ res });
-
-      return res;
+    const res = await llm.generateAlbumName({
+      artistName,
+      artistGenres: genres,
+      igFollowerCount,
+      apiKey: oak,
     });
+    functions.logger.log({ res });
+
+    return res;
+  });
 
 export const createAvatarInferenceJob = functions 
   .runWith({ secrets: [ LEAP_API_KEY ] })
@@ -1900,34 +1900,34 @@ export const createAvatarInferenceJob = functions
       return { inferenceId, prompt };
     });
 
-export const getAvatarInferenceJob = functions
-  .runWith({ secrets: [ LEAP_API_KEY ] })
-  .https 
-  .onCall(
-    async (request) => {
+export const getAvatarInferenceJob = onCall(
+  {
+    secrets: [ LEAP_API_KEY ],
+  },
+  async (request) => {
     // Checking that the user is authenticated.
-      if (!request.auth) {
+    if (!request.auth) {
       // Throwing an HttpsError so that the client gets the error details.
-        throw new HttpsError("failed-precondition", "The function must be " +
+      throw new HttpsError("failed-precondition", "The function must be " +
         "called while authenticated.");
-      }
+    }
 
-      const leapApiKey = LEAP_API_KEY.value();
-      const { inferenceId } = request.data;
+    const leapApiKey = LEAP_API_KEY.value();
+    const { inferenceId } = request.data;
 
-      if (!(typeof inferenceId === "string") || inferenceId.length === 0) {
+    if (!(typeof inferenceId === "string") || inferenceId.length === 0) {
       // Throwing an HttpsError so that the client gets the error details.
-        throw new HttpsError("invalid-argument", "The function must be called " +
+      throw new HttpsError("invalid-argument", "The function must be called " +
         "with argument \"inferenceId\".");
-      }
+    }
 
-      const { imageUrls } = await sd.getInferenceJob({
-        leapApiKey,
-        inferenceId,
-      });
-
-      return { imageUrls };
+    const { imageUrls } = await sd.getInferenceJob({
+      leapApiKey,
+      inferenceId,
     });
+
+    return { imageUrls };
+  });
 
 export const deleteInferenceJob = functions 
   .runWith({ secrets: [ LEAP_API_KEY ] }) 
