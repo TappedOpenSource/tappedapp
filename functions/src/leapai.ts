@@ -1,8 +1,7 @@
 
 import { Leap } from "@leap-ai/sdk";
-import * as functions from "firebase-functions";
 
-const sd = {
+export const sd = {
   createInferenceJob: async ({
     leapApiKey,
     modelId,
@@ -12,7 +11,6 @@ const sd = {
     modelId: string;
     prompt: string;
 }): Promise<{ inferenceId: string }> => {
-    functions.logger.log(`Generating text ${prompt}`);
     const leap = new Leap(leapApiKey);
 
     const { data, error } = await leap.generate.createInferenceJob({
@@ -21,7 +19,6 @@ const sd = {
     });
 
     if (data === null) {
-      functions.logger.error(`Error generating text: ${error}`);
       throw new Error(error);
     }
 
@@ -41,7 +38,6 @@ const sd = {
     });
 
     if (data === null) {
-      functions.logger.error(`Error getting inference job: ${error}`);
       throw new Error(error);
     }
 
@@ -64,11 +60,7 @@ const sd = {
     });
 
     if (data === null) {
-      functions.logger.error(`Error deleting inference job: ${error}`);
       throw new Error(error);
     }
   },
-
 };
-
-export default sd;
