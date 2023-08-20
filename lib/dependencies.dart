@@ -28,8 +28,8 @@ import 'package:intheloopapp/domains/activity_bloc/activity_bloc.dart';
 import 'package:intheloopapp/domains/authentication_bloc/authentication_bloc.dart';
 import 'package:intheloopapp/domains/bookings_bloc/bookings_bloc.dart';
 import 'package:intheloopapp/domains/confirm_email_bloc/confirm_email_bloc.dart';
+import 'package:intheloopapp/domains/deep_link_bloc/deep_link_bloc.dart';
 import 'package:intheloopapp/domains/down_for_maintenance_bloc/down_for_maintenance_bloc.dart';
-import 'package:intheloopapp/domains/dynamic_link_bloc/dynamic_link_bloc.dart';
 import 'package:intheloopapp/domains/loop_feed_list_bloc/loop_feed_list_bloc.dart';
 import 'package:intheloopapp/domains/navigation_bloc/navigation_bloc.dart';
 import 'package:intheloopapp/domains/onboarding_bloc/onboarding_bloc.dart';
@@ -114,23 +114,23 @@ List<BlocProvider> buildBlocs({
         databaseRepository: context.read<DatabaseRepository>(),
       ),
     ),
-    BlocProvider<DynamicLinkBloc>(
+    BlocProvider<DeepLinkBloc>(
       //Depreciated
-      create: (context) => DynamicLinkBloc(
+      create: (context) => DeepLinkBloc(
         onboardingBloc: context.read<OnboardingBloc>(),
         navBloc: context.read<NavigationBloc>(),
         dynamicLinkRepository: context.read<DeepLinkRepository>(),
         databaseRepository: context.read<DatabaseRepository>(),
-      )..add(MonitorDynamicLinks()),
+      )..add(MonitorDeepLinks()),
     ),
-    BlocProvider<DynamicLinkBloc>(
+    BlocProvider<DeepLinkBloc>(
       //Depreciated CHANGE THIS ONE
-      create: (context) => DynamicLinkBloc(
+      create: (context) => DeepLinkBloc(
         onboardingBloc: context.read<OnboardingBloc>(),
         navBloc: context.read<NavigationBloc>(),
         dynamicLinkRepository: context.read<DeepLinkRepository>(),
         databaseRepository: context.read<DatabaseRepository>(),
-      )..add(MonitorDynamicLinks()),
+      )..add(MonitorDeepLinks()),
     ),
     BlocProvider<DownForMaintenanceBloc>(
       create: (context) => DownForMaintenanceBloc(

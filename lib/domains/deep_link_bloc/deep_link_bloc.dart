@@ -8,17 +8,17 @@ import 'package:intheloopapp/domains/navigation_bloc/tapped_route.dart';
 import 'package:intheloopapp/domains/onboarding_bloc/onboarding_bloc.dart';
 import 'package:intheloopapp/utils/app_logger.dart';
 
-part 'dynamic_link_event.dart';
-part 'dynamic_link_state.dart';
+part 'deep_link_event.dart';
+part 'deep_link_state.dart';
 
-class DynamicLinkBloc extends Bloc<DynamicLinkEvent, DynamicLinkState> {
-  DynamicLinkBloc({
+class DeepLinkBloc extends Bloc<DeepLinkEvent, DeepLinkState> {
+  DeepLinkBloc({
     required this.onboardingBloc,
     required this.navBloc,
     required this.dynamicLinkRepository,
     required this.databaseRepository,
-  }) : super(DynamicLinkInitial()) {
-    on<MonitorDynamicLinks>((event, emit) {
+  }) : super(DeepLinkInitial()) {
+    on<MonitorDeepLinks>((event, emit) {
       logger.debug('monitoring dynamic links');
       dynamicLinkRepository.getDeepLinks().listen((event) {
         try {
@@ -86,7 +86,7 @@ class DynamicLinkBloc extends Bloc<DynamicLinkEvent, DynamicLinkState> {
         }
       });
 
-      emit(DynamicLinkInitial());
+      emit(DeepLinkInitial());
     });
   }
 
