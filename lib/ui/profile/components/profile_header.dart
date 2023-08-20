@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:intheloopapp/data/dynamic_link_repository.dart';
+import 'package:intheloopapp/data/deep_link_repository.dart';
 import 'package:intheloopapp/domains/models/option.dart';
 import 'package:intheloopapp/ui/profile/components/follow_button.dart';
 import 'package:intheloopapp/ui/profile/components/follower_count.dart';
@@ -19,7 +19,7 @@ class ProfileHeader extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final dynamicLinkRepository =
-        RepositoryProvider.of<UniLinkRepository>(context);
+        RepositoryProvider.of<DeepLinkRepository>(context);
 
     return BlocBuilder<ProfileCubit, ProfileState>(
       builder: (context, state) {
@@ -80,7 +80,7 @@ class ProfileHeader extends StatelessWidget {
                                 child: GestureDetector(
                                   onTap: () async {
                                     final link = await dynamicLinkRepository
-                                        .getShareProfileUniLink(
+                                        .getShareProfileDeepLink(
                                       state.visitedUser,
                                     );
                                     await Share.share(

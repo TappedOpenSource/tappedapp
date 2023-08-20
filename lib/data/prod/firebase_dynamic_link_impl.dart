@@ -2,7 +2,7 @@ import 'dart:async';
 
 import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:firebase_dynamic_links/firebase_dynamic_links.dart';
-import 'package:intheloopapp/data/dynamic_link_repository.dart';
+import 'package:intheloopapp/data/deep_link_repository.dart';
 import 'package:intheloopapp/domains/models/loop.dart';
 import 'package:intheloopapp/domains/models/option.dart';
 import 'package:intheloopapp/domains/models/user_model.dart';
@@ -14,11 +14,11 @@ final _analytics = FirebaseAnalytics.instance;
 /// The Firebase dynamic link implementation for Dynamic Link
 ///
 /// aka Deep Links
-class FirebaseDynamicLinkImpl extends DynamicLinkRepository {
+class FirebaseDynamicLinkImpl extends DeepLinkRepository {
   @override
-  Stream<DynamicLinkRedirect> getDynamicLinks() async* {
+  Stream<DeepLinkRedirect> getDeepLinks() async* {
     // ignore: close_sinks
-    final dynamicLinkStream = StreamController<DynamicLinkRedirect>();
+    final dynamicLinkStream = StreamController<DeepLinkRedirect>();
 
     final data = await _dynamicLinks.getInitialLink();
 
@@ -43,7 +43,7 @@ class FirebaseDynamicLinkImpl extends DynamicLinkRepository {
     yield* dynamicLinkStream.stream;
   }
 
-  DynamicLinkRedirect? _handleDeepLink(
+  DeepLinkRedirect? _handleDeepLink(
     PendingDynamicLinkData? data,
   ) {
     final deepLink = data?.link;
@@ -55,21 +55,21 @@ class FirebaseDynamicLinkImpl extends DynamicLinkRepository {
 
     switch (deepLink.path) {
       case '/upload_loop':
-        return const DynamicLinkRedirect(
-          type: DynamicLinkType.createPost,
+        return const DeepLinkRedirect(
+          type: DeepLinkType.createPost,
         );
       case '/user':
         final linkParameters = deepLink.queryParameters;
         final userId = linkParameters['id'] ?? '';
-        return DynamicLinkRedirect(
-          type: DynamicLinkType.shareProfile,
+        return DeepLinkRedirect(
+          type: DeepLinkType.shareProfile,
           id: userId,
         );
       case '/loop':
         final linkParameters = deepLink.queryParameters;
         final loopId = linkParameters['id'] ?? '';
-        return DynamicLinkRedirect(
-          type: DynamicLinkType.shareLoop,
+        return DeepLinkRedirect(
+          type: DeepLinkType.shareLoop,
           id: loopId,
         );
       case '/connect_payment':
@@ -88,8 +88,8 @@ class FirebaseDynamicLinkImpl extends DynamicLinkRepository {
         //   );
         // }
 
-        return DynamicLinkRedirect(
-          type: DynamicLinkType.connectStripeRedirect,
+        return DeepLinkRedirect(
+          type: DeepLinkType.connectStripeRedirect,
           id: accountId,
         );
       default:
@@ -98,7 +98,7 @@ class FirebaseDynamicLinkImpl extends DynamicLinkRepository {
   }
 
   @override
-  Future<String> getShareLoopDynamicLink(Loop loop) async {
+  Future<String> getShareLoopDeepLink(Loop loop) async {
     final imageUri =
         (loop.imagePaths.isNotEmpty && loop.imagePaths[0].isNotEmpty)
             ? Uri.parse(loop.imagePaths[0])
@@ -136,7 +136,7 @@ class FirebaseDynamicLinkImpl extends DynamicLinkRepository {
   }
 
   @override
-  Future<String> getShareProfileDynamicLink(UserModel user) async {
+  Future<String> getShareProfileDeepLink(UserModel user) async {
     final imageUri = user.profilePicture == null
         ? Uri.parse('https://tapped.ai/images/tapped_reverse.png')
         : Uri.parse(user.profilePicture!);
