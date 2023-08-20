@@ -19,7 +19,7 @@ class UniLinkRedirect {
   final String? id;
 }
 
-abstract class UniLinkRepository {
+abstract class DeepLinkRepository {
   Stream<UniLinkRedirect> getUniLinks();
   Future<String> getShareLoopUniLink(Loop loop);
   Future<String> getShareProfileUniLink(UserModel user);

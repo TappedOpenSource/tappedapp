@@ -1,7 +1,7 @@
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:intheloopapp/data/database_repository.dart';
-import 'package:intheloopapp/data/dynamic_link_repository.dart';
+import 'package:intheloopapp/data/deep_link_repository.dart';
 import 'package:intheloopapp/domains/models/option.dart';
 import 'package:intheloopapp/domains/navigation_bloc/navigation_bloc.dart';
 import 'package:intheloopapp/domains/navigation_bloc/tapped_route.dart';
@@ -20,15 +20,15 @@ class DynamicLinkBloc extends Bloc<DynamicLinkEvent, DynamicLinkState> {
   }) : super(DynamicLinkInitial()) {
     on<MonitorDynamicLinks>((event, emit) {
       logger.debug('monitoring dynamic links');
-      dynamicLinkRepository.getDynamicLinks().listen((event) {
+      dynamicLinkRepository.getDeepLinks().listen((event) {
         try {
           logger.debug('new dynamic link');
           switch (event.type) {
-            case DynamicLinkType.createPost:
+            case DeepLinkType.createPost:
               navBloc.push(
                 CreateLoopPage(),
               );
-            case DynamicLinkType.shareLoop:
+            case DeepLinkType.shareLoop:
               final loopId = event.id;
               if (loopId != null) {
                 databaseRepository
@@ -46,7 +46,7 @@ class DynamicLinkBloc extends Bloc<DynamicLinkEvent, DynamicLinkState> {
                   }
                 });
               }
-            case DynamicLinkType.shareProfile:
+            case DeepLinkType.shareProfile:
               if (event.id != null) {
                 navBloc.push(
                   ProfilePage(
@@ -55,7 +55,7 @@ class DynamicLinkBloc extends Bloc<DynamicLinkEvent, DynamicLinkState> {
                   ),
                 );
               }
-            case DynamicLinkType.connectStripeRedirect:
+            case DeepLinkType.connectStripeRedirect:
               if (event.id == null || event.id == '') {
                 break;
               }
@@ -76,7 +76,7 @@ class DynamicLinkBloc extends Bloc<DynamicLinkEvent, DynamicLinkState> {
               );
 
               navBloc.push(SettingsPage());
-            case DynamicLinkType.connectStripeRefresh:
+            case DeepLinkType.connectStripeRefresh:
               if (event.id != null) {
                 // resend the create account request?
               }
@@ -92,6 +92,6 @@ class DynamicLinkBloc extends Bloc<DynamicLinkEvent, DynamicLinkState> {
 
   final NavigationBloc navBloc;
   final OnboardingBloc onboardingBloc;
-  final DynamicLinkRepository dynamicLinkRepository;
+  final DeepLinkRepository dynamicLinkRepository;
   final DatabaseRepository databaseRepository;
 }
