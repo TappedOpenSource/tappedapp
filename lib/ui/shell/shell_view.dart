@@ -8,6 +8,7 @@ import 'package:intheloopapp/ui/bookings/bookings_view.dart';
 import 'package:intheloopapp/ui/error/error_view.dart';
 import 'package:intheloopapp/ui/loops_feeds_list/loop_feeds_list_view.dart';
 import 'package:intheloopapp/ui/profile/profile_view.dart';
+import 'package:intheloopapp/ui/record_label/record_label_view.dart';
 import 'package:intheloopapp/ui/search/search_view.dart';
 import 'package:intheloopapp/ui/shell/components/bottom_toolbar.dart';
 import 'package:intheloopapp/utils/current_user_builder.dart';
@@ -54,12 +55,7 @@ class _ShellViewState extends State<ShellView> {
                     searchFocusNode: searchFocusNode,
                   ),
                   const BookingsView(),
-                  Scaffold(
-                    backgroundColor: Theme.of(context).colorScheme.background,
-                    body: const Center(
-                      child: Text('coming soon'),
-                    ),
-                  ),
+                  const RecordLabelView(),
                   ProfileView(
                     visitedUserId: currentUser.id,
                     visitedUser: Some(currentUser),
