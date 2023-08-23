@@ -1,3 +1,4 @@
+import type { CallableRequest } from "firebase-functions/v2/https";
 /* eslint-disable import/no-unresolved */
 import { messaging, auth } from "firebase-admin";
 
@@ -40,7 +41,6 @@ import {
   // UserModel,
   // BookerReview,
 } from "./models";
-
 import { llm } from "./openai";
 import { sd } from "./leapai";
 
@@ -136,6 +136,17 @@ const _authenticated = (context: functions.https.CallableContext) => {
   if (!context.auth) {
     // Throwing an HttpsError so that the client gets the error details.
     throw new functions.https.HttpsError(
+      "failed-precondition",
+      "The function must be called while authenticated."
+    );
+  }
+};
+
+const _authenticatedRequest = (request: CallableRequest) => {
+  // Checking that the user is authenticated.
+  if (!request.auth) {
+    // Throwing an HttpsError so that the client gets the error details.
+    throw new HttpsError(
       "failed-precondition",
       "The function must be called while authenticated."
     );
@@ -1862,43 +1873,41 @@ export const generateAlbumName = onCall(
     return res;
   });
 
-export const createAvatarInferenceJob = functions 
-  .runWith({ secrets: [ LEAP_API_KEY ] })
-  .https
-  .onCall(
-    async (request) => {
-    // Checking that the user is authenticated.
-      if (!request.auth) {
-      // Throwing an HttpsError so that the client gets the error details.
-        throw new HttpsError("failed-precondition", "The function must be " +
-        "called while authenticated.");
-      }
+export const createAvatarInferenceJob = onCall(
+  {
+    secrets: [ LEAP_API_KEY ]
+  },
+  async (request) => {
+    // // Checking that the user is authenticated.
+    _authenticatedRequest(request);
 
-      const leapApiKey = LEAP_API_KEY.value();
-      const { modelId, avatarStyle } = request.data;
+    const leapApiKey = LEAP_API_KEY.value();
+    const { modelId, avatarStyle } = request.data;
 
-      if (!(typeof modelId === "string") || modelId.length === 0) {
+    if (!(typeof modelId === "string") || modelId.length === 0) {
       // Throwing an HttpsError so that the client gets the error details.
-        throw new HttpsError("invalid-argument", "The function must be called " +
+      throw new HttpsError("invalid-argument", "The function must be called " +
         "with argument \"modelId\".");
-      }
+    }
 
-      if (!(typeof avatarStyle === "string") || avatarStyle.length === 0) {
+    if (!(typeof avatarStyle === "string") || avatarStyle.length === 0) {
       // Throwing an HttpsError so that the client gets the error details.
-        throw new HttpsError("invalid-argument", "The function must be called " +
+      throw new HttpsError("invalid-argument", "The function must be called " +
         "with argument \"avatarStyle\".");
-      }
+    }
 
-      const prompt = `@subject is a ${avatarStyle} avatar.`;
+    const prompt = "8k portrait of @subject man in the style of jackson pollock's 'abstract expressionism,' featuring drips, splatters, and energetic brushwork.";
+    const negativePrompt = "(deformed iris, deformed pupils, semi-realistic, cgi, 3d, render, sketch, cartoon, drawing, anime:1.4), text, close up, cropped, out of frame, worst quality, low quality, jpeg artifacts, ugly, duplicate, morbid, mutilated, extra fingers, mutated hands, poorly drawn hands, poorly drawn face, mutation, deformed, blurry, dehydrated, bad anatomy, bad proportions, extra limbs, cloned face, disfigured, gross proportions, malformed limbs, missing arms, missing legs, extra arms, extra legs, fused fingers, too many fingers, long neck";
 
-      const { inferenceId } = await sd.createInferenceJob({
-        leapApiKey,
-        modelId,
-        prompt,
-      });
-
-      return { inferenceId, prompt };
+    const { inferenceId } = await sd.createInferenceJob({
+      leapApiKey,
+      modelId,
+      prompt,
+      negativePrompt,
     });
+
+    return { inferenceId, prompt };
+  });
 
 export const getAvatarInferenceJob = onCall(
   {
@@ -1906,11 +1915,7 @@ export const getAvatarInferenceJob = onCall(
   },
   async (request) => {
     // Checking that the user is authenticated.
-    if (!request.auth) {
-      // Throwing an HttpsError so that the client gets the error details.
-      throw new HttpsError("failed-precondition", "The function must be " +
-        "called while authenticated.");
-    }
+    _authenticatedRequest(request);
 
     const leapApiKey = LEAP_API_KEY.value();
     const { inferenceId } = request.data;
@@ -1921,12 +1926,12 @@ export const getAvatarInferenceJob = onCall(
         "with argument \"inferenceId\".");
     }
 
-    const { imageUrls } = await sd.getInferenceJob({
+    const { inferenceJob } = await sd.getInferenceJob({
       leapApiKey,
       inferenceId,
     });
 
-    return { imageUrls };
+    return { inferenceJob };
   });
 
 export const deleteInferenceJob = functions 

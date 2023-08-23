@@ -1,4 +1,9 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:intheloopapp/domains/generation_bloc/generation_bloc.dart';
+import 'package:intheloopapp/domains/navigation_bloc/navigation_bloc.dart';
+import 'package:intheloopapp/domains/navigation_bloc/tapped_route.dart';
 import 'package:intheloopapp/ui/record_label/components/claim_chip.dart';
 
 class SubscribedView extends StatelessWidget {
@@ -31,7 +36,25 @@ class SubscribedView extends StatelessWidget {
           ],
         ),
       ),
-      body: const Placeholder(),
+      body: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          const SizedBox(width: double.infinity),
+          const Text('avatars'),
+          const SizedBox(height: 16),
+          CupertinoButton.filled(
+            onPressed: () {
+              context.read<GenerationBloc>().add(
+                    const ResetGeneration(),
+                  );
+              context.push(
+                GenerateAvatarPage(),
+              );
+            },
+            child: const Text('generate avatar'),
+          ),
+        ],
+      ),
     );
   }
 }

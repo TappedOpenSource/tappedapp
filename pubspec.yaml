@@ -109,4 +109,6 @@ flutter_icons:
 flutter: 
   assets: 
     - assets/
+    - assets/cities/
+    - assets/aesthetics/
   uses-material-design: true

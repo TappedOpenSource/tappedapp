@@ -32,6 +32,8 @@ import 'package:intheloopapp/ui/onboarding/onboarding_view.dart';
 import 'package:intheloopapp/ui/opportunities/interested_view.dart';
 import 'package:intheloopapp/ui/profile/components/service_selection_view.dart';
 import 'package:intheloopapp/ui/profile/profile_view.dart';
+import 'package:intheloopapp/ui/record_label/generate_avatar_confirmation_view.dart';
+import 'package:intheloopapp/ui/record_label/generate_avatar_view.dart';
 import 'package:intheloopapp/ui/reviews/user_reviews_feed.dart';
 import 'package:intheloopapp/ui/search/search_view.dart';
 import 'package:intheloopapp/ui/services/service_view.dart';
@@ -454,4 +456,20 @@ final class VideoCallPage extends TappedRoute {
         );
 
   final Call call;
+}
+
+final class GenerateAvatarPage extends TappedRoute {
+  GenerateAvatarPage()
+      : super(
+          routeName: '/generate_avatar',
+          view: const GenerateAvatarView(),
+        );
+}
+
+final class GenerateAvatarConfirmationPage extends TappedRoute {
+  GenerateAvatarConfirmationPage()
+      : super(
+          routeName: '/generate_avatar_confirmation',
+          view: const GenerateAvatarConfirmationView(),
+        );
 }

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:intheloopapp/data/ai_repository.dart';
 import 'package:intheloopapp/data/audio_repository.dart';
 import 'package:intheloopapp/data/auth_repository.dart';
 import 'package:intheloopapp/data/database_repository.dart';
@@ -8,6 +9,7 @@ import 'package:intheloopapp/data/image_picker_repository.dart';
 import 'package:intheloopapp/data/notification_repository.dart';
 import 'package:intheloopapp/data/payment_repository.dart';
 import 'package:intheloopapp/data/places_repository.dart';
+import 'package:intheloopapp/data/prod/ai_impl.dart';
 import 'package:intheloopapp/data/prod/algolia_search_impl.dart';
 import 'package:intheloopapp/data/prod/audio_service_impl.dart';
 import 'package:intheloopapp/data/prod/cloud_messaging_impl.dart';
@@ -30,6 +32,7 @@ import 'package:intheloopapp/domains/bookings_bloc/bookings_bloc.dart';
 import 'package:intheloopapp/domains/confirm_email_bloc/confirm_email_bloc.dart';
 import 'package:intheloopapp/domains/down_for_maintenance_bloc/down_for_maintenance_bloc.dart';
 import 'package:intheloopapp/domains/dynamic_link_bloc/dynamic_link_bloc.dart';
+import 'package:intheloopapp/domains/generation_bloc/generation_bloc.dart';
 import 'package:intheloopapp/domains/loop_feed_list_bloc/loop_feed_list_bloc.dart';
 import 'package:intheloopapp/domains/navigation_bloc/navigation_bloc.dart';
 import 'package:intheloopapp/domains/onboarding_bloc/onboarding_bloc.dart';
@@ -81,6 +84,9 @@ List<RepositoryProvider<Object>> buildRepositories({
     ),
     RepositoryProvider<AudioRepository>(
       create: (_) => AudioServiceImpl()..initAudioService(),
+    ),
+    RepositoryProvider<AIRepository>(
+      create: (_) => AiImpl(),
     ),
   ];
 }
@@ -166,6 +172,13 @@ List<BlocProvider> buildBlocs({
         database: context.read<DatabaseRepository>(),
         searchRepository: context.read<SearchRepository>(),
         places: context.read<PlacesRepository>(),
+      ),
+    ),
+    BlocProvider<GenerationBloc>(
+      create: (context) => GenerationBloc(
+        authenticationBloc: context.read<AuthenticationBloc>(),
+        database: context.read<DatabaseRepository>(),
+        ai: context.read<AIRepository>(),
       ),
     ),
   ];
