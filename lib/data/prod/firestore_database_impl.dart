@@ -7,6 +7,7 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'package:georange/georange.dart';
 import 'package:intheloopapp/data/database_repository.dart';
 import 'package:intheloopapp/domains/models/activity.dart';
+import 'package:intheloopapp/domains/models/ai_model.dart';
 import 'package:intheloopapp/domains/models/badge.dart';
 import 'package:intheloopapp/domains/models/booking.dart';
 import 'package:intheloopapp/domains/models/comment.dart';
@@ -42,6 +43,7 @@ final _opportunitiesRef = _firestore.collection('opportunities');
 final _blockerRef = _firestore.collection('blockers');
 // final _blockeeRef = _firestore.collection('blockees');
 final _reviewsRef = _firestore.collection('reviews');
+final _aiModelsRef = _firestore.collection('aiModels');
 
 const verifiedBadgeId = '0aa46576-1fbe-4312-8b69-e2fef3269083';
 
@@ -2310,6 +2312,19 @@ class FirestoreDatabaseImpl extends DatabaseRepository {
       );
       yield* const Stream.empty();
     }
+  }
+
+  @override
+  Future<AiImageModel?> getUserImageModel(String userId) async {
+    final userImageModelsQuery =
+        await _aiModelsRef.doc(userId).collection('imageModels').get();
+
+    final userImageModels = userImageModelsQuery.docs
+        .map(AiModel.fromDoc)
+        .whereType<AiImageModel>()
+        .toList();
+
+    return userImageModels.first;
   }
 }
 

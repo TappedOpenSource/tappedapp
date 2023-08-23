@@ -1,21 +1,28 @@
 
 import { Leap } from "@leap-ai/sdk";
+import { LeapInferenceSchema } from "@leap-ai/sdk/dist/types/schemas/Inference";
 
 export const sd = {
   createInferenceJob: async ({
     leapApiKey,
     modelId,
     prompt,
+    negativePrompt,
   }: {
     leapApiKey: string;
     modelId: string;
     prompt: string;
+    negativePrompt: string;
 }): Promise<{ inferenceId: string }> => {
     const leap = new Leap(leapApiKey);
 
     const { data, error } = await leap.generate.createInferenceJob({
-      modelId: modelId,
-      prompt: prompt,
+      modelId,
+      prompt,
+      negativePrompt,
+      width: 512,
+      height: 512,
+      numberOfImages: 1,
     });
 
     if (data === null) {
@@ -31,7 +38,7 @@ export const sd = {
   }: {
     leapApiKey: string;
         inferenceId: string;
-}): Promise<{ imageUrls: string[] }> => {
+}): Promise<{ inferenceJob: LeapInferenceSchema }> => {
     const leap = new Leap(leapApiKey);
     const { data, error } = await leap.generate.getInferenceJob({
       inferenceId: inferenceId,
@@ -41,10 +48,7 @@ export const sd = {
       throw new Error(error);
     }
 
-    const images = data.images;
-    const imageUrls = images.map((image) => image.uri);
-
-    return { imageUrls };
+    return { inferenceJob: data };
   },
 
   deleteInferenceJob: async ({

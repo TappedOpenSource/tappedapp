@@ -8,9 +8,9 @@ class ClaimChip extends StatelessWidget {
 
   final String claim;
   Color get color => switch (claim) {
-        'basic' || 'starter' => Colors.red,
-        'pro' || 'premium' => Colors.green,
-        'business' => Colors.blue,
+        'basic' || 'starter' => Colors.green,
+        'pro' || 'premium' => Colors.blue,
+        'business' => Colors.purple,
         _ => Colors.grey,
       };
 

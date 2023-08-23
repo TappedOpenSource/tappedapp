@@ -1,4 +1,5 @@
 import 'package:intheloopapp/domains/models/activity.dart';
+import 'package:intheloopapp/domains/models/ai_model.dart';
 import 'package:intheloopapp/domains/models/badge.dart';
 import 'package:intheloopapp/domains/models/booking.dart';
 import 'package:intheloopapp/domains/models/comment.dart';
@@ -305,4 +306,6 @@ abstract class DatabaseRepository {
     String bookerId, {
     int limit = 20,
   });
+
+  Future<AiImageModel?> getUserImageModel(String userId);
 }
