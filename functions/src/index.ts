@@ -967,7 +967,21 @@ export const notifyFoundersOnAppRemoved = functions
 
     fcm.sendToDevice(devices, payload);
   });
+export const notifyFoundersOnLabelApplication = functions
+  .firestore
+  .document("labelApplications/{applicationId}")
+  .onCreate(async (snapshot) => {
+    const application = snapshot.data();
+    const devices = await _getFoundersDeviceTokens();
+    const payload = {
+      notification: {
+        title: "New Label Application \uD83D\uDE43",
+        body: `${application.name} just applied to be a label`,
+      }
+    };
 
+    fcm.sendToDevice(devices, payload);
+  });
 export const updateStreamUserOnUserUpdate = functions
   .runWith({ secrets: [ streamKey, streamSecret ] })
   .firestore
@@ -1896,7 +1910,7 @@ export const createAvatarInferenceJob = onCall(
         "with argument \"avatarStyle\".");
     }
 
-    const prompt = "8k portrait of @subject man in the style of jackson pollock's 'abstract expressionism,' featuring drips, splatters, and energetic brushwork.";
+    const prompt = `8k portrait of @subject in the style of ${avatarStyle}`;
     const negativePrompt = "(deformed iris, deformed pupils, semi-realistic, cgi, 3d, render, sketch, cartoon, drawing, anime:1.4), text, close up, cropped, out of frame, worst quality, low quality, jpeg artifacts, ugly, duplicate, morbid, mutilated, extra fingers, mutated hands, poorly drawn hands, poorly drawn face, mutation, deformed, blurry, dehydrated, bad anatomy, bad proportions, extra limbs, cloned face, disfigured, gross proportions, malformed limbs, missing arms, missing legs, extra arms, extra legs, fused fingers, too many fingers, long neck";
 
     const { inferenceId } = await sd.createInferenceJob({

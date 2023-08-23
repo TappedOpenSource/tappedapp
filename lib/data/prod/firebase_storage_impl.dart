@@ -1,6 +1,8 @@
 import 'dart:io';
 
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:firebase_storage/firebase_storage.dart';
+import 'package:flutter_cache_manager/flutter_cache_manager.dart';
 import 'package:flutter_image_compress/flutter_image_compress.dart';
 import 'package:intheloopapp/data/storage_repository.dart';
 import 'package:path/path.dart' as p;
@@ -53,8 +55,9 @@ class FirebaseStorageImpl extends StorageRepository {
 
     final uniqueAudioId = const Uuid().v4();
 
-    final uploadTask =
-        storageRef.child('$prefix/loop_$uniqueAudioId$extension').putFile(audioFile);
+    final uploadTask = storageRef
+        .child('$prefix/loop_$uniqueAudioId$extension')
+        .putFile(audioFile);
 
     final taskSnapshot = await uploadTask.whenComplete(() => null);
     final downloadUrl = await taskSnapshot.ref.getDownloadURL();
@@ -90,6 +93,28 @@ class FirebaseStorageImpl extends StorageRepository {
     final uploadTask = storageRef
         .child('$prefix/badge_$uniqueImageId$extension')
         .putFile(compressedImage);
+
+    final taskSnapshot = await uploadTask.whenComplete(() => null);
+    final downloadUrl = await taskSnapshot.ref.getDownloadURL();
+
+    return downloadUrl;
+  }
+
+  @override
+  Future<String> uploadAvatar({
+    required String userId,
+    required String originUrl,
+  }) async {
+    final extension = p.extension(originUrl);
+    final prefix = userId.isEmpty ? 'images/avatars' : 'images/avatars/$userId';
+
+    final uniqueImageId = const Uuid().v4();
+
+    final File imageData = await DefaultCacheManager().getSingleFile(originUrl);
+
+    final uploadTask = storageRef
+        .child('$prefix/avatar_$uniqueImageId$extension')
+        .putFile(imageData);
 
     final taskSnapshot = await uploadTask.whenComplete(() => null);
     final downloadUrl = await taskSnapshot.ref.getDownloadURL();
