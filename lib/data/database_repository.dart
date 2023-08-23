@@ -1,5 +1,6 @@
 import 'package:intheloopapp/domains/models/activity.dart';
 import 'package:intheloopapp/domains/models/ai_model.dart';
+import 'package:intheloopapp/domains/models/avatar.dart';
 import 'package:intheloopapp/domains/models/badge.dart';
 import 'package:intheloopapp/domains/models/booking.dart';
 import 'package:intheloopapp/domains/models/comment.dart';
@@ -308,4 +309,7 @@ abstract class DatabaseRepository {
   });
 
   Future<AiImageModel?> getUserImageModel(String userId);
+  Future<List<Avatar>> getUserAvatars(String userId);
+  Stream<Avatar> userAvatarsObserver(String userId);
+  Future<void> createAvatar(Avatar avatar);
 }

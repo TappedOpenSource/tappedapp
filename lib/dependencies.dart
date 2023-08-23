@@ -178,6 +178,7 @@ List<BlocProvider> buildBlocs({
       create: (context) => GenerationBloc(
         authenticationBloc: context.read<AuthenticationBloc>(),
         database: context.read<DatabaseRepository>(),
+        storage: context.read<StorageRepository>(),
         ai: context.read<AIRepository>(),
       ),
     ),
