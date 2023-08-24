@@ -24,6 +24,7 @@ class SubscribedView extends StatelessWidget {
     final database = context.read<DatabaseRepository>();
     return CurrentUserBuilder(
       builder: (context, currentUser) {
+        final isOutOfCredits = currentUser.aiCredits <= 0;
         return BlocProvider(
           create: (context) => SubscribedCubit(
             database: database,
@@ -52,6 +53,15 @@ class SubscribedView extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 const SizedBox(width: double.infinity),
+                Text(
+                  'credits: ${currentUser.aiCredits}',
+                  style: TextStyle(
+                    fontWeight: FontWeight.w700,
+                    fontSize: 24,
+                    color: isOutOfCredits ? Colors.red : Colors.white,
+                  ),
+                ),
+                const SizedBox(height: 16),
                 const AvatarsPreview(),
                 const SizedBox(height: 16),
                 SizedBox(
@@ -62,19 +72,21 @@ class SubscribedView extends StatelessWidget {
                       horizontal: 32,
                     ),
                     child: CupertinoButton.filled(
-                      onPressed: () {
-                        context.read<GenerationBloc>().add(
-                              const ResetGeneration(),
-                            );
-                        context.push(
-                          GenerateAvatarPage(),
-                        );
-                      },
-                      child: const Text(
+                      onPressed: isOutOfCredits
+                          ? null
+                          : () {
+                              context.read<GenerationBloc>().add(
+                                    const ResetGeneration(),
+                                  );
+                              context.push(
+                                GenerateAvatarPage(),
+                              );
+                            },
+                      child: Text(
                         'generate avatar',
                         style: TextStyle(
                           fontWeight: FontWeight.w700,
-                          color: Colors.white,
+                          color: isOutOfCredits ? Colors.grey : Colors.white,
                         ),
                       ),
                     ),

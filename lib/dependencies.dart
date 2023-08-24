@@ -176,7 +176,7 @@ List<BlocProvider> buildBlocs({
     ),
     BlocProvider<GenerationBloc>(
       create: (context) => GenerationBloc(
-        authenticationBloc: context.read<AuthenticationBloc>(),
+        onboardingBloc: context.read<OnboardingBloc>(),
         database: context.read<DatabaseRepository>(),
         storage: context.read<StorageRepository>(),
         ai: context.read<AIRepository>(),
