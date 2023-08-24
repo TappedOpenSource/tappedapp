@@ -117,13 +117,13 @@ class _AvatarsGeneratedViewState extends State<AvatarsGeneratedView> {
                         _shareLoading = true;
                       });
                       try {
-                        Future.wait(
-                          widget.imageUrls.map((url) async {
-                            final imageData =
-                                await DefaultCacheManager().getSingleFile(url);
-                            return XFile(imageData.path);
-                          }).toList(),
-                        ).then(Share.shareXFiles);
+                        DefaultCacheManager()
+                            .getSingleFile(widget.imageUrls[_focusedIndex])
+                            .then(
+                              (file) => Share.shareXFiles([
+                                XFile(file.path),
+                              ]),
+                            );
                       } catch (e, s) {
                         logger.error(
                           'sharing avatar failed',
