@@ -35,7 +35,6 @@ class UserModel extends Equatable {
     required this.overallRating,
     required this.deleted,
     required this.shadowBanned,
-    required this.accountType,
     required this.epkUrl,
     required this.youtubeChannelId,
     required this.tiktokHandle,
@@ -51,6 +50,7 @@ class UserModel extends Equatable {
     required this.emailNotificationsITLUpdates,
     required this.stripeConnectedAccountId,
     required this.stripeCustomerId,
+    required this.aiCredits,
   });
 
   factory UserModel.empty() => UserModel(
@@ -76,7 +76,6 @@ class UserModel extends Equatable {
         overallRating: const None<double>(),
         deleted: false,
         shadowBanned: false,
-        accountType: AccountType.free,
         epkUrl: const None<String>(),
         youtubeChannelId: null,
         tiktokHandle: null,
@@ -92,22 +91,13 @@ class UserModel extends Equatable {
         emailNotificationsITLUpdates: true,
         stripeConnectedAccountId: null,
         stripeCustomerId: null,
+        aiCredits: 0,
       );
 
   factory UserModel.fromJson(Map<String, dynamic> json) =>
       _$UserModelFromJson(json);
 
   factory UserModel.fromDoc(DocumentSnapshot<Map<String, dynamic>> doc) {
-    late final AccountType accountType;
-    try {
-      accountType = $enumDecode(
-        _$AccountTypeEnumMap,
-        doc.getOrElse('accountType', 'free'),
-      );
-    } catch (e) {
-      accountType = AccountType.free;
-    }
-
     final tmpTimestamp = doc.getOrElse(
       'timestamp',
       Timestamp.now(),
@@ -157,7 +147,6 @@ class UserModel extends Equatable {
       overallRating: overallRating,
       deleted: doc.getOrElse<bool>('deleted', false),
       shadowBanned: doc.getOrElse<bool>('shadowBanned', false),
-      accountType: accountType,
       epkUrl: Option.fromNullable(
         doc.getOrElse<String?>('epkUrl', null),
       ),
@@ -183,6 +172,7 @@ class UserModel extends Equatable {
         null,
       ),
       stripeCustomerId: doc.getOrElse<String?>('stripeCustomerId', null),
+      aiCredits: doc.getOrElse<int>('aiCredits', 0),
     );
   }
   final String id;
@@ -216,7 +206,6 @@ class UserModel extends Equatable {
 
   final bool deleted;
   final bool shadowBanned;
-  final AccountType accountType;
 
   @OptionalStringConverter()
   final Option<String> epkUrl;
@@ -238,6 +227,8 @@ class UserModel extends Equatable {
 
   final String? stripeConnectedAccountId;
   final String? stripeCustomerId;
+
+  final int aiCredits;
 
   @override
   List<Object?> get props => [
@@ -263,7 +254,6 @@ class UserModel extends Equatable {
         overallRating,
         deleted,
         shadowBanned,
-        accountType,
         epkUrl,
         youtubeChannelId,
         tiktokHandle,
@@ -279,15 +269,11 @@ class UserModel extends Equatable {
         emailNotificationsITLUpdates,
         stripeConnectedAccountId,
         stripeCustomerId,
+        aiCredits,
       ];
   bool get isEmpty => this == UserModel.empty();
   bool get isNotEmpty => this != UserModel.empty();
   Map<String, dynamic> toJson() => _$UserModelToJson(this);
-
-  bool get isVenue => accountType == AccountType.venue;
-  bool get isNotVenue => accountType != AccountType.venue;
-  bool get isFree => accountType == AccountType.free;
-  bool get isNotFree => accountType != AccountType.free;
 
   String get displayName => artistName.isEmpty ? username.username : artistName;
 
@@ -314,7 +300,6 @@ class UserModel extends Equatable {
     Option<double>? overallRating,
     bool? deleted,
     bool? shadowBanned,
-    AccountType? accountType,
     Option<String>? epkUrl,
     String? youtubeChannelId,
     String? tiktokHandle,
@@ -330,6 +315,7 @@ class UserModel extends Equatable {
     bool? emailNotificationsITLUpdates,
     String? stripeConnectedAccountId,
     String? stripeCustomerId,
+    int? aiCredits,
   }) {
     return UserModel(
       id: id ?? this.id,
@@ -354,7 +340,6 @@ class UserModel extends Equatable {
       overallRating: overallRating ?? this.overallRating,
       deleted: deleted ?? this.deleted,
       shadowBanned: shadowBanned ?? this.shadowBanned,
-      accountType: accountType ?? this.accountType,
       epkUrl: epkUrl ?? this.epkUrl,
       youtubeChannelId: youtubeChannelId ?? this.youtubeChannelId,
       tiktokHandle: tiktokHandle ?? this.tiktokHandle,
@@ -378,6 +363,7 @@ class UserModel extends Equatable {
       stripeConnectedAccountId:
           stripeConnectedAccountId ?? this.stripeConnectedAccountId,
       stripeCustomerId: stripeCustomerId ?? this.stripeCustomerId,
+      aiCredits: aiCredits ?? this.aiCredits,
     );
   }
 
@@ -405,7 +391,6 @@ class UserModel extends Equatable {
       // 'overallRating': overallRating.asNullable(),
       'deleted': deleted,
       'shadowBanned': shadowBanned,
-      'accountType': _$AccountTypeEnumMap[accountType],
       'epkUrl': epkUrl.asNullable(),
       'youtubeChannelId': youtubeChannelId,
       'tiktokHandle': tiktokHandle,
@@ -421,17 +406,7 @@ class UserModel extends Equatable {
       'emailNotificationsITLUpdates': emailNotificationsITLUpdates,
       'stripeConnectedAccountId': stripeConnectedAccountId,
       'stripeCustomerId': stripeCustomerId,
+      'aiCredits': aiCredits,
     };
   }
-}
-
-/// The different account types for a user
-enum AccountType {
-  /// Venue users
-  @JsonValue('venue')
-  venue,
-
-  /// Users with free accounts
-  @JsonValue('free')
-  free,
 }
