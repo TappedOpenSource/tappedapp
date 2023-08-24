@@ -3,18 +3,20 @@ import 'package:equatable/equatable.dart';
 import 'package:intheloopapp/data/ai_repository.dart';
 import 'package:intheloopapp/data/database_repository.dart';
 import 'package:intheloopapp/data/storage_repository.dart';
-import 'package:intheloopapp/domains/authentication_bloc/authentication_bloc.dart';
 import 'package:intheloopapp/domains/models/avatar.dart';
 import 'package:intheloopapp/domains/models/option.dart';
+import 'package:intheloopapp/domains/onboarding_bloc/onboarding_bloc.dart';
 import 'package:intheloopapp/utils/app_logger.dart';
 import 'package:uuid/uuid.dart';
 
 part 'generation_event.dart';
 part 'generation_state.dart';
 
+const avatarCreditCost = 5;
+
 class GenerationBloc extends Bloc<GenerationEvent, GenerationState> {
   GenerationBloc({
-    required this.authenticationBloc,
+    required this.onboardingBloc,
     required this.database,
     required this.storage,
     required this.ai,
@@ -34,11 +36,18 @@ class GenerationBloc extends Bloc<GenerationEvent, GenerationState> {
               'generating avatar for aesthetic: ${event.aesthetic}',
             );
             emit(state.copyWith(loading: true));
-            final currentUserId =
-                (authenticationBloc.state as Authenticated).currentAuthUser.uid;
+            final currentUser = (onboardingBloc.state as Onboarded).currentUser;
+
+            onboardingBloc.add(
+              UpdateOnboardedUser(
+                user: currentUser.copyWith(
+                  aiCredits: currentUser.aiCredits - avatarCreditCost,
+                ),
+              ),
+            );
 
             final userImageModel =
-                await database.getUserImageModel(currentUserId);
+                await database.getUserImageModel(currentUser.id);
             if (userImageModel == null) {
               logger.error('userImageModel is null');
               return;
@@ -54,7 +63,7 @@ class GenerationBloc extends Bloc<GenerationEvent, GenerationState> {
             await pollInferenceJobTillComplete(
               inferenceId: inferenceId,
               prompt: prompt,
-              currentUserId: currentUserId,
+              currentUserId: currentUser.id,
               emit: emit,
             );
           }(),
@@ -65,7 +74,7 @@ class GenerationBloc extends Bloc<GenerationEvent, GenerationState> {
     });
   }
 
-  final AuthenticationBloc authenticationBloc;
+  final OnboardingBloc onboardingBloc;
   final DatabaseRepository database;
   final AIRepository ai;
   final StorageRepository storage;
