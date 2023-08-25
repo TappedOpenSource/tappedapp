@@ -6,7 +6,7 @@ class UnsubscribedView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return const Center(
-      child: Text('no record label'),
+      child: Text('coming soon'),
     );
   }
 }

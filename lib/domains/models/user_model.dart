@@ -275,6 +275,8 @@ class UserModel extends Equatable {
   bool get isNotEmpty => this != UserModel.empty();
   Map<String, dynamic> toJson() => _$UserModelToJson(this);
 
+  bool get isOutOfCredits => aiCredits <= 0;
+
   String get displayName => artistName.isEmpty ? username.username : artistName;
 
   UserModel copyWith({

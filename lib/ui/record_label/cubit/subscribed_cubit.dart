@@ -13,7 +13,9 @@ class SubscribedCubit extends Cubit<SubscribedState> {
   SubscribedCubit({
     required this.database,
     required this.currentUser,
-  }) : super(const SubscribedState());
+  }) : super(
+          const SubscribedState(),
+        );
 
   final DatabaseRepository database;
   final UserModel currentUser;
@@ -37,9 +39,11 @@ class SubscribedCubit extends Cubit<SubscribedState> {
         );
       }
 
-      avatarListener = database.userAvatarsObserver(
+      avatarListener = database
+          .userAvatarsObserver(
         currentUser.id,
-      ).listen((Avatar avatar) {
+      )
+          .listen((Avatar avatar) {
         logger.debug('avatar { ${avatar.id} }');
         try {
           emit(
