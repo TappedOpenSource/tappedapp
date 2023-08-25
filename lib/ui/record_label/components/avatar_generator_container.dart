@@ -22,7 +22,7 @@ class AvatarGeneratorContainer extends StatelessWidget {
             return Column(
               children: [
                 const AvatarsPreview(),
-                const SizedBox(height: 16),
+                const SizedBox(height: 4),
                 SizedBox(
                   width: double.infinity,
                   child: Padding(
