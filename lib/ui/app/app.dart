@@ -7,6 +7,7 @@ import 'package:intheloopapp/data/stream_repository.dart';
 import 'package:intheloopapp/domains/activity_bloc/activity_bloc.dart';
 import 'package:intheloopapp/domains/authentication_bloc/authentication_bloc.dart';
 import 'package:intheloopapp/domains/bookings_bloc/bookings_bloc.dart';
+import 'package:intheloopapp/domains/deep_link_bloc/deep_link_bloc.dart';
 import 'package:intheloopapp/domains/down_for_maintenance_bloc/down_for_maintenance_bloc.dart';
 import 'package:intheloopapp/domains/onboarding_bloc/onboarding_bloc.dart';
 import 'package:intheloopapp/ui/app_theme_cubit.dart';
@@ -47,6 +48,7 @@ class App extends StatelessWidget {
         );
     context.read<StreamRepository>().connectUser(currentAuthUserId);
     context.read<ActivityBloc>().add(InitListenerEvent());
+    context.read<DeepLinkBloc>().add(MonitorDeepLinks());
     context.read<BookingsBloc>().add(FetchBookings());
 
     return BlocBuilder<OnboardingBloc, OnboardingState>(
