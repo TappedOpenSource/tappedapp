@@ -19,6 +19,10 @@ import 'package:intheloopapp/ui/create_loop/create_loop_view.dart';
 import 'package:intheloopapp/ui/create_service/create_service_view.dart';
 import 'package:intheloopapp/ui/follow_relationship/follow_relationship_view.dart';
 import 'package:intheloopapp/ui/forms/location_form/location_form_view.dart';
+import 'package:intheloopapp/ui/graphic_designer/avatars_generated_view.dart';
+import 'package:intheloopapp/ui/graphic_designer/generate_avatar_confirmation_view.dart';
+import 'package:intheloopapp/ui/graphic_designer/generate_avatar_view.dart';
+import 'package:intheloopapp/ui/graphic_designer/graphic_designer_view.dart';
 import 'package:intheloopapp/ui/likes/likes_view.dart';
 import 'package:intheloopapp/ui/login/forgot_password_view.dart';
 import 'package:intheloopapp/ui/login/login_view.dart';
@@ -32,14 +36,11 @@ import 'package:intheloopapp/ui/onboarding/onboarding_view.dart';
 import 'package:intheloopapp/ui/opportunities/interested_view.dart';
 import 'package:intheloopapp/ui/profile/components/service_selection_view.dart';
 import 'package:intheloopapp/ui/profile/profile_view.dart';
-import 'package:intheloopapp/ui/record_label/avatars_generated_view.dart';
-import 'package:intheloopapp/ui/record_label/generate_avatar_confirmation_view.dart';
-import 'package:intheloopapp/ui/record_label/generate_avatar_view.dart';
-import 'package:intheloopapp/ui/record_label/graphic_designer_view.dart';
 import 'package:intheloopapp/ui/reviews/user_reviews_feed.dart';
 import 'package:intheloopapp/ui/search/search_view.dart';
 import 'package:intheloopapp/ui/services/service_view.dart';
 import 'package:intheloopapp/ui/settings/settings_view.dart';
+import 'package:intheloopapp/ui/social_media_manager/social_media_manager_view.dart';
 import 'package:stream_chat_flutter/stream_chat_flutter.dart';
 // import 'package:stream_video_flutter/stream_video_flutter.dart';
 
@@ -497,5 +498,13 @@ final class GraphicDesignerPage extends TappedRoute {
       : super(
           routeName: '/graphic_designer',
           view: const GraphicDesignerView(),
+        );
+}
+
+final class SocialMediaManagerPage extends TappedRoute {
+  SocialMediaManagerPage()
+      : super(
+          routeName: '/social_media_manager',
+          view: const SocialMediaManagerView(),
         );
 }

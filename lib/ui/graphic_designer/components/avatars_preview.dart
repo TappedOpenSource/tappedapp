@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intheloopapp/domains/navigation_bloc/navigation_bloc.dart';
 import 'package:intheloopapp/domains/navigation_bloc/tapped_route.dart';
-import 'package:intheloopapp/ui/record_label/cubit/graphic_designer_cubit.dart';
+import 'package:intheloopapp/ui/graphic_designer/cubit/graphic_designer_cubit.dart';
 
 class AvatarsPreview extends StatelessWidget {
   const AvatarsPreview({super.key});
