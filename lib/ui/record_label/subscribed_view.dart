@@ -5,6 +5,7 @@ import 'package:intheloopapp/data/database_repository.dart';
 import 'package:intheloopapp/domains/generation_bloc/generation_bloc.dart';
 import 'package:intheloopapp/domains/navigation_bloc/navigation_bloc.dart';
 import 'package:intheloopapp/domains/navigation_bloc/tapped_route.dart';
+import 'package:intheloopapp/ui/record_label/components/album_name_generator_container.dart';
 import 'package:intheloopapp/ui/record_label/components/avatar_generator_container.dart';
 import 'package:intheloopapp/ui/record_label/components/avatars_preview.dart';
 import 'package:intheloopapp/ui/record_label/components/claim_chip.dart';
@@ -57,6 +58,18 @@ class SubscribedView extends StatelessWidget {
                 Credits(),
                 SizedBox(height: 16),
                 AvatarGeneratorContainer(),
+                SizedBox(height: 16),
+                Padding(
+                  padding: EdgeInsets.symmetric(
+                    vertical: 4,
+                    horizontal: 32,
+                  ),
+                  child: Divider(
+                    color: Colors.grey,
+                  ),
+                ),
+                // SizedBox(height: 16),
+                // AlbumNameGeneratorContainer(),
               ],
             ),
           ),
