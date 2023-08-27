@@ -7,6 +7,8 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'package:georange/georange.dart';
 import 'package:intheloopapp/data/database_repository.dart';
 import 'package:intheloopapp/domains/models/activity.dart';
+import 'package:intheloopapp/domains/models/ai_model.dart';
+import 'package:intheloopapp/domains/models/avatar.dart';
 import 'package:intheloopapp/domains/models/badge.dart';
 import 'package:intheloopapp/domains/models/booking.dart';
 import 'package:intheloopapp/domains/models/comment.dart';
@@ -42,6 +44,8 @@ final _opportunitiesRef = _firestore.collection('opportunities');
 final _blockerRef = _firestore.collection('blockers');
 // final _blockeeRef = _firestore.collection('blockees');
 final _reviewsRef = _firestore.collection('reviews');
+final _aiModelsRef = _firestore.collection('aiModels');
+final _avatarsRef = _firestore.collection('avatars');
 
 const verifiedBadgeId = '0aa46576-1fbe-4312-8b69-e2fef3269083';
 
@@ -2310,6 +2314,70 @@ class FirestoreDatabaseImpl extends DatabaseRepository {
       );
       yield* const Stream.empty();
     }
+  }
+
+  @override
+  Future<AiImageModel?> getUserImageModel(String userId) async {
+    final userImageModelsQuery =
+        await _aiModelsRef.doc(userId).collection('imageModels').get();
+
+    final userImageModels = userImageModelsQuery.docs
+        .map(AiModel.fromDoc)
+        .whereType<AiImageModel>()
+        .toList();
+
+    return userImageModels.first;
+  }
+
+  @override
+  Future<List<Avatar>> getUserAvatars(String userId) async {
+    final userAvatarsQuery =
+        await _avatarsRef.doc(userId).collection('userAvatars').get();
+
+    final userAvatars = userAvatarsQuery.docs
+        .map(Avatar.fromDoc)
+        .toList();
+
+    return userAvatars;
+  }
+
+  @override 
+  Stream<Avatar> userAvatarsObserver(String userId) async* {
+    final userAvatarsSnapshotObserver = _avatarsRef
+        .doc(userId)
+        .collection('userAvatars')
+        .orderBy('timestamp', descending: true)
+        .snapshots();
+
+    final userAvatarsObserver = userAvatarsSnapshotObserver
+        .map((event) {
+          return event.docChanges
+              .where(
+            (DocumentChange<Map<String, dynamic>> element) =>
+                element.type == DocumentChangeType.added,
+          )
+              .map((DocumentChange<Map<String, dynamic>> element) {
+            try {
+              return Avatar.fromDoc(element.doc);
+            } catch (e, s) {
+              logger.error('Error parsing avatar', error: e, stackTrace: s);
+              return null;
+            }
+          });
+        })
+        .flatMap(Stream.fromIterable)
+        .whereType<Avatar>();
+
+    yield* userAvatarsObserver;
+  }
+
+  @override 
+  Future<void> createAvatar(Avatar avatar) async {
+    await _avatarsRef
+      .doc(avatar.userId)
+      .collection('userAvatars')
+      .doc(avatar.id)
+      .set(avatar.toMap());
   }
 }
 
