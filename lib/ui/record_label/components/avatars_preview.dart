@@ -3,16 +3,15 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intheloopapp/domains/navigation_bloc/navigation_bloc.dart';
 import 'package:intheloopapp/domains/navigation_bloc/tapped_route.dart';
-import 'package:intheloopapp/ui/record_label/cubit/subscribed_cubit.dart';
+import 'package:intheloopapp/ui/record_label/cubit/graphic_designer_cubit.dart';
 
 class AvatarsPreview extends StatelessWidget {
   const AvatarsPreview({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<SubscribedCubit, SubscribedState>(
+    return BlocBuilder<GraphicDesignerCubit, GraphicDesignerState>(
       builder: (context, state) {
-
         if (state.avatars.isEmpty) {
           return const Center(
             child: Text('no avatars yet'),

@@ -5,7 +5,7 @@ import 'package:intheloopapp/domains/generation_bloc/generation_bloc.dart';
 import 'package:intheloopapp/domains/navigation_bloc/navigation_bloc.dart';
 import 'package:intheloopapp/domains/navigation_bloc/tapped_route.dart';
 import 'package:intheloopapp/ui/record_label/components/avatars_preview.dart';
-import 'package:intheloopapp/ui/record_label/cubit/subscribed_cubit.dart';
+import 'package:intheloopapp/ui/record_label/cubit/graphic_designer_cubit.dart';
 import 'package:intheloopapp/utils/current_user_builder.dart';
 
 class AvatarGeneratorContainer extends StatelessWidget {
@@ -17,7 +17,7 @@ class AvatarGeneratorContainer extends StatelessWidget {
   Widget build(BuildContext context) {
     return CurrentUserBuilder(
       builder: (context, currentUser) {
-        return BlocBuilder<SubscribedCubit, SubscribedState>(
+        return BlocBuilder<GraphicDesignerCubit, GraphicDesignerState>(
           builder: (context, state) {
             return Column(
               children: [

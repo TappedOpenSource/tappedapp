@@ -35,12 +35,13 @@ import 'package:intheloopapp/ui/profile/profile_view.dart';
 import 'package:intheloopapp/ui/record_label/avatars_generated_view.dart';
 import 'package:intheloopapp/ui/record_label/generate_avatar_confirmation_view.dart';
 import 'package:intheloopapp/ui/record_label/generate_avatar_view.dart';
+import 'package:intheloopapp/ui/record_label/graphic_designer_view.dart';
 import 'package:intheloopapp/ui/reviews/user_reviews_feed.dart';
 import 'package:intheloopapp/ui/search/search_view.dart';
 import 'package:intheloopapp/ui/services/service_view.dart';
 import 'package:intheloopapp/ui/settings/settings_view.dart';
 import 'package:stream_chat_flutter/stream_chat_flutter.dart';
-import 'package:stream_video_flutter/stream_video_flutter.dart';
+// import 'package:stream_video_flutter/stream_video_flutter.dart';
 
 sealed class TappedRoute {
   TappedRoute({
@@ -447,16 +448,19 @@ final class ServicePage extends TappedRoute {
 }
 
 final class VideoCallPage extends TappedRoute {
-  VideoCallPage({
-    required this.call,
-  }) : super(
-          routeName: '/video_call/${call.id}',
+  VideoCallPage(
+    // {
+    // required this.call,
+  // }
+  ) : super(
+          // routeName: '/video_call/${call.id}',
+          routeName: '/video_call',
           view: VideoCallView(
-            call: call,
+            // call: call,
           ),
         );
 
-  final Call call;
+  // final Call call;
 }
 
 final class GenerateAvatarPage extends TappedRoute {
@@ -486,4 +490,12 @@ final class AvatarsGeneratedPage extends TappedRoute {
         );
 
   final List<String> imageUrls;
+}
+
+final class GraphicDesignerPage extends TappedRoute {
+  GraphicDesignerPage()
+      : super(
+          routeName: '/graphic_designer',
+          view: const GraphicDesignerView(),
+        );
 }
