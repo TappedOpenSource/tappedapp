@@ -58,16 +58,16 @@ class SubscribedView extends StatelessWidget {
                 Credits(),
                 SizedBox(height: 16),
                 AvatarGeneratorContainer(),
-                SizedBox(height: 16),
-                Padding(
-                  padding: EdgeInsets.symmetric(
-                    vertical: 4,
-                    horizontal: 32,
-                  ),
-                  child: Divider(
-                    color: Colors.grey,
-                  ),
-                ),
+                // SizedBox(height: 16),
+                // Padding(
+                //   padding: EdgeInsets.symmetric(
+                //     vertical: 4,
+                //     horizontal: 32,
+                //   ),
+                //   child: Divider(
+                //     color: Colors.grey,
+                //   ),
+                // ),
                 // SizedBox(height: 16),
                 // AlbumNameGeneratorContainer(),
               ],
