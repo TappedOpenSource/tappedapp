@@ -1,14 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intheloopapp/domains/models/option.dart';
-import 'package:intheloopapp/domains/models/user_model.dart';
 import 'package:intheloopapp/domains/navigation_bloc/navigation_bloc.dart';
-import 'package:intheloopapp/domains/onboarding_bloc/onboarding_bloc.dart';
 import 'package:intheloopapp/ui/bookings/bookings_view.dart';
-import 'package:intheloopapp/ui/error/error_view.dart';
 import 'package:intheloopapp/ui/loops_feeds_list/loop_feeds_list_view.dart';
 import 'package:intheloopapp/ui/profile/profile_view.dart';
-import 'package:intheloopapp/ui/record_label/record_label_view.dart';
+import 'package:intheloopapp/ui/record_label/subscribed_view.dart';
 import 'package:intheloopapp/ui/search/search_view.dart';
 import 'package:intheloopapp/ui/shell/components/bottom_toolbar.dart';
 import 'package:intheloopapp/utils/current_user_builder.dart';
@@ -55,7 +52,7 @@ class _ShellViewState extends State<ShellView> {
                     searchFocusNode: searchFocusNode,
                   ),
                   const BookingsView(),
-                  const RecordLabelView(),
+                  const SubscribedView(),
                   ProfileView(
                     visitedUserId: currentUser.id,
                     visitedUser: Some(currentUser),

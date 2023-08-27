@@ -7,16 +7,20 @@ import 'package:intheloopapp/domains/models/avatar.dart';
 import 'package:intheloopapp/domains/models/user_model.dart';
 import 'package:intheloopapp/utils/app_logger.dart';
 
-part 'subscribed_state.dart';
+part 'graphic_designer_state.dart';
 
-class SubscribedCubit extends Cubit<SubscribedState> {
-  SubscribedCubit({
+class GraphicDesignerCubit extends Cubit<GraphicDesignerState> {
+  GraphicDesignerCubit({
     required this.database,
     required this.currentUser,
+    required this.claim,
   }) : super(
-          const SubscribedState(),
+          GraphicDesignerState(
+            claim: claim,
+          ),
         );
 
+  final String claim;
   final DatabaseRepository database;
   final UserModel currentUser;
   StreamSubscription<Avatar>? avatarListener;

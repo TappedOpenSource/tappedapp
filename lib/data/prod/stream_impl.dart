@@ -4,11 +4,11 @@ import 'package:intheloopapp/data/stream_repository.dart';
 import 'package:intheloopapp/domains/models/user_model.dart';
 import 'package:intheloopapp/utils/app_logger.dart';
 import 'package:stream_chat_flutter/stream_chat_flutter.dart';
-import 'package:stream_video_flutter/stream_video_flutter.dart' as video;
+// import 'package:stream_video_flutter/stream_video_flutter.dart' as video;
 
 final _functions = FirebaseFunctions.instance;
 final _fireStore = firestore.FirebaseFirestore.instance;
-final streamVideo = video.StreamVideo.instance;
+// final streamVideo = video.StreamVideo.instance;
 
 final _usersRef = _fireStore.collection('users');
 
@@ -29,12 +29,12 @@ class StreamImpl extends StreamRepository {
         await _client.disconnectUser();
         final token = await getToken();
         final user = User(id: userId);
-        final userInfo = video.UserInfo(
-          id: userId,
-          role: 'admin',
-          name: 'BLAHBLAH',
-        );
-        await streamVideo.connectUser(userInfo, token);
+        // final userInfo = video.UserInfo(
+        //   id: userId,
+        //   role: 'admin',
+        //   name: 'BLAHBLAH',
+        // );
+        // await streamVideo.connectUser(userInfo, token);
         await _client.connectUser(user, token);
         _connected = true;
       } catch (e) {
@@ -183,23 +183,23 @@ class StreamImpl extends StreamRepository {
     return channel;
   }
 
-  @override
-  video.Call makeVideoCall({
-    required List<String> participantIds,
-  }) {
-    final uuid = const Uuid().v4();
-    final call = streamVideo.makeCall(
-      type: 'default',
-      id: uuid,
-    );
+  // @override
+  // video.Call makeVideoCall({
+  //   required List<String> participantIds,
+  // }) {
+  //   final uuid = const Uuid().v4();
+  //   final call = streamVideo.makeCall(
+  //     type: 'default',
+  //     id: uuid,
+  //   );
 
-    return call;
-  }
+  //   return call;
+  // }
 
   @override
   Future<void> logout() async {
     logger.debug('logout of stream');
-    await streamVideo.disconnectUser();
+    // await streamVideo.disconnectUser();
     return _client.disconnectUser();
   }
 
