@@ -34,7 +34,6 @@ UserModel _$UserModelFromJson(Map<String, dynamic> json) => UserModel(
           .fromJson(json['overallRating'] as double?),
       deleted: json['deleted'] as bool,
       shadowBanned: json['shadowBanned'] as bool,
-      accountType: $enumDecode(_$AccountTypeEnumMap, json['accountType']),
       epkUrl:
           const OptionalStringConverter().fromJson(json['epkUrl'] as String?),
       youtubeChannelId: json['youtubeChannelId'] as String?,
@@ -54,6 +53,7 @@ UserModel _$UserModelFromJson(Map<String, dynamic> json) => UserModel(
           json['emailNotificationsITLUpdates'] as bool,
       stripeConnectedAccountId: json['stripeConnectedAccountId'] as String?,
       stripeCustomerId: json['stripeCustomerId'] as String?,
+      aiCredits: json['aiCredits'] as int,
     );
 
 Map<String, dynamic> _$UserModelToJson(UserModel instance) => <String, dynamic>{
@@ -80,7 +80,6 @@ Map<String, dynamic> _$UserModelToJson(UserModel instance) => <String, dynamic>{
           const OptionalDoubleConverter().toJson(instance.overallRating),
       'deleted': instance.deleted,
       'shadowBanned': instance.shadowBanned,
-      'accountType': _$AccountTypeEnumMap[instance.accountType]!,
       'epkUrl': const OptionalStringConverter().toJson(instance.epkUrl),
       'youtubeChannelId': instance.youtubeChannelId,
       'tiktokHandle': instance.tiktokHandle,
@@ -97,6 +96,7 @@ Map<String, dynamic> _$UserModelToJson(UserModel instance) => <String, dynamic>{
       'emailNotificationsITLUpdates': instance.emailNotificationsITLUpdates,
       'stripeConnectedAccountId': instance.stripeConnectedAccountId,
       'stripeCustomerId': instance.stripeCustomerId,
+      'aiCredits': instance.aiCredits,
     };
 
 const _$GenreEnumMap = {
@@ -118,9 +118,4 @@ const _$GenreEnumMap = {
   Genre.indie: 'indie',
   Genre.folk: 'folk',
   Genre.other: 'other',
-};
-
-const _$AccountTypeEnumMap = {
-  AccountType.venue: 'venue',
-  AccountType.free: 'free',
 };
