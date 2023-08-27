@@ -44,7 +44,10 @@ class SubscribedView extends StatelessWidget {
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        Credits(),
+                        Padding(
+                          padding: EdgeInsets.all(8),
+                          child: Credits(),
+                        ),
                       ],
                     ),
                   ),
@@ -56,9 +59,10 @@ class SubscribedView extends StatelessWidget {
                         icon: Icons.brush,
                         onTap: () => context.push(GraphicDesignerPage()),
                       ),
-                      const GridItem(
+                      GridItem(
                         title: 'Social Media Manager',
                         icon: Icons.people,
+                        onTap: () => context.push(SocialMediaManagerPage()),
                       ),
                       const GridItem(
                         title: 'Marketer',
