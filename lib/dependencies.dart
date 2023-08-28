@@ -4,7 +4,7 @@ import 'package:intheloopapp/data/ai_repository.dart';
 import 'package:intheloopapp/data/audio_repository.dart';
 import 'package:intheloopapp/data/auth_repository.dart';
 import 'package:intheloopapp/data/database_repository.dart';
-import 'package:intheloopapp/data/dynamic_link_repository.dart';
+import 'package:intheloopapp/data/deep_link_repository.dart';
 import 'package:intheloopapp/data/image_picker_repository.dart';
 import 'package:intheloopapp/data/notification_repository.dart';
 import 'package:intheloopapp/data/payment_repository.dart';
@@ -30,8 +30,8 @@ import 'package:intheloopapp/domains/activity_bloc/activity_bloc.dart';
 import 'package:intheloopapp/domains/authentication_bloc/authentication_bloc.dart';
 import 'package:intheloopapp/domains/bookings_bloc/bookings_bloc.dart';
 import 'package:intheloopapp/domains/confirm_email_bloc/confirm_email_bloc.dart';
+import 'package:intheloopapp/domains/deep_link_bloc/deep_link_bloc.dart';
 import 'package:intheloopapp/domains/down_for_maintenance_bloc/down_for_maintenance_bloc.dart';
-import 'package:intheloopapp/domains/dynamic_link_bloc/dynamic_link_bloc.dart';
 import 'package:intheloopapp/domains/generation_bloc/generation_bloc.dart';
 import 'package:intheloopapp/domains/loop_feed_list_bloc/loop_feed_list_bloc.dart';
 import 'package:intheloopapp/domains/navigation_bloc/navigation_bloc.dart';
@@ -64,7 +64,7 @@ List<RepositoryProvider<Object>> buildRepositories({
         apiKey: 'c89ebf37b46a3683405be3ed0901f217',
       ),
     ),
-    RepositoryProvider<DynamicLinkRepository>(
+    RepositoryProvider<DeepLinkRepository>(
       create: (_) => FirebaseDynamicLinkImpl(),
     ),
     RepositoryProvider<StreamRepository>(
@@ -120,13 +120,23 @@ List<BlocProvider> buildBlocs({
         databaseRepository: context.read<DatabaseRepository>(),
       ),
     ),
-    BlocProvider<DynamicLinkBloc>(
-      create: (context) => DynamicLinkBloc(
+    BlocProvider<DeepLinkBloc>(
+      //Depreciated
+      create: (context) => DeepLinkBloc(
         onboardingBloc: context.read<OnboardingBloc>(),
         navBloc: context.read<NavigationBloc>(),
-        dynamicLinkRepository: context.read<DynamicLinkRepository>(),
+        dynamicLinkRepository: context.read<DeepLinkRepository>(),
         databaseRepository: context.read<DatabaseRepository>(),
-      )..add(MonitorDynamicLinks()),
+      ),
+    ),
+    BlocProvider<DeepLinkBloc>(
+      //Depreciated CHANGE THIS ONE
+      create: (context) => DeepLinkBloc(
+        onboardingBloc: context.read<OnboardingBloc>(),
+        navBloc: context.read<NavigationBloc>(),
+        dynamicLinkRepository: context.read<DeepLinkRepository>(),
+        databaseRepository: context.read<DatabaseRepository>(),
+      ),
     ),
     BlocProvider<DownForMaintenanceBloc>(
       create: (context) => DownForMaintenanceBloc(

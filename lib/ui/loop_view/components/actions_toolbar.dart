@@ -1,7 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:intheloopapp/data/dynamic_link_repository.dart';
+import 'package:intheloopapp/data/deep_link_repository.dart';
 import 'package:intheloopapp/domains/models/loop.dart';
 import 'package:intheloopapp/domains/models/user_model.dart';
 import 'package:intheloopapp/ui/loop_view/components/follow_action_button.dart';
@@ -26,7 +26,7 @@ class ActionsToolbar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final dynamicLinkRepository =
-        RepositoryProvider.of<DynamicLinkRepository>(context);
+        RepositoryProvider.of<DeepLinkRepository>(context);
     return BlocBuilder<LoopViewCubit, LoopViewState>(
       builder: (context, state) {
         return SizedBox(
@@ -61,7 +61,7 @@ class ActionsToolbar extends StatelessWidget {
                 onTap: () async {
                   await context.read<LoopViewCubit>().incrementShares();
                   final link =
-                      await dynamicLinkRepository.getShareLoopDynamicLink(loop);
+                      await dynamicLinkRepository.getShareLoopDeepLink(loop);
                   await Share.share('Check out this loop on Tapped $link');
                 },
               ),

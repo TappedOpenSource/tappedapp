@@ -7,73 +7,70 @@ import 'package:intheloopapp/domains/models/loop.dart';
 import 'package:intheloopapp/domains/models/option.dart';
 import 'package:intheloopapp/domains/models/user_model.dart';
 import 'package:intheloopapp/utils/app_logger.dart';
+import 'package:uni_links/uni_links.dart';
 
-final _dynamicLinks = FirebaseDynamicLinks.instance;
+final _dynamic = FirebaseDynamicLinks.instance;
 final _analytics = FirebaseAnalytics.instance;
 
-/// The Firebase dynamic link implementation for Dynamic Link
-///
-/// aka Deep Links
-class FirebaseDynamicLinkImpl extends DeepLinkRepository {
+/// The unilink link implementation for Deep Link
+class UniLinkImpl extends DeepLinkRepository {
   @override
   Stream<DeepLinkRedirect> getDeepLinks() async* {
     // ignore: close_sinks
-    final dynamicLinkStream = StreamController<DeepLinkRedirect>();
+    final uniLinkStream = StreamController<DeepLinkRedirect>();
 
-    final data = await _dynamicLinks.getInitialLink();
+    final uri = await getInitialUri();
 
-    final redirect = _handleDeepLink(data);
+    final redirect = _handleDeepLink(uri);
     if (redirect != null) {
-      dynamicLinkStream.add(redirect);
+      uniLinkStream.add(redirect);
     }
 
-    _dynamicLinks.onLink.listen((PendingDynamicLinkData? dynamicLinkData) {
-      logger.debug('new dynamic link - ${dynamicLinkData?.link}');
-      final redirect = _handleDeepLink(dynamicLinkData);
+    uriLinkStream.listen((Uri? deepLink) {
+      logger.debug('new deep link - $deepLink');
+      final redirect = _handleDeepLink(deepLink);
 
       if (redirect != null) {
-        dynamicLinkStream.add(redirect);
+        uniLinkStream.add(redirect);
       }
     }).onError(
       (Object? error, StackTrace? stack) {
-        logger.error('dynamic link error', error: error, stackTrace: stack);
+        logger.error('uni link error', error: error, stackTrace: stack);
       },
     );
 
-    yield* dynamicLinkStream.stream;
+    yield* uniLinkStream.stream;
   }
 
-  DeepLinkRedirect? _handleDeepLink(
-    PendingDynamicLinkData? data,
-  ) {
-    final deepLink = data?.link;
-    if (deepLink == null) {
+  DeepLinkRedirect? _handleDeepLink(Uri? uri) {
+    if (uri == null) {
       return null;
     }
 
     // print('_handleDeepLink | deep link: $deepLink');
+    final path = uri.path;
 
-    switch (deepLink.path) {
+    switch (path) {
       case '/upload_loop':
         return const DeepLinkRedirect(
           type: DeepLinkType.createPost,
         );
       case '/user':
-        final linkParameters = deepLink.queryParameters;
+        final linkParameters = uri.queryParameters;
         final userId = linkParameters['id'] ?? '';
         return DeepLinkRedirect(
           type: DeepLinkType.shareProfile,
           id: userId,
         );
       case '/loop':
-        final linkParameters = deepLink.queryParameters;
+        final linkParameters = uri.queryParameters;
         final loopId = linkParameters['id'] ?? '';
         return DeepLinkRedirect(
           type: DeepLinkType.shareLoop,
           id: loopId,
         );
       case '/connect_payment':
-        final linkParameters = deepLink.queryParameters;
+        final linkParameters = uri.queryParameters;
         final accountId = linkParameters['account_id'];
 
         if (accountId == null) {
@@ -105,6 +102,7 @@ class FirebaseDynamicLinkImpl extends DeepLinkRepository {
             : Uri.parse('https://tapped.ai/images/tapped_reverse.png');
 
     final parameters = DynamicLinkParameters(
+      //TODO switch this function to one that makes sense
       uriPrefix: 'https://tappednetwork.page.link',
       link: Uri.parse(
         'https://tappednetwork.page.link/loop?id=${loop.id}',
@@ -123,7 +121,7 @@ class FirebaseDynamicLinkImpl extends DeepLinkRepository {
       ),
     );
 
-    final shortDynamicLink = await _dynamicLinks.buildShortLink(parameters);
+    final shortDynamicLink = await _dynamic.buildShortLink(parameters);
     final shortUrl = shortDynamicLink.shortUrl;
 
     await _analytics.logShare(
@@ -142,6 +140,7 @@ class FirebaseDynamicLinkImpl extends DeepLinkRepository {
         : Uri.parse(user.profilePicture!);
 
     final parameters = DynamicLinkParameters(
+      //TODO change this to the proper function
       uriPrefix: 'https://tappednetwork.page.link',
       link: Uri.parse('https://tappednetwork.page.link/user?id=${user.id}'),
       androidParameters: const AndroidParameters(
@@ -158,8 +157,8 @@ class FirebaseDynamicLinkImpl extends DeepLinkRepository {
       ),
     );
 
-    final shortDynamicLink = await _dynamicLinks.buildShortLink(parameters);
-    final shortUrl = shortDynamicLink.shortUrl;
+    final shortUniLink = await _dynamic.buildShortLink(parameters);
+    final shortUrl = shortUniLink.shortUrl;
 
     await _analytics.logShare(
       contentType: 'user',
