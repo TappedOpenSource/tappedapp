@@ -9,4 +9,8 @@ abstract class StorageRepository {
   Future<String> uploadAudioAttachment(File audioFile);
   Future<String> uploadImageAttachment(File imageFile);
   Future<String> uploadBadgeImage(String receiverId, File imageFile);
+  Future<String> uploadAvatar({
+    required String userId,
+    required String originUrl,
+  });
 }

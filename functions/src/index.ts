@@ -1,8 +1,9 @@
+import type { CallableRequest } from "firebase-functions/v2/https";
 /* eslint-disable import/no-unresolved */
 import { messaging, auth } from "firebase-admin";
 
 import * as functions from "firebase-functions";
-import { initializeApp } from "firebase-admin/app";
+import { getApp, getApps, initializeApp } from "firebase-admin/app";
 import {
   getFirestore,
   FieldValue,
@@ -15,8 +16,12 @@ import { StreamChat } from "stream-chat";
 import { defineSecret } from "firebase-functions/params";
 import { HttpsError } from "firebase-functions/v1/auth";
 import { onSchedule } from "firebase-functions/v2/scheduler";
+import { onCall, onRequest } from "firebase-functions/v2/https";
 
 import Stripe from "stripe";
+import { v4 as uuidv4 } from "uuid";
+import { Leap } from "@leap-ai/sdk";
+
 import {
   Booking,
   Loop,
@@ -36,10 +41,13 @@ import {
   // UserModel,
   // BookerReview,
 } from "./models";
+import { llm } from "./openai";
+import { sd } from "./leapai";
 
-import { v4 as uuidv4 } from "uuid";
+const app = getApps().length <= 0 ?
+  initializeApp() :
+  getApp();
 
-const app = initializeApp();
 
 const streamKey = defineSecret("STREAM_KEY");
 const streamSecret = defineSecret("STREAM_SECRET");
@@ -48,6 +56,8 @@ const streamSecret = defineSecret("STREAM_SECRET");
 // const stripePublishableKey = defineSecret("STRIPE_PUBLISHABLE_TEST_KEY");
 const stripeKey = defineSecret("STRIPE_KEY");
 const stripePublishableKey = defineSecret("STRIPE_PUBLISHABLE_KEY");
+const OPEN_AI_KEY = defineSecret("OPEN_AI_KEY");
+const LEAP_API_KEY = defineSecret("LEAP_API_KEY");
 
 const db = getFirestore(app);
 const storage = getStorage(app);
@@ -71,6 +81,7 @@ const servicesRef = db.collection("services");
 const mailRef = db.collection("mail");
 const queuedWritesRef = db.collection("queued_writes");
 // const reviewsRef = db.collection("reviews");
+const teamsRef = db.collection("teams");
 
 // const loopLikesSubcollection = "loopLikes";
 // const loopCommentsSubcollection = "loopComments";
@@ -83,11 +94,12 @@ const bookingBotUuid = "90dc0775-3a0d-4e92-8573-9c7aa6832d94";
 const verifiedBotUuid = "1c0d9380-873c-493a-a3f8-1283d5408673";
 const verifyUserBadgeId = "0aa46576-1fbe-4312-8b69-e2fef3269083";
 
+const WEBHOOK_URL = "https://us-central1-in-the-loop-306520.cloudfunctions.net/onTrainingJobCompletedWebhook";
+
 const founderIds = [
   "8yYVxpQ7cURSzNfBsaBGF7A7kkv2", // Johannes
   "n4zIL6bOuPTqRC3dtsl6gyEBPQl1", // Ilias
 ];
-
 
 const _getFileFromURL = (fileURL: string): string => {
   const fSlashes = fileURL.split("/");
@@ -124,6 +136,17 @@ const _authenticated = (context: functions.https.CallableContext) => {
   if (!context.auth) {
     // Throwing an HttpsError so that the client gets the error details.
     throw new functions.https.HttpsError(
+      "failed-precondition",
+      "The function must be called while authenticated."
+    );
+  }
+};
+
+const _authenticatedRequest = (request: CallableRequest) => {
+  // Checking that the user is authenticated.
+  if (!request.auth) {
+    // Throwing an HttpsError so that the client gets the error details.
+    throw new HttpsError(
       "failed-precondition",
       "The function must be called while authenticated."
     );
@@ -630,6 +653,98 @@ const _updateOverallRating = async ({
   });
 };
 
+const _createLeapSdModel = async ({ userId, teamId, referenceImages, leapApiKey }: {
+  userId: string,
+  teamId: string,
+  referenceImages: string[],
+  leapApiKey: string,
+}) => {
+  // create LeapAI job
+  const leap = new Leap(leapApiKey);
+  const { data: modelSchema, error: error1 } = await leap
+    .fineTune
+    .createModel({
+      title: `sd/${userId}/${teamId}`,
+      subjectKeyword: "@subject",
+      subjectType: "person",
+    });
+  if (modelSchema == null) {
+    functions.logger.error(error1);
+    await teamsRef
+      .doc(teamId)
+      .update({ sdModelStatus: "errored" });
+    return;
+  }
+
+  // Save model id to firestore
+  const model = await modelSchema;
+  const modelId = model.id;
+  await teamsRef
+    .doc(teamId)
+    .update({ sdModelId: modelId });
+
+  // upload images to leapai
+  const { data: sampleSchema, error: error2 } = await leap
+    .fineTune
+    .uploadImageSamples({
+      modelId,
+      images: referenceImages,
+    });
+  if (sampleSchema == null) {
+    functions.logger.error(error2);
+    await teamsRef
+      .doc(teamId)
+      .update({ sdModelStatus: "errored" });
+    return;
+  }
+
+  // queue training job
+  const samples = await sampleSchema;
+  functions.logger.debug(`samples: ${JSON.stringify(samples)}`);
+  const { data: versionSchema, error: error3 } = await leap
+    .fineTune
+    .queueTrainingJob({
+      modelId,
+      webhookUrl: WEBHOOK_URL,
+    });
+  if (versionSchema == null) {
+    functions.logger.error(error3);
+    await teamsRef
+      .doc(teamId)
+      .update({ sdModelStatus: "errored" });
+    return;
+  }
+  const version = await versionSchema;
+  functions.logger.debug(`version: ${JSON.stringify(version)}`);
+
+  // change team sfModel to "training"
+  await teamsRef
+    .doc(teamId)
+    .update({ sdModelStatus: "training" });
+};
+
+const _updateTeamStatus = async ({ modelId, state }: {
+  modelId: string,
+  state: string,
+}) => {
+  // update firestore if error
+  if (state !== "finished") {
+    functions.logger.error(`training job ${modelId} failed with state ${state}`);
+    return;
+  }
+
+  // update firestore if success
+  functions.logger.debug(`training job ${modelId} finished with state ${state}`);
+  const teamSnapshot = await teamsRef.where("sdModelId", "==", modelId).get();
+  if (teamSnapshot.docs.length <= 0) {
+    functions.logger.error(`no team found with sdModelId ${modelId}`);
+    return;
+  }
+
+  const team = teamSnapshot.docs[0];
+  await team.ref.update({ sdModelStatus: "ready" });
+};
+
 // --------------------------------------------------------
 export const sendToDevice = functions.firestore
   .document("activities/{activityId}")
@@ -852,7 +967,21 @@ export const notifyFoundersOnAppRemoved = functions
 
     fcm.sendToDevice(devices, payload);
   });
+export const notifyFoundersOnLabelApplication = functions
+  .firestore
+  .document("label_applications/{applicationId}")
+  .onCreate(async (snapshot) => {
+    const application = snapshot.data();
+    const devices = await _getFoundersDeviceTokens();
+    const payload = {
+      notification: {
+        title: "New Label Application \uD83D\uDE43",
+        body: `${application.name} just applied for the ai label`,
+      }
+    };
 
+    fcm.sendToDevice(devices, payload);
+  });
 export const updateStreamUserOnUserUpdate = functions
   .runWith({ secrets: [ streamKey, streamSecret ] })
   .firestore
@@ -1677,3 +1806,162 @@ export const sendSearchAppearances = onSchedule("0 0/3 * * *", async (event) => 
     count: randomNumber,
   });
 });
+
+export const onTeamCreated = functions
+  .runWith({ secrets: [ LEAP_API_KEY ] })
+  .firestore
+  .document("/team/{teamId}")
+  .onCreate(
+    async (data, context) => {
+      const { teamId } = context.params;
+      const team = data.data();
+      if (team == null) {
+        return;
+      }
+
+      const { userId, referenceImages } = team;
+      const leapApiKey = LEAP_API_KEY.value();
+
+      await _createLeapSdModel({ 
+        userId, 
+        teamId, 
+        referenceImages, 
+        leapApiKey,
+      });
+    });
+
+export const onTrainingJobCompletedWebhook = onRequest(
+  async (req) => {
+    // get model id from request
+    const { id, state } = req.body;
+    await _updateTeamStatus({ modelId: id, state });
+  });
+
+export const generateAlbumName = onCall(
+  {
+    secrets: [ OPEN_AI_KEY ],
+  },
+  async (request) => {
+    const oak = OPEN_AI_KEY.value();
+    const {
+      artistName,
+      artistGenres,
+      igFollowerCount,
+    } = request.data;
+
+    if (!(typeof artistName === "string") || artistName.length === 0) {
+      // Throwing an HttpsError so that the client gets the error details.
+      throw new HttpsError("invalid-argument", "The function must be called " +
+        "with argument \"artistName\".");
+    }
+
+    if (!Array.isArray(artistGenres) || artistGenres.length === 0) {
+      // Throwing an HttpsError so that the client gets the error details.
+      throw new HttpsError("invalid-argument", "The function must be called " +
+        "with argument \"artistGenres\".");
+    }
+
+    if (!(typeof igFollowerCount === "number") || artistName.length <= 0) {
+      // Throwing an HttpsError so that the client gets the error details.
+      throw new HttpsError("invalid-argument", "The function must be called " +
+        "with argument \"igFollowerCount\".");
+    }
+
+    // Checking that the user is authenticated.
+    if (!request.auth) {
+      // Throwing an HttpsError so that the client gets the error details.
+      throw new HttpsError("failed-precondition", "The function must be " +
+        "called while authenticated.");
+    }
+
+    const genres = artistGenres.join(", ");
+
+    const res = await llm.generateAlbumName({
+      artistName,
+      artistGenres: genres,
+      igFollowerCount,
+      apiKey: oak,
+    });
+    functions.logger.log({ res });
+
+    return res;
+  });
+
+export const createAvatarInferenceJob = onCall(
+  {
+    secrets: [ LEAP_API_KEY ]
+  },
+  async (request) => {
+    // // Checking that the user is authenticated.
+    _authenticatedRequest(request);
+
+    const leapApiKey = LEAP_API_KEY.value();
+    const { modelId, prompt } = request.data;
+
+    if (!(typeof modelId === "string") || modelId.length === 0) {
+      // Throwing an HttpsError so that the client gets the error details.
+      throw new HttpsError("invalid-argument", "The function must be called " +
+        "with argument \"modelId\".");
+    }
+
+    if (!(typeof prompt === "string") || prompt.length === 0) {
+      // Throwing an HttpsError so that the client gets the error details.
+      throw new HttpsError("invalid-argument", "The function must be called " +
+        "with argument \"avatarStyle\".");
+    }
+
+    // const prompt = `8k portrait of @subject in the style of ${avatarStyle}`;
+    const negativePrompt = "(deformed iris, deformed pupils, semi-realistic, cgi, 3d, render, sketch, cartoon, drawing, anime:1.4), text, close up, cropped, out of frame, worst quality, low quality, jpeg artifacts, ugly, duplicate, morbid, mutilated, extra fingers, mutated hands, poorly drawn hands, poorly drawn face, mutation, deformed, blurry, dehydrated, bad anatomy, bad proportions, extra limbs, cloned face, disfigured, gross proportions, malformed limbs, missing arms, missing legs, extra arms, extra legs, fused fingers, too many fingers, long neck";
+
+    const { inferenceId } = await sd.createInferenceJob({
+      leapApiKey,
+      modelId,
+      prompt,
+      negativePrompt,
+    });
+
+    return { inferenceId };
+  });
+
+export const getAvatarInferenceJob = onCall(
+  {
+    secrets: [ LEAP_API_KEY ],
+  },
+  async (request) => {
+    // Checking that the user is authenticated.
+    _authenticatedRequest(request);
+
+    const leapApiKey = LEAP_API_KEY.value();
+    const { inferenceId } = request.data;
+
+    if (!(typeof inferenceId === "string") || inferenceId.length === 0) {
+      // Throwing an HttpsError so that the client gets the error details.
+      throw new HttpsError("invalid-argument", "The function must be called " +
+        "with argument \"inferenceId\".");
+    }
+
+    const { inferenceJob } = await sd.getInferenceJob({
+      leapApiKey,
+      inferenceId,
+    });
+
+    return { inferenceJob };
+  });
+
+export const deleteInferenceJob = functions 
+  .runWith({ secrets: [ LEAP_API_KEY ] }) 
+  .https 
+  .onCall(
+    async (request) => {
+    // Checking that the user is authenticated.
+      if (!request.auth) {
+      // Throwing an HttpsError so that the client gets the error details.
+        throw new HttpsError("failed-precondition", "The function must be " +
+        "called while authenticated.");
+      }
+
+      const leapApiKey = LEAP_API_KEY.value();
+      const { inferenceId } = request.data;
+
+      await sd.deleteInferenceJob({ inferenceId, leapApiKey });
+    });
