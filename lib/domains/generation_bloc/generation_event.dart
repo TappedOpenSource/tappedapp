@@ -7,26 +7,26 @@ sealed class GenerationEvent extends Equatable {
   List<Object> get props => [];
 }
 
-class SelectAesthetic extends GenerationEvent {
-  const SelectAesthetic({
-    required this.aesthetic,
+class SelectPrompt extends GenerationEvent {
+  const SelectPrompt({
+    required this.prompt,
   });
 
-  final String aesthetic;
+  final String prompt;
 
   @override
-  List<Object> get props => [aesthetic];
+  List<Object> get props => [prompt];
 }
 
 class GenerateAvatar extends GenerationEvent {
   const GenerateAvatar({
-    required this.aesthetic,
+    required this.prompt,
   });
 
-  final String aesthetic;
+  final String prompt;
 
   @override
-  List<Object> get props => [aesthetic];
+  List<Object> get props => [prompt];
 }
 
 class ResetGeneration extends GenerationEvent {

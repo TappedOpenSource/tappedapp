@@ -1896,7 +1896,7 @@ export const createAvatarInferenceJob = onCall(
     _authenticatedRequest(request);
 
     const leapApiKey = LEAP_API_KEY.value();
-    const { modelId, avatarStyle } = request.data;
+    const { modelId, prompt } = request.data;
 
     if (!(typeof modelId === "string") || modelId.length === 0) {
       // Throwing an HttpsError so that the client gets the error details.
@@ -1904,13 +1904,13 @@ export const createAvatarInferenceJob = onCall(
         "with argument \"modelId\".");
     }
 
-    if (!(typeof avatarStyle === "string") || avatarStyle.length === 0) {
+    if (!(typeof prompt === "string") || prompt.length === 0) {
       // Throwing an HttpsError so that the client gets the error details.
       throw new HttpsError("invalid-argument", "The function must be called " +
         "with argument \"avatarStyle\".");
     }
 
-    const prompt = `8k portrait of @subject in the style of ${avatarStyle}`;
+    // const prompt = `8k portrait of @subject in the style of ${avatarStyle}`;
     const negativePrompt = "(deformed iris, deformed pupils, semi-realistic, cgi, 3d, render, sketch, cartoon, drawing, anime:1.4), text, close up, cropped, out of frame, worst quality, low quality, jpeg artifacts, ugly, duplicate, morbid, mutilated, extra fingers, mutated hands, poorly drawn hands, poorly drawn face, mutation, deformed, blurry, dehydrated, bad anatomy, bad proportions, extra limbs, cloned face, disfigured, gross proportions, malformed limbs, missing arms, missing legs, extra arms, extra legs, fused fingers, too many fingers, long neck";
 
     const { inferenceId } = await sd.createInferenceJob({
@@ -1920,7 +1920,7 @@ export const createAvatarInferenceJob = onCall(
       negativePrompt,
     });
 
-    return { inferenceId, prompt };
+    return { inferenceId };
   });
 
 export const getAvatarInferenceJob = onCall(

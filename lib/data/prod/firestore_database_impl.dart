@@ -2317,7 +2317,7 @@ class FirestoreDatabaseImpl extends DatabaseRepository {
   }
 
   @override
-  Future<AiImageModel?> getUserImageModel(String userId) async {
+  Future<Option<AiImageModel>> getUserImageModel(String userId) async {
     final userImageModelsQuery =
         await _aiModelsRef
           .doc(userId)
@@ -2330,7 +2330,7 @@ class FirestoreDatabaseImpl extends DatabaseRepository {
         .whereType<AiImageModel>()
         .toList();
 
-    return userImageModels.first;
+    return Option.fromNullable(userImageModels.first);
   }
 
   @override

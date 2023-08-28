@@ -10,19 +10,18 @@ class AiImpl implements AIRepository {
   @override
   Future<(String, String)> createAvatarInferenceJob({
     required String modelId,
-    required String aesthetic,
+    required String prompt,
   }) async {
     final callable = _functions.httpsCallable('createAvatarInferenceJob');
 
     final results = await callable<Map<String, dynamic>>({
       'modelId': modelId,
-      'avatarStyle': aesthetic,
+      'prompt': prompt,
     });
     final data = results.data;
     final inferenceId = data['inferenceId'] as String?;
-    final prompt = data['prompt'] as String?;
 
-    if (inferenceId == null || prompt == null) {
+    if (inferenceId == null) {
       throw Exception('inferenceId or prompt is null');
     }
 

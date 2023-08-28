@@ -21,19 +21,19 @@ class GenerationBloc extends Bloc<GenerationEvent, GenerationState> {
     required this.storage,
     required this.ai,
   }) : super(const GenerationState()) {
-    on<SelectAesthetic>((event, emit) {
+    on<SelectPrompt>((event, emit) {
       emit(
         state.copyWith(
-          selectedAesthetic: Some(event.aesthetic),
+          selectedPrompt: Some(event.prompt),
         ),
       );
     });
     on<GenerateAvatar>((event, emit) async {
-      return switch (state.selectedAesthetic) {
+      return switch (state.selectedPrompt) {
         None() => null,
         Some(:final value) => () async {
             logger.info(
-              'generating avatar for aesthetic: ${event.aesthetic}',
+              'generating avatar for aesthetic: ${event.prompt}',
             );
             emit(state.copyWith(loading: true));
             final currentUser = (onboardingBloc.state as Onboarded).currentUser;
@@ -48,15 +48,16 @@ class GenerationBloc extends Bloc<GenerationEvent, GenerationState> {
 
             final userImageModel =
                 await database.getUserImageModel(currentUser.id);
-            if (userImageModel == null) {
+
+            if (userImageModel.isNone) {
               logger.error('userImageModel is null');
               return;
             }
 
             // create inference job
             final (inferenceId, prompt) = await ai.createAvatarInferenceJob(
-              modelId: userImageModel.id,
-              aesthetic: value,
+              modelId: userImageModel.unwrap.id,
+              prompt: value,
             );
             logger.debug('inferenceId: $inferenceId, prompt: $prompt');
 
