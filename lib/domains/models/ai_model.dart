@@ -7,6 +7,7 @@ sealed class AiModel {
     required this.id,
     required this.userId,
     required this.type,
+    required this.timestamp,
   });
 
   factory AiModel.fromDoc(DocumentSnapshot<Map<String, dynamic>> doc) {
@@ -16,11 +17,17 @@ sealed class AiModel {
         ) ??
         AiModelType.image;
 
+      final tmpTimestamp = doc.getOrElse(
+        'timestamp',
+        Timestamp.now(),
+      );
+
     return switch (type) {
       AiModelType.image => AiImageModel(
           id: doc.id,
           userId: doc.get('userId') as String,
           type: AiModelType.image,
+          timestamp: tmpTimestamp.toDate(),
         ),
       AiModelType.text => throw UnimplementedError(),
     };
@@ -29,6 +36,7 @@ sealed class AiModel {
   final String id;
   final String userId;
   final AiModelType type;
+  final DateTime timestamp;
 
   Map<String, dynamic> toMap() {
     return {
@@ -44,6 +52,7 @@ class AiImageModel extends AiModel {
     required super.id,
     required super.userId,
     required super.type,
+    required super.timestamp,
   });
 }
 

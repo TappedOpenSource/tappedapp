@@ -44,8 +44,28 @@ class GenerateAvatarView extends StatelessWidget {
                   ),
                   AestheticCard(
                     name:
-                        "Retro comic style artwork, highly detailed spiderman, comic book cover, symmetrical, vibrant",
+                        'Retro comic style artwork, highly detailed spiderman, comic book cover, symmetrical, vibrant',
                     imagePath: 'assets/aesthetics/four.png',
+                  ),
+                  AestheticCard(
+                    name:
+                        'an anime portrait, high resolution, sharp features, 32k, super-resolution, sharp focus, depth of field, bokeh, official media, trending on pixiv, oil painting, yoji shinakawa, studio gainax, y2k design, anime, dramatic lighting',
+                    imagePath: 'assets/aesthetics/five.png',
+                  ),
+                  AestheticCard(
+                    name:
+                        'ken from barbie on a beach, 8k high-fashion shot, blonde hair, wearing pink, vibrant backdrop of malibu beach, styled in a chic and tailored pastel suit without a tie, iconic windswept hair, flawless dramatic lighting with soft shadows, captured with a 100mm leica summilux f/1.4 lens, showcasing intricate details and capturing the essence of modern masculinity and style',
+                    imagePath: 'assets/aesthetics/six.png',
+                  ),
+                  AestheticCard(
+                    name:
+                        '8k ultra realistic animation, a young boy, as disney prince pixar style pixar 3d cartoon style gorgeous tangled beautiful animation character art',
+                    imagePath: 'assets/aesthetics/seven.png',
+                  ),
+                  AestheticCard(
+                    name:
+                      '8k close up linkedin profile picture, professional jack suite, professional headshots, photo-realistic, 4k, high-resolution image, workplace settings, upper body, modern outfit, professional suit, businessman, blurred background, glass building, office window',
+                    imagePath: 'assets/aesthetics/eight.png',
                   ),
                 ],
               ),

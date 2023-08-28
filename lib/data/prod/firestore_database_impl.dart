@@ -2319,7 +2319,11 @@ class FirestoreDatabaseImpl extends DatabaseRepository {
   @override
   Future<AiImageModel?> getUserImageModel(String userId) async {
     final userImageModelsQuery =
-        await _aiModelsRef.doc(userId).collection('imageModels').get();
+        await _aiModelsRef
+          .doc(userId)
+          .collection('imageModels')
+          .orderBy('timestamp', descending: true)
+          .get();
 
     final userImageModels = userImageModelsQuery.docs
         .map(AiModel.fromDoc)
