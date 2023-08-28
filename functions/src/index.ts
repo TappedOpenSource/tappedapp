@@ -969,7 +969,7 @@ export const notifyFoundersOnAppRemoved = functions
   });
 export const notifyFoundersOnLabelApplication = functions
   .firestore
-  .document("labelApplications/{applicationId}")
+  .document("label_applications/{applicationId}")
   .onCreate(async (snapshot) => {
     const application = snapshot.data();
     const devices = await _getFoundersDeviceTokens();
