@@ -976,7 +976,7 @@ export const notifyFoundersOnLabelApplication = functions
     const payload = {
       notification: {
         title: "New Label Application \uD83D\uDE43",
-        body: `${application.name} just applied to be a label`,
+        body: `${application.name} just applied for the ai label`,
       }
     };
 
