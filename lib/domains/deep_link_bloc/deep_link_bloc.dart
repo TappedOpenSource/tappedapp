@@ -19,10 +19,10 @@ class DeepLinkBloc extends Bloc<DeepLinkEvent, DeepLinkState> {
     required this.databaseRepository,
   }) : super(DeepLinkInitial()) {
     on<MonitorDeepLinks>((event, emit) {
-      logger.debug('monitoring dynamic links');
+      logger.debug('monitoring deep links');
       dynamicLinkRepository.getDeepLinks().listen((event) {
         try {
-          logger.debug('new dynamic link');
+          logger.debug('new deep link ${event.type}');
           switch (event.type) {
             case DeepLinkType.createPost:
               navBloc.push(
@@ -82,7 +82,7 @@ class DeepLinkBloc extends Bloc<DeepLinkEvent, DeepLinkState> {
               }
           }
         } catch (e, s) {
-          logger.error('dynamic link error', error: e, stackTrace: s);
+          logger.error('deep link error', error: e, stackTrace: s);
         }
       });
 
