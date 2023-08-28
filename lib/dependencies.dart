@@ -127,7 +127,7 @@ List<BlocProvider> buildBlocs({
         navBloc: context.read<NavigationBloc>(),
         dynamicLinkRepository: context.read<DeepLinkRepository>(),
         databaseRepository: context.read<DatabaseRepository>(),
-      )..add(MonitorDeepLinks()),
+      ),
     ),
     BlocProvider<DeepLinkBloc>(
       //Depreciated CHANGE THIS ONE
