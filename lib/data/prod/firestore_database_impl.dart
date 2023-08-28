@@ -2318,12 +2318,11 @@ class FirestoreDatabaseImpl extends DatabaseRepository {
 
   @override
   Future<Option<AiImageModel>> getUserImageModel(String userId) async {
-    final userImageModelsQuery =
-        await _aiModelsRef
-          .doc(userId)
-          .collection('imageModels')
-          .orderBy('timestamp', descending: true)
-          .get();
+    final userImageModelsQuery = await _aiModelsRef
+        .doc(userId)
+        .collection('imageModels')
+        .orderBy('timestamp', descending: true)
+        .get();
 
     final userImageModels = userImageModelsQuery.docs
         .map(AiModel.fromDoc)
@@ -2338,14 +2337,12 @@ class FirestoreDatabaseImpl extends DatabaseRepository {
     final userAvatarsQuery =
         await _avatarsRef.doc(userId).collection('userAvatars').get();
 
-    final userAvatars = userAvatarsQuery.docs
-        .map(Avatar.fromDoc)
-        .toList();
+    final userAvatars = userAvatarsQuery.docs.map(Avatar.fromDoc).toList();
 
     return userAvatars;
   }
 
-  @override 
+  @override
   Stream<Avatar> userAvatarsObserver(String userId) async* {
     final userAvatarsSnapshotObserver = _avatarsRef
         .doc(userId)
@@ -2375,13 +2372,21 @@ class FirestoreDatabaseImpl extends DatabaseRepository {
     yield* userAvatarsObserver;
   }
 
-  @override 
+  @override
   Future<void> createAvatar(Avatar avatar) async {
+    await _analytics.logEvent(
+      name: 'create_avatar',
+      parameters: {
+        'user_id': avatar.userId,
+        'avatar_id': avatar.id,
+      },
+    );
+
     await _avatarsRef
-      .doc(avatar.userId)
-      .collection('userAvatars')
-      .doc(avatar.id)
-      .set(avatar.toMap());
+        .doc(avatar.userId)
+        .collection('userAvatars')
+        .doc(avatar.id)
+        .set(avatar.toMap());
   }
 }
 
