@@ -1,12 +1,12 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:intheloopapp/data/stream_repository.dart';
-import 'package:intheloopapp/domains/navigation_bloc/navigation_bloc.dart';
-import 'package:intheloopapp/domains/navigation_bloc/tapped_route.dart';
+// import 'package:flutter_bloc/flutter_bloc.dart';
+// import 'package:intheloopapp/data/stream_repository.dart';
+// import 'package:intheloopapp/domains/navigation_bloc/navigation_bloc.dart';
+// import 'package:intheloopapp/domains/navigation_bloc/tapped_route.dart';
 import 'package:intheloopapp/ui/messaging/channel_name.dart';
 import 'package:stream_chat_flutter/stream_chat_flutter.dart' hide ChannelName;
-import 'package:stream_video_flutter/stream_video_flutter.dart';
+// import 'package:stream_video_flutter/stream_video_flutter.dart';
 
 /// ![screenshot](https://raw.githubusercontent.com/GetStream/stream-chat-flutter/master/screenshots/channel_header.png)
 /// ![screenshot](https://raw.githubusercontent.com/GetStream/stream-chat-flutter/master/screenshots/channel_header_paint.png)
@@ -102,38 +102,38 @@ class ChannelHeader extends StatelessWidget implements PreferredSizeWidget {
   /// By default it shows the [StreamChannelAvatar]
   final List<Widget>? actions;
 
-  Call _startCall(BuildContext context) {
-    final currentUser = StreamChat.of(context).currentUser;
-    final channel = StreamChannel.of(context).channel;
-    final stream = context.read<StreamRepository>();
+  // Call _startCall(BuildContext context) {
+  //   final currentUser = StreamChat.of(context).currentUser;
+  //   final channel = StreamChannel.of(context).channel;
+  //   final stream = context.read<StreamRepository>();
 
-    final call = stream.makeVideoCall(
-      participantIds: channel.state!.members
-          .where(
-            (e) => e.userId != currentUser?.id,
-          )
-          .map((e) => e.userId)
-          .whereType<String>()
-          .toList(),
-    );
+  //   final call = stream.makeVideoCall(
+  //     participantIds: channel.state!.members
+  //         .where(
+  //           (e) => e.userId != currentUser?.id,
+  //         )
+  //         .map((e) => e.userId)
+  //         .whereType<String>()
+  //         .toList(),
+  //   );
 
-    channel.sendMessage(
-      Message(
-        attachments: [
-          Attachment(
-            type: 'custom',
-            authorName: currentUser?.name ?? '',
-            uploadState: const UploadState.success(),
-            extraData: {
-              'callCid': call.callCid,
-            },
-          ),
-        ],
-      ),
-    );
+  //   channel.sendMessage(
+  //     Message(
+  //       attachments: [
+  //         Attachment(
+  //           type: 'custom',
+  //           authorName: currentUser?.name ?? '',
+  //           uploadState: const UploadState.success(),
+  //           extraData: {
+  //             'callCid': call.callCid,
+  //           },
+  //         ),
+  //       ],
+  //     ),
+  //   );
 
-    return call;
-  }
+  //   return call;
+  // }
 
   @override
   Widget build(BuildContext context) {

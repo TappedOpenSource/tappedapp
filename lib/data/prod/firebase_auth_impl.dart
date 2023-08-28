@@ -65,6 +65,18 @@ class FirebaseAuthImpl extends AuthRepository {
   }
 
   @override
+  Future<Option<String>> getCustomClaim() async {
+    final user = _auth.currentUser;
+    if (user != null) {
+      final idTokenResult = await user.getIdTokenResult();
+      final claim = idTokenResult.claims?['stripeRole'] as String?;
+      return Option.fromNullable(claim);
+    }
+
+    return const None();
+  }
+
+  @override
   Future<String?> signInWithCredentials(
     String email,
     String password,

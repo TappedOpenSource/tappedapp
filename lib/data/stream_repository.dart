@@ -1,6 +1,6 @@
 import 'package:intheloopapp/domains/models/user_model.dart';
 import 'package:stream_chat_flutter/stream_chat_flutter.dart';
-import 'package:stream_video_flutter/stream_video_flutter.dart';
+// import 'package:stream_video_flutter/stream_video_flutter.dart';
 
 /// [StreamRepository] is an interface defining what methods are
 /// needed to get instant messaging or DMs to work
@@ -33,9 +33,9 @@ abstract class StreamRepository {
   /// and [friendId]
   Future<Channel> createSimpleChat(String? friendId);
 
-  Call makeVideoCall({
-    required List<String> participantIds,
-  });
+  // Call makeVideoCall({
+  //   required List<String> participantIds,
+  // });
 
   /// Disconnects the user from the Chat DM
   Future<void> logout();

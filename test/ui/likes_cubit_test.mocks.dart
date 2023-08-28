@@ -7,6 +7,8 @@ import 'dart:async' as _i4;
 
 import 'package:intheloopapp/data/database_repository.dart' as _i3;
 import 'package:intheloopapp/domains/models/activity.dart' as _i9;
+import 'package:intheloopapp/domains/models/ai_model.dart' as _i14;
+import 'package:intheloopapp/domains/models/avatar.dart' as _i15;
 import 'package:intheloopapp/domains/models/badge.dart' as _i10;
 import 'package:intheloopapp/domains/models/booking.dart' as _i11;
 import 'package:intheloopapp/domains/models/comment.dart' as _i2;
@@ -613,6 +615,21 @@ class MockDatabaseRepository extends _i1.Mock
         returnValue: _i4.Future<List<_i5.UserModel>>.value(<_i5.UserModel>[]),
       ) as _i4.Future<List<_i5.UserModel>>);
   @override
+  _i4.Future<List<_i5.UserModel>> getCommonFollowers(
+    String? currentUserID,
+    String? observedUserId,
+  ) =>
+      (super.noSuchMethod(
+        Invocation.method(
+          #getCommonFollowers,
+          [
+            currentUserID,
+            observedUserId,
+          ],
+        ),
+        returnValue: _i4.Future<List<_i5.UserModel>>.value(<_i5.UserModel>[]),
+      ) as _i4.Future<List<_i5.UserModel>>);
+  @override
   _i4.Future<List<_i9.Activity>> getActivities(
     String? userId, {
     int? limit = 100,
@@ -1211,4 +1228,40 @@ class MockDatabaseRepository extends _i1.Mock
         ),
         returnValue: _i4.Stream<_i13.BookerReview>.empty(),
       ) as _i4.Stream<_i13.BookerReview>);
+  @override
+  _i4.Future<_i14.AiImageModel?> getUserImageModel(String? userId) =>
+      (super.noSuchMethod(
+        Invocation.method(
+          #getUserImageModel,
+          [userId],
+        ),
+        returnValue: _i4.Future<_i14.AiImageModel?>.value(),
+      ) as _i4.Future<_i14.AiImageModel?>);
+  @override
+  _i4.Future<List<_i15.Avatar>> getUserAvatars(String? userId) =>
+      (super.noSuchMethod(
+        Invocation.method(
+          #getUserAvatars,
+          [userId],
+        ),
+        returnValue: _i4.Future<List<_i15.Avatar>>.value(<_i15.Avatar>[]),
+      ) as _i4.Future<List<_i15.Avatar>>);
+  @override
+  _i4.Stream<_i15.Avatar> userAvatarsObserver(String? userId) =>
+      (super.noSuchMethod(
+        Invocation.method(
+          #userAvatarsObserver,
+          [userId],
+        ),
+        returnValue: _i4.Stream<_i15.Avatar>.empty(),
+      ) as _i4.Stream<_i15.Avatar>);
+  @override
+  _i4.Future<void> createAvatar(_i15.Avatar? avatar) => (super.noSuchMethod(
+        Invocation.method(
+          #createAvatar,
+          [avatar],
+        ),
+        returnValue: _i4.Future<void>.value(),
+        returnValueForMissingStub: _i4.Future<void>.value(),
+      ) as _i4.Future<void>);
 }
