@@ -2,11 +2,14 @@ import 'dart:math';
 
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
+import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:intheloopapp/domains/models/option.dart';
 import 'package:intheloopapp/domains/models/user_model.dart';
 import 'package:intheloopapp/domains/onboarding_bloc/onboarding_bloc.dart';
 
 part 'social_media_manager_state.dart';
+
+final _analytics = FirebaseAnalytics.instance;
 
 class SocialMediaManagerCubit extends Cubit<SocialMediaManagerState> {
   SocialMediaManagerCubit({
@@ -24,11 +27,20 @@ class SocialMediaManagerCubit extends Cubit<SocialMediaManagerState> {
     return random.nextInt(postIdeas.length);
   }
 
-  void generatePostIdea() {
+  Future<void> generatePostIdea() async {
+
+
     final randomIndex = _getRandomIndex();
     final postIdea = postIdeas[randomIndex];
     final updatedCredits = state.credits - 1;
 
+    await _analytics.logEvent(
+      name: 'generate_post_idea',
+      parameters: {
+        'credits': state.credits,
+        'user_id': currentUser.id,
+      },
+    );
     final updated = currentUser.copyWith(
       aiCredits: updatedCredits,
     );
