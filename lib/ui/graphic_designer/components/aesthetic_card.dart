@@ -5,12 +5,12 @@ import 'package:intheloopapp/domains/models/option.dart';
 
 class AestheticCard extends StatelessWidget {
   const AestheticCard({
-    required this.name,
+    required this.prompt,
     required this.imagePath,
     super.key,
   });
 
-  final String name;
+  final String prompt;
   final String imagePath;
 
   @override
@@ -19,8 +19,8 @@ class AestheticCard extends StatelessWidget {
       builder: (context, state) {
         return InkWell(
           onTap: () => context.read<GenerationBloc>().add(
-                SelectAesthetic(
-                  aesthetic: name,
+                SelectPrompt(
+                  prompt: prompt,
                 ),
               ),
           child: Container(
@@ -29,10 +29,10 @@ class AestheticCard extends StatelessWidget {
               border: Border.all(
                 width: 6,
                 color: () {
-                  return switch (state.selectedAesthetic) {
+                  return switch (state.selectedPrompt) {
                     None() => Colors.transparent,
                     Some(:final value) =>
-                      value == name ? Colors.blue : Colors.transparent,
+                      value == prompt ? Colors.blue : Colors.transparent,
                   };
                 }(),
               ),

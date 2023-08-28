@@ -1,7 +1,7 @@
 abstract class AIRepository {
   Future<(String, String)> createAvatarInferenceJob({
     required String modelId,
-    required String aesthetic,
+    required String prompt,
   });
   Future<InferenceJob> getAvatarInferenceJob({
     required String inferenceId,

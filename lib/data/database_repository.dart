@@ -308,7 +308,7 @@ abstract class DatabaseRepository {
     int limit = 20,
   });
 
-  Future<AiImageModel?> getUserImageModel(String userId);
+  Future<Option<AiImageModel>> getUserImageModel(String userId);
   Future<List<Avatar>> getUserAvatars(String userId);
   Stream<Avatar> userAvatarsObserver(String userId);
   Future<void> createAvatar(Avatar avatar);
