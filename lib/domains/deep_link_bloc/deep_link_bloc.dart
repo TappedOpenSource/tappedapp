@@ -1,34 +1,34 @@
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:intheloopapp/data/database_repository.dart';
-import 'package:intheloopapp/data/dynamic_link_repository.dart';
+import 'package:intheloopapp/data/deep_link_repository.dart';
 import 'package:intheloopapp/domains/models/option.dart';
 import 'package:intheloopapp/domains/navigation_bloc/navigation_bloc.dart';
 import 'package:intheloopapp/domains/navigation_bloc/tapped_route.dart';
 import 'package:intheloopapp/domains/onboarding_bloc/onboarding_bloc.dart';
 import 'package:intheloopapp/utils/app_logger.dart';
 
-part 'dynamic_link_event.dart';
-part 'dynamic_link_state.dart';
+part 'deep_link_event.dart';
+part 'deep_link_state.dart';
 
-class DynamicLinkBloc extends Bloc<DynamicLinkEvent, DynamicLinkState> {
-  DynamicLinkBloc({
+class DeepLinkBloc extends Bloc<DeepLinkEvent, DeepLinkState> {
+  DeepLinkBloc({
     required this.onboardingBloc,
     required this.navBloc,
     required this.dynamicLinkRepository,
     required this.databaseRepository,
-  }) : super(DynamicLinkInitial()) {
-    on<MonitorDynamicLinks>((event, emit) {
-      logger.debug('monitoring dynamic links');
-      dynamicLinkRepository.getDynamicLinks().listen((event) {
+  }) : super(DeepLinkInitial()) {
+    on<MonitorDeepLinks>((event, emit) {
+      logger.debug('monitoring deep links');
+      dynamicLinkRepository.getDeepLinks().listen((event) {
         try {
-          logger.debug('new dynamic link');
+          logger.debug('new deep link ${event.type}');
           switch (event.type) {
-            case DynamicLinkType.createPost:
+            case DeepLinkType.createPost:
               navBloc.push(
                 CreateLoopPage(),
               );
-            case DynamicLinkType.shareLoop:
+            case DeepLinkType.shareLoop:
               final loopId = event.id;
               if (loopId != null) {
                 databaseRepository
@@ -46,7 +46,7 @@ class DynamicLinkBloc extends Bloc<DynamicLinkEvent, DynamicLinkState> {
                   }
                 });
               }
-            case DynamicLinkType.shareProfile:
+            case DeepLinkType.shareProfile:
               if (event.id != null) {
                 navBloc.push(
                   ProfilePage(
@@ -55,7 +55,7 @@ class DynamicLinkBloc extends Bloc<DynamicLinkEvent, DynamicLinkState> {
                   ),
                 );
               }
-            case DynamicLinkType.connectStripeRedirect:
+            case DeepLinkType.connectStripeRedirect:
               if (event.id == null || event.id == '') {
                 break;
               }
@@ -76,22 +76,22 @@ class DynamicLinkBloc extends Bloc<DynamicLinkEvent, DynamicLinkState> {
               );
 
               navBloc.push(SettingsPage());
-            case DynamicLinkType.connectStripeRefresh:
+            case DeepLinkType.connectStripeRefresh:
               if (event.id != null) {
                 // resend the create account request?
               }
           }
         } catch (e, s) {
-          logger.error('dynamic link error', error: e, stackTrace: s);
+          logger.error('deep link error', error: e, stackTrace: s);
         }
       });
 
-      emit(DynamicLinkInitial());
+      emit(DeepLinkInitial());
     });
   }
 
   final NavigationBloc navBloc;
   final OnboardingBloc onboardingBloc;
-  final DynamicLinkRepository dynamicLinkRepository;
+  final DeepLinkRepository dynamicLinkRepository;
   final DatabaseRepository databaseRepository;
 }

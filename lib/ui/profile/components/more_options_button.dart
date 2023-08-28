@@ -2,7 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intheloopapp/data/database_repository.dart';
-import 'package:intheloopapp/data/dynamic_link_repository.dart';
+import 'package:intheloopapp/data/deep_link_repository.dart';
 import 'package:intheloopapp/domains/models/user_model.dart';
 import 'package:intheloopapp/domains/navigation_bloc/navigation_bloc.dart';
 import 'package:intheloopapp/ui/profile/profile_cubit.dart';
@@ -17,7 +17,7 @@ class MoreOptionsButton extends StatelessWidget {
     UserModel user,
     UserModel currentUser,
   ) {
-    final dynamic = context.read<DynamicLinkRepository>();
+    final dynamic = context.read<DeepLinkRepository>();
     final database = context.read<DatabaseRepository>();
     final nav = context.read<NavigationBloc>();
     showCupertinoModalPopup<void>(
@@ -28,7 +28,7 @@ class MoreOptionsButton extends StatelessWidget {
         actions: <CupertinoActionSheetAction>[
           CupertinoActionSheetAction(
             onPressed: () async {
-              final link = await dynamic.getShareProfileDynamicLink(user);
+              final link = await dynamic.getShareProfileDeepLink(user);
               await Share.share('Check out this profile on Tapped $link');
               nav.pop();
             },
