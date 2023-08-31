@@ -1316,10 +1316,10 @@ packages:
     dependency: "direct main"
     description:
       name: image_downloader
-      sha256: "95822e36bc6535e5aa6f88254ba70d6ab27a7bc95c9a458ca85c85e9a9fe043d"
+      sha256: "2b1c1d1fcfb6677175d009af3fc86914aee07684c12ea061f380ef1f44cae8df"
       url: "https://pub.dev"
     source: hosted
-    version: "0.30.0"
+    version: "0.31.0"
   image_gallery_saver:
     dependency: transitive
     description:
