@@ -66,12 +66,16 @@ class PostIdeaGeneratorContainer extends StatelessWidget {
                   horizontal: 32,
                 ),
                 child: CupertinoButton.filled(
-                  onPressed: () => context
-                      .read<SocialMediaManagerCubit>()
-                      .generatePostIdea(),
-                  child: const Text(
+                  onPressed: state.credits <= 0
+                      ? null
+                      : () => context
+                          .read<SocialMediaManagerCubit>()
+                          .generatePostIdea(),
+                  child: Text(
                     'generate IG post idea',
-                    style: TextStyle(
+                    style: state.credits <= 0
+                    ? null
+                    : const TextStyle(
                       fontWeight: FontWeight.w700,
                       color: Colors.white,
                     ),
