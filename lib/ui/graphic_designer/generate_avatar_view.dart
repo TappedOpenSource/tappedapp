@@ -5,9 +5,9 @@ import 'package:intheloopapp/domains/generation_bloc/generation_bloc.dart';
 import 'package:intheloopapp/domains/models/option.dart';
 import 'package:intheloopapp/domains/navigation_bloc/navigation_bloc.dart';
 import 'package:intheloopapp/ui/common/tapped_app_bar.dart';
-import 'package:intheloopapp/ui/graphic_designer/avatars_generated_view.dart';
 import 'package:intheloopapp/ui/graphic_designer/components/aesthetic_card.dart';
 import 'package:intheloopapp/ui/graphic_designer/generate_avatar_confirmation_view.dart';
+import 'package:intheloopapp/ui/graphic_designer/generate_avatar_loading_view.dart';
 
 class GenerateAvatarView extends StatelessWidget {
   const GenerateAvatarView({super.key});
@@ -121,13 +121,13 @@ class GenerateAvatarView extends StatelessWidget {
     return BlocBuilder<GenerationBloc, GenerationState>(
       builder: (context, state) {
         if (state.loading) {
-          return const GenerateAvatarConfirmationView();
+          return const GenerateAvatarLoadingView();
         }
 
-        return switch (state.imageUrls) {
+        return switch (state.results) {
           None() => _pickAestheticView(context),
-          Some(:final value) => AvatarsGeneratedView(
-              imageUrls: value,
+          Some(:final value) => GenerateAvatarConfirmationView(
+              results: value,
             )
         };
       },

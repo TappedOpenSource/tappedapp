@@ -20,7 +20,7 @@ import 'package:intheloopapp/ui/create_service/create_service_view.dart';
 import 'package:intheloopapp/ui/follow_relationship/follow_relationship_view.dart';
 import 'package:intheloopapp/ui/forms/location_form/location_form_view.dart';
 import 'package:intheloopapp/ui/graphic_designer/avatars_generated_view.dart';
-import 'package:intheloopapp/ui/graphic_designer/generate_avatar_confirmation_view.dart';
+import 'package:intheloopapp/ui/graphic_designer/generate_avatar_loading_view.dart';
 import 'package:intheloopapp/ui/graphic_designer/generate_avatar_view.dart';
 import 'package:intheloopapp/ui/graphic_designer/graphic_designer_view.dart';
 import 'package:intheloopapp/ui/likes/likes_view.dart';
@@ -450,15 +450,16 @@ final class ServicePage extends TappedRoute {
 
 final class VideoCallPage extends TappedRoute {
   VideoCallPage(
-    // {
-    // required this.call,
-  // }
-  ) : super(
+      // {
+      // required this.call,
+      // }
+      )
+      : super(
           // routeName: '/video_call/${call.id}',
           routeName: '/video_call',
           view: VideoCallView(
-            // call: call,
-          ),
+              // call: call,
+              ),
         );
 
   // final Call call;
@@ -472,11 +473,11 @@ final class GenerateAvatarPage extends TappedRoute {
         );
 }
 
-final class GenerateAvatarConfirmationPage extends TappedRoute {
-  GenerateAvatarConfirmationPage()
+final class GenerateAvatarLoadingPage extends TappedRoute {
+  GenerateAvatarLoadingPage()
       : super(
           routeName: '/generate_avatar_confirmation',
-          view: const GenerateAvatarConfirmationView(),
+          view: const GenerateAvatarLoadingView(),
         );
 }
 

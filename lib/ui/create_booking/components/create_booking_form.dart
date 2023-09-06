@@ -187,15 +187,13 @@ class _CreateBookingFormState extends State<CreateBookingForm> {
               SizedBox(
                 width: double.infinity,
                 child: CupertinoButton.filled(
-                  onPressed: () async {
+                  onPressed: () {
                     try {
-                      final booking = await context
-                          .read<CreateBookingCubit>()
-                          .createBooking();
-
-                      nav.push(
-                        BookingConfirmationPage(booking: booking),
-                      );
+                      context.read<CreateBookingCubit>().createBooking().then(
+                            (booking) => nav.push(
+                              BookingConfirmationPage(booking: booking),
+                            ),
+                          );
                     } on StripeException catch (e, s) {
                       if (e.error.code == FailureCode.Canceled) {
                         return;
