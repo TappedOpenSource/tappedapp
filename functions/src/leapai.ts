@@ -22,7 +22,7 @@ export const sd = {
       negativePrompt,
       width: 512,
       height: 512,
-      numberOfImages: 1,
+      numberOfImages: 4,
     });
 
     if (data === null) {

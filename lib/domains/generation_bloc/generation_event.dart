@@ -29,6 +29,19 @@ class GenerateAvatar extends GenerationEvent {
   List<Object> get props => [prompt];
 }
 
+class SaveAvatar extends GenerationEvent {
+  const SaveAvatar({
+    required this.result,
+  });
+
+  final GenerationResult result;
+
+  @override
+  List<Object> get props => [
+        result,
+      ];
+}
+
 class ResetGeneration extends GenerationEvent {
   const ResetGeneration();
 }

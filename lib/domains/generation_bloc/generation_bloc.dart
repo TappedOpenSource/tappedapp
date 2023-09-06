@@ -70,6 +70,25 @@ class GenerationBloc extends Bloc<GenerationEvent, GenerationState> {
           }(),
       };
     });
+    on<SaveAvatar>((event, emit) async {
+      final result = event.result;
+      final currentUser = (onboardingBloc.state as Onboarded).currentUser;
+      final newImageUrl = await storage.uploadAvatar(
+        userId: currentUser.id,
+        originUrl: result.imageUrl,
+      );
+      final uuid = const Uuid().v4();
+      final avatar = Avatar(
+        id: uuid,
+        userId: currentUser.id,
+        prompt: result.prompt,
+        imageUrl: newImageUrl,
+        inferenceId: result.inferenceId,
+        timestamp: DateTime.now(),
+      );
+      await database.createAvatar(avatar);
+      emit(const GenerationState());
+    });
     on<ResetGeneration>((event, emit) {
       emit(const GenerationState());
     });
@@ -98,7 +117,7 @@ class GenerationBloc extends Bloc<GenerationEvent, GenerationState> {
 
     if (inferenceJob.state == 'queued') {
       logger.debug('inferenceJob queued');
-      await Future.delayed(const Duration(milliseconds: 500));
+      await Future<void>.delayed(const Duration(milliseconds: 500));
       await pollInferenceJobTillComplete(
         inferenceId: inferenceId,
         prompt: prompt,
@@ -110,7 +129,7 @@ class GenerationBloc extends Bloc<GenerationEvent, GenerationState> {
 
     if (inferenceJob.state == 'processing') {
       logger.debug('inferenceJob processing');
-      await Future.delayed(const Duration(milliseconds: 500));
+      await Future<void>.delayed(const Duration(milliseconds: 500));
       await pollInferenceJobTillComplete(
         inferenceId: inferenceId,
         prompt: prompt,
@@ -121,43 +140,24 @@ class GenerationBloc extends Bloc<GenerationEvent, GenerationState> {
     }
 
     logger.info('$inferenceJob');
-    final imageUrls = inferenceJob.images?.map((image) => image.uri).toList();
+    final results = inferenceJob.images
+        ?.map(
+          (image) => image.uri == null
+              ? null
+              : GenerationResult(
+                  imageUrl: image.uri!,
+                  inferenceId: inferenceId,
+                  prompt: prompt,
+                ),
+        )
+        .toList();
 
-    // save inferenceId and prompt to database
-    if (imageUrls == null) {
-      logger.error('imageUrls is null');
-      throw Exception('imageUrls is null');
-    }
-
-    await Future.wait(
-      imageUrls.map(
-        (String? url) async {
-          if (url == null) {
-            return;
-          }
-
-          final newImageUrl = await storage.uploadAvatar(
-            userId: currentUserId,
-            originUrl: url,
-          );
-          final uuid = const Uuid().v4();
-          final avatar = Avatar(
-            id: uuid,
-            userId: currentUserId,
-            prompt: prompt,
-            imageUrl: newImageUrl,
-            inferenceId: inferenceId,
-            timestamp: DateTime.now(),
-          );
-          await database.createAvatar(avatar);
-        },
-      ),
-    );
-
-    logger.debug('imageUrls: $imageUrls');
+    logger.debug('results: $results');
     emit(
       state.copyWith(
-        imageUrls: Option.fromNullable(imageUrls.whereType<String>().toList()),
+        results: Option.fromNullable(
+          results?.whereType<GenerationResult>().toList(),
+        ),
         loading: false,
       ),
     );
