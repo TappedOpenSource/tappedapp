@@ -3,7 +3,6 @@ import 'dart:math';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:firebase_analytics/firebase_analytics.dart';
-import 'package:intheloopapp/domains/models/option.dart';
 import 'package:intheloopapp/domains/models/user_model.dart';
 import 'package:intheloopapp/domains/onboarding_bloc/onboarding_bloc.dart';
 
@@ -15,26 +14,21 @@ class SocialMediaManagerCubit extends Cubit<SocialMediaManagerState> {
   SocialMediaManagerCubit({
     required this.currentUser,
     required this.onboardingBloc,
-  }) : super(SocialMediaManagerState(
-    credits: currentUser.aiCredits,
-  ));
+  }) : super(
+          SocialMediaManagerState(
+            credits: currentUser.aiCredits,
+            postIdea: _randomPost(),
+          ),
+        );
 
   final UserModel currentUser;
   final OnboardingBloc onboardingBloc;
 
-  int _getRandomIndex() {
-    final random = Random();
-    return random.nextInt(postIdeas.length);
-  }
-
-  Future<void> generatePostIdea() async {
-
-
-    final randomIndex = _getRandomIndex();
-    final postIdea = postIdeas[randomIndex];
+  void generatePostIdea() {
+    final postIdea = _randomPost();
     final updatedCredits = state.credits - 1;
 
-    await _analytics.logEvent(
+    _analytics.logEvent(
       name: 'generate_post_idea',
       parameters: {
         'credits': state.credits,
@@ -49,10 +43,21 @@ class SocialMediaManagerCubit extends Cubit<SocialMediaManagerState> {
     emit(
       state.copyWith(
         credits: updatedCredits,
-        postIdea: Some(postIdea),
+        postIdea: postIdea,
       ),
     );
   }
+}
+
+int _getRandomIndex() {
+  final random = Random();
+  return random.nextInt(postIdeas.length);
+}
+
+String _randomPost() {
+  final randomIndex = _getRandomIndex();
+  final postIdea = postIdeas[randomIndex];
+  return postIdea;
 }
 
 final postIdeas = [

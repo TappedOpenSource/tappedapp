@@ -3,10 +3,10 @@ part of 'social_media_manager_cubit.dart';
 class SocialMediaManagerState extends Equatable {
   const SocialMediaManagerState({
     required this.credits,
-    this.postIdea = const None(),
+    required this.postIdea,
   });
 
-  final Option<String> postIdea;
+  final String postIdea;
   final int credits;
 
   @override
@@ -17,7 +17,7 @@ class SocialMediaManagerState extends Equatable {
 
   SocialMediaManagerState copyWith({
     int? credits,
-    Option<String>? postIdea,
+    String? postIdea,
   }) {
     return SocialMediaManagerState(
       credits: credits ?? this.credits,

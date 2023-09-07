@@ -47,9 +47,9 @@ class SocialMediaManagerView extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     SizedBox(width: double.infinity),
-                    Credits(),
-                    SizedBox(height: 16),
                     PostIdeaGeneratorContainer(),
+                    SizedBox(height: 16),
+                    Credits(),
                     // SizedBox(height: 16),
                     // Padding(
                     //   padding: EdgeInsets.symmetric(
