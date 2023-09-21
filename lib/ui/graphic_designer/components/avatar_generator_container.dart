@@ -17,45 +17,57 @@ class AvatarGeneratorContainer extends StatelessWidget {
   Widget build(BuildContext context) {
     return CurrentUserBuilder(
       builder: (context, currentUser) {
-      final noEnoughCredits = currentUser.aiCredits < 5;
+        final noEnoughCredits = currentUser.aiCredits < 5;
         return BlocBuilder<GraphicDesignerCubit, GraphicDesignerState>(
           builder: (context, state) {
-            return Column(
-              children: [
-                const AvatarsPreview(),
-                const SizedBox(height: 4),
-                SizedBox(
-                  width: double.infinity,
-                  child: Padding(
-                    padding: const EdgeInsets.symmetric(
-                      vertical: 4,
-                      horizontal: 32,
+            return switch (state.hasImageModel) {
+              false => const Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text('no image model found'),
+                    SizedBox(height: 4),
+                    Text(
+                      // ignore: lines_longer_than_80_chars
+                      'context johannes@tapped.ai or ilias@tapped.ai to get one create for you',
                     ),
-                    child: CupertinoButton.filled(
-                      onPressed: noEnoughCredits
-                          ? null
-                          : () {
-                              context.read<GenerationBloc>().add(
-                                    const ResetGeneration(),
+                  ],
+                ),
+              true => Column(
+                  children: [
+                    const AvatarsPreview(),
+                    const SizedBox(height: 4),
+                    SizedBox(
+                      width: double.infinity,
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(
+                          vertical: 4,
+                          horizontal: 32,
+                        ),
+                        child: CupertinoButton.filled(
+                          onPressed: noEnoughCredits
+                              ? null
+                              : () {
+                                  context.read<GenerationBloc>().add(
+                                        const ResetGeneration(),
+                                      );
+                                  context.push(
+                                    GenerateAvatarPage(),
                                   );
-                              context.push(
-                                GenerateAvatarPage(),
-                              );
-                            },
-                      child: Text(
-                        'generate avatar',
-                        style: TextStyle(
-                          fontWeight: FontWeight.w700,
-                          color: noEnoughCredits
-                              ? Colors.grey
-                              : Colors.white,
+                                },
+                          child: Text(
+                            'generate avatar',
+                            style: TextStyle(
+                              fontWeight: FontWeight.w700,
+                              color:
+                                  noEnoughCredits ? Colors.grey : Colors.white,
+                            ),
+                          ),
                         ),
                       ),
                     ),
-                  ),
+                  ],
                 ),
-              ],
-            );
+            };
           },
         );
       },

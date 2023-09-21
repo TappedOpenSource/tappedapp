@@ -24,7 +24,9 @@ class GraphicDesignerView extends StatelessWidget {
                 database: database,
                 currentUser: currentUser,
                 claim: claim,
-              )..initAvatars(),
+              )
+              ..checkImageModel()
+              ..initAvatars(),
               child: Scaffold(
                 backgroundColor: theme.colorScheme.background,
                 appBar: AppBar(

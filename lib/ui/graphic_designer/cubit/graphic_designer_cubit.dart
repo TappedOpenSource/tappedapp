@@ -4,6 +4,7 @@ import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:intheloopapp/data/database_repository.dart';
 import 'package:intheloopapp/domains/models/avatar.dart';
+import 'package:intheloopapp/domains/models/option.dart';
 import 'package:intheloopapp/domains/models/user_model.dart';
 import 'package:intheloopapp/utils/app_logger.dart';
 
@@ -24,6 +25,15 @@ class GraphicDesignerCubit extends Cubit<GraphicDesignerState> {
   final DatabaseRepository database;
   final UserModel currentUser;
   StreamSubscription<Avatar>? avatarListener;
+
+  Future<void> checkImageModel() async {
+    final imageModel = await database.getUserImageModel(currentUser.id);
+    emit(
+      state.copyWith(
+        hasImageModel: imageModel.isSome,
+      ),
+    );
+  }
 
   Future<void> getAvatars() async {
     final avatars = await database.getUserAvatars(currentUser.id);
