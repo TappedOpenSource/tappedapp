@@ -1,4 +1,4 @@
-
+/* eslint-disable import/no-unresolved */
 import { Leap } from "@leap-ai/sdk";
 import { LeapInferenceSchema } from "@leap-ai/sdk/dist/types/schemas/Inference";
 import { info } from "firebase-functions/logger";
