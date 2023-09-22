@@ -14,7 +14,6 @@ import { onCall, onRequest } from "firebase-functions/v2/https";
 
 import Stripe from "stripe";
 import { v4 as uuidv4 } from "uuid";
-import { Leap } from "@leap-ai/sdk";
 
 import {
   Booking,
@@ -67,7 +66,6 @@ import {
   OPEN_AI_KEY,
   verifiedBotUuid,
   bookingBotUuid,
-  RESEND_API_KEY,
   LEAP_WEBHOOK_SECRET,
   avatarsRef,
   aiModelsRef,
@@ -81,10 +79,19 @@ import {
   getFileFromURL,
 } from "./utils";
 import { info } from "firebase-functions/logger";
-import { Resend } from "resend";
 
 const WEBHOOK_URL = `https://us-central1-${projectId}.cloudfunctions.net/trainWebhook`;
 const IMAGE_WEBHOOK_URL = `https://us-central1-${projectId}.cloudfunctions.net/imageWebhook`;
+
+const prompts = [
+  "8k portrait of @subject in the style of jackson pollock's 'abstract expressionism,' featuring drips, splatters, and energetic brushwork.",
+
+  "8k portrait of @subject in the style of salvador dalí's 'surrealism,' featuring unexpected juxtapositions, melting objects, and a dreamlike atmosphere.",
+
+  "8k portrait of @subject in the style of Retro comic style artwork, highly detailed spiderman, comic book cover, symmetrical, vibrant",
+
+  "8k close up linkedin profile picture of @subject, professional jack suite, professional headshots, photo-realistic, 4k, high-resolution image, workplace settings, upper body, modern outfit, professional suit, businessman, blurred background, glass building, office window",
+];
 
 const _deleteUser = async (data: { id: string }) => {
   // Checking attribute.
@@ -1580,29 +1587,6 @@ export const sendSearchAppearances = onSchedule("0 0/3 * * *", async (event) => 
   });
 });
 
-export const onTeamCreated = functions
-  .runWith({ secrets: [ LEAP_API_KEY ] })
-  .firestore
-  .document("/team/{teamId}")
-  .onCreate(
-    async (data, context) => {
-      const { teamId } = context.params;
-      const team = data.data();
-      if (team == null) {
-        return;
-      }
-
-      const { userId, referenceImages } = team;
-      const leapApiKey = LEAP_API_KEY.value();
-
-      await _createLeapSdModel({ 
-        userId, 
-        teamId, 
-        referenceImages, 
-        leapApiKey,
-      });
-    });
-
 export const generateAlbumName = onCall(
   {
     secrets: [ OPEN_AI_KEY ],
@@ -1684,6 +1668,7 @@ export const createAvatarInferenceJob = onCall(
       modelId,
       prompt,
       negativePrompt,
+      numberOfImages: 4,
     });
 
     return { inferenceId };
@@ -1875,11 +1860,13 @@ export const trainModel = onCall(
   });
     
 export const trainWebhook = onRequest(
-  { secrets: [ LEAP_API_KEY, RESEND_API_KEY, LEAP_WEBHOOK_SECRET ] },
+  { secrets: [ LEAP_API_KEY, LEAP_WEBHOOK_SECRET ] },
   async (request, response): Promise<void> => {
-    const resend = new Resend(RESEND_API_KEY.value());
     
-    const { id, state: status } = await request.body;
+    const { id, state: status }: {
+      id: string;
+      state: string;
+    } = await request.body;
     const userId = request.query.user_id as string;
     const webhookSecret = request.query.webhook_secret as string;
     const modelType = request.query.model_type as string;
@@ -1915,15 +1902,6 @@ export const trainWebhook = onRequest(
     
     try {
       if (status === "finished") {
-        // Send Email
-        await resend.emails.send({
-          from: "noreply@headshots.tapped.ai",
-          to: user?.email ?? "",
-          subject: "Your model was successfully trained!",
-          html:
-                // eslint-disable-next-line max-len
-                "<h2>We're writing to notify you that your model training was successful!</h2>",
-        });
     
         await aiModelsRef
           .doc(userId)
@@ -1933,40 +1911,22 @@ export const trainWebhook = onRequest(
             status: "ready",
           });
     
-        const leap = new Leap({
-          accessToken: LEAP_API_KEY.value(),
-        });
-    
-        const { status, statusText } = await leap.images.generate({
-          prompt: prompts[index].replace(
-            "{model_type}",
-            modelType ?? ""
-          ),
-          numberOfImages: 4,
-          height: 512,
-          width: 512,
-          steps: 50,
-          negativePrompt:
-                  // eslint-disable-next-line max-len
-                  "(deformed iris, deformed pupils, semi-realistic, cgi, 3d, render, sketch, cartoon, drawing, anime:1.4), text, close up, cropped, out of frame, worst quality, low quality, jpeg artifacts, ugly, duplicate, morbid, mutilated, extra fingers, mutated hands, poorly drawn hands, poorly drawn face, mutation, deformed, blurry, dehydrated, bad anatomy, bad proportions, extra limbs, cloned face, disfigured, gross proportions, malformed limbs, missing arms, missing legs, extra arms, extra legs, fused fingers, too many fingers, long neck",
-          modelId: id,
-          promptStrength: 7.5,
-          webhookUrl:
-                  // eslint-disable-next-line max-len
-                  `${IMAGE_WEBHOOK_URL}?user_id=${userId}&model_id=${id}&webhook_secret=${LEAP_WEBHOOK_SECRET.value()}`,
-        });
-        info({ status, statusText });
+        
+        for (let index = 0; index < prompts.length; index++) { 
+          const { inferenceId } = await sd.createInferenceJob({
+            leapApiKey: LEAP_API_KEY.value(),
+            modelId: id,
+            prompt: prompts[index].replace(
+              "{model_type}",
+              modelType ?? ""
+            ),
+            negativePrompt: "(deformed iris, deformed pupils, semi-realistic, cgi, 3d, render, sketch, cartoon, drawing, anime:1.4), text, close up, cropped, out of frame, worst quality, low quality, jpeg artifacts, ugly, duplicate, morbid, mutilated, extra fingers, mutated hands, poorly drawn hands, poorly drawn face, mutation, deformed, blurry, dehydrated, bad anatomy, bad proportions, extra limbs, cloned face, disfigured, gross proportions, malformed limbs, missing arms, missing legs, extra arms, extra legs, fused fingers, too many fingers, long neck",
+            numberOfImages: 0,
+            webhookUrl: `${IMAGE_WEBHOOK_URL}?user_id=${userId}&model_id=${id}&webhook_secret=${LEAP_WEBHOOK_SECRET.value()}`,
+          });
+          info({ inferenceId });
+        }
       } else {
-        // Send Email
-        await resend.emails.send({
-          from: "noreply@headshots.tapped.ai",
-          to: user?.email ?? "",
-          subject: "Your model failed to train!",
-          html:
-                // eslint-disable-next-line max-len
-                "<h2>We're writing to notify you that your model training failed!.</h2>",
-        });
-    
         await aiModelsRef
           .doc(userId)
           .collection("imageModels")

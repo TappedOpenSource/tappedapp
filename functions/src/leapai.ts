@@ -68,11 +68,15 @@ export const sd = {
     modelId,
     prompt,
     negativePrompt,
+    numberOfImages,
+    webhookUrl,
   }: {
     leapApiKey: string;
     modelId: string;
     prompt: string;
     negativePrompt: string;
+    numberOfImages: number;
+    webhookUrl?: string;
 }): Promise<{ inferenceId: string }> => {
     const leap = new Leap(leapApiKey);
 
@@ -82,7 +86,8 @@ export const sd = {
       negativePrompt,
       width: 512,
       height: 512,
-      numberOfImages: 4,
+      numberOfImages,
+      webhookUrl,
     });
 
     if (data === null) {
