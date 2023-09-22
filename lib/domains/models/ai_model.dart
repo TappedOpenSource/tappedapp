@@ -7,7 +7,9 @@ sealed class AiModel {
     required this.id,
     required this.userId,
     required this.type,
+    required this.subjectType,
     required this.timestamp,
+    required this.status,
   });
 
   factory AiModel.fromDoc(DocumentSnapshot<Map<String, dynamic>> doc) {
@@ -17,17 +19,23 @@ sealed class AiModel {
         ) ??
         AiModelType.image;
 
-      final tmpTimestamp = doc.getOrElse(
-        'timestamp',
-        Timestamp.now(),
-      );
+    final tmpTimestamp = doc.getOrElse(
+      'timestamp',
+      Timestamp.now(),
+    );
 
     return switch (type) {
       AiModelType.image => AiImageModel(
           id: doc.id,
           userId: doc.get('userId') as String,
           type: AiModelType.image,
+          subjectType: doc.get('subjectType') as String,
           timestamp: tmpTimestamp.toDate(),
+          status: EnumToString.fromString(
+                AiModelStatus.values,
+                doc.getOrElse('status', 'ready'),
+              ) ??
+              AiModelStatus.ready,
         ),
       AiModelType.text => throw UnimplementedError(),
     };
@@ -36,13 +44,18 @@ sealed class AiModel {
   final String id;
   final String userId;
   final AiModelType type;
+  final String subjectType;
   final DateTime timestamp;
+  final AiModelStatus status;
 
   Map<String, dynamic> toMap() {
     return {
       'id': id,
       'userId': userId,
       'type': EnumToString.convertToString(type),
+      'subjectType': subjectType,
+      'timestamp': timestamp,
+      'status': EnumToString.convertToString(status),
     };
   }
 }
@@ -52,11 +65,20 @@ class AiImageModel extends AiModel {
     required super.id,
     required super.userId,
     required super.type,
+    required super.subjectType,
     required super.timestamp,
+    required super.status,
   });
 }
 
 enum AiModelType {
   image,
   text,
+}
+
+enum AiModelStatus {
+  initial,
+  training,
+  ready,
+  errored,
 }

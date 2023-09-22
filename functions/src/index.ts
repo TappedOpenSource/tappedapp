@@ -1,20 +1,14 @@
-import type { CallableRequest } from "firebase-functions/v2/https";
 /* eslint-disable import/no-unresolved */
-import { messaging, auth } from "firebase-admin";
+import { messaging } from "firebase-admin";
 
 import * as functions from "firebase-functions";
-import { getApp, getApps, initializeApp } from "firebase-admin/app";
 import {
-  getFirestore,
   FieldValue,
   Timestamp,
 } from "firebase-admin/firestore";
-import { getStorage } from "firebase-admin/storage";
-import { getMessaging } from "firebase-admin/messaging";
-import { getRemoteConfig } from "firebase-admin/remote-config";
+
 import { StreamChat } from "stream-chat";
-import { defineSecret } from "firebase-functions/params";
-import { HttpsError } from "firebase-functions/v1/auth";
+import { HttpsError, UserRecord } from "firebase-functions/v1/auth";
 import { onSchedule } from "firebase-functions/v2/scheduler";
 import { onCall, onRequest } from "firebase-functions/v2/https";
 
@@ -43,176 +37,54 @@ import {
 } from "./models";
 import { llm } from "./openai";
 import { sd } from "./leapai";
+import { 
+  auth,
+  activitiesRef, 
+  bookerReviewsSubcollection, 
+  commentsRef, 
+  feedsRef, 
+  loopCommentsGroupRef, 
+  loopsFeedSubcollection, 
+  loopsRef, 
+  mailRef, 
+  mainBucket, 
+  performerReviewsSubcollection, 
+  remote, 
+  usersRef,
+  fcm,
+  servicesRef,
+  bookingsRef,
+  tokensRef,
+  followingRef,
+  queuedWritesRef,
+  followersRef,
+  stripeKey,
+  stripePublishableKey,
+  LEAP_API_KEY,
+  verifyUserBadgeId,
+  streamSecret,
+  streamKey,
+  OPEN_AI_KEY,
+  verifiedBotUuid,
+  bookingBotUuid,
+  RESEND_API_KEY,
+  LEAP_WEBHOOK_SECRET,
+  avatarsRef,
+  aiModelsRef,
+  trainingImagesRef,
+  projectId,
+} from "./firebase";
+import { 
+  authenticatedRequest, 
+  authenticated, 
+  getFoundersDeviceTokens,
+  getFileFromURL,
+} from "./utils";
+import { info } from "firebase-functions/logger";
+import { Resend } from "resend";
 
-const app = getApps().length <= 0 ?
-  initializeApp() :
-  getApp();
-
-
-const streamKey = defineSecret("STREAM_KEY");
-const streamSecret = defineSecret("STREAM_SECRET");
-
-// const stripeKey = defineSecret("STRIPE_TEST_KEY");
-// const stripePublishableKey = defineSecret("STRIPE_PUBLISHABLE_TEST_KEY");
-const stripeKey = defineSecret("STRIPE_KEY");
-const stripePublishableKey = defineSecret("STRIPE_PUBLISHABLE_KEY");
-const OPEN_AI_KEY = defineSecret("OPEN_AI_KEY");
-const LEAP_API_KEY = defineSecret("LEAP_API_KEY");
-
-const db = getFirestore(app);
-const storage = getStorage(app);
-const fcm = getMessaging(app);
-const remote = getRemoteConfig(app);
-
-const usersRef = db.collection("users");
-const loopsRef = db.collection("loops");
-const activitiesRef = db.collection("activities");
-const followingRef = db.collection("following");
-const followersRef = db.collection("followers");
-// const likesRef = db.collection("likes");
-const commentsRef = db.collection("comments");
-const loopCommentsGroupRef = db.collectionGroup("loopComments");
-const feedsRef = db.collection("feeds");
-// const badgesRef = db.collection("badges");
-// const badgesSentRef = db.collection("badgesSent");
-const bookingsRef = db.collection("bookings");
-const tokensRef = db.collection("device_tokens")
-const servicesRef = db.collection("services");
-const mailRef = db.collection("mail");
-const queuedWritesRef = db.collection("queued_writes");
-// const reviewsRef = db.collection("reviews");
-const teamsRef = db.collection("teams");
-
-// const loopLikesSubcollection = "loopLikes";
-// const loopCommentsSubcollection = "loopComments";
-const loopsFeedSubcollection = "userFeed";
-
-const bookerReviewsSubcollection = "bookerReviews";
-const performerReviewsSubcollection = "performerReviews";
-
-const bookingBotUuid = "90dc0775-3a0d-4e92-8573-9c7aa6832d94";
-const verifiedBotUuid = "1c0d9380-873c-493a-a3f8-1283d5408673";
-const verifyUserBadgeId = "0aa46576-1fbe-4312-8b69-e2fef3269083";
-
-const WEBHOOK_URL = "https://us-central1-in-the-loop-306520.cloudfunctions.net/onTrainingJobCompletedWebhook";
-
-const founderIds = [
-  "8yYVxpQ7cURSzNfBsaBGF7A7kkv2", // Johannes
-  "n4zIL6bOuPTqRC3dtsl6gyEBPQl1", // Ilias
-];
-
-const _getFileFromURL = (fileURL: string): string => {
-  const fSlashes = fileURL.split("/");
-  const fQuery = fSlashes[fSlashes.length - 1].split("?");
-  const segments = fQuery[0].split("%2F");
-  const fileName = segments.join("/");
-
-  return fileName;
-};
-
-const _getFoundersDeviceTokens = async () => {
-  const deviceTokens = (
-    await Promise.all(
-      founderIds.map(
-        async (founderId) => {
-
-          const querySnapshot = await tokensRef
-            .doc(founderId)
-            .collection("tokens")
-            .get();
-
-          const tokens: string[] = querySnapshot.docs.map((snap) => snap.id);
-
-          return tokens;
-        })
-    )
-  ).flat();
-
-  return deviceTokens;
-}
-
-const _authenticated = (context: functions.https.CallableContext) => {
-  // Checking that the user is authenticated.
-  if (!context.auth) {
-    // Throwing an HttpsError so that the client gets the error details.
-    throw new functions.https.HttpsError(
-      "failed-precondition",
-      "The function must be called while authenticated."
-    );
-  }
-};
-
-const _authenticatedRequest = (request: CallableRequest) => {
-  // Checking that the user is authenticated.
-  if (!request.auth) {
-    // Throwing an HttpsError so that the client gets the error details.
-    throw new HttpsError(
-      "failed-precondition",
-      "The function must be called while authenticated."
-    );
-  }
-};
-
-// const _createUser = async (data: {
-//   id: string;
-//   email?: string;
-//   username?: string;
-//   bio?: string;
-//   profilePicture?: string;
-//   location?: string;
-//   onboarded?: boolean;
-//   loopsCount?: number;
-//   badgesCount?: number;
-//   shadowBanned?: boolean;
-//   accountType?: string;
-//   twitterHandle?: string; 
-//   instagramHandle?: string;
-//   tiktokHandle?: string;
-//   soundcloudHandle?: string;
-//   youtubeChannelId?: string ;
-//   pushNotificationsLikes?: boolean;
-//   pushNotificationsComments?: boolean;
-//   pushNotificationsFollows?: boolean;
-//   pushNotificationsDirectMessages?: boolean;
-//   pushNotificationsITLUpdates?: boolean;
-//   emailNotificationsAppReleases?: boolean;
-//   emailNotificationsITLUpdates?: boolean;
-// }) => {
-//   if ((await usersRef.doc(data.id).get()).exists) {
-//     return { id: data.id };
-//   }
-
-//   const filteredUsername = data.username?.trim().toLowerCase() || "anonymous";
-
-//   usersRef.doc(data.id).set({
-//     email: data.email || "",
-//     username: filteredUsername,
-//     bio: data.bio || "",
-//     profilePicture: data.profilePicture || "",
-//     location: data.location || "Global",
-//     onboarded: data.onboarded || false,
-//     loopsCount: data.loopsCount || 0,
-//     badgesCount: data.badgesCount || 0,
-//     deleted: false,
-//     shadowBanned: data.shadowBanned || false,
-//     accountType: data.accountType || "free",
-//     twitterHandle: data.twitterHandle || "",
-//     instagramHandle: data.instagramHandle || "",
-//     tiktokHandle: data.tiktokHandle || "",
-//     soundcloudHandle: data.soundcloudHandle || "",
-//     youtubeChannelId: data.youtubeChannelId || "",
-//     pushNotificationsLikes: data.pushNotificationsLikes || true,
-//     pushNotificationsComments: data.pushNotificationsComments || true,
-//     pushNotificationsFollows: data.pushNotificationsFollows || true,
-//     pushNotificaionsDirectMessages:
-//       data.pushNotificationsDirectMessages || true,
-//     pushNotificationsITLUpdates: data.pushNotificationsITLUpdates || true,
-//     emailNotificationsAppReleases: data.emailNotificationsAppReleases || true,
-//     emailNotificationsITLUpdates: data.emailNotificationsITLUpdates || true,
-//   });
-
-//   return { id: data.id };
-// };
+const WEBHOOK_URL = `https://us-central1-${projectId}.cloudfunctions.net/trainWebhook`;
+const IMAGE_WEBHOOK_URL = `https://us-central1-${projectId}.cloudfunctions.net/imageWebhook`;
 
 const _deleteUser = async (data: { id: string }) => {
   // Checking attribute.
@@ -255,14 +127,10 @@ const _deleteUser = async (data: { id: string }) => {
   });
 
   // *delete all loops keyed at 'audio/loops/{UID}/{LOOPURL}'*
-  storage
-    .bucket("in-the-loop-306520.appspot.com")
-    .deleteFiles({ prefix: `audio/loops/${data.id}` });
+  mainBucket.deleteFiles({ prefix: `audio/loops/${data.id}` });
 
   // *delete all images keyed at 'images/users/{UID}/{IMAGEURL}'*
-  storage
-    .bucket("in-the-loop-306520.appspot.com")
-    .deleteFiles({ prefix: `images/users/${data.id}` });
+  mainBucket.deleteFiles({ prefix: `images/users/${data.id}` });
 
   // TODO: delete follower table stuff?
   // TODO: delete following table stuff?
@@ -285,7 +153,7 @@ const _addActivity = async (
   // Checking attribute.A
   if (activity.toUserId.length === 0) {
     // Throwing an HttpsError so that the client gets the error details.
-    throw new functions.https.HttpsError(
+    throw new HttpsError(
       "invalid-argument",
       "The function argument 'toUserId' cannot be empty"
     );
@@ -397,10 +265,7 @@ const _deleteLoop = async (data: { id: string; userId: string }) => {
 
   // *delete loops keyed at refFromURL(loop.audioPath)*
   if (loopSnapshot.data()?.audioPath != null) {
-    storage
-      .bucket("in-the-loop-306520.appspot.com")
-      .file(_getFileFromURL(loopSnapshot.data()?.audioPath))
-      .delete();
+    mainBucket.file(getFileFromURL(loopSnapshot.data()?.audioPath)).delete();
   }
 };
 
@@ -554,7 +419,7 @@ const _createStripeAccount = async ({ countryCode }: {
     country: country,
   });
 
-  functions.logger.info(`Created Stripe account ${account.id} for ${country}`);
+  info(`Created Stripe account ${account.id} for ${country}`);
 
   return account.id;
 }
@@ -651,98 +516,6 @@ const _updateOverallRating = async ({
   await usersRef.doc(userId).update({
     overallRating: overallRating,
   });
-};
-
-const _createLeapSdModel = async ({ userId, teamId, referenceImages, leapApiKey }: {
-  userId: string,
-  teamId: string,
-  referenceImages: string[],
-  leapApiKey: string,
-}) => {
-  // create LeapAI job
-  const leap = new Leap(leapApiKey);
-  const { data: modelSchema, error: error1 } = await leap
-    .fineTune
-    .createModel({
-      title: `sd/${userId}/${teamId}`,
-      subjectKeyword: "@subject",
-      subjectType: "person",
-    });
-  if (modelSchema == null) {
-    functions.logger.error(error1);
-    await teamsRef
-      .doc(teamId)
-      .update({ sdModelStatus: "errored" });
-    return;
-  }
-
-  // Save model id to firestore
-  const model = await modelSchema;
-  const modelId = model.id;
-  await teamsRef
-    .doc(teamId)
-    .update({ sdModelId: modelId });
-
-  // upload images to leapai
-  const { data: sampleSchema, error: error2 } = await leap
-    .fineTune
-    .uploadImageSamples({
-      modelId,
-      images: referenceImages,
-    });
-  if (sampleSchema == null) {
-    functions.logger.error(error2);
-    await teamsRef
-      .doc(teamId)
-      .update({ sdModelStatus: "errored" });
-    return;
-  }
-
-  // queue training job
-  const samples = await sampleSchema;
-  functions.logger.debug(`samples: ${JSON.stringify(samples)}`);
-  const { data: versionSchema, error: error3 } = await leap
-    .fineTune
-    .queueTrainingJob({
-      modelId,
-      webhookUrl: WEBHOOK_URL,
-    });
-  if (versionSchema == null) {
-    functions.logger.error(error3);
-    await teamsRef
-      .doc(teamId)
-      .update({ sdModelStatus: "errored" });
-    return;
-  }
-  const version = await versionSchema;
-  functions.logger.debug(`version: ${JSON.stringify(version)}`);
-
-  // change team sfModel to "training"
-  await teamsRef
-    .doc(teamId)
-    .update({ sdModelStatus: "training" });
-};
-
-const _updateTeamStatus = async ({ modelId, state }: {
-  modelId: string,
-  state: string,
-}) => {
-  // update firestore if error
-  if (state !== "finished") {
-    functions.logger.error(`training job ${modelId} failed with state ${state}`);
-    return;
-  }
-
-  // update firestore if success
-  functions.logger.debug(`training job ${modelId} finished with state ${state}`);
-  const teamSnapshot = await teamsRef.where("sdModelId", "==", modelId).get();
-  if (teamSnapshot.docs.length <= 0) {
-    functions.logger.error(`no team found with sdModelId ${modelId}`);
-    return;
-  }
-
-  const team = teamSnapshot.docs[0];
-  await team.ref.update({ sdModelStatus: "ready" });
 };
 
 // --------------------------------------------------------
@@ -942,7 +715,7 @@ export const notifyFoundersOnSignUp = functions
   .auth
   .user()
   .onCreate(async (user) => {
-    const devices = await _getFoundersDeviceTokens();
+    const devices = await getFoundersDeviceTokens();
     const payload = {
       notification: {
         title: "You have a new user \uD83D\uDE43",
@@ -956,7 +729,7 @@ export const notifyFoundersOnAppRemoved = functions
   .analytics
   .event("app_remove")
   .onLog(async (event) => {
-    const devices = await _getFoundersDeviceTokens();
+    const devices = await getFoundersDeviceTokens();
     const user = event.user;
     const payload = {
       notification: {
@@ -972,7 +745,7 @@ export const notifyFoundersOnLabelApplication = functions
   .document("label_applications/{applicationId}")
   .onCreate(async (snapshot) => {
     const application = snapshot.data();
-    const devices = await _getFoundersDeviceTokens();
+    const devices = await getFoundersDeviceTokens();
     const payload = {
       notification: {
         title: "New Label Application \uD83D\uDE43",
@@ -1373,7 +1146,7 @@ export const incrementBadgeCountOnBadgeSent = functions.firestore
 
 export const onUserDeleted = functions.auth
   .user()
-  .onDelete((user: auth.UserRecord) => _deleteUser({ id: user.uid }));
+  .onDelete((user: UserRecord) => _deleteUser({ id: user.uid }));
 export const deleteStreamUser = functions
   .runWith({ secrets: [ streamKey, streamSecret ] })
   .auth
@@ -1386,28 +1159,28 @@ export const deleteStreamUser = functions
     return streamClient.deleteUser(user.uid);
   });
 export const addActivity = functions.https.onCall((data, context) => {
-  _authenticated(context);
+  authenticated(context);
   return _addActivity(data);
 });
 export const createPaymentIntent = functions
   .runWith({ secrets: [ stripeKey, stripePublishableKey ] })
   .https
   .onCall((data, context) => {
-    _authenticated(context);
+    authenticated(context);
     return _createPaymentIntent(data);
   });
 export const createConnectedAccount = functions
   .runWith({ secrets: [ stripeKey, stripePublishableKey ] })
   .https
   .onCall((data, context) => {
-    _authenticated(context);
+    authenticated(context);
     return _createConnectedAccount(data);
   })
 export const getAccountById = functions
   .runWith({ secrets: [ stripeKey, stripePublishableKey ] })
   .https
   .onCall((data, context) => {
-    _authenticated(context);
+    authenticated(context);
     return _getAccountById(data);
   });
 
@@ -1477,7 +1250,7 @@ export const notifyFoundersOnBookings = functions
       },
     };
 
-    const deviceTokens = await _getFoundersDeviceTokens();
+    const deviceTokens = await getFoundersDeviceTokens();
 
     try {
       const resp = await fcm.sendToDevice(deviceTokens, payload);
@@ -1830,13 +1603,6 @@ export const onTeamCreated = functions
       });
     });
 
-export const onTrainingJobCompletedWebhook = onRequest(
-  async (req) => {
-    // get model id from request
-    const { id, state } = req.body;
-    await _updateTeamStatus({ modelId: id, state });
-  });
-
 export const generateAlbumName = onCall(
   {
     secrets: [ OPEN_AI_KEY ],
@@ -1893,7 +1659,7 @@ export const createAvatarInferenceJob = onCall(
   },
   async (request) => {
     // // Checking that the user is authenticated.
-    _authenticatedRequest(request);
+    authenticatedRequest(request);
 
     const leapApiKey = LEAP_API_KEY.value();
     const { modelId, prompt } = request.data;
@@ -1929,7 +1695,7 @@ export const getAvatarInferenceJob = onCall(
   },
   async (request) => {
     // Checking that the user is authenticated.
-    _authenticatedRequest(request);
+    authenticatedRequest(request);
 
     const leapApiKey = LEAP_API_KEY.value();
     const { inferenceId } = request.data;
@@ -1965,3 +1731,258 @@ export const deleteInferenceJob = functions
 
       await sd.deleteInferenceJob({ inferenceId, leapApiKey });
     });
+
+export const imageWebhook = onRequest(
+  { secrets: [ LEAP_API_KEY, LEAP_WEBHOOK_SECRET ] },
+  async (request, response): Promise<void> => {
+    const {
+      id: inferenceId,
+      state: status,
+      result,
+    } = request.body;
+    
+    const userId = request.query.user_id as string;
+    const modelId = request.query.model_id as string;
+    const webhookSecret = request.query.webhook_secret as string;
+    
+    info({ userId, status, inferenceId });
+    
+    if (!webhookSecret) {
+      response.status(500).json(
+        "Malformed URL, no webhook_secret detected!",
+      );
+      return;
+    }
+    
+    if (
+      webhookSecret.toLowerCase() !== LEAP_WEBHOOK_SECRET.value().toLowerCase()
+    ) {
+      response.status(401).json("Unauthorized!");
+      return;
+    }
+    
+    if (!userId) {
+      response.status(500).json(
+        "Malformed URL, no user_id detected!",
+      );
+      return;
+    }
+    
+    if (!modelId) {
+      response.status(500).json(
+        "Malformed URL, no model_id detected!",
+      );
+      return;
+    }
+    
+    try {
+      info({ images: result.images });
+      await Promise.all(
+        result.images.map(async (image: any) => {
+          avatarsRef.doc(userId).collection("userAvatars").add({
+            modelId: modelId,
+            url: image.uri,
+          });
+        })
+      );
+      response.status(200).json("Success");
+    } catch (e) {
+      info(e);
+      response.status(500).json(
+        "Something went wrong!",
+      );
+    }
+  });
+    
+export const trainModel = onCall(
+  { secrets: [ LEAP_API_KEY, LEAP_WEBHOOK_SECRET ] },
+  async (request) => {
+    // Checking that the user is authenticated.
+    if (!request.auth) {
+      // Throwing an HttpsError so that the client gets the error details.
+      throw new HttpsError(
+        "failed-precondition",
+        "The function must be called while authenticated."
+      );
+    }
+    
+    const userId = request.auth.uid;
+    info({ userId });
+    const { imageUrls, type, name }: {
+          imageUrls: string[];
+          type: string;
+          name: string;
+        } = request.data;
+    
+    if (imageUrls?.length < 4) {
+      throw new HttpsError(
+        "failed-precondition",
+        "Upload at least 4 sample images",
+      );
+    }
+    info({ imageUrls, type, name });
+
+    // eslint-disable-next-line max-len
+    const fullWebhook = `${WEBHOOK_URL.valueOf()}?user_id=${userId}&webhook_secret=${LEAP_WEBHOOK_SECRET.value()}&model_type=${type}`;
+
+    const modelId = await sd.createTrainingJob({
+      leapApiKey: LEAP_API_KEY.value(),
+      imageUrls,
+      name,
+      type,
+      userId,
+      webhookUrl: fullWebhook,
+    });
+
+    // add model to DB
+    await aiModelsRef
+      .doc(userId)
+      .collection("imageModels")
+      .doc(modelId)
+      .set({
+        id: modelId,
+        user_id: userId,
+        name,
+        type,
+        status: "training",
+      });
+    
+    await Promise.all(
+      imageUrls.map(async (imageUrl) => {
+        // get image from url
+        const imagesSnap = await trainingImagesRef
+          .doc(userId)
+          .collection("userSamples")
+          .where("url", "==", imageUrl)
+          .get();
+    
+        if (imagesSnap.empty) return;
+    
+        // update image with modelId
+        await Promise.all(
+          imagesSnap.docs.map(async (doc) => {
+            await doc.ref.update({
+              modelId: modelId,
+            });
+          }),
+        );
+      }),
+    );
+    
+    return {
+      success: true,
+    };
+  });
+    
+export const trainWebhook = onRequest(
+  { secrets: [ LEAP_API_KEY, RESEND_API_KEY, LEAP_WEBHOOK_SECRET ] },
+  async (request, response): Promise<void> => {
+    const resend = new Resend(RESEND_API_KEY.value());
+    
+    const { id, state: status } = await request.body;
+    const userId = request.query.user_id as string;
+    const webhookSecret = request.query.webhook_secret as string;
+    const modelType = request.query.model_type as string;
+    
+    if (!webhookSecret) {
+      response.status(500).json(
+        "Malformed URL, no webhook_secret detected!",
+      );
+      return;
+    }
+    
+    if (
+      webhookSecret.toLowerCase() !== LEAP_WEBHOOK_SECRET.value().toLowerCase()
+    ) {
+      response.status(401).json("Unauthorized!");
+      return;
+    }
+    
+    if (!userId) {
+      response.status(500).json(
+        "Malformed URL, no user_id detected!",
+      );
+      return;
+    }
+    
+    const user = await auth.getUser(userId);
+    if (!user) {
+      response.status(401).json(
+        "User not found!",
+      );
+      return;
+    }
+    
+    try {
+      if (status === "finished") {
+        // Send Email
+        await resend.emails.send({
+          from: "noreply@headshots.tapped.ai",
+          to: user?.email ?? "",
+          subject: "Your model was successfully trained!",
+          html:
+                // eslint-disable-next-line max-len
+                "<h2>We're writing to notify you that your model training was successful!</h2>",
+        });
+    
+        await aiModelsRef
+          .doc(userId)
+          .collection("imageModels")
+          .doc(id)
+          .update({
+            status: "ready",
+          });
+    
+        const leap = new Leap({
+          accessToken: LEAP_API_KEY.value(),
+        });
+    
+        const { status, statusText } = await leap.images.generate({
+          prompt: prompts[index].replace(
+            "{model_type}",
+            modelType ?? ""
+          ),
+          numberOfImages: 4,
+          height: 512,
+          width: 512,
+          steps: 50,
+          negativePrompt:
+                  // eslint-disable-next-line max-len
+                  "(deformed iris, deformed pupils, semi-realistic, cgi, 3d, render, sketch, cartoon, drawing, anime:1.4), text, close up, cropped, out of frame, worst quality, low quality, jpeg artifacts, ugly, duplicate, morbid, mutilated, extra fingers, mutated hands, poorly drawn hands, poorly drawn face, mutation, deformed, blurry, dehydrated, bad anatomy, bad proportions, extra limbs, cloned face, disfigured, gross proportions, malformed limbs, missing arms, missing legs, extra arms, extra legs, fused fingers, too many fingers, long neck",
+          modelId: id,
+          promptStrength: 7.5,
+          webhookUrl:
+                  // eslint-disable-next-line max-len
+                  `${IMAGE_WEBHOOK_URL}?user_id=${userId}&model_id=${id}&webhook_secret=${LEAP_WEBHOOK_SECRET.value()}`,
+        });
+        info({ status, statusText });
+      } else {
+        // Send Email
+        await resend.emails.send({
+          from: "noreply@headshots.tapped.ai",
+          to: user?.email ?? "",
+          subject: "Your model failed to train!",
+          html:
+                // eslint-disable-next-line max-len
+                "<h2>We're writing to notify you that your model training failed!.</h2>",
+        });
+    
+        await aiModelsRef
+          .doc(userId)
+          .collection("imageModels")
+          .doc(id)
+          .update({
+            status: "errored",
+          });
+      }
+    
+      response.status(200).json(
+        "Success",
+      );
+    } catch (e) {
+      info(e);
+      response.status(500).json(
+        "Something went wrong!",
+      );
+    }
+  });
