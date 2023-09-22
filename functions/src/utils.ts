@@ -1,3 +1,5 @@
+/* eslint-disable import/no-unresolved */
+
 import type { CallableContext } from "firebase-functions/v1/https";
 import type { CallableRequest } from "firebase-functions/v2/https";
 import { HttpsError } from "firebase-functions/v2/https";

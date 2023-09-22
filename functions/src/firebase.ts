@@ -1,3 +1,4 @@
+/* eslint-disable import/no-unresolved */
 import { getStorage } from "firebase-admin/storage";
 import { getMessaging } from "firebase-admin/messaging";
 import { getRemoteConfig } from "firebase-admin/remote-config";
