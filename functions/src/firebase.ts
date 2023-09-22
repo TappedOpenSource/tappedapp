@@ -57,7 +57,6 @@ export const stripePublishableKey = defineSecret("STRIPE_PUBLISHABLE_KEY");
 export const OPEN_AI_KEY = defineSecret("OPEN_AI_KEY");
 export const LEAP_API_KEY = defineSecret("LEAP_API_KEY");
 export const LEAP_WEBHOOK_SECRET = defineSecret("LEAP_WEBHOOK_SECRET");
-export const RESEND_API_KEY = defineSecret("RESEND_API_KEY");
 
 export const bookingBotUuid = "90dc0775-3a0d-4e92-8573-9c7aa6832d94";
 export const verifiedBotUuid = "1c0d9380-873c-493a-a3f8-1283d5408673";
