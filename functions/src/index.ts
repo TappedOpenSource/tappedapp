@@ -1639,7 +1639,7 @@ export const generateAlbumName = onCall(
 
 export const createAvatarInferenceJob = onCall(
   {
-    secrets: [ LEAP_API_KEY ]
+    secrets: [ LEAP_API_KEY, LEAP_WEBHOOK_SECRET ]
   },
   async (request) => {
     // // Checking that the user is authenticated.
@@ -1660,6 +1660,8 @@ export const createAvatarInferenceJob = onCall(
         "with argument \"avatarStyle\".");
     }
 
+    const userId = request.auth?.uid;
+
     // const prompt = `8k portrait of @subject in the style of ${avatarStyle}`;
     const negativePrompt = "(deformed iris, deformed pupils, semi-realistic, cgi, 3d, render, sketch, cartoon, drawing, anime:1.4), text, close up, cropped, out of frame, worst quality, low quality, jpeg artifacts, ugly, duplicate, morbid, mutilated, extra fingers, mutated hands, poorly drawn hands, poorly drawn face, mutation, deformed, blurry, dehydrated, bad anatomy, bad proportions, extra limbs, cloned face, disfigured, gross proportions, malformed limbs, missing arms, missing legs, extra arms, extra legs, fused fingers, too many fingers, long neck";
 
@@ -1669,7 +1671,9 @@ export const createAvatarInferenceJob = onCall(
       prompt,
       negativePrompt,
       numberOfImages: 4,
+      webhookUrl: `${IMAGE_WEBHOOK_URL}?user_id=${userId}&model_id=${modelId}&webhook_secret=${LEAP_WEBHOOK_SECRET.value()}`,
     });
+    info({ inferenceId });
 
     return { inferenceId };
   });
