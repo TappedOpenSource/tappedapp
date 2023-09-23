@@ -1587,6 +1587,25 @@ export const sendSearchAppearances = onSchedule("0 0/3 * * *", async (event) => 
   });
 });
 
+export const onDeleteAvatar = functions
+  .firestore
+  .document("avatars/{userId}/userAvatars/{avatarId}")
+  .onDelete(async (data) => {
+    const avatar = data.data();
+    const url = avatar?.url;
+    const userId = avatar?.userId;
+
+    if (url === undefined) {
+      return;
+    }
+
+    if (userId === undefined) {
+      return;
+    }
+
+    await mainBucket.deleteFiles({ prefix: `images/${userId}/avatar_${data.id}.png` });
+  });
+
 export const generateAlbumName = onCall(
   {
     secrets: [ OPEN_AI_KEY ],
@@ -1833,6 +1852,7 @@ export const trainModel = onCall(
         user_id: userId,
         name,
         type,
+        timestamp: Timestamp.now(),
         status: "training",
       });
     
@@ -1874,6 +1894,8 @@ export const trainWebhook = onRequest(
     const userId = request.query.user_id as string;
     const webhookSecret = request.query.webhook_secret as string;
     const modelType = request.query.model_type as string;
+
+    info({ status, id });
     
     if (!webhookSecret) {
       response.status(500).json(
@@ -1906,7 +1928,6 @@ export const trainWebhook = onRequest(
     
     try {
       if (status === "finished") {
-    
         await aiModelsRef
           .doc(userId)
           .collection("imageModels")
