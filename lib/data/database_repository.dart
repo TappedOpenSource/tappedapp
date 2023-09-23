@@ -157,7 +157,8 @@ abstract class DatabaseRepository {
   );
   Future<List<UserModel>> getFollowing(String currentUserId);
   Future<List<UserModel>> getFollowers(String currentUserId);
-  Future<List<UserModel>> getCommonFollowers(String currentUserID, String observedUserId);
+  Future<List<UserModel>> getCommonFollowers(
+      String currentUserID, String observedUserId);
 
   // Activity related stuff
   Future<List<Activity>> getActivities(
@@ -312,4 +313,8 @@ abstract class DatabaseRepository {
   Future<List<Avatar>> getUserAvatars(String userId);
   Stream<Avatar> userAvatarsObserver(String userId);
   Future<void> createAvatar(Avatar avatar);
+  Future<void> deleteAvatar({
+    required String userId,
+    required String avatarId,
+  });
 }

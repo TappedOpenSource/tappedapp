@@ -1,50 +1,47 @@
 import 'package:flutter/material.dart';
 
-class GridItem extends StatelessWidget {
-  const GridItem({
+class MarketingOption extends StatelessWidget {
+  const MarketingOption({
     required this.title,
-    required this.icon,
     this.disabled = false,
     this.onTap,
     super.key,
   });
 
   final String title;
-  final IconData icon;
-  final bool disabled;
   final void Function()? onTap;
+  final bool disabled;
 
-  Widget get _buildGridItem => Padding(
-      padding: const EdgeInsets.all(8),
+  Widget get _buildMarketingOption => Padding(
+      padding: const EdgeInsets.symmetric(
+        horizontal: 8,
+        vertical: 2,
+      ),
       child: Card(
         child: InkWell(
-          onTap: disabled ? null : onTap,
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Icon(
-                icon,
-                size: 40,
-              ),
-              Text(
-                title,
-                textAlign: TextAlign.center,
-              ),
-            ],
+          onTap: onTap,
+          child: Padding(
+            padding: const EdgeInsets.symmetric(
+              vertical: 48,
+            ),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Text(title),
+              ],
+            ),
           ),
         ),
       ),
     );
-  
+
   @override
   Widget build(BuildContext context) {
     return switch (disabled) {
-      false => _buildGridItem,
+      false => _buildMarketingOption,
       true => Stack(
           children: [
-            Positioned.fill(
-              child: _buildGridItem,
-            ),
+              _buildMarketingOption,
             Positioned.fill(
               child: Container(
                 color: Colors.black.withOpacity(0.5),
