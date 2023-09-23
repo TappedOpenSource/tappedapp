@@ -29,6 +29,8 @@ import 'package:intheloopapp/ui/login/login_view.dart';
 import 'package:intheloopapp/ui/login/signup_view.dart';
 import 'package:intheloopapp/ui/loop_feed/loop_feed_view.dart';
 import 'package:intheloopapp/ui/loop_view/loop_view.dart';
+import 'package:intheloopapp/ui/create_single_marketing_plan/create_single_marketing_plan_view.dart';
+import 'package:intheloopapp/ui/marketer/marketer_view.dart';
 import 'package:intheloopapp/ui/messaging/channel_view.dart';
 import 'package:intheloopapp/ui/messaging/messaging_view.dart';
 import 'package:intheloopapp/ui/messaging/video_call_view.dart';
@@ -507,5 +509,21 @@ final class SocialMediaManagerPage extends TappedRoute {
       : super(
           routeName: '/social_media_manager',
           view: const SocialMediaManagerView(),
+        );
+}
+
+final class MarketerPage extends TappedRoute {
+  MarketerPage()
+      : super(
+          routeName: '/marketer',
+          view: const MarketerView(),
+        );
+}
+
+final class CreateSingleMarketingPlanPage extends TappedRoute {
+  CreateSingleMarketingPlanPage()
+      : super(
+          routeName: '/create_marketing_plan',
+          view: const CreateSingleMarketingPlanView(),
         );
 }

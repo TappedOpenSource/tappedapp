@@ -28,7 +28,8 @@ class AvatarGeneratorContainer extends StatelessWidget {
                     SizedBox(height: 4),
                     Text(
                       // ignore: lines_longer_than_80_chars
-                      'context johannes@tapped.ai or ilias@tapped.ai to get one create for you',
+                      'contact support@tapped.ai to get one created for you',
+                      textAlign: TextAlign.center,
                     ),
                   ],
                 ),

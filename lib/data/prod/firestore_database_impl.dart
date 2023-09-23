@@ -2388,6 +2388,26 @@ class FirestoreDatabaseImpl extends DatabaseRepository {
         .doc(avatar.id)
         .set(avatar.toMap());
   }
+
+  @override 
+  Future<void> deleteAvatar({
+    required String userId,
+    required String avatarId,
+}) async {
+  await _analytics.logEvent(
+    name: 'delete_avatar',
+    parameters: {
+      'user_id': userId,
+      'avatar_id': avatarId,
+    },
+  );
+
+  await _avatarsRef
+      .doc(userId)
+      .collection('userAvatars')
+      .doc(avatarId)
+      .delete();
+}
 }
 
 class HandleAlreadyExistsException implements Exception {
