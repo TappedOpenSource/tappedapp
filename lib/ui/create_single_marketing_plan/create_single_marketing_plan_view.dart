@@ -1,12 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:intheloopapp/domains/navigation_bloc/navigation_bloc.dart';
+import 'package:intheloopapp/domains/models/option.dart';
 import 'package:intheloopapp/ui/create_single_marketing_plan/cubit/create_single_marketing_plan_cubit.dart';
-import 'package:intheloopapp/ui/forms/aesthetic_form_field.dart';
-import 'package:intheloopapp/ui/forms/more_to_come_form_field.dart';
-import 'package:intheloopapp/ui/forms/release_timeline_form_field.dart';
 import 'package:intheloopapp/ui/forms/tapped_form/tapped_form.dart';
-import 'package:intheloopapp/ui/forms/target_audience_form_field.dart';
+import 'package:intheloopapp/ui/forms/tapped_form/tapped_text_field.dart';
 import 'package:intheloopapp/ui/marketer/marketing_plan_complete_view.dart';
 
 class CreateSingleMarketingPlanView extends StatelessWidget {
@@ -15,13 +12,47 @@ class CreateSingleMarketingPlanView extends StatelessWidget {
   Widget get _buildForm => BlocBuilder<CreateSingleMarketingPlanCubit,
           CreateSingleMarketingPlanState>(
         builder: (context, state) {
+          final cubit = context.read<CreateSingleMarketingPlanCubit>();
           return switch (state.isSubmitted) {
             false => TappedForm(
-                questions: const [
-                  AestheticFormField(),
-                  TargetAudienceFormField(),
-                  MoreToComeFormField(),
-                  ReleaseTimelineFormField(),
+                questions: [
+                  TappedTextField(
+                    title: 'what is the aesthetic?',
+                    initialValue: state.aesthetic.asNullable() ?? '',
+                    onChange: cubit.updateAesthetic,
+                    examples: const [
+                      'dreamy waves',
+                      'futuristic cyberpunk',
+                      '90s y2k',
+                      'rage rap',
+                    ],
+                  ),
+                 TappedTextField(
+                    title: 'do you have a target audience?',
+                    initialValue: state.targetAudience.asNullable() ?? '',
+                    onChange: cubit.updateTargetAudience,
+                    examples: const [],
+                  ),
+                 TappedTextField(
+                    title: 'is this leading to something bigger?',
+                    initialValue: state.moreToCome.asNullable() ?? '',
+                    onChange: cubit.updateMoreToCome,
+                    examples: const [
+                      'an album',
+                      'a music video',
+                    ],
+                  ),
+                 TappedTextField(
+                    title: 'what is your release timeline?',
+                    initialValue: state.releaseTimeline.asNullable() ?? '',
+                    onChange: cubit.updateReleaseTimeline,
+                    examples: const [
+                      'tomorrow',
+                      'next week',
+                      'next month',
+                      'who knows',
+                    ],
+                  ),
                 ],
                 onSubmit: () =>
                     context.read<CreateSingleMarketingPlanCubit>().submit(),
