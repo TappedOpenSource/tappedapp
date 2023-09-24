@@ -19,11 +19,12 @@ class TappedTextField extends StatefulWidget {
 }
 
 class _TappedTextFieldState extends State<TappedTextField> {
-  final _controller = TextEditingController();
+  late final TextEditingController _controller;
 
   @override
   void initState() {
     super.initState();
+    _controller = TextEditingController();
     _controller.text = widget.initialValue ?? '';
   }
 
@@ -33,7 +34,7 @@ class _TappedTextFieldState extends State<TappedTextField> {
     super.dispose();
   }
 
-  Widget exampleChip({
+  Widget _exampleChip({
     required String text,
   }) {
     return Padding(
@@ -97,7 +98,7 @@ class _TappedTextFieldState extends State<TappedTextField> {
           Column(
             children: widget.examples
                 .map(
-                  (e) => exampleChip(
+                  (e) => _exampleChip(
                     text: e,
                   ),
                 )

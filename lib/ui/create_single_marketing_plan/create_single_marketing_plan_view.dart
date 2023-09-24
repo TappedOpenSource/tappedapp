@@ -17,6 +17,7 @@ class CreateSingleMarketingPlanView extends StatelessWidget {
             false => TappedForm(
                 questions: [
                   TappedTextField(
+                    key: const Key('aesthetic'),
                     title: 'what is the aesthetic?',
                     initialValue: state.aesthetic.asNullable() ?? '',
                     onChange: cubit.updateAesthetic,
@@ -28,12 +29,14 @@ class CreateSingleMarketingPlanView extends StatelessWidget {
                     ],
                   ),
                  TappedTextField(
+                    key: const Key('targetAudience'),
                     title: 'do you have a target audience?',
                     initialValue: state.targetAudience.asNullable() ?? '',
                     onChange: cubit.updateTargetAudience,
                     examples: const [],
                   ),
                  TappedTextField(
+                    key: const Key('moreToCome'),
                     title: 'is this leading to something bigger?',
                     initialValue: state.moreToCome.asNullable() ?? '',
                     onChange: cubit.updateMoreToCome,
@@ -43,6 +46,7 @@ class CreateSingleMarketingPlanView extends StatelessWidget {
                     ],
                   ),
                  TappedTextField(
+                    key: const Key('releaseTimeline'),
                     title: 'what is your release timeline?',
                     initialValue: state.releaseTimeline.asNullable() ?? '',
                     onChange: cubit.updateReleaseTimeline,
