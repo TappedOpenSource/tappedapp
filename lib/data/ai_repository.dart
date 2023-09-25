@@ -8,9 +8,13 @@ abstract class AIRepository {
   Future<InferenceJob> getAvatarInferenceJob({
     required String inferenceId,
   });
-  Future<MarketingPlan> createMarketingPlan(
-    String currentUserId,
-  );
+  Future<MarketingPlan> createMarketingPlan({
+    required String currentUserId,
+    required String aesthetic,
+    required String targetAudience,
+    required String moreToCome,
+    required String releaseTimeline,
+  });
 }
 
 class InferenceJob {

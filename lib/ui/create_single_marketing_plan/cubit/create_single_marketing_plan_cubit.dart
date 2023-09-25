@@ -37,7 +37,22 @@ class CreateSingleMarketingPlanCubit
   Future<void> submit() async {
     emit(state.copyWith(loading: true));
 
-    final marketingPlan = await ai.createMarketingPlan(userId);
+    // final marketingPlan = await ai.createMarketingPlan(
+    //   aesthetic: state.aesthetic.unwrap,
+    //   targetAudience: state.targetAudience.unwrap,
+    //   releaseTimeline: state.releaseTimeline.unwrap,
+    //   moreToCome: state.moreToCome.unwrap,
+    //   currentUserId: userId,
+    // );
+
+    final marketingPlan = MarketingPlan(
+      id: '1',
+      userId: userId,
+      type: MarketingPlanType.single,
+      content: 'content',
+      prompt: 'prompt',
+      timestamp: DateTime.now(),
+    );
 
     emit(
       state.copyWith(
