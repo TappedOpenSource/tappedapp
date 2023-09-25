@@ -21,16 +21,25 @@ class TappedTextField extends StatefulWidget {
 class _TappedTextFieldState extends State<TappedTextField> {
   late final TextEditingController _controller;
 
+  void _onChange() {
+    final text = _controller.text;
+    widget.onChange?.call(text);
+  }
+
   @override
   void initState() {
     super.initState();
     _controller = TextEditingController();
-    _controller.text = widget.initialValue ?? '';
+    _controller
+      ..text = widget.initialValue ?? ''
+      ..addListener(_onChange);
   }
 
   @override
   void dispose() {
-    _controller.dispose();
+    _controller
+      ..removeListener(_onChange)
+      ..dispose();
     super.dispose();
   }
 

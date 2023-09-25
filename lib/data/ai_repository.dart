@@ -1,3 +1,5 @@
+import 'package:intheloopapp/domains/models/marketing_plan.dart';
+
 abstract class AIRepository {
   Future<(String, String)> createAvatarInferenceJob({
     required String modelId,
@@ -6,9 +8,9 @@ abstract class AIRepository {
   Future<InferenceJob> getAvatarInferenceJob({
     required String inferenceId,
   });
-  // Future<String> createAlbumName(
-  //   String currentUserId,
-  // );
+  Future<MarketingPlan> createMarketingPlan(
+    String currentUserId,
+  );
 }
 
 class InferenceJob {

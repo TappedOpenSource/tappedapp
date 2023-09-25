@@ -9,7 +9,7 @@ class TappedForm extends StatefulWidget {
     super.key,
   });
 
-  final List<Widget> questions;
+  final List<(Widget, bool Function())> questions;
   final void Function()? onNext;
   final void Function()? onPrevious;
   final void Function()? onSubmit;
@@ -20,6 +20,9 @@ class TappedForm extends StatefulWidget {
 
 class _TappedFormState extends State<TappedForm> {
   int _index = 0;
+  Widget get _currQuestion => widget.questions[_index].$1;
+  bool Function() get _currValidator => widget.questions[_index].$2;
+  bool get _isValid => _currValidator();
 
   @override
   Widget build(BuildContext context) {
@@ -33,8 +36,8 @@ class _TappedFormState extends State<TappedForm> {
     }
 
     const segmentPadding = 4;
-    final segmentWidth = MediaQuery.of(context).size.width / numQuestions -
-        (segmentPadding * 2);
+    final segmentWidth =
+        MediaQuery.of(context).size.width / numQuestions - (segmentPadding * 2);
 
     return Scaffold(
       backgroundColor: theme.colorScheme.background,
@@ -59,37 +62,45 @@ class _TappedFormState extends State<TappedForm> {
               }).toList(),
             ),
             Expanded(
-              child: Center(child: widget.questions[_index]),
+              child: Center(
+                child: _currQuestion,
+              ),
             ),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 if (_index != 0)
-                  TextButton(
+                  FilledButton(
                     onPressed: () {
                       setState(() {
                         _index--;
                       });
                       widget.onPrevious?.call();
                     },
-                    child: const Text('back'),
+                    child: const Text(
+                      'back',
+                    ),
                   )
                 else
                   const SizedBox.shrink(),
-                if (_index != numQuestions - 1)
-                  TextButton(
+                if (_index != numQuestions - 1 && _isValid)
+                  FilledButton(
                     onPressed: () {
                       setState(() {
                         _index++;
                       });
                       widget.onNext?.call();
                     },
-                    child: const Text('next'),
+                    child: const Text(
+                      'next',
+                    ),
                   ),
-                if (_index == numQuestions - 1)
-                  TextButton(
+                if (_index == numQuestions - 1 && _isValid)
+                  FilledButton(
                     onPressed: widget.onSubmit?.call,
-                    child: const Text('submit'),
+                    child: const Text(
+                      'submit',
+                    ),
                   ),
               ],
             ),
