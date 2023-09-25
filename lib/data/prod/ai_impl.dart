@@ -4,6 +4,7 @@ import 'package:intheloopapp/domains/models/marketing_plan.dart';
 import 'package:intheloopapp/domains/models/option.dart';
 import 'package:intheloopapp/utils/app_logger.dart';
 import 'package:path/path.dart';
+import 'package:uuid/uuid.dart';
 
 final _functions = FirebaseFunctions.instance;
 
@@ -50,14 +51,33 @@ class AiImpl implements AIRepository {
   }
 
   @override
-  Future<MarketingPlan> createMarketingPlan(
-    String currentUserId,
-  ) async {
+  Future<MarketingPlan> createMarketingPlan({
+    required String currentUserId,
+    required String aesthetic,
+    required String targetAudience,
+    required String moreToCome,
+    required String releaseTimeline,
+  }) async {
+    final uuid = const Uuid().v4();
+
+    final callable = _functions.httpsCallable('createMarketingPlan');
+    final results = await callable<Map<String, dynamic>>({
+      'aesthetic': aesthetic,
+      'targetAudience': targetAudience,
+      'moreToCome': moreToCome,
+      'releaseTimeline': releaseTimeline,
+    });
+
+    logger.info('createMarketingPlan: ${results.data}');
+
+    final data = results.data;
+
     return MarketingPlan(
-      id: '1',
+      id: uuid,
       userId: currentUserId,
       type: MarketingPlanType.single,
-      content: 'content',
+      content: data['content'] as String? ?? '',
+      prompt: data['prompt'] as String? ?? '',
       timestamp: DateTime.now(),
     );
   }
