@@ -1,5 +1,6 @@
 import 'package:cloud_functions/cloud_functions.dart';
 import 'package:intheloopapp/data/ai_repository.dart';
+import 'package:intheloopapp/domains/models/marketing_plan.dart';
 import 'package:intheloopapp/domains/models/option.dart';
 import 'package:intheloopapp/utils/app_logger.dart';
 import 'package:path/path.dart';
@@ -48,10 +49,16 @@ class AiImpl implements AIRepository {
     return job;
   }
 
-  // @override
-  // Future<String> createAlbumName(
-  //   String currentUserId,
-  // ) async {
-  //   return '';
-  // }
+  @override
+  Future<MarketingPlan> createMarketingPlan(
+    String currentUserId,
+  ) async {
+    return MarketingPlan(
+      id: '1',
+      userId: currentUserId,
+      type: MarketingPlanType.single,
+      content: 'content',
+      timestamp: DateTime.now(),
+    );
+  }
 }

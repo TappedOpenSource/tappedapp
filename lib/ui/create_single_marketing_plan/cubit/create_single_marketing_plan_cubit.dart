@@ -1,15 +1,22 @@
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
+import 'package:intheloopapp/data/ai_repository.dart';
+import 'package:intheloopapp/domains/models/marketing_plan.dart';
 import 'package:intheloopapp/domains/models/option.dart';
 
 part 'create_single_marketing_plan_state.dart';
 
 class CreateSingleMarketingPlanCubit
     extends Cubit<CreateSingleMarketingPlanState> {
-  CreateSingleMarketingPlanCubit()
-      : super(
+  CreateSingleMarketingPlanCubit({
+    required this.userId,
+    required this.ai,
+  }) : super(
           const CreateSingleMarketingPlanState(),
         );
+
+  final String userId;
+  final AIRepository ai;
 
   void updateAesthetic(String aesthetic) {
     emit(state.copyWith(aesthetic: Some(aesthetic)));
@@ -27,7 +34,17 @@ class CreateSingleMarketingPlanCubit
     emit(state.copyWith(releaseTimeline: Some(releaseTimeline)));
   }
 
-  void submit() {
-    emit(state.copyWith(isSubmitted: true));
+  Future<void> submit() async {
+    emit(state.copyWith(loading: true));
+
+    final marketingPlan = await ai.createMarketingPlan(userId);
+
+    emit(
+      state.copyWith(
+        marketingPlan: Some(marketingPlan),
+      ),
+    );
+
+    emit(state.copyWith(loading: false));
   }
 }
