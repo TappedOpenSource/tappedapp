@@ -19,7 +19,7 @@ class MarketingPlanView extends StatelessWidget {
         Text(marketingPlan.content),
         CupertinoButton.filled(
           onPressed: () => context.pop(),
-          child: const Text('Save'),
+          child: const Text('Done'),
         ),
       ],
     );

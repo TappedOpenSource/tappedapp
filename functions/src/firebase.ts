@@ -39,6 +39,7 @@ export const avatarsRef = db.collection("avatars");
 export const aiModelsRef = db.collection("aiModels");
 export const trainingImagesRef = db.collection("trainingImages");
 export const labelApplicationsRef = db.collection("labelApplications");
+export const marketingPlansRef = db.collection("marketingPlans");
 
 // const loopLikesSubcollection = "loopLikes";
 // const loopCommentsSubcollection = "loopComments";
