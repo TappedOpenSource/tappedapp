@@ -31,6 +31,7 @@ import {
   OpportunityInterest,
   SearchAppearanceActivity,
   BookingReminderActivity,
+  MarketingPlan,
   // UserModel,
   // BookerReview,
 } from "./models";
@@ -71,6 +72,7 @@ import {
   aiModelsRef,
   trainingImagesRef,
   projectId,
+  marketingPlansRef,
 } from "./firebase";
 import { 
   authenticatedRequest, 
@@ -1970,4 +1972,66 @@ export const trainWebhook = onRequest(
         "Something went wrong!",
       );
     }
+  });
+
+export const createSingleMarketingPlan = onCall(
+  { secrets: [ OPEN_AI_KEY ] },
+  async (request) => {
+    const openAiKey = OPEN_AI_KEY.value();
+    const { 
+      userId, 
+      aesthetic, 
+      targetAudience, 
+      moreToCome, 
+      releaseTimeline,
+    } = request.data;
+
+    info({ userId, aesthetic, targetAudience, moreToCome, releaseTimeline });
+
+    const userSnapshot = await usersRef.doc(userId).get();
+    if (!userSnapshot.exists) {
+      throw new HttpsError("failed-precondition", `user ${userId} does not exist`);
+    }
+
+    const artistName = userSnapshot.data()?.username;
+    const artistGenres = userSnapshot.data()?.genres;
+
+    // const labelApplicationsQuery = await labelApplicationsRef.where("id", "==", userId).get();
+    // if (labelApplicationsQuery.empty) {
+    //   throw new HttpsError("failed-precondition", `user ${userId} does not have a label application`);
+    // }
+
+    // const igFollowerCount = labelApplicationsQuery.docs[0].data().igFollowerCount;
+  
+    const { content, prompt } = await llm.generateSingleMarketingPlan({
+      artistName,
+      artistGenres,
+      // igFollowerCount,
+      aesthetic,
+      targetAudience,
+      moreToCome,
+      releaseTimeline,
+      apiKey: openAiKey,
+    });
+
+    const uuid = uuidv4();
+    const marketingPlan: MarketingPlan = {
+      id: uuid,
+      userId: userId,
+      type: "single",
+      content: content,
+      prompt: prompt,
+      timestamp: Timestamp.now(),
+
+    };
+    await marketingPlansRef
+      .doc(userId)
+      .collection("userMarketingPlans")
+      .doc(uuid)
+      .set(marketingPlan);
+
+    return {
+      content,
+      prompt,
+    };
   });

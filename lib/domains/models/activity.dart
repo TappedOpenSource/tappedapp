@@ -384,7 +384,7 @@ final class LoopMention extends Activity {
           'fromUserId',
         ) as String,
         loopId: doc.get(
-          'rootId',
+          'loopId',
         ) as String,
       );
     } catch (e, s) {

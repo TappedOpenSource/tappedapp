@@ -13,6 +13,7 @@ import 'package:intheloopapp/domains/models/badge.dart';
 import 'package:intheloopapp/domains/models/booking.dart';
 import 'package:intheloopapp/domains/models/comment.dart';
 import 'package:intheloopapp/domains/models/loop.dart';
+import 'package:intheloopapp/domains/models/marketing_plan.dart';
 import 'package:intheloopapp/domains/models/option.dart';
 import 'package:intheloopapp/domains/models/review.dart';
 import 'package:intheloopapp/domains/models/service.dart';
@@ -46,6 +47,7 @@ final _blockerRef = _firestore.collection('blockers');
 final _reviewsRef = _firestore.collection('reviews');
 final _aiModelsRef = _firestore.collection('aiModels');
 final _avatarsRef = _firestore.collection('avatars');
+final _marketingPlansRef = _firestore.collection('marketingPlans');
 
 const verifiedBadgeId = '0aa46576-1fbe-4312-8b69-e2fef3269083';
 
@@ -2387,6 +2389,73 @@ class FirestoreDatabaseImpl extends DatabaseRepository {
         .collection('userAvatars')
         .doc(avatar.id)
         .set(avatar.toMap());
+  }
+
+  @override
+  Future<void> deleteAvatar({
+    required String userId,
+    required String avatarId,
+  }) async {
+    await _analytics.logEvent(
+      name: 'delete_avatar',
+      parameters: {
+        'user_id': userId,
+        'avatar_id': avatarId,
+      },
+    );
+
+    await _avatarsRef
+        .doc(userId)
+        .collection('userAvatars')
+        .doc(avatarId)
+        .delete();
+  }
+
+  @override
+  Future<List<MarketingPlan>> getUserMarketingPlans(String userId) async {
+    final marketingPlansSnapshot = await _marketingPlansRef
+        .doc(userId)
+        .collection('userMarketingPlans')
+        .get();
+
+    final marketingPlans =
+        marketingPlansSnapshot.docs.map(MarketingPlan.fromDoc).toList();
+
+    return marketingPlans;
+  }
+
+  @override
+  Stream<MarketingPlan> userMarketingPlansObserver(String userId) async* {
+    final userMarketingPlanSnapshotObserver = _marketingPlansRef
+        .doc(userId)
+        .collection('userMarketingPlans')
+        .orderBy('timestamp', descending: true)
+        .snapshots();
+
+    final userMarketingPlansObserver = userMarketingPlanSnapshotObserver
+        .map((event) {
+          return event.docChanges
+              .where(
+            (DocumentChange<Map<String, dynamic>> element) =>
+                element.type == DocumentChangeType.added,
+          )
+              .map((DocumentChange<Map<String, dynamic>> element) {
+            try {
+              return MarketingPlan.fromDoc(element.doc);
+            } catch (e, s) {
+              logger.error(
+                'Error parsing marketing plan',
+                error: e,
+                stackTrace: s,
+              );
+              return null;
+            }
+          });
+        })
+        .flatMap(Stream.fromIterable)
+        .whereType<MarketingPlan>();
+
+    yield* userMarketingPlansObserver;
   }
 }
 
