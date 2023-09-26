@@ -5,6 +5,7 @@ import 'package:intheloopapp/domains/models/badge.dart';
 import 'package:intheloopapp/domains/models/booking.dart';
 import 'package:intheloopapp/domains/models/comment.dart';
 import 'package:intheloopapp/domains/models/loop.dart';
+import 'package:intheloopapp/domains/models/marketing_plan.dart';
 import 'package:intheloopapp/domains/models/option.dart';
 import 'package:intheloopapp/domains/models/review.dart';
 import 'package:intheloopapp/domains/models/service.dart';
@@ -317,4 +318,6 @@ abstract class DatabaseRepository {
     required String userId,
     required String avatarId,
   });
+  Future<List<MarketingPlan>> getUserMarketingPlans(String userId);
+  Stream<MarketingPlan> userMarketingPlansObserver(String userId);
 }

@@ -1,3 +1,8 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:enum_to_string/enum_to_string.dart';
+import 'package:intheloopapp/utils/app_logger.dart';
+import 'package:intheloopapp/utils/default_value.dart';
+
 class MarketingPlan {
   const MarketingPlan({
     required this.id,
@@ -7,6 +12,35 @@ class MarketingPlan {
     required this.prompt,
     required this.timestamp,
   });
+
+  factory MarketingPlan.fromDoc(DocumentSnapshot<Map<String, dynamic>> doc) {
+    try {
+      final tmpTimestamp = doc.getOrElse(
+        'timestamp',
+        Timestamp.now(),
+      );
+
+      return MarketingPlan(
+        id: doc.id,
+        userId: doc.get('userId') as String,
+        type: EnumToString.fromString(
+              MarketingPlanType.values,
+              doc.get('type') as String,
+            ) ??
+            MarketingPlanType.single,
+        content: doc.get('content') as String,
+        prompt: doc.get('prompt') as String,
+        timestamp: tmpTimestamp.toDate(),
+      );
+    } catch (e, s) {
+      logger.error(
+        'Error building loop from doc',
+        error: e,
+        stackTrace: s,
+      );
+      rethrow;
+    }
+  }
 
   final String id;
   final String userId;

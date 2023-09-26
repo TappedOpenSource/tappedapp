@@ -31,6 +31,7 @@ import {
   OpportunityInterest,
   SearchAppearanceActivity,
   BookingReminderActivity,
+  MarketingPlan,
   // UserModel,
   // BookerReview,
 } from "./models";
@@ -71,6 +72,7 @@ import {
   aiModelsRef,
   trainingImagesRef,
   projectId,
+  marketingPlansRef,
 } from "./firebase";
 import { 
   authenticatedRequest, 
@@ -2011,6 +2013,22 @@ export const createSingleMarketingPlan = onCall(
       releaseTimeline,
       apiKey: openAiKey,
     });
+
+    const uuid = uuidv4();
+    const marketingPlan: MarketingPlan = {
+      id: uuid,
+      userId: userId,
+      type: "single",
+      content: content,
+      prompt: prompt,
+      timestamp: Timestamp.now(),
+
+    };
+    await marketingPlansRef
+      .doc(userId)
+      .collection("userMarketingPlans")
+      .doc(uuid)
+      .set(marketingPlan);
 
     return {
       content,
