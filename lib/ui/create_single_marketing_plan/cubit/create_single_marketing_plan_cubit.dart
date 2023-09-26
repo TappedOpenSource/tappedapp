@@ -3,6 +3,7 @@ import 'package:equatable/equatable.dart';
 import 'package:intheloopapp/data/ai_repository.dart';
 import 'package:intheloopapp/domains/models/marketing_plan.dart';
 import 'package:intheloopapp/domains/models/option.dart';
+import 'package:intheloopapp/utils/app_logger.dart';
 
 part 'create_single_marketing_plan_state.dart';
 
@@ -37,29 +38,32 @@ class CreateSingleMarketingPlanCubit
   Future<void> submit() async {
     emit(state.copyWith(loading: true));
 
-    // final marketingPlan = await ai.createMarketingPlan(
-    //   aesthetic: state.aesthetic.unwrap,
-    //   targetAudience: state.targetAudience.unwrap,
-    //   releaseTimeline: state.releaseTimeline.unwrap,
-    //   moreToCome: state.moreToCome.unwrap,
-    //   currentUserId: userId,
-    // );
+    try {
+      final marketingPlan = await ai.createSingleMarketingPlan(
+        aesthetic: state.aesthetic.unwrap,
+        targetAudience: state.targetAudience.unwrap,
+        releaseTimeline: state.releaseTimeline.unwrap,
+        moreToCome: state.moreToCome.unwrap,
+        userId: userId,
+      );
 
-    final marketingPlan = MarketingPlan(
-      id: '1',
-      userId: userId,
-      type: MarketingPlanType.single,
-      content: 'content',
-      prompt: 'prompt',
-      timestamp: DateTime.now(),
-    );
-
-    emit(
-      state.copyWith(
-        marketingPlan: Some(marketingPlan),
-      ),
-    );
-
-    emit(state.copyWith(loading: false));
+      emit(
+        state.copyWith(
+          marketingPlan: Some(marketingPlan),
+        ),
+      );
+    } catch (e, s) {
+      logger.error(
+        'Error creating single marketing plan',
+        error: e,
+        stackTrace: s,
+      );
+    } finally {
+      emit(
+        state.copyWith(
+          loading: false,
+        ),
+      );
+    }
   }
 }
