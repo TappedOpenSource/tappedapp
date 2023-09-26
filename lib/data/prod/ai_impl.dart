@@ -1,8 +1,10 @@
 import 'package:cloud_functions/cloud_functions.dart';
 import 'package:intheloopapp/data/ai_repository.dart';
+import 'package:intheloopapp/domains/models/marketing_plan.dart';
 import 'package:intheloopapp/domains/models/option.dart';
 import 'package:intheloopapp/utils/app_logger.dart';
 import 'package:path/path.dart';
+import 'package:uuid/uuid.dart';
 
 final _functions = FirebaseFunctions.instance;
 
@@ -48,10 +50,36 @@ class AiImpl implements AIRepository {
     return job;
   }
 
-  // @override
-  // Future<String> createAlbumName(
-  //   String currentUserId,
-  // ) async {
-  //   return '';
-  // }
+  @override
+  Future<MarketingPlan> createSingleMarketingPlan({
+    required String userId,
+    required String aesthetic,
+    required String targetAudience,
+    required String moreToCome,
+    required String releaseTimeline,
+  }) async {
+    final uuid = const Uuid().v4();
+
+    final callable = _functions.httpsCallable('createSingleMarketingPlan');
+    final results = await callable<Map<String, dynamic>>({
+      'userId': userId,
+      'aesthetic': aesthetic,
+      'targetAudience': targetAudience,
+      'moreToCome': moreToCome,
+      'releaseTimeline': releaseTimeline,
+    });
+
+    logger.info('createMarketingPlan: ${results.data}');
+
+    final data = results.data;
+
+    return MarketingPlan(
+      id: uuid,
+      userId: userId,
+      type: MarketingPlanType.single,
+      content: data['content'] as String? ?? '',
+      prompt: data['prompt'] as String? ?? '',
+      timestamp: DateTime.now(),
+    );
+  }
 }

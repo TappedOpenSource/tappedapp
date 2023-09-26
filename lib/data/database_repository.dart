@@ -5,6 +5,7 @@ import 'package:intheloopapp/domains/models/badge.dart';
 import 'package:intheloopapp/domains/models/booking.dart';
 import 'package:intheloopapp/domains/models/comment.dart';
 import 'package:intheloopapp/domains/models/loop.dart';
+import 'package:intheloopapp/domains/models/marketing_plan.dart';
 import 'package:intheloopapp/domains/models/option.dart';
 import 'package:intheloopapp/domains/models/review.dart';
 import 'package:intheloopapp/domains/models/service.dart';
@@ -157,7 +158,8 @@ abstract class DatabaseRepository {
   );
   Future<List<UserModel>> getFollowing(String currentUserId);
   Future<List<UserModel>> getFollowers(String currentUserId);
-  Future<List<UserModel>> getCommonFollowers(String currentUserID, String observedUserId);
+  Future<List<UserModel>> getCommonFollowers(
+      String currentUserID, String observedUserId);
 
   // Activity related stuff
   Future<List<Activity>> getActivities(
@@ -312,4 +314,10 @@ abstract class DatabaseRepository {
   Future<List<Avatar>> getUserAvatars(String userId);
   Stream<Avatar> userAvatarsObserver(String userId);
   Future<void> createAvatar(Avatar avatar);
+  Future<void> deleteAvatar({
+    required String userId,
+    required String avatarId,
+  });
+  Future<List<MarketingPlan>> getUserMarketingPlans(String userId);
+  Stream<MarketingPlan> userMarketingPlansObserver(String userId);
 }

@@ -1,3 +1,5 @@
+
+import type { Timestamp } from "firebase-admin/firestore";
 import { firestore } from "firebase-admin";
 
 export type AccountType = "free" | "venue";
@@ -122,3 +124,12 @@ export type PerformerReview = {
   overallReview: string;
   type: "performer";
 };
+
+export type MarketingPlan = {
+  id: string;
+  userId: string;
+  type: "single";
+  content: string;
+  prompt: string;
+  timestamp: Timestamp;
+}

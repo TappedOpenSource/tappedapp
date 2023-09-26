@@ -64,10 +64,10 @@ class SubscribedView extends StatelessWidget {
                         icon: Icons.people,
                         onTap: () => context.push(SocialMediaManagerPage()),
                       ),
-                      const GridItem(
+                      GridItem(
                         title: 'Marketer',
                         icon: Icons.mark_email_read,
-                        disabled: true,
+                        onTap: () => context.push(MarketerPage()),
                       ),
                       const GridItem(
                         title: 'Publicist',

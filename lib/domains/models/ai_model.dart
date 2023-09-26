@@ -29,7 +29,7 @@ sealed class AiModel {
           id: doc.id,
           userId: doc.get('userId') as String,
           type: AiModelType.image,
-          subjectType: doc.get('subjectType') as String,
+          subjectType: doc.getOrElse('subjectType', 'person'),
           timestamp: tmpTimestamp.toDate(),
           status: EnumToString.fromString(
                 AiModelStatus.values,
