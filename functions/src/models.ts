@@ -128,6 +128,7 @@ export type PerformerReview = {
 export type MarketingPlan = {
   id: string;
   userId: string;
+  name: string;
   type: "single";
   content: string;
   prompt: string;

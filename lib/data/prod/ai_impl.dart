@@ -53,6 +53,7 @@ class AiImpl implements AIRepository {
   @override
   Future<MarketingPlan> createSingleMarketingPlan({
     required String userId,
+    required String name,
     required String aesthetic,
     required String targetAudience,
     required String moreToCome,
@@ -63,6 +64,7 @@ class AiImpl implements AIRepository {
     final callable = _functions.httpsCallable('createSingleMarketingPlan');
     final results = await callable<Map<String, dynamic>>({
       'userId': userId,
+      'name': name,
       'aesthetic': aesthetic,
       'targetAudience': targetAudience,
       'moreToCome': moreToCome,
@@ -76,6 +78,7 @@ class AiImpl implements AIRepository {
     return MarketingPlan(
       id: uuid,
       userId: userId,
+      name: name,
       type: MarketingPlanType.single,
       content: data['content'] as String? ?? '',
       prompt: data['prompt'] as String? ?? '',

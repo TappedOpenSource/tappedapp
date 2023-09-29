@@ -19,6 +19,10 @@ class CreateSingleMarketingPlanCubit
   final String userId;
   final AIRepository ai;
 
+  void updateName(String name) {
+    emit(state.copyWith(name: Some(name)));
+  }
+
   void updateAesthetic(String aesthetic) {
     emit(state.copyWith(aesthetic: Some(aesthetic)));
   }
@@ -40,6 +44,7 @@ class CreateSingleMarketingPlanCubit
 
     try {
       final marketingPlan = await ai.createSingleMarketingPlan(
+        name: state.name.unwrap,
         aesthetic: state.aesthetic.unwrap,
         targetAudience: state.targetAudience.unwrap,
         releaseTimeline: state.releaseTimeline.unwrap,

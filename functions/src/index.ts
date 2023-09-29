@@ -1980,13 +1980,14 @@ export const createSingleMarketingPlan = onCall(
     const openAiKey = OPEN_AI_KEY.value();
     const { 
       userId, 
+      name,
       aesthetic, 
       targetAudience, 
       moreToCome, 
       releaseTimeline,
     } = request.data;
 
-    info({ userId, aesthetic, targetAudience, moreToCome, releaseTimeline });
+    info({ userId, name, aesthetic, targetAudience, moreToCome, releaseTimeline });
 
     const userSnapshot = await usersRef.doc(userId).get();
     if (!userSnapshot.exists) {
@@ -2007,6 +2008,7 @@ export const createSingleMarketingPlan = onCall(
       artistName,
       artistGenres,
       // igFollowerCount,
+      singleName: name,
       aesthetic,
       targetAudience,
       moreToCome,
@@ -2018,6 +2020,7 @@ export const createSingleMarketingPlan = onCall(
     const marketingPlan: MarketingPlan = {
       id: uuid,
       userId: userId,
+      name: name,
       type: "single",
       content: content,
       prompt: prompt,

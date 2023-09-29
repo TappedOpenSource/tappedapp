@@ -13,8 +13,8 @@ You will now assume the role of a manager at a
 record label and create branding for an artist
 that we want to become more well known.
 Your role is to create branding, marketing strategy,
-and social media direction for their new single 
-coming out {RELEASE_TIMELINE}.
+and social media direction for their new single called
+{SINGLE_NAME} coming out {RELEASE_TIMELINE}.
 In this specific example you will be working
 for an artist named {ARTIST_NAME}.
 Their biggest genres are {ARTIST_GENRES} and the aesthetic
@@ -66,6 +66,7 @@ export const llm = {
     return res;
   },
   generateSingleMarketingPlan: async ({
+    singleName,
     aesthetic,
     releaseTimeline,
     moreToCome,
@@ -75,6 +76,7 @@ export const llm = {
     // igFollowerCount,
     apiKey, 
   }: {
+    singleName: string;
     aesthetic: string;
     releaseTimeline: string;
     moreToCome: string;
@@ -89,6 +91,7 @@ export const llm = {
     const model = new OpenAI({ temperature: 0 });
     const prompt = new PromptTemplate({
       inputVariables: [
+        "SINGLE_NAME",
         "AESTHETIC",
         "RELEASE_TIMELINE",
         "MORE_TO_COME",
@@ -106,6 +109,7 @@ export const llm = {
     });
 
     const res = await chain.call({
+      SINGLE_NAME: singleName,
       AESTHETIC: aesthetic,
       RELEASE_TIMELINE: releaseTimeline,
       MORE_TO_COME: moreToCome,
@@ -116,6 +120,7 @@ export const llm = {
     });
 
     const formatted = await prompt.format({
+      SINGLE_NAME: singleName,
       AESTHETIC: aesthetic,
       RELEASE_TIMELINE: releaseTimeline,
       MORE_TO_COME: moreToCome,

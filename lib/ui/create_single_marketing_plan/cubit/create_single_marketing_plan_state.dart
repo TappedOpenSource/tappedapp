@@ -2,6 +2,7 @@ part of 'create_single_marketing_plan_cubit.dart';
 
 class CreateSingleMarketingPlanState extends Equatable {
   const CreateSingleMarketingPlanState({
+    this.name = const None(),
     this.aesthetic = const None(),
     this.targetAudience = const None(),
     this.moreToCome = const None(),
@@ -12,6 +13,7 @@ class CreateSingleMarketingPlanState extends Equatable {
 
   final bool loading;
   final Option<MarketingPlan> marketingPlan;
+  final Option<String> name;
   final Option<String> aesthetic;
   final Option<String> targetAudience;
   final Option<String> moreToCome;
@@ -21,6 +23,7 @@ class CreateSingleMarketingPlanState extends Equatable {
   List<Object> get props => [
         marketingPlan,
         loading,
+        name,
         aesthetic,
         targetAudience,
         moreToCome,
@@ -30,6 +33,7 @@ class CreateSingleMarketingPlanState extends Equatable {
   CreateSingleMarketingPlanState copyWith({
     Option<MarketingPlan>? marketingPlan,
     bool? loading,
+    Option<String>? name,
     Option<String>? aesthetic,
     Option<String>? targetAudience,
     Option<String>? moreToCome,
@@ -38,6 +42,7 @@ class CreateSingleMarketingPlanState extends Equatable {
     return CreateSingleMarketingPlanState(
       marketingPlan: marketingPlan ?? this.marketingPlan,
       loading: loading ?? this.loading,
+      name: name ?? this.name,
       aesthetic: aesthetic ?? this.aesthetic,
       targetAudience: targetAudience ?? this.targetAudience,
       moreToCome: moreToCome ?? this.moreToCome,
