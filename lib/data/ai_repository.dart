@@ -10,6 +10,7 @@ abstract class AIRepository {
   });
   Future<MarketingPlan> createSingleMarketingPlan({
     required String userId,
+    required String name,
     required String aesthetic,
     required String targetAudience,
     required String moreToCome,

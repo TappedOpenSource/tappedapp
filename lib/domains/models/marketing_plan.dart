@@ -7,6 +7,7 @@ class MarketingPlan {
   const MarketingPlan({
     required this.id,
     required this.userId,
+    required this.name,
     required this.type,
     required this.content,
     required this.prompt,
@@ -23,6 +24,7 @@ class MarketingPlan {
       return MarketingPlan(
         id: doc.id,
         userId: doc.get('userId') as String,
+        name: doc.getOrElse('name', ''),
         type: EnumToString.fromString(
               MarketingPlanType.values,
               doc.get('type') as String,
@@ -44,6 +46,7 @@ class MarketingPlan {
 
   final String id;
   final String userId;
+  final String name;
   final MarketingPlanType type;
   final String content;
   final String prompt;
@@ -52,6 +55,7 @@ class MarketingPlan {
   MarketingPlan copyWith({
     String? id,
     String? userId,
+    String? name,
     MarketingPlanType? type,
     String? content,
     String? prompt,
@@ -60,6 +64,7 @@ class MarketingPlan {
     return MarketingPlan(
       id: id ?? this.id,
       userId: userId ?? this.userId,
+      name: name ?? this.name,
       type: type ?? this.type,
       content: content ?? this.content,
       prompt: prompt ?? this.prompt,

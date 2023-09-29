@@ -22,6 +22,18 @@ class CreateSingleMarketingPlanView extends StatelessWidget {
                 questions: [
                   (
                     TappedTextField(
+                      key: const Key('name'),
+                      title: 'what is the name of the single?',
+                      initialValue: state.name.asNullable() ?? '',
+                      onChange: cubit.updateName,
+                      examples: const [
+                        'untitled',
+                      ],
+                    ),
+                    () => state.name.unwrapOr('').isNotEmpty
+                  ),
+                  (
+                    TappedTextField(
                       key: const Key('aesthetic'),
                       title: 'what is the aesthetic?',
                       initialValue: state.aesthetic.asNullable() ?? '',
