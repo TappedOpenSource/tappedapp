@@ -13,9 +13,10 @@ class MarketingPlansList extends StatelessWidget {
   Widget _buildList(List<MarketingPlan> marketingPlans) {
     return SizedBox(
       height: 100,
-      child: ListView.builder(
+      child: ListView.separated(
         scrollDirection: Axis.horizontal,
         itemCount: marketingPlans.length,
+        separatorBuilder: (context, index) => const SizedBox(width: 12),
         itemBuilder: (context, index) {
           final marketingPlan = marketingPlans[index];
           return InkWell(

@@ -46,8 +46,11 @@ class GridItem extends StatelessWidget {
               child: _buildGridItem,
             ),
             Positioned.fill(
-              child: Container(
-                color: Colors.black.withOpacity(0.5),
+              child: Padding(
+                padding: const EdgeInsets.all(8),
+                child: Container(
+                  color: Colors.black.withOpacity(0.5),
+                ),
               ),
             ),
             const Positioned.fill(
