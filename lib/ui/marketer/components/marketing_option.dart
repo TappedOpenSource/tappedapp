@@ -13,27 +13,27 @@ class MarketingOption extends StatelessWidget {
   final bool disabled;
 
   Widget get _buildMarketingOption => Padding(
-      padding: const EdgeInsets.symmetric(
-        horizontal: 8,
-        vertical: 2,
-      ),
-      child: Card(
-        child: InkWell(
-          onTap: onTap,
-          child: Padding(
-            padding: const EdgeInsets.symmetric(
-              vertical: 48,
-            ),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Text(title),
-              ],
+        padding: const EdgeInsets.symmetric(
+          horizontal: 8,
+          vertical: 2,
+        ),
+        child: Card(
+          child: InkWell(
+            onTap: onTap,
+            child: Padding(
+              padding: const EdgeInsets.symmetric(
+                vertical: 48,
+              ),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text(title),
+                ],
+              ),
             ),
           ),
         ),
-      ),
-    );
+      );
 
   @override
   Widget build(BuildContext context) {
@@ -41,10 +41,16 @@ class MarketingOption extends StatelessWidget {
       false => _buildMarketingOption,
       true => Stack(
           children: [
-              _buildMarketingOption,
+            _buildMarketingOption,
             Positioned.fill(
-              child: Container(
-                color: Colors.black.withOpacity(0.5),
+              child: Padding(
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 8,
+                  vertical: 2,
+                ),
+                child: Container(
+                  color: Colors.black.withOpacity(0.5),
+                ),
               ),
             ),
             const Positioned.fill(

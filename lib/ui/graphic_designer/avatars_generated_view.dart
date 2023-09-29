@@ -5,7 +5,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_cache_manager/flutter_cache_manager.dart';
-import 'package:image_downloader/image_downloader.dart';
 import 'package:intheloopapp/domains/generation_bloc/generation_bloc.dart';
 import 'package:intheloopapp/domains/navigation_bloc/navigation_bloc.dart';
 import 'package:intheloopapp/utils/app_logger.dart';
@@ -146,39 +145,6 @@ class _AvatarsGeneratedViewState extends State<AvatarsGeneratedView> {
                               color: Colors.white,
                             ),
                           ),
-                  ),
-                ),
-              ),
-              SizedBox(
-                width: double.infinity,
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(
-                    vertical: 4,
-                    horizontal: 32,
-                  ),
-                  child: CupertinoButton(
-                    onPressed: () {
-                      try {
-                        ImageDownloader.downloadImage(
-                          widget.imageUrls[_focusedIndex],
-                        );
-                      } catch (e, s) {
-                        logger.error(
-                          'downloading avatar failed',
-                          error: e,
-                          stackTrace: s,
-                        );
-                      }
-                    },
-                    color: Colors.white.withOpacity(0.1),
-                    borderRadius: BorderRadius.circular(15),
-                    child: const Text(
-                      'Download',
-                      style: TextStyle(
-                        fontWeight: FontWeight.w700,
-                        color: Colors.white,
-                      ),
-                    ),
                   ),
                 ),
               ),
