@@ -53,8 +53,9 @@ export const mainBucket = storage.bucket("in-the-loop-306520.appspot.com")
 export const streamKey = defineSecret("STREAM_KEY");
 export const streamSecret = defineSecret("STREAM_SECRET");
 
-// const stripeKey = defineSecret("STRIPE_TEST_KEY");
-// const stripePublishableKey = defineSecret("STRIPE_PUBLISHABLE_TEST_KEY");
+export const stripeTestKey = defineSecret("STRIPE_TEST_KEY");
+export const stripePublishableTestKey = defineSecret("STRIPE_PUBLISHABLE_TEST_KEY");
+export const stripeTestEndpointSecret = defineSecret("STRIPE_TEST_ENDPOINT_SECRET");
 export const stripeKey = defineSecret("STRIPE_KEY");
 export const stripePublishableKey = defineSecret("STRIPE_PUBLISHABLE_KEY");
 export const OPEN_AI_KEY = defineSecret("OPEN_AI_KEY");
