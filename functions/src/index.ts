@@ -73,6 +73,8 @@ import {
   trainingImagesRef,
   projectId,
   marketingPlansRef,
+  stripeTestKey,
+  stripeTestEndpointSecret,
 } from "./firebase";
 import { 
   authenticatedRequest, 
@@ -2037,4 +2039,62 @@ export const createSingleMarketingPlan = onCall(
       content,
       prompt,
     };
+  });
+
+/**
+ * Import function triggers from their respective submodules:
+ *
+ * import {onCall} from "firebase-functions/v2/https";
+ * import {onDocumentWritten} from "firebase-functions/v2/firestore";
+ *
+ * See a full list of supported triggers at https://firebase.google.com/docs/functions
+ */
+
+export const marketingPlanStripeWebhook = onRequest(
+  { secrets: [ stripeTestKey, stripeTestEndpointSecret ] }
+  ,async (req, res) => {
+    const stripe = new Stripe(stripeTestKey.value(), {
+      apiVersion: "2022-11-15",
+    });
+
+    info("marketingPlanStripeWebhook", req.body);
+    const sig = req.headers["stripe-signature"];
+    if (!sig) {
+      res.status(400).send("No signature");
+      return;
+    }
+
+    try {
+      const event = stripe.webhooks.constructEvent(
+        req.body, 
+        sig, 
+        stripeTestEndpointSecret.value(),
+      );
+
+      // Handle the event
+      switch (event.type) {
+      case "checkout.session.completed":
+      // eslint-disable-next-line no-case-declarations
+        const checkoutSessionCompleted = event.data.object as unknown as { id: string };
+
+        // create firestore document for marketing plan set to 'processing' keyed at session_id
+        info({ checkoutSessionCompleted });
+        info({ sessionId: checkoutSessionCompleted.id });
+
+        // call openAi for marketing plan
+
+        // save marketing plan to firestore and update status to 'complete'
+        break;
+        // ... handle other event types
+      default:
+        console.log(`Unhandled event type ${event.type}`);
+      }
+
+      // Return a 200 response to acknowledge receipt of the event
+      res.sendStatus(200);
+    } catch (err: any) {
+      res.status(400).send(`Webhook Error: ${err.message}`);
+      return;
+    }
+
   });
