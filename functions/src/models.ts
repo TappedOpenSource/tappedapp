@@ -145,4 +145,15 @@ export type GuestMarketingPlan = {
 
 export type MarketingForm = {
   id: string;
+  artistName: string;
+  genre: string;
+  name: string;
+  socialFollowing: string;
+  marketingType: "single" | "ep" | "album";
+  moreToCome: string;
+  aesthetic: string;
+  budget: string;
+  timeline: string;
+  audience: string;
+  timestamp: Date;
 };
