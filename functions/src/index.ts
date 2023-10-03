@@ -78,6 +78,7 @@ import {
   stripeTestKey,
   stripeTestEndpointSecret,
   marketingPlanFormsRef,
+  guestMarketingPlansRef,
 } from "./firebase";
 import { 
   authenticatedRequest, 
@@ -85,7 +86,7 @@ import {
   getFoundersDeviceTokens,
   getFileFromURL,
 } from "./utils";
-import { info } from "firebase-functions/logger";
+import { error, info } from "firebase-functions/logger";
 
 const WEBHOOK_URL = `https://us-central1-${projectId}.cloudfunctions.net/trainWebhook`;
 const IMAGE_WEBHOOK_URL = `https://us-central1-${projectId}.cloudfunctions.net/imageWebhook`;
@@ -2069,7 +2070,7 @@ export const marketingPlanStripeWebhook = onRequest(
 
     try {
       const event = stripe.webhooks.constructEvent(
-        req.body, 
+        req.rawBody, 
         sig, 
         stripeTestEndpointSecret.value(),
       );
@@ -2097,6 +2098,10 @@ export const marketingPlanStripeWebhook = onRequest(
           return;
         }
 
+        await guestMarketingPlansRef.doc(clientReferenceId).update({
+          status: "processing",
+        });
+
         // eslint-disable-next-line no-case-declarations
         const formDataRef = await marketingPlanFormsRef.doc(clientReferenceId).get()
         // eslint-disable-next-line no-case-declarations
@@ -2106,11 +2111,11 @@ export const marketingPlanStripeWebhook = onRequest(
         // call openAi for marketing plan
 
         // save marketing plan to firestore and update status to 'complete'
-        await marketingPlansRef.doc(clientReferenceId).set({
+        await guestMarketingPlansRef.doc(clientReferenceId).update({
           status: "completed",
           checkoutSessionId: checkoutSessionCompleted.id,
-          content: "",
-          prompt: "",
+          content: "this is a marketing report",
+          prompt: "this is a prompt",
         });
 
         // email marketing plan to user
@@ -2125,6 +2130,7 @@ export const marketingPlanStripeWebhook = onRequest(
       // Return a 200 response to acknowledge receipt of the event
       res.sendStatus(200);
     } catch (err: any) {
+      error(err);
       res.status(400).send(`Webhook Error: ${err.message}`);
       return;
     }
