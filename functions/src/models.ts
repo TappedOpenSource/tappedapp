@@ -134,3 +134,15 @@ export type MarketingPlan = {
   prompt: string;
   timestamp: Timestamp;
 }
+
+export type GuestMarketingPlan = {
+  prompt?: string;
+  content?: string;
+  checkoutSessionId?: string;
+  clientReferenceId: string;
+  status: "initial" | "processing" | "completed" | "failed";
+};
+
+export type MarketingForm = {
+  id: string;
+};

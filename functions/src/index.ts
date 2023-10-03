@@ -32,6 +32,8 @@ import {
   SearchAppearanceActivity,
   BookingReminderActivity,
   MarketingPlan,
+  MarketingForm,
+  // GuestMarketingPlan,
   // UserModel,
   // BookerReview,
 } from "./models";
@@ -75,6 +77,7 @@ import {
   marketingPlansRef,
   stripeTestKey,
   stripeTestEndpointSecret,
+  marketingPlanFormsRef,
 } from "./firebase";
 import { 
   authenticatedRequest, 
@@ -2051,8 +2054,8 @@ export const createSingleMarketingPlan = onCall(
  */
 
 export const marketingPlanStripeWebhook = onRequest(
-  { secrets: [ stripeTestKey, stripeTestEndpointSecret ] }
-  ,async (req, res) => {
+  { secrets: [ stripeTestKey, stripeTestEndpointSecret ] },
+  async (req, res) => {
     const stripe = new Stripe(stripeTestKey.value(), {
       apiVersion: "2022-11-15",
     });
@@ -2081,9 +2084,38 @@ export const marketingPlanStripeWebhook = onRequest(
         info({ checkoutSessionCompleted });
         info({ sessionId: checkoutSessionCompleted.id });
 
+        // get form data from firestore
+        // eslint-disable-next-line no-case-declarations
+        const checkoutSession = await stripe.checkout.sessions.retrieve(checkoutSessionCompleted.id);
+        info({ checkoutSession });
+
+        // eslint-disable-next-line no-case-declarations
+        const { client_reference_id: clientReferenceId } = checkoutSession;
+
+        if (clientReferenceId === null) {
+          res.status(400).send("no client reference id");
+          return;
+        }
+
+        // eslint-disable-next-line no-case-declarations
+        const formDataRef = await marketingPlanFormsRef.doc(clientReferenceId).get()
+        // eslint-disable-next-line no-case-declarations
+        const formData = formDataRef.data as unknown as MarketingForm;
+        info({ formData })
+
         // call openAi for marketing plan
 
         // save marketing plan to firestore and update status to 'complete'
+        await marketingPlansRef.doc(clientReferenceId).set({
+          status: "completed",
+          checkoutSessionId: checkoutSessionCompleted.id,
+          content: "",
+          prompt: "",
+        });
+
+        // email marketing plan to user
+        // await resend()
+
         break;
         // ... handle other event types
       default:
@@ -2096,5 +2128,27 @@ export const marketingPlanStripeWebhook = onRequest(
       res.status(400).send(`Webhook Error: ${err.message}`);
       return;
     }
+  });
 
+export const checkoutSessionToClientReferenceId = onCall(
+  { secrets: [ stripeTestKey ] },
+  async (request) => {
+    const stripe = new Stripe(stripeTestKey.value(), {
+      apiVersion: "2022-11-15",
+    });
+
+    const { checkoutSessionId }: {
+      checkoutSessionId: string;
+    } = request.data;
+    if (typeof checkoutSessionId !== "string" || checkoutSessionId.length === 0) {
+      throw new HttpsError("invalid-argument", "The function must be called " +
+        "with argument \"checkoutSessionId\".");
+    }
+
+    const session = await stripe.checkout.sessions.retrieve(checkoutSessionId);
+    info({ session });
+
+    return {
+      clientReferenceId: session.client_reference_id,
+    };
   });
