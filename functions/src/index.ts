@@ -79,6 +79,7 @@ import {
   stripeTestEndpointSecret,
   marketingPlanFormsRef,
   guestMarketingPlansRef,
+  RESEND_API_KEY,
 } from "./firebase";
 import { 
   authenticatedRequest, 
@@ -87,6 +88,7 @@ import {
   getFileFromURL,
 } from "./utils";
 import { error, info } from "firebase-functions/logger";
+import { Resend } from "resend";
 
 const WEBHOOK_URL = `https://us-central1-${projectId}.cloudfunctions.net/trainWebhook`;
 const IMAGE_WEBHOOK_URL = `https://us-central1-${projectId}.cloudfunctions.net/imageWebhook`;
@@ -2055,11 +2057,13 @@ export const createSingleMarketingPlan = onCall(
  */
 
 export const marketingPlanStripeWebhook = onRequest(
-  { secrets: [ stripeTestKey, stripeTestEndpointSecret ] },
+  { secrets: [ stripeTestKey, stripeTestEndpointSecret, RESEND_API_KEY, ] },
   async (req, res) => {
     const stripe = new Stripe(stripeTestKey.value(), {
       apiVersion: "2022-11-15",
     });
+
+    const resend = new Resend(RESEND_API_KEY.value());
 
     info("marketingPlanStripeWebhook", req.body);
     const sig = req.headers["stripe-signature"];
@@ -2079,7 +2083,13 @@ export const marketingPlanStripeWebhook = onRequest(
       switch (event.type) {
       case "checkout.session.completed":
       // eslint-disable-next-line no-case-declarations
-        const checkoutSessionCompleted = event.data.object as unknown as { id: string };
+        const checkoutSessionCompleted = event.data.object as unknown as { 
+          id: string;
+          customer_email: string | null;
+          customer_details: {
+            email: string;
+          }
+        };
 
         // create firestore document for marketing plan set to 'processing' keyed at session_id
         info({ checkoutSessionCompleted });
@@ -2109,17 +2119,47 @@ export const marketingPlanStripeWebhook = onRequest(
         info({ formData })
 
         // call openAi for marketing plan
+        // eslint-disable-next-line no-case-declarations
+        const { content, prompt } = await llm.generateSingleMarketingPlan({
+          artistName: formData.artistName,
+          artistGenres: formData.genre,
+          // igFollowerCount,
+          singleName: formData.name,
+          aesthetic: formData.aesthetic,
+          targetAudience: formData.audience,
+          moreToCome: formData.moreToCome ?? "no",
+          releaseTimeline: formData.timeline,
+          apiKey: OPEN_AI_KEY.value(),
+        });
 
         // save marketing plan to firestore and update status to 'complete'
         await guestMarketingPlansRef.doc(clientReferenceId).update({
           status: "completed",
           checkoutSessionId: checkoutSessionCompleted.id,
-          content: "this is a marketing report",
-          prompt: "this is a prompt",
+          content,
+          prompt,
         });
 
         // email marketing plan to user
-        // await resend()
+        // eslint-disable-next-line no-case-declarations
+        const customerEmail = checkoutSessionCompleted.customer_email ?? checkoutSessionCompleted.customer_details.email;
+        if (customerEmail !== null) {
+          await resend.emails.send({
+            from: "no-reply@tapped.ai",
+            to: [
+              checkoutSessionCompleted.customer_email ?? checkoutSessionCompleted.customer_details.email
+            ],
+            subject: "Your Marketing Plan",
+            html: `<p>Hi ${formData.id},</p><br /><div>${JSON.stringify(
+              {
+                status: "completed",
+                checkoutSessionId: checkoutSessionCompleted.id,
+                content: "this is a marketing report",
+                prompt: "this is a prompt",
+              }
+            )}</div>`,
+          });
+        }
 
         break;
         // ... handle other event types
