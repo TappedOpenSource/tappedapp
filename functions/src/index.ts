@@ -2057,7 +2057,12 @@ export const createSingleMarketingPlan = onCall(
  */
 
 export const marketingPlanStripeWebhook = onRequest(
-  { secrets: [ stripeTestKey, stripeTestEndpointSecret, RESEND_API_KEY, ] },
+  { secrets: [ 
+    stripeTestKey, 
+    stripeTestEndpointSecret, 
+    RESEND_API_KEY, 
+    OPEN_AI_KEY, 
+  ] },
   async (req, res) => {
     const stripe = new Stripe(stripeTestKey.value(), {
       apiVersion: "2022-11-15",
@@ -2118,7 +2123,8 @@ export const marketingPlanStripeWebhook = onRequest(
         const formData = formDataRef.data as unknown as MarketingForm;
         info({ formData })
 
-        // call openAi for marketing plan
+        // TODO: get use follower count
+        // TODO: switch case for if it's a single, EP, or album
         // eslint-disable-next-line no-case-declarations
         const { content, prompt } = await llm.generateSingleMarketingPlan({
           artistName: formData.artistName,
