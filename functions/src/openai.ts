@@ -34,8 +34,7 @@ cost-effective strategies promotion report.Your goal is
 to create a hyper specific marketing report for an artist 
 whos releasing is a {RELEASE_TYPE} coming out on {RELEASE_TIMELINE}. 
 In this specific example you will be working for an artist 
-named {ARTIST_NAME}. Their biggest genres are {ARTIST_GENRES} 
-and the aesthetic of the single is {AESTHETIC}.
+named {ARTIST_NAME}. The aesthetic of the single is {AESTHETIC}.
 Finally, this {RELEASE_TYPE} is leading to {MORE_TO_COME}.
 
 

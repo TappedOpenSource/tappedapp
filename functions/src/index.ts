@@ -2135,7 +2135,7 @@ export const marketingPlanStripeWebhook = onRequest(
         // eslint-disable-next-line no-case-declarations
         const formDataRef = await marketingPlanFormsRef.doc(clientReferenceId).get()
         // eslint-disable-next-line no-case-declarations
-        const formData = formDataRef.data as unknown as MarketingForm;
+        const formData = formDataRef.data() as unknown as MarketingForm;
         info({ formData })
 
         // TODO: get use follower count
@@ -2172,7 +2172,7 @@ export const marketingPlanStripeWebhook = onRequest(
               checkoutSessionCompleted.customer_email ?? checkoutSessionCompleted.customer_details.email
             ],
             subject: "Your Marketing Plan",
-            html: `<p>Hi,</p><br /><div>${marked.parse(content)}</div>`,
+            html: `<div>${marked.parse(content)}</div>`,
           });
         }
 
