@@ -89,6 +89,7 @@ import {
 } from "./utils";
 import { error, info } from "firebase-functions/logger";
 import { Resend } from "resend";
+import { marked } from "marked";
 
 const WEBHOOK_URL = `https://us-central1-${projectId}.cloudfunctions.net/trainWebhook`;
 const IMAGE_WEBHOOK_URL = `https://us-central1-${projectId}.cloudfunctions.net/imageWebhook`;
@@ -2171,14 +2172,7 @@ export const marketingPlanStripeWebhook = onRequest(
               checkoutSessionCompleted.customer_email ?? checkoutSessionCompleted.customer_details.email
             ],
             subject: "Your Marketing Plan",
-            html: `<p>Hi,</p><br /><div>${JSON.stringify(
-              {
-                status: "completed",
-                checkoutSessionId: checkoutSessionCompleted.id,
-                content,
-                prompt,
-              }
-            )}</div>`,
+            html: `<p>Hi,</p><br /><div>${marked.parse(content)}</div>`,
           });
         }
 
