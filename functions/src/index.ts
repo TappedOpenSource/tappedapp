@@ -713,11 +713,9 @@ export const autoFollowUsersOnUserCreated = functions
         .set({});
     }
   })
-export const sendWelcomeEmailOnUserCreated = functions
-  .firestore
-  .document("users/{usersId}")
-  .onCreate(async (snapshot) => {
-    const user = snapshot.data();
+export const sendWelcomeEmailOnUserCreated = functions.auth
+  .user()
+  .onCreate(async (user: UserRecord) => {
     const email = user.email;
 
     if (email === undefined || email === null || email === "") {
@@ -1160,7 +1158,23 @@ export const incrementBadgeCountOnBadgeSent = functions.firestore
       .doc(context.params.userId)
       .update({ badgesCount: FieldValue.increment(1) });
   });
+// export const sendWelcome = onUserCreated(
+//   { secrets: [ RESEND_API_KEY ] },
+//   (user: UserRecord) => {
+//     if (!user.email) {
+//       return;
+//     }
 
+//     // Check user claim
+
+//     const resend = new Resend();
+//     resend.emails.create({
+//       from: "no-reply@tapped.ai",
+//       to: user.email,
+//       subject: "Welcome to Tapped!",
+//       html: "<p>welcome to tapped</p>" 
+//     });
+//   });
 export const onUserDeleted = functions.auth
   .user()
   .onDelete((user: UserRecord) => _deleteUser({ id: user.uid }));
@@ -2126,14 +2140,15 @@ export const marketingPlanStripeWebhook = onRequest(
         // TODO: get use follower count
         // TODO: switch case for if it's a single, EP, or album
         // eslint-disable-next-line no-case-declarations
-        const { content, prompt } = await llm.generateSingleMarketingPlan({
+        const { content, prompt } = await llm.generateMarketingPlan({
+          releaseType: formData.marketingType,
           artistName: formData.artistName,
-          artistGenres: formData.genre,
+          // artistGenres: formData.genre,
           // igFollowerCount,
-          singleName: formData.name,
+          singleName: formData.productName,
           aesthetic: formData.aesthetic,
           targetAudience: formData.audience,
-          moreToCome: formData.moreToCome ?? "no",
+          moreToCome: formData.moreToCome ?? "nothing",
           releaseTimeline: formData.timeline,
           apiKey: OPEN_AI_KEY.value(),
         });
@@ -2156,12 +2171,12 @@ export const marketingPlanStripeWebhook = onRequest(
               checkoutSessionCompleted.customer_email ?? checkoutSessionCompleted.customer_details.email
             ],
             subject: "Your Marketing Plan",
-            html: `<p>Hi ${formData.id},</p><br /><div>${JSON.stringify(
+            html: `<p>Hi,</p><br /><div>${JSON.stringify(
               {
                 status: "completed",
                 checkoutSessionId: checkoutSessionCompleted.id,
-                content: "this is a marketing report",
-                prompt: "this is a prompt",
+                content,
+                prompt,
               }
             )}</div>`,
           });
