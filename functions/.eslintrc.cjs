@@ -21,6 +21,7 @@ module.exports = {
   ignorePatterns: [
     "/lib/**/*", // Ignore built files.
     ".eslintrc.cjs",
+    "**/node_modules/**",
   ],
   plugins: [ "@typescript-eslint", "import", ],
   rules: {
