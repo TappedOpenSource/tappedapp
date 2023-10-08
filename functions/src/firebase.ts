@@ -41,7 +41,7 @@ export const trainingImagesRef = db.collection("trainingImages");
 export const labelApplicationsRef = db.collection("labelApplications");
 export const marketingPlansRef = db.collection("marketingPlans");
 
-export const marketingPlanFormsRef = db.collection("marketingPlanForms");
+export const marketingFormsRef = db.collection("marketingForms");
 export const guestMarketingPlansRef = db.collection("guestMarketingPlans");
 
 // const loopLikesSubcollection = "loopLikes";

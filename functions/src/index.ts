@@ -32,7 +32,6 @@ import {
   SearchAppearanceActivity,
   BookingReminderActivity,
   MarketingPlan,
-  MarketingForm,
   // GuestMarketingPlan,
   // UserModel,
   // BookerReview,
@@ -77,7 +76,7 @@ import {
   marketingPlansRef,
   stripeTestKey,
   stripeTestEndpointSecret,
-  marketingPlanFormsRef,
+  marketingFormsRef,
   guestMarketingPlansRef,
   RESEND_API_KEY,
 } from "./firebase";
@@ -2122,35 +2121,42 @@ export const marketingPlanStripeWebhook = onRequest(
 
         // eslint-disable-next-line no-case-declarations
         const { client_reference_id: clientReferenceId } = checkoutSession;
-
         if (clientReferenceId === null) {
           res.status(400).send("no client reference id");
           return;
         }
+        info({ clientReferenceId });
 
         await guestMarketingPlansRef.doc(clientReferenceId).update({
           status: "processing",
         });
 
         // eslint-disable-next-line no-case-declarations
-        const formDataRef = await marketingPlanFormsRef.doc(clientReferenceId).get()
+        const formDataRef = await marketingFormsRef.doc(clientReferenceId).get()
+
+
         // eslint-disable-next-line no-case-declarations
-        const formData = formDataRef.data() as unknown as MarketingForm;
+        const formData = formDataRef.data();
+        if (!formData || !formDataRef.exists) {
+          res.status(400).send("no form data");
+          return;
+        }
+
         info({ formData })
 
         // TODO: get use follower count
         // TODO: switch case for if it's a single, EP, or album
         // eslint-disable-next-line no-case-declarations
         const { content, prompt } = await llm.generateMarketingPlan({
-          releaseType: formData.marketingType,
-          artistName: formData.artistName,
+          releaseType: formData["marketingType"],
+          artistName: formData["artistName"],
           // artistGenres: formData.genre,
           // igFollowerCount,
-          singleName: formData.productName,
-          aesthetic: formData.aesthetic,
-          targetAudience: formData.audience,
-          moreToCome: formData.moreToCome ?? "nothing",
-          releaseTimeline: formData.timeline,
+          singleName: formData["productName"],
+          aesthetic: formData["aesthetic"],
+          targetAudience: formData["audience"],
+          moreToCome: formData["moreToCome"] ?? "nothing",
+          releaseTimeline: formData["timeline"],
           apiKey: OPEN_AI_KEY.value(),
         });
 
