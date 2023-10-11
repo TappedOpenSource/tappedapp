@@ -770,6 +770,20 @@ export const notifyFoundersOnLabelApplication = functions
 
     fcm.sendToDevice(devices, payload);
   });
+export const notifyFoundersOnGuestMarketingPlan = functions
+  .firestore 
+  .document("guestMarketingPlans/{planId}")
+  .onCreate(async () => {
+    const devices = await getFoundersDeviceTokens();
+    const payload = {
+      notification: {
+        title: "New Marketing Plan uD83D\uDE43",
+        body: "Someone just created a marketing plan",
+      }
+    };
+
+    fcm.sendToDevice(devices, payload);
+  });
 export const updateStreamUserOnUserUpdate = functions
   .runWith({ secrets: [ streamKey, streamSecret ] })
   .firestore
@@ -2061,15 +2075,6 @@ export const createSingleMarketingPlan = onCall(
     };
   });
 
-/**
- * Import function triggers from their respective submodules:
- *
- * import {onCall} from "firebase-functions/v2/https";
- * import {onDocumentWritten} from "firebase-functions/v2/firestore";
- *
- * See a full list of supported triggers at https://firebase.google.com/docs/functions
- */
-
 export const marketingPlanStripeWebhook = onRequest(
   { secrets: [ 
     stripeTestKey, 
@@ -2196,6 +2201,154 @@ export const marketingPlanStripeWebhook = onRequest(
       return;
     }
   });
+
+export const emailMarketingPlanStripeWebhook = onRequest(
+  { secrets: [ 
+    stripeTestKey, 
+    stripeTestEndpointSecret, 
+    RESEND_API_KEY, 
+  ] },
+  async (req, res) => {
+    const stripe = new Stripe(stripeTestKey.value(), {
+      apiVersion: "2022-11-15",
+    });
+  
+    const resend = new Resend(RESEND_API_KEY.value());
+  
+    info("marketingPlanStripeWebhook", req.body);
+    const sig = req.headers["stripe-signature"];
+    if (!sig) {
+      res.status(400).send("No signature");
+      return;
+    }
+  
+    try {
+      const event = stripe.webhooks.constructEvent(
+        req.rawBody, 
+        sig, 
+        stripeTestEndpointSecret.value(),
+      );
+  
+      // Handle the event
+      switch (event.type) {
+      case "checkout.session.completed":
+        // eslint-disable-next-line no-case-declarations
+        const checkoutSessionCompleted = event.data.object as unknown as { 
+            id: string;
+            customer_email: string | null;
+            customer_details: {
+              email: string;
+            }
+          };
+  
+        // create firestore document for marketing plan set to 'processing' keyed at session_id
+        info({ checkoutSessionCompleted });
+        info({ sessionId: checkoutSessionCompleted.id });
+  
+        // get form data from firestore
+        // eslint-disable-next-line no-case-declarations
+        const checkoutSession = await stripe.checkout.sessions.retrieve(checkoutSessionCompleted.id);
+        info({ checkoutSession });
+  
+        // eslint-disable-next-line no-case-declarations
+        const { client_reference_id: clientReferenceId } = checkoutSession;
+        if (clientReferenceId === null) {
+          res.status(400).send("no client reference id");
+          return;
+        }
+        info({ clientReferenceId });
+  
+        // save marketing plan to firestore and update status to 'complete'
+        await guestMarketingPlansRef.doc(clientReferenceId).update({
+          checkoutSessionId: checkoutSessionCompleted.id,
+        });
+
+        // eslint-disable-next-line no-case-declarations
+        const marketingPlanRef = await guestMarketingPlansRef.doc(clientReferenceId).get();
+        // eslint-disable-next-line no-case-declarations
+        const marketingPlan = marketingPlanRef.data() as MarketingPlan;
+  
+        // email marketing plan to user
+        // eslint-disable-next-line no-case-declarations
+        const customerEmail = checkoutSessionCompleted.customer_email ?? checkoutSessionCompleted.customer_details.email;
+        if (customerEmail !== null) {
+          await resend.emails.send({
+            from: "no-reply@tapped.ai",
+            to: [
+              checkoutSessionCompleted.customer_email ?? checkoutSessionCompleted.customer_details.email
+            ],
+            subject: "Your Marketing Plan | Tapped Ai",
+            html: `<div>${marked.parse(marketingPlan.content)}</div>`,
+          });
+        }
+  
+        break;
+        // ... handle other event types
+      default:
+        console.log(`Unhandled event type ${event.type}`);
+      }
+  
+      // Return a 200 response to acknowledge receipt of the event
+      res.sendStatus(200);
+    } catch (err: any) {
+      error(err);
+      res.status(400).send(`Webhook Error: ${err.message}`);
+      return;
+    }
+  });
+  
+
+export const generateMarketingPlan = functions
+  .runWith({ secrets: [ 
+    RESEND_API_KEY, 
+    OPEN_AI_KEY, 
+  ] })
+  .firestore
+  .document("marketingForms/{clientReferenceId}")
+  .onCreate(
+    async (request, context) => {
+      const clientReferenceId = context.params.clientReferenceId;
+      if (clientReferenceId === null) {
+        throw new HttpsError("invalid-argument", "no client reference id");
+      }
+      info({ clientReferenceId });
+
+      await guestMarketingPlansRef.doc(clientReferenceId).update({
+        status: "processing",
+      });
+
+      const formDataRef = await marketingFormsRef.doc(clientReferenceId).get()
+
+
+      const formData = formDataRef.data();
+      if (!formData || !formDataRef.exists) {
+        throw new HttpsError("failed-precondition", "no form data");
+      }
+
+      info({ formData })
+
+      // TODO: get use follower count
+      const { content, prompt } = await llm.generateMarketingPlan({
+        releaseType: formData["marketingType"],
+        artistName: formData["artistName"],
+        // artistGenres: formData.genre,
+        // igFollowerCount,
+        singleName: formData["productName"],
+        aesthetic: formData["aesthetic"],
+        targetAudience: formData["audience"],
+        moreToCome: formData["moreToCome"] ?? "nothing",
+        releaseTimeline: formData["timeline"],
+        apiKey: OPEN_AI_KEY.value(),
+      });
+
+      // save marketing plan to firestore and update status to 'complete'
+      await guestMarketingPlansRef.doc(clientReferenceId).update({
+        status: "completed",
+        // checkoutSessionId: checkoutSessionCompleted.id,
+        content,
+        prompt,
+      });
+    });
 
 export const checkoutSessionToClientReferenceId = onCall(
   { secrets: [ stripeTestKey ] },
