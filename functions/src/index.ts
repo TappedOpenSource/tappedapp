@@ -839,6 +839,22 @@ export const notifyFoundersOnLabelApplication = functions
 
     fcm.sendToDevice(devices, payload);
   });
+export const notifyFoundersOnMarketingForm = functions
+  .firestore 
+  .document("marketingForm/{formId}")
+  .onCreate(async (snapshot) => {
+    const form = snapshot.data();
+
+    const devices = await getFoundersDeviceTokens();
+    const payload = {
+      notification: {
+        title: "New Marketing Form \uD83D\uDE43",
+        body: `${form.artistName} just created a marketing plan`,
+      }
+    };
+
+    fcm.sendToDevice(devices, payload);
+  });
 export const notifyFoundersOnGuestMarketingPlan = functions
   .firestore 
   .document("guestMarketingPlans/{planId}")
@@ -846,7 +862,7 @@ export const notifyFoundersOnGuestMarketingPlan = functions
     const devices = await getFoundersDeviceTokens();
     const payload = {
       notification: {
-        title: "New Marketing Plan uD83D\uDE43",
+        title: "New Marketing Plan \uD83D\uDE43",
         body: "Someone just created a marketing plan",
       }
     };
