@@ -535,6 +535,75 @@ const _updateOverallRating = async ({
   });
 };
 
+const _emailMarketingPlan = async ({
+  checkoutSessionCompleteId,
+  checkoutSession,
+  customerEmail,
+  resendApiKey,
+}: {
+  checkoutSessionCompleteId: string;
+  checkoutSession: Stripe.Response<Stripe.Checkout.Session>;
+  customerEmail: string | null;
+  resendApiKey: string;
+}) => {
+  const resend = new Resend(resendApiKey);
+
+  const { client_reference_id: clientReferenceId } = checkoutSession;
+  if (clientReferenceId === null) {
+    throw new Error("no client reference id");
+  }
+  info({ clientReferenceId });
+
+  await guestMarketingPlansRef.doc(clientReferenceId).update({
+    status: "processing",
+  });
+
+  const formDataRef = await marketingFormsRef.doc(clientReferenceId).get()
+
+
+  const formData = formDataRef.data();
+  if (!formData || !formDataRef.exists) {
+    throw new Error("no form data");
+  }
+
+  info({ formData })
+
+  // TODO: get use follower count
+  // TODO: switch case for if it's a single, EP, or album
+  const { content, prompt } = await llm.generateMarketingPlan({
+    releaseType: formData["marketingType"],
+    artistName: formData["artistName"],
+    // artistGenres: formData.genre,
+    // igFollowerCount,
+    singleName: formData["productName"],
+    aesthetic: formData["aesthetic"],
+    targetAudience: formData["audience"],
+    moreToCome: formData["moreToCome"] ?? "nothing",
+    releaseTimeline: formData["timeline"],
+    apiKey: OPEN_AI_KEY.value(),
+  });
+
+  // save marketing plan to firestore and update status to 'complete'
+  await guestMarketingPlansRef.doc(clientReferenceId).update({
+    status: "completed",
+    checkoutSessionCompleteId,
+    content,
+    prompt,
+  });
+
+  // email marketing plan to user
+  if (customerEmail !== null) {
+    await resend.emails.send({
+      from: "no-reply@tapped.ai",
+      to: [
+        customerEmail
+      ],
+      subject: "Your Marketing Plan",
+      html: `<div>${marked.parse(content)}</div>`,
+    });
+  }
+};
+
 // --------------------------------------------------------
 export const sendToDevice = functions.firestore
   .document("activities/{activityId}")
@@ -2087,8 +2156,6 @@ export const marketingPlanStripeWebhook = onRequest(
       apiVersion: "2022-11-15",
     });
 
-    const resend = new Resend(RESEND_API_KEY.value());
-
     info("marketingPlanStripeWebhook", req.body);
     const sig = req.headers["stripe-signature"];
     if (!sig) {
@@ -2125,68 +2192,13 @@ export const marketingPlanStripeWebhook = onRequest(
         info({ checkoutSession });
 
         // eslint-disable-next-line no-case-declarations
-        const { client_reference_id: clientReferenceId } = checkoutSession;
-        if (clientReferenceId === null) {
-          res.status(400).send("no client reference id");
-          return;
-        }
-        info({ clientReferenceId });
-
-        await guestMarketingPlansRef.doc(clientReferenceId).update({
-          status: "processing",
-        });
-
-        // eslint-disable-next-line no-case-declarations
-        const formDataRef = await marketingFormsRef.doc(clientReferenceId).get()
-
-
-        // eslint-disable-next-line no-case-declarations
-        const formData = formDataRef.data();
-        if (!formData || !formDataRef.exists) {
-          res.status(400).send("no form data");
-          return;
-        }
-
-        info({ formData })
-
-        // TODO: get use follower count
-        // TODO: switch case for if it's a single, EP, or album
-        // eslint-disable-next-line no-case-declarations
-        const { content, prompt } = await llm.generateMarketingPlan({
-          releaseType: formData["marketingType"],
-          artistName: formData["artistName"],
-          // artistGenres: formData.genre,
-          // igFollowerCount,
-          singleName: formData["productName"],
-          aesthetic: formData["aesthetic"],
-          targetAudience: formData["audience"],
-          moreToCome: formData["moreToCome"] ?? "nothing",
-          releaseTimeline: formData["timeline"],
-          apiKey: OPEN_AI_KEY.value(),
-        });
-
-        // save marketing plan to firestore and update status to 'complete'
-        await guestMarketingPlansRef.doc(clientReferenceId).update({
-          status: "completed",
-          checkoutSessionId: checkoutSessionCompleted.id,
-          content,
-          prompt,
-        });
-
-        // email marketing plan to user
-        // eslint-disable-next-line no-case-declarations
         const customerEmail = checkoutSessionCompleted.customer_email ?? checkoutSessionCompleted.customer_details.email;
-        if (customerEmail !== null) {
-          await resend.emails.send({
-            from: "no-reply@tapped.ai",
-            to: [
-              checkoutSessionCompleted.customer_email ?? checkoutSessionCompleted.customer_details.email
-            ],
-            subject: "Your Marketing Plan",
-            html: `<div>${marked.parse(content)}</div>`,
-          });
-        }
-
+        await _emailMarketingPlan({
+          checkoutSessionCompleteId: checkoutSessionCompleted.id,
+          checkoutSession,
+          customerEmail,
+          resendApiKey: RESEND_API_KEY.value(),
+        });
         break;
         // ... handle other event types
       default:
