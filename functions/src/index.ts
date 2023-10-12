@@ -86,7 +86,7 @@ import {
   getFoundersDeviceTokens,
   getFileFromURL,
 } from "./utils";
-import { error, info } from "firebase-functions/logger";
+import { debug, error, info } from "firebase-functions/logger";
 import { Resend } from "resend";
 import { marked } from "marked";
 
@@ -2214,6 +2214,10 @@ export const emailMarketingPlanStripeWebhook = onRequest(
     });
   
     const resend = new Resend(RESEND_API_KEY.value());
+    const productIds = [
+      "prod_Ojv2uMqEt5n60E", // test AI plan product
+      "prod_OjsPZixnuZ86el", // prod AI plan product
+    ];
   
     info("marketingPlanStripeWebhook", req.body);
     const sig = req.headers["stripe-signature"];
@@ -2247,8 +2251,19 @@ export const emailMarketingPlanStripeWebhook = onRequest(
   
         // get form data from firestore
         // eslint-disable-next-line no-case-declarations
-        const checkoutSession = await stripe.checkout.sessions.retrieve(checkoutSessionCompleted.id);
+        const checkoutSession = await stripe.checkout.sessions.retrieve(checkoutSessionCompleted.id, {
+          expand: [ "line_items" ]
+        });
         info({ checkoutSession });
+        info({ lineItems: checkoutSession.line_items })
+        // eslint-disable-next-line no-case-declarations
+        const products = checkoutSession.line_items?.data?.map((item) => item.price?.product);
+        // eslint-disable-next-line no-case-declarations
+        const filteredArray = products?.filter(value => productIds.includes(value?.toString() ?? "")) ?? [];
+        if (filteredArray.length === 0) {
+          debug(`incorrect product: ${products}`);
+          return;
+        }
   
         // eslint-disable-next-line no-case-declarations
         const { client_reference_id: clientReferenceId } = checkoutSession;
@@ -2372,3 +2387,19 @@ export const checkoutSessionToClientReferenceId = onCall(
       clientReferenceId: session.client_reference_id,
     };
   });
+
+// export const addNewsletterSubscriberToMailchimp = onRequest(
+//   { secrets: [ MAILCHIMP_API_KEY ] },
+//   async () => {
+//     // get customer information
+
+//     // add contact to mailchimp audience
+//   });
+
+// export const removeNewsletterUnsubscriberFromMailchimp = onRequest(
+//   { secrets: [ MAILCHIMP_API_KEY ] },
+//   async () => {
+//     // get customer information
+
+//     // remove contact from mailchimp audience
+//   });
