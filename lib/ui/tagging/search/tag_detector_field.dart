@@ -15,12 +15,12 @@ class TagDetectorField extends StatefulWidget {
 
 class _TagDetectorFieldState extends State<TagDetectorField> {
   bool _showSearch = false; 
-
+  String _tag = '';
     @override
     Widget build(BuildContext context) {
       final textField = widget.textField;
       final controller = widget.controller;
-      final _searchOverlay = SearchOverlay().show(context, controller);
+      final _searchOverlay = SearchOverlay().show(context, controller, _tag);
       return Stack(
         children: [
           textField,
@@ -53,24 +53,24 @@ class _TagDetectorFieldState extends State<TagDetectorField> {
     }
 
 
-    bool isItTaggable(String text, TextEditingController controller){
+    String isItTaggable(String text, TextEditingController controller){
       //start by determining the index of the cursor
       final cursorIndex = controller.selection.baseOffset;
-      print('avsz $cursorIndex');
+      //print('avsz $cursorIndex');
       //if there's nothing, show no button.
-      if (cursorIndex == 0) return false;
+      if (cursorIndex == 0) return '';
+      //find the last word before the cursor
+      var lastWord = '';
+      if(text.contains(' ')) {lastWord = text.substring(0, cursorIndex).split(' ').last;}
+      else {lastWord = text;}
       //is the last character an '@'?
-      final isAt = text.substring(cursorIndex - 1) == '@';
+      final isAt = lastWord.substring(0, 1).contains('@');
       // if so, if there's nothing before it, it's taggable 
-      if (isAt && cursorIndex == 1) return true;
-      //is the character before the '@' a space?
-      final isSP = text.substring(cursorIndex - 2, cursorIndex - 1) == ' ';
-      //if the @ is right after a space, then we can show the search
-      final isTaggable = isAt && isSP;
+      final isTaggable = isAt;
       //I really had trouble with this so this is the debug
-      //print('avsz tag: $isTaggable "@" $isAt " " $isSP crsr $cursorIndex');
-      
-      return isTaggable;
+      print('avsz tag: $isTaggable lastWord $lastWord "@" $isAt crsr $cursorIndex');
+      if(isTaggable) return lastWord;
+      else return '';
     }
 
 
@@ -81,7 +81,10 @@ class _TagDetectorFieldState extends State<TagDetectorField> {
       final text = controller.text;
       
       setState(() {
-        _showSearch = isItTaggable(text, controller);
+        //show search if isItTaggable returns the type of string
+        var tagIt = isItTaggable(text, controller);
+         if (tagIt.compareTo('') != 0 ) {_showSearch = true; _tag = tagIt;}
+         else {_showSearch = false;}
       });
       widget.textField.onChanged?.call(text);
     }

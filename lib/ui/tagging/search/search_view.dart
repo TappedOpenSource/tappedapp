@@ -9,7 +9,7 @@
     class SearchView extends StatefulWidget {
       SearchView({
         FocusNode? searchFocusNode,
-        
+        required this.tag,
         //required TextEditingController tagController,
         required VoidCallback this.onClear,
         Key? key, required this.tagController,
@@ -18,7 +18,8 @@
 
       final FocusNode searchFocusNode;
       final VoidCallback onClear;
-      final TextEditingController tagController;
+      TextEditingController tagController;
+      String tag;
 
       @override
       // ignore: library_private_types_in_public_api
@@ -31,6 +32,7 @@
       void initState() {
         super.initState();
         _searchController = TextEditingController();
+        
       }
 
       @override
@@ -50,20 +52,25 @@
       }
 
       late final TextEditingController _searchController;
+      TextEditingController getSearchController() {_searchController.text = widget.tag.substring(1); return _searchController;}
 
       @override
       Widget build(BuildContext context) {
         final theme = Theme.of(context);
+        //set the text controller's text to the tag
+        //then set the state
+        
 
         return Scaffold(
-          backgroundColor: theme.colorScheme.background,
+          //backgroundColor: theme.colorScheme.background,
+          backgroundColor: Colors.red,
           appBar: AppBar(
             centerTitle: true,
             elevation: 0.5,
             backgroundColor: theme.colorScheme.background,
             title: TappedSearchBar(
               searchFocusNode: widget.searchFocusNode,
-              searchController: _searchController,
+              searchController: getSearchController(),
             ),
             actions: _buildActions(),
           ),
