@@ -10,6 +10,7 @@ static String isItTaggable(String text, TextEditingController controller){
       //print('avsz $cursorIndex');
       //if there's nothing, show no button.
       if (cursorIndex == 0) return '';
+      if (text.substring(cursorIndex - 1, cursorIndex) == ' ') return '';
       //find the last word before the cursor
       var lastWord = '';
       if(text.contains(' ')) {lastWord = text.substring(0, cursorIndex).split(' ').last;}
