@@ -49,22 +49,19 @@ class _TagDetectorFieldState extends State<TagDetectorField> {
 
 
   bool isItTaggable(String text, TextEditingController controller){
-    
-    
-    
-    
-    //for every @ symbol, check if the previous character is a space
     //start by determining the index of the cursor
     final cursorIndex = controller.selection.baseOffset;
-    
-    //find the last space before the cursor
-    final spIndex = text.substring(0, cursorIndex).lastIndexOf(' ');
-    //find the last @ before the cursor
-    final atIndex = text.indexOf('@');
-    //if the @ is right after the space, then we can show the search
-    final isTaggable = atIndex >= spIndex + 1;
+    print('avsz $cursorIndex');
+    if (cursorIndex == 0) return false;
+    //is the last character an '@'?
+    final isAt = text.substring(cursorIndex - 1) == '@';
+    if (isAt && cursorIndex == 1) return true;
+    //is the character before the @ a space OR is there nothing before the '@'?
+    final isSP = text.substring(cursorIndex - 2, cursorIndex - 1) == ' ';
+    //if the @ is right after a space, then we can show the search
+    final isTaggable = isAt && isSP;
     //I really had trouble with this so this is the debug
-    print('avsz $isTaggable sp $spIndex @ $atIndex  crsr $cursorIndex');
+    print('avsz tag: $isTaggable "@" $isAt " " $isSP crsr $cursorIndex');
     
     return isTaggable;
   }
