@@ -83,6 +83,7 @@ class CommentsTextFieldState extends State<CommentsTextField> {
                       hintText: 'Add Comment...',
                     ),
                   ),
+                  controller: _textEditingController,
                 ),
                 ),
                 IconButton(

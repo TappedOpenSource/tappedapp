@@ -9,15 +9,16 @@
     class SearchView extends StatefulWidget {
       SearchView({
         FocusNode? searchFocusNode,
-        // q: I need to typecast this to a function that returns void.  How do i do that?
-
+        
+        //required TextEditingController tagController,
         required VoidCallback this.onClear,
-        Key? key,
+        Key? key, required this.tagController,
       })  : searchFocusNode = searchFocusNode ?? FocusNode(),
             super(key: key);
 
       final FocusNode searchFocusNode;
       final VoidCallback onClear;
+      final TextEditingController tagController;
 
       @override
       // ignore: library_private_types_in_public_api

@@ -6,12 +6,14 @@ import 'package:intheloopapp/ui/tagging/search/search_view.dart';
 class SearchOverlay {
 
 late OverlayEntry _overlayEntry;
+late TextEditingController controller;
 
   SearchOverlay() {
+
     _overlayEntry = OverlayEntry(
 
       builder: (BuildContext context) {
-        return SearchView(onClear: close);
+        return SearchView(onClear: close, tagController: controller,);
             
          
         
@@ -38,7 +40,8 @@ late OverlayEntry _overlayEntry;
   }
   
 
-  OverlayEntry show(BuildContext context) {
+  OverlayEntry show(BuildContext context, TextEditingController controller) {
+    this.controller = controller;
     return  _overlayEntry;
   }
 
