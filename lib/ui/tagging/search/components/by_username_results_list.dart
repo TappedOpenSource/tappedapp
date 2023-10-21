@@ -4,10 +4,12 @@ import 'package:intheloopapp/domains/models/option.dart';
 import 'package:intheloopapp/domains/search_bloc/search_bloc.dart';
 import 'package:intheloopapp/ui/loading/logo_wave.dart';
 import 'package:intheloopapp/ui/tagging/search/components/discover_view.dart';
-import 'package:intheloopapp/ui/user_tile.dart';
+import 'package:intheloopapp/ui/tagging/search/components/user_tile.dart';
 
 class ByUsernameResultsList extends StatelessWidget {
-  const ByUsernameResultsList({super.key});
+  const ByUsernameResultsList({super.key, required this.tagController, required VoidCallback this.onClear});
+  final TextEditingController tagController;
+  final VoidCallback onClear; 
 
   @override
   Widget build(BuildContext context) {
@@ -30,6 +32,8 @@ class ByUsernameResultsList extends StatelessWidget {
                 itemBuilder: (BuildContext context, int index) {
                   final user = state.searchResults[index];
                   return UserTile(
+                    onClear: onClear,
+                    tagController: tagController,
                     userId: user.id,
                     user: Some(user),
                   );

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:intheloopapp/ui/tagging/search/search_overlay.dart';
+import 'package:intheloopapp/ui/tagging/search/components/static_tag_tools.dart';
 
 class TagDetectorField extends StatefulWidget {
 
@@ -53,25 +54,7 @@ class _TagDetectorFieldState extends State<TagDetectorField> {
     }
 
 
-    String isItTaggable(String text, TextEditingController controller){
-      //start by determining the index of the cursor
-      final cursorIndex = controller.selection.baseOffset;
-      //print('avsz $cursorIndex');
-      //if there's nothing, show no button.
-      if (cursorIndex == 0) return '';
-      //find the last word before the cursor
-      var lastWord = '';
-      if(text.contains(' ')) {lastWord = text.substring(0, cursorIndex).split(' ').last;}
-      else {lastWord = text;}
-      //is the last character an '@'?
-      final isAt = lastWord.substring(0, 1).contains('@');
-      // if so, if there's nothing before it, it's taggable 
-      final isTaggable = isAt;
-      //I really had trouble with this so this is the debug
-      print('avsz tag: $isTaggable lastWord $lastWord "@" $isAt crsr $cursorIndex');
-      if(isTaggable) return lastWord;
-      else return '';
-    }
+    
 
 
     void _onTextChanged() {
@@ -82,7 +65,7 @@ class _TagDetectorFieldState extends State<TagDetectorField> {
       
       setState(() {
         //show search if isItTaggable returns the type of string
-        var tagIt = isItTaggable(text, controller);
+        var tagIt = TagTools.isItTaggable(text, controller);
          if (tagIt.compareTo('') != 0 ) {_showSearch = true; _tag = tagIt;}
          else {_showSearch = false;}
       });

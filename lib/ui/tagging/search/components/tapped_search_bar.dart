@@ -9,11 +9,13 @@ class TappedSearchBar extends StatelessWidget {
   const TappedSearchBar({
     required this.searchFocusNode,
     required this.searchController,
+    required this.tagController,
     super.key,
   });
 
   final FocusNode searchFocusNode;
   final TextEditingController searchController;
+  final TextEditingController tagController;
 
   @override
   Widget build(BuildContext context) {

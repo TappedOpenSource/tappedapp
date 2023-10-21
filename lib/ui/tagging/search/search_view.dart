@@ -69,12 +69,15 @@
             elevation: 0.5,
             backgroundColor: theme.colorScheme.background,
             title: TappedSearchBar(
+              tagController: widget.tagController,
               searchFocusNode: widget.searchFocusNode,
               searchController: getSearchController(),
             ),
             actions: _buildActions(),
           ),
-          body: ByUsernameResultsList(),
+          body: ByUsernameResultsList(
+            tagController: widget.tagController, 
+            onClear: widget.onClear,),
         );
       }
     }
