@@ -12,11 +12,19 @@ import 'package:intheloopapp/ui/create_booking/create_booking_cubit.dart';
 import 'package:intheloopapp/ui/forms/location_text_field.dart';
 import 'package:intheloopapp/utils/app_logger.dart';
 
+
+
+
+
 class CreateBookingForm extends StatefulWidget {
   const CreateBookingForm({super.key});
 
   @override
   State<CreateBookingForm> createState() => _CreateBookingFormState();
+
+
+
+
 }
 
 class _CreateBookingFormState extends State<CreateBookingForm> {

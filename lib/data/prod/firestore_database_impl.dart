@@ -331,6 +331,36 @@ class FirestoreDatabaseImpl extends DatabaseRepository {
   }
 
   @override
+  Future<List<UserModel>> getUserByIncUsername (String? query) async {
+    final usersSnapshot = await _usersRef
+        .orderBy('username')
+        .startAt([query])
+        .endAt(['$query\u{f8ff}'])
+        .get();
+
+    if (usersSnapshot.docs.isEmpty) {
+      return [];
+    }
+
+    final usersWithFP = usersSnapshot.docs.map(UserModel.fromDoc).toList();
+
+    final users = usersWithFP
+        .map((user) {
+          if (user.username == null) {
+            return null;
+          }
+
+          return user;
+        })
+        .whereType<UserModel>()
+        .toList();
+
+    return users;
+  }
+
+
+
+  @override
   Future<List<UserModel>> getBookingLeaders() async {
     final leadersSnapshot = await _leadersRef.doc('leaders').get();
 

@@ -103,6 +103,10 @@ class CommentsCubit extends Cubit<CommentsState> {
     }
   }
 
+  // Q: I'm looking to make a slightly different TextField.  which directory should i put it in so everyone can use it?
+  // A: I would put it in the components folder.  If it's a more complex widget, you can put it in a folder with the same name as the widget.
+  
+
   @override
   Future<void> close() async {
     await commentListener?.cancel();

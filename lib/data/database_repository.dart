@@ -17,6 +17,7 @@ abstract class DatabaseRepository {
   Future<bool> userEmailExists(String email);
   Future<void> createUser(UserModel user);
   Future<Option<UserModel>> getUserByUsername(String? username);
+  Future<List<UserModel>> getUserByIncUsername(String? username);
   Future<Option<UserModel>> getUserById(
     String userId, {
     bool ignoreCache = false,

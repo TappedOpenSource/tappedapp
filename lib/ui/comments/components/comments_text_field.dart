@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intheloopapp/ui/comments/comments_cubit.dart';
+import 'package:intheloopapp/ui/tagging/search/tag_detector_field.dart';
 
 class CommentsTextField extends StatefulWidget {
   const CommentsTextField({super.key});
@@ -61,33 +62,39 @@ class CommentsTextFieldState extends State<CommentsTextField> {
           );
         }
 
-        return Row(
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        return Column(
           children: [
-            SizedBox(
-              width: 300,
-              height: 40,
-              child: TextField(
-                onChanged: (value) =>
-                    context.read<CommentsCubit>().changeComment(value),
-                controller: _textEditingController,
-                textCapitalization: TextCapitalization.sentences,
-                maxLines: 3,
-                minLines: 3,
-                decoration: const InputDecoration.collapsed(
-                  // border: OutlineInputBorder(),
-                  hintText: 'Add Comment...',
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                
+                SizedBox(
+                  width: 300,
+                  height: 40,
+                  child: TagDetectorField(textField: TextField(
+                    onChanged: (value) =>
+                        context.read<CommentsCubit>().changeComment(value),
+                    controller: _textEditingController,
+                    textCapitalization: TextCapitalization.sentences,
+                    maxLines: 3,
+                    minLines: 3,
+                    decoration: const InputDecoration.collapsed(
+                      // border: OutlineInputBorder(),
+                      hintText: 'Add Comment...',
+                    ),
+                  ),
                 ),
-              ),
-            ),
-            IconButton(
-              onPressed: () async {
-                await context.read<CommentsCubit>().addComment();
-                _textEditingController.clear();
-              },
-              icon: state.loading
-                  ? const CircularProgressIndicator(color: Colors.white)
-                  : const Icon(Icons.send),
+                ),
+                IconButton(
+                  onPressed: () async {
+                    await context.read<CommentsCubit>().addComment();
+                    _textEditingController.clear();
+                  },
+                  icon: state.loading
+                      ? const CircularProgressIndicator(color: Colors.white)
+                      : const Icon(Icons.send),
+                ),
+              ],
             ),
           ],
         );
