@@ -61,23 +61,32 @@
         //then set the state
         
 
-        return Scaffold(
-          //backgroundColor: theme.colorScheme.background,
-          backgroundColor: Colors.red,
-          appBar: AppBar(
-            centerTitle: true,
-            elevation: 0.5,
-            backgroundColor: theme.colorScheme.background,
-            title: TappedSearchBar(
-              tagController: widget.tagController,
-              searchFocusNode: widget.searchFocusNode,
-              searchController: getSearchController(),
+        return Positioned(
+
+          //I want this to be all the way on the right and just below the tag_detector_field
+          child: SizedBox(
+            //width: 400,
+            //height: 100,
+            child: Transform.scale(scale: .5, alignment: Alignment.centerRight, child: Scaffold(
+            //backgroundColor: theme.colorScheme.background,
+            backgroundColor: Color.fromARGB(255, 14, 59, 95),
+            appBar: AppBar(
+              centerTitle: true,
+              elevation: 0.5,
+              backgroundColor: theme.colorScheme.background,
+              title: TappedSearchBar(
+                tagController: widget.tagController,
+                searchFocusNode: widget.searchFocusNode,
+                searchController: getSearchController(),
+              ),
+              actions: _buildActions(),
             ),
-            actions: _buildActions(),
+            body: ByUsernameResultsList(
+              tagController: widget.tagController, 
+              onClear: widget.onClear,),
+                  ),
+                  ),
           ),
-          body: ByUsernameResultsList(
-            tagController: widget.tagController, 
-            onClear: widget.onClear,),
         );
       }
     }

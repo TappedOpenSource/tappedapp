@@ -21,25 +21,28 @@ class _TagDetectorFieldState extends State<TagDetectorField> {
     Widget build(BuildContext context) {
       final textField = widget.textField;
       final controller = widget.controller;
-      final _searchOverlay = SearchOverlay().show(context, controller, _tag);
+      final _searchOverlay = SearchOverlay().show(context, controller, _tag); //this is the overlay function
+      //final _searchAddition = SearchAddition().show(context, controller, _tag); //this is the addative function
       return Stack(
         children: [
           textField,
           if (_showSearch)
-            Positioned(
+            //Overlay.of(context).insert(_searchOverlay)
+            
+            Positioned(//START positioned
               right: 0,
               top: 0,
               bottom: 0,
               //on tap show the search overlay
               child: GestureDetector(child:Icon(Icons.alternate_email,), 
-              onTap: () => Overlay.of(context).insert(_searchOverlay) ,),
+              onTap: () => Overlay.of(context).insert(_searchOverlay) ,
+              ),
+              //child: _searchAddition,
               //
-            ),
+            ), //END positioned
         ],
       );
     }
-
-    
 
     @override
     void initState() {

@@ -112,18 +112,21 @@ class _UserTileState extends State<UserTile> {
                 ],
             };
           
+          String userName = '@${user.username.username}';
         
 
             return ListTile(
+              
+              tileColor: Colors.black,
               leading: UserAvatar(
-                radius: 25,
+                radius: 15,
                 pushUser: Some(user),
                 imageUrl: user.profilePicture,
                 verified: verified,
               ),
               title: RichText(
                 text: TextSpan(
-                  text: user.displayName,
+                  text: userName,
                   style: TextStyle(
                     fontWeight: FontWeight.bold,
                     color: Theme.of(context).colorScheme.onSurface,
@@ -133,10 +136,7 @@ class _UserTileState extends State<UserTile> {
                   ],
                 ),
               ),
-              subtitle: widget.subtitle ??
-                  Text(
-                    '${user.followerCount} followers',
-                  ),
+              
               
               onTap: () => insertUsername(widget.tagController, user.username.username),);
           },
@@ -152,10 +152,10 @@ class _UserTileState extends State<UserTile> {
     var cursorIndex = controller.selection.baseOffset;
     //print('avsz $current');
     var getRid = current.substring(0, cursorIndex).split(' ').last;
-    print('avsz deleting $getRid');
+    //print('avsz deleting $getRid');
     var conUsername = '@$username';
     var newString = current.replaceAll(getRid, '$conUsername');
-    print('avsz newString $newString');
+    //print('avsz newString $newString');
     controller.text = newString;
     widget.onClear();
     

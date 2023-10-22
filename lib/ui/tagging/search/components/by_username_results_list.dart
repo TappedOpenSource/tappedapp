@@ -11,19 +11,16 @@ class ByUsernameResultsList extends StatelessWidget {
   final TextEditingController tagController;
   final VoidCallback onClear; 
 
-  @override
-  Widget build(BuildContext context) {
+  BlocBuilder returnThis(){
     return BlocBuilder<SearchBloc, SearchState>(
       builder: (context, state) {
-        if (state.loading) {
+        if (state.loading || state.isNotSearching) {
           return const Center(
             child: LogoWave(),
           );
         }
 
-        if (state.isNotSearching) {
-          return const DiscoverView();
-        }
+        //if (state.isNotSearching) {return const DiscoverView();}
 
         return state.searchResults.isEmpty
             ? const Center(child: Text('No users found'))
@@ -41,6 +38,11 @@ class ByUsernameResultsList extends StatelessWidget {
               );
       },
     );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return returnThis();
   }
 }
 
