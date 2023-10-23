@@ -2296,7 +2296,8 @@ export const emailMarketingPlanStripeWebhook = onRequest(
         // eslint-disable-next-line no-case-declarations
         const { client_reference_id: clientReferenceId } = checkoutSession;
         if (clientReferenceId === null) {
-          res.status(400).send("no client reference id");
+          debug(`no client reference id: ${clientReferenceId}`)
+          res.sendStatus(200);
           return;
         }
         info({ clientReferenceId });
@@ -2417,15 +2418,50 @@ export const checkoutSessionToClientReferenceId = onCall(
   });
 
 // export const addNewsletterSubscriberToMailchimp = onRequest(
-//   { secrets: [ MAILCHIMP_API_KEY ] },
-//   async () => {
+//   { secrets: [ ] },
+//   async (req, res) => {
 //     // get customer information
+//     const stripe = new Stripe(stripeTestKey.value(), {
+//       apiVersion: "2022-11-15",
+//     });
 
+//     info("marketingPlanStripeWebhook", req.body);
+//     const sig = req.headers["stripe-signature"];
+//     if (!sig) {
+//       res.status(400).send("No signature");
+//       return;
+//     }
+
+
+//     try {
+//       const event = stripe.webhooks.constructEvent(
+//         req.rawBody, 
+//         sig, 
+//         stripeTestEndpointSecret.value(),
+//       );
+
+//       // Handle the event
+//       switch (event.type) {
+//       case "checkout.session.completed":
+
+//         break;
+//         // ... handle other event types
+//       default:
+//         console.log(`Unhandled event type ${event.type}`);
+//       }
+
+//       // Return a 200 response to acknowledge receipt of the event
+//       res.sendStatus(200);
+//     } catch (err: any) {
+//       error(err);
+//       res.status(400).send(`Webhook Error: ${err.message}`);
+//       return;
+//     }
 //     // add contact to mailchimp audience
 //   });
 
 // export const removeNewsletterUnsubscriberFromMailchimp = onRequest(
-//   { secrets: [ MAILCHIMP_API_KEY ] },
+//   { secrets: [ ] },
 //   async () => {
 //     // get customer information
 
