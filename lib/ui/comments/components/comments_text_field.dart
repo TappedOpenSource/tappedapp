@@ -70,7 +70,7 @@ class CommentsTextFieldState extends State<CommentsTextField> {
                 
                 SizedBox(
                   width: 300,
-                  height: 40,
+                  //height: 400,
                   child: TagDetectorField(textField: TextField(
                     onChanged: (value) =>
                         context.read<CommentsCubit>().changeComment(value),

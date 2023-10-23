@@ -20,7 +20,7 @@ static String isItTaggable(String text, TextEditingController controller){
       // if so, if there's nothing before it, it's taggable 
       final isTaggable = isAt;
       //I really had trouble with this so this is the debug
-      print('avsz tag: $isTaggable lastWord $lastWord "@" $isAt crsr $cursorIndex');
+      //print('avsz tag: $isTaggable lastWord $lastWord "@" $isAt crsr $cursorIndex');
       if(isTaggable) return lastWord;
       else return '';
     }
