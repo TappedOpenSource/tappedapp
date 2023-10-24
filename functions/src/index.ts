@@ -47,7 +47,6 @@ import {
   loopCommentsGroupRef, 
   loopsFeedSubcollection, 
   loopsRef, 
-  mailRef, 
   mainBucket, 
   performerReviewsSubcollection, 
   remote, 
@@ -57,7 +56,6 @@ import {
   bookingsRef,
   tokensRef,
   followingRef,
-  queuedWritesRef,
   followersRef,
   stripeKey,
   stripePublishableKey,
@@ -1220,23 +1218,6 @@ export const incrementBadgeCountOnBadgeSent = functions.firestore
       .doc(context.params.userId)
       .update({ badgesCount: FieldValue.increment(1) });
   });
-// export const sendWelcome = onUserCreated(
-//   { secrets: [ RESEND_API_KEY ] },
-//   (user: UserRecord) => {
-//     if (!user.email) {
-//       return;
-//     }
-
-//     // Check user claim
-
-//     const resend = new Resend();
-//     resend.emails.create({
-//       from: "no-reply@tapped.ai",
-//       to: user.email,
-//       subject: "Welcome to Tapped!",
-//       html: "<p>welcome to tapped</p>" 
-//     });
-//   });
 export const onUserDeleted = functions.auth
   .user()
   .onDelete((user: UserRecord) => _deleteUser({ id: user.uid }));
@@ -1420,120 +1401,6 @@ export const postFromVerifiedBotOnVerification = functions
     await loopsRef.doc(uuid).set(post);
   });
 
-export const sendBookingNotificationsOnBookingConfirmed = functions
-  .firestore
-  .document("bookings/{bookingId}")
-  .onUpdate(async (data) => {
-    const booking = data.after.data() as Booking;
-    const bookingBefore = data.before.data() as Booking;
-
-    if (booking.status !== "confirmed" || bookingBefore.status === "confirmed") {
-      functions.logger.info(`booking ${booking.id} is not confirmed or was already confirmed`);
-      return;
-    }
-
-    const requesteeSnapshot = await usersRef.doc(booking.requesteeId).get();
-    const requestee = requesteeSnapshot.data();
-    const requesteeEmail = requestee?.email;
-
-    if (requesteeEmail === undefined || requesteeEmail === null || requesteeEmail === "") {
-      throw new Error(`requestee ${requestee?.id} does not have an email`);
-    }
-
-    const requesterSnapshot = await usersRef.doc(booking.requesterId).get();
-    const requester = requesterSnapshot.data();
-    const requesterEmail = requester?.email;
-
-    if (requesterEmail === undefined || requesterEmail === null || requesterEmail === "") {
-      throw new Error(`requester ${requester?.id} does not have an email`);
-    }
-
-
-    const ONE_HOUR_MS = 60 * 60 * 1000;
-    const ONE_DAY_MS = 24 * ONE_HOUR_MS;
-    const ONE_WEEK_MS = 7 * ONE_DAY_MS;
-    const reminders = [
-      {
-        userId: booking.requesteeId,
-        email: requesteeEmail,
-        offset: ONE_HOUR_MS,
-        type: "bookingReminderRequestee",
-      },
-      {
-        userId: booking.requesteeId,
-        email: requesteeEmail,
-        offset: ONE_DAY_MS,
-        type: "bookingReminderRequestee",
-      },
-      {
-        userId: booking.requesteeId,
-        email: requesteeEmail,
-        offset: ONE_WEEK_MS,
-        type: "bookingReminderRequestee",
-      },
-      {
-        userId: booking.requesterId,
-        email: requesterEmail,
-        offset: ONE_HOUR_MS,
-        type: "bookingReminderRequester",
-      },
-      {
-        userId: booking.requesterId,
-        email: requesterEmail,
-        offset: ONE_DAY_MS,
-        type: "bookingReminderRequester",
-      },
-      {
-        userId: booking.requesterId,
-        email: requesterEmail,
-        offset: ONE_WEEK_MS,
-        type: "bookingReminderRequester",
-      },
-    ]
-
-    const startTime = booking.startTime.toDate().getTime();
-
-    // Create schedule write for push notification
-    // 1 week, 1 day, and 1 hour before booking start time
-    for (const reminder of reminders) {
-
-      if ((startTime - reminder.offset) < Date.now()) {
-        functions.logger.info("too late to send reminder, skipping reminder");
-        continue;
-      }
-
-      await Promise.all([
-        queuedWritesRef.add({
-          state: "PENDING",
-          data: {
-            toUserId: reminder.userId,
-            type: "bookingReminder",
-            bookingId: booking.id,
-            timestamp: Timestamp.now(),
-            markedRead: false,
-          },
-          collection: "activities",
-          deliverTime: Timestamp.fromMillis(
-            startTime - reminder.offset,
-          ),
-        }),
-        // queuedWritesRef.add({
-        //   state: "PENDING",
-        //   data: {
-        //     to: [ reminder.email ],
-        //     template: {
-        //       // e.g. bookingReminderRequestee-3600000
-        //       name: `${reminder.type}-${reminder.offset}`,
-        //     },
-        //   },
-        //   collection: "mail",
-        //   deliverTime: Timestamp.fromMillis(
-        //     startTime - reminder.offset,
-        //   ),
-        // }),
-      ]);
-    }
-  });
 export const cancelBookingIfExpired = onSchedule("0 * * * *", async (event) => {
   const pendingBookings = await bookingsRef.where("status", "==", "pending").get();
 
