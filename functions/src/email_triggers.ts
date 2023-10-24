@@ -11,15 +11,23 @@ import {
   RESEND_API_KEY, 
   guestMarketingPlansRef, 
   mailRef, 
+  queuedWritesRef, 
   stripeTestEndpointSecret, 
   stripeTestKey,
   usersRef,
 } from "./firebase";
-import { onRequest } from "firebase-functions/v2/https";
+import { 
+  onRequest, 
+} from "firebase-functions/v2/https";
+import {
+  onDocumentCreated,
+} from "firebase-functions/v2/firestore";
 import Stripe from "stripe";
 import { Resend } from "resend";
 import { Booking, MarketingPlan } from "./models";
 import { marked } from "marked";
+import { Timestamp } from "firebase-admin/firestore";
+import { labelApplied } from "./email_templates/label_applied";
 
 export const sendWelcomeEmailOnUserCreated = functions.auth
   .user()
@@ -31,7 +39,6 @@ export const sendWelcomeEmailOnUserCreated = functions.auth
     }
 
     debug(`sending welcome email to ${email}`);
-
     await mailRef.add({
       to: [ email ],
       template: {
@@ -39,6 +46,27 @@ export const sendWelcomeEmailOnUserCreated = functions.auth
       },
     })
   });
+
+
+export const sendEmailOnLabelApplication = onDocumentCreated({
+  document: "label_applications/{applicationId}",
+  secrets: [ RESEND_API_KEY ],
+},async (event) => {
+  const snapshot = event.data;
+  const application = snapshot?.data();
+  const email = application?.email;
+  if (email === undefined || email === null || email === "") {
+    throw new Error(`application ${application?.id} does not have an email`);
+  }
+
+  const resend = new Resend(RESEND_API_KEY.value());
+  await resend.emails.send({
+    from: "no-reply@tapped.ai",
+    to: [ email ],
+    subject: "thank you for applying to Tapped Ai!",
+    html: `<div style="white-space: pre;">${labelApplied}</div>`,
+  });
+});
 
 export const emailMarketingPlanStripeWebhook = onRequest(
   { secrets: [ 
@@ -191,4 +219,119 @@ export const sendBookingRequestReceivedEmailOnBooking = functions
         name: "bookingRequestReceived",
       },
     })
+  });
+
+export const sendBookingNotificationsOnBookingConfirmed = functions
+  .firestore
+  .document("bookings/{bookingId}")
+  .onUpdate(async (data) => {
+    const booking = data.after.data() as Booking;
+    const bookingBefore = data.before.data() as Booking;
+
+    if (booking.status !== "confirmed" || bookingBefore.status === "confirmed") {
+      functions.logger.info(`booking ${booking.id} is not confirmed or was already confirmed`);
+      return;
+    }
+
+    const requesteeSnapshot = await usersRef.doc(booking.requesteeId).get();
+    const requestee = requesteeSnapshot.data();
+    const requesteeEmail = requestee?.email;
+
+    if (requesteeEmail === undefined || requesteeEmail === null || requesteeEmail === "") {
+      throw new Error(`requestee ${requestee?.id} does not have an email`);
+    }
+
+    const requesterSnapshot = await usersRef.doc(booking.requesterId).get();
+    const requester = requesterSnapshot.data();
+    const requesterEmail = requester?.email;
+
+    if (requesterEmail === undefined || requesterEmail === null || requesterEmail === "") {
+      throw new Error(`requester ${requester?.id} does not have an email`);
+    }
+
+
+    const ONE_HOUR_MS = 60 * 60 * 1000;
+    const ONE_DAY_MS = 24 * ONE_HOUR_MS;
+    const ONE_WEEK_MS = 7 * ONE_DAY_MS;
+    const reminders = [
+      {
+        userId: booking.requesteeId,
+        email: requesteeEmail,
+        offset: ONE_HOUR_MS,
+        type: "bookingReminderRequestee",
+      },
+      {
+        userId: booking.requesteeId,
+        email: requesteeEmail,
+        offset: ONE_DAY_MS,
+        type: "bookingReminderRequestee",
+      },
+      {
+        userId: booking.requesteeId,
+        email: requesteeEmail,
+        offset: ONE_WEEK_MS,
+        type: "bookingReminderRequestee",
+      },
+      {
+        userId: booking.requesterId,
+        email: requesterEmail,
+        offset: ONE_HOUR_MS,
+        type: "bookingReminderRequester",
+      },
+      {
+        userId: booking.requesterId,
+        email: requesterEmail,
+        offset: ONE_DAY_MS,
+        type: "bookingReminderRequester",
+      },
+      {
+        userId: booking.requesterId,
+        email: requesterEmail,
+        offset: ONE_WEEK_MS,
+        type: "bookingReminderRequester",
+      },
+    ]
+
+    const startTime = booking.startTime.toDate().getTime();
+
+    // Create schedule write for push notification
+    // 1 week, 1 day, and 1 hour before booking start time
+    for (const reminder of reminders) {
+
+      if ((startTime - reminder.offset) < Date.now()) {
+        functions.logger.info("too late to send reminder, skipping reminder");
+        continue;
+      }
+
+      await Promise.all([
+        queuedWritesRef.add({
+          state: "PENDING",
+          data: {
+            toUserId: reminder.userId,
+            type: "bookingReminder",
+            bookingId: booking.id,
+            timestamp: Timestamp.now(),
+            markedRead: false,
+          },
+          collection: "activities",
+          deliverTime: Timestamp.fromMillis(
+            startTime - reminder.offset,
+          ),
+        }),
+        // queuedWritesRef.add({
+        //   state: "PENDING",
+        //   data: {
+        //     to: [ reminder.email ],
+        //     template: {
+        //       // e.g. bookingReminderRequestee-3600000
+        //       name: `${reminder.type}-${reminder.offset}`,
+        //     },
+        //   },
+        //   collection: "mail",
+        //   deliverTime: Timestamp.fromMillis(
+        //     startTime - reminder.offset,
+        //   ),
+        // }),
+      ]);
+    }
   });
