@@ -77,6 +77,13 @@ export const sendEmailOnApproval = onDocumentUpdated({
   const {before, after} = event.data;
   const beforeData = before?.data();
   const afterData = after?.data();
+  const approvedBefore = beforeData?.approved ?? false;
+  const approvedAfter = afterData?.approved ?? false; 
+
+  if (approvedBefore !== false && approvedAfter !== true) {
+    debug(`before ${approvedBefore}, after ${approvedAfter}`);
+    return;
+  }
 
   if (beforeData?.approved === false && afterData?.approved === true){
     const email = afterData?.email;
