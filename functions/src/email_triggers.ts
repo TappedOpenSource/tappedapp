@@ -73,7 +73,12 @@ export const sendEmailOnApproval = onDocumentUpdated({
   document: "label_applications/{applicationId}",
   secrets: [ RESEND_API_KEY ],
 }, async (event) => {
-  const {before, after} = event.data;
+
+  if (event.data === undefined) {
+    throw new Error("event data is undefined");
+  }
+
+  const { before, after } = event.data;
   const beforeData = before?.data();
   const afterData = after?.data();
   const approvedBefore = beforeData?.approved ?? false;
