@@ -21,6 +21,7 @@ import {
 } from "firebase-functions/v2/https";
 import {
   onDocumentCreated,
+  onDocumentUpdated,
 } from "firebase-functions/v2/firestore";
 import Stripe from "stripe";
 import { Resend } from "resend";
@@ -28,6 +29,7 @@ import { Booking, MarketingPlan } from "./models";
 import { marked } from "marked";
 import { Timestamp } from "firebase-admin/firestore";
 import { labelApplied } from "./email_templates/label_applied";
+import { labelApproved } from "./email_templates/label_approved";
 
 export const sendWelcomeEmailOnUserCreated = functions.auth
   .user()
@@ -65,6 +67,36 @@ export const sendEmailOnLabelApplication = onDocumentCreated({
     subject: "thank you for applying to Tapped Ai!",
     html: `<div style="white-space: pre;">${labelApplied}</div>`,
   });
+});
+
+export const sendEmailOnApproval = onDocumentUpdated({
+  document: "label_applications/{applicationId}",
+  secrets: [ RESEND_API_KEY ],
+}, async (event) => {
+  const {before, after} = event.data;
+  const beforeData = before?.data();
+  const afterData = after?.data();
+  const approvedBefore = beforeData?.approved ?? false;
+  const approvedAfter = afterData?.approved ?? false; 
+
+  if (approvedBefore !== false && approvedAfter !== true) {
+    debug(`before ${approvedBefore}, after ${approvedAfter}`);
+    return;
+  }
+
+  if (beforeData?.approved === false && afterData?.approved === true){
+    const email = afterData?.email;
+    if (email === undefined || email === null || email === "") {
+      throw new Error(`application ${afterData?.id} does not have an email`);
+    }
+    const resend = new Resend(RESEND_API_KEY.value());
+    await resend.emails.send({
+      from: "no-reply@tapped.ai",
+      to: [ email ],
+      subject: "you've been approved for Tapped Ai!",
+      html: `<div style="white-space: pre;">${labelApproved}</div>`,
+    });
+  }
 });
 
 export const emailMarketingPlanStripeWebhook = onRequest(
