@@ -51,7 +51,7 @@ export const sendWelcomeEmailOnUserCreated = functions.auth
 export const sendEmailOnLabelApplication = onDocumentCreated({
   document: "label_applications/{applicationId}",
   secrets: [ RESEND_API_KEY ],
-},async (event) => {
+}, async (event) => {
   const snapshot = event.data;
   const application = snapshot?.data();
   const email = application?.email;
