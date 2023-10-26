@@ -47,7 +47,6 @@ export const sendWelcomeEmailOnUserCreated = functions.auth
     })
   });
 
-
 export const sendEmailOnLabelApplication = onDocumentCreated({
   document: "label_applications/{applicationId}",
   secrets: [ RESEND_API_KEY ],
