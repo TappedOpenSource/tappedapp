@@ -47,7 +47,7 @@ const ALBUM_NAME_TEMPLATE = `Create an album name for {ARTIST_NAME}
 who makes {ARTIST_GENRES} music 
 and has {IG_FOLLOWER_COUNT} followers.`;
 
-const ENHANCE_BIO_TEMPLATE = `“Create a concise and engaging artist 
+const ENHANCE_BIO_TEMPLATE = `Create a concise and engaging artist 
 biography for {ARTIST_NAME}. 
 Highlight their unique style, achievements, 
 and what sets them apart in the music industry. 
@@ -58,7 +58,7 @@ Use the information provided, social media handles (if applicable
 ), 
 genre ({ARTIST_GENRES}), and any outstanding accomplishments, to craft a compelling two-paragraph 
 artist introduction. Remember to keep it captivating and suitable for press and 
-promotional materials.”`
+promotional materials. It should be no more than 6 sentences`
 
 export async function generateBasicAlbumName({
   artistName,
