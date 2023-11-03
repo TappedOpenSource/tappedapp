@@ -58,7 +58,7 @@ Use the information provided, social media handles (if applicable
 ), 
 genre ({ARTIST_GENRES}), and any outstanding accomplishments, to craft a compelling two-paragraph 
 artist introduction. Remember to keep it captivating and suitable for press and 
-promotional materials. It should be no more than 6 sentences`
+promotional materials. It should be no more than 4 sentences`
 
 export async function generateBasicAlbumName({
   artistName,
