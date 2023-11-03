@@ -32,11 +32,11 @@ import {
   SearchAppearanceActivity,
   BookingReminderActivity,
   MarketingPlan,
+  UserModel,
   // GuestMarketingPlan,
   // UserModel,
   // BookerReview,
 } from "./models";
-import { llm } from "./openai";
 import { sd } from "./leapai";
 import { 
   auth,
@@ -77,6 +77,7 @@ import {
   marketingFormsRef,
   guestMarketingPlansRef,
   RESEND_API_KEY,
+  labelApplicationsRef,
 } from "./firebase";
 import { 
   authenticatedRequest, 
@@ -87,6 +88,7 @@ import {
 import { error, info } from "firebase-functions/logger";
 import { Resend } from "resend";
 import { marked } from "marked";
+import { basicEnhancedBio, generateBasicAlbumName, generateBasicMarketingPlan, generateSingleBasicMarketingPlan } from "./openai";
 
 export * from "./email_triggers";
 
@@ -543,7 +545,7 @@ const _emailMarketingPlan = async ({
 
   // TODO: get use follower count
   // TODO: switch case for if it's a single, EP, or album
-  const { content, prompt } = await llm.generateMarketingPlan({
+  const { content, prompt } = await generateBasicMarketingPlan({
     releaseType: formData["marketingType"],
     artistName: formData["artistName"],
     // artistGenres: formData.genre,
@@ -1568,7 +1570,7 @@ export const generateAlbumName = onCall(
 
     const genres = artistGenres.join(", ");
 
-    const res = await llm.generateAlbumName({
+    const res = await generateBasicAlbumName({
       artistName,
       artistGenres: genres,
       igFollowerCount,
@@ -1925,7 +1927,7 @@ export const createSingleMarketingPlan = onCall(
 
     // const igFollowerCount = labelApplicationsQuery.docs[0].data().igFollowerCount;
   
-    const { content, prompt } = await llm.generateSingleMarketingPlan({
+    const { content, prompt } = await generateSingleBasicMarketingPlan({
       artistName,
       artistGenres,
       // igFollowerCount,
@@ -2060,7 +2062,7 @@ export const generateMarketingPlan = functions
       info({ formData })
 
       // TODO: get use follower count
-      const { content, prompt } = await llm.generateMarketingPlan({
+      const { content, prompt } = await generateBasicMarketingPlan({
         releaseType: formData["marketingType"],
         artistName: formData["artistName"],
         // artistGenres: formData.genre,
@@ -2155,3 +2157,50 @@ export const checkoutSessionToClientReferenceId = onCall(
 
 //     // remove contact from mailchimp audience
 //   });
+
+export const createLabelApplication = onRequest(
+  { cors: true },
+  async (req, res) => {
+    const labelApplication = req.body;
+    info({ labelApplication });
+    await labelApplicationsRef.doc(labelApplication.id).set({
+      timestamp: Timestamp.now(),
+      ...labelApplication, 
+    })
+
+    res.status(200).json("Success");
+  });
+
+export const generateEnhancedBio = onCall(
+  { secrets: [ OPEN_AI_KEY ] },
+  async (request) => {
+    authenticatedRequest(request);
+    // pull artist data
+    const userId = request.auth?.uid;
+    if (userId === undefined) {
+      throw new HttpsError("unauthenticated", "user is not authenticated");
+    }
+
+    const userSnapshot = await usersRef.doc(userId).get();
+    const userData = userSnapshot.data() as UserModel;
+
+    const displayName = userData?.artistName ?? userData?.username ?? "";
+    const twitterHandle = userData?.twitterHandle ?? "";
+    const tiktokHandle = userData?.tiktokHandle ?? "";
+    const instagramHandle = userData?.instagramHandle ?? "";
+    const artistGenres = userData?.genres ?? [];
+
+    const openAiKey = OPEN_AI_KEY.value();
+    const { content } = await basicEnhancedBio({
+      apiKey: openAiKey,
+      artistName: displayName,
+      twitterHandle,
+      tiktokHandle,
+      instagramHandle,
+      artistGenres,
+    });
+
+    return {
+      enhancedBio: content,
+    };
+  });

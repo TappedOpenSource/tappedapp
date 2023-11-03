@@ -12,6 +12,7 @@ export type UserModel = {
   bio?: string;
   profilePicture?: string;
   location?: string;
+  genres?: Array<string>;
   onboarded?: boolean;
   loopsCount?: number;
   badgesCount?: number;
