@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:intheloopapp/domains/navigation_bloc/tapped_route.dart';
 import 'package:intheloopapp/domains/onboarding_bloc/onboarding_bloc.dart';
 import 'package:intheloopapp/ui/record_label/components/claim_chip.dart';
-import 'package:intheloopapp/ui/record_label/components/credits.dart';
 import 'package:intheloopapp/ui/social_media_manager/components/post_idea_generator_container.dart';
 import 'package:intheloopapp/ui/social_media_manager/cubit/social_media_manager_cubit.dart';
 import 'package:intheloopapp/utils/current_user_builder.dart';
@@ -48,8 +46,6 @@ class SocialMediaManagerView extends StatelessWidget {
                   children: [
                     SizedBox(width: double.infinity),
                     PostIdeaGeneratorContainer(),
-                    SizedBox(height: 16),
-                    Credits(),
                     // SizedBox(height: 16),
                     // Padding(
                     //   padding: EdgeInsets.symmetric(

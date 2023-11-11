@@ -1,7 +1,7 @@
 part of 'navigation_bloc.dart';
 
 class NavigationState extends Equatable {
-  const NavigationState({this.selectedTab = 0});
+  const NavigationState({this.selectedTab = 2});
 
   final int selectedTab;
 

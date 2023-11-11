@@ -7,10 +7,8 @@ import 'package:intheloopapp/data/database_repository.dart';
 import 'package:intheloopapp/data/places_repository.dart';
 import 'package:intheloopapp/data/search_repository.dart';
 import 'package:intheloopapp/domains/models/genre.dart';
-import 'package:intheloopapp/domains/models/loop.dart';
 import 'package:intheloopapp/domains/models/option.dart';
 import 'package:intheloopapp/domains/models/user_model.dart';
-import 'package:intheloopapp/utils/app_logger.dart';
 
 part 'search_event.dart';
 part 'search_state.dart';
@@ -82,8 +80,6 @@ class SearchBloc extends Bloc<SearchEvent, SearchState> {
         await _searchUsersByUsername(query, emit);
       case 1:
         await _searchLocations(query, emit);
-      case 2:
-        await _searchLoops(query, emit);
     }
   }
 
@@ -143,54 +139,6 @@ class SearchBloc extends Bloc<SearchEvent, SearchState> {
           loading: false,
           searchTerm: '',
           searchResults: [],
-        ),
-      );
-    }
-  }
-
-  Future<void> _searchLoops(
-    String input,
-    Emitter<SearchState> emit,
-  ) async {
-    if (input.isNotEmpty) {
-      emit(state.copyWith(loading: true, searchTerm: input));
-      const duration = Duration(milliseconds: 500);
-      final completer = Completer<void>();
-      Timer(duration, () async {
-        if (input.isNotEmpty && input == state.searchTerm) {
-          // input hasn't changed in the last 500 milliseconds..
-          // you can start search
-          // print('Now !!! search term : ${state.searchTerm}');
-          try {
-            final searchRes =
-                await searchRepository.queryLoops(state.searchTerm);
-            // print('RESULTS: $searchRes');
-            emit(
-              state.copyWith(
-                loopSearchResults: searchRes,
-                loading: false,
-              ),
-            );
-          } catch (e, s) {
-            logger.error(
-              'Error searching loops',
-              error: e,
-              stackTrace: s,
-            );
-          }
-        } else {
-          //wait.. Because user still writing..        print('Not Now');
-          // print('Not Now');
-        }
-        completer.complete();
-      });
-      await completer.future;
-    } else {
-      emit(
-        state.copyWith(
-          loading: false,
-          searchTerm: '',
-          loopSearchResults: [],
         ),
       );
     }

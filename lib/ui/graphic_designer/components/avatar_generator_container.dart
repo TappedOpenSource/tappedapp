@@ -17,7 +17,7 @@ class AvatarGeneratorContainer extends StatelessWidget {
   Widget build(BuildContext context) {
     return CurrentUserBuilder(
       builder: (context, currentUser) {
-        final noEnoughCredits = currentUser.aiCredits < 5;
+        // final noEnoughCredits = currentUser.aiCredits < 5;
         return BlocBuilder<GraphicDesignerCubit, GraphicDesignerState>(
           builder: (context, state) {
             return switch (state.hasImageModel) {
@@ -45,22 +45,19 @@ class AvatarGeneratorContainer extends StatelessWidget {
                           horizontal: 32,
                         ),
                         child: CupertinoButton.filled(
-                          onPressed: noEnoughCredits
-                              ? null
-                              : () {
-                                  context.read<GenerationBloc>().add(
-                                        const ResetGeneration(),
-                                      );
-                                  context.push(
-                                    GenerateAvatarPage(),
-                                  );
-                                },
-                          child: Text(
+                          onPressed: () {
+                            context.read<GenerationBloc>().add(
+                                  const ResetGeneration(),
+                                );
+                            context.push(
+                              GenerateAvatarPage(),
+                            );
+                          },
+                          child: const Text(
                             'generate avatar',
                             style: TextStyle(
                               fontWeight: FontWeight.w700,
-                              color:
-                                  noEnoughCredits ? Colors.grey : Colors.white,
+                              color: Colors.white,
                             ),
                           ),
                         ),

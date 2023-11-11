@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intheloopapp/domains/search_bloc/search_bloc.dart';
 import 'package:intheloopapp/ui/search/components/by_location_results_list.dart';
-import 'package:intheloopapp/ui/search/components/by_loop_results_list.dart';
 import 'package:intheloopapp/ui/search/components/by_username_results_list.dart';
 import 'package:intheloopapp/ui/search/components/cancel_icon.dart';
 import 'package:intheloopapp/ui/search/components/tapped_search_bar.dart';
@@ -26,7 +25,7 @@ class _SearchViewState extends State<SearchView> with TickerProviderStateMixin {
   void initState() {
     super.initState();
     _tabController = TabController(
-      length: 3,
+      length: 2,
       vsync: this,
     );
     _searchController = TextEditingController();
@@ -82,7 +81,6 @@ class _SearchViewState extends State<SearchView> with TickerProviderStateMixin {
           tabs: const [
             Tab(child: Text('Username')),
             Tab(child: Text('Location')),
-            Tab(child: Text('Loops')),
           ],
         ),
       ),
@@ -91,7 +89,6 @@ class _SearchViewState extends State<SearchView> with TickerProviderStateMixin {
         children: const [
           ByUsernameResultsList(),
           ByLocationResultsList(),
-          ByLoopResultsList(),
         ],
       ),
     );

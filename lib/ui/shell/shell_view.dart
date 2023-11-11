@@ -3,7 +3,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intheloopapp/domains/models/option.dart';
 import 'package:intheloopapp/domains/navigation_bloc/navigation_bloc.dart';
 import 'package:intheloopapp/ui/bookings/bookings_view.dart';
-import 'package:intheloopapp/ui/loops_feeds_list/loop_feeds_list_view.dart';
+import 'package:intheloopapp/ui/messaging/channel_list_view.dart';
+import 'package:intheloopapp/ui/messaging/messaging_view.dart';
 import 'package:intheloopapp/ui/profile/profile_view.dart';
 import 'package:intheloopapp/ui/record_label/subscribed_view.dart';
 import 'package:intheloopapp/ui/search/search_view.dart';
@@ -13,10 +14,7 @@ import 'package:intheloopapp/utils/current_user_builder.dart';
 class ShellView extends StatefulWidget {
   const ShellView({
     super.key,
-    this.initialTab = 0,
   });
-
-  final int initialTab;
 
   @override
   State<ShellView> createState() => _ShellViewState();
@@ -48,11 +46,12 @@ class _ShellViewState extends State<ShellView> {
                 index: state.selectedTab,
                 children: [
                   // const LoopFeedsListView(), // getstream.io activity feed?
+                  const SubscribedView(),
                   SearchView(
                     searchFocusNode: searchFocusNode,
                   ),
                   const BookingsView(),
-                  const SubscribedView(),
+                  const MessagingChannelListView(),
                   ProfileView(
                     visitedUserId: currentUser.id,
                     visitedUser: Some(currentUser),

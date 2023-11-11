@@ -50,7 +50,7 @@ class UserModel extends Equatable {
     required this.emailNotificationsITLUpdates,
     required this.stripeConnectedAccountId,
     required this.stripeCustomerId,
-    required this.aiCredits,
+    // required this.aiCredits,
   });
 
   factory UserModel.empty() => UserModel(
@@ -91,7 +91,7 @@ class UserModel extends Equatable {
         emailNotificationsITLUpdates: true,
         stripeConnectedAccountId: null,
         stripeCustomerId: null,
-        aiCredits: 0,
+        // aiCredits: 0,
       );
 
   factory UserModel.fromJson(Map<String, dynamic> json) =>
@@ -172,7 +172,7 @@ class UserModel extends Equatable {
         null,
       ),
       stripeCustomerId: doc.getOrElse<String?>('stripeCustomerId', null),
-      aiCredits: doc.getOrElse<int>('aiCredits', 0),
+      // aiCredits: doc.getOrElse<int>('aiCredits', 0),
     );
   }
   final String id;
@@ -228,7 +228,7 @@ class UserModel extends Equatable {
   final String? stripeConnectedAccountId;
   final String? stripeCustomerId;
 
-  final int aiCredits;
+  // final int aiCredits;
 
   @override
   List<Object?> get props => [
@@ -269,13 +269,13 @@ class UserModel extends Equatable {
         emailNotificationsITLUpdates,
         stripeConnectedAccountId,
         stripeCustomerId,
-        aiCredits,
+        // aiCredits,
       ];
   bool get isEmpty => this == UserModel.empty();
   bool get isNotEmpty => this != UserModel.empty();
   Map<String, dynamic> toJson() => _$UserModelToJson(this);
 
-  bool get isOutOfCredits => aiCredits <= 0;
+  // bool get isOutOfCredits => aiCredits <= 0;
 
   String get displayName => artistName.isEmpty ? username.username : artistName;
 
@@ -317,7 +317,7 @@ class UserModel extends Equatable {
     bool? emailNotificationsITLUpdates,
     String? stripeConnectedAccountId,
     String? stripeCustomerId,
-    int? aiCredits,
+    // int? aiCredits,
   }) {
     return UserModel(
       id: id ?? this.id,
@@ -365,7 +365,7 @@ class UserModel extends Equatable {
       stripeConnectedAccountId:
           stripeConnectedAccountId ?? this.stripeConnectedAccountId,
       stripeCustomerId: stripeCustomerId ?? this.stripeCustomerId,
-      aiCredits: aiCredits ?? this.aiCredits,
+      // aiCredits: aiCredits ?? this.aiCredits,
     );
   }
 
@@ -408,7 +408,7 @@ class UserModel extends Equatable {
       'emailNotificationsITLUpdates': emailNotificationsITLUpdates,
       'stripeConnectedAccountId': stripeConnectedAccountId,
       'stripeCustomerId': stripeCustomerId,
-      'aiCredits': aiCredits,
+      // 'aiCredits': aiCredits,
     };
   }
 }

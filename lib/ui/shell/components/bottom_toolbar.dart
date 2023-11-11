@@ -9,6 +9,7 @@ import 'package:intheloopapp/domains/loop_feed_list_bloc/loop_feed_list_bloc.dar
 import 'package:intheloopapp/domains/models/booking.dart';
 import 'package:intheloopapp/domains/models/user_model.dart';
 import 'package:intheloopapp/domains/navigation_bloc/navigation_bloc.dart';
+import 'package:intheloopapp/domains/navigation_bloc/tapped_route.dart';
 import 'package:intheloopapp/ui/themes.dart';
 import 'package:intheloopapp/ui/user_avatar.dart';
 import 'package:stream_chat_flutter/stream_chat_flutter.dart';
@@ -28,6 +29,7 @@ class BottomToolbar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+    final streamClient = StreamChat.of(context).client;
     return BlocBuilder<NavigationBloc, NavigationState>(
       builder: (context, state) {
         return CupertinoTabBar(
@@ -83,6 +85,12 @@ class BottomToolbar extends StatelessWidget {
             //     },
             //   ),
             // ),
+            const BottomNavigationBarItem(
+              icon: Icon(
+                Icons.smart_toy_outlined,
+                // FontAwesomeIcons.userXmark,
+              ),
+            ),
             BottomNavigationBarItem(
               icon: GestureDetector(
                 onDoubleTap: () {
@@ -112,11 +120,32 @@ class BottomToolbar extends StatelessWidget {
                 },
               ),
             ),
-            // const BottomNavigationBarItem(icon: Icon(Icons.person)),
-            const BottomNavigationBarItem(
-              icon: Icon(
-                Icons.smart_toy_outlined,
-                // FontAwesomeIcons.userXmark,
+            BottomNavigationBarItem(
+              icon: StreamBuilder<int?>(
+                stream: streamClient
+                    .on()
+                    .where((event) => event.totalUnreadCount != null)
+                    .map(
+                      (event) => event.totalUnreadCount,
+                    ),
+                initialData: streamClient.state.totalUnreadCount,
+                builder: (context, snapshot) {
+                  final unreadMessagesCount = snapshot.data ?? 0;
+
+                  return badges.Badge(
+                    showBadge: unreadMessagesCount > 0,
+                    position: badges.BadgePosition.topEnd(
+                      top: -1,
+                      end: 2,
+                    ),
+                    badgeContent: Text('$unreadMessagesCount'),
+                    child: const Icon(
+                      CupertinoIcons.chat_bubble,
+                      size: 24,
+                      semanticLabel: 'Messages',
+                    ),
+                  );
+                },
               ),
             ),
             BottomNavigationBarItem(

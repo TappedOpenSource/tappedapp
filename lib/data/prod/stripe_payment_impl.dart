@@ -10,11 +10,13 @@ final _stripe = Stripe.instance;
 final _analytics = FirebaseAnalytics.instance;
 
 // ignore: lines_longer_than_80_chars
-// const _publishedableTestKey = 'pk_test_51IWSJmJgkuWqwX75nxNjPEZdOsPrjWf27ANkGzSRcJXIPCtjZNYasmmyvWqcLYBCchzaHGQmuawvf8wD7y11nyPQ00GzXLWgTz';
+// const _publishedableTestKey = 
+  // 'pk_test_51O7KGuDYybu1wznEDQXsjWySgLSKjuCoHpA8Di5xBMZzYRf1FPm9yHNRPaZVAZzKn8k37TMW10fODaO8sERwqapM00oDOAOTIl';
 
 // ignore: lines_longer_than_80_chars
 const _publishableKey =
-    'pk_live_51IWSJmJgkuWqwX75uIMi6sg7q2y1McOYvHtHjzlhLGciGTlaLIsssJ0smKiHKkwADinTPuz9MFfVPRuqTDQpGqGk00KsoDkV8z';
+    'pk_live_51O7KGuDYybu1wznED6nNmA0HNrCxwycnz5cw7akKUDBKaNmqdMYkOY3vGKFQF8iFfPGHrjPmGRMNxf9iX120sxV8003rBfQKil';
+
 
 class StripePaymentImpl implements PaymentRepository {
   @override

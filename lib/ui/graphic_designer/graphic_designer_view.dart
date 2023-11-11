@@ -4,7 +4,6 @@ import 'package:intheloopapp/data/database_repository.dart';
 import 'package:intheloopapp/ui/graphic_designer/components/avatar_generator_container.dart';
 import 'package:intheloopapp/ui/graphic_designer/cubit/graphic_designer_cubit.dart';
 import 'package:intheloopapp/ui/record_label/components/claim_chip.dart';
-import 'package:intheloopapp/ui/record_label/components/credits.dart';
 import 'package:intheloopapp/utils/current_user_builder.dart';
 import 'package:intheloopapp/utils/user_claim_builder.dart';
 
@@ -50,8 +49,6 @@ class GraphicDesignerView extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     SizedBox(width: double.infinity),
-                    Credits(),
-                    SizedBox(height: 16),
                     AvatarGeneratorContainer(),
                   ],
                 ),

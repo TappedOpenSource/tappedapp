@@ -38,13 +38,13 @@ class GenerationBloc extends Bloc<GenerationEvent, GenerationState> {
             emit(state.copyWith(loading: true));
             final currentUser = (onboardingBloc.state as Onboarded).currentUser;
 
-            onboardingBloc.add(
-              UpdateOnboardedUser(
-                user: currentUser.copyWith(
-                  aiCredits: currentUser.aiCredits - avatarCreditCost,
-                ),
-              ),
-            );
+            // onboardingBloc.add(
+            //   UpdateOnboardedUser(
+            //     user: currentUser.copyWith(
+            //       aiCredits: currentUser.aiCredits - avatarCreditCost,
+            //     ),
+            //   ),
+            // );
 
             final userImageModel =
                 await database.getUserImageModel(currentUser.id);
