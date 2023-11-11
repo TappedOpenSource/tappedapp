@@ -42,47 +42,47 @@ class BottomToolbar extends StatelessWidget {
           // inactiveColor: Colors.white,
           currentIndex: state.selectedTab,
           items: [
-            BottomNavigationBarItem(
-              icon: BlocBuilder<LoopFeedListBloc, LoopFeedListState>(
-                builder: (context, state) {
-                  return StreamBuilder<int?>(
-                    stream: StreamChat.of(context)
-                        .client
-                        .on()
-                        .where((event) => event.unreadChannels != null)
-                        .map(
-                          (event) => event.unreadChannels,
-                        ),
-                    builder: (context, snapshot) {
-                      final unreadMessagesCount = snapshot.data ?? 0;
-                      return BlocBuilder<ActivityBloc, ActivityState>(
-                        builder: (context, state) {
-                          return GestureDetector(
-                            onDoubleTap: () {
-                              context.changeTab(selectedTab: 0);
-                              context.read<LoopFeedListBloc>().add(
-                                    ScrollToTop(),
-                                  );
-                            },
-                            child: badges.Badge(
-                              position: badges.BadgePosition.topEnd(
-                                top: 0,
-                                end: 0,
-                              ),
-                              showBadge: state.unreadActivities ||
-                                  unreadMessagesCount > 0,
-                              child: const Icon(
-                                CupertinoIcons.waveform,
-                              ),
-                            ),
-                          );
-                        },
-                      );
-                    },
-                  );
-                },
-              ),
-            ),
+            // BottomNavigationBarItem(
+            //   icon: BlocBuilder<LoopFeedListBloc, LoopFeedListState>(
+            //     builder: (context, state) {
+            //       return StreamBuilder<int?>(
+            //         stream: StreamChat.of(context)
+            //             .client
+            //             .on()
+            //             .where((event) => event.unreadChannels != null)
+            //             .map(
+            //               (event) => event.unreadChannels,
+            //             ),
+            //         builder: (context, snapshot) {
+            //           final unreadMessagesCount = snapshot.data ?? 0;
+            //           return BlocBuilder<ActivityBloc, ActivityState>(
+            //             builder: (context, state) {
+            //               return GestureDetector(
+            //                 onDoubleTap: () {
+            //                   context.changeTab(selectedTab: 0);
+            //                   context.read<LoopFeedListBloc>().add(
+            //                         ScrollToTop(),
+            //                       );
+            //                 },
+            //                 child: badges.Badge(
+            //                   position: badges.BadgePosition.topEnd(
+            //                     top: 0,
+            //                     end: 0,
+            //                   ),
+            //                   showBadge: state.unreadActivities ||
+            //                       unreadMessagesCount > 0,
+            //                   child: const Icon(
+            //                     CupertinoIcons.waveform,
+            //                   ),
+            //                 ),
+            //               );
+            //             },
+            //           );
+            //         },
+            //       );
+            //     },
+            //   ),
+            // ),
             BottomNavigationBarItem(
               icon: GestureDetector(
                 onDoubleTap: () {

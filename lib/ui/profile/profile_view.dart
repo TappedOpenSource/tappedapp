@@ -124,8 +124,8 @@ class ProfileView extends StatelessWidget {
             final cubit = context.read<ProfileCubit>();
             await Future.wait([
               HapticFeedback.mediumImpact(),
-              cubit.getLatestLoop(),
-              cubit.getLatestOpportunity(),
+              // cubit.getLatestLoop(),
+              // cubit.getLatestOpportunity(),
               cubit.getLatestBooking(),
               cubit.getLatestReview(),
               cubit.initBadges(),
@@ -221,12 +221,12 @@ class ProfileView extends StatelessWidget {
         const SliverToBoxAdapter(
           child: SizedBox(height: 18),
         ),
-        const SliverToBoxAdapter(
-          child: OpportunitySliver(),
-        ),
-        const SliverToBoxAdapter(
-          child: LoopsSliver(),
-        ),
+        // const SliverToBoxAdapter(
+        //   child: OpportunitySliver(),
+        // ),
+        // const SliverToBoxAdapter(
+        //   child: LoopsSliver(),
+        // ),
         const SliverToBoxAdapter(
           child: SizedBox(height: 18),
         ),
