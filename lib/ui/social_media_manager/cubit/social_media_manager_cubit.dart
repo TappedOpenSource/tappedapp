@@ -16,7 +16,7 @@ class SocialMediaManagerCubit extends Cubit<SocialMediaManagerState> {
     required this.onboardingBloc,
   }) : super(
           SocialMediaManagerState(
-            credits: currentUser.aiCredits,
+            // credits: currentUser.aiCredits,
             postIdea: _randomPost(),
           ),
         );
@@ -26,23 +26,15 @@ class SocialMediaManagerCubit extends Cubit<SocialMediaManagerState> {
 
   void generatePostIdea() {
     final postIdea = _randomPost();
-    final updatedCredits = state.credits - 1;
 
     _analytics.logEvent(
       name: 'generate_post_idea',
       parameters: {
-        'credits': state.credits,
         'user_id': currentUser.id,
       },
     );
-    final updated = currentUser.copyWith(
-      aiCredits: updatedCredits,
-    );
-    onboardingBloc.add(UpdateOnboardedUser(user: updated));
-
     emit(
       state.copyWith(
-        credits: updatedCredits,
         postIdea: postIdea,
       ),
     );

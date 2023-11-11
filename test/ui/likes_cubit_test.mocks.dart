@@ -13,6 +13,7 @@ import 'package:intheloopapp/domains/models/badge.dart' as _i10;
 import 'package:intheloopapp/domains/models/booking.dart' as _i11;
 import 'package:intheloopapp/domains/models/comment.dart' as _i2;
 import 'package:intheloopapp/domains/models/loop.dart' as _i8;
+import 'package:intheloopapp/domains/models/marketing_plan.dart' as _i16;
 import 'package:intheloopapp/domains/models/option.dart' as _i6;
 import 'package:intheloopapp/domains/models/review.dart' as _i13;
 import 'package:intheloopapp/domains/models/service.dart' as _i12;
@@ -1229,14 +1230,21 @@ class MockDatabaseRepository extends _i1.Mock
         returnValue: _i4.Stream<_i13.BookerReview>.empty(),
       ) as _i4.Stream<_i13.BookerReview>);
   @override
-  _i4.Future<_i14.AiImageModel?> getUserImageModel(String? userId) =>
+  _i4.Future<_i6.Option<_i14.AiImageModel>> getUserImageModel(String? userId) =>
       (super.noSuchMethod(
         Invocation.method(
           #getUserImageModel,
           [userId],
         ),
-        returnValue: _i4.Future<_i14.AiImageModel?>.value(),
-      ) as _i4.Future<_i14.AiImageModel?>);
+        returnValue: _i4.Future<_i6.Option<_i14.AiImageModel>>.value(
+            _i7.dummyValue<_i6.Option<_i14.AiImageModel>>(
+          this,
+          Invocation.method(
+            #getUserImageModel,
+            [userId],
+          ),
+        )),
+      ) as _i4.Future<_i6.Option<_i14.AiImageModel>>);
   @override
   _i4.Future<List<_i15.Avatar>> getUserAvatars(String? userId) =>
       (super.noSuchMethod(
@@ -1264,4 +1272,40 @@ class MockDatabaseRepository extends _i1.Mock
         returnValue: _i4.Future<void>.value(),
         returnValueForMissingStub: _i4.Future<void>.value(),
       ) as _i4.Future<void>);
+  @override
+  _i4.Future<void> deleteAvatar({
+    required String? userId,
+    required String? avatarId,
+  }) =>
+      (super.noSuchMethod(
+        Invocation.method(
+          #deleteAvatar,
+          [],
+          {
+            #userId: userId,
+            #avatarId: avatarId,
+          },
+        ),
+        returnValue: _i4.Future<void>.value(),
+        returnValueForMissingStub: _i4.Future<void>.value(),
+      ) as _i4.Future<void>);
+  @override
+  _i4.Future<List<_i16.MarketingPlan>> getUserMarketingPlans(String? userId) =>
+      (super.noSuchMethod(
+        Invocation.method(
+          #getUserMarketingPlans,
+          [userId],
+        ),
+        returnValue:
+            _i4.Future<List<_i16.MarketingPlan>>.value(<_i16.MarketingPlan>[]),
+      ) as _i4.Future<List<_i16.MarketingPlan>>);
+  @override
+  _i4.Stream<_i16.MarketingPlan> userMarketingPlansObserver(String? userId) =>
+      (super.noSuchMethod(
+        Invocation.method(
+          #userMarketingPlansObserver,
+          [userId],
+        ),
+        returnValue: _i4.Stream<_i16.MarketingPlan>.empty(),
+      ) as _i4.Stream<_i16.MarketingPlan>);
 }

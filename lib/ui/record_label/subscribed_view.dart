@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:intheloopapp/domains/navigation_bloc/navigation_bloc.dart';
 import 'package:intheloopapp/domains/navigation_bloc/tapped_route.dart';
 import 'package:intheloopapp/ui/record_label/components/claim_chip.dart';
-import 'package:intheloopapp/ui/record_label/components/credits.dart';
 import 'package:intheloopapp/ui/record_label/components/grid_item.dart';
 import 'package:intheloopapp/utils/current_user_builder.dart';
 import 'package:intheloopapp/utils/user_claim_builder.dart';
@@ -26,7 +25,7 @@ class SubscribedView extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     const Text(
-                      'your AI team',
+                      'your record label',
                       style: TextStyle(
                         fontWeight: FontWeight.bold,
                         fontSize: 32,
@@ -40,17 +39,6 @@ class SubscribedView extends StatelessWidget {
               ),
               body: CustomScrollView(
                 slivers: [
-                  const SliverToBoxAdapter(
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Padding(
-                          padding: EdgeInsets.all(8),
-                          child: Credits(),
-                        ),
-                      ],
-                    ),
-                  ),
                   SliverGrid.count(
                     crossAxisCount: 2,
                     children: [
