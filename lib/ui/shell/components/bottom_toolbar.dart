@@ -81,21 +81,12 @@ class BottomToolbar extends StatelessWidget {
             //     },
             //   ),
             // ),
-            const BottomNavigationBarItem(
-              icon: Icon(
-                Icons.smart_toy_outlined,
-                // FontAwesomeIcons.userXmark,
-              ),
-            ),
-            BottomNavigationBarItem(
-              icon: GestureDetector(
-                onDoubleTap: () {
-                  context.changeTab(selectedTab: 1);
-                  searchFocusNode.requestFocus();
-                },
-                child: const Icon(CupertinoIcons.search),
-              ),
-            ),
+            // const BottomNavigationBarItem(
+            //   icon: Icon(
+            //     Icons.smart_toy_outlined,
+            //     // FontAwesomeIcons.userXmark,
+            //   ),
+            // ),
             BottomNavigationBarItem(
               icon: BlocBuilder<BookingsBloc, BookingsState>(
                 builder: (context, state) {
@@ -116,6 +107,16 @@ class BottomToolbar extends StatelessWidget {
                 },
               ),
             ),
+            BottomNavigationBarItem(
+              icon: GestureDetector(
+                onDoubleTap: () {
+                  context.changeTab(selectedTab: 1);
+                  searchFocusNode.requestFocus();
+                },
+                child: const Icon(CupertinoIcons.search),
+              ),
+            ),
+
             BottomNavigationBarItem(
               icon: StreamBuilder<int?>(
                 stream: streamClient

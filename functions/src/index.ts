@@ -2204,3 +2204,5 @@ export const generateEnhancedBio = onCall(
       enhancedBio: content,
     };
   });
+
+// TODO: on user created, add a few services for them by default

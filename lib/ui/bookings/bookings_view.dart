@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -9,6 +10,7 @@ class BookingsView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final themeColor = Theme.of(context).primaryIconTheme.color ?? Colors.black;
     return RefreshIndicator(
       onRefresh: () {
         context.read<BookingsBloc>().add(FetchBookings());
@@ -38,9 +40,29 @@ class BookingsView extends StatelessWidget {
                         ),
                       ),
                     ),
-                    BookingsList(
-                      bookings: state.pendingBookings,
-                    ),
+                    if (state.pendingBookings.isNotEmpty)
+                      BookingsList(
+                        bookings: state.pendingBookings,
+                      )
+                    else
+                      SliverToBoxAdapter(
+                        child: Padding(
+                          padding: const EdgeInsets.symmetric(
+                            vertical: 96,
+                          ),
+                          child: CupertinoButton.filled(
+                            onPressed: () {},
+                            borderRadius: BorderRadius.circular(15),
+                            child: const Text(
+                              'get booked',
+                              style: TextStyle(
+                                fontWeight: FontWeight.w700,
+                                color: Colors.white,
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
                     const SliverToBoxAdapter(
                       child: SizedBox(height: 12),
                     ),
