@@ -110,7 +110,7 @@ class _FullScreenViewerState extends State<FullScreenViewer> {
     setDisposeLevel();
   }
 
-  setDisposeLevel() {
+  void setDisposeLevel() {
     if (widget.disposeLevel == DisposeLevel.high) {
       _disposeLimit = 300;
     } else if (widget.disposeLevel == DisposeLevel.medium) {
@@ -134,7 +134,7 @@ class _FullScreenViewerState extends State<FullScreenViewer> {
     });
   }
 
-  _dragEnd(DragEndDetails details) {
+  void _dragEnd(DragEndDetails details) {
     if (_positionYDelta > _disposeLimit || _positionYDelta < -_disposeLimit) {
       Navigator.of(context).pop();
     } else {
@@ -152,7 +152,7 @@ class _FullScreenViewerState extends State<FullScreenViewer> {
     }
   }
 
-  setOpacity() {
+  void setOpacity() {
     final tmp = _positionYDelta < 0
         ? 1 - ((_positionYDelta / 1000) * -1)
         : 1 - (_positionYDelta / 1000);

@@ -83,47 +83,6 @@ class ProfileCubit extends Cubit<ProfileState> {
     }
   }
 
-  Future<void> getLatestLoop() async {
-    try {
-      final loops = await databaseRepository.getUserLoops(
-        visitedUser.id,
-        limit: 1,
-      );
-
-      final latestLoop =
-          loops.isNotEmpty ? Some(loops.first) : const None<Loop>();
-
-      emit(state.copyWith(latestLoop: latestLoop));
-    } catch (e, s) {
-      logger.error(
-        'getLatestLoop error',
-        error: e,
-        stackTrace: s,
-      );
-    }
-  }
-
-  Future<void> getLatestOpportunity() async {
-    try {
-      final opportunities = await databaseRepository.getUserOpportunities(
-        visitedUser.id,
-        limit: 1,
-      );
-
-      final latestOpportunity = opportunities.isNotEmpty
-          ? Some(opportunities.first)
-          : const None<Loop>();
-
-      emit(state.copyWith(latestOpportunity: latestOpportunity));
-    } catch (e, s) {
-      logger.error(
-        'getLatestLoop error',
-        error: e,
-        stackTrace: s,
-      );
-    }
-  }
-
   Future<void> getLatestBooking() async {
     final trace = logger.createTrace('getLatestBooking');
     await trace.start();

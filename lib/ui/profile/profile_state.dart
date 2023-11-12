@@ -17,13 +17,12 @@ class ProfileState extends Equatable {
     this.badgeStatus = BadgesStatus.initial,
     this.isCollapsed = false,
     this.didAddFeedback = false,
+    this.place,
     int? followerCount,
     int? followingCount,
-    Place? place,
   }) {
     this.followerCount = followerCount ?? visitedUser.followerCount;
     this.followingCount = followingCount ?? visitedUser.followingCount;
-    this.place = place ?? const Place();
   }
 
   late final int followerCount;
@@ -43,13 +42,13 @@ class ProfileState extends Equatable {
   final BadgesStatus badgeStatus;
   final UserModel visitedUser;
   final UserModel currentUser;
-  late final Place place;
+  final Place? place;
 
   final bool isCollapsed;
   final bool didAddFeedback;
 
   @override
-  List<Object> get props => [
+  List<Object?> get props => [
         followingCount,
         followerCount,
         isFollowing,

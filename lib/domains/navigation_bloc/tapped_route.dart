@@ -461,7 +461,7 @@ final class VideoCallPage extends TappedRoute {
       : super(
           // routeName: '/video_call/${call.id}',
           routeName: '/video_call',
-          view: VideoCallView(
+          view: const VideoCallView(
               // call: call,
               ),
         );

@@ -3,9 +3,6 @@ import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intheloopapp/data/database_repository.dart';
 import 'package:intheloopapp/domains/models/option.dart';
-import 'package:intheloopapp/domains/models/user_model.dart';
-import 'package:intheloopapp/domains/onboarding_bloc/onboarding_bloc.dart';
-import 'package:intheloopapp/utils/app_logger.dart';
 import 'package:intheloopapp/utils/current_user_builder.dart';
 
 class BadgeReceiverTextField extends StatefulWidget {

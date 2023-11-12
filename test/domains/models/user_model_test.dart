@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:intheloopapp/domains/models/option.dart';
 import 'package:intheloopapp/domains/models/user_model.dart';
 import 'package:intheloopapp/domains/models/username.dart';
 import 'package:mockito/annotations.dart';
@@ -30,7 +31,6 @@ void main() {
         followingCount: 0,
         deleted: false,
         shadowBanned: false,
-        accountType: AccountType.free,
         youtubeChannelId: '',
         tiktokHandle: '',
         instagramHandle: '',
@@ -48,6 +48,10 @@ void main() {
         occupations: const [],
         label: 'None',
         spotifyId: '',
+        timestamp: DateTime.now(), 
+        reviewCount: 0, 
+        overallRating: const None(),
+        epkUrl: const None(),
       ),
     );
   });
@@ -70,7 +74,6 @@ void main() {
       followingCount: 0,
       deleted: false,
       shadowBanned: false,
-      accountType: AccountType.free,
       youtubeChannelId: '',
       tiktokHandle: '',
       instagramHandle: '',
@@ -88,6 +91,10 @@ void main() {
       label: 'None',
       occupations: const [],
       spotifyId: '',
+      timestamp: DateTime.now(),
+      reviewCount: 0,
+      overallRating: const None(),
+      epkUrl: const None(),
     );
 
     expect(emptyUser.isEmpty, true);
@@ -114,7 +121,6 @@ void main() {
         followingCount: 0,
         deleted: false,
         shadowBanned: false,
-        accountType: AccountType.free,
         youtubeChannelId: '',
         tiktokHandle: '',
         instagramHandle: '',
@@ -132,6 +138,10 @@ void main() {
         label: '',
         occupations: const [],
         spotifyId: '',
+        timestamp: DateTime.now(),
+        reviewCount: 0,
+        overallRating: const None(),
+        epkUrl: const None(),
       );
 
       expect(emptyUser.isEmpty, false);
@@ -190,7 +200,6 @@ void main() {
         'badgesCount': 0,
         'deleted': false,
         'shadowBanned': false,
-        'accountType': 'free',
         'youtubeChannelId': '',
         'soundcloudHandle': '',
         'tiktokHandle': '',
@@ -229,7 +238,6 @@ void main() {
         followerCount: 0,
         followingCount: 0,
         deleted: false,
-        accountType: AccountType.free,
         shadowBanned: false,
         youtubeChannelId: '',
         tiktokHandle: '',
@@ -248,6 +256,10 @@ void main() {
         label: 'None',
         occupations: const [],
         spotifyId: '',
+        timestamp: DateTime.now(),
+        reviewCount: 0,
+        overallRating: const None(),
+        epkUrl: const None(),
       ),
     );
   });

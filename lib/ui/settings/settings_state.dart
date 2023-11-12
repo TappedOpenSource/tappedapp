@@ -25,13 +25,12 @@ class SettingsState extends Equatable {
     this.emailNotificationsITLUpdates = true,
     this.email = '',
     this.password = '',
-    Place? place,
+    this.place,
     ImagePicker? picker,
     GlobalKey<FormState>? formKey,
   }) {
     this.picker = picker ?? ImagePicker();
     this.formKey = formKey ?? GlobalKey<FormState>(debugLabel: 'settings');
-    this.place = place ?? const Place();
   }
 
   final String username;
@@ -66,7 +65,6 @@ class SettingsState extends Equatable {
 
   final String email;
   final String password;
-
 
   @override
   List<Object?> get props => [

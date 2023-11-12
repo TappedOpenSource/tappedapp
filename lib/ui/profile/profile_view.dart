@@ -16,13 +16,10 @@ import 'package:intheloopapp/ui/profile/components/bookings_sliver.dart';
 import 'package:intheloopapp/ui/profile/components/common_followers_sliver.dart';
 import 'package:intheloopapp/ui/profile/components/header_sliver.dart';
 import 'package:intheloopapp/ui/profile/components/info_sliver.dart';
-import 'package:intheloopapp/ui/profile/components/loops_sliver.dart';
-import 'package:intheloopapp/ui/profile/components/opportunity_sliver.dart';
 import 'package:intheloopapp/ui/profile/components/reviews_sliver.dart';
 import 'package:intheloopapp/ui/profile/components/services_sliver.dart';
 import 'package:intheloopapp/ui/profile/profile_cubit.dart';
 import 'package:intheloopapp/ui/themes.dart';
-import 'package:intheloopapp/ui/user_avatar.dart';
 
 class ProfileView extends StatelessWidget {
   ProfileView({
@@ -55,8 +52,6 @@ class ProfileView extends StatelessWidget {
           currentUser: currentUser,
           visitedUser: visitedUser,
         )
-          ..getLatestLoop()
-          ..getLatestOpportunity()
           ..getLatestBooking()
           ..getLatestReview()
           ..initBadges()
@@ -256,8 +251,6 @@ class ProfileView extends StatelessWidget {
           onStretchTrigger: () async {
             final cubit = context.read<ProfileCubit>();
             await Future.wait([
-              cubit.getLatestLoop(),
-              cubit.getLatestOpportunity(),
               cubit.getLatestBooking(),
               cubit.initBadges(),
               cubit.initServices(),
