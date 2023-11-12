@@ -32,7 +32,7 @@ class _TagDetectorFieldState extends State<TagDetectorField> {
     Widget build(BuildContext context) {
       final textField = widget.textField;
       final controller = widget.controller;
-      print('avsz showSearch: $_showSearch');
+      //print('avsz showSearch: $_showSearch');
       //if(_showSearch) _searchOverlay();
       
       return Stack(
@@ -61,11 +61,11 @@ class _TagDetectorFieldState extends State<TagDetectorField> {
 
 
     void _onTextChanged() {
-      print('searchOverlay.closed: ${searchOverlay.closed} _showing: $_showing _showSearch: $_showSearch');
+      //print('searchOverlay.closed: ${searchOverlay.closed} _showing: $_showing _showSearch: $_showSearch');
       final controller = widget.textField.controller ?? null;
       if (controller == null) return;
       final text = controller.text;
-      print('avsz searchOverlay.closed: ${searchOverlay.closed} _showing: $_showing _showSearch: $_showSearch');
+      //print('avsz searchOverlay.closed: ${searchOverlay.closed} _showing: $_showing _showSearch: $_showSearch');
       setState(() {
         //show search if isItTaggable returns the type of string
         var tagIt = TagTools.isItTaggable(text, controller);
@@ -74,9 +74,14 @@ class _TagDetectorFieldState extends State<TagDetectorField> {
          if (_showSearch && (!_showing || searchOverlay.closed) ){
           Overlay.of(context).insert(searchOverlay.show(context, controller, _tag));
           _showing = true;
-          print('avsz show');
+          //print('avsz show');
           }
-          if ((!_showSearch & ((_showing) || !searchOverlay.closed))) {searchOverlay.closeIt(); hideOverlay(searchOverlay);  _showing = false;  print("avsz hideeeeee");}
+          if ((!_showSearch & ((_showing) || !searchOverlay.closed))) {
+            searchOverlay.closeIt();
+             hideOverlay(searchOverlay);
+               _showing = false;  
+               //print("avsz hideeeeee");
+               }
 
           
       

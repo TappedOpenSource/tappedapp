@@ -1,90 +1,81 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intheloopapp/domains/models/user_model.dart';
-
+import 'package:intheloopapp/data/prod/firestore_database_impl.dart';
+import 'package:intheloopapp/domains/search_bloc/search_bloc.dart';
+import 'package:intheloopapp/ui/user_avatar.dart';
 
 class SearchBarWidget extends StatefulWidget {
-  final List<UserModel> users;
+  //final FirestoreDatabaseImpl database;
 
-  SearchBarWidget({required this.users});
+  SearchBarWidget(this.controller, {super.key});
+ TextEditingController controller;  
+
 
   @override
   _SearchBarWidgetState createState() => _SearchBarWidgetState();
 }
 
 class _SearchBarWidgetState extends State<SearchBarWidget> {
-  List<UserModel> _searchResults = [];
-
-  void _onSearch(String searchTerm) {
-    setState(() {
-      _searchResults = widget.users.where((user) =>
-          user.username.username.toLowerCase().contains(searchTerm.toLowerCase())).toList();
-    });
-  }
+  TextEditingController get controller => widget.controller;
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        TappedSearchBar(onSearch: _onSearch),
-        Expanded(
-          child: ByUsernameResultsList(users: _searchResults),
-        ),
-      ],
-    );
-  }
-}
-
-class TappedSearchBar extends StatefulWidget {
-  final Function(String) onSearch;
-
-  TappedSearchBar({required this.onSearch});
-
-  @override
-  _TappedSearchBarState createState() => _TappedSearchBarState();
-}
-
-class _TappedSearchBarState extends State<TappedSearchBar> {
-  final TextEditingController _searchController = TextEditingController();
-
-  void _onSearch() {
-    widget.onSearch(_searchController.text);
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      padding: EdgeInsets.symmetric(horizontal: 16.0),
-      child: TextField(
-        controller: _searchController,
-        decoration: InputDecoration(
-          hintText: 'Search by username',
-          suffixIcon: IconButton(
-            icon: Icon(Icons.search),
-            onPressed: _onSearch,
+    
+    return SafeArea(
+      child: Scaffold(
+      resizeToAvoidBottomInset: false,  
+        body: Container(
+          color: Colors.purple,
+          child: BlocBuilder<SearchBloc, SearchState>(
+            builder: (context, state){
+            return Column(
+              children: [ 
+                Container(
+                color: Colors.blue,
+                padding: EdgeInsets.symmetric(horizontal: 16.0),
+                child: SearchBar(
+                  controller: controller,
+                  onChanged: (value) {
+                    context.read<SearchBloc>().add(Search(query: value));
+                  },
+                ),
+              ),
+              Expanded(
+                child: BlocBuilder<SearchBloc, SearchState>(
+                  builder: (context, state) {
+                    if (state.loading) { print('avsz search loading');
+                      return Center(child: CircularProgressIndicator());
+                    } else if (state.isNotSearching || state.searchResults.length > 0) { print('avsz search not searching');
+                      final users = state.searchResults;
+                      print('avsz users: ${users.length}');
+                      return ListView.builder(
+                        itemCount: users.length,
+                        itemBuilder: (context, index) {
+                          final user = users[index];
+                          return ListTile(      //onTap: ,
+                            title: Text(user.username.username),
+                            subtitle: UserAvatar(
+                              imageUrl: user.profilePicture,
+                              radius: 14,
+                              ),
+                          );
+                        },
+                      );
+                    } else {print('avsz search else');
+                      return Container();
+                    }
+                  },
+                ),
+              ),
+            ],
+            ); print('avsz wierd third choice'); return Container();
+          },
+          
           ),
         ),
-        onSubmitted: (_) => _onSearch(),
       ),
     );
   }
 }
 
-class ByUsernameResultsList extends StatelessWidget {
-  final List<UserModel> users;
-
-  ByUsernameResultsList({required this.users});
-
-  @override
-  Widget build(BuildContext context) {
-    return ListView.builder(
-      itemCount: users.length,
-      itemBuilder: (context, index) {
-        final user = users[index];
-        return ListTile(
-          title: Text(user.username.username),
-          subtitle: Text(user.email),
-        );
-      },
-    );
-  }
-}
