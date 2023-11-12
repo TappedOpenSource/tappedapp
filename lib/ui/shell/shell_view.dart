@@ -45,11 +45,11 @@ class _ShellViewState extends State<ShellView> {
                 index: state.selectedTab,
                 children: [
                   // const LoopFeedsListView(), // getstream.io activity feed?
-                  const SubscribedView(),
+                  // const SubscribedView(),
+                  const BookingsView(),
                   SearchView(
                     searchFocusNode: searchFocusNode,
                   ),
-                  const BookingsView(),
                   const MessagingChannelListView(),
                   ProfileView(
                     visitedUserId: currentUser.id,

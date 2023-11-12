@@ -1,8 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:intheloopapp/domains/navigation_bloc/navigation_bloc.dart';
-import 'package:intheloopapp/domains/navigation_bloc/tapped_route.dart';
 import 'package:intheloopapp/ui/record_label/components/claim_chip.dart';
-import 'package:intheloopapp/ui/record_label/components/grid_item.dart';
 import 'package:intheloopapp/utils/current_user_builder.dart';
 import 'package:intheloopapp/utils/user_claim_builder.dart';
 
@@ -37,42 +34,161 @@ class SubscribedView extends StatelessWidget {
                   ],
                 ),
               ),
-              body: CustomScrollView(
+              body: const CustomScrollView(
                 slivers: [
-                  SliverGrid.count(
-                    crossAxisCount: 2,
-                    children: [
-                      GridItem(
-                        title: 'Designer',
-                        icon: Icons.brush,
-                        onTap: () => context.push(GraphicDesignerPage()),
+                  SliverToBoxAdapter(
+                    child: Card(
+                      child: Padding(
+                        padding: EdgeInsets.symmetric(
+                          horizontal: 16,
+                          vertical: 32,
+                        ),
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Text(
+                              'dsp distribution',
+                              style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                                fontSize: 24,
+                              ),
+                            ),
+                          ],
+                        ),
                       ),
-                      GridItem(
-                        title: 'Social Media Manager',
-                        icon: Icons.people,
-                        onTap: () => context.push(SocialMediaManagerPage()),
+                    ),
+                  ),
+                  SliverToBoxAdapter(
+                    child: Card(
+                      child: Padding(
+                        padding: EdgeInsets.symmetric(
+                          horizontal: 16,
+                          vertical: 32,
+                        ),
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Text(
+                              'production',
+                              style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                                fontSize: 24,
+                              ),
+                            ),
+                          ],
+                        ),
                       ),
-                      GridItem(
-                        title: 'Marketer',
-                        icon: Icons.mark_email_read,
-                        onTap: () => context.push(MarketerPage()),
+                    ),
+                  ),
+                  SliverToBoxAdapter(
+                    child: Card(
+                      child: Padding(
+                        padding: EdgeInsets.symmetric(
+                          horizontal: 16,
+                          vertical: 32,
+                        ),
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Text(
+                              'touring',
+                              style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                                fontSize: 24,
+                              ),
+                            ),
+                          ],
+                        ),
                       ),
-                      const GridItem(
-                        title: 'Publicist',
-                        icon: Icons.public,
-                        disabled: true,
+                    ),
+                  ),
+                  SliverToBoxAdapter(
+                    child: Card(
+                      child: Padding(
+                        padding: EdgeInsets.symmetric(
+                          horizontal: 16,
+                          vertical: 32,
+                        ),
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Text(
+                              'performance rights',
+                              style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                                fontSize: 24,
+                              ),
+                            ),
+                          ],
+                        ),
                       ),
-                      const GridItem(
-                        title: 'A&R',
-                        icon: Icons.chat,
-                        disabled: true,
+                    ),
+                  ),
+                  SliverToBoxAdapter(
+                    child: Card(
+                      child: Padding(
+                        padding: EdgeInsets.symmetric(
+                          horizontal: 16,
+                          vertical: 32,
+                        ),
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Text(
+                              'sync licensing',
+                              style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                                fontSize: 24,
+                              ),
+                            ),
+                          ],
+                        ),
                       ),
-                      const GridItem(
-                        title: 'Lawyer',
-                        icon: Icons.gavel,
-                        disabled: true,
+                    ),
+                  ),
+                  SliverToBoxAdapter(
+                    child: Card(
+                      child: Padding(
+                        padding: EdgeInsets.symmetric(
+                          horizontal: 16,
+                          vertical: 32,
+                        ),
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Text(
+                              'social media marketing',
+                              style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                                fontSize: 24,
+                              ),
+                            ),
+                          ],
+                        ),
                       ),
-                    ],
+                    ),
+                  ),
+                  SliverToBoxAdapter(
+                    child: Card(
+                      child: Padding(
+                        padding: EdgeInsets.symmetric(
+                          horizontal: 16,
+                          vertical: 32,
+                        ),
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Text(
+                              'merch',
+                              style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                                fontSize: 24,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
                   ),
                 ],
               ),

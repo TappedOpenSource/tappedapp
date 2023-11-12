@@ -23,7 +23,7 @@ class NotificationIconButton extends StatelessWidget {
           child: IconButton(
             onPressed: () => context.push(ActivitiesPage()),
             icon: Icon(
-              CupertinoIcons.heart,
+              CupertinoIcons.bell,
               color: Theme.of(context).colorScheme.outline,
               size: 24,
               semanticLabel: 'Notifications',
