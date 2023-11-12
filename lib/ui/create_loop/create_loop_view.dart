@@ -4,7 +4,6 @@ import 'package:intheloopapp/data/audio_repository.dart';
 import 'package:intheloopapp/data/database_repository.dart';
 import 'package:intheloopapp/data/storage_repository.dart';
 import 'package:intheloopapp/domains/models/option.dart';
-import 'package:intheloopapp/domains/models/user_model.dart';
 import 'package:intheloopapp/domains/navigation_bloc/navigation_bloc.dart';
 import 'package:intheloopapp/domains/onboarding_bloc/onboarding_bloc.dart';
 import 'package:intheloopapp/ui/create_loop/components/attachments.dart';
@@ -13,7 +12,6 @@ import 'package:intheloopapp/ui/create_loop/components/loop_title_text_field.dar
 import 'package:intheloopapp/ui/create_loop/components/opportunity_toggle.dart';
 import 'package:intheloopapp/ui/create_loop/components/submit_loop_button.dart';
 import 'package:intheloopapp/ui/create_loop/cubit/create_loop_cubit.dart';
-import 'package:intheloopapp/ui/error/error_view.dart';
 import 'package:intheloopapp/ui/user_avatar.dart';
 import 'package:intheloopapp/utils/current_user_builder.dart';
 

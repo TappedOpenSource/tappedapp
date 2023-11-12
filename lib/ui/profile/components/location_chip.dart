@@ -10,6 +10,11 @@ class LocationChip extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocBuilder<ProfileCubit, ProfileState>(
       builder: (context, state) {
+        final place = state.place;
+        if (place == null) {
+          return Container();
+        }
+
         return Container(
           padding: const EdgeInsets.symmetric(
             vertical: 6,
@@ -30,7 +35,7 @@ class LocationChip extends StatelessWidget {
               const SizedBox(width: 6),
               Text(
                 formattedAddress(
-                  state.place.addressComponents,
+                  place.addressComponents,
                 ),
                 overflow: TextOverflow.ellipsis,
                 style: TextStyle(

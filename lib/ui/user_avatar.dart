@@ -83,7 +83,7 @@ class UserAvatar extends StatelessWidget {
               ? const AssetImage('assets/default_avatar.png') as ImageProvider
               : CachedNetworkImageProvider(
                   imageUrl!,
-                  errorListener: () {
+                  errorListener: (object) {
                     return;
                   },
                 ),

@@ -55,20 +55,6 @@ class DiscoverView extends StatelessWidget {
                   horizontal: 8,
                 ),
                 child: Text(
-                  'Top Creators',
-                  style: TextStyle(
-                    fontSize: 28,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-              ),
-              _userSlider(viewLeaders),
-              const Padding(
-                padding: EdgeInsets.symmetric(
-                  vertical: 16,
-                  horizontal: 8,
-                ),
-                child: Text(
                   'Top Bookers',
                   style: TextStyle(
                     fontSize: 28,

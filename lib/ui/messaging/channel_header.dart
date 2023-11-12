@@ -170,7 +170,7 @@ class ChannelHeader extends StatelessWidget implements PreferredSizeWidget {
             leading: leadingWidget,
             actions: actions ??
                 [
-                  IconButton(
+                  const IconButton(
                     onPressed: null,
                     // onPressed: () {
                     //   final call = _startCall(context);
@@ -180,7 +180,7 @@ class ChannelHeader extends StatelessWidget implements PreferredSizeWidget {
                     //     ),
                     //   );
                     // },
-                    icon: const Icon(
+                    icon: Icon(
                       CupertinoIcons.video_camera,
                       size: 30,
                     ),

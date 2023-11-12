@@ -159,7 +159,7 @@ abstract class DatabaseRepository {
   Future<List<UserModel>> getFollowing(String currentUserId);
   Future<List<UserModel>> getFollowers(String currentUserId);
   Future<List<UserModel>> getCommonFollowers(
-      String currentUserID, String observedUserId);
+      String currentUserID, String observedUserId,);
 
   // Activity related stuff
   Future<List<Activity>> getActivities(

@@ -1,9 +1,7 @@
 import 'package:cloud_functions/cloud_functions.dart';
 import 'package:intheloopapp/data/ai_repository.dart';
 import 'package:intheloopapp/domains/models/marketing_plan.dart';
-import 'package:intheloopapp/domains/models/option.dart';
 import 'package:intheloopapp/utils/app_logger.dart';
-import 'package:path/path.dart';
 import 'package:uuid/uuid.dart';
 
 final _functions = FirebaseFunctions.instance;

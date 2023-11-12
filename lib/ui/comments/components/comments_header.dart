@@ -45,7 +45,7 @@ class CommentsHeader extends StatelessWidget {
                     color: Colors.white,
                   ),
                 ),
-              )
+              ),
             ],
           ),
         );

@@ -1,8 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:intheloopapp/domains/models/user_model.dart';
-import 'package:intheloopapp/domains/onboarding_bloc/onboarding_bloc.dart';
 import 'package:intheloopapp/ui/loop_view/components/follow_icon.dart';
 import 'package:intheloopapp/ui/loop_view/loop_view_cubit.dart';
 import 'package:intheloopapp/utils/current_user_builder.dart';
