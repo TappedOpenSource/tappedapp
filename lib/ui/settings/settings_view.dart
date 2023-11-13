@@ -46,23 +46,32 @@ class SettingsView extends StatelessWidget {
             appBar: AppBar(
               title: Row(
                 children: [
-                  Text.rich(
-                    TextSpan(
-                      text: currentUser.artistName.isNotEmpty
-                          ? currentUser.artistName
-                          : currentUser.username.toString(),
-                      style: const TextStyle(
-                        fontSize: 32,
-                        fontWeight: FontWeight.bold,
-                      ),
-                      children: const [
-                        WidgetSpan(
-                          alignment: PlaceholderAlignment.middle,
-                          child: ConnectivityStatus(),
-                        ),
-                      ],
+                  Text(
+                    currentUser.artistName.isNotEmpty
+                        ? currentUser.artistName
+                        : currentUser.username.toString(),
+                    style: const TextStyle(
+                      fontSize: 32,
+                      fontWeight: FontWeight.bold,
                     ),
                   ),
+                  // Text.rich(
+                  //   TextSpan(
+                  //     text: currentUser.artistName.isNotEmpty
+                  //         ? currentUser.artistName
+                  //         : currentUser.username.toString(),
+                  //     style: const TextStyle(
+                  //       fontSize: 32,
+                  //       fontWeight: FontWeight.bold,
+                  //     ),
+                  //     children: const [
+                  //       WidgetSpan(
+                  //         alignment: PlaceholderAlignment.middle,
+                  //         child: ConnectivityStatus(),
+                  //       ),
+                  //     ],
+                  //   ),
+                  // ),
                 ],
               ),
               elevation: 0,
