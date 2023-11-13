@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_google_places_sdk/flutter_google_places_sdk.dart';
-import 'package:intheloopapp/data/database_repository.dart';
 import 'package:intheloopapp/domains/models/badge.dart' as badge_model;
 import 'package:intheloopapp/domains/models/booking.dart';
 import 'package:intheloopapp/domains/models/loop.dart';
@@ -16,8 +15,8 @@ import 'package:intheloopapp/ui/booking/booking_view.dart';
 import 'package:intheloopapp/ui/bookings/user_bookings_feed.dart';
 import 'package:intheloopapp/ui/create_booking/booking_confirmation_view.dart';
 import 'package:intheloopapp/ui/create_booking/create_booking_view.dart';
-import 'package:intheloopapp/ui/create_loop/create_loop_view.dart';
 import 'package:intheloopapp/ui/create_service/create_service_view.dart';
+import 'package:intheloopapp/ui/create_single_marketing_plan/create_single_marketing_plan_view.dart';
 import 'package:intheloopapp/ui/follow_relationship/follow_relationship_view.dart';
 import 'package:intheloopapp/ui/forms/location_form/location_form_view.dart';
 import 'package:intheloopapp/ui/graphic_designer/avatars_generated_view.dart';
@@ -28,16 +27,12 @@ import 'package:intheloopapp/ui/likes/likes_view.dart';
 import 'package:intheloopapp/ui/login/forgot_password_view.dart';
 import 'package:intheloopapp/ui/login/login_view.dart';
 import 'package:intheloopapp/ui/login/signup_view.dart';
-import 'package:intheloopapp/ui/loop_feed/loop_feed_view.dart';
-import 'package:intheloopapp/ui/loop_view/loop_view.dart';
-import 'package:intheloopapp/ui/create_single_marketing_plan/create_single_marketing_plan_view.dart';
 import 'package:intheloopapp/ui/marketer/marketer_view.dart';
 import 'package:intheloopapp/ui/marketer/marketing_plan_view.dart';
 import 'package:intheloopapp/ui/messaging/channel_view.dart';
 import 'package:intheloopapp/ui/messaging/messaging_view.dart';
 import 'package:intheloopapp/ui/messaging/video_call_view.dart';
 import 'package:intheloopapp/ui/onboarding/onboarding_view.dart';
-import 'package:intheloopapp/ui/opportunities/interested_view.dart';
 import 'package:intheloopapp/ui/profile/components/service_selection_view.dart';
 import 'package:intheloopapp/ui/profile/profile_view.dart';
 import 'package:intheloopapp/ui/reviews/user_reviews_feed.dart';
@@ -79,121 +74,108 @@ final class SettingsPage extends TappedRoute {
         );
 }
 
-final class CreateLoopPage extends TappedRoute {
-  CreateLoopPage()
-      : super(
-          routeName: '/create_loop',
-          view: const CreateLoopView(),
-        );
-}
+// final class CreateLoopPage extends TappedRoute {
+//   CreateLoopPage()
+//       : super(
+//           routeName: '/create_loop',
+//           view: const CreateLoopView(),
+//         );
+// }
 
-final class LoopPage extends TappedRoute {
-  LoopPage({
-    required Loop loop,
-    required Option<UserModel> loopUser,
-  }) : super(
-          routeName: '/loop/${loop.id}',
-          view: LoopView(
-            loop: loop,
-            loopUser: loopUser,
-          ),
-        );
-}
+// final class LoopPage extends TappedRoute {
+//   LoopPage({
+//     required Loop loop,
+//     required Option<UserModel> loopUser,
+//   }) : super(
+//           routeName: '/loop/${loop.id}',
+//           view: LoopView(
+//             loop: loop,
+//             loopUser: loopUser,
+//           ),
+//         );
+// }
 
-final class LoopsPage extends TappedRoute {
-  LoopsPage({
-    required this.userId,
-    required this.database,
-  }) : super(
-          routeName: '/loops/$userId',
-          view: LoopFeedView(
-            sourceFunction: (
-              String userId, {
-              String? lastLoopId,
-              int limit = 20,
-              bool ignoreCache = false,
-            }) async {
-              final result = await database.getUserLoops(
-                userId,
-                limit: limit,
-                lastLoopId: lastLoopId,
-              );
-              return result;
-            },
-            sourceStream: (
-              String userId, {
-              int limit = 20,
-              bool ignoreCache = false,
-            }) async* {
-              yield* database.userLoopsObserver(
-                userId,
-                limit: limit,
-              );
-            },
-            userId: userId,
-            feedKey: 'user_loops',
-            scrollController: ScrollController(),
-            headerSliver: null,
-          ),
-        );
+// final class LoopsPage extends TappedRoute {
+//   LoopsPage({
+//     required this.userId,
+//     required this.database,
+//   }) : super(
+//           routeName: '/loops/$userId',
+//           view: LoopFeedView(
+//             sourceFunction: (
+//               String userId, {
+//               String? lastLoopId,
+//               int limit = 20,
+//               bool ignoreCache = false,
+//             }) async {
+//               final result = await database.getUserLoops(
+//                 userId,
+//                 limit: limit,
+//                 lastLoopId: lastLoopId,
+//               );
+//               return result;
+//             },
+//             sourceStream: (
+//               String userId, {
+//               int limit = 20,
+//               bool ignoreCache = false,
+//             }) async* {
+//               yield* database.userLoopsObserver(
+//                 userId,
+//                 limit: limit,
+//               );
+//             },
+//             userId: userId,
+//             feedKey: 'user_loops',
+//             scrollController: ScrollController(),
+//             headerSliver: null,
+//           ),
+//         );
 
-  final String userId;
-  final DatabaseRepository database;
-}
+//   final String userId;
+//   final DatabaseRepository database;
+// }
 
-final class OpportunitiesPage extends TappedRoute {
-  OpportunitiesPage({
-    required this.userId,
-    required this.database,
-  }) : super(
-          routeName: '/opportunities/$userId',
-          view: LoopFeedView(
-            sourceFunction: (
-              String userId, {
-              String? lastLoopId,
-              int limit = 20,
-              bool ignoreCache = false,
-            }) async {
-              final result = await database.getUserOpportunities(
-                userId,
-                limit: limit,
-                lastLoopId: lastLoopId,
-              );
-              return result;
-            },
-            sourceStream: (
-              String userId, {
-              int limit = 20,
-              bool ignoreCache = false,
-            }) async* {
-              yield* database.userOpportunitiesObserver(
-                userId,
-                limit: limit,
-              );
-            },
-            userId: userId,
-            feedKey: 'user_opportunities',
-            scrollController: ScrollController(),
-            headerSliver: null,
-          ),
-        );
+// final class OpportunitiesPage extends TappedRoute {
+//   OpportunitiesPage({
+//     required this.userId,
+//     required this.database,
+//   }) : super(
+//           routeName: '/opportunities/$userId',
+//           view: LoopFeedView(
+//             sourceFunction: (
+//               String userId, {
+//               String? lastLoopId,
+//               int limit = 20,
+//               bool ignoreCache = false,
+//             }) async {
+//               final result = await database.getUserOpportunities(
+//                 userId,
+//                 limit: limit,
+//                 lastLoopId: lastLoopId,
+//               );
+//               return result;
+//             },
+//             sourceStream: (
+//               String userId, {
+//               int limit = 20,
+//               bool ignoreCache = false,
+//             }) async* {
+//               yield* database.userOpportunitiesObserver(
+//                 userId,
+//                 limit: limit,
+//               );
+//             },
+//             userId: userId,
+//             feedKey: 'user_opportunities',
+//             scrollController: ScrollController(),
+//             headerSliver: null,
+//           ),
+//         );
 
-  final String userId;
-  final DatabaseRepository database;
-}
-
-final class InterestedPage extends TappedRoute {
-  InterestedPage({
-    required this.loop,
-  }) : super(
-          routeName: '/interested/${loop.id}',
-          view: InterestedView(
-            loop: loop,
-          ),
-        );
-
-  final Loop loop;
-}
+//   final String userId;
+//   final DatabaseRepository database;
+// }
 
 final class BadgePage extends TappedRoute {
   BadgePage({
@@ -332,17 +314,6 @@ final class LocationFormPage extends TappedRoute {
 
   final Place? initialPlace;
   final void Function(Place?, String) onSelected;
-}
-
-final class LikesPage extends TappedRoute {
-  LikesPage({
-    required this.loop,
-  }) : super(
-          routeName: '/likes/${loop.id}',
-          view: LikesView(loop: loop),
-        );
-
-  final Loop loop;
 }
 
 final class ReviewsPage extends TappedRoute {

@@ -54,10 +54,10 @@ class FirebaseDynamicLinkImpl extends DeepLinkRepository {
     // print('_handleDeepLink | deep link: $deepLink');
 
     switch (deepLink.path) {
-      case '/upload_loop':
-        return const DeepLinkRedirect(
-          type: DeepLinkType.createPost,
-        );
+      // case '/upload_loop':
+      //   return const DeepLinkRedirect(
+      //     type: DeepLinkType.createPost,
+      //   );
       case '/user':
         final linkParameters = deepLink.queryParameters;
         final userId = linkParameters['id'] ?? '';
@@ -65,13 +65,13 @@ class FirebaseDynamicLinkImpl extends DeepLinkRepository {
           type: DeepLinkType.shareProfile,
           id: userId,
         );
-      case '/loop':
-        final linkParameters = deepLink.queryParameters;
-        final loopId = linkParameters['id'] ?? '';
-        return DeepLinkRedirect(
-          type: DeepLinkType.shareLoop,
-          id: loopId,
-        );
+      // case '/loop':
+      //   final linkParameters = deepLink.queryParameters;
+      //   final loopId = linkParameters['id'] ?? '';
+      //   return DeepLinkRedirect(
+      //     type: DeepLinkType.shareLoop,
+      //     id: loopId,
+      //   );
       case '/connect_payment':
         final linkParameters = deepLink.queryParameters;
         final accountId = linkParameters['account_id'];

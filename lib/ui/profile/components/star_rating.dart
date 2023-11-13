@@ -11,7 +11,7 @@ class StarRating extends StatelessWidget {
     return BlocBuilder<ProfileCubit, ProfileState>(
       builder: (context, state) {
         final overallRating = switch (state.visitedUser.overallRating) {
-          None() => '0.0',
+          None() => 'N/A',
           Some(:final value) => value.toStringAsFixed(1),
         };
         return Column(

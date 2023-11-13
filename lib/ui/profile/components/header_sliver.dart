@@ -4,9 +4,7 @@ import 'package:intheloopapp/domains/models/option.dart';
 import 'package:intheloopapp/ui/profile/components/badges_chip.dart';
 import 'package:intheloopapp/ui/profile/components/follow_button.dart';
 import 'package:intheloopapp/ui/profile/components/follower_count.dart';
-import 'package:intheloopapp/ui/profile/components/following_count.dart';
 import 'package:intheloopapp/ui/profile/components/location_chip.dart';
-import 'package:intheloopapp/ui/profile/components/loop_count.dart';
 import 'package:intheloopapp/ui/profile/components/message_button.dart';
 import 'package:intheloopapp/ui/profile/components/more_options_button.dart';
 import 'package:intheloopapp/ui/profile/components/request_to_book.dart';
@@ -28,18 +26,12 @@ class HeaderSliver extends StatelessWidget {
           return Column(
             children: [
               const SizedBox(height: 18),
-              Row(
+              const Row(
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children: [
-                  const FollowerCount(),
-                  if (state.visitedUser.reviewCount <= 0)
-                    const FollowingCount()
-                  else
-                    const ReviewCount(),
-                  if (state.visitedUser.reviewCount <= 0)
-                    const LoopCount()
-                  else
-                    const StarRating(),
+                  FollowerCount(),
+                  ReviewCount(),
+                  StarRating(),
                 ],
               ),
               const SizedBox(height: 12),

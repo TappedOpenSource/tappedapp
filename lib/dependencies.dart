@@ -155,27 +155,6 @@ List<BlocProvider> buildBlocs({
         authenticationBloc: context.read<AuthenticationBloc>(),
       ),
     ),
-    BlocProvider<LoopFeedListBloc>(
-      create: (context) => LoopFeedListBloc(
-        initialFeed: LoopFeed.forYou,
-        feedParamsList: {
-          LoopFeed.forYou: FeedParams(
-            sourceFunction: context.read<DatabaseRepository>().getAllLoops,
-            sourceStream: context.read<DatabaseRepository>().allLoopsObserver,
-            label: 'For You',
-            scrollController: ScrollController(),
-          ),
-          LoopFeed.following: FeedParams(
-            sourceFunction:
-                context.read<DatabaseRepository>().getFollowingLoops,
-            sourceStream:
-                context.read<DatabaseRepository>().followingLoopsObserver,
-            label: 'Following',
-            scrollController: ScrollController(),
-          ),
-        },
-      ),
-    ),
     BlocProvider<SearchBloc>(
       create: (context) => SearchBloc(
         initialIndex: 0,
