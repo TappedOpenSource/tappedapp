@@ -44,7 +44,7 @@ class CreateBookingCubit extends Cubit<CreateBookingState> {
 
   final UserModel currentUser;
   final Service service;
-  final String requesteeStripeConnectedAccountId;
+  final Option<String> requesteeStripeConnectedAccountId;
   final double bookingFee;
   final NavigationBloc navigationBloc;
   final OnboardingBloc onboardingBloc;
@@ -124,10 +124,15 @@ class CreateBookingCubit extends Cubit<CreateBookingState> {
     logger.debug('creating booking: $booking');
     try {
       if (total > 0) {
+        if (requesteeStripeConnectedAccountId is None) {
+          throw Exception('requesteeStripeConnectedAccountId is None');
+        }
+
+        final stripeAccountId = requesteeStripeConnectedAccountId.unwrap;
         final intent = await payments.initPaymentSheet(
           payerCustomerId: currentUser.stripeCustomerId,
           customerEmail: currentUser.email,
-          payeeConnectedAccountId: requesteeStripeConnectedAccountId,
+          payeeConnectedAccountId: stripeAccountId,
           amount: total,
         );
 

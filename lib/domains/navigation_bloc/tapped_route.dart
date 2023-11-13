@@ -231,7 +231,7 @@ final class CreateBookingPage extends TappedRoute {
         );
 
   final Service service;
-  final String requesteeStripeConnectedAccountId;
+  final Option<String> requesteeStripeConnectedAccountId;
 }
 
 final class BookingPage extends TappedRoute {
@@ -299,7 +299,7 @@ final class ServiceSelectionPage extends TappedRoute {
         );
 
   final String userId;
-  final String requesteeStripeConnectedAccountId;
+  final Option<String> requesteeStripeConnectedAccountId;
 }
 
 final class CreateServicePage extends TappedRoute {
