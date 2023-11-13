@@ -1,15 +1,14 @@
-import 'package:intheloopapp/domains/models/loop.dart';
 import 'package:intheloopapp/domains/models/user_model.dart';
 
 abstract class DeepLinkRepository {
   Stream<DeepLinkRedirect> getDeepLinks();
-  Future<String> getShareLoopDeepLink(Loop loop);
+  // Future<String> getShareLoopDeepLink(Loop loop);
   Future<String> getShareProfileDeepLink(UserModel user);
 }
 
 enum DeepLinkType {
-  createPost,
-  shareLoop,
+  // createPost,
+  // shareLoop,
   shareProfile,
   connectStripeRedirect,
   connectStripeRefresh,

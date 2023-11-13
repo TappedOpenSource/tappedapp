@@ -3,13 +3,7 @@ import 'package:intheloopapp/domains/models/activity.dart';
 import 'package:intheloopapp/ui/activity/components/booking_reminder_activity_tile.dart';
 import 'package:intheloopapp/ui/activity/components/booking_request_activity_tile.dart';
 import 'package:intheloopapp/ui/activity/components/booking_update_activity_tile.dart';
-import 'package:intheloopapp/ui/activity/components/comment_activity_tile.dart';
-import 'package:intheloopapp/ui/activity/components/comment_like_activity_tile.dart';
-import 'package:intheloopapp/ui/activity/components/comment_mention_activity_tile.dart';
 import 'package:intheloopapp/ui/activity/components/follow_activity_tile.dart';
-import 'package:intheloopapp/ui/activity/components/like_activity_tile.dart';
-import 'package:intheloopapp/ui/activity/components/loop_mention_activity_tile.dart';
-import 'package:intheloopapp/ui/activity/components/opportunity_interest_activity_tile.dart';
 import 'package:intheloopapp/ui/activity/components/search_appearance_activity_tile.dart';
 
 class ActivityTile extends StatelessWidget {
@@ -23,30 +17,30 @@ class ActivityTile extends StatelessWidget {
       Follow() => FollowActivityTile(
           activity: activity as Follow,
         ),
-      Like() => LikeActivityTile(
-          activity: activity as Like,
-        ),
-      CommentActivity() => CommentActivityTile(
-          activity: activity as CommentActivity,
-        ),
+      // Like() => LikeActivityTile(
+      //     activity: activity as Like,
+      //   ),
+      // CommentActivity() => CommentActivityTile(
+      //     activity: activity as CommentActivity,
+      //   ),
       BookingRequest() => BookingRequestActivityTile(
           activity: activity as BookingRequest,
         ),
       BookingUpdate() => BookingUpdateActivityTile(
           activity: activity as BookingUpdate,
         ),
-      LoopMention() => LoopMentionActivityTile(
-          activity: activity as LoopMention,
-        ),
-      CommentMention() => CommentMentionActivityTile(
-          activity: activity as CommentMention,
-        ),
-      CommentLike() => CommentLikeActivityTile(
-          activity: activity as CommentLike,
-        ),
-      OpportunityInterest() => OpportunityInterestActivityTile(
-          activity: activity as OpportunityInterest,
-        ),
+      // LoopMention() => LoopMentionActivityTile(
+      //     activity: activity as LoopMention,
+      //   ),
+      // CommentMention() => CommentMentionActivityTile(
+      //     activity: activity as CommentMention,
+      //   ),
+      // CommentLike() => CommentLikeActivityTile(
+      //     activity: activity as CommentLike,
+      //   ),
+      // OpportunityInterest() => OpportunityInterestActivityTile(
+      //     activity: activity as OpportunityInterest,
+      //   ),
       BookingReminder() => BookingReminderActivityTile(
           activity: activity as BookingReminder,
         ),

@@ -36,52 +36,52 @@ abstract class DatabaseRepository {
   Future<List<UserModel>> getBookerLeaders();
 
   // Loop related stuff
-  Future<Option<Loop>> getLoopById(
-    String loopId, {
-    bool ignoreCache = false,
-  });
-  Future<void> addLoop(Loop loop);
-  Future<void> deleteLoop(Loop loop);
-  Future<List<Loop>> getUserLoops(
-    String userId, {
-    int limit = 20,
-    String? lastLoopId,
-  });
-  Stream<Loop> userLoopsObserver(
-    String userId, {
-    int limit = 100,
-  });
-  Future<List<Loop>> getUserOpportunities(
-    String userId, {
-    int limit = 20,
-    String? lastLoopId,
-  });
-  Stream<Loop> userOpportunitiesObserver(
-    String userId, {
-    int limit = 100,
-  });
-  Future<List<Loop>> getFollowingLoops(
-    String currentUserId, {
-    int limit = 100,
-    String? lastLoopId,
-    bool ignoreCache = false,
-  });
-  Stream<Loop> followingLoopsObserver(
-    String currentUserId, {
-    int limit = 100,
-    bool ignoreCache = false,
-  });
-  Future<List<Loop>> getAllLoops(
-    String currentUserId, {
-    int limit = 100,
-    String? lastLoopId,
-    bool ignoreCache = false,
-  });
-  Stream<Loop> allLoopsObserver(
-    String currentUserId, {
-    int limit = 100,
-    bool ignoreCache = false,
-  });
+  // Future<Option<Loop>> getLoopById(
+  //   String loopId, {
+  //   bool ignoreCache = false,
+  // });
+  // Future<void> addLoop(Loop loop);
+  // Future<void> deleteLoop(Loop loop);
+  // Future<List<Loop>> getUserLoops(
+  //   String userId, {
+  //   int limit = 20,
+  //   String? lastLoopId,
+  // });
+  // Stream<Loop> userLoopsObserver(
+  //   String userId, {
+  //   int limit = 100,
+  // });
+  // Future<List<Loop>> getUserOpportunities(
+  //   String userId, {
+  //   int limit = 20,
+  //   String? lastLoopId,
+  // });
+  // Stream<Loop> userOpportunitiesObserver(
+  //   String userId, {
+  //   int limit = 100,
+  // });
+  // Future<List<Loop>> getFollowingLoops(
+  //   String currentUserId, {
+  //   int limit = 100,
+  //   String? lastLoopId,
+  //   bool ignoreCache = false,
+  // });
+  // Stream<Loop> followingLoopsObserver(
+  //   String currentUserId, {
+  //   int limit = 100,
+  //   bool ignoreCache = false,
+  // });
+  // Future<List<Loop>> getAllLoops(
+  //   String currentUserId, {
+  //   int limit = 100,
+  //   String? lastLoopId,
+  //   bool ignoreCache = false,
+  // });
+  // Stream<Loop> allLoopsObserver(
+  //   String currentUserId, {
+  //   int limit = 100,
+  //   bool ignoreCache = false,
+  // });
 
   // Liking related stuff
   Future<void> addLike(
@@ -133,13 +133,13 @@ abstract class DatabaseRepository {
   // Future<List<Tag>> getTagSuggestions(String query);
 
   // Sharing related stuff
-  Future<void> shareLoop(Loop loop);
+  // Future<void> shareLoop(Loop loop);
 
   // Reporting related stuff
-  Future<void> reportLoop({
-    required String reporterId,
-    required Loop loop,
-  });
+  // Future<void> reportLoop({
+  //   required String reporterId,
+  //   required Loop loop,
+  // });
 
   // Following related stuff
   Future<int> followersNum(String userid);
@@ -243,19 +243,19 @@ abstract class DatabaseRepository {
   Future<void> deleteService(String userId, String serviceId);
 
   // Opporunity related stuff
-  Future<void> showInterest({
-    required String userId,
-    required String loopId,
-  });
-  Future<void> cancelInterest({
-    required String userId,
-    required String loopId,
-  });
-  Future<List<UserModel>> getInterestedUsers(String loopId);
-  Future<bool> isInterested({
-    required String userId,
-    required String loopId,
-  });
+  // Future<void> showInterest({
+  //   required String userId,
+  //   required String loopId,
+  // });
+  // Future<void> cancelInterest({
+  //   required String userId,
+  //   required String loopId,
+  // });
+  // Future<List<UserModel>> getInterestedUsers(String loopId);
+  // Future<bool> isInterested({
+  //   required String userId,
+  //   required String loopId,
+  // });
 
   Future<void> blockUser({
     required String currentUserId,

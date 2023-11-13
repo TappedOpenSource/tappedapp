@@ -51,10 +51,10 @@ class UniLinkImpl extends DeepLinkRepository {
     final path = uri.path;
 
     switch (path) {
-      case '/upload_loop':
-        return const DeepLinkRedirect(
-          type: DeepLinkType.createPost,
-        );
+      // case '/upload_loop':
+      //   return const DeepLinkRedirect(
+      //     type: DeepLinkType.createPost,
+      //   );
       case '/user':
         final linkParameters = uri.queryParameters;
         final userId = linkParameters['id'] ?? '';
@@ -62,13 +62,13 @@ class UniLinkImpl extends DeepLinkRepository {
           type: DeepLinkType.shareProfile,
           id: userId,
         );
-      case '/loop':
-        final linkParameters = uri.queryParameters;
-        final loopId = linkParameters['id'] ?? '';
-        return DeepLinkRedirect(
-          type: DeepLinkType.shareLoop,
-          id: loopId,
-        );
+      // case '/loop':
+      //   final linkParameters = uri.queryParameters;
+      //   final loopId = linkParameters['id'] ?? '';
+      //   return DeepLinkRedirect(
+      //     type: DeepLinkType.shareLoop,
+      //     id: loopId,
+      //   );
       case '/connect_payment':
         final linkParameters = uri.queryParameters;
         final accountId = linkParameters['account_id'];
