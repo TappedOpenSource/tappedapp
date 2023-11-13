@@ -38,18 +38,18 @@ import {
   // BookerReview,
 } from "./models";
 import { sd } from "./leapai";
-import { 
+import {
   auth,
-  activitiesRef, 
-  bookerReviewsSubcollection, 
-  commentsRef, 
-  feedsRef, 
-  loopCommentsGroupRef, 
-  loopsFeedSubcollection, 
-  loopsRef, 
-  mainBucket, 
-  performerReviewsSubcollection, 
-  remote, 
+  activitiesRef,
+  bookerReviewsSubcollection,
+  commentsRef,
+  feedsRef,
+  loopCommentsGroupRef,
+  loopsFeedSubcollection,
+  loopsRef,
+  mainBucket,
+  performerReviewsSubcollection,
+  remote,
   usersRef,
   fcm,
   servicesRef,
@@ -79,9 +79,9 @@ import {
   RESEND_API_KEY,
   labelApplicationsRef,
 } from "./firebase";
-import { 
-  authenticatedRequest, 
-  authenticated, 
+import {
+  authenticatedRequest,
+  authenticated,
   getFoundersDeviceTokens,
   getFileFromURL,
 } from "./utils";
@@ -89,6 +89,7 @@ import { error, info } from "firebase-functions/logger";
 import { Resend } from "resend";
 import { marked } from "marked";
 import { basicEnhancedBio, generateBasicAlbumName, generateBasicMarketingPlan, generateSingleBasicMarketingPlan } from "./openai";
+import { onDocumentCreated } from "firebase-functions/v2/firestore";
 
 export * from "./email_triggers";
 
@@ -492,11 +493,11 @@ const _getAccountById = async (data: { accountId: string }) => {
   return account;
 }
 
-const _updateOverallRating = async ({ 
+const _updateOverallRating = async ({
   userId,
-  currOverallRating, 
-  reviewCount, 
-  newRating, 
+  currOverallRating,
+  reviewCount,
+  newRating,
 }: {
   userId: string;
   currOverallRating: number;
@@ -578,6 +579,52 @@ const _emailMarketingPlan = async ({
     });
   }
 };
+
+const _createDefaultServices = async (user: UserModel) => {
+  const userId = user.id;
+  const services = [
+    {
+      id: uuidv4(),
+      userId: userId,
+      title: "30 min set",
+      description: "30 min set",
+      rate: 0,
+      rateType: "hourly",
+      count: 0,
+      deleted: false,
+    },
+    {
+      id: uuidv4(),
+      userId: userId,
+      title: "45 min set",
+      description: "45 min set",
+      rate: 0,
+      rateType: "hourly",
+      count: 0,
+      deleted: false,
+    },
+    {
+      id: uuidv4(),
+      userId: userId,
+      title: "60 min set",
+      description: "60 min set",
+      rate: 0,
+      rateType: "hourly",
+      count: 0,
+      deleted: false,
+    },
+  ]
+
+  await Promise.all(
+    services.map((service) => {
+      return servicesRef
+        .doc(user.id)
+        .collection("userServices")
+        .doc(service.id)
+        .set(service);
+    }),
+  );
+}
 
 // --------------------------------------------------------
 export const sendToDevice = functions.firestore
@@ -803,7 +850,7 @@ export const notifyFoundersOnLabelApplication = functions
     fcm.sendToDevice(devices, payload);
   });
 export const notifyFoundersOnMarketingForm = functions
-  .firestore 
+  .firestore
   .document("marketingForm/{formId}")
   .onCreate(async (snapshot) => {
     const form = snapshot.data();
@@ -819,7 +866,7 @@ export const notifyFoundersOnMarketingForm = functions
     fcm.sendToDevice(devices, payload);
   });
 export const notifyFoundersOnGuestMarketingPlan = functions
-  .firestore 
+  .firestore
   .document("guestMarketingPlans/{planId}")
   .onCreate(async () => {
     const devices = await getFoundersDeviceTokens();
@@ -1647,16 +1694,16 @@ export const getAvatarInferenceJob = onCall(
     return { inferenceJob };
   });
 
-export const deleteInferenceJob = functions 
-  .runWith({ secrets: [ LEAP_API_KEY ] }) 
-  .https 
+export const deleteInferenceJob = functions
+  .runWith({ secrets: [ LEAP_API_KEY ] })
+  .https
   .onCall(
     async (request) => {
-    // Checking that the user is authenticated.
+      // Checking that the user is authenticated.
       if (!request.auth) {
-      // Throwing an HttpsError so that the client gets the error details.
+        // Throwing an HttpsError so that the client gets the error details.
         throw new HttpsError("failed-precondition", "The function must be " +
-        "called while authenticated.");
+          "called while authenticated.");
       }
 
       const leapApiKey = LEAP_API_KEY.value();
@@ -1673,41 +1720,41 @@ export const imageWebhook = onRequest(
       state: status,
       result,
     } = request.body;
-    
+
     const userId = request.query.user_id as string;
     const modelId = request.query.model_id as string;
     const webhookSecret = request.query.webhook_secret as string;
-    
+
     info({ userId, status, inferenceId });
-    
+
     if (!webhookSecret) {
       response.status(500).json(
         "Malformed URL, no webhook_secret detected!",
       );
       return;
     }
-    
+
     if (
       webhookSecret.toLowerCase() !== LEAP_WEBHOOK_SECRET.value().toLowerCase()
     ) {
       response.status(401).json("Unauthorized!");
       return;
     }
-    
+
     if (!userId) {
       response.status(500).json(
         "Malformed URL, no user_id detected!",
       );
       return;
     }
-    
+
     if (!modelId) {
       response.status(500).json(
         "Malformed URL, no model_id detected!",
       );
       return;
     }
-    
+
     try {
       info({ images: result.images });
       await Promise.all(
@@ -1726,7 +1773,7 @@ export const imageWebhook = onRequest(
       );
     }
   });
-    
+
 export const trainModel = onCall(
   { secrets: [ LEAP_API_KEY, LEAP_WEBHOOK_SECRET ] },
   async (request) => {
@@ -1738,15 +1785,15 @@ export const trainModel = onCall(
         "The function must be called while authenticated."
       );
     }
-    
+
     const userId = request.auth.uid;
     info({ userId });
     const { imageUrls, type, name }: {
-          imageUrls: string[];
-          type: string;
-          name: string;
-        } = request.data;
-    
+      imageUrls: string[];
+      type: string;
+      name: string;
+    } = request.data;
+
     if (imageUrls?.length < 4) {
       throw new HttpsError(
         "failed-precondition",
@@ -1780,7 +1827,7 @@ export const trainModel = onCall(
         timestamp: Timestamp.now(),
         status: "training",
       });
-    
+
     await Promise.all(
       imageUrls.map(async (imageUrl) => {
         // get image from url
@@ -1789,9 +1836,9 @@ export const trainModel = onCall(
           .collection("userSamples")
           .where("url", "==", imageUrl)
           .get();
-    
+
         if (imagesSnap.empty) return;
-    
+
         // update image with modelId
         await Promise.all(
           imagesSnap.docs.map(async (doc) => {
@@ -1802,16 +1849,16 @@ export const trainModel = onCall(
         );
       }),
     );
-    
+
     return {
       success: true,
     };
   });
-    
+
 export const trainWebhook = onRequest(
   { secrets: [ LEAP_API_KEY, LEAP_WEBHOOK_SECRET ] },
   async (request, response): Promise<void> => {
-    
+
     const { id, state: status }: {
       id: string;
       state: string;
@@ -1821,28 +1868,28 @@ export const trainWebhook = onRequest(
     const modelType = request.query.model_type as string;
 
     info({ status, id });
-    
+
     if (!webhookSecret) {
       response.status(500).json(
         "Malformed URL, no webhook_secret detected!",
       );
       return;
     }
-    
+
     if (
       webhookSecret.toLowerCase() !== LEAP_WEBHOOK_SECRET.value().toLowerCase()
     ) {
       response.status(401).json("Unauthorized!");
       return;
     }
-    
+
     if (!userId) {
       response.status(500).json(
         "Malformed URL, no user_id detected!",
       );
       return;
     }
-    
+
     const user = await auth.getUser(userId);
     if (!user) {
       response.status(401).json(
@@ -1850,7 +1897,7 @@ export const trainWebhook = onRequest(
       );
       return;
     }
-    
+
     try {
       if (status === "finished") {
         await aiModelsRef
@@ -1860,9 +1907,9 @@ export const trainWebhook = onRequest(
           .update({
             status: "ready",
           });
-    
-        
-        for (let index = 0; index < prompts.length; index++) { 
+
+
+        for (let index = 0; index < prompts.length; index++) {
           const { inferenceId } = await sd.createInferenceJob({
             leapApiKey: LEAP_API_KEY.value(),
             modelId: id,
@@ -1885,7 +1932,7 @@ export const trainWebhook = onRequest(
             status: "errored",
           });
       }
-    
+
       response.status(200).json(
         "Success",
       );
@@ -1901,12 +1948,12 @@ export const createSingleMarketingPlan = onCall(
   { secrets: [ OPEN_AI_KEY ] },
   async (request) => {
     const openAiKey = OPEN_AI_KEY.value();
-    const { 
-      userId, 
+    const {
+      userId,
       name,
-      aesthetic, 
-      targetAudience, 
-      moreToCome, 
+      aesthetic,
+      targetAudience,
+      moreToCome,
       releaseTimeline,
     } = request.data;
 
@@ -1926,7 +1973,7 @@ export const createSingleMarketingPlan = onCall(
     // }
 
     // const igFollowerCount = labelApplicationsQuery.docs[0].data().igFollowerCount;
-  
+
     const { content, prompt } = await generateSingleBasicMarketingPlan({
       artistName,
       artistGenres,
@@ -1963,12 +2010,14 @@ export const createSingleMarketingPlan = onCall(
   });
 
 export const marketingPlanStripeWebhook = onRequest(
-  { secrets: [ 
-    stripeTestKey, 
-    stripeTestEndpointSecret, 
-    RESEND_API_KEY, 
-    OPEN_AI_KEY, 
-  ] },
+  {
+    secrets: [
+      stripeTestKey,
+      stripeTestEndpointSecret,
+      RESEND_API_KEY,
+      OPEN_AI_KEY,
+    ]
+  },
   async (req, res) => {
     const stripe = new Stripe(stripeTestKey.value(), {
       apiVersion: "2022-11-15",
@@ -1983,22 +2032,22 @@ export const marketingPlanStripeWebhook = onRequest(
 
     try {
       const event = stripe.webhooks.constructEvent(
-        req.rawBody, 
-        sig, 
+        req.rawBody,
+        sig,
         stripeTestEndpointSecret.value(),
       );
 
       // Handle the event
       switch (event.type) {
       case "checkout.session.completed":
-      // eslint-disable-next-line no-case-declarations
-        const checkoutSessionCompleted = event.data.object as unknown as { 
-          id: string;
-          customer_email: string | null;
-          customer_details: {
-            email: string;
-          }
-        };
+        // eslint-disable-next-line no-case-declarations
+        const checkoutSessionCompleted = event.data.object as unknown as {
+            id: string;
+            customer_email: string | null;
+            customer_details: {
+              email: string;
+            }
+          };
 
         // create firestore document for marketing plan set to 'processing' keyed at session_id
         info({ checkoutSessionCompleted });
@@ -2033,10 +2082,12 @@ export const marketingPlanStripeWebhook = onRequest(
   });
 
 export const generateMarketingPlan = functions
-  .runWith({ secrets: [ 
-    RESEND_API_KEY, 
-    OPEN_AI_KEY, 
-  ] })
+  .runWith({
+    secrets: [
+      RESEND_API_KEY,
+      OPEN_AI_KEY,
+    ]
+  })
   .firestore
   .document("marketingForms/{clientReferenceId}")
   .onCreate(
@@ -2165,7 +2216,7 @@ export const createLabelApplication = onRequest(
     info({ labelApplication });
     await labelApplicationsRef.doc(labelApplication.id).set({
       timestamp: Timestamp.now(),
-      ...labelApplication, 
+      ...labelApplication,
     })
 
     res.status(200).json("Success");
@@ -2206,3 +2257,14 @@ export const generateEnhancedBio = onCall(
   });
 
 // TODO: on user created, add a few services for them by default
+export const createDefaultServicesOnUserCreated = onDocumentCreated(
+  { document: "users/{userId}" },
+  async (event) => {
+    const snapshot = event.data;
+    const user = snapshot?.data() as UserModel | undefined;
+    if (user === undefined) {
+      throw new HttpsError("failed-precondition", "user does not exist");
+    }
+
+    _createDefaultServices(user); 
+  });

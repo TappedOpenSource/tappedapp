@@ -24,7 +24,7 @@ class CreateBookingView extends StatelessWidget {
   });
 
   final Service service;
-  final String requesteeStripeConnectedAccountId;
+  final Option<String> requesteeStripeConnectedAccountId;
 
   @override
   Widget build(BuildContext context) {
