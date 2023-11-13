@@ -1,9 +1,9 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intheloopapp/domains/bookings_bloc/bookings_bloc.dart';
 import 'package:intheloopapp/ui/bookings/components/bookings_list.dart';
+import 'package:intheloopapp/ui/common/easter_egg_placeholder.dart';
 
 class BookingsView extends StatelessWidget {
   const BookingsView({super.key});
@@ -45,22 +45,19 @@ class BookingsView extends StatelessWidget {
                         bookings: state.pendingBookings,
                       )
                     else
-                      SliverToBoxAdapter(
-                        child: Padding(
-                          padding: const EdgeInsets.symmetric(
-                            vertical: 96,
-                          ),
-                          child: CupertinoButton.filled(
-                            onPressed: () {},
-                            borderRadius: BorderRadius.circular(15),
-                            child: const Text(
-                              'get booked',
-                              style: TextStyle(
-                                fontWeight: FontWeight.w700,
-                                color: Colors.white,
+                      const SliverToBoxAdapter(
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Padding(
+                              padding: EdgeInsets.symmetric(
+                                vertical: 12,
+                              ),
+                              child: EasterEggPlaceholder(
+                                text: 'lets get you booked',
                               ),
                             ),
-                          ),
+                          ],
                         ),
                       ),
                     const SliverToBoxAdapter(
