@@ -9,7 +9,6 @@ import 'package:intheloopapp/domains/navigation_bloc/navigation_bloc.dart';
 import 'package:intheloopapp/domains/onboarding_bloc/onboarding_bloc.dart';
 import 'package:intheloopapp/ui/settings/components/action_menu.dart';
 import 'package:intheloopapp/ui/settings/components/change_profile_image.dart';
-import 'package:intheloopapp/ui/settings/components/connectivity_status.dart';
 import 'package:intheloopapp/ui/settings/components/delete_account_button.dart';
 import 'package:intheloopapp/ui/settings/components/dev_information.dart';
 import 'package:intheloopapp/ui/settings/components/notification_settings_form.dart';
@@ -55,23 +54,6 @@ class SettingsView extends StatelessWidget {
                       fontWeight: FontWeight.bold,
                     ),
                   ),
-                  // Text.rich(
-                  //   TextSpan(
-                  //     text: currentUser.artistName.isNotEmpty
-                  //         ? currentUser.artistName
-                  //         : currentUser.username.toString(),
-                  //     style: const TextStyle(
-                  //       fontSize: 32,
-                  //       fontWeight: FontWeight.bold,
-                  //     ),
-                  //     children: const [
-                  //       WidgetSpan(
-                  //         alignment: PlaceholderAlignment.middle,
-                  //         child: ConnectivityStatus(),
-                  //       ),
-                  //     ],
-                  //   ),
-                  // ),
                 ],
               ),
               elevation: 0,
