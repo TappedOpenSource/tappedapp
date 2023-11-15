@@ -105,6 +105,7 @@ dev_dependencies:
 
 dependency_overrides: 
   http: 0.13.3 
+  connectivity_plus: 5.0.1
 
 flutter_icons: 
   image_path_ios: assets/app_icon_ios.png
