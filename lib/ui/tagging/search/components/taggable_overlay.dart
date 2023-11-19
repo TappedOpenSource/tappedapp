@@ -32,7 +32,7 @@ bool closed = false;
           child: Container(
             child: Stack(
               children: [
-                SearchBarWidget(controller),
+                SearchBarWidget(controller, close),
                 Positioned(child:
                 closeButton(),
                 right: 0,

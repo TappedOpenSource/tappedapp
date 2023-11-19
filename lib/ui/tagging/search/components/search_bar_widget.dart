@@ -7,9 +7,15 @@ import 'package:intheloopapp/ui/user_avatar.dart';
 
 class SearchBarWidget extends StatefulWidget {
   //final FirestoreDatabaseImpl database;
+  Function close;
+  SearchBarWidget(this.controller,  this.close, {super.key}); 
+  
 
-  SearchBarWidget(this.controller, {super.key});
- TextEditingController controller;  
+ TextEditingController controller;
+ // Q: I need to declare a function passed in by the parent widget. How do I do that? 
+  // A: Declare a function type, then pass in the function as a parameter.
+
+ 
 
 
   @override
@@ -53,7 +59,7 @@ class _SearchBarWidgetState extends State<SearchBarWidget> {
                         itemCount: users.length,
                         itemBuilder: (context, index) {
                           final user = users[index];
-                          return ListTile(      //onTap: ,
+                          return ListTile(      onTap: () {controller.text = ('@${user.username.username}'); print('avsz search onTap'); widget.close();},
                             title: Text(user.username.username),
                             subtitle: UserAvatar(
                               imageUrl: user.profilePicture,
