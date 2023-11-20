@@ -1,87 +1,77 @@
-import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:intheloopapp/domains/models/user_model.dart';
-import 'package:intheloopapp/data/prod/firestore_database_impl.dart';
-import 'package:intheloopapp/domains/search_bloc/search_bloc.dart';
-import 'package:intheloopapp/ui/user_avatar.dart';
+  import 'package:flutter/material.dart';
+  import 'package:flutter_bloc/flutter_bloc.dart';
+  import 'package:intheloopapp/domains/models/user_model.dart';
+  import 'package:intheloopapp/data/prod/firestore_database_impl.dart';
+  import 'package:intheloopapp/domains/search_bloc/search_bloc.dart';
+  import 'package:intheloopapp/ui/user_avatar.dart';
 
-class SearchBarWidget extends StatefulWidget {
-  //final FirestoreDatabaseImpl database;
-  Function close;
-  SearchBarWidget(this.controller,  this.close, {super.key}); 
-  
+  class SearchBarWidget extends StatefulWidget {
+    final Function close;
+    final TextEditingController controller;
 
- TextEditingController controller;
- // Q: I need to declare a function passed in by the parent widget. How do I do that? 
-  // A: Declare a function type, then pass in the function as a parameter.
+    SearchBarWidget(this.controller, this.close, {Key? key}) : super(key: key);
 
- 
+    @override
+    _SearchBarWidgetState createState() => _SearchBarWidgetState();
+  }
 
-
-  @override
-  _SearchBarWidgetState createState() => _SearchBarWidgetState();
+  class _SearchBarWidgetState extends State<SearchBarWidget> {
+    
+    @override
+void initState() {
+  super.initState();
+  WidgetsBinding.instance.addPostFrameCallback((_) {
+    widget.controller.addListener(_onTextChanged);
+  });
 }
 
-class _SearchBarWidgetState extends State<SearchBarWidget> {
-  TextEditingController get controller => widget.controller;
+    @override
+    void dispose() {
+      widget.controller.removeListener(_onTextChanged);
+      super.dispose();
+    }
 
-  @override
-  Widget build(BuildContext context) {
-    
-    return SafeArea(
-      child: Scaffold(
-      resizeToAvoidBottomInset: false,  
-        body: Container(
+    void _onTextChanged() {
+      final searchText = widget.controller.text;
+      final searchBloc = context.read<SearchBloc>();
+      searchBloc.add(Search(query: searchText));
+    }
+
+    @override
+    Widget build(BuildContext context) {
+
+      return Positioned(
+        bottom: 0,
+        left: 0,
+        right: 0,
+        child: Container(
+          height: 500,
           color: Colors.purple,
           child: BlocBuilder<SearchBloc, SearchState>(
-            builder: (context, state){
-            return Column(
-              children: [ 
-                Container(
-                color: Colors.blue,
-                padding: EdgeInsets.symmetric(horizontal: 16.0),
-                child: SearchBar(
-                  controller: controller,
-                  onChanged: (value) {
-                    context.read<SearchBloc>().add(Search(query: value));
+            builder: (context, state) {
+              return Scaffold(
+                body: ListView.builder(
+                  scrollDirection: Axis.vertical,
+                  itemCount: state.searchResults.length,
+                  itemBuilder: (context, index) {
+                    final user = state.searchResults[index];
+                    return ListTile(
+                      onTap: () {
+                        widget.controller.text = '@${user.username.username}';
+                        widget.close();
+                      },
+                      title: UserAvatar(
+                        imageUrl: user.profilePicture,
+                        radius: 14,
+                      ),
+                      subtitle: Text(user.username.username),
+                    );
                   },
                 ),
-              ),
-              Expanded(
-                child: BlocBuilder<SearchBloc, SearchState>(
-                  builder: (context, state) {
-                    if (state.loading) { print('avsz search loading');
-                      return Center(child: CircularProgressIndicator());
-                    } else if (state.isNotSearching || state.searchResults.length > 0) { print('avsz search not searching');
-                      final users = state.searchResults;
-                      print('avsz users: ${users.length}');
-                      return ListView.builder(
-                        itemCount: users.length,
-                        itemBuilder: (context, index) {
-                          final user = users[index];
-                          return ListTile(      onTap: () {controller.text = ('@${user.username.username}'); print('avsz search onTap'); widget.close();},
-                            title: Text(user.username.username),
-                            subtitle: UserAvatar(
-                              imageUrl: user.profilePicture,
-                              radius: 14,
-                              ),
-                          );
-                        },
-                      );
-                    } else {print('avsz search else');
-                      return Container();
-                    }
-                  },
-                ),
-              ),
-            ],
-            ); print('avsz wierd third choice'); return Container();
-          },
-          
+              );
+            },
           ),
         ),
-      ),
-    );
+      );
+    }
   }
-}
-
