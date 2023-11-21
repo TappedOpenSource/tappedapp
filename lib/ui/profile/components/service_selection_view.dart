@@ -20,9 +20,15 @@ class ServiceSelectionView extends StatelessWidget {
   final Option<String> requesteeStripeConnectedAccountId;
 
   void Function()? buildOnTap(BuildContext context, Service service) {
-    return switch (requesteeStripeConnectedAccountId) {
-      None() => null,
-      Some(:final value) => () => context.push(
+    return switch ((requesteeStripeConnectedAccountId, service.rate)) {
+      (_, <= 0) => () => context.push(
+            CreateBookingPage(
+              service: service,
+              requesteeStripeConnectedAccountId: const None(),
+            ),
+          ),
+      (None(), _) => null,
+      (Some(:final value), _) => () => context.push(
             CreateBookingPage(
               service: service,
               requesteeStripeConnectedAccountId: Some(value),
