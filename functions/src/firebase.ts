@@ -44,6 +44,8 @@ export const marketingPlansRef = db.collection("marketingPlans");
 export const marketingFormsRef = db.collection("marketingForms");
 export const guestMarketingPlansRef = db.collection("guestMarketingPlans");
 
+export const creditsRef = db.collection("credits");
+
 // const loopLikesSubcollection = "loopLikes";
 // const loopCommentsSubcollection = "loopComments";
 export const loopsFeedSubcollection = "userFeed";
@@ -58,14 +60,42 @@ export const streamSecret = defineSecret("STREAM_SECRET");
 
 export const stripeTestKey = defineSecret("STRIPE_TEST_KEY");
 export const stripePublishableTestKey = defineSecret("STRIPE_PUBLISHABLE_TEST_KEY");
-// export const stripeEndpointSecret = defineSecret("STRIPE_ENDPOINT_SECRET");
+export const stripeEndpointSecret = defineSecret("STRIPE_ENDPOINT_SECRET");
 export const stripeTestEndpointSecret = defineSecret("STRIPE_TEST_ENDPOINT_SECRET");
 export const stripeKey = defineSecret("STRIPE_KEY");
 export const stripePublishableKey = defineSecret("STRIPE_PUBLISHABLE_KEY");
+
+export const stripeCoverArtTestWebhookSecret = defineSecret("STRIPE_COVER_ART_TEST_WEBHOOK_SECRET");
+export const stripeCoverArtWebhookSecret = defineSecret("STRIPE_COVER_ART_WEBHOOK_SECRET");
+
 export const OPEN_AI_KEY = defineSecret("OPEN_AI_KEY");
 export const LEAP_API_KEY = defineSecret("LEAP_API_KEY");
 export const LEAP_WEBHOOK_SECRET = defineSecret("LEAP_WEBHOOK_SECRET");
 export const RESEND_API_KEY = defineSecret("RESEND_API_KEY");
+
+export const starterCreditsTestPriceId = "price_1OE2ptDYybu1wznEqHNMGZax";
+export const basicCreditsTestPriceId = "price_1OE2rrDYybu1wznEqv4mmjoK";
+export const proCreditsTestPriceId = "price_1OE2tPDYybu1wznEZV2ZkUKk"
+
+export const creditsPerTestPriceId: {
+  [key: string]: number;
+} = {
+  [starterCreditsTestPriceId]: 5,
+  [basicCreditsTestPriceId]: 15,
+  [proCreditsTestPriceId]: 40,
+};
+
+export const starterCreditsPriceId = "price_1OE4tFDYybu1wznE4IsHY85G";
+export const basicCreditsPriceId = "price_1OE4tADYybu1wznESg0YCIcd";
+export const proCreditsPriceId = "price_1OE4t6DYybu1wznEkNrIhcQ9";
+
+export const creditsPerPriceId: {
+  [key: string]: number;
+} = {
+  [starterCreditsPriceId]: 5,
+  [basicCreditsPriceId]: 15,
+  [proCreditsPriceId]: 40,
+};
 
 export const bookingBotUuid = "90dc0775-3a0d-4e92-8573-9c7aa6832d94";
 export const verifiedBotUuid = "1c0d9380-873c-493a-a3f8-1283d5408673";
