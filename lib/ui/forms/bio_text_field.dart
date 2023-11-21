@@ -1,13 +1,14 @@
 import 'package:flutter/material.dart';
 
 class BioTextField extends StatelessWidget {
-  const BioTextField({
+    BioTextField({
     super.key,
     this.onSaved,
     this.onChanged,
-    this.initialValue, 
-  });
+    this.initialValue,
+    TextEditingController? controller}) : controller = controller ?? TextEditingController();
 
+  final TextEditingController controller;
   final void Function(String?)? onSaved;
   final void Function(String?)? onChanged;
   final String? initialValue;

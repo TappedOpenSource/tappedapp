@@ -16,13 +16,45 @@ import 'package:intheloopapp/ui/settings/components/label_selection.dart';
 import 'package:intheloopapp/ui/settings/components/occupation_selection.dart';
 import 'package:intheloopapp/ui/settings/components/theme_switch.dart';
 import 'package:intheloopapp/ui/settings/settings_cubit.dart';
+import 'package:intheloopapp/ui/tagging/search/tag_detector_field.dart';
 import 'package:intheloopapp/ui/themes.dart';
 
 class SettingsForm extends StatelessWidget {
-  const SettingsForm({super.key});
+   SettingsForm({super.key});
+  TextEditingController tagController = TextEditingController();
+
+
+TagDetectorField makeTagDetector(
+  String initialValue, 
+  BuildContext context, 
+  SettingsState state) {
+
+    BioTextField textField = makeTaggableBio(initialValue, context,  state); 
+
+  return TagDetectorField(
+                controller: tagController,
+                textField: textField,
+                //onChangedAnc: (value) => {print('avsz onChanged: $value')},
+              );
+}
+BioTextField makeTaggableBio(
+  String initialValue, 
+  BuildContext context,
+  SettingsState state){
+
+  return BioTextField(
+                onChanged: (value) =>
+                    context.read<SettingsCubit>().changeBio(value ?? ''),
+                initialValue: state.bio,
+                controller: tagController,
+              );
+}
 
   @override
   Widget build(BuildContext context) {
+    
+    
+
     return BlocBuilder<SettingsCubit, SettingsState>(
       builder: (context, state) {
         return Form(
@@ -42,11 +74,9 @@ class SettingsForm extends StatelessWidget {
                     context.read<SettingsCubit>().changeArtistName(input ?? ''),
                 initialValue: state.artistName,
               ),
-              BioTextField(
-                onChanged: (value) =>
-                    context.read<SettingsCubit>().changeBio(value ?? ''),
-                initialValue: state.bio,
-              ),
+
+              makeTagDetector(state.bio, context, state),
+              
               OccupationSelection(
                 initialValue: state.occupations,
                 onConfirm: (values) {
@@ -119,4 +149,5 @@ class SettingsForm extends StatelessWidget {
       },
     );
   }
+  
 }

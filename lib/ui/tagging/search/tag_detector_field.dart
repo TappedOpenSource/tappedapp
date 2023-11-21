@@ -4,9 +4,12 @@ import 'package:intheloopapp/ui/tagging/search/components/static_tag_tools.dart'
 import 'package:intheloopapp/ui/tagging/taggable_text_field.dart';
 
 class TagDetectorField extends StatefulWidget {
-
-  const TagDetectorField({required this.textField, required this.controller, super.key});
-  final TextField textField;
+ Function? onChangedAnc;
+  TagDetectorField({required this.textField, 
+  required this.controller,
+   Function? onChangedAnc,
+    super.key});
+  final Widget textField;
   final TextEditingController controller;
    
   
@@ -47,12 +50,12 @@ class _TagDetectorFieldState extends State<TagDetectorField> {
     @override
     void initState() {
       super.initState();
-      widget.textField.controller?.addListener(_onTextChanged);
+      widget.controller.addListener(_onTextChanged);
     }
 
     @override
     void dispose() {
-      widget.textField.controller?.removeListener(_onTextChanged);
+      widget.controller.removeListener(_onTextChanged);
       super.dispose();
     }
 
@@ -61,9 +64,8 @@ class _TagDetectorFieldState extends State<TagDetectorField> {
 
 
     void _onTextChanged() {
-      //print('searchOverlay.closed: ${searchOverlay.closed} _showing: $_showing _showSearch: $_showSearch');
-      final controller = widget.textField.controller ?? null;
-      if (controller == null) return;
+      print('avsz searchOverlay.closed: ${searchOverlay.closed} _showing: $_showing _showSearch: $_showSearch');
+      final controller = widget.controller;
       final text = controller.text;
       //print('avsz searchOverlay.closed: ${searchOverlay.closed} _showing: $_showing _showSearch: $_showSearch');
       setState(() {
@@ -74,7 +76,7 @@ class _TagDetectorFieldState extends State<TagDetectorField> {
          if (_showSearch && (!_showing || searchOverlay.closed) ){
           Overlay.of(context).insert(searchOverlay.show(context, controller, _tag));
           _showing = true;
-          //print('avsz show');
+          print('avsz show');
           }
           if ((!_showSearch & ((_showing) || !searchOverlay.closed))) {
             searchOverlay.closeIt();
@@ -87,6 +89,9 @@ class _TagDetectorFieldState extends State<TagDetectorField> {
       
           
       });
-      widget.textField.onChanged?.call(text);
+      if (widget.textField is TextField) {
+        TextField textField = widget.textField as TextField;
+        textField.onChanged?.call(text);}
+        else if(widget.onChangedAnc != null) widget.onChangedAnc!.call(text);
     }
   }

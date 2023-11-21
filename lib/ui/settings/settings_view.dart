@@ -85,7 +85,7 @@ class SettingsView extends StatelessWidget {
                 Container(
                   transform: Matrix4.translationValues(0, -40, 0),
                   padding: const EdgeInsets.symmetric(horizontal: 20),
-                  child: const Column(
+                  child: Column(
                     children: [
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,

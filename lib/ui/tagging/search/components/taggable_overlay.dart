@@ -20,14 +20,14 @@ bool closed = false;
 
 
         var screenSize = MediaQuery.of(context).size;
+        var keyboardPosition = MediaQuery.of(context).viewInsets.bottom;
         return Positioned(
             
           //top: screenSize.height * 0.45,
-          top: screenSize.height * 0.1,
-          left: screenSize.width * 0.1,
+         bottom: keyboardPosition ,
 
           child: SizedBox(    //height: screenSize.height *.8, width: screenSize.width * .8, 
-          height: 600, width: 300,
+          height: 80, width: MediaQuery.of(context).size.width,
 
           child: Container(
             child: Stack(

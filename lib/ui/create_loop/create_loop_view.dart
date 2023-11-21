@@ -14,14 +14,21 @@ import 'package:intheloopapp/ui/create_loop/components/opportunity_toggle.dart';
 import 'package:intheloopapp/ui/create_loop/components/submit_loop_button.dart';
 import 'package:intheloopapp/ui/create_loop/cubit/create_loop_cubit.dart';
 import 'package:intheloopapp/ui/error/error_view.dart';
+import 'package:intheloopapp/ui/tagging/search/tag_detector_field.dart';
 import 'package:intheloopapp/ui/user_avatar.dart';
 import 'package:intheloopapp/utils/current_user_builder.dart';
 
 class CreateLoopView extends StatelessWidget {
-  const CreateLoopView({super.key});
-
+   const CreateLoopView({super.key});
   @override
   Widget build(BuildContext context) {
+    
+  LoopTitleTextField titleControllerField = LoopTitleTextField();
+  TextEditingController controllerA = titleControllerField.controller;
+
+  LoopDescriptionTextField descriptionControllerField = LoopDescriptionTextField();
+  TextEditingController controllerB = descriptionControllerField.controller;
+
     return CurrentUserBuilder(
       builder: (context, currentUser) {
         return BlocProvider(
@@ -40,7 +47,7 @@ class CreateLoopView extends StatelessWidget {
                 title: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    const Text(
+                     Text(
                       'Create Loop',
                       style: TextStyle(
                         fontSize: 32,
@@ -66,18 +73,19 @@ class CreateLoopView extends StatelessWidget {
                   ],
                 ),
               ),
-              body: const Padding(
+              body:  Padding(
                 padding: EdgeInsets.symmetric(
                   horizontal: 40,
                   vertical: 40,
                 ),
                 child: Column(
                   children: [
-                    LoopTitleTextField(),
+                    TagDetectorField(textField: titleControllerField, controller: controllerA,) ,
+                    //LoopTitleTextField(),
                     SizedBox(
                       height: 24,
                     ),
-                    LoopDescriptionTextField(),
+                    TagDetectorField(textField: descriptionControllerField, controller: controllerB),
                     SizedBox(
                       height: 24,
                     ),

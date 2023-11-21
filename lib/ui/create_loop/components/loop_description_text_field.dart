@@ -3,13 +3,15 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intheloopapp/ui/create_loop/cubit/create_loop_cubit.dart';
 
 class LoopDescriptionTextField extends StatelessWidget {
-  const LoopDescriptionTextField({super.key});
+   LoopDescriptionTextField({super.key, TextEditingController? controller}) : controller = controller ?? TextEditingController();
+final TextEditingController controller;
 
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<CreateLoopCubit, CreateLoopState>(
       builder: (context, state) {
         return TextFormField(
+          controller: controller,
           keyboardType: TextInputType.multiline,
           maxLines: null,
           decoration: const InputDecoration.collapsed(
