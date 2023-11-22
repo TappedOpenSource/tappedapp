@@ -47,7 +47,7 @@ class ActionMenu extends StatelessWidget {
               onTap: () => launchUrl(
                 Uri(
                   scheme: 'https',
-                  path: 'instagram.com/tappedapp/',
+                  path: 'instagram.com/tappedai',
                 ),
               ),
             ),
@@ -61,7 +61,7 @@ class ActionMenu extends StatelessWidget {
               onTap: () => launchUrl(
                 Uri(
                   scheme: 'https',
-                  path: 'tapped.ai/privacy',
+                  path: 'app.tapped.ai/privacy',
                 ),
               ),
             ),
@@ -75,7 +75,7 @@ class ActionMenu extends StatelessWidget {
               onTap: () => launchUrl(
                 Uri(
                   scheme: 'https',
-                  path: 'tapped.ai/terms',
+                  path: 'app.tapped.ai/terms',
                 ),
               ),
             ),
