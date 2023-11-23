@@ -2,8 +2,6 @@
 import type { Timestamp } from "firebase-admin/firestore";
 import { firestore } from "firebase-admin";
 
-export type AccountType = "free" | "venue";
-
 export type UserModel = {
   id: string;
   email?: string;
@@ -20,7 +18,6 @@ export type UserModel = {
   deleted?: boolean;
   overallRating?: number;
   shadowBanned?: boolean;
-  accountType?: AccountType;
   twitterHandle?: string;
   instagramHandle?: string;
   tiktokHandle?: string;

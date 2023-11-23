@@ -6,7 +6,6 @@ final georange = GeoRange();
 const latPerKm = 0.009090909090909; // degrees latitude per Km
 const lngPerKm = 0.0089847259658580; // degrees longitude per Km
 
-
 String geocodeEncode({
   required double lat,
   required double lng,
@@ -55,5 +54,11 @@ class GeoHashRange {
   final String lower;
 }
 
-String formattedAddress(List<AddressComponent>? shortNames) =>
-    shortNames?.first.shortName ?? 'Unknown';
+String formattedAddress(List<AddressComponent>? shortNames) {
+  final locality =
+      shortNames?.where((element) => element.types.contains('locality'));
+  // final political = 
+  //  shortNames?.where((element) => element.types.contains('political'));
+
+  return locality?.first.shortName ?? 'Unknown';
+}
