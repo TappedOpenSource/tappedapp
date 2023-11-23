@@ -1134,7 +1134,7 @@ class FirestoreDatabaseImpl extends DatabaseRepository {
               .map((DocumentChange<Map<String, dynamic>> element) {
             try {
               return Activity.fromDoc(element.doc);
-            } catch (e, s) {
+            } catch (e) {
               // if (kDebugMode) {
               //   logger.error('activitiesObserver', error: e, stackTrace: s);
               // }
@@ -1376,9 +1376,9 @@ class FirestoreDatabaseImpl extends DatabaseRepository {
   //   final reporter = UserModel.fromDoc(reporterSnapshot);
 
   //   final reportHtml = '''
-  //       <p>Report from:</p> 
-  //       <p>${reporter.toJson()}<p> 
-  //       <p>Loop:</p> 
+  //       <p>Report from:</p>
+  //       <p>${reporter.toJson()}<p>
+  //       <p>Loop:</p>
   //       <p>${loop.toJson()}</p>
   //   ''';
 

@@ -20,7 +20,7 @@ sealed class Review {
     try {
       final rawType = doc.getOrElse<String?>('type', null);
       if (rawType == null) {
-        throw Exception('Activity.fromDoc: type is null');
+        throw Exception('Review.fromDoc: type is null');
       }
 
       final type = EnumToString.fromString(
@@ -34,10 +34,10 @@ sealed class Review {
         case ReviewType.performer:
           return PerformerReview.fromDoc(doc);
         case null:
-          throw Exception('Activity.fromDoc: unknown type: $rawType');
+          throw Exception('Review.fromDoc: unknown type: $rawType');
       }
     } catch (e, s) {
-      logger.error('Activity.fromDoc', error: e, stackTrace: s);
+      logger.error('Review.fromDoc', error: e, stackTrace: s);
       rethrow;
     }
   }
