@@ -270,7 +270,7 @@ final class BookingReminder extends Activity {
     }
   }
 
-  final String fromUserId;
+  final String? fromUserId;
   final String bookingId;
 
   @override
