@@ -117,7 +117,6 @@ const prompts = [
 ];
 
 
-
 const _deleteUser = async (data: { id: string }) => {
   // Checking attribute.
   if (data.id.length === 0) {
