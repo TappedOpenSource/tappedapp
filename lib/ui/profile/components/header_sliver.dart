@@ -23,6 +23,7 @@ class HeaderSliver extends StatelessWidget {
       ),
       child: BlocBuilder<ProfileCubit, ProfileState>(
         builder: (context, state) {
+          final currPlace = state.place;
           return Column(
             children: [
               const SizedBox(height: 18),
@@ -78,7 +79,10 @@ class HeaderSliver extends StatelessWidget {
                     ),
                   ),
                   const BadgesChip(),
-                  const LocationChip(),
+                  if (currPlace != null)
+                    LocationChip(
+                      place: currPlace,
+                    ),
                   const MoreOptionsButton(),
                 ],
               ),

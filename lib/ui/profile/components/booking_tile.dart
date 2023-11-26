@@ -73,8 +73,8 @@ class BookingTile extends StatelessWidget {
         };
 
         final serviceTitle = switch (service) {
-          None() => 'UNKNOWN',
-          Some(:final value) => value.title,
+          None() => '',
+          Some(:final value) => 'for ${value.title}',
         };
         final onSurfaceColor = Theme.of(context).colorScheme.onSurface;
         return ListTile(
@@ -118,7 +118,7 @@ class BookingTile extends StatelessWidget {
           subtitle: Linkify(
             text:
                 // ignore: lines_longer_than_80_chars
-                '$requesterUsername booked $requesteeUsername for service "$serviceTitle"',
+                '$requesterUsername booked $requesteeUsername $serviceTitle',
           ),
         );
       },

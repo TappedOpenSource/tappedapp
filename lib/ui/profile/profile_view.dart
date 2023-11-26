@@ -2,7 +2,6 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:intheloopapp/data/database_repository.dart';
 import 'package:intheloopapp/data/places_repository.dart';
 import 'package:intheloopapp/domains/models/option.dart';
@@ -16,6 +15,7 @@ import 'package:intheloopapp/ui/profile/components/bookings_sliver.dart';
 import 'package:intheloopapp/ui/profile/components/common_followers_sliver.dart';
 import 'package:intheloopapp/ui/profile/components/header_sliver.dart';
 import 'package:intheloopapp/ui/profile/components/info_sliver.dart';
+import 'package:intheloopapp/ui/profile/components/opportunities_sliver.dart';
 import 'package:intheloopapp/ui/profile/components/reviews_sliver.dart';
 import 'package:intheloopapp/ui/profile/components/services_sliver.dart';
 import 'package:intheloopapp/ui/profile/profile_cubit.dart';
@@ -56,6 +56,7 @@ class ProfileView extends StatelessWidget {
           ..getLatestReview()
           ..initBadges()
           ..initServices()
+          ..initOpportunities()
           ..loadIsFollowing(currentUser.id, visitedUser.id)
           ..loadIsBlocked()
           ..loadIsVerified(visitedUser.id)
@@ -125,6 +126,7 @@ class ProfileView extends StatelessWidget {
               cubit.getLatestReview(),
               cubit.initBadges(),
               cubit.initServices(),
+              cubit.initOpportunities(),
               cubit.refetchVisitedUser(),
               cubit.loadIsFollowing(currentUser.id, visitedUser.id),
               cubit.loadIsVerified(visitedUser.id),
@@ -144,7 +146,7 @@ class ProfileView extends StatelessWidget {
             title: Text.rich(
               TextSpan(
                 text: visitedUser.displayName,
-                style: GoogleFonts.manrope(
+                style: const TextStyle(
                   color: Colors.white,
                   fontSize: 32,
                   fontWeight: FontWeight.w900,
@@ -197,6 +199,9 @@ class ProfileView extends StatelessWidget {
             ),
             child: const CommonFollowersSliver(),
           ),
+        ),
+        const SliverToBoxAdapter(
+          child: OpportunitiesSliver(),
         ),
         const SliverToBoxAdapter(
           child: ServicesSliver(),
