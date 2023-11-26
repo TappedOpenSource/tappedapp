@@ -35,13 +35,13 @@ class DiscoverView extends StatelessWidget {
     final database = context.read<DatabaseRepository>();
     return FutureBuilder<List<List<UserModel>>>(
       future: Future.wait([
-        database.getViewLeaders(),
+        database.getRichmondVenues(),
         database.getBookingLeaders(),
         database.getBookerLeaders(),
       ]),
       builder: (context, snapshot) {
         final leaders = snapshot.data ?? [[], [], []];
-        final viewLeaders = leaders[0];
+        final richmondVenues = leaders[0];
         final bookingLeaders = leaders[1];
         final bookerLeaders = leaders[2];
 
@@ -77,6 +77,20 @@ class DiscoverView extends StatelessWidget {
                 ),
               ),
               _userSlider(bookingLeaders),
+              const Padding(
+                padding: EdgeInsets.symmetric(
+                  vertical: 16,
+                  horizontal: 8,
+                ),
+                child: Text(
+                  'Top Richmond Venues',
+                  style: TextStyle(
+                    fontSize: 28,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              ),
+              _userSlider(richmondVenues),
             ],
           ),
         );

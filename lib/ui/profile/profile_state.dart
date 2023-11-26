@@ -7,12 +7,11 @@ class ProfileState extends Equatable {
     this.isFollowing = false,
     this.isBlocked = false,
     this.isVerified = false,
-    this.latestLoop = const None(),
-    this.latestOpportunity = const None(),
     this.latestBooking = const None(),
     this.latestReview = const None(),
     this.userBadges = const [],
     this.services = const [],
+    this.opportunities = const [],
     this.hasReachedMaxBadges = false,
     this.badgeStatus = BadgesStatus.initial,
     this.isCollapsed = false,
@@ -32,9 +31,8 @@ class ProfileState extends Equatable {
   final bool isVerified;
   final List<badge.Badge> userBadges;
   final List<Service> services;
+  final List<Opportunity> opportunities;
 
-  final Option<Loop> latestLoop;
-  final Option<Loop> latestOpportunity;
   final Option<Booking> latestBooking;
   final Option<Review> latestReview;
 
@@ -54,14 +52,13 @@ class ProfileState extends Equatable {
         isFollowing,
         isBlocked,
         isVerified,
-        latestLoop,
-        latestOpportunity,
         latestBooking,
         latestReview,
         userBadges,
         hasReachedMaxBadges,
         badgeStatus,
         services,
+        opportunities,
         visitedUser,
         currentUser,
         place,
@@ -73,14 +70,13 @@ class ProfileState extends Equatable {
     bool? isFollowing,
     bool? isBlocked,
     bool? isVerified,
-    Option<Loop>? latestLoop,
-    Option<Loop>? latestOpportunity,
     Option<Booking>? latestBooking,
     Option<Review>? latestReview,
     List<badge.Badge>? userBadges,
     bool? hasReachedMaxBadges,
     BadgesStatus? badgeStatus,
     List<Service>? services,
+    List<Opportunity>? opportunities,
     UserModel? currentUser,
     UserModel? visitedUser,
     Place? place,
@@ -93,14 +89,13 @@ class ProfileState extends Equatable {
       isFollowing: isFollowing ?? this.isFollowing,
       isBlocked: isBlocked ?? this.isBlocked,
       isVerified: isVerified ?? this.isVerified,
-      latestLoop: latestLoop ?? this.latestLoop,
-      latestOpportunity: latestOpportunity ?? this.latestOpportunity,
       latestBooking: latestBooking ?? this.latestBooking,
       latestReview: latestReview ?? this.latestReview,
       userBadges: userBadges ?? this.userBadges,
       hasReachedMaxBadges: hasReachedMaxBadges ?? this.hasReachedMaxBadges,
       badgeStatus: badgeStatus ?? this.badgeStatus,
       services: services ?? this.services,
+      opportunities: opportunities ?? this.opportunities,
       currentUser: currentUser ?? this.currentUser,
       visitedUser: visitedUser ?? this.visitedUser,
       place: place ?? this.place,

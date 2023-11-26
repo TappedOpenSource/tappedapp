@@ -9,7 +9,7 @@ import 'package:intheloopapp/data/database_repository.dart';
 import 'package:intheloopapp/data/places_repository.dart';
 import 'package:intheloopapp/domains/models/badge.dart' as badge;
 import 'package:intheloopapp/domains/models/booking.dart';
-import 'package:intheloopapp/domains/models/loop.dart';
+import 'package:intheloopapp/domains/models/opportunity.dart';
 import 'package:intheloopapp/domains/models/option.dart';
 import 'package:intheloopapp/domains/models/review.dart';
 import 'package:intheloopapp/domains/models/service.dart';
@@ -200,6 +200,19 @@ class ProfileCubit extends Cubit<ProfileState> {
           ..sort(
             (a, b) => a.rate.compareTo(b.rate),
           ),
+      ),
+    );
+  }
+
+  Future<void> initOpportunities() async {
+    logger.debug('initOpportunities');
+    final opportunities = await databaseRepository.getUserOpportunities(
+      visitedUser.id,
+    );
+
+    emit(
+      state.copyWith(
+        opportunities: opportunities,
       ),
     );
   }

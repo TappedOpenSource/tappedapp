@@ -28,11 +28,27 @@ class MoreOptionsButton extends StatelessWidget {
         actions: <CupertinoActionSheetAction>[
           CupertinoActionSheetAction(
             onPressed: () async {
-              final link = await dynamic.getShareProfileDeepLink(user);
-              await Share.share('Check out this profile on Tapped $link');
+              final link = 'https://tapped.ai/${user.username}';
+              await Share.share(link);
               nav.pop();
             },
-            child: const Text('Share'),
+            child: const Text('share performer profile'),
+          ),
+          CupertinoActionSheetAction(
+            onPressed: () async {
+              final link = 'https://tapped.ai/b/${user.username}';
+              await Share.share(link);
+              nav.pop();
+            },
+            child: const Text('share booker profile'),
+          ),
+          CupertinoActionSheetAction(
+            onPressed: () async {
+              final link = await dynamic.getShareProfileDeepLink(user);
+              await Share.share(link);
+              nav.pop();
+            },
+            child: const Text('share deep link'),
           ),
           if (user.id != currentUser.id)
             CupertinoActionSheetAction(
@@ -53,7 +69,7 @@ class MoreOptionsButton extends StatelessWidget {
                   );
                 });
               },
-              child: const Text('Report User'),
+              child: const Text('report user'),
             ),
           if (user.id != currentUser.id)
             CupertinoActionSheetAction(
@@ -73,7 +89,7 @@ class MoreOptionsButton extends StatelessWidget {
                   );
                 });
               },
-              child: const Text('Block User'),
+              child: const Text('block user'),
             ),
         ],
       ),

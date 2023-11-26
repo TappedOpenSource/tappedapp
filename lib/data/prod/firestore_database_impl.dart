@@ -15,6 +15,7 @@ import 'package:intheloopapp/domains/models/booking.dart';
 import 'package:intheloopapp/domains/models/comment.dart';
 import 'package:intheloopapp/domains/models/loop.dart';
 import 'package:intheloopapp/domains/models/marketing_plan.dart';
+import 'package:intheloopapp/domains/models/opportunity.dart';
 import 'package:intheloopapp/domains/models/option.dart';
 import 'package:intheloopapp/domains/models/review.dart';
 import 'package:intheloopapp/domains/models/service.dart';
@@ -49,6 +50,7 @@ final _reviewsRef = _firestore.collection('reviews');
 final _aiModelsRef = _firestore.collection('aiModels');
 final _avatarsRef = _firestore.collection('avatars');
 final _marketingPlansRef = _firestore.collection('marketingPlans');
+final _opportunitiesRef = _firestore.collection('opportunities');
 
 const verifiedBadgeId = '0aa46576-1fbe-4312-8b69-e2fef3269083';
 
@@ -313,11 +315,11 @@ class FirestoreDatabaseImpl extends DatabaseRepository {
   }
 
   @override
-  Future<List<UserModel>> getViewLeaders() async {
+  Future<List<UserModel>> getRichmondVenues() async {
     final leadersSnapshot = await _leadersRef.doc('leaders').get();
 
     final leadingUsernames =
-        leadersSnapshot.getOrElse('viewLeaders', <dynamic>[]);
+        leadersSnapshot.getOrElse('richmondVenues', <dynamic>[]);
 
     final leaders = await Future.wait(
       leadingUsernames.map(
@@ -1910,6 +1912,24 @@ class FirestoreDatabaseImpl extends DatabaseRepository {
           .set(service.toJson());
     } catch (e, s) {
       logger.error('updateService', error: e, stackTrace: s);
+    }
+  }
+
+  @override
+  Future<List<Opportunity>> getUserOpportunities(String userId) async {
+    try {
+      final userOpportunitiesSnapshot = await _opportunitiesRef
+          .doc(userId)
+          .collection('userOpportunities')
+          .get();
+
+      final opportunities =
+          userOpportunitiesSnapshot.docs.map(Opportunity.fromDoc).toList();
+
+      return opportunities;
+    } catch (e, s) {
+      logger.error('getUserOpportunities', error: e, stackTrace: s);
+      return [];
     }
   }
 

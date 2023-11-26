@@ -35,11 +35,11 @@ class OnboardingForm extends StatelessWidget {
                   //       .aristNameChange(input ?? ''),
                   //   initialValue: state.artistName.value,
                   // ),
-                  Row(
+                  const Row(
                     children: [
                       Text(
                         'start your journey...',
-                        style: GoogleFonts.manrope(
+                        style: TextStyle(
                           fontSize: 28,
                           fontWeight: FontWeight.w900,
                         ),
