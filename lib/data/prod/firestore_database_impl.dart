@@ -1933,6 +1933,55 @@ class FirestoreDatabaseImpl extends DatabaseRepository {
     }
   }
 
+  @override
+  Future<void> applyForOpportunity({
+    required String userId,
+    required Opportunity opportunity,
+  }) async {
+    try {
+      await _analytics.logEvent(
+        name: 'apply_for_opportunity',
+        parameters: {
+          'user_id': userId,
+          'opportunity_id': opportunity.id,
+        },
+      );
+      await _opportunitiesRef
+          .doc(opportunity.userId)
+          .collection('userOpportunities')
+          .doc(opportunity.id)
+          .collection('interestedUsers')
+          .doc(userId)
+          .set({
+        'timestamp': Timestamp.now(),
+      });
+    } catch (e, s) {
+      logger.error('applyForOpporunities', error: e, stackTrace: s);
+      rethrow;
+    }
+  }
+
+  @override
+  Future<bool> isUserAppliedForOpportunity({
+    required String userId,
+    required Opportunity opportunity,
+  }) async {
+    try {
+      final userSnapshot = await _opportunitiesRef
+          .doc(opportunity.userId)
+          .collection('userOpportunities')
+          .doc(opportunity.id)
+          .collection('interestedUsers')
+          .doc(userId)
+          .get();
+
+      return userSnapshot.exists;
+    } catch (e, s) {
+      logger.error('isAppliedForOpportunity', error: e, stackTrace: s);
+      return false;
+    }
+  }
+
   // @override
   // Future<void> cancelInterest({
   //   required String userId,

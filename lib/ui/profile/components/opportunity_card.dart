@@ -2,9 +2,12 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_google_places_sdk/flutter_google_places_sdk.dart';
+import 'package:intheloopapp/data/database_repository.dart';
 import 'package:intheloopapp/data/places_repository.dart';
 import 'package:intheloopapp/domains/models/opportunity.dart';
+import 'package:intheloopapp/ui/profile/components/apply_button.dart';
 import 'package:intheloopapp/ui/profile/components/location_chip.dart';
+import 'package:intheloopapp/utils/current_user_builder.dart';
 import 'package:intheloopapp/utils/geohash.dart';
 
 class OpportunityCard extends StatelessWidget {
@@ -69,7 +72,8 @@ class OpportunityCard extends StatelessWidget {
                                 horizontal: 16,
                               ),
                               child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
+                                crossAxisAlignment:
+                                    CrossAxisAlignment.start,
                                 children: [
                                   Text(
                                     opportunity.title,
@@ -133,25 +137,8 @@ class OpportunityCard extends StatelessWidget {
                                     },
                                   ),
                                   const Spacer(),
-                                  SizedBox(
-                                    width: double.infinity,
-                                    child: Padding(
-                                      padding: const EdgeInsets.symmetric(
-                                        vertical: 4,
-                                        horizontal: 32,
-                                      ),
-                                      child: CupertinoButton.filled(
-                                        onPressed: () {},
-                                        borderRadius: BorderRadius.circular(15),
-                                        child: const Text(
-                                          'Apply',
-                                          style: TextStyle(
-                                            fontWeight: FontWeight.w700,
-                                            color: Colors.white,
-                                          ),
-                                        ),
-                                      ),
-                                    ),
+                                  ApplyButton(
+                                    opportunity: opportunity,
                                   ),
                                   const SizedBox(height: 32),
                                 ],

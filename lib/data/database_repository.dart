@@ -185,6 +185,14 @@ abstract class DatabaseRepository {
 
   // Opportunity related stuff
   Future<List<Opportunity>> getUserOpportunities(String userId);
+  Future<void> applyForOpportunity({
+    required Opportunity opportunity,
+    required String userId,
+  });
+  Future<bool> isUserAppliedForOpportunity({
+    required Opportunity opportunity,
+    required String userId,
+  });
 
   // blocking
   Future<void> blockUser({
