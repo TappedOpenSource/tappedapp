@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intheloopapp/data/database_repository.dart';
 import 'package:intheloopapp/domains/models/opportunity.dart';
+import 'package:intheloopapp/domains/navigation_bloc/navigation_bloc.dart';
+import 'package:intheloopapp/domains/navigation_bloc/tapped_route.dart';
 import 'package:intheloopapp/utils/current_user_builder.dart';
 
 class ApplyButton extends StatefulWidget {
@@ -40,8 +42,8 @@ class _ApplyButtonState extends State<ApplyButton> {
 
     return CurrentUserBuilder(
       builder: (context, currentUser) {
-
         if (currentUser.id == _opportunity.userId) {
+          // TODO: turn this into a widget like partiful
           return SizedBox(
             width: double.infinity,
             child: Padding(
@@ -50,10 +52,14 @@ class _ApplyButtonState extends State<ApplyButton> {
                 horizontal: 32,
               ),
               child: CupertinoButton(
-                onPressed: null,
+                onPressed: () => context.push(
+                  InterestedUsersPage(
+                    opportunity: _opportunity,
+                  ),
+                ),
                 borderRadius: BorderRadius.circular(15),
                 child: const Text(
-                  'your opportunity',
+                  "see who's interested",
                   style: TextStyle(
                     fontWeight: FontWeight.w700,
                     color: Colors.grey,
@@ -110,10 +116,12 @@ class _ApplyButtonState extends State<ApplyButton> {
                     setState(() {
                       loading = true;
                     });
-                    database.applyForOpportunity(
+                    database
+                        .applyForOpportunity(
                       opportunity: _opportunity,
                       userId: currentUser.id,
-                    ).then((value) {
+                    )
+                        .then((value) {
                       setState(() {
                         loading = false;
                       });
