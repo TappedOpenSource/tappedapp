@@ -170,7 +170,8 @@ class ProfileView extends StatelessWidget {
               decoration: BoxDecoration(
                 image: DecorationImage(
                   fit: BoxFit.cover,
-                  image: (visitedUser.profilePicture == null)
+                  image: (visitedUser.profilePicture == null ||
+                          visitedUser.profilePicture == '')
                       ? const AssetImage(
                           'assets/default_avatar.png',
                         ) as ImageProvider

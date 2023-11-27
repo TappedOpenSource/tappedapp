@@ -53,7 +53,7 @@ class _ApplyButtonState extends State<ApplyButton> {
                 onPressed: null,
                 borderRadius: BorderRadius.circular(15),
                 child: const Text(
-                  'Your Opportunity',
+                  'your opportunity',
                   style: TextStyle(
                     fontWeight: FontWeight.w700,
                     color: Colors.grey,
