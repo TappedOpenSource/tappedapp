@@ -4,6 +4,7 @@ import 'package:intheloopapp/domains/models/badge.dart' as badge_model;
 import 'package:intheloopapp/domains/models/booking.dart';
 import 'package:intheloopapp/domains/models/loop.dart';
 import 'package:intheloopapp/domains/models/marketing_plan.dart';
+import 'package:intheloopapp/domains/models/opportunity.dart';
 import 'package:intheloopapp/domains/models/option.dart';
 import 'package:intheloopapp/domains/models/service.dart';
 import 'package:intheloopapp/domains/models/user_model.dart';
@@ -33,6 +34,7 @@ import 'package:intheloopapp/ui/messaging/channel_view.dart';
 import 'package:intheloopapp/ui/messaging/messaging_view.dart';
 import 'package:intheloopapp/ui/messaging/video_call_view.dart';
 import 'package:intheloopapp/ui/onboarding/onboarding_view.dart';
+import 'package:intheloopapp/ui/opportunities/interested_users_view.dart';
 import 'package:intheloopapp/ui/profile/components/service_selection_view.dart';
 import 'package:intheloopapp/ui/profile/profile_view.dart';
 import 'package:intheloopapp/ui/reviews/user_reviews_feed.dart';
@@ -512,4 +514,17 @@ final class MarketingPlanPage extends TappedRoute {
         );
 
   final MarketingPlan marketingPlan;
+}
+
+final class InterestedUsersPage extends TappedRoute {
+  InterestedUsersPage({
+    required this.opportunity,
+  }) : super(
+          routeName: '/interested_users/${opportunity.id}',
+          view: InterestedUsersView(
+            opportunity: opportunity,
+          ),
+        );
+
+  final Opportunity opportunity;
 }

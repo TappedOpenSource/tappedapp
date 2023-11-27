@@ -193,6 +193,7 @@ abstract class DatabaseRepository {
     required Opportunity opportunity,
     required String userId,
   });
+  Future<List<UserModel>> getInterestedUsers(Opportunity opportunity);
 
   // blocking
   Future<void> blockUser({

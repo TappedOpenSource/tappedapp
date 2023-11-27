@@ -1982,6 +1982,30 @@ class FirestoreDatabaseImpl extends DatabaseRepository {
     }
   }
 
+  @override
+  Future<List<UserModel>> getInterestedUsers(Opportunity opportunity) async {
+    try {
+      final interestedUsersSnapshot = await _opportunitiesRef
+          .doc(opportunity.userId)
+          .collection('userOpportunities')
+          .doc(opportunity.id)
+          .collection('interestedUsers')
+          .get();
+
+      final interestedUsers = await Future.wait(
+        interestedUsersSnapshot.docs.map((doc) async {
+          final userSnapshot = await _usersRef.doc(doc.id).get();
+          return UserModel.fromDoc(userSnapshot);
+        }),
+      );
+
+      return interestedUsers;
+    } catch (e, s) {
+      logger.error('getInterestedUsers', error: e, stackTrace: s);
+      return [];
+    }
+  }
+
   // @override
   // Future<void> cancelInterest({
   //   required String userId,
