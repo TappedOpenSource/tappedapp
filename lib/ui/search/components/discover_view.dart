@@ -47,6 +47,7 @@ class DiscoverView extends StatelessWidget {
 
         return SingleChildScrollView(
           child: Column(
+
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               const Padding(
