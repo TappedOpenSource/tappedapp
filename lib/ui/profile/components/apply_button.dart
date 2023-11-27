@@ -40,6 +40,30 @@ class _ApplyButtonState extends State<ApplyButton> {
 
     return CurrentUserBuilder(
       builder: (context, currentUser) {
+
+        if (currentUser.id == _opportunity.userId) {
+          return SizedBox(
+            width: double.infinity,
+            child: Padding(
+              padding: const EdgeInsets.symmetric(
+                vertical: 4,
+                horizontal: 32,
+              ),
+              child: CupertinoButton(
+                onPressed: null,
+                borderRadius: BorderRadius.circular(15),
+                child: const Text(
+                  'Your Opportunity',
+                  style: TextStyle(
+                    fontWeight: FontWeight.w700,
+                    color: Colors.grey,
+                  ),
+                ),
+              ),
+            ),
+          );
+        }
+
         return FutureBuilder<bool>(
           future: database.isUserAppliedForOpportunity(
             userId: currentUser.id,
