@@ -67,15 +67,15 @@ class _ConnectBankButtonState extends State<ConnectBankButton> {
             throw Exception('create connected account failed');
           }
 
-          final updatedUser = currentUser.copyWith(
-            stripeConnectedAccountId: res.accountId,
-          );
+          // final updatedUser = currentUser.copyWith(
+          //   stripeConnectedAccountId: res.accountId,
+          // );
 
-          onboarding.add(
-            UpdateOnboardedUser(
-              user: updatedUser,
-            ),
-          );
+          // onboarding.add(
+          //   UpdateOnboardedUser(
+          //     user: updatedUser,
+          //   ),
+          // );
 
           nav.pop();
 
