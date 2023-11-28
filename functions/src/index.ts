@@ -456,7 +456,7 @@ const _createStripeAccount = async ({ countryCode }: {
 }
 
 const _createConnectedAccount = async ({ accountId, country }: {
-  accountId: string;
+  accountId?: string | null;
   country?: string;
 }) => {
 
@@ -484,7 +484,9 @@ const _createConnectedAccount = async ({ accountId, country }: {
     type: "account_onboarding",
   })
 
-  return { success: true, url: accountLinks.url, accountId: accountId };
+  info(`Created Stripe account link ${accountLinks.url} for ${account}`)
+
+  return { success: true, url: accountLinks.url, accountId: account };
 }
 
 const _getAccountById = async (data: { accountId: string }) => {

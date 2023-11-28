@@ -27,7 +27,7 @@ class ConnectedAccountResponse {
   });
 
   final bool success;
-  final String accountId;
+  final String? accountId;
   final String url;
 }
 

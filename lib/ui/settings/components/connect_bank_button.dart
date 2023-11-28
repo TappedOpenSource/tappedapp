@@ -67,15 +67,18 @@ class _ConnectBankButtonState extends State<ConnectBankButton> {
             throw Exception('create connected account failed');
           }
 
-          // final updatedUser = currentUser.copyWith(
-          //   stripeConnectedAccountId: res.accountId,
-          // );
+          logger.info('connecting account : accountId ${res.accountId}');
+          if (res.accountId != null || res.accountId != '') {
+            final updatedUser = currentUser.copyWith(
+              stripeConnectedAccountId: res.accountId,
+            );
 
-          // onboarding.add(
-          //   UpdateOnboardedUser(
-          //     user: updatedUser,
-          //   ),
-          // );
+            onboarding.add(
+              UpdateOnboardedUser(
+                user: updatedUser,
+              ),
+            );
+          }
 
           nav.pop();
 
@@ -140,7 +143,8 @@ class _ConnectBankButtonState extends State<ConnectBankButton> {
         ),
       ),
       builder: (context, currentUser) {
-        if (currentUser.stripeConnectedAccountId == null) {
+        if (currentUser.stripeConnectedAccountId == null ||
+            currentUser.stripeConnectedAccountId == '') {
           return _connectBankAccountButton(
             context: context,
             currentUser: currentUser,
