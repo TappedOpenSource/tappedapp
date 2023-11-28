@@ -1,11 +1,14 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:intheloopapp/data/auth_repository.dart';
 import 'package:intheloopapp/data/database_repository.dart';
 import 'package:intheloopapp/domains/models/opportunity.dart';
 import 'package:intheloopapp/domains/navigation_bloc/navigation_bloc.dart';
 import 'package:intheloopapp/domains/navigation_bloc/tapped_route.dart';
 import 'package:intheloopapp/utils/current_user_builder.dart';
+import 'package:path/path.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class ApplyButton extends StatefulWidget {
   const ApplyButton({
@@ -26,6 +29,7 @@ class _ApplyButtonState extends State<ApplyButton> {
 
   @override
   Widget build(BuildContext context) {
+    final auth = context.read<AuthRepository>();
     final database = context.read<DatabaseRepository>();
     if (loading) {
       return const SizedBox(
@@ -70,73 +74,95 @@ class _ApplyButtonState extends State<ApplyButton> {
           );
         }
 
-        return FutureBuilder<bool>(
-          future: database.isUserAppliedForOpportunity(
-            userId: currentUser.id,
-            opportunity: _opportunity,
-          ),
+        return FutureBuilder(
+          future: auth.getCustomClaim(),
           builder: (context, snapshot) {
-            if (!snapshot.hasData) {
-              return const CupertinoActivityIndicator();
-            }
-
-            final applied = snapshot.data!;
-            if (applied) {
+            final claim = snapshot.data;
+            if (claim == null) {
               return SizedBox(
                 width: double.infinity,
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(
-                    vertical: 4,
-                    horizontal: 32,
-                  ),
-                  child: CupertinoButton(
-                    onPressed: null,
-                    borderRadius: BorderRadius.circular(15),
-                    child: const Text(
-                      'Applied',
-                      style: TextStyle(
-                        fontWeight: FontWeight.w700,
-                        color: Colors.green,
-                      ),
+                child: CupertinoButton(
+                  onPressed: () => launchUrl(
+                    Uri(
+                      scheme: 'https',
+                      path: 'tapped.ai/',
                     ),
                   ),
+                  borderRadius: BorderRadius.circular(15),
+                  child: const Text('Subscribe to apply'),
                 ),
               );
             }
 
-            return SizedBox(
-              width: double.infinity,
-              child: Padding(
-                padding: const EdgeInsets.symmetric(
-                  vertical: 4,
-                  horizontal: 32,
-                ),
-                child: CupertinoButton.filled(
-                  onPressed: () {
-                    setState(() {
-                      loading = true;
-                    });
-                    database
-                        .applyForOpportunity(
-                      opportunity: _opportunity,
-                      userId: currentUser.id,
-                    )
-                        .then((value) {
-                      setState(() {
-                        loading = false;
-                      });
-                    });
-                  },
-                  borderRadius: BorderRadius.circular(15),
-                  child: const Text(
-                    'Apply',
-                    style: TextStyle(
-                      fontWeight: FontWeight.w700,
-                      color: Colors.white,
+            return FutureBuilder<bool>(
+              future: database.isUserAppliedForOpportunity(
+                userId: currentUser.id,
+                opportunity: _opportunity,
+              ),
+              builder: (context, snapshot) {
+                if (!snapshot.hasData) {
+                  return const CupertinoActivityIndicator();
+                }
+
+                final applied = snapshot.data!;
+                if (applied) {
+                  return SizedBox(
+                    width: double.infinity,
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(
+                        vertical: 4,
+                        horizontal: 32,
+                      ),
+                      child: CupertinoButton(
+                        onPressed: null,
+                        borderRadius: BorderRadius.circular(15),
+                        child: const Text(
+                          'Applied',
+                          style: TextStyle(
+                            fontWeight: FontWeight.w700,
+                            color: Colors.green,
+                          ),
+                        ),
+                      ),
+                    ),
+                  );
+                }
+
+                return SizedBox(
+                  width: double.infinity,
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(
+                      vertical: 4,
+                      horizontal: 32,
+                    ),
+                    child: CupertinoButton.filled(
+                      onPressed: () {
+                        setState(() {
+                          loading = true;
+                        });
+                        database
+                            .applyForOpportunity(
+                          opportunity: _opportunity,
+                          userId: currentUser.id,
+                        )
+                            .then((value) {
+                          setState(() {
+                            loading = false;
+                          });
+                        });
+                      },
+                      borderRadius: BorderRadius.circular(15),
+                      child: const Text(
+                        'Apply',
+                        style: TextStyle(
+                          fontWeight: FontWeight.w700,
+                          color: Colors.white,
+                        ),
+                      ),
                     ),
                   ),
-                ),
-              ),
+                );
+              },
             );
           },
         );
