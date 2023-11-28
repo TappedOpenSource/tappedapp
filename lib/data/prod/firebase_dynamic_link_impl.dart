@@ -47,11 +47,10 @@ class FirebaseDynamicLinkImpl extends DeepLinkRepository {
     PendingDynamicLinkData? data,
   ) {
     final deepLink = data?.link;
+    logger.info('deep link: $deepLink');
     if (deepLink == null) {
       return null;
     }
-
-    // print('_handleDeepLink | deep link: $deepLink');
 
     switch (deepLink.path) {
       // case '/upload_loop':
@@ -75,8 +74,10 @@ class FirebaseDynamicLinkImpl extends DeepLinkRepository {
       case '/connect_payment':
         final linkParameters = deepLink.queryParameters;
         final accountId = linkParameters['account_id'];
+        logger.info('connect payment deep link: $accountId');
 
         if (accountId == null) {
+          logger.error('account_id is null');
           return null;
         }
 
@@ -95,44 +96,6 @@ class FirebaseDynamicLinkImpl extends DeepLinkRepository {
       default:
         return null;
     }
-  }
-
-  @override
-  Future<String> getShareLoopDeepLink(Loop loop) async {
-    final imageUri =
-        (loop.imagePaths.isNotEmpty && loop.imagePaths[0].isNotEmpty)
-            ? Uri.parse(loop.imagePaths[0])
-            : Uri.parse('https://tapped.ai/images/tapped_reverse.png');
-
-    final parameters = DynamicLinkParameters(
-      uriPrefix: 'https://tappednetwork.page.link',
-      link: Uri.parse(
-        'https://tappednetwork.page.link/loop?id=${loop.id}',
-      ),
-      androidParameters: const AndroidParameters(
-        packageName: 'com.intheloopstudio',
-      ),
-      iosParameters: const IOSParameters(
-        bundleId: 'com.intheloopstudio',
-      ),
-      socialMetaTagParameters: SocialMetaTagParameters(
-        title: 'Tapped Network | ${loop.title.unwrapOr('')}',
-        description:
-            '''Tapped Network - The online platform tailored for producers and creators to share their loops to the world, get feedback on their music, and join the world-wide community of artists to collaborate with''',
-        imageUrl: imageUri,
-      ),
-    );
-
-    final shortDynamicLink = await _dynamicLinks.buildShortLink(parameters);
-    final shortUrl = shortDynamicLink.shortUrl;
-
-    await _analytics.logShare(
-      contentType: 'loop',
-      itemId: loop.id,
-      method: 'dynamic_link',
-    );
-
-    return shortUrl.toString();
   }
 
   @override

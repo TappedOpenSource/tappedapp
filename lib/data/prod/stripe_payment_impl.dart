@@ -118,14 +118,14 @@ class StripePaymentImpl implements PaymentRepository {
     final callable = _functions.httpsCallable('createConnectedAccount');
 
     final results = await callable<Map<String, dynamic>>({
-      'accountId': accountId ?? '',
+      'accountId': accountId,
       'countryCode': countryCode ?? 'US',
     });
     final data = results.data;
 
     final res = ConnectedAccountResponse(
       success: (data['success'] as bool?) ?? false,
-      accountId: (data['accountId'] as String?) ?? '',
+      accountId: data['accountId'] as String?,
       url: (data['url'] as String?) ?? '',
     );
 
