@@ -145,6 +145,9 @@ class _UserCardState extends State<UserCard> {
                             ),
                             Text(
                               '${widget.user.followerCount} followers',
+                              style: const TextStyle(
+                                color: Colors.white,
+                              ),
                             ),
                             // _followButton(
                             //   currentUser,
