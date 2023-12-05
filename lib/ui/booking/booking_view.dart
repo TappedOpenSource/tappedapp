@@ -48,6 +48,7 @@ class BookingView extends StatelessWidget {
   Widget build(BuildContext context) {
     final database = RepositoryProvider.of<DatabaseRepository>(context);
     final navigationBloc = context.read<NavigationBloc>();
+    final validService = booking.serviceId.isSome;
     return CurrentUserBuilder(
       builder: (context, currentUser) {
         return Scaffold(
@@ -127,7 +128,7 @@ class BookingView extends StatelessWidget {
                 const SliverToBoxAdapter(
                   child: SizedBox(height: 20),
                 ),
-                const SliverToBoxAdapter(
+                if (validService) const SliverToBoxAdapter(
                   child: Text(
                     'Service',
                     style: TextStyle(
@@ -135,10 +136,12 @@ class BookingView extends StatelessWidget {
                       fontWeight: FontWeight.bold,
                     ),
                   ),
+                ) else const SliverToBoxAdapter(
+                  child: SizedBox.shrink(),
                 ),
                 SliverToBoxAdapter(
                   child: FutureBuilder<Option<Service>>(
-                    future: booking.serviceId.isSome
+                    future: validService
                         ? database.getServiceById(
                             booking.requesteeId,
                             booking.serviceId.unwrap,
