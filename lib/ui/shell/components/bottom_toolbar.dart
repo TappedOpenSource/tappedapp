@@ -88,6 +88,15 @@ class BottomToolbar extends StatelessWidget {
             //   ),
             // ),
             BottomNavigationBarItem(
+              icon: GestureDetector(
+                onDoubleTap: () {
+                  context.changeTab(selectedTab: 1);
+                  searchFocusNode.requestFocus();
+                },
+                child: const Icon(CupertinoIcons.search),
+              ),
+            ),
+            BottomNavigationBarItem(
               icon: BlocBuilder<BookingsBloc, BookingsState>(
                 builder: (context, state) {
                   final pendingBookings = state.bookings.where((booking) {
@@ -107,16 +116,6 @@ class BottomToolbar extends StatelessWidget {
                 },
               ),
             ),
-            BottomNavigationBarItem(
-              icon: GestureDetector(
-                onDoubleTap: () {
-                  context.changeTab(selectedTab: 1);
-                  searchFocusNode.requestFocus();
-                },
-                child: const Icon(CupertinoIcons.search),
-              ),
-            ),
-
             BottomNavigationBarItem(
               icon: StreamBuilder<int?>(
                 stream: streamClient
