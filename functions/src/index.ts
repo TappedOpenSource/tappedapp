@@ -33,6 +33,8 @@ import {
   BookingReminderActivity,
   MarketingPlan,
   UserModel,
+  Opportunity,
+  OpportunityFeedItem,
   // GuestMarketingPlan,
   // UserModel,
   // BookerReview,
@@ -83,6 +85,8 @@ import {
   creditsPerTestPriceId,
   stripeCoverArtTestWebhookSecret,
   stripeCoverArtWebhookSecret,
+  opportunityFeedsRef,
+  opportunitiesRef,
 } from "./firebase";
 import {
   authenticatedRequest,
@@ -90,7 +94,7 @@ import {
   getFoundersDeviceTokens,
   getFileFromURL,
 } from "./utils";
-import { error, info } from "firebase-functions/logger";
+import { debug, error, info } from "firebase-functions/logger";
 import { Resend } from "resend";
 import { marked } from "marked";
 import {
@@ -99,7 +103,7 @@ import {
   generateBasicMarketingPlan,
   generateSingleBasicMarketingPlan,
 } from "./openai";
-import { onDocumentCreated } from "firebase-functions/v2/firestore";
+import { onDocumentCreated, onDocumentUpdated } from "firebase-functions/v2/firestore";
 
 export * from "./email_triggers";
 
@@ -732,6 +736,37 @@ const _giveUserCoverArtCredits = async (userId: string, amount: number) => {
     coverArtCredits: FieldValue.increment(amount),
   });
 }
+
+const _addOpportunityToUserFeeds = async (
+  userId: string,
+  opData: Opportunity,
+) => {
+  await opportunityFeedsRef
+    .doc(userId)
+    .collection("opportunities")
+    .doc(opData.id)
+    .set({
+      ...opData,
+    });
+
+  return;
+};
+
+const _addInterestedUserToOpportunity = async (
+  userId: string, 
+  opFeedItem: OpportunityFeedItem,
+) => {
+  await opportunitiesRef
+    .doc(opFeedItem.id)
+    .collection("interestedUsers")
+    .doc(userId)
+    .set({
+      userComment: opFeedItem.userComment,
+      timestamp: Timestamp.now(),
+    });
+
+  return;
+};
 
 // --------------------------------------------------------
 export const sendToDevice = functions.firestore
@@ -2499,4 +2534,56 @@ export const richmondEventsWebhook = onRequest(
     info({ data });
 
     res.status(200).json("Success");
+  });
+
+export const copyOpportunityToFeedsOnCreate = onDocumentCreated(
+  { document: "opportunities/{opportunityId}" },
+  async (event) => {
+    const snapshot = event.data;
+    const opportunity = snapshot?.data() as Opportunity | undefined;
+
+    if (opportunity === undefined) {
+      throw new HttpsError("failed-precondition", "opportunity does not exist");
+    }
+
+    const usersSnap = await usersRef.get();
+
+    await Promise.all(
+      usersSnap.docs.map(async (userDoc) => {
+
+        if (userDoc.id === opportunity.userId) {
+          return;
+        }
+
+        await _addOpportunityToUserFeeds(userDoc.id, opportunity);
+      }),
+    );
+  });
+
+export const addInterestedUserOnApplyToOpportunity = onDocumentUpdated(
+  { document: "opportunityFeeds/{userId}/opportunities/{opportunityId}" },
+  async (event) => {
+    const snapshot = event.data;
+    const userId = event.params.userId;
+    const beforeOpSnap = snapshot?.before;
+    const afterOpSnap = snapshot?.after;
+
+    const beforeOp = beforeOpSnap?.data() as Opportunity | undefined;
+    const afterOp = afterOpSnap?.data() as Opportunity | undefined;
+
+    if (beforeOp === undefined || afterOp === undefined) {
+      throw new HttpsError("failed-precondition", "before or after does not exist");
+    }
+
+    if (beforeOp.touched !== undefined && beforeOp.touched !== null) {
+      debug("beforeOp.touched is already set", { beforeOp });
+      return;
+    }
+
+    if (afterOp.touched !== "like") {
+      debug("afterOp.touched !== like", { afterOp });
+      return;
+    }
+
+    await _addInterestedUserToOpportunity(userId, afterOp);
   });

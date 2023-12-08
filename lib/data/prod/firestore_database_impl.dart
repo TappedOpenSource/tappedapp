@@ -3,18 +3,13 @@ import 'dart:async';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:enum_to_string/enum_to_string.dart';
 import 'package:firebase_analytics/firebase_analytics.dart';
-import 'package:firebase_storage/firebase_storage.dart';
-import 'package:flutter/foundation.dart';
 import 'package:georange/georange.dart';
 import 'package:intheloopapp/data/database_repository.dart';
 import 'package:intheloopapp/domains/models/activity.dart';
-import 'package:intheloopapp/domains/models/ai_model.dart';
-import 'package:intheloopapp/domains/models/avatar.dart';
 import 'package:intheloopapp/domains/models/badge.dart';
 import 'package:intheloopapp/domains/models/booking.dart';
 import 'package:intheloopapp/domains/models/comment.dart';
 import 'package:intheloopapp/domains/models/loop.dart';
-import 'package:intheloopapp/domains/models/marketing_plan.dart';
 import 'package:intheloopapp/domains/models/opportunity.dart';
 import 'package:intheloopapp/domains/models/option.dart';
 import 'package:intheloopapp/domains/models/review.dart';
@@ -34,7 +29,6 @@ final _followersRef = _firestore.collection('followers');
 final _followingRef = _firestore.collection('following');
 // final _loopsRef = _firestore.collection('loops');
 // final _feedRefs = _firestore.collection('feeds');
-final _likesRef = _firestore.collection('likes');
 final _activitiesRef = _firestore.collection('activities');
 final _commentsRef = _firestore.collection('comments');
 final _badgesRef = _firestore.collection('badges');
@@ -47,10 +41,8 @@ final _leadersRef = _firestore.collection('leaderboard');
 final _blockerRef = _firestore.collection('blockers');
 // final _blockeeRef = _firestore.collection('blockees');
 final _reviewsRef = _firestore.collection('reviews');
-final _aiModelsRef = _firestore.collection('aiModels');
-final _avatarsRef = _firestore.collection('avatars');
-final _marketingPlansRef = _firestore.collection('marketingPlans');
 final _opportunitiesRef = _firestore.collection('opportunities');
+final _opportunityFeedsRef = _firestore.collection('opportunityFeeds');
 
 const verifiedBadgeId = '0aa46576-1fbe-4312-8b69-e2fef3269083';
 
@@ -371,34 +363,6 @@ class FirestoreDatabaseImpl extends DatabaseRepository {
     return leaders.whereType<Some<UserModel>>().map((e) => e.unwrap).toList();
   }
 
-  // @override
-  // Future<Option<Loop>> getLoopById(
-  //   String loopId, {
-  //   bool ignoreCache = true,
-  // }) async {
-  //   DocumentSnapshot<Map<String, dynamic>>? loopSnapshot;
-  //   try {
-  //     if (!ignoreCache) {
-  //       try {
-  //         loopSnapshot = await _loopsRef.doc(loopId).get(
-  //               const GetOptions(source: Source.cache),
-  //             );
-  //       } on FirebaseException {
-  //         loopSnapshot = await _usersRef.doc(loopId).get();
-  //       }
-  //     }
-
-  //     loopSnapshot ??= await _loopsRef.doc(loopId).get();
-
-  //     final loop = Loop.fromDoc(loopSnapshot);
-
-  //     return Some(loop);
-  //   } catch (e, s) {
-  //     logger.error('getLoopById', error: e, stackTrace: s);
-  //     return const None();
-  //   }
-  // }
-
   @override
   Future<int> followersNum(String userid) async {
     try {
@@ -565,496 +529,6 @@ class FirestoreDatabaseImpl extends DatabaseRepository {
     );
 
     return intersection.whereType<UserModel>().toList();
-  }
-
-  // @override
-  // Future<void> addLoop(Loop loop) async {
-  //   logger.debug('addLoop $loop');
-  //   await _analytics.logEvent(
-  //     name: 'create_loop',
-  //     parameters: {
-  //       'user_id': loop.userId,
-  //       'loop_id': loop.id,
-  //     },
-  //   );
-  //   await _loopsRef.doc(loop.id).set(loop.toMap());
-  // }
-
-  // @override
-  // Future<void> deleteLoop(Loop loop) async {
-  //   await _analytics.logEvent(
-  //     name: 'delete_loop',
-  //     parameters: {
-  //       'user_id': loop.userId,
-  //       'loop_id': loop.id,
-  //     },
-  //   );
-
-  //   await _loopsRef.doc(loop.id).update({
-  //     'audioPath': FieldValue.delete(),
-  //     'commentCount': FieldValue.delete(),
-  //     'likeCount': FieldValue.delete(),
-  //     'tags': FieldValue.delete(),
-  //     'timestamp': FieldValue.delete(),
-  //     'imagePaths': FieldValue.delete(),
-  //     'title': '*deleted*',
-  //     'deleted': true,
-  //   });
-
-  //   await _usersRef.doc(loop.userId).update({
-  //     'loopsCount': FieldValue.increment(-1),
-  //   });
-
-  //   if (loop.audioPath.isSome) {
-  //     // *delete loops keyed at refFromURL(loop.audioPath)*
-  //     await _storage.child(_getFileFromURL(loop.audioPath.unwrap)).delete();
-  //   }
-
-  //   for (final imagePath in loop.imagePaths) {
-  //     // *delete images keyed at refFromURL(imagePath)*
-  //     if (imagePath.isNotEmpty) {
-  //       await _storage.child(_getFileFromURL(imagePath)).delete();
-  //     }
-  //   }
-  // }
-
-  // @override
-  // Future<List<Loop>> getUserLoops(
-  //   String userId, {
-  //   int limit = 30,
-  //   String? lastLoopId,
-  // }) async {
-  //   try {
-  //     if (lastLoopId != null) {
-  //       final documentSnapshot = await _loopsRef.doc(lastLoopId).get();
-
-  //       final userLoopsSnapshot = await _loopsRef
-  //           .where('deleted', isNotEqualTo: true)
-  //           .orderBy('deleted', descending: true)
-  //           .orderBy('timestamp', descending: true)
-  //           .where('userId', isEqualTo: userId)
-  //           .limit(limit)
-  //           .startAfterDocument(documentSnapshot)
-  //           .get();
-
-  //       final userLoops = userLoopsSnapshot.docs
-  //           .map(Loop.fromDoc)
-  //           .where((loop) => !loop.deleted)
-  //           .toList();
-
-  //       return userLoops;
-  //     } else {
-  //       final userLoopsSnapshot = await _loopsRef
-  //           .where('deleted', isNotEqualTo: true)
-  //           .orderBy('deleted', descending: true)
-  //           .orderBy('timestamp', descending: true)
-  //           .where('userId', isEqualTo: userId)
-  //           .limit(limit)
-  //           .get();
-
-  //       final userLoops = userLoopsSnapshot.docs
-  //           .map(Loop.fromDoc)
-  //           .where((loop) => !loop.deleted)
-  //           .toList();
-
-  //       return userLoops;
-  //     }
-  //   } catch (e, s) {
-  //     logger.error('getUserLoops', error: e, stackTrace: s);
-  //     return [];
-  //   }
-  // }
-
-  // @override
-  // Stream<Loop> userLoopsObserver(
-  //   String userId, {
-  //   int limit = 30,
-  // }) async* {
-  //   final userLoopsSnapshotObserver = _loopsRef
-  //       .where('deleted', isNotEqualTo: true)
-  //       .orderBy('deleted', descending: true)
-  //       .where('userId', isEqualTo: userId)
-  //       .orderBy('timestamp', descending: true)
-  //       .limit(limit)
-  //       .snapshots();
-
-  //   final userLoopsObserver = userLoopsSnapshotObserver.map((event) {
-  //     return event.docChanges
-  //         .where(
-  //       (DocumentChange<Map<String, dynamic>> element) =>
-  //           element.type == DocumentChangeType.added,
-  //     )
-  //         .map((DocumentChange<Map<String, dynamic>> element) {
-  //       try {
-  //         return Loop.fromDoc(element.doc);
-  //       } catch (e, s) {
-  //         logger.error('userLoopsObserver', error: e, stackTrace: s);
-  //         return null;
-  //       }
-  //       // if (element.type == DocumentChangeType.modified) {}
-  //       // if (element.type == DocumentChangeType.removed) {}
-  //     });
-  //   }).flatMap(
-  //     (value) => Stream.fromIterable(value).whereType<Loop>().where(
-  //           (loop) => !loop.deleted,
-  //         ),
-  //   );
-
-  //   yield* userLoopsObserver;
-  // }
-
-  // @override
-  // Future<List<Loop>> getUserOpportunities(
-  //   String userId, {
-  //   int limit = 30,
-  //   String? lastLoopId,
-  // }) async {
-  //   try {
-  //     if (lastLoopId != null) {
-  //       final documentSnapshot = await _loopsRef.doc(lastLoopId).get();
-
-  //       final userLoopsSnapshot = await _loopsRef
-  //           .where('isOpportunity', isEqualTo: true)
-  //           .where('deleted', isNotEqualTo: true)
-  //           .orderBy('deleted', descending: true)
-  //           .orderBy('timestamp', descending: true)
-  //           .where('userId', isEqualTo: userId)
-  //           .limit(limit)
-  //           .startAfterDocument(documentSnapshot)
-  //           .get();
-
-  //       final userLoops = userLoopsSnapshot.docs
-  //           .map(Loop.fromDoc)
-  //           .where((loop) => !loop.deleted)
-  //           .toList();
-
-  //       return userLoops;
-  //     } else {
-  //       final userLoopsSnapshot = await _loopsRef
-  //           .where('isOpportunity', isEqualTo: true)
-  //           .where('deleted', isNotEqualTo: true)
-  //           .orderBy('deleted', descending: true)
-  //           .orderBy('timestamp', descending: true)
-  //           .where('userId', isEqualTo: userId)
-  //           .limit(limit)
-  //           .get();
-
-  //       final userLoops = userLoopsSnapshot.docs
-  //           .map(Loop.fromDoc)
-  //           .where((loop) => !loop.deleted)
-  //           .toList();
-
-  //       return userLoops;
-  //     }
-  //   } catch (e, s) {
-  //     logger.error('getUserOpportunities', error: e, stackTrace: s);
-  //     return [];
-  //   }
-  // }
-
-  // @override
-  // Stream<Loop> userOpportunitiesObserver(
-  //   String userId, {
-  //   int limit = 20,
-  // }) async* {
-  //   final userLoopsSnapshotObserver = _loopsRef
-  //       .where('isOpportunity', isEqualTo: true)
-  //       .where('deleted', isNotEqualTo: true)
-  //       .orderBy('deleted', descending: true)
-  //       .where('userId', isEqualTo: userId)
-  //       .orderBy('timestamp', descending: true)
-  //       .limit(limit)
-  //       .snapshots();
-
-  //   final userLoopsObserver = userLoopsSnapshotObserver.map((event) {
-  //     return event.docChanges
-  //         .where(
-  //       (DocumentChange<Map<String, dynamic>> element) =>
-  //           element.type == DocumentChangeType.added,
-  //     )
-  //         .map((DocumentChange<Map<String, dynamic>> element) {
-  //       try {
-  //         return Loop.fromDoc(element.doc);
-  //       } catch (e, s) {
-  //         logger.error('userLoopsObserver', error: e, stackTrace: s);
-  //         return null;
-  //       }
-  //       // if (element.type == DocumentChangeType.modified) {}
-  //       // if (element.type == DocumentChangeType.removed) {}
-  //     });
-  //   }).flatMap(
-  //     (value) => Stream.fromIterable(value).whereType<Loop>().where(
-  //           (loop) => !loop.deleted,
-  //         ),
-  //   );
-
-  //   yield* userLoopsObserver;
-  // }
-
-  // @override
-  // Future<List<Loop>> getFollowingLoops(
-  //   String currentUserId, {
-  //   int limit = 30,
-  //   String? lastLoopId,
-  //   bool ignoreCache = true,
-  // }) async {
-  //   try {
-  //     if (lastLoopId != null) {
-  //       final documentSnapshot = await _loopsRef.doc(lastLoopId).get();
-
-  //       final userFeedLoops = await _feedRefs
-  //           .doc(currentUserId)
-  //           .collection(feedSubcollection)
-  //           .orderBy('timestamp', descending: true)
-  //           .limit(limit)
-  //           .startAfterDocument(documentSnapshot)
-  //           .get();
-
-  //       final followingLoops = await Future.wait(
-  //         userFeedLoops.docs.map((doc) async {
-  //           final loop = await getLoopById(
-  //             doc.id,
-  //             ignoreCache: ignoreCache,
-  //           );
-
-  //           return loop;
-  //         }),
-  //       );
-
-  //       return followingLoops
-  //           .whereType<Some<Loop>>()
-  //           .map((loop) => loop.unwrap)
-  //           .where((loop) => !loop.deleted)
-  //           .toList();
-  //     } else {
-  //       final userFeedLoops = await _feedRefs
-  //           .doc(currentUserId)
-  //           .collection(feedSubcollection)
-  //           .orderBy('timestamp', descending: true)
-  //           .limit(limit)
-  //           .get();
-
-  //       final followingLoops = await Future.wait(
-  //         userFeedLoops.docs.map((doc) async {
-  //           final loop = await getLoopById(doc.id, ignoreCache: ignoreCache);
-
-  //           return loop;
-  //         }),
-  //       );
-
-  //       return followingLoops
-  //           .whereType<Some<Loop>>()
-  //           .map((loop) => loop.unwrap)
-  //           .where((loop) => !loop.deleted)
-  //           .toList();
-  //     }
-  //   } catch (e, s) {
-  //     logger.error('getFollowingLoops', error: e, stackTrace: s);
-  //     return [];
-  //   }
-  // }
-
-  // @override
-  // Stream<Loop> followingLoopsObserver(
-  //   String currentUserId, {
-  //   int limit = 30,
-  //   bool ignoreCache = true,
-  // }) async* {
-  //   final userFeedLoopsSnapshotObserver = _feedRefs
-  //       .doc(currentUserId)
-  //       .collection(feedSubcollection)
-  //       .orderBy('timestamp', descending: true)
-  //       .limit(limit)
-  //       .snapshots();
-
-  //   final userFeedLoopsObserver = userFeedLoopsSnapshotObserver.map((event) {
-  //     return event.docChanges
-  //         .where(
-  //       (DocumentChange<Map<String, dynamic>> element) =>
-  //           element.type == DocumentChangeType.added,
-  //     )
-  //         .map((DocumentChange<Map<String, dynamic>> element) async {
-  //       try {
-  //         final loop = await getLoopById(
-  //           element.doc.id,
-  //           ignoreCache: ignoreCache,
-  //         );
-  //         return loop;
-  //       } catch (e, s) {
-  //         logger.error(
-  //           'followingLoopsObserver',
-  //           error: e,
-  //           stackTrace: s,
-  //         );
-  //         return null;
-  //       }
-  //       // if (element.type == DocumentChangeType.modified) {}
-  //       // if (element.type == DocumentChangeType.removed) {}
-  //     });
-  //   }).flatMap(
-  //     (value) => Stream.fromFutures(value)
-  //         .whereType<Some<Loop>>()
-  //         .map((e) => e.unwrap)
-  //         .where((loop) => !loop.deleted),
-  //   );
-
-  //   yield* userFeedLoopsObserver;
-  // }
-
-  // @override
-  // Future<List<Loop>> getAllLoops(
-  //   String currentUserId, {
-  //   bool ignoreCache = true,
-  //   int limit = 30,
-  //   String? lastLoopId,
-  // }) async {
-  //   try {
-  //     if (lastLoopId != null) {
-  //       final documentSnapshot = await _loopsRef.doc(lastLoopId).get();
-
-  //       final allLoopsDocs = await _loopsRef
-  //           .where('deleted', isNotEqualTo: true)
-  //           .orderBy('deleted', descending: true)
-  //           .orderBy('timestamp', descending: true)
-  //           .limit(limit)
-  //           .startAfterDocument(documentSnapshot)
-  //           .get();
-
-  //       final allLoopsList = await Future.wait(
-  //         allLoopsDocs.docs.map((doc) async => Loop.fromDoc(doc)).toList(),
-  //       );
-
-  //       return allLoopsList
-  //           .where((e) => e.userId != currentUserId && !e.deleted)
-  //           .toList();
-  //     } else {
-  //       final allLoopsDocs = await _loopsRef
-  //           .orderBy('timestamp', descending: true)
-  //           // .where('deleted', isNotEqualTo: true)
-  //           .limit(limit)
-  //           .get();
-
-  //       final allLoopsList = await Future.wait(
-  //         allLoopsDocs.docs.map((doc) async => Loop.fromDoc(doc)).toList(),
-  //       );
-
-  //       return allLoopsList
-  //           .where((e) => e.userId != currentUserId && !e.deleted)
-  //           .toList();
-  //     }
-  //   } catch (e, s) {
-  //     logger.error('getAllLoops', error: e, stackTrace: s);
-  //     return [];
-  //   }
-  // }
-
-  // @override
-  // Stream<Loop> allLoopsObserver(
-  //   String currentUserId, {
-  //   int limit = 30,
-  //   bool ignoreCache = true,
-  // }) async* {
-  //   final allLoopsSnapshotObserver = _loopsRef
-  //       .where('deleted', isNotEqualTo: true)
-  //       .orderBy('deleted', descending: true)
-  //       .orderBy('timestamp', descending: true)
-  //       .limit(limit)
-  //       .snapshots();
-
-  //   final allLoopsObserver = allLoopsSnapshotObserver.map((event) {
-  //     return event.docChanges
-  //         .where(
-  //       (DocumentChange<Map<String, dynamic>> element) =>
-  //           element.type == DocumentChangeType.added,
-  //     )
-  //         .map((DocumentChange<Map<String, dynamic>> element) {
-  //       try {
-  //         return Loop.fromDoc(element.doc);
-  //       } catch (e, s) {
-  //         logger.error('allLoopsObserver', error: e, stackTrace: s);
-  //         return null;
-  //       }
-  //       // if (element.type == DocumentChangeType.modified) {}
-  //       // if (element.type == DocumentChangeType.removed) {}
-  //     });
-  //   }).flatMap(
-  //     (value) => Stream.fromIterable(value).whereType<Loop>().where(
-  //           (loop) => loop.userId != currentUserId && !loop.deleted,
-  //         ),
-  //   );
-
-  //   yield* allLoopsObserver;
-  // }
-
-  @override
-  Future<void> addLike(
-    String currentUserId,
-    String loopId,
-  ) async {
-    await _analytics.logEvent(
-      name: 'like',
-      parameters: {
-        'user_id': currentUserId,
-        'loop_id': loopId,
-      },
-    );
-
-    await _likesRef
-        .doc(loopId)
-        .collection(likesSubcollection)
-        .doc(currentUserId)
-        .set({});
-  }
-
-  @override
-  Future<void> deleteLike(
-    String currentUserId,
-    String loopId,
-  ) async {
-    await _analytics.logEvent(
-      name: 'unlike',
-      parameters: {
-        'user_id': currentUserId,
-        'loop_id': loopId,
-      },
-    );
-
-    await _likesRef
-        .doc(loopId)
-        .collection(likesSubcollection)
-        .doc(currentUserId)
-        .delete();
-  }
-
-  @override
-  Future<bool> isLiked(
-    String currentUserId,
-    String loopId,
-  ) async {
-    final userDoc = await _likesRef
-        .doc(loopId)
-        .collection(likesSubcollection)
-        .doc(currentUserId)
-        .get();
-
-    return userDoc.exists;
-  }
-
-  @override
-  Future<List<UserModel>> getLikes(
-    String loopId,
-  ) async {
-    final likesSnapshot =
-        await _likesRef.doc(loopId).collection(likesSubcollection).get();
-
-    final usersList = await Future.wait(
-      likesSnapshot.docs.map((doc) async {
-        final userDoc = await _usersRef.doc(doc.id).get();
-        return UserModel.fromDoc(userDoc);
-      }).toList(),
-    );
-
-    return usersList;
   }
 
   @override
@@ -1338,66 +812,6 @@ class FirestoreDatabaseImpl extends DatabaseRepository {
 
     return commentLikeSnapshot.exists;
   }
-
-  // Future<List<Tag>> getTagSuggestions(String query) async {
-  //   await Future.delayed(Duration(milliseconds: 0), null);
-
-  //   return <Tag>[]
-  //       .where((tag) => tag
-  //                .value.toLowerCase().contains(query.toLowerCase()))
-  //       .toList();
-  // }
-
-  // @override
-  // Future<void> shareLoop(Loop loop) async {
-  //   await _analytics.logShare(
-  //     contentType: 'loop',
-  //     itemId: loop.id,
-  //     method: 'unknown',
-  //   );
-
-  //   await _loopsRef.doc(loop.id).update({
-  //     'shares': FieldValue.increment(1),
-  //   });
-  // }
-
-  // @override
-  // Future<void> reportLoop({
-  //   required String reporterId,
-  //   required Loop loop,
-  // }) async {
-  //   await _analytics.logEvent(
-  //     name: 'report_loop',
-  //     parameters: {
-  //       'reporter_id': reporterId,
-  //       'loop_id': loop.id,
-  //     },
-  //   );
-
-  //   final reporterSnapshot = await _usersRef.doc(reporterId).get();
-  //   final reporter = UserModel.fromDoc(reporterSnapshot);
-
-  //   final reportHtml = '''
-  //       <p>Report from:</p>
-  //       <p>${reporter.toJson()}<p>
-  //       <p>Loop:</p>
-  //       <p>${loop.toJson()}</p>
-  //   ''';
-
-  //   await _mailRef.add({
-  //     'to': [
-  //       'support@tapped.ai',
-  //     ],
-  //     'cc': [
-  //       'johannes@tapped.ai',
-  //       'ilias@tapped.ai',
-  //     ],
-  //     'message': {
-  //       'subject': 'Loop reported',
-  //       'html': reportHtml,
-  //     },
-  //   });
-  // }
 
   @override
   Future<bool> isVerified(
@@ -1916,11 +1330,43 @@ class FirestoreDatabaseImpl extends DatabaseRepository {
   }
 
   @override
-  Future<List<Opportunity>> getUserOpportunities(String userId) async {
+  Future<List<Opportunity>> getOpportunities({
+    int limit = 20,
+    String? lastOpportunityId,
+  }) async {
+    if (lastOpportunityId != null) {
+      final documentSnapshot =
+          await _opportunitiesRef.doc(lastOpportunityId).get();
+
+      final opportunitiesSnapshot = await _opportunitiesRef
+          .orderBy('timestamp', descending: true)
+          .limit(limit)
+          .startAfterDocument(documentSnapshot)
+          .get();
+
+      final opportunities =
+          opportunitiesSnapshot.docs.map(Opportunity.fromDoc).toList();
+
+      return opportunities;
+    }
+
+    final opportunitiesSnapshot = await _opportunitiesRef
+        .orderBy('timestamp', descending: true)
+        .limit(limit)
+        .get();
+
+    final opportunities =
+        opportunitiesSnapshot.docs.map(Opportunity.fromDoc).toList();
+
+    return opportunities;
+  }
+
+  @override
+  Future<List<Opportunity>> getOpportunitiesByUserId(String userId) async {
     try {
       final userOpportunitiesSnapshot = await _opportunitiesRef
-          .doc(userId)
-          .collection('userOpportunities')
+          .where('userId', isEqualTo: userId)
+          .orderBy('timestamp', descending: true)
           .get();
 
       final opportunities =
@@ -1934,42 +1380,12 @@ class FirestoreDatabaseImpl extends DatabaseRepository {
   }
 
   @override
-  Future<void> applyForOpportunity({
-    required String userId,
-    required Opportunity opportunity,
-  }) async {
-    try {
-      await _analytics.logEvent(
-        name: 'apply_for_opportunity',
-        parameters: {
-          'user_id': userId,
-          'opportunity_id': opportunity.id,
-        },
-      );
-      await _opportunitiesRef
-          .doc(opportunity.userId)
-          .collection('userOpportunities')
-          .doc(opportunity.id)
-          .collection('interestedUsers')
-          .doc(userId)
-          .set({
-        'timestamp': Timestamp.now(),
-      });
-    } catch (e, s) {
-      logger.error('applyForOpporunities', error: e, stackTrace: s);
-      rethrow;
-    }
-  }
-
-  @override
   Future<bool> isUserAppliedForOpportunity({
     required String userId,
     required Opportunity opportunity,
   }) async {
     try {
       final userSnapshot = await _opportunitiesRef
-          .doc(opportunity.userId)
-          .collection('userOpportunities')
           .doc(opportunity.id)
           .collection('interestedUsers')
           .doc(userId)
@@ -1986,8 +1402,6 @@ class FirestoreDatabaseImpl extends DatabaseRepository {
   Future<List<UserModel>> getInterestedUsers(Opportunity opportunity) async {
     try {
       final interestedUsersSnapshot = await _opportunitiesRef
-          .doc(opportunity.userId)
-          .collection('userOpportunities')
           .doc(opportunity.id)
           .collection('interestedUsers')
           .get();
@@ -2006,76 +1420,103 @@ class FirestoreDatabaseImpl extends DatabaseRepository {
     }
   }
 
-  // @override
-  // Future<void> cancelInterest({
-  //   required String userId,
-  //   required String loopId,
-  // }) async {
-  //   await _analytics.logEvent(
-  //     name: 'cancel_interest',
-  //     parameters: {
-  //       'user_id': userId,
-  //       'loop_id': loopId,
-  //     },
-  //   );
+  @override
+  Future<void> applyForOpportunity({
+    required String userId,
+    required String userComment,
+    required Opportunity opportunity,
+  }) async {
+    try {
+      await _analytics.logEvent(
+        name: 'apply_for_opportunity',
+        parameters: {
+          'user_id': userId,
+          'opportunity_id': opportunity.id,
+        },
+      );
 
-  //   await _opportunitiesRef
-  //       .doc(loopId)
-  //       .collection('interestedUsers')
-  //       .doc(userId)
-  //       .delete();
-  // }
+      await _opportunityFeedsRef
+          .doc(userId)
+          .collection('opportunities')
+          .doc(opportunity.id)
+          .update({
+        'touched': 'like',
+        'userComment': userComment,
+      });
+    } catch (e, s) {
+      logger.error('applyForOpporunities', error: e, stackTrace: s);
+      rethrow;
+    }
+  }
 
-  // @override
-  // Future<void> showInterest({
-  //   required String userId,
-  //   required String loopId,
-  // }) async {
-  //   await _analytics.logEvent(
-  //     name: 'show_interest',
-  //     parameters: {
-  //       'user_id': userId,
-  //       'loop_id': loopId,
-  //     },
-  //   );
+  @override
+  Future<void> dislikeOpportunity({
+    required Opportunity opportunity,
+    required String userId,
+  }) async {
+    try {
+      await _analytics.logEvent(
+        name: 'dislike_opportunity',
+        parameters: {
+          'user_id': userId,
+          'opportunity_id': opportunity.id,
+        },
+      );
 
-  //   await _opportunitiesRef
-  //       .doc(loopId)
-  //       .collection('interestedUsers')
-  //       .doc(userId)
-  //       .set({
-  //     'timestamp': Timestamp.now(),
-  //   });
-  // }
+      await _opportunityFeedsRef
+          .doc(userId)
+          .collection('opportunities')
+          .doc(opportunity.id)
+          .update({
+        'touched': 'dislike',
+      });
+    } catch (e, s) {
+      logger.error('applyForOpporunities', error: e, stackTrace: s);
+      rethrow;
+    }
+  }
 
-  // @override
-  // Future<List<UserModel>> getInterestedUsers(String loopId) async {
-  //   final usersSnapshot =
-  //       await _opportunitiesRef.doc(loopId).collection('interestedUsers').get();
+  @override
+  Future<List<Opportunity>> getOpportunityFeedByUserId(
+    String userId, {
+    int limit = 20,
+    String? lastOpportunityId,
+  }) async {
+    if (lastOpportunityId != null) {
+      final documentSnapshot = await _opportunityFeedsRef
+          .doc(userId)
+          .collection('opportunities')
+          .doc(lastOpportunityId)
+          .get();
 
-  //   final users = await Future.wait(
-  //     usersSnapshot.docs.map((doc) async {
-  //       final userSnapshot = await _usersRef.doc(doc.id).get();
-  //       return UserModel.fromDoc(userSnapshot);
-  //     }),
-  //   );
+      final opportunitiesSnapshot = await _opportunityFeedsRef
+          .doc(userId)
+          .collection('opportunities')
+          .orderBy('timestamp', descending: true)
+          .where('touched', isNull: true)
+          .limit(limit)
+          .startAfterDocument(documentSnapshot)
+          .get();
 
-  //   return users;
-  // }
+      final opportunities =
+          opportunitiesSnapshot.docs.map(Opportunity.fromDoc).toList();
 
-  // @override
-  // Future<bool> isInterested({
-  //   required String userId,
-  //   required String loopId,
-  // }) async {
-  //   final userSnapshot = await _opportunitiesRef
-  //       .doc(loopId)
-  //       .collection('interestedUsers')
-  //       .doc(userId)
-  //       .get();
+      return opportunities;
+    }
 
-  //   return userSnapshot.exists;
-  // }
+    final opportunitiesSnapshot = await _opportunityFeedsRef
+        .doc(userId)
+        .collection('opportunities')
+        .orderBy('timestamp', descending: true)
+        .where('touched', isNull: true)
+        .limit(limit)
+        .get();
+
+    final opportunities =
+        opportunitiesSnapshot.docs.map(Opportunity.fromDoc).toList();
+
+    return opportunities;
+  }
 
   @override
   Future<void> blockUser({
@@ -2416,146 +1857,6 @@ class FirestoreDatabaseImpl extends DatabaseRepository {
       );
       yield* const Stream.empty();
     }
-  }
-
-  @override
-  Future<Option<AiImageModel>> getUserImageModel(String userId) async {
-    final userImageModelsQuery = await _aiModelsRef
-        .doc(userId)
-        .collection('imageModels')
-        .orderBy('timestamp', descending: true)
-        .get();
-
-    final userImageModels = userImageModelsQuery.docs
-        .map(AiModel.fromDoc)
-        .whereType<AiImageModel>()
-        .toList();
-
-    return Option.fromNullable(userImageModels.first);
-  }
-
-  @override
-  Future<List<Avatar>> getUserAvatars(String userId) async {
-    final userAvatarsQuery =
-        await _avatarsRef.doc(userId).collection('userAvatars').get();
-
-    final userAvatars = userAvatarsQuery.docs.map(Avatar.fromDoc).toList();
-
-    return userAvatars;
-  }
-
-  @override
-  Stream<Avatar> userAvatarsObserver(String userId) async* {
-    final userAvatarsSnapshotObserver = _avatarsRef
-        .doc(userId)
-        .collection('userAvatars')
-        .orderBy('timestamp', descending: true)
-        .snapshots();
-
-    final userAvatarsObserver = userAvatarsSnapshotObserver
-        .map((event) {
-          return event.docChanges
-              .where(
-            (DocumentChange<Map<String, dynamic>> element) =>
-                element.type == DocumentChangeType.added,
-          )
-              .map((DocumentChange<Map<String, dynamic>> element) {
-            try {
-              return Avatar.fromDoc(element.doc);
-            } catch (e, s) {
-              logger.error('Error parsing avatar', error: e, stackTrace: s);
-              return null;
-            }
-          });
-        })
-        .flatMap(Stream.fromIterable)
-        .whereType<Avatar>();
-
-    yield* userAvatarsObserver;
-  }
-
-  @override
-  Future<void> createAvatar(Avatar avatar) async {
-    await _analytics.logEvent(
-      name: 'create_avatar',
-      parameters: {
-        'user_id': avatar.userId,
-        'avatar_id': avatar.id,
-      },
-    );
-
-    await _avatarsRef
-        .doc(avatar.userId)
-        .collection('userAvatars')
-        .doc(avatar.id)
-        .set(avatar.toMap());
-  }
-
-  @override
-  Future<void> deleteAvatar({
-    required String userId,
-    required String avatarId,
-  }) async {
-    await _analytics.logEvent(
-      name: 'delete_avatar',
-      parameters: {
-        'user_id': userId,
-        'avatar_id': avatarId,
-      },
-    );
-
-    await _avatarsRef
-        .doc(userId)
-        .collection('userAvatars')
-        .doc(avatarId)
-        .delete();
-  }
-
-  @override
-  Future<List<MarketingPlan>> getUserMarketingPlans(String userId) async {
-    final marketingPlansSnapshot = await _marketingPlansRef
-        .doc(userId)
-        .collection('userMarketingPlans')
-        .get();
-
-    final marketingPlans =
-        marketingPlansSnapshot.docs.map(MarketingPlan.fromDoc).toList();
-
-    return marketingPlans;
-  }
-
-  @override
-  Stream<MarketingPlan> userMarketingPlansObserver(String userId) async* {
-    final userMarketingPlanSnapshotObserver = _marketingPlansRef
-        .doc(userId)
-        .collection('userMarketingPlans')
-        .orderBy('timestamp', descending: true)
-        .snapshots();
-
-    final userMarketingPlansObserver = userMarketingPlanSnapshotObserver
-        .map((event) {
-          return event.docChanges
-              .where(
-            (DocumentChange<Map<String, dynamic>> element) =>
-                element.type == DocumentChangeType.added,
-          )
-              .map((DocumentChange<Map<String, dynamic>> element) {
-            try {
-              return MarketingPlan.fromDoc(element.doc);
-            } catch (e, s) {
-              logger.error(
-                'Error parsing marketing plan',
-                error: e,
-                stackTrace: s,
-              );
-              return null;
-            }
-          });
-        })
-        .flatMap(Stream.fromIterable)
-        .whereType<MarketingPlan>();
-
-    yield* userMarketingPlansObserver;
   }
 }
 

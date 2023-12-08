@@ -128,17 +128,20 @@ class BookingView extends StatelessWidget {
                 const SliverToBoxAdapter(
                   child: SizedBox(height: 20),
                 ),
-                if (validService) const SliverToBoxAdapter(
-                  child: Text(
-                    'Service',
-                    style: TextStyle(
-                      fontSize: 28,
-                      fontWeight: FontWeight.bold,
+                if (validService)
+                  const SliverToBoxAdapter(
+                    child: Text(
+                      'Service',
+                      style: TextStyle(
+                        fontSize: 28,
+                        fontWeight: FontWeight.bold,
+                      ),
                     ),
+                  )
+                else
+                  const SliverToBoxAdapter(
+                    child: SizedBox.shrink(),
                   ),
-                ) else const SliverToBoxAdapter(
-                  child: SizedBox.shrink(),
-                ),
                 SliverToBoxAdapter(
                   child: FutureBuilder<Option<Service>>(
                     future: validService
@@ -205,7 +208,7 @@ class BookingView extends StatelessWidget {
                     builder: (context, snapshot) {
                       final place = snapshot.data;
                       return Text(
-                        formattedAddress(
+                        getAddressComponent(
                           place?.addressComponents,
                         ),
                         overflow: TextOverflow.ellipsis,

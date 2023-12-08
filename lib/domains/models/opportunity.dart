@@ -1,5 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:enum_to_string/enum_to_string.dart';
 import 'package:equatable/equatable.dart';
+import 'package:intheloopapp/domains/models/option.dart';
 import 'package:intheloopapp/utils/default_value.dart';
 
 class Opportunity extends Equatable {
@@ -16,9 +18,17 @@ class Opportunity extends Equatable {
     required this.startTime,
     required this.endTime,
     required this.isPaid,
+    required this.touched,
   });
 
   factory Opportunity.fromDoc(DocumentSnapshot<Map<String, dynamic>> doc) {
+    final touchedVal = doc.getOrElse('touched', null) as String?;
+    final touched = touchedVal != null
+        ? EnumToString.fromString<OpportunityInteration>(
+            OpportunityInteration.values,
+            touchedVal,
+          )
+        : null;
     return Opportunity(
       id: doc.id,
       userId: doc.get('userId') as String,
@@ -32,6 +42,7 @@ class Opportunity extends Equatable {
       startTime: (doc.get('startTime') as Timestamp).toDate(),
       endTime: (doc.get('endTime') as Timestamp).toDate(),
       isPaid: doc.getOrElse('isPaid', false),
+      touched: Option.fromNullable(touched),
     );
   }
 
@@ -47,6 +58,7 @@ class Opportunity extends Equatable {
   final DateTime startTime;
   final DateTime endTime;
   final bool isPaid;
+  final Option<OpportunityInteration> touched;
 
   @override
   List<Object?> get props => [
@@ -62,6 +74,7 @@ class Opportunity extends Equatable {
         startTime,
         endTime,
         isPaid,
+        touched,
       ];
 
   Opportunity copyWith({
@@ -77,6 +90,7 @@ class Opportunity extends Equatable {
     DateTime? startTime,
     DateTime? endTime,
     bool? isPaid,
+    Option<OpportunityInteration>? touched,
   }) {
     return Opportunity(
       id: id ?? this.id,
@@ -91,6 +105,9 @@ class Opportunity extends Equatable {
       startTime: startTime ?? this.startTime,
       endTime: endTime ?? this.endTime,
       isPaid: isPaid ?? this.isPaid,
+      touched: touched ?? this.touched,
     );
   }
 }
+
+enum OpportunityInteration { like, dislike }

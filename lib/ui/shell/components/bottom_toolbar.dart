@@ -87,6 +87,11 @@ class BottomToolbar extends StatelessWidget {
             //     // FontAwesomeIcons.userXmark,
             //   ),
             // ),
+            const BottomNavigationBarItem(
+              icon: Icon(
+                CupertinoIcons.waveform_path,
+              ),
+            ),
             BottomNavigationBarItem(
               icon: GestureDetector(
                 onDoubleTap: () {
