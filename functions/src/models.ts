@@ -155,3 +155,23 @@ export type MarketingForm = {
   audience: string;
   timestamp: Date;
 };
+
+export type Opportunity = {
+  id: string;
+  userId: string;
+  title: string;
+  description: string;
+  placeId: string;
+  geohash: string;
+  lat: number;
+  lng: number;
+  timestamp: Date;
+  startTime: Date;
+  endTime: Date;
+  isPaid: boolean;
+  touched: "like" | "dislike" | null;
+};
+
+export type OpportunityFeedItem = Opportunity & {
+  userComment?: string | null;
+};

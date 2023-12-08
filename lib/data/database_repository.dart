@@ -1,11 +1,8 @@
 import 'package:intheloopapp/domains/models/activity.dart';
-import 'package:intheloopapp/domains/models/ai_model.dart';
-import 'package:intheloopapp/domains/models/avatar.dart';
 import 'package:intheloopapp/domains/models/badge.dart';
 import 'package:intheloopapp/domains/models/booking.dart';
 import 'package:intheloopapp/domains/models/comment.dart';
 import 'package:intheloopapp/domains/models/loop.dart';
-import 'package:intheloopapp/domains/models/marketing_plan.dart';
 import 'package:intheloopapp/domains/models/opportunity.dart';
 import 'package:intheloopapp/domains/models/option.dart';
 import 'package:intheloopapp/domains/models/review.dart';
@@ -35,23 +32,6 @@ abstract class DatabaseRepository {
   Future<List<UserModel>> getRichmondVenues();
   Future<List<UserModel>> getBookingLeaders();
   Future<List<UserModel>> getBookerLeaders();
-
-  // Liking related stuff
-  Future<void> addLike(
-    String currentUserId,
-    String loopId,
-  );
-  Future<void> deleteLike(
-    String currentUserId,
-    String loopId,
-  );
-  Future<bool> isLiked(
-    String currentUserId,
-    String loopId,
-  );
-  Future<List<UserModel>> getLikes(
-    String loopId,
-  );
 
   // Commenting related stuff
   Future<List<Comment>> getComments(
@@ -100,7 +80,9 @@ abstract class DatabaseRepository {
   Future<List<UserModel>> getFollowing(String currentUserId);
   Future<List<UserModel>> getFollowers(String currentUserId);
   Future<List<UserModel>> getCommonFollowers(
-      String currentUserID, String observedUserId,);
+    String currentUserID,
+    String observedUserId,
+  );
 
   // Activity related stuff
   Future<List<Activity>> getActivities(
@@ -184,16 +166,30 @@ abstract class DatabaseRepository {
   Future<void> deleteService(String userId, String serviceId);
 
   // Opportunity related stuff
-  Future<List<Opportunity>> getUserOpportunities(String userId);
-  Future<void> applyForOpportunity({
-    required Opportunity opportunity,
-    required String userId,
+  Future<List<Opportunity>> getOpportunities({
+    int limit = 20,
+    String? lastOpportunityId,
+  });
+  Future<List<Opportunity>> getOpportunitiesByUserId(String userId);
+  Future<List<Opportunity>> getOpportunityFeedByUserId(
+    String userId, {
+    int limit = 20,
+    String? lastOpportunityId,
   });
   Future<bool> isUserAppliedForOpportunity({
     required Opportunity opportunity,
     required String userId,
   });
   Future<List<UserModel>> getInterestedUsers(Opportunity opportunity);
+  Future<void> applyForOpportunity({
+    required Opportunity opportunity,
+    required String userId,
+    required String userComment,
+  });
+  Future<void> dislikeOpportunity({
+    required Opportunity opportunity,
+    required String userId,
+  });
 
   // blocking
   Future<void> blockUser({
@@ -248,15 +244,4 @@ abstract class DatabaseRepository {
     String bookerId, {
     int limit = 20,
   });
-
-  Future<Option<AiImageModel>> getUserImageModel(String userId);
-  Future<List<Avatar>> getUserAvatars(String userId);
-  Stream<Avatar> userAvatarsObserver(String userId);
-  Future<void> createAvatar(Avatar avatar);
-  Future<void> deleteAvatar({
-    required String userId,
-    required String avatarId,
-  });
-  Future<List<MarketingPlan>> getUserMarketingPlans(String userId);
-  Stream<MarketingPlan> userMarketingPlansObserver(String userId);
 }

@@ -206,7 +206,7 @@ class ProfileCubit extends Cubit<ProfileState> {
 
   Future<void> initOpportunities() async {
     logger.debug('initOpportunities');
-    final opportunities = await databaseRepository.getUserOpportunities(
+    final opportunities = await databaseRepository.getOpportunitiesByUserId(
       visitedUser.id,
     );
 

@@ -32,15 +32,14 @@ class _ApplyButtonState extends State<ApplyButton> {
     final auth = context.read<AuthRepository>();
     final database = context.read<DatabaseRepository>();
     if (loading) {
-      return const SizedBox(
-        width: double.infinity,
-        child: Padding(
-          padding: EdgeInsets.symmetric(
-            vertical: 4,
-            horizontal: 32,
+      return const Column(
+        children: [
+          CupertinoActivityIndicator(),
+          SizedBox(
+            width: double.infinity,
+            height: 8,
           ),
-          child: CupertinoActivityIndicator(),
-        ),
+        ],
       );
     }
 
@@ -143,6 +142,7 @@ class _ApplyButtonState extends State<ApplyButton> {
                         database
                             .applyForOpportunity(
                           opportunity: _opportunity,
+                          userComment: '',
                           userId: currentUser.id,
                         )
                             .then((value) {

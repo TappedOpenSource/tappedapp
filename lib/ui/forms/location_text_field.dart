@@ -21,7 +21,8 @@ class LocationTextField extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        context.push(LocationFormPage(
+        context.push(
+          LocationFormPage(
             initialPlace: initialPlace,
             onSelected: onChanged,
           ),
@@ -42,7 +43,7 @@ class LocationTextField extends StatelessWidget {
                 ),
                 Text(
                   initialPlace != null
-                      ? formattedAddress(initialPlace?.addressComponents)
+                      ? getAddressComponent(initialPlace?.addressComponents)
                       : 'Tap to select a city',
                   overflow: TextOverflow.ellipsis,
                   style: const TextStyle(

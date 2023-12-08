@@ -45,6 +45,8 @@ export const marketingFormsRef = db.collection("marketingForms");
 export const guestMarketingPlansRef = db.collection("guestMarketingPlans");
 
 export const creditsRef = db.collection("credits");
+export const opportunitiesRef = db.collection("opportunities");
+export const opportunityFeedsRef = db.collection("opportunityFeeds");
 
 // const loopLikesSubcollection = "loopLikes";
 // const loopCommentsSubcollection = "loopComments";

@@ -1,3 +1,4 @@
+import 'package:enum_to_string/enum_to_string.dart';
 import 'package:flutter_google_places_sdk/flutter_google_places_sdk.dart';
 import 'package:georange/georange.dart';
 
@@ -54,11 +55,53 @@ class GeoHashRange {
   final String lower;
 }
 
-String formattedAddress(List<AddressComponent>? shortNames) {
-  final locality =
-      shortNames?.where((element) => element.types.contains('locality'));
-  // final political = 
+String getAddressComponent(
+  List<AddressComponent>? addressComponents, {
+  PlaceType type = PlaceType.LOCALITY,
+  String defaultIdent = 'Unknown',
+  bool longName = false,
+}) {
+  final typeString = EnumToString.convertToString(type).toLowerCase();
+
+  final addressComponent =
+      addressComponents?.where((element) => element.types.contains(typeString));
+  // final political =
   //  shortNames?.where((element) => element.types.contains('political'));
 
-  return locality?.first.shortName ?? 'Unknown';
+  if (longName) {
+    return addressComponent?.firstOrNull?.name ?? defaultIdent;
+  }
+
+  return addressComponent?.firstOrNull?.shortName ?? defaultIdent;
+}
+
+String formattedFullAddress(List<AddressComponent>? addressComponents) {
+  final streetNumber = getAddressComponent(
+    addressComponents,
+    type: PlaceType.STREET_NUMBER,
+    longName: true,
+    defaultIdent: '',
+  );
+
+  final street = getAddressComponent(
+    addressComponents,
+    type: PlaceType.ROUTE,
+    longName: true,
+    defaultIdent: '',
+  );
+
+  final city = getAddressComponent(
+    addressComponents,
+    longName: true,
+    defaultIdent: '',
+  );
+
+  final zipCode = getAddressComponent(
+    addressComponents,
+    type: PlaceType.POSTAL_CODE,
+    longName: true,
+    defaultIdent: '',
+  );
+
+  return '$streetNumber $street, $city $zipCode';
 }

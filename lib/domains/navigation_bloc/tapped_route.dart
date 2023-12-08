@@ -2,8 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_google_places_sdk/flutter_google_places_sdk.dart';
 import 'package:intheloopapp/domains/models/badge.dart' as badge_model;
 import 'package:intheloopapp/domains/models/booking.dart';
-import 'package:intheloopapp/domains/models/loop.dart';
-import 'package:intheloopapp/domains/models/marketing_plan.dart';
 import 'package:intheloopapp/domains/models/opportunity.dart';
 import 'package:intheloopapp/domains/models/option.dart';
 import 'package:intheloopapp/domains/models/service.dart';
@@ -17,19 +15,11 @@ import 'package:intheloopapp/ui/bookings/user_bookings_feed.dart';
 import 'package:intheloopapp/ui/create_booking/booking_confirmation_view.dart';
 import 'package:intheloopapp/ui/create_booking/create_booking_view.dart';
 import 'package:intheloopapp/ui/create_service/create_service_view.dart';
-import 'package:intheloopapp/ui/create_single_marketing_plan/create_single_marketing_plan_view.dart';
 import 'package:intheloopapp/ui/follow_relationship/follow_relationship_view.dart';
 import 'package:intheloopapp/ui/forms/location_form/location_form_view.dart';
-import 'package:intheloopapp/ui/graphic_designer/avatars_generated_view.dart';
-import 'package:intheloopapp/ui/graphic_designer/generate_avatar_loading_view.dart';
-import 'package:intheloopapp/ui/graphic_designer/generate_avatar_view.dart';
-import 'package:intheloopapp/ui/graphic_designer/graphic_designer_view.dart';
-import 'package:intheloopapp/ui/likes/likes_view.dart';
 import 'package:intheloopapp/ui/login/forgot_password_view.dart';
 import 'package:intheloopapp/ui/login/login_view.dart';
 import 'package:intheloopapp/ui/login/signup_view.dart';
-import 'package:intheloopapp/ui/marketer/marketer_view.dart';
-import 'package:intheloopapp/ui/marketer/marketing_plan_view.dart';
 import 'package:intheloopapp/ui/messaging/channel_view.dart';
 import 'package:intheloopapp/ui/messaging/messaging_view.dart';
 import 'package:intheloopapp/ui/messaging/video_call_view.dart';
@@ -41,7 +31,6 @@ import 'package:intheloopapp/ui/reviews/user_reviews_feed.dart';
 import 'package:intheloopapp/ui/search/search_view.dart';
 import 'package:intheloopapp/ui/services/service_view.dart';
 import 'package:intheloopapp/ui/settings/settings_view.dart';
-import 'package:intheloopapp/ui/social_media_manager/social_media_manager_view.dart';
 import 'package:stream_chat_flutter/stream_chat_flutter.dart';
 // import 'package:stream_video_flutter/stream_video_flutter.dart';
 
@@ -75,109 +64,6 @@ final class SettingsPage extends TappedRoute {
           view: const SettingsView(),
         );
 }
-
-// final class CreateLoopPage extends TappedRoute {
-//   CreateLoopPage()
-//       : super(
-//           routeName: '/create_loop',
-//           view: const CreateLoopView(),
-//         );
-// }
-
-// final class LoopPage extends TappedRoute {
-//   LoopPage({
-//     required Loop loop,
-//     required Option<UserModel> loopUser,
-//   }) : super(
-//           routeName: '/loop/${loop.id}',
-//           view: LoopView(
-//             loop: loop,
-//             loopUser: loopUser,
-//           ),
-//         );
-// }
-
-// final class LoopsPage extends TappedRoute {
-//   LoopsPage({
-//     required this.userId,
-//     required this.database,
-//   }) : super(
-//           routeName: '/loops/$userId',
-//           view: LoopFeedView(
-//             sourceFunction: (
-//               String userId, {
-//               String? lastLoopId,
-//               int limit = 20,
-//               bool ignoreCache = false,
-//             }) async {
-//               final result = await database.getUserLoops(
-//                 userId,
-//                 limit: limit,
-//                 lastLoopId: lastLoopId,
-//               );
-//               return result;
-//             },
-//             sourceStream: (
-//               String userId, {
-//               int limit = 20,
-//               bool ignoreCache = false,
-//             }) async* {
-//               yield* database.userLoopsObserver(
-//                 userId,
-//                 limit: limit,
-//               );
-//             },
-//             userId: userId,
-//             feedKey: 'user_loops',
-//             scrollController: ScrollController(),
-//             headerSliver: null,
-//           ),
-//         );
-
-//   final String userId;
-//   final DatabaseRepository database;
-// }
-
-// final class OpportunitiesPage extends TappedRoute {
-//   OpportunitiesPage({
-//     required this.userId,
-//     required this.database,
-//   }) : super(
-//           routeName: '/opportunities/$userId',
-//           view: LoopFeedView(
-//             sourceFunction: (
-//               String userId, {
-//               String? lastLoopId,
-//               int limit = 20,
-//               bool ignoreCache = false,
-//             }) async {
-//               final result = await database.getUserOpportunities(
-//                 userId,
-//                 limit: limit,
-//                 lastLoopId: lastLoopId,
-//               );
-//               return result;
-//             },
-//             sourceStream: (
-//               String userId, {
-//               int limit = 20,
-//               bool ignoreCache = false,
-//             }) async* {
-//               yield* database.userOpportunitiesObserver(
-//                 userId,
-//                 limit: limit,
-//               );
-//             },
-//             userId: userId,
-//             feedKey: 'user_opportunities',
-//             scrollController: ScrollController(),
-//             headerSliver: null,
-//           ),
-//         );
-
-//   final String userId;
-//   final DatabaseRepository database;
-// }
 
 final class BadgePage extends TappedRoute {
   BadgePage({
@@ -440,80 +326,6 @@ final class VideoCallPage extends TappedRoute {
         );
 
   // final Call call;
-}
-
-final class GenerateAvatarPage extends TappedRoute {
-  GenerateAvatarPage()
-      : super(
-          routeName: '/generate_avatar',
-          view: const GenerateAvatarView(),
-        );
-}
-
-final class GenerateAvatarLoadingPage extends TappedRoute {
-  GenerateAvatarLoadingPage()
-      : super(
-          routeName: '/generate_avatar_confirmation',
-          view: const GenerateAvatarLoadingView(),
-        );
-}
-
-final class AvatarsGeneratedPage extends TappedRoute {
-  AvatarsGeneratedPage({
-    required this.imageUrls,
-  }) : super(
-          routeName: '/avatars_generated',
-          view: AvatarsGeneratedView(
-            imageUrls: imageUrls,
-          ),
-        );
-
-  final List<String> imageUrls;
-}
-
-final class GraphicDesignerPage extends TappedRoute {
-  GraphicDesignerPage()
-      : super(
-          routeName: '/graphic_designer',
-          view: const GraphicDesignerView(),
-        );
-}
-
-final class SocialMediaManagerPage extends TappedRoute {
-  SocialMediaManagerPage()
-      : super(
-          routeName: '/social_media_manager',
-          view: const SocialMediaManagerView(),
-        );
-}
-
-final class MarketerPage extends TappedRoute {
-  MarketerPage()
-      : super(
-          routeName: '/marketer',
-          view: const MarketerView(),
-        );
-}
-
-final class CreateSingleMarketingPlanPage extends TappedRoute {
-  CreateSingleMarketingPlanPage()
-      : super(
-          routeName: '/create_marketing_plan',
-          view: const CreateSingleMarketingPlanView(),
-        );
-}
-
-final class MarketingPlanPage extends TappedRoute {
-  MarketingPlanPage({
-    required this.marketingPlan,
-  }) : super(
-          routeName: '/marketing_plan/${marketingPlan.id}',
-          view: MarketingPlanView(
-            marketingPlan: marketingPlan,
-          ),
-        );
-
-  final MarketingPlan marketingPlan;
 }
 
 final class InterestedUsersPage extends TappedRoute {
