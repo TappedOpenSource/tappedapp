@@ -1,6 +1,5 @@
 import 'dart:ui';
 
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -8,10 +7,10 @@ import 'package:flutter_google_places_sdk/flutter_google_places_sdk.dart';
 import 'package:intheloopapp/data/places_repository.dart';
 import 'package:intheloopapp/domains/models/opportunity.dart';
 import 'package:intheloopapp/domains/models/option.dart';
-import 'package:intheloopapp/ui/profile/components/apply_button.dart';
-import 'package:intheloopapp/ui/profile/components/location_chip.dart';
 import 'package:intheloopapp/ui/user_tile.dart';
 import 'package:intheloopapp/utils/geohash.dart';
+import 'package:intl/intl.dart';
+import 'package:timeago/timeago.dart' as timeago;
 
 class OpportunityCard extends StatelessWidget {
   const OpportunityCard({
@@ -131,6 +130,17 @@ class OpportunityCard extends StatelessWidget {
                     ),
                     Text(
                       formattedFullAddress(place.addressComponents),
+                    ),
+                    const SizedBox(height: 12),
+                    const Text(
+                      'date',
+                      style: TextStyle(
+                        fontSize: 24,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    Text(
+                      DateFormat('MM/dd/yyyy').format(opportunity.startTime),
                     ),
                     const SizedBox(height: 12),
                     const Text(
