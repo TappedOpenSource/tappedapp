@@ -47,7 +47,6 @@ class DiscoverView extends StatelessWidget {
 
         return SingleChildScrollView(
           child: Column(
-
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               const Padding(
@@ -70,20 +69,6 @@ class DiscoverView extends StatelessWidget {
                   horizontal: 8,
                 ),
                 child: Text(
-                  'Top Performers',
-                  style: TextStyle(
-                    fontSize: 28,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-              ),
-              _userSlider(bookingLeaders),
-              const Padding(
-                padding: EdgeInsets.symmetric(
-                  vertical: 16,
-                  horizontal: 8,
-                ),
-                child: Text(
                   'Top Richmond Venues',
                   style: TextStyle(
                     fontSize: 28,
@@ -92,6 +77,20 @@ class DiscoverView extends StatelessWidget {
                 ),
               ),
               _userSlider(richmondVenues),
+              const Padding(
+                padding: EdgeInsets.symmetric(
+                  vertical: 16,
+                  horizontal: 8,
+                ),
+                child: Text(
+                  'Top Performers',
+                  style: TextStyle(
+                    fontSize: 28,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              ),
+              _userSlider(bookingLeaders),
             ],
           ),
         );
