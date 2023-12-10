@@ -10,6 +10,7 @@ class Opportunity extends Equatable {
     required this.userId,
     required this.title,
     required this.description,
+    required this.flierUrl,
     required this.placeId,
     required this.geohash,
     required this.lat,
@@ -34,6 +35,9 @@ class Opportunity extends Equatable {
       userId: doc.get('userId') as String,
       title: doc.get('title') as String,
       description: doc.get('description') as String,
+      flierUrl: Option.fromNullable(
+        doc.getOrElse('flierUrl', null),
+      ),
       placeId: doc.get('placeId') as String,
       geohash: doc.get('geohash') as String,
       lat: doc.get('lat') as double,
@@ -50,6 +54,7 @@ class Opportunity extends Equatable {
   final String userId;
   final String title;
   final String description;
+  final Option<String> flierUrl;
   final String placeId;
   final String geohash;
   final double lat;
@@ -66,6 +71,7 @@ class Opportunity extends Equatable {
         userId,
         title,
         description,
+        flierUrl,
         placeId,
         geohash,
         lat,
@@ -82,6 +88,7 @@ class Opportunity extends Equatable {
     String? userId,
     String? title,
     String? description,
+    Option<String>? flierUrl,
     String? placeId,
     String? geohash,
     double? lat,
@@ -97,6 +104,7 @@ class Opportunity extends Equatable {
       userId: userId ?? this.userId,
       title: title ?? this.title,
       description: description ?? this.description,
+      flierUrl: flierUrl ?? this.flierUrl,
       placeId: placeId ?? this.placeId,
       geohash: geohash ?? this.geohash,
       lat: lat ?? this.lat,

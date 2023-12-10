@@ -1,5 +1,6 @@
 import 'dart:ui';
 
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -44,43 +45,64 @@ class OpportunityCard extends StatelessWidget {
 
         final place = snapshot.data!;
         final photoReference = place.photoMetadatas?.first;
+        final imageWidget = switch (opportunity.flierUrl) {
+          None() => FutureBuilder<Option<Image>>(
+              future: photoReference != null
+                  ? places.getPhotoUrlFromReference(photoReference)
+                  : nothing(),
+              builder: (context, snapshot) {
+                final image = snapshot.data;
+                return switch (image) {
+                  null => const Center(
+                      child: CupertinoActivityIndicator(),
+                    ),
+                  None() => const Center(
+                      child: CupertinoActivityIndicator(),
+                    ),
+                  Some(:final value) => Container(
+                      height: 400,
+                      width: double.infinity,
+                      decoration: BoxDecoration(
+                        image: DecorationImage(
+                          image: value.image,
+                          fit: BoxFit.cover,
+                        ),
+                      ),
+                      child: BackdropFilter(
+                        filter: ImageFilter.blur(
+                          sigmaX: 600,
+                          sigmaY: 1000,
+                        ),
+                      ),
+                    ),
+                };
+              },
+            ),
+          Some(:final value) => Container(
+              height: 400,
+              width: double.infinity,
+              decoration: BoxDecoration(
+                image: DecorationImage(
+                  image: CachedNetworkImageProvider(
+                    value,
+                  ),
+                  fit: BoxFit.cover,
+                ),
+              ),
+              child: BackdropFilter(
+                filter: ImageFilter.blur(
+                  sigmaX: 600,
+                  sigmaY: 1000,
+                ),
+              ),
+            ),
+        };
         return SingleChildScrollView(
           physics: const AlwaysScrollableScrollPhysics(),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              FutureBuilder<Option<Image>>(
-                future: photoReference != null
-                    ? places.getPhotoUrlFromReference(photoReference)
-                    : nothing(),
-                builder: (context, snapshot) {
-                  final image = snapshot.data;
-                  return switch (image) {
-                    null => const Center(
-                        child: CupertinoActivityIndicator(),
-                      ),
-                    None() => const Center(
-                        child: CupertinoActivityIndicator(),
-                      ),
-                    Some(:final value) => Container(
-                        height: 400,
-                        width: double.infinity,
-                        decoration: BoxDecoration(
-                          image: DecorationImage(
-                            image: value.image,
-                            fit: BoxFit.cover,
-                          ),
-                        ),
-                        child: BackdropFilter(
-                          filter: ImageFilter.blur(
-                            sigmaX: 600,
-                            sigmaY: 1000,
-                          ),
-                        ),
-                      ),
-                  };
-                },
-              ),
+              imageWidget,
               Padding(
                 padding: const EdgeInsets.symmetric(
                   horizontal: 24,
