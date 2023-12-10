@@ -1,7 +1,9 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intheloopapp/domains/bookings_bloc/bookings_bloc.dart';
+import 'package:intheloopapp/domains/navigation_bloc/navigation_bloc.dart';
 import 'package:intheloopapp/ui/bookings/components/bookings_list.dart';
 import 'package:intheloopapp/ui/common/easter_egg_placeholder.dart';
 
@@ -10,7 +12,7 @@ class BookingsView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final themeColor = Theme.of(context).primaryIconTheme.color ?? Colors.black;
+    final nav = context.read<NavigationBloc>();
     return RefreshIndicator(
       onRefresh: () {
         context.read<BookingsBloc>().add(FetchBookings());
@@ -45,19 +47,14 @@ class BookingsView extends StatelessWidget {
                         bookings: state.pendingBookings,
                       )
                     else
-                      const SliverToBoxAdapter(
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Padding(
-                              padding: EdgeInsets.symmetric(
-                                vertical: 12,
-                              ),
-                              child: EasterEggPlaceholder(
-                                text: 'lets get you booked',
-                              ),
+                      SliverToBoxAdapter(
+                        child: CupertinoButton.filled(
+                          onPressed: () => nav.add(
+                            const ChangeTab(
+                              selectedTab: 0,
                             ),
-                          ],
+                          ),
+                          child: const Text("let's get you booked!"),
                         ),
                       ),
                     const SliverToBoxAdapter(
