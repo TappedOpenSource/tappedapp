@@ -17,7 +17,7 @@ class Themes {
   static final themeLight = ThemeData.light().copyWith(
     useMaterial3: true,
 
-    textTheme: GoogleFonts.rubikTextTheme(
+    textTheme: GoogleFonts.arimoTextTheme(
       ThemeData.light().textTheme,
     ),
 
@@ -67,7 +67,7 @@ class Themes {
   static final themeDark = ThemeData.dark().copyWith(
     useMaterial3: true,
 
-    textTheme: GoogleFonts.rubikTextTheme(
+    textTheme: GoogleFonts.arimoTextTheme(
       ThemeData.dark().textTheme,
     ),
 

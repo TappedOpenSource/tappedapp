@@ -25,7 +25,7 @@ class ServicesList extends StatelessWidget {
     return Column(
       children: [
         SizedBox(
-          height: 200,
+          height: 190,
           child: ListView.builder(
             scrollDirection: Axis.horizontal,
             itemCount: isCurrentUser ? services.length + 1 : services.length,

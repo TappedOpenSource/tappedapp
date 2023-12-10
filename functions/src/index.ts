@@ -103,7 +103,7 @@ import {
   generateBasicMarketingPlan,
   generateSingleBasicMarketingPlan,
 } from "./openai";
-import { onDocumentCreated, onDocumentUpdated } from "firebase-functions/v2/firestore";
+import { onDocumentCreated, onDocumentUpdated, onDocumentWritten } from "firebase-functions/v2/firestore";
 
 export * from "./email_triggers";
 
@@ -737,7 +737,7 @@ const _giveUserCoverArtCredits = async (userId: string, amount: number) => {
   });
 }
 
-const _addOpportunityToUserFeeds = async (
+const _addOpportunityToUserFeed = async (
   userId: string,
   opData: Opportunity,
 ) => {
@@ -1097,14 +1097,14 @@ export const incrementFollowingCountOnFollow = functions.firestore
         followingCount: FieldValue.increment(1),
       });
   });
-export const copyLoopFeedOnFollow = functions.firestore
-  .document("following/{followerId}/Following/{followeeId}")
-  .onCreate(async (snapshot, context) => {
-    _copyUserLoopsToFeed({
-      loopsOwnerId: context.params.followeeId,
-      feedOwnerId: context.params.followerId,
-    });
-  });
+// export const copyLoopFeedOnFollow = functions.firestore
+//   .document("following/{followerId}/Following/{followeeId}")
+//   .onCreate(async (snapshot, context) => {
+//     _copyUserLoopsToFeed({
+//       loopsOwnerId: context.params.followeeId,
+//       feedOwnerId: context.params.followerId,
+//     });
+//   });
 
 export const addActivityOnFollow = functions.firestore
   .document("followers/{followeeId}/Followers/{followerId}")
@@ -1116,14 +1116,14 @@ export const addActivityOnFollow = functions.firestore
     });
   })
 
-export const deleteUserLoopOnUnfollow = functions.firestore
-  .document("following/{followerId}/Following/{followeeId}")
-  .onDelete(async (snapshot, context) => {
-    _deleteUserLoopsFromFeed({
-      loopsOwnerId: context.params.followeeId,
-      feedOwnerId: context.params.followerId,
-    })
-  });
+// export const deleteUserLoopOnUnfollow = functions.firestore
+//   .document("following/{followerId}/Following/{followeeId}")
+//   .onDelete(async (snapshot, context) => {
+//     _deleteUserLoopsFromFeed({
+//       loopsOwnerId: context.params.followeeId,
+//       feedOwnerId: context.params.followerId,
+//     })
+//   });
 
 export const deteteFollowersEntryOnUnfollow = functions.firestore
   .document("following/{followerId}/Following/{followeeId}")
@@ -1141,157 +1141,157 @@ export const deteteFollowersEntryOnUnfollow = functions.firestore
     doc.ref.delete()
   });
 
-export const incrementLoopCountOnUpload = functions.firestore
-  .document("loops/{loopId}")
-  .onCreate(async (snapshot) => {
-    const loop = snapshot.data();
-    await usersRef
-      .doc(loop.userId)
-      .update({ loopsCount: FieldValue.increment(1) });
-  })
-export const notifyMentionsOnLoopUpload = functions.firestore
-  .document("loops/{loopId}")
-  .onCreate(async (snapshot) => {
-    const loop = snapshot.data() as Loop;
-    const description = loop.description;
-    const userTagRegex = /^(.*?)(?<![\w@])@([\w@]+(?:[.!][\w@]+)*)/;
+// export const incrementLoopCountOnUpload = functions.firestore
+//   .document("loops/{loopId}")
+//   .onCreate(async (snapshot) => {
+//     const loop = snapshot.data();
+//     await usersRef
+//       .doc(loop.userId)
+//       .update({ loopsCount: FieldValue.increment(1) });
+//   })
+// export const notifyMentionsOnLoopUpload = functions.firestore
+//   .document("loops/{loopId}")
+//   .onCreate(async (snapshot) => {
+//     const loop = snapshot.data() as Loop;
+//     const description = loop.description;
+//     const userTagRegex = /^(.*?)(?<![\w@])@([\w@]+(?:[.!][\w@]+)*)/;
 
-    description.match(userTagRegex)?.forEach(async (match: string) => {
-      const username = match.replace("@", "");
-      const userDoc = await usersRef.where("username", "==", username).get();
-      if (userDoc.empty) {
-        functions.logger.error(`user ${username} not found`)
-        return;
-      }
+//     description.match(userTagRegex)?.forEach(async (match: string) => {
+//       const username = match.replace("@", "");
+//       const userDoc = await usersRef.where("username", "==", username).get();
+//       if (userDoc.empty) {
+//         functions.logger.error(`user ${username} not found`)
+//         return;
+//       }
 
-      const user = userDoc.docs[0].data();
+//       const user = userDoc.docs[0].data();
 
-      functions.logger.info(`new mention ${user.id} by ${loop.userId}`)
-      await _addActivity({
-        toUserId: user.id,
-        fromUserId: loop.userId,
-        type: "loopMention",
-        loopId: loop.id,
-      });
-    });
-  })
-export const sendLoopToFollowers = functions.firestore
-  .document("loops/{loopId}")
-  .onCreate(async (snapshot) => {
-    const loop = snapshot.data();
-    const userDoc = await usersRef.doc(loop.userId).get();
-    // add loops to owner's feed
-    await feedsRef
-      .doc(loop.userId)
-      .collection(loopsFeedSubcollection)
-      .doc(snapshot.id)
-      .set({
-        timestamp: Timestamp.now(),
-        userId: loop.userId,
-      });
+//       functions.logger.info(`new mention ${user.id} by ${loop.userId}`)
+//       await _addActivity({
+//         toUserId: user.id,
+//         fromUserId: loop.userId,
+//         type: "loopMention",
+//         loopId: loop.id,
+//       });
+//     });
+//   })
+// export const sendLoopToFollowers = functions.firestore
+//   .document("loops/{loopId}")
+//   .onCreate(async (snapshot) => {
+//     const loop = snapshot.data();
+//     const userDoc = await usersRef.doc(loop.userId).get();
+//     // add loops to owner's feed
+//     await feedsRef
+//       .doc(loop.userId)
+//       .collection(loopsFeedSubcollection)
+//       .doc(snapshot.id)
+//       .set({
+//         timestamp: Timestamp.now(),
+//         userId: loop.userId,
+//       });
 
-    const isShadowBanned: boolean = userDoc.data()?.["shadowBanned"] || false
-    if (isShadowBanned === true) {
-      return;
-    }
-    // get followers
-    const followerSnapshot = await followersRef
-      .doc(loop.userId)
-      .collection("Followers")
-      .get();
+//     const isShadowBanned: boolean = userDoc.data()?.["shadowBanned"] || false
+//     if (isShadowBanned === true) {
+//       return;
+//     }
+//     // get followers
+//     const followerSnapshot = await followersRef
+//       .doc(loop.userId)
+//       .collection("Followers")
+//       .get();
 
-    // add loops to followers feed
-    await Promise.all(
-      followerSnapshot.docs.map(async (docSnapshot) => {
-        return feedsRef
-          .doc(docSnapshot.id)
-          .collection(loopsFeedSubcollection)
-          .doc(snapshot.id).set({
-            timestamp: Timestamp.now(),
-            userId: loop.userId,
-          });
-      }),
-    );
+//     // add loops to followers feed
+//     await Promise.all(
+//       followerSnapshot.docs.map(async (docSnapshot) => {
+//         return feedsRef
+//           .doc(docSnapshot.id)
+//           .collection(loopsFeedSubcollection)
+//           .doc(snapshot.id).set({
+//             timestamp: Timestamp.now(),
+//             userId: loop.userId,
+//           });
+//       }),
+//     );
 
-  });
+//   });
 
-export const incrementLikeCountOnLoopLike = functions.firestore
-  .document("likes/{loopId}/loopLikes/{userId}")
-  .onCreate(async (snapshot, context) => {
-    await loopsRef
-      .doc(context.params.loopId)
-      .update({ likeCount: FieldValue.increment(1) });
-  });
+// export const incrementLikeCountOnLoopLike = functions.firestore
+//   .document("likes/{loopId}/loopLikes/{userId}")
+//   .onCreate(async (snapshot, context) => {
+//     await loopsRef
+//       .doc(context.params.loopId)
+//       .update({ likeCount: FieldValue.increment(1) });
+//   });
 
-export const addActivityOnLoopLike = functions.firestore
-  .document("likes/{loopId}/loopLikes/{userId}")
-  .onCreate(async (snapshot, context) => {
-    const loopSnapshot = await loopsRef.doc(context.params.loopId).get();
-    const loop = loopSnapshot.data();
-    if (loop === undefined) {
-      return;
-    }
+// export const addActivityOnLoopLike = functions.firestore
+//   .document("likes/{loopId}/loopLikes/{userId}")
+//   .onCreate(async (snapshot, context) => {
+//     const loopSnapshot = await loopsRef.doc(context.params.loopId).get();
+//     const loop = loopSnapshot.data();
+//     if (loop === undefined) {
+//       return;
+//     }
 
-    if (loop.userId !== context.params.userId) {
-      _addActivity({
-        fromUserId: context.params.userId,
-        type: "like",
-        toUserId: loop.userId,
-        loopId: context.params.loopId,
-      });
-    }
-  });
+//     if (loop.userId !== context.params.userId) {
+//       _addActivity({
+//         fromUserId: context.params.userId,
+//         type: "like",
+//         toUserId: loop.userId,
+//         loopId: context.params.loopId,
+//       });
+//     }
+//   });
 
-export const decrementLoopLikeCountOnUnlike = functions.firestore
-  .document("likes/{loopId}/loopLikes/{userId}")
-  .onDelete(async (snapshot, context) => {
-    await loopsRef
-      .doc(context.params.loopId)
-      .update({ likeCount: FieldValue.increment(-1) });
-  })
+// export const decrementLoopLikeCountOnUnlike = functions.firestore
+//   .document("likes/{loopId}/loopLikes/{userId}")
+//   .onDelete(async (snapshot, context) => {
+//     await loopsRef
+//       .doc(context.params.loopId)
+//       .update({ likeCount: FieldValue.increment(-1) });
+//   })
 
-export const incrementLikeCountOnCommentLike = functions.firestore
-  .document("comments/{loopId}/loopComments/{commentId}/commentLikes/{userId}")
-  .onCreate(async (snapshot, context) => {
-    await commentsRef
-      .doc(context.params.loopId)
-      .collection("loopComments")
-      .doc(context.params.commentId)
-      .update({ likeCount: FieldValue.increment(1) });
-  });
-export const decrementLoopLikeCountOnCommentUnlike = functions.firestore
-  .document("comments/{loopId}/loopComments/{commentId}/commentLikes/{userId}")
-  .onDelete(async (snapshot, context) => {
-    await commentsRef
-      .doc(context.params.loopId)
-      .collection("loopComments")
-      .doc(context.params.commentId)
-      .update({ likeCount: FieldValue.increment(-1) });
-  });
-export const addActivityOnCommentLike = functions.firestore
-  .document("comments/{rootId}/loopComments/{commentId}/commentLikes/{userId}")
-  .onCreate(async (snapshot, context) => {
-    const commentSnapshot = await commentsRef
-      .doc(context.params.rootId)
-      .collection("loopComments")
-      .doc(context.params.commentId)
-      .get();
+// export const incrementLikeCountOnCommentLike = functions.firestore
+//   .document("comments/{loopId}/loopComments/{commentId}/commentLikes/{userId}")
+//   .onCreate(async (snapshot, context) => {
+//     await commentsRef
+//       .doc(context.params.loopId)
+//       .collection("loopComments")
+//       .doc(context.params.commentId)
+//       .update({ likeCount: FieldValue.increment(1) });
+//   });
+// export const decrementLoopLikeCountOnCommentUnlike = functions.firestore
+//   .document("comments/{loopId}/loopComments/{commentId}/commentLikes/{userId}")
+//   .onDelete(async (snapshot, context) => {
+//     await commentsRef
+//       .doc(context.params.loopId)
+//       .collection("loopComments")
+//       .doc(context.params.commentId)
+//       .update({ likeCount: FieldValue.increment(-1) });
+//   });
+// export const addActivityOnCommentLike = functions.firestore
+//   .document("comments/{rootId}/loopComments/{commentId}/commentLikes/{userId}")
+//   .onCreate(async (snapshot, context) => {
+//     const commentSnapshot = await commentsRef
+//       .doc(context.params.rootId)
+//       .collection("loopComments")
+//       .doc(context.params.commentId)
+//       .get();
 
-    const comment = commentSnapshot.data();
-    if (comment === undefined) {
-      return;
-    }
+//     const comment = commentSnapshot.data();
+//     if (comment === undefined) {
+//       return;
+//     }
 
-    if (comment.userId !== context.params.userId) {
-      _addActivity({
-        toUserId: comment.userId,
-        fromUserId: context.params.userId,
-        type: "commentLike",
-        commentId: context.params.commentId,
-        rootId: context.params.rootId,
-      });
-    }
-  });
+//     if (comment.userId !== context.params.userId) {
+//       _addActivity({
+//         toUserId: comment.userId,
+//         fromUserId: context.params.userId,
+//         type: "commentLike",
+//         commentId: context.params.commentId,
+//         rootId: context.params.rootId,
+//       });
+//     }
+//   });
 
 export const addActivityOnBooking = functions.firestore
   .document("bookings/{bookingId}")
@@ -1338,69 +1338,69 @@ export const addActivityOnBookingUpdate = functions.firestore
     }
   });
 
-export const incrementLoopCommentCountOnComment = functions.firestore
-  .document("comments/{loopId}/loopComments/{commentId}")
-  .onCreate(async (snapshot, context) => {
-    const loopSnapshot = await loopsRef.doc(context.params.loopId).get();
-    const loop = loopSnapshot.data();
+// export const incrementLoopCommentCountOnComment = functions.firestore
+//   .document("comments/{loopId}/loopComments/{commentId}")
+//   .onCreate(async (snapshot, context) => {
+//     const loopSnapshot = await loopsRef.doc(context.params.loopId).get();
+//     const loop = loopSnapshot.data();
 
-    if (loop === undefined) {
-      throw new HttpsError("failed-precondition", `loop ${context.params.loopId} does not exist`);
-    }
+//     if (loop === undefined) {
+//       throw new HttpsError("failed-precondition", `loop ${context.params.loopId} does not exist`);
+//     }
 
-    await loopsRef
-      .doc(context.params.loopId)
-      .update({ commentCount: FieldValue.increment(1) });
-  });
-export const notifyMentionsOnComment = functions.firestore
-  .document("comments/{loopId}/loopComments/{commentId}")
-  .onCreate(async (snapshot, context) => {
-    const comment = snapshot.data() as Comment;
+//     await loopsRef
+//       .doc(context.params.loopId)
+//       .update({ commentCount: FieldValue.increment(1) });
+//   });
+// export const notifyMentionsOnComment = functions.firestore
+//   .document("comments/{loopId}/loopComments/{commentId}")
+//   .onCreate(async (snapshot, context) => {
+//     const comment = snapshot.data() as Comment;
 
-    const text = comment.content;
-    const userTagRegex = /^(.*?)(?<![\w@])@([\w@]+(?:[.!][\w@]+)*)/;
+//     const text = comment.content;
+//     const userTagRegex = /^(.*?)(?<![\w@])@([\w@]+(?:[.!][\w@]+)*)/;
 
-    text.match(userTagRegex)?.forEach(async (match: string) => {
-      const username = match.replace("@", "");
-      const userDoc = await usersRef.where("username", "==", username).get();
-      if (userDoc.empty) {
-        return;
-      }
+//     text.match(userTagRegex)?.forEach(async (match: string) => {
+//       const username = match.replace("@", "");
+//       const userDoc = await usersRef.where("username", "==", username).get();
+//       if (userDoc.empty) {
+//         return;
+//       }
 
-      const user = userDoc.docs[0].data();
+//       const user = userDoc.docs[0].data();
 
-      functions.logger.info(`new mention ${user.id} by ${comment.userId}`)
-      await _addActivity({
-        toUserId: user.id,
-        fromUserId: comment.userId,
-        type: "commentMention",
-        rootId: context.params.loopId,
-        commentId: context.params.commentId,
-      });
-    });
-  });
+//       functions.logger.info(`new mention ${user.id} by ${comment.userId}`)
+//       await _addActivity({
+//         toUserId: user.id,
+//         fromUserId: comment.userId,
+//         type: "commentMention",
+//         rootId: context.params.loopId,
+//         commentId: context.params.commentId,
+//       });
+//     });
+//   });
 
-export const addActivityOnLoopComment = functions.firestore
-  .document("comments/{loopId}/loopComments/{commentId}")
-  .onCreate(async (snapshot, context) => {
-    const comment = snapshot.data();
-    const loopSnapshot = await loopsRef.doc(context.params.loopId).get();
-    const loop = loopSnapshot.data();
+// export const addActivityOnLoopComment = functions.firestore
+//   .document("comments/{loopId}/loopComments/{commentId}")
+//   .onCreate(async (snapshot, context) => {
+//     const comment = snapshot.data();
+//     const loopSnapshot = await loopsRef.doc(context.params.loopId).get();
+//     const loop = loopSnapshot.data();
 
-    if (loop === undefined) {
-      throw new HttpsError("failed-precondition", `loop ${context.params.loopId} does not exist`);
-    }
+//     if (loop === undefined) {
+//       throw new HttpsError("failed-precondition", `loop ${context.params.loopId} does not exist`);
+//     }
 
-    if (loop.userId !== comment.userId) {
-      _addActivity({
-        toUserId: loop.userId,
-        fromUserId: comment.userId,
-        type: "comment",
-        rootId: context.params.loopId,
-        commentId: context.params.commentId,
-      });
-    }
-  });
+//     if (loop.userId !== comment.userId) {
+//       _addActivity({
+//         toUserId: loop.userId,
+//         fromUserId: comment.userId,
+//         type: "comment",
+//         rootId: context.params.loopId,
+//         commentId: context.params.commentId,
+//       });
+//     }
+//   });
 
 export const incrementBadgeCountOnBadgeSent = functions.firestore
   .document("badgesSent/{userId}/badges/{badgeId}")
@@ -1611,16 +1611,16 @@ export const cancelBookingIfExpired = onSchedule("0 * * * *", async (event) => {
 
 export const addActivityOnOpportunityInterest = functions
   .firestore
-  .document("opportunities/{loopId}/interestedUsers/{userId}")
+  .document("opportunities/{opportunityId}/interestedUsers/{userId}")
   .onCreate(async (data, context) => {
-    const loopSnapshot = await loopsRef.doc(context.params.loopId).get();
-    const loop = loopSnapshot.data() as Loop;
+    const opSnap = await opportunitiesRef.doc(context.params.opportunityId).get();
+    const op = opSnap.data() as Opportunity;
 
     _addActivity({
-      toUserId: loop.userId,
+      toUserId: op.userId,
       fromUserId: context.params.userId,
       type: "opportunityInterest",
-      loopId: context.params.loopId,
+      opportunityId: context.params.opportunityId,
     });
   });
 
@@ -2536,11 +2536,12 @@ export const richmondEventsWebhook = onRequest(
     res.status(200).json("Success");
   });
 
-export const copyOpportunityToFeedsOnCreate = onDocumentCreated(
+export const copyOpportunityToFeedsOnCreate = onDocumentWritten(
   { document: "opportunities/{opportunityId}" },
   async (event) => {
     const snapshot = event.data;
-    const opportunity = snapshot?.data() as Opportunity | undefined;
+    const afterDoc = snapshot?.after;
+    const opportunity = afterDoc?.data() as Opportunity | undefined;
 
     if (opportunity === undefined) {
       throw new HttpsError("failed-precondition", "opportunity does not exist");
@@ -2555,7 +2556,7 @@ export const copyOpportunityToFeedsOnCreate = onDocumentCreated(
           return;
         }
 
-        await _addOpportunityToUserFeeds(userDoc.id, opportunity);
+        await _addOpportunityToUserFeed(userDoc.id, opportunity);
       }),
     );
   });
@@ -2586,4 +2587,26 @@ export const addInterestedUserOnApplyToOpportunity = onDocumentUpdated(
     }
 
     await _addInterestedUserToOpportunity(userId, afterOp);
+  });
+
+export const copyOpportunitiesToFeedOnCreateUser = onDocumentCreated(
+  { document: "users/{userId}" },
+  async (event) => {
+    const snapshot = event.data;
+    const user = snapshot?.data() as UserModel | undefined;
+
+    if (user === undefined) {
+      throw new HttpsError("failed-precondition", "user does not exist");
+    }
+
+    const opportunitiesSnap = await opportunitiesRef
+      .where("startTime", ">", Timestamp.now())
+      .get();
+
+    await Promise.all(
+      opportunitiesSnap.docs.map(async (opDoc) => {
+        const op = opDoc.data() as Opportunity;
+        await _addOpportunityToUserFeed(user.id, op);
+      }),
+    );
   });
