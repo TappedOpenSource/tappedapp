@@ -65,16 +65,15 @@ class _UserBookingsFeedState extends State<UserBookingsFeed> {
       _bookingListener = Rx.merge([
         _databaseRepository.getBookingsByRequesteeObserver(
           _userId,
+          status: BookingStatus.confirmed,
         ),
         _databaseRepository.getBookingsByRequesterObserver(
           _userId,
+          status: BookingStatus.confirmed,
         ),
       ]).listen((Booking event) {
         logger.debug('booking { ${event.id} : ${event.name} }');
         try {
-          if (event.status != BookingStatus.confirmed) {
-            return;
-          }
 
           setState(() {
             _bookingsStatus = BookingsStatus.success;
@@ -162,7 +161,9 @@ class _UserBookingsFeedState extends State<UserBookingsFeed> {
           ),
         BookingsStatus.success => () {
             if (_userBookings.isEmpty || user.deleted) {
-              return const Text('No bookings yet...');
+              return const Center(
+                child: Text('No bookings yet...'),
+              );
             }
 
             return CustomScrollView(

@@ -143,28 +143,44 @@ class ProfileView extends StatelessWidget {
               vertical: 6,
             ),
             centerTitle: false,
-            title: Text.rich(
-              TextSpan(
-                text: visitedUser.displayName,
-                style: const TextStyle(
-                  color: Colors.white,
-                  fontSize: 32,
-                  fontWeight: FontWeight.w900,
-                ),
-                children: [
-                  if (state.isVerified)
-                    const WidgetSpan(
-                      child: Icon(
-                        Icons.verified,
-                        size: 18,
-                        color: tappedAccent,
-                      ),
-                      alignment: PlaceholderAlignment.middle,
+            title: Column(
+              mainAxisAlignment: MainAxisAlignment.end,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text.rich(
+                  TextSpan(
+                    text: visitedUser.displayName,
+                    style: const TextStyle(
+                      color: Colors.white,
+                      fontSize: 32,
+                      fontWeight: FontWeight.w900,
                     ),
-                ],
-              ),
-              overflow: TextOverflow.fade,
-              maxLines: 2,
+                    children: [
+                      if (state.isVerified)
+                        const WidgetSpan(
+                          child: Icon(
+                            Icons.verified,
+                            size: 18,
+                            color: tappedAccent,
+                          ),
+                          alignment: PlaceholderAlignment.middle,
+                        ),
+                    ],
+                  ),
+                  overflow: TextOverflow.fade,
+                  maxLines: 2,
+                ),
+                Text(
+                  visitedUser.occupations.join(', '),
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                  style: TextStyle(
+                    color: Colors.grey[300],
+                    fontSize: 12,
+                    fontWeight: FontWeight.w300,
+                  ),
+                ),
+              ],
             ),
             background: Container(
               decoration: BoxDecoration(
@@ -222,12 +238,6 @@ class ProfileView extends StatelessWidget {
         const SliverToBoxAdapter(
           child: SizedBox(height: 18),
         ),
-        // const SliverToBoxAdapter(
-        //   child: OpportunitySliver(),
-        // ),
-        // const SliverToBoxAdapter(
-        //   child: LoopsSliver(),
-        // ),
         const SliverToBoxAdapter(
           child: SizedBox(height: 18),
         ),

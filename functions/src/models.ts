@@ -95,7 +95,7 @@ export type BookingUpdateActivity = UserToUserActivity & { type: "bookingUpdate"
 export type LoopMentionActivity = UserToUserActivity & { type: "loopMention", loopId: string }
 export type CommentMentionActivity = UserToUserActivity & { type: "commentMention", rootId: string, commentId: string; }
 export type CommentLikeActivity = UserToUserActivity & { type: "commentLike", rootId: string, commentId: string; }
-export type OpportunityInterest = UserToUserActivity & { type: "opportunityInterest", loopId: string; }
+export type OpportunityInterest = UserToUserActivity & { type: "opportunityInterest", opportunityId: string; }
 export type BookingReminderActivity = UserToUserActivity & { type: "bookingReminder", bookingId: string; }
 export type SearchAppearanceActivity = Activity & { type: "searchAppearance", count: number; }
 

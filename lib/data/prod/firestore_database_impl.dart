@@ -840,76 +840,6 @@ class FirestoreDatabaseImpl extends DatabaseRepository {
   }
 
   @override
-  Future<void> createBadge(Badge badge) async {
-    await _analytics.logEvent(
-      name: 'create_badge',
-      parameters: {
-        'badge_id': badge.id,
-        'creator_id': badge.creatorId,
-      },
-    );
-    await _badgesRef.doc(badge.id).set({
-      'name': badge.name,
-      'description': badge.description,
-      'creatorId': badge.creatorId,
-      'imageUrl': badge.imageUrl,
-      'timestamp': Timestamp.now(),
-    });
-  }
-
-  @override
-  Future<void> sendBadge(String badgeId, String receiverId) async {
-    await _analytics.logEvent(
-      name: 'send_badge',
-      parameters: {
-        'badge_id': badgeId,
-        'receiver_id': receiverId,
-      },
-    );
-
-    await _badgesSentRef.doc(receiverId).collection('badges').doc(badgeId).set({
-      'timestamp': Timestamp.now(),
-    });
-
-    await _usersRef
-        .doc(receiverId)
-        .update({'badgesCount': FieldValue.increment(1)});
-  }
-
-  @override
-  Stream<Badge> userCreatedBadgesObserver(
-    String userId, {
-    int limit = 30,
-  }) async* {
-    final userCreatedBadgesSnapshotObserver = _badgesRef
-        .where('creatorId', isEqualTo: userId)
-        .orderBy('timestamp', descending: true)
-        .limit(limit)
-        .snapshots();
-
-    final userCreatedBadgesObserver = userCreatedBadgesSnapshotObserver
-        .map((event) {
-          return event.docChanges
-              .where(
-            (DocumentChange<Map<String, dynamic>> element) =>
-                element.type == DocumentChangeType.added,
-          )
-              .map((DocumentChange<Map<String, dynamic>> element) {
-            try {
-              return Badge.fromDoc(element.doc);
-            } catch (e, s) {
-              logger.error('Error parsing badge', error: e, stackTrace: s);
-              return null;
-            }
-          });
-        })
-        .flatMap(Stream.fromIterable)
-        .whereType<Badge>();
-
-    yield* userCreatedBadgesObserver;
-  }
-
-  @override
   Stream<Badge> userBadgesObserver(
     String userId, {
     int limit = 30,
@@ -941,39 +871,6 @@ class FirestoreDatabaseImpl extends DatabaseRepository {
       } catch (error, stack) {
         yield* Stream.error(error, stack);
       }
-    }
-  }
-
-  @override
-  Future<List<Badge>> getUserCreatedBadges(
-    String userId, {
-    int limit = 30,
-    String? lastBadgeId,
-  }) async {
-    if (lastBadgeId != null) {
-      final documentSnapshot = await _badgesRef.doc(lastBadgeId).get();
-
-      final userCreatedBadgesSnapshot = await _badgesRef
-          .orderBy('timestamp', descending: true)
-          .where('creatorId', isEqualTo: userId)
-          .limit(limit)
-          .startAfterDocument(documentSnapshot)
-          .get();
-
-      final userCreatedBadges =
-          userCreatedBadgesSnapshot.docs.map(Badge.fromDoc).toList();
-      return userCreatedBadges;
-    } else {
-      final userCreatedBadgesSnapshot = await _badgesRef
-          .orderBy('timestamp', descending: true)
-          .where('creatorId', isEqualTo: userId)
-          .limit(limit)
-          .get();
-
-      final userCreatedBadges =
-          userCreatedBadgesSnapshot.docs.map(Badge.fromDoc).toList();
-
-      return userCreatedBadges;
     }
   }
 
@@ -1067,17 +964,34 @@ class FirestoreDatabaseImpl extends DatabaseRepository {
     String requesteeId, {
     int limit = 20,
     String? lastBookingRequestId,
+    BookingStatus? status,
   }) async {
-    final bookingSnapshot = await _bookingsRef
-        .where(
-          'requesterId',
-          isEqualTo: requesterId,
-        )
-        .where(
-          'requesteeId',
-          isEqualTo: requesteeId,
-        )
-        .get();
+    final bookingSnapshot = await (() {
+      if (status == null) {
+        return _bookingsRef
+            .where(
+              'requesterId',
+              isEqualTo: requesterId,
+            )
+            .where(
+              'requesteeId',
+              isEqualTo: requesteeId,
+            )
+            .get();
+      }
+
+      return _bookingsRef
+          .where(
+            'requesterId',
+            isEqualTo: requesterId,
+          )
+          .where(
+            'requesteeId',
+            isEqualTo: requesteeId,
+          )
+          .where('status', isEqualTo: EnumToString.convertToString(status))
+          .get();
+    })();
 
     final bookingRequests = bookingSnapshot.docs.map(Booking.fromDoc).toList();
 
@@ -1089,14 +1003,27 @@ class FirestoreDatabaseImpl extends DatabaseRepository {
     String userId, {
     int limit = 20,
     String? lastBookingRequestId,
+    BookingStatus? status,
   }) async {
     try {
-      final bookingSnapshot = await _bookingsRef
-          .where(
-            'requesterId',
-            isEqualTo: userId,
-          )
-          .get();
+      final bookingSnapshot = await (() {
+        if (status == null) {
+          return _bookingsRef
+              .where(
+                'requesterId',
+                isEqualTo: userId,
+              )
+              .get();
+        }
+
+        return _bookingsRef
+            .where(
+              'requesterId',
+              isEqualTo: userId,
+            )
+            .where('status', isEqualTo: EnumToString.convertToString(status))
+            .get();
+      })();
 
       final bookingRequests =
           bookingSnapshot.docs.map(Booking.fromDoc).toList();
@@ -1116,12 +1043,26 @@ class FirestoreDatabaseImpl extends DatabaseRepository {
   Stream<Booking> getBookingsByRequesterObserver(
     String userId, {
     int limit = 20,
+    BookingStatus? status,
   }) async* {
-    final bookingsSnapshotObserver = _bookingsRef
-        .where('requesterId', isEqualTo: userId)
-        .orderBy('timestamp', descending: true)
-        .limit(limit)
-        .snapshots();
+
+    final bookingsSnapshotObserver = (() {
+      if (status == null) {
+        return _bookingsRef
+            .where('requesterId', isEqualTo: userId)
+            .orderBy('timestamp', descending: true)
+            .limit(limit)
+            .snapshots();
+      }
+
+      return _bookingsRef
+          .where('requesterId', isEqualTo: userId)
+          .where('status', isEqualTo: EnumToString.convertToString(status))
+          .orderBy('timestamp', descending: true)
+          .limit(limit)
+          .snapshots();
+    })();
+
 
     final bookingsObserver = bookingsSnapshotObserver.map((event) {
       return event.docChanges
@@ -1151,14 +1092,27 @@ class FirestoreDatabaseImpl extends DatabaseRepository {
     String userId, {
     int limit = 20,
     String? lastBookingRequestId,
+    BookingStatus? status,
   }) async {
     try {
-      final bookingSnapshot = await _bookingsRef
-          .where(
-            'requesteeId',
-            isEqualTo: userId,
-          )
-          .get();
+      final bookingSnapshot = await (() {
+        if (status == null) {
+          return _bookingsRef
+              .where(
+                'requesteeId',
+                isEqualTo: userId,
+              )
+              .get();
+        }
+
+        return _bookingsRef
+            .where(
+              'requesteeId',
+              isEqualTo: userId,
+            )
+            .where('status', isEqualTo: EnumToString.convertToString(status))
+            .get();
+      })();
 
       final bookingRequests =
           bookingSnapshot.docs.map(Booking.fromDoc).toList();
@@ -1178,12 +1132,25 @@ class FirestoreDatabaseImpl extends DatabaseRepository {
   Stream<Booking> getBookingsByRequesteeObserver(
     String userId, {
     int limit = 20,
+    BookingStatus? status,
   }) async* {
-    final bookingsSnapshotObserver = _bookingsRef
-        .where('requesteeId', isEqualTo: userId)
-        .orderBy('timestamp', descending: true)
-        .limit(limit)
-        .snapshots();
+
+    final bookingsSnapshotObserver = (() {
+      if (status == null) {
+        return _bookingsRef
+            .where('requesteeId', isEqualTo: userId)
+            .orderBy('timestamp', descending: true)
+            .limit(limit)
+            .snapshots();
+      }
+
+      return _bookingsRef
+          .where('requesteeId', isEqualTo: userId)
+          .where('status', isEqualTo: EnumToString.convertToString(status))
+          .orderBy('timestamp', descending: true)
+          .limit(limit)
+          .snapshots();
+    })();
 
     final bookingsObserver = bookingsSnapshotObserver.map((event) {
       return event.docChanges

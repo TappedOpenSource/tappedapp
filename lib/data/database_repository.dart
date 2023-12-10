@@ -104,17 +104,6 @@ abstract class DatabaseRepository {
 
   // Badge related stuff
   Future<bool> isVerified(String userId);
-  Future<void> createBadge(Badge badge);
-  Future<void> sendBadge(String badgeId, String receiverId);
-  Stream<Badge> userCreatedBadgesObserver(
-    String userId, {
-    int limit = 100,
-  });
-  Future<List<Badge>> getUserCreatedBadges(
-    String userId, {
-    int limit = 100,
-    String? lastBadgeId,
-  });
   Stream<Badge> userBadgesObserver(
     String userId, {
     int limit = 100,
@@ -137,24 +126,29 @@ abstract class DatabaseRepository {
     String requesteeId, {
     int limit = 20,
     String? lastBookingRequestId,
+    BookingStatus? status,
   });
   Future<List<Booking>> getBookingsByRequester(
     String userId, {
     int limit = 20,
     String? lastBookingRequestId,
+    BookingStatus? status,
   });
   Stream<Booking> getBookingsByRequesterObserver(
     String userId, {
     int limit = 20,
+    BookingStatus? status,
   });
   Future<List<Booking>> getBookingsByRequestee(
     String userId, {
     int limit = 20,
     String? lastBookingRequestId,
+    BookingStatus? status,
   });
   Stream<Booking> getBookingsByRequesteeObserver(
     String userId, {
     int limit = 20,
+    BookingStatus? status,
   });
   Future<void> updateBooking(Booking booking);
 

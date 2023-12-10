@@ -90,10 +90,12 @@ class ProfileCubit extends Cubit<ProfileState> {
       final bookingsRequestee = await databaseRepository.getBookingsByRequestee(
         visitedUser.id,
         limit: 1,
+        status: BookingStatus.confirmed,
       );
       final bookingsRequester = await databaseRepository.getBookingsByRequester(
         visitedUser.id,
         limit: 1,
+        status: BookingStatus.confirmed,
       );
 
       final latestRequesteeBooking = bookingsRequestee.isNotEmpty
