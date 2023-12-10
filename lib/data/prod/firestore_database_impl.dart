@@ -364,6 +364,24 @@ class FirestoreDatabaseImpl extends DatabaseRepository {
   }
 
   @override
+  Future<List<Opportunity>> getFeaturedOpportunities() async {
+    final leadersSnapshot = await _leadersRef.doc('leaders').get();
+    final leadingOps =
+        leadersSnapshot.getOrElse('featuredOpportunities', <dynamic>[]);
+
+    final ops = await Future.wait(
+      leadingOps.map(
+        (opId) async {
+          final op = await getOpportunityById(opId as String);
+          return op;
+        },
+      ),
+    );
+
+    return ops;
+  }
+
+  @override
   Future<int> followersNum(String userid) async {
     try {
       final followersSnapshot =
@@ -1045,7 +1063,6 @@ class FirestoreDatabaseImpl extends DatabaseRepository {
     int limit = 20,
     BookingStatus? status,
   }) async* {
-
     final bookingsSnapshotObserver = (() {
       if (status == null) {
         return _bookingsRef
@@ -1062,7 +1079,6 @@ class FirestoreDatabaseImpl extends DatabaseRepository {
           .limit(limit)
           .snapshots();
     })();
-
 
     final bookingsObserver = bookingsSnapshotObserver.map((event) {
       return event.docChanges
@@ -1134,7 +1150,6 @@ class FirestoreDatabaseImpl extends DatabaseRepository {
     int limit = 20,
     BookingStatus? status,
   }) async* {
-
     final bookingsSnapshotObserver = (() {
       if (status == null) {
         return _bookingsRef
@@ -1293,6 +1308,21 @@ class FirestoreDatabaseImpl extends DatabaseRepository {
           .set(service.toJson());
     } catch (e, s) {
       logger.error('updateService', error: e, stackTrace: s);
+    }
+  }
+
+  @override
+  Future<Opportunity> getOpportunityById(String opportunityId) async {
+    try {
+      final opportunitySnapshot =
+          await _opportunitiesRef.doc(opportunityId).get();
+
+      final opportunity = Opportunity.fromDoc(opportunitySnapshot);
+
+      return opportunity;
+    } catch (e, s) {
+      logger.error('getOpportunityById', error: e, stackTrace: s);
+      rethrow;
     }
   }
 

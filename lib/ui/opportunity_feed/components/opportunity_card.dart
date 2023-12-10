@@ -11,7 +11,6 @@ import 'package:intheloopapp/domains/models/option.dart';
 import 'package:intheloopapp/ui/user_tile.dart';
 import 'package:intheloopapp/utils/geohash.dart';
 import 'package:intl/intl.dart';
-import 'package:timeago/timeago.dart' as timeago;
 
 class OpportunityCard extends StatelessWidget {
   const OpportunityCard({
@@ -20,10 +19,6 @@ class OpportunityCard extends StatelessWidget {
   });
 
   final Opportunity opportunity;
-
-  // required this.startTime,
-  // required this.endTime,
-  // required this.isPaid,
 
   Future<Option<Image>> nothing() async {
     return const None();

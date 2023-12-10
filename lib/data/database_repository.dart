@@ -32,6 +32,7 @@ abstract class DatabaseRepository {
   Future<List<UserModel>> getRichmondVenues();
   Future<List<UserModel>> getBookingLeaders();
   Future<List<UserModel>> getBookerLeaders();
+  Future<List<Opportunity>> getFeaturedOpportunities();
 
   // Commenting related stuff
   Future<List<Comment>> getComments(
@@ -160,6 +161,7 @@ abstract class DatabaseRepository {
   Future<void> deleteService(String userId, String serviceId);
 
   // Opportunity related stuff
+  Future<Opportunity> getOpportunityById(String opportunityId);
   Future<List<Opportunity>> getOpportunities({
     int limit = 20,
     String? lastOpportunityId,
