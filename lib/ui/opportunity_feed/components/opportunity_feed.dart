@@ -6,6 +6,7 @@ import 'package:intheloopapp/ui/loading/loading_view.dart';
 import 'package:intheloopapp/ui/loading/logo_wave.dart';
 import 'package:intheloopapp/ui/opportunity_feed/components/opportunity_card.dart';
 import 'package:intheloopapp/ui/opportunity_feed/cubit/opportunity_feed_cubit.dart';
+import 'package:intheloopapp/ui/themes.dart';
 
 class OpportunityFeed extends StatelessWidget {
   const OpportunityFeed({super.key});
@@ -61,7 +62,7 @@ class OpportunityFeed extends StatelessWidget {
                       ),
                     ),
                     icon: const Icon(
-                      CupertinoIcons.xmark_circle_fill,
+                      CupertinoIcons.xmark,
                       size: 42,
                     ),
                   ),
@@ -71,11 +72,11 @@ class OpportunityFeed extends StatelessWidget {
                         context.read<OpportunityFeedCubit>().likeOpportunity(),
                     style: ButtonStyle(
                       backgroundColor: MaterialStateProperty.all(
-                        Colors.green,
+                        tappedAccent,
                       ),
                     ),
                     icon: const Icon(
-                      CupertinoIcons.heart_fill,
+                      CupertinoIcons.star_fill,
                       size: 42,
                     ),
                   ),
