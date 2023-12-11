@@ -4,7 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intheloopapp/ui/loading/loading_container.dart';
 import 'package:intheloopapp/ui/loading/loading_view.dart';
 import 'package:intheloopapp/ui/loading/logo_wave.dart';
-import 'package:intheloopapp/ui/opportunity_feed/components/opportunity_card.dart';
+import 'package:intheloopapp/ui/opportunity_feed/components/opportunity_view.dart';
 import 'package:intheloopapp/ui/opportunity_feed/cubit/opportunity_feed_cubit.dart';
 import 'package:intheloopapp/ui/themes.dart';
 
@@ -44,7 +44,7 @@ class OpportunityFeed extends StatelessWidget {
           alignment: Alignment.center,
           children: [
             Positioned.fill(
-              child: OpportunityCard(
+              child: OpportunityView(
                 opportunity: curOp,
               ),
             ),

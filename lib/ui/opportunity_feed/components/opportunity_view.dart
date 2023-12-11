@@ -12,8 +12,8 @@ import 'package:intheloopapp/ui/user_tile.dart';
 import 'package:intheloopapp/utils/geohash.dart';
 import 'package:intl/intl.dart';
 
-class OpportunityCard extends StatelessWidget {
-  const OpportunityCard({
+class OpportunityView extends StatelessWidget {
+  const OpportunityView({
     required this.opportunity,
     super.key,
   });
