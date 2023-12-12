@@ -17,8 +17,10 @@ class OpportunityCard extends StatelessWidget {
 
   final Opportunity opportunity;
 
+
   @override
   Widget build(BuildContext context) {
+    final cardWidth = MediaQuery.of(context).size.width - 48;
     return InkWell(
       onTap: () => showModalBottomSheet<void>(
         showDragHandle: true,
@@ -46,7 +48,7 @@ class OpportunityCard extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Container(
-                  width: 300,
+                  width: cardWidth,
                   height: 200,
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(12),

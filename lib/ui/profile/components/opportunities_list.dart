@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:intheloopapp/domains/models/opportunity.dart';
 import 'package:intheloopapp/ui/profile/components/opportunity_card.dart';
+import 'package:scroll_snap_list/scroll_snap_list.dart';
 
 class OpportunitiesList extends StatelessWidget {
   const OpportunitiesList({
@@ -15,9 +16,10 @@ class OpportunitiesList extends StatelessWidget {
     return Column(
       children: [
         SizedBox(
-          height: 200,
-          child: ListView.builder(
-            scrollDirection: Axis.horizontal,
+          height: 275,
+          child: ScrollSnapList(
+            onItemFocus: (index) {},
+            itemSize: MediaQuery.of(context).size.width - 48,
             itemCount: opportunities.length,
             itemBuilder: (context, index) {
               final opportunity = opportunities[index];
