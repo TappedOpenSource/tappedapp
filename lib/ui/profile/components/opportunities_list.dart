@@ -19,7 +19,7 @@ class OpportunitiesList extends StatelessWidget {
           height: 275,
           child: ScrollSnapList(
             onItemFocus: (index) {},
-            itemSize: MediaQuery.of(context).size.width - 48,
+            itemSize: MediaQuery.of(context).size.width - 36,
             itemCount: opportunities.length,
             itemBuilder: (context, index) {
               final opportunity = opportunities[index];

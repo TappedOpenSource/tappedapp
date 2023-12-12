@@ -18,9 +18,11 @@ class DiscoverView extends StatelessWidget {
     }
     return SizedBox(
       height: 200,
-      child: ListView.builder(
-        scrollDirection: Axis.horizontal,
+      child: ScrollSnapList(
+        onItemFocus: (index) {},
+        selectedItemAnchor: SelectedItemAnchor.START,
         itemCount: users.length,
+        itemSize: 200,
         itemBuilder: (context, index) {
           return Padding(
             padding: const EdgeInsets.symmetric(
@@ -43,6 +45,7 @@ class DiscoverView extends StatelessWidget {
       height: 275,
       child: ScrollSnapList(
         onItemFocus: (int index) {},
+        // selectedItemAnchor: SelectedItemAnchor.START,
         itemSize: cardWidth,
         itemBuilder: (context, index) {
           final op = opportunities[index];
@@ -80,7 +83,7 @@ class DiscoverView extends StatelessWidget {
                   horizontal: 8,
                 ),
                 child: Text(
-                  'Featured Opportunities',
+                  'Featured',
                   style: TextStyle(
                     fontSize: 28,
                     fontWeight: FontWeight.bold,
