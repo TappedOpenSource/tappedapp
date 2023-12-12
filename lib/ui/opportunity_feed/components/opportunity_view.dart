@@ -10,6 +10,7 @@ import 'package:intheloopapp/domains/models/opportunity.dart';
 import 'package:intheloopapp/domains/models/option.dart';
 import 'package:intheloopapp/ui/user_tile.dart';
 import 'package:intheloopapp/utils/geohash.dart';
+import 'package:intheloopapp/utils/opportunity_image.dart';
 import 'package:intl/intl.dart';
 
 class OpportunityView extends StatelessWidget {
@@ -33,71 +34,41 @@ class OpportunityView extends StatelessWidget {
       ),
       builder: (context, snapshot) {
         if (!snapshot.hasData) {
-          return const Center(
-            child: CircularProgressIndicator(),
-          );
+          return const CupertinoActivityIndicator();
         }
 
         final place = snapshot.data!;
-        final photoReference = place.photoMetadatas?.first;
-        final imageWidget = switch (opportunity.flierUrl) {
-          None() => FutureBuilder<Option<Image>>(
-              future: photoReference != null
-                  ? places.getPhotoUrlFromReference(photoReference)
-                  : nothing(),
-              builder: (context, snapshot) {
-                final image = snapshot.data;
-                return switch (image) {
-                  null => const Center(
-                      child: CupertinoActivityIndicator(),
-                    ),
-                  None() => const Center(
-                      child: CupertinoActivityIndicator(),
-                    ),
-                  Some(:final value) => Container(
-                      height: 400,
-                      width: double.infinity,
-                      decoration: BoxDecoration(
-                        image: DecorationImage(
-                          image: value.image,
-                          fit: BoxFit.cover,
-                        ),
-                      ),
-                      child: BackdropFilter(
-                        filter: ImageFilter.blur(
-                          sigmaX: 600,
-                          sigmaY: 1000,
-                        ),
-                      ),
-                    ),
-                };
-              },
-            ),
-          Some(:final value) => Container(
-              height: 400,
-              width: double.infinity,
-              decoration: BoxDecoration(
-                image: DecorationImage(
-                  image: CachedNetworkImageProvider(
-                    value,
-                  ),
-                  fit: BoxFit.cover,
-                ),
-              ),
-              child: BackdropFilter(
-                filter: ImageFilter.blur(
-                  sigmaX: 600,
-                  sigmaY: 1000,
-                ),
-              ),
-            ),
-        };
         return SingleChildScrollView(
           physics: const AlwaysScrollableScrollPhysics(),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              imageWidget,
+              FutureBuilder<ImageProvider>(
+                future: getOpImage(context, opportunity),
+                builder: (context, snapshot) {
+                  if (!snapshot.hasData) {
+                    return const CupertinoActivityIndicator();
+                  }
+
+                  final provider = snapshot.data!;
+                  return Container(
+                    height: 400,
+                    width: double.infinity,
+                    decoration: BoxDecoration(
+                      image: DecorationImage(
+                        image: provider,
+                        fit: BoxFit.cover,
+                      ),
+                    ),
+                    child: BackdropFilter(
+                      filter: ImageFilter.blur(
+                        sigmaX: 600,
+                        sigmaY: 1000,
+                      ),
+                    ),
+                  );
+                },
+              ),
               Padding(
                 padding: const EdgeInsets.symmetric(
                   horizontal: 24,

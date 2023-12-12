@@ -1,13 +1,13 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_google_places_sdk/flutter_google_places_sdk.dart';
-import 'package:intheloopapp/data/places_repository.dart';
 import 'package:intheloopapp/domains/models/opportunity.dart';
 import 'package:intheloopapp/ui/opportunity_feed/components/opportunity_view.dart';
 import 'package:intheloopapp/ui/profile/components/apply_button.dart';
 import 'package:intheloopapp/ui/profile/components/location_chip.dart';
 import 'package:intheloopapp/utils/current_user_builder.dart';
 import 'package:intheloopapp/utils/geohash.dart';
+import 'package:intheloopapp/utils/opportunity_image.dart';
+import 'package:skeletons/skeletons.dart';
 
 class OpportunityCard extends StatelessWidget {
   const OpportunityCard({
@@ -19,84 +19,59 @@ class OpportunityCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final places = context.read<PlacesRepository>();
-    return Card(
-      child: Container(
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(10),
-        ),
-        width: 300,
-        child: Padding(
-          padding: const EdgeInsets.symmetric(
-            horizontal: 12,
-            vertical: 12,
-          ),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                opportunity.title,
-                maxLines: 2,
-                overflow: TextOverflow.ellipsis,
-                textAlign: TextAlign.center,
-                style: const TextStyle(
-                  fontSize: 22,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-              const SizedBox(height: 16),
-              Text(
-                opportunity.description,
-                maxLines: 2,
-                overflow: TextOverflow.ellipsis,
-                style: const TextStyle(
-                  fontSize: 16,
-                ),
-              ),
-              const Spacer(),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  FilledButton(
-                    onPressed: () {
-                      showModalBottomSheet<void>(
-                        showDragHandle: true,
-                        context: context,
-                        builder: (context) {
-                          return SizedBox(
-                            height: 600,
-                            width: double.infinity,
-                            child: OpportunityView(
-                              opportunity: opportunity,
-                            ),
-                          );
-                        },
-                      );
-                    },
-                    child: const Text(
-                      'More Info',
-                      style: TextStyle(
-                        color: Colors.white,
-                      ),
+    return InkWell(
+      onTap: () => showModalBottomSheet<void>(
+        showDragHandle: true,
+        context: context,
+        builder: (context) {
+          return SizedBox(
+            height: 1200,
+            width: double.infinity,
+            child: OpportunityView(
+              opportunity: opportunity,
+            ),
+          );
+        },
+      ),
+      child: FutureBuilder<ImageProvider>(
+        future: getOpImage(context, opportunity),
+        builder: (context, snapshot) {
+          if (!snapshot.hasData) {
+            return const SkeletonAvatar();
+          }
+
+          final provider = snapshot.data!;
+          return Card(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Container(
+                  width: 300,
+                  height: 200,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(12),
+                    image: DecorationImage(
+                      image: provider,
+                      fit: BoxFit.cover,
                     ),
                   ),
-                  if (opportunity.isPaid)
-                    const Icon(
-                      Icons.attach_money,
-                      size: 24,
-                      color: Colors.green,
-                    )
-                  else
-                    const Icon(
-                      Icons.attach_money,
-                      size: 24,
-                      color: Colors.red,
+                ),
+                Padding(
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 12,
+                  ),
+                  child: Text(
+                    opportunity.title,
+                    style: const TextStyle(
+                      fontSize: 18,
+                      fontWeight: FontWeight.w900,
                     ),
-                ],
-              ),
-            ],
-          ),
-        ),
+                  ),
+                ),
+              ],
+            ),
+          );
+        },
       ),
     );
   }

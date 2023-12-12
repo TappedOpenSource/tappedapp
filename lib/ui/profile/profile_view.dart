@@ -221,9 +221,6 @@ class ProfileView extends StatelessWidget {
           child: OpportunitiesSliver(),
         ),
         const SliverToBoxAdapter(
-          child: InfoSliver(),
-        ),
-        const SliverToBoxAdapter(
           child: SizedBox(height: 12),
         ),
         const SliverToBoxAdapter(
@@ -243,6 +240,12 @@ class ProfileView extends StatelessWidget {
         ),
         const SliverToBoxAdapter(
           child: ServicesSliver(),
+        ),
+        const SliverToBoxAdapter(
+          child: SizedBox(height: 12),
+        ),
+        const SliverToBoxAdapter(
+          child: InfoSliver(),
         ),
         const SliverToBoxAdapter(
           child: SizedBox(

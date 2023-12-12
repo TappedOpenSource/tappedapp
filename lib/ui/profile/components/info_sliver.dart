@@ -24,7 +24,7 @@ class InfoSliver extends StatelessWidget {
                 horizontal: 16,
               ),
               child: Text(
-                'More Info',
+                'Info',
                 style: TextStyle(
                   fontSize: 24,
                   fontWeight: FontWeight.bold,
