@@ -60,17 +60,25 @@ class OpportunityFeedCubit extends Cubit<OpportunityFeedState> {
     }
   }
 
+  Future<void> nextOpportunity() async {
+    emit(
+      state.copyWith(
+        curOp: state.curOp + 1,
+      ),
+    );
+
+    if (state.curOp >= state.opportunities.length - 1) {
+      await fetchMoreOpportunities();
+    }
+  }
+
   Future<void> likeOpportunity() async {
     final curOpportunity = state.opportunities[state.curOp];
 
     // like animation
 
     // remove first from list
-    emit(
-      state.copyWith(
-        curOp: state.curOp + 1,
-      ),
-    );
+    await nextOpportunity();
 
     await database.applyForOpportunity(
       opportunity: curOpportunity,
@@ -85,11 +93,7 @@ class OpportunityFeedCubit extends Cubit<OpportunityFeedState> {
     // disappear animation
 
     // remove first from list
-    emit(
-      state.copyWith(
-        curOp: state.curOp + 1,
-      ),
-    );
+    await nextOpportunity();
 
     await database.dislikeOpportunity(
       opportunity: curOpportunity,

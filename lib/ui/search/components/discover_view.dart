@@ -5,6 +5,7 @@ import 'package:intheloopapp/domains/models/opportunity.dart';
 import 'package:intheloopapp/domains/models/user_model.dart';
 import 'package:intheloopapp/ui/profile/components/opportunity_card.dart';
 import 'package:intheloopapp/ui/user_card.dart';
+import 'package:scroll_snap_list/scroll_snap_list.dart';
 
 class DiscoverView extends StatelessWidget {
   const DiscoverView({super.key});
@@ -32,27 +33,23 @@ class DiscoverView extends StatelessWidget {
     );
   }
 
-  Widget _opSlider(List<Opportunity> opportunities) {
+  Widget _opSlider(List<Opportunity> opportunities, double cardWidth) {
     if (opportunities.isEmpty) {
       return const Center(
         child: Text('None rn'),
       );
     }
     return SizedBox(
-      height: 250,
-      child: ListView.builder(
-        scrollDirection: Axis.horizontal,
-        itemCount: opportunities.length,
+      height: 275,
+      child: ScrollSnapList(
+        onItemFocus: (int index) {},
+        itemSize: cardWidth,
         itemBuilder: (context, index) {
-          return Padding(
-            padding: const EdgeInsets.symmetric(
-              horizontal: 12,
-            ),
-            child: OpportunityCard(
-              opportunity: opportunities[index],
-            ),
-          );
+          final op = opportunities[index];
+          return OpportunityCard(opportunity: op);
         },
+        itemCount: opportunities.length,
+        // key: sslKey,
       ),
     );
   }
@@ -60,6 +57,7 @@ class DiscoverView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final database = context.read<DatabaseRepository>();
+    final cardWidth = MediaQuery.of(context).size.width - 48;
     return FutureBuilder<List<List<UserModel>>>(
       future: Future.wait([
         database.getRichmondVenues(),
@@ -99,7 +97,7 @@ class DiscoverView extends StatelessWidget {
                   }
 
                   final opportunities = snapshot.data!;
-                  return _opSlider(opportunities);
+                  return _opSlider(opportunities, cardWidth);
                 },
               ),
               const Padding(
