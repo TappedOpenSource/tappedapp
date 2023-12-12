@@ -11,7 +11,7 @@ class SearchView extends StatefulWidget {
   SearchView({
     FocusNode? searchFocusNode,
     super.key,
-  }): searchFocusNode = searchFocusNode ?? FocusNode();
+  }) : searchFocusNode = searchFocusNode ?? FocusNode();
 
   final FocusNode searchFocusNode;
 
@@ -65,30 +65,32 @@ class _SearchViewState extends State<SearchView> with TickerProviderStateMixin {
 
     return Scaffold(
       backgroundColor: theme.colorScheme.background,
-      appBar: AppBar(
-        centerTitle: true,
-        elevation: 0.5,
-        backgroundColor: theme.colorScheme.background,
-        title: TappedSearchBar(
-          searchFocusNode: widget.searchFocusNode,
-          searchController: _searchController,
-        ),
-        actions: _buildActions(),
-        bottom: TabBar(
-          controller: _tabController,
-          indicatorColor: tappedAccent,
-          labelColor: tappedAccent,
-          tabs: const [
-            Tab(child: Text('Username')),
-            Tab(child: Text('Location')),
-          ],
-        ),
-      ),
-      body: TabBarView(
-        controller: _tabController,
-        children: const [
-          ByUsernameResultsList(),
-          ByLocationResultsList(),
+      // appBar: AppBar(
+      //   centerTitle: true,
+      //   elevation: 0.5,
+      //   backgroundColor: theme.colorScheme.background,
+      //   title: TappedSearchBar(
+      //     searchFocusNode: widget.searchFocusNode,
+      //     searchController: _searchController,
+      //   ),
+      //   actions: _buildActions(),
+      // ),
+      // body: const ByUsernameResultsList(),
+      body: CustomScrollView(
+        slivers: [
+          SliverAppBar(
+            automaticallyImplyLeading: false,
+            backgroundColor: theme.colorScheme.background,
+            floating: true,
+            title: TappedSearchBar(
+              searchFocusNode: widget.searchFocusNode,
+              searchController: _searchController,
+            ),
+            actions: _buildActions(),
+          ),
+          const SliverToBoxAdapter(
+            child: ByUsernameResultsList(),
+          ),
         ],
       ),
     );
