@@ -25,11 +25,11 @@ import {
 } from "firebase-functions/v2/firestore";
 import Stripe from "stripe";
 import { Resend } from "resend";
-import { Booking, MarketingPlan } from "./models";
+import { Booking, MarketingPlan } from "../types/models";
 import { marked } from "marked";
 import { Timestamp } from "firebase-admin/firestore";
-import { labelApplied } from "./email_templates/label_applied";
-import { labelApproved } from "./email_templates/label_approved";
+import { labelApplied } from "../email_templates/label_applied";
+import { labelApproved } from "../email_templates/label_approved";
 
 export const sendWelcomeEmailOnUserCreated = functions.auth
   .user()
