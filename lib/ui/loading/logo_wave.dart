@@ -2,14 +2,21 @@ import 'package:flutter/material.dart';
 import 'package:rive/rive.dart';
 
 class LogoWave extends StatelessWidget {
-  const LogoWave({super.key});
+  const LogoWave({
+    this.height = 200,
+    this.width = 200,
+    super.key,
+  });
+
+  final double height;
+  final double width;
 
   @override
   Widget build(BuildContext context) {
-    return const SizedBox(
-      height: 200,
-      width: 200,
-      child: RiveAnimation.asset(
+    return SizedBox(
+      height: height,
+      width: width,
+      child: const RiveAnimation.asset(
         'assets/loading_logo.riv',
       ),
     );

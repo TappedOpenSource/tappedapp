@@ -12,13 +12,16 @@ class ApplyAnimationView extends StatelessWidget {
       body: const Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          LogoWave(),
+          SizedBox(width: double.infinity),
+          LogoWave(
+            height: 100,
+            width: 100,
+          ),
           Text(
             'easy applying with tappedai',
             textAlign: TextAlign.center,
             style: TextStyle(
-              fontSize: 32,
-              fontWeight: FontWeight.w900,
+              fontSize: 22,
             ),
           ),
         ],
