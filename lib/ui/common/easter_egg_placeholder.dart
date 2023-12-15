@@ -48,6 +48,7 @@ class EasterEggPlaceholderState extends State<EasterEggPlaceholder> {
           ),
           Text(
             widget.text,
+            textAlign: TextAlign.center,
             style: TextStyle(
               fontSize: 22,
               fontWeight: FontWeight.w400,

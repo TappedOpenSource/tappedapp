@@ -1,9 +1,8 @@
-import 'dart:io';
-
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:intheloopapp/data/database_repository.dart';
 import 'package:intheloopapp/domains/models/opportunity.dart';
+import 'package:intheloopapp/domains/opportunity_bloc/opportunity_bloc.dart';
 import 'package:intheloopapp/utils/app_logger.dart';
 
 part 'opportunity_feed_state.dart';
@@ -11,13 +10,16 @@ part 'opportunity_feed_state.dart';
 class OpportunityFeedCubit extends Cubit<OpportunityFeedState> {
   OpportunityFeedCubit({
     required this.database,
+    required this.opBloc,
     required this.currentUserId,
   }) : super(const OpportunityFeedState());
 
   final DatabaseRepository database;
+  final OpportunityBloc opBloc;
   final String currentUserId;
 
   Future<void> initOpportunities() async {
+    opBloc.add(const InitQuotaListener());
     emit(
       state.copyWith(
         loading: true,
@@ -83,15 +85,18 @@ class OpportunityFeedCubit extends Cubit<OpportunityFeedState> {
     try {
       // remove first from list
       final curOpportunity = state.opportunities[state.curOp];
-      await nextOpportunity();
 
-      await database.applyForOpportunity(
-        opportunity: curOpportunity,
-        userId: currentUserId,
-        userComment: '',
+      final opQuota = opBloc.state.opQuota;
+      if (opQuota > 0) {
+        await nextOpportunity();
+        await Future<void>.delayed(const Duration(milliseconds: 1500));
+      }
+      opBloc.add(
+        ApplyForOpportunity(
+          opportunity: curOpportunity,
+          userComment: '',
+        ),
       );
-
-      await Future<void>.delayed(const Duration(milliseconds: 1500));
     } catch (e, s) {
       logger.error(
         'Error liking opportunity',

@@ -32,6 +32,7 @@ import 'package:intheloopapp/domains/deep_link_bloc/deep_link_bloc.dart';
 import 'package:intheloopapp/domains/down_for_maintenance_bloc/down_for_maintenance_bloc.dart';
 import 'package:intheloopapp/domains/navigation_bloc/navigation_bloc.dart';
 import 'package:intheloopapp/domains/onboarding_bloc/onboarding_bloc.dart';
+import 'package:intheloopapp/domains/opportunity_bloc/opportunity_bloc.dart';
 import 'package:intheloopapp/domains/search_bloc/search_bloc.dart';
 import 'package:intheloopapp/ui/app_theme_cubit.dart';
 import 'package:stream_chat_flutter/stream_chat_flutter.dart';
@@ -146,6 +147,13 @@ List<BlocProvider> buildBlocs({
       create: (context) => BookingsBloc(
         database: context.read<DatabaseRepository>(),
         authenticationBloc: context.read<AuthenticationBloc>(),
+      ),
+    ),
+    BlocProvider<OpportunityBloc>(
+      create: (context) => OpportunityBloc(
+        database: context.read<DatabaseRepository>(),
+        nav: context.read<NavigationBloc>(),
+        auth: context.read<AuthenticationBloc>(),
       ),
     ),
     BlocProvider<SearchBloc>(
