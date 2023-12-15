@@ -21,9 +21,6 @@ class OpportunityFeedView extends StatelessWidget {
           )..initOpportunities(),
           child: Scaffold(
             backgroundColor: theme.colorScheme.background,
-            // appBar: TappedAppBar(
-            //   title: '',
-            // ),
             body: const OpportunityFeed(),
           ),
         );
