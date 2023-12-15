@@ -37,12 +37,12 @@ final _bookingsRef = _firestore.collection('bookings');
 final _servicesRef = _firestore.collection('services');
 final _mailRef = _firestore.collection('mail');
 final _leadersRef = _firestore.collection('leaderboard');
-// final _opportunitiesRef = _firestore.collection('opportunities');
 final _blockerRef = _firestore.collection('blockers');
 // final _blockeeRef = _firestore.collection('blockees');
 final _reviewsRef = _firestore.collection('reviews');
 final _opportunitiesRef = _firestore.collection('opportunities');
 final _opportunityFeedsRef = _firestore.collection('opportunityFeeds');
+final _creditsRef = _firestore.collection('credits');
 
 const verifiedBadgeId = '0aa46576-1fbe-4312-8b69-e2fef3269083';
 
@@ -1513,6 +1513,38 @@ class FirestoreDatabaseImpl extends DatabaseRepository {
         opportunitiesSnapshot.docs.map(Opportunity.fromDoc).toList();
 
     return opportunities;
+  }
+
+  @override
+  Future<int> getUserOpportunityQuota(String userId) async {
+    final quotaSnap = await _creditsRef.doc(userId).get();
+    final quota = quotaSnap.getOrElse('opportunityQuota', 0);
+
+    return quota;
+  }
+
+  @override
+  Stream<int> getUserOpportunityQuotaObserver(String userId) async* {
+    final quotaSnapObserver = _creditsRef.doc(userId).snapshots();
+
+    final quotaObserver = quotaSnapObserver.map((event) {
+      final data = event.data();
+
+      return data?.getOrElse('opportunityQuota', 0) ?? 0;
+    });
+
+    yield* quotaObserver;
+  }
+
+  @override 
+  Future<void> decrementUserOpportunityQuota(String userId) async {
+    try {
+      await _creditsRef.doc(userId).update({
+        'opportunityQuota': FieldValue.increment(-1),
+      });
+    } catch (e, s) {
+      logger.error('decrementUserOpportunityQuota', error: e, stackTrace: s);
+    }
   }
 
   @override
