@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:intheloopapp/data/database_repository.dart';
@@ -73,31 +75,58 @@ class OpportunityFeedCubit extends Cubit<OpportunityFeedState> {
   }
 
   Future<void> likeOpportunity() async {
-    final curOpportunity = state.opportunities[state.curOp];
-
     // like animation
-
-    // remove first from list
-    await nextOpportunity();
-
-    await database.applyForOpportunity(
-      opportunity: curOpportunity,
-      userId: currentUserId,
-      userComment: '',
+    emit(
+      state.copyWith(showApplyAnimation: true),
     );
+
+    try {
+      // remove first from list
+      final curOpportunity = state.opportunities[state.curOp];
+      await nextOpportunity();
+
+      await database.applyForOpportunity(
+        opportunity: curOpportunity,
+        userId: currentUserId,
+        userComment: '',
+      );
+
+      sleep(const Duration(milliseconds: 1500));
+    } catch (e, s) {
+      logger.error(
+        'Error liking opportunity',
+        error: e,
+        stackTrace: s,
+      );
+    } finally {
+      emit(state.copyWith(showApplyAnimation: false));
+    }
   }
 
   Future<void> dislikeOpportunity() async {
-    final curOpportunity = state.opportunities[state.curOp];
-
     // disappear animation
-
-    // remove first from list
-    await nextOpportunity();
-
-    await database.dislikeOpportunity(
-      opportunity: curOpportunity,
-      userId: currentUserId,
+    emit(
+      state.copyWith(loading: true),
     );
+
+    try {
+      final curOpportunity = state.opportunities[state.curOp];
+
+      // remove first from list
+      await nextOpportunity();
+
+      await database.dislikeOpportunity(
+        opportunity: curOpportunity,
+        userId: currentUserId,
+      );
+    } catch (e, s) {
+      logger.error(
+        'Error disliking opportunity',
+        error: e,
+        stackTrace: s,
+      );
+    } finally {
+      emit(state.copyWith(loading: false));
+    }
   }
 }
