@@ -91,7 +91,7 @@ class OpportunityFeedCubit extends Cubit<OpportunityFeedState> {
         userComment: '',
       );
 
-      sleep(const Duration(milliseconds: 1500));
+      await Future<void>.delayed(const Duration(milliseconds: 1500));
     } catch (e, s) {
       logger.error(
         'Error liking opportunity',
@@ -119,6 +119,8 @@ class OpportunityFeedCubit extends Cubit<OpportunityFeedState> {
         opportunity: curOpportunity,
         userId: currentUserId,
       );
+
+      await Future<void>.delayed(const Duration(milliseconds: 500));
     } catch (e, s) {
       logger.error(
         'Error disliking opportunity',
