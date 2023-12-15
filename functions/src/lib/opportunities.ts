@@ -6,11 +6,12 @@ import {
   onDocumentWritten,
 } from "firebase-functions/v2/firestore";
 import { createActivity } from "./activities";
-import { opportunitiesRef, opportunityFeedsRef, usersRef } from "./firebase";
+import { creditsRef, opportunitiesRef, opportunityFeedsRef, usersRef } from "./firebase";
 import { Opportunity, OpportunityFeedItem, UserModel } from "../types/models";
 import { Timestamp } from "firebase-admin/firestore";
 import { HttpsError } from "firebase-functions/v2/https";
 import { debug } from "firebase-functions/logger";
+import { onSchedule } from "firebase-functions/v2/scheduler";
 
 const _addOpportunityToUserFeed = async (
   userId: string,
@@ -132,3 +133,15 @@ export const copyOpportunitiesToFeedOnCreateUser = onDocumentCreated(
       }),
     );
   });
+
+export const setDailyOpportunityQuota = onSchedule("0 0 * * *", async () => {
+  const usersSnap = await usersRef.get();
+
+  await Promise.all(
+    usersSnap.docs.map(async (userDoc) => {
+      creditsRef.doc(userDoc.id).update({
+        opportunityQuota: 5,
+      });
+    }),
+  );
+});
