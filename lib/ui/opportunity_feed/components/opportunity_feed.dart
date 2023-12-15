@@ -14,7 +14,6 @@ class OpportunityFeed extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<OpportunityFeedCubit, OpportunityFeedState>(
-      bloc: context.read<OpportunityFeedCubit>(),
       builder: (context, state) {
         if (state.loading) {
           return const LoadingView();

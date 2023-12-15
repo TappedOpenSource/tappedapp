@@ -12,6 +12,7 @@ import 'package:intheloopapp/ui/badge/badge_view.dart';
 import 'package:intheloopapp/ui/badge/badges_view.dart';
 import 'package:intheloopapp/ui/booking/booking_view.dart';
 import 'package:intheloopapp/ui/bookings/user_bookings_feed.dart';
+import 'package:intheloopapp/ui/common/waitlist_view.dart';
 import 'package:intheloopapp/ui/create_booking/booking_confirmation_view.dart';
 import 'package:intheloopapp/ui/create_booking/create_booking_view.dart';
 import 'package:intheloopapp/ui/create_service/create_service_view.dart';
@@ -339,4 +340,12 @@ final class InterestedUsersPage extends TappedRoute {
         );
 
   final Opportunity opportunity;
+}
+
+final class WaitlistPage extends TappedRoute {
+  WaitlistPage()
+      : super(
+          routeName: '/waitlist',
+          view: const WaitlistView(),
+        );
 }
