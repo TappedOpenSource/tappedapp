@@ -1891,15 +1891,33 @@ class FirestoreDatabaseImpl extends DatabaseRepository {
 
   @override
   Future<bool> isOnPremiumWailist(String userId) async {
-    final docSnap = await _premiumWailistRef.doc(userId).get();
-    return docSnap.exists;
+    try {
+      final docSnap = await _premiumWailistRef.doc(userId).get();
+      return docSnap.exists;
+    } catch (e, s) {
+      logger.error(
+        "can't check if a user is on the waitlist $userId",
+        error: e,
+        stackTrace: s,
+      );
+      rethrow;
+    }
   }
 
   @override
   Future<void> joinPremiumWaitlist(String userId) async {
-    await _premiumWailistRef.doc(userId).set({
-      'timestamp': Timestamp.now(),
-    });
+    try {
+      await _premiumWailistRef.doc(userId).set({
+        'timestamp': Timestamp.now(),
+      });
+    } catch (e, s) {
+      logger.error(
+        "can't add user to the waitlist $userId",
+        error: e,
+        stackTrace: s,
+      );
+      rethrow;
+    }
   }
 }
 

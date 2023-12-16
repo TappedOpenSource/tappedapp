@@ -6,7 +6,7 @@ import {
   onDocumentWritten,
 } from "firebase-functions/v2/firestore";
 import { createActivity } from "./activities";
-import { creditsRef, opportunitiesRef, opportunityFeedsRef, usersRef } from "./firebase";
+import { creditsRef, fcm, opportunitiesRef, opportunityFeedsRef, tokensRef, usersRef } from "./firebase";
 import { Opportunity, OpportunityFeedItem, UserModel } from "../types/models";
 import { Timestamp } from "firebase-admin/firestore";
 import { HttpsError } from "firebase-functions/v2/https";
@@ -43,6 +43,28 @@ const _addInterestedUserToOpportunity = async (
 
   return;
 };
+
+const _sendUserQuotaNotification = async (userId: string) => {
+  // get userId device tokens
+  const tokensSnap = await tokensRef
+    .doc(userId)
+    .collection("tokens")
+    .get();
+
+  
+  const tokens: string[] = tokensSnap.docs.map((snap) => snap.id);
+
+  // send payload to tokens
+  const payload = {
+    notification: {
+      title: "you're back!",
+      body: "you're good to keep swiping on opportunities",
+    }
+  };
+
+  fcm.sendToDevice(tokens, payload);
+
+}
 
 export const addActivityOnOpportunityInterest = functions
   .firestore
@@ -140,9 +162,11 @@ export const setDailyOpportunityQuota = onSchedule("0 0 * * *", async () => {
 
   await Promise.all(
     usersSnap.docs.map(async (userDoc) => {
-      creditsRef.doc(userDoc.id).update({
+      await creditsRef.doc(userDoc.id).update({
         opportunityQuota: 5,
       });
+
+      await _sendUserQuotaNotification(userDoc.id);
     }),
   );
 });
