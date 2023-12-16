@@ -356,12 +356,16 @@ final class OpportunityPage extends TappedRoute {
     required this.opportunity,
     this.onApply,
     this.onDislike,
+    this.heroImage,
+    this.titleHeroTag,
     this.showDislikeButton = true,
     this.showAppBar = true,
   }) : super(
           routeName: '/op/${opportunity.id}',
           view: OpportunityView(
             opportunity: opportunity,
+            heroImage: heroImage,
+            titleHeroTag: titleHeroTag,
             showDislikeButton: showDislikeButton,
             showAppBar: showAppBar,
             onApply: onApply,
@@ -372,6 +376,8 @@ final class OpportunityPage extends TappedRoute {
   final Opportunity opportunity;
   final bool showDislikeButton;
   final bool showAppBar;
+  final String? titleHeroTag;
+  final HeroImage? heroImage;
   final void Function()? onApply;
   final void Function()? onDislike;
 }
