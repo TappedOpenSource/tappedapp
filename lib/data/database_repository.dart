@@ -243,4 +243,6 @@ abstract class DatabaseRepository {
     String bookerId, {
     int limit = 20,
   });
+  Future<void> joinPremiumWaitlist(String userId);
+  Future<bool> isOnPremiumWailist(String userId);
 }

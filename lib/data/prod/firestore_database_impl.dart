@@ -43,6 +43,7 @@ final _reviewsRef = _firestore.collection('reviews');
 final _opportunitiesRef = _firestore.collection('opportunities');
 final _opportunityFeedsRef = _firestore.collection('opportunityFeeds');
 final _creditsRef = _firestore.collection('credits');
+final _premiumWailistRef = _firestore.collection('premiumWaitlist');
 
 const verifiedBadgeId = '0aa46576-1fbe-4312-8b69-e2fef3269083';
 
@@ -1536,7 +1537,7 @@ class FirestoreDatabaseImpl extends DatabaseRepository {
     yield* quotaObserver;
   }
 
-  @override 
+  @override
   Future<void> decrementUserOpportunityQuota(String userId) async {
     try {
       await _creditsRef.doc(userId).update({
@@ -1886,6 +1887,19 @@ class FirestoreDatabaseImpl extends DatabaseRepository {
       );
       yield* const Stream.empty();
     }
+  }
+
+  @override
+  Future<bool> isOnPremiumWailist(String userId) async {
+    final docSnap = await _premiumWailistRef.doc(userId).get();
+    return docSnap.exists;
+  }
+
+  @override
+  Future<void> joinPremiumWaitlist(String userId) async {
+    await _premiumWailistRef.doc(userId).set({
+      'timestamp': Timestamp.now(),
+    });
   }
 }
 
