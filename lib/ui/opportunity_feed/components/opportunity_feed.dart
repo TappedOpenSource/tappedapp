@@ -47,7 +47,7 @@ class OpportunityFeed extends StatelessWidget {
         final curOp = state.opportunities[state.curOp];
         return OpportunityView(
           opportunity: curOp,
-          showDislikeButton: true,
+          showAppBar: false,
           onDislike: () =>
               context.read<OpportunityFeedCubit>().dislikeOpportunity(),
           onApply: () => context.read<OpportunityFeedCubit>().likeOpportunity(),
