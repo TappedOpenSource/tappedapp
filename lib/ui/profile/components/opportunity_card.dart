@@ -24,7 +24,11 @@ class OpportunityCard extends StatelessWidget {
     final cardWidth = MediaQuery.of(context).size.width - 48;
     return InkWell(
       onTap: () => context.push(
-        OpportunityPage(opportunity: opportunity),
+        OpportunityPage(
+          opportunity: opportunity,
+          onApply: () => context.pop(),
+          onDislike: () => context.pop(),
+        ),
       ),
       child: FutureBuilder<ImageProvider>(
         future: getOpImage(context, opportunity),

@@ -20,6 +20,19 @@ final class SetQuota extends OpportunityEvent {
   List<Object> get props => [quota];
 }
 
+final class DislikeOpportunity extends OpportunityEvent {
+  const DislikeOpportunity({
+    required this.opportunity,
+  });
+
+  final Opportunity opportunity;
+
+  @override
+  List<Object> get props => [
+    opportunity,
+  ];
+}
+
 final class ApplyForOpportunity extends OpportunityEvent {
   const ApplyForOpportunity({
     required this.opportunity,
