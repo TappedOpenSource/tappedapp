@@ -12,14 +12,21 @@ import 'package:intheloopapp/ui/user_tile.dart';
 import 'package:intheloopapp/utils/geohash.dart';
 import 'package:intheloopapp/utils/opportunity_image.dart';
 import 'package:intl/intl.dart';
+import 'package:skeleton_text/skeleton_text.dart';
 
 class OpportunityView extends StatelessWidget {
   const OpportunityView({
     required this.opportunity,
+    this.onApply,
+    this.onDislike,
+    this.showDislikeButton = false,
     super.key,
   });
 
   final Opportunity opportunity;
+  final bool showDislikeButton;
+  final void Function()? onApply;
+  final void Function()? onDislike;
 
   Future<Option<Image>> nothing() async {
     return const None();
@@ -47,7 +54,12 @@ class OpportunityView extends StatelessWidget {
                 future: getOpImage(context, opportunity),
                 builder: (context, snapshot) {
                   if (!snapshot.hasData) {
-                    return const CupertinoActivityIndicator();
+                    return SkeletonAnimation(
+                      child: const SizedBox(
+                        height: 400,
+                        width: double.infinity,
+                      ),
+                    );
                   }
 
                   final provider = snapshot.data!;
