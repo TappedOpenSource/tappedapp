@@ -28,10 +28,11 @@ class OpportunityFeedCubit extends Cubit<OpportunityFeedState> {
     final opportunities = await database.getOpportunityFeedByUserId(
       currentUserId,
     );
+
     emit(
       state.copyWith(
         curOp: 0,
-        opportunities: opportunities,
+        opportunities: opportunities..shuffle(),
         loading: false,
       ),
     );
@@ -50,7 +51,7 @@ class OpportunityFeedCubit extends Cubit<OpportunityFeedState> {
       );
       emit(
         state.copyWith(
-          opportunities: opportunities,
+          opportunities: opportunities..shuffle(),
         ),
       );
     } catch (e, s) {
