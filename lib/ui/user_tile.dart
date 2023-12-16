@@ -114,7 +114,7 @@ class _UserTileState extends State<UserTile> {
               ),
               title: RichText(
                 maxLines: 2,
-                overflow: TextOverflow.ellipsis,
+                overflow: TextOverflow.fade,
                 text: TextSpan(
                   text: user.displayName,
                   style: TextStyle(

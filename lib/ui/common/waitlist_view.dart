@@ -4,6 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intheloopapp/data/database_repository.dart';
 import 'package:intheloopapp/domains/navigation_bloc/navigation_bloc.dart';
 import 'package:intheloopapp/ui/common/easter_egg_placeholder.dart';
+import 'package:intheloopapp/ui/loading/logo_wave.dart';
 import 'package:intheloopapp/utils/current_user_builder.dart';
 
 class WaitlistView extends StatefulWidget {
@@ -40,10 +41,31 @@ class _WaitlistViewState extends State<WaitlistView> {
                 null => const Center(
                     child: CupertinoActivityIndicator(),
                   ),
-                false => const Center(
-                    child: CupertinoActivityIndicator(),
-                  ),
                 true => Padding(
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 12,
+                    ),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        const SizedBox(width: double.infinity),
+                        const LogoWave(),
+                        const SizedBox(height: 12),
+                        const Text(
+                          "you're in!\n we'll let you know when premium is available",
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                            fontSize: 22,
+                          ),
+                        ),
+                        FilledButton(
+                          onPressed: () => context.pop(),
+                          child: const Text('okay'),
+                        ),
+                      ],
+                    ),
+                  ),
+                false => Padding(
                     padding: const EdgeInsets.symmetric(
                       horizontal: 12,
                     ),
