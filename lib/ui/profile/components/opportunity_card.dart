@@ -1,6 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:intheloopapp/domains/models/opportunity.dart';
+import 'package:intheloopapp/domains/navigation_bloc/navigation_bloc.dart';
+import 'package:intheloopapp/domains/navigation_bloc/tapped_route.dart';
 import 'package:intheloopapp/ui/opportunity_feed/components/opportunity_view.dart';
 import 'package:intheloopapp/ui/profile/components/apply_button.dart';
 import 'package:intheloopapp/ui/profile/components/location_chip.dart';
@@ -17,23 +19,12 @@ class OpportunityCard extends StatelessWidget {
 
   final Opportunity opportunity;
 
-
   @override
   Widget build(BuildContext context) {
     final cardWidth = MediaQuery.of(context).size.width - 48;
     return InkWell(
-      onTap: () => showModalBottomSheet<void>(
-        showDragHandle: true,
-        context: context,
-        builder: (context) {
-          return SizedBox(
-            height: 1200,
-            width: double.infinity,
-            child: OpportunityView(
-              opportunity: opportunity,
-            ),
-          );
-        },
+      onTap: () => context.push(
+        OpportunityPage(opportunity: opportunity),
       ),
       child: FutureBuilder<ImageProvider>(
         future: getOpImage(context, opportunity),

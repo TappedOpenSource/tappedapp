@@ -26,6 +26,7 @@ import 'package:intheloopapp/ui/messaging/messaging_view.dart';
 import 'package:intheloopapp/ui/messaging/video_call_view.dart';
 import 'package:intheloopapp/ui/onboarding/onboarding_view.dart';
 import 'package:intheloopapp/ui/opportunities/interested_users_view.dart';
+import 'package:intheloopapp/ui/opportunity_feed/components/opportunity_view.dart';
 import 'package:intheloopapp/ui/profile/components/service_selection_view.dart';
 import 'package:intheloopapp/ui/profile/profile_view.dart';
 import 'package:intheloopapp/ui/reviews/user_reviews_feed.dart';
@@ -348,4 +349,26 @@ final class WaitlistPage extends TappedRoute {
           routeName: '/waitlist',
           view: const WaitlistView(),
         );
+}
+
+final class OpportunityPage extends TappedRoute {
+  OpportunityPage({
+    required this.opportunity,
+    this.onApply,
+    this.onDislike,
+    this.showDislikeButton = false,
+  }) : super(
+          routeName: '/op/${opportunity.id}',
+          view: OpportunityView(
+            opportunity: opportunity,
+            showDislikeButton: showDislikeButton,
+            onApply: onApply,
+            onDislike: onDislike,
+          ),
+        );
+
+  final Opportunity opportunity;
+  final bool showDislikeButton;
+  final void Function()? onApply;
+  final void Function()? onDislike;
 }
