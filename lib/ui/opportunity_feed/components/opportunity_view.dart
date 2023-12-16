@@ -9,6 +9,7 @@ import 'package:intheloopapp/data/places_repository.dart';
 import 'package:intheloopapp/domains/models/opportunity.dart';
 import 'package:intheloopapp/domains/models/option.dart';
 import 'package:intheloopapp/domains/opportunity_bloc/opportunity_bloc.dart';
+import 'package:intheloopapp/ui/conditional_parent_widget.dart';
 import 'package:intheloopapp/ui/themes.dart';
 import 'package:intheloopapp/ui/user_tile.dart';
 import 'package:intheloopapp/utils/current_user_builder.dart';
@@ -22,6 +23,8 @@ class OpportunityView extends StatelessWidget {
     required this.opportunity,
     this.onApply,
     this.onDislike,
+    this.heroImage,
+    this.titleHeroTag,
     this.showAppBar = true,
     this.showDislikeButton = true,
     super.key,
@@ -30,6 +33,8 @@ class OpportunityView extends StatelessWidget {
   final Opportunity opportunity;
   final bool showDislikeButton;
   final bool showAppBar;
+  final HeroImage? heroImage;
+  final String? titleHeroTag;
   final void Function()? onApply;
   final void Function()? onDislike;
 
@@ -37,46 +42,53 @@ class OpportunityView extends StatelessWidget {
     return const None();
   }
 
-  Widget buildOpportunityView(
-    BuildContext context, {
-    required Place place,
-  }) {
+  Widget opImage(ImageProvider provider) => Container(
+        height: 400,
+        width: double.infinity,
+        decoration: BoxDecoration(
+          image: DecorationImage(
+            image: provider,
+            fit: BoxFit.cover,
+          ),
+        ),
+        child: BackdropFilter(
+          filter: ImageFilter.blur(
+            sigmaX: 600,
+            sigmaY: 1000,
+          ),
+        ),
+      );
+
+  Widget buildOpportunityView(BuildContext context) {
+    final hero = heroImage;
+    final places = context.read<PlacesRepository>();
     return SingleChildScrollView(
       physics: const AlwaysScrollableScrollPhysics(),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          FutureBuilder<ImageProvider>(
-            future: getOpImage(context, opportunity),
-            builder: (context, snapshot) {
-              if (!snapshot.hasData) {
-                return SkeletonAnimation(
-                  child: const SizedBox(
-                    height: 400,
-                    width: double.infinity,
-                  ),
-                );
-              }
+          if (hero == null)
+            FutureBuilder<ImageProvider>(
+              future: getOpImage(context, opportunity),
+              builder: (context, snapshot) {
+                if (!snapshot.hasData) {
+                  return SkeletonAnimation(
+                    child: const SizedBox(
+                      height: 400,
+                      width: double.infinity,
+                    ),
+                  );
+                }
 
-              final provider = snapshot.data!;
-              return Container(
-                height: 400,
-                width: double.infinity,
-                decoration: BoxDecoration(
-                  image: DecorationImage(
-                    image: provider,
-                    fit: BoxFit.cover,
-                  ),
-                ),
-                child: BackdropFilter(
-                  filter: ImageFilter.blur(
-                    sigmaX: 600,
-                    sigmaY: 1000,
-                  ),
-                ),
-              );
-            },
-          ),
+                final provider = snapshot.data!;
+                return opImage(provider);
+              },
+            )
+          else
+            Hero(
+              tag: hero.heroTag,
+              child: opImage(hero.imageProvider),
+            ),
           Padding(
             padding: const EdgeInsets.symmetric(
               horizontal: 24,
@@ -85,12 +97,19 @@ class OpportunityView extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(
-                  opportunity.title,
-                  style: const TextStyle(
-                    fontSize: 32,
-                    fontFamily: 'Rubik One',
-                    fontWeight: FontWeight.w900,
+                ConditionalParentWidget(
+                  condition: titleHeroTag != null,
+                  conditionalBuilder: ({required child}) => Hero(
+                    tag: titleHeroTag!,
+                    child: child,
+                  ),
+                  child: Text(
+                    opportunity.title,
+                    style: const TextStyle(
+                      fontSize: 32,
+                      fontFamily: 'Rubik One',
+                      fontWeight: FontWeight.w900,
+                    ),
                   ),
                 ),
                 const SizedBox(height: 12),
@@ -124,8 +143,21 @@ class OpportunityView extends StatelessWidget {
                     fontWeight: FontWeight.bold,
                   ),
                 ),
-                Text(
-                  formattedFullAddress(place.addressComponents),
+                FutureBuilder<Place?>(
+                  future: places.getPlaceById(
+                    opportunity.placeId,
+                  ),
+                  builder: (context, snapshot) {
+                    if (!snapshot.hasData) {
+                      return const CupertinoActivityIndicator();
+                    }
+
+                    final place = snapshot.data!;
+
+                    return Text(
+                      formattedFullAddress(place.addressComponents),
+                    );
+                  },
                 ),
                 const SizedBox(height: 12),
                 const Text(
@@ -238,44 +270,39 @@ class OpportunityView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final places = context.read<PlacesRepository>();
     final opBloc = context.read<OpportunityBloc>();
     final database = context.read<DatabaseRepository>();
     final theme = Theme.of(context);
-    return FutureBuilder<Place?>(
-      future: places.getPlaceById(
-        opportunity.placeId,
-      ),
-      builder: (context, snapshot) {
-        if (!snapshot.hasData) {
-          return const CupertinoActivityIndicator();
-        }
-
-        final place = snapshot.data!;
-
-        return Scaffold(
-          backgroundColor: theme.colorScheme.background,
-          appBar: showAppBar ? AppBar() : null,
-          body: Stack(
-            alignment: Alignment.center,
-            children: [
-              Positioned.fill(
-                child: buildOpportunityView(
-                  context,
-                  place: place,
-                ),
-              ),
-              Positioned(
-                bottom: 42,
-                child: buildApplyButton(
-                  opBloc,
-                  database,
-                ),
-              ),
-            ],
+    return Scaffold(
+      backgroundColor: theme.colorScheme.background,
+      appBar: showAppBar ? AppBar() : null,
+      body: Stack(
+        alignment: Alignment.center,
+        children: [
+          Positioned.fill(
+            child: buildOpportunityView(
+              context,
+            ),
           ),
-        );
-      },
+          Positioned(
+            bottom: 42,
+            child: buildApplyButton(
+              opBloc,
+              database,
+            ),
+          ),
+        ],
+      ),
     );
   }
+}
+
+class HeroImage {
+  const HeroImage({
+    required this.imageProvider,
+    required this.heroTag,
+  });
+
+  final ImageProvider imageProvider;
+  final String heroTag;
 }
