@@ -92,12 +92,6 @@ class OpportunityFeedCubit extends Cubit<OpportunityFeedState> {
         await nextOpportunity();
         await Future<void>.delayed(const Duration(milliseconds: 1500));
       }
-      opBloc.add(
-        ApplyForOpportunity(
-          opportunity: curOpportunity,
-          userComment: '',
-        ),
-      );
     } catch (e, s) {
       logger.error(
         'Error liking opportunity',
@@ -116,16 +110,8 @@ class OpportunityFeedCubit extends Cubit<OpportunityFeedState> {
     );
 
     try {
-      final curOpportunity = state.opportunities[state.curOp];
-
       // remove first from list
       await nextOpportunity();
-
-      await database.dislikeOpportunity(
-        opportunity: curOpportunity,
-        userId: currentUserId,
-      );
-
       await Future<void>.delayed(const Duration(milliseconds: 500));
     } catch (e, s) {
       logger.error(

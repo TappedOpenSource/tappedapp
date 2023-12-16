@@ -52,11 +52,15 @@ class _WaitlistViewState extends State<WaitlistView> {
                         const LogoWave(),
                         const SizedBox(height: 12),
                         const Text(
-                          "you're in!\n we'll let you know when premium is available",
+                          "you've hit your daily limit!",
                           textAlign: TextAlign.center,
                           style: TextStyle(
                             fontSize: 22,
                           ),
+                        ),
+                        const Text(
+                          "we'll let you know when premium is available and you can apply for UNLIMITED opportunities",
+                          textAlign: TextAlign.center,
                         ),
                         FilledButton(
                           onPressed: () => context.pop(),

@@ -31,6 +31,14 @@ class OpportunityBloc extends Bloc<OpportunityEvent, OpportunityState> {
         state.copyWith(opQuota: quota),
       );
     });
+    on<DislikeOpportunity>((event, emit) async {
+      final currentUserId = (auth.state as Authenticated).currentAuthUser.uid;
+      final op = event.opportunity;
+      await database.dislikeOpportunity(
+        opportunity: op,
+        userId: currentUserId,
+      );
+    });
     on<ApplyForOpportunity>((event, emit) async {
       final currentUserId = (auth.state as Authenticated).currentAuthUser.uid;
       final userComment = event.userComment;
