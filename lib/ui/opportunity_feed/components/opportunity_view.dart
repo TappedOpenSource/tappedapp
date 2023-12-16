@@ -1,6 +1,5 @@
 import 'dart:ui';
 
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -8,7 +7,6 @@ import 'package:flutter_google_places_sdk/flutter_google_places_sdk.dart';
 import 'package:intheloopapp/data/places_repository.dart';
 import 'package:intheloopapp/domains/models/opportunity.dart';
 import 'package:intheloopapp/domains/models/option.dart';
-import 'package:intheloopapp/domains/navigation_bloc/navigation_bloc.dart';
 import 'package:intheloopapp/domains/opportunity_bloc/opportunity_bloc.dart';
 import 'package:intheloopapp/ui/themes.dart';
 import 'package:intheloopapp/ui/user_tile.dart';
@@ -22,7 +20,7 @@ class OpportunityView extends StatelessWidget {
     required this.opportunity,
     this.onApply,
     this.onDislike,
-    this.showDislikeButton = false,
+    this.showDislikeButton = true,
     super.key,
   });
 
