@@ -4,12 +4,14 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_google_places_sdk/flutter_google_places_sdk.dart';
+import 'package:intheloopapp/data/database_repository.dart';
 import 'package:intheloopapp/data/places_repository.dart';
 import 'package:intheloopapp/domains/models/opportunity.dart';
 import 'package:intheloopapp/domains/models/option.dart';
 import 'package:intheloopapp/domains/opportunity_bloc/opportunity_bloc.dart';
 import 'package:intheloopapp/ui/themes.dart';
 import 'package:intheloopapp/ui/user_tile.dart';
+import 'package:intheloopapp/utils/current_user_builder.dart';
 import 'package:intheloopapp/utils/geohash.dart';
 import 'package:intheloopapp/utils/opportunity_image.dart';
 import 'package:intl/intl.dart';
@@ -20,12 +22,14 @@ class OpportunityView extends StatelessWidget {
     required this.opportunity,
     this.onApply,
     this.onDislike,
+    this.showAppBar = true,
     this.showDislikeButton = true,
     super.key,
   });
 
   final Opportunity opportunity;
   final bool showDislikeButton;
+  final bool showAppBar;
   final void Function()? onApply;
   final void Function()? onDislike;
 
@@ -162,50 +166,73 @@ class OpportunityView extends StatelessWidget {
     );
   }
 
-  Widget buildApplyButton(OpportunityBloc opBloc) {
-    return Row(
-      children: [
-        IconButton.filled(
-          onPressed: () {
-            opBloc.add(
-              DislikeOpportunity(
-                opportunity: opportunity,
-              ),
-            );
-            onDislike?.call(); 
+  Widget buildApplyButton(
+    OpportunityBloc opBloc,
+    DatabaseRepository database,
+  ) {
+    return CurrentUserBuilder(
+      builder: (context, currentUser) {
+        return FutureBuilder(
+          future: database.isUserAppliedForOpportunity(
+            opportunity: opportunity,
+            userId: currentUser.id,
+          ),
+          builder: (context, snapshot) {
+            final isApplied = snapshot.data;
+            return switch (isApplied) {
+              null => const CupertinoActivityIndicator(),
+              true => const FilledButton(
+                  onPressed: null,
+                  child: Text('already applied :)'),
+                ),
+              false => Row(
+                  children: [
+                    IconButton.filled(
+                      onPressed: () {
+                        opBloc.add(
+                          DislikeOpportunity(
+                            opportunity: opportunity,
+                          ),
+                        );
+                        onDislike?.call();
+                      },
+                      style: ButtonStyle(
+                        backgroundColor: MaterialStateProperty.all(
+                          Colors.red,
+                        ),
+                      ),
+                      icon: const Icon(
+                        CupertinoIcons.xmark,
+                        size: 42,
+                      ),
+                    ),
+                    const SizedBox(width: 69),
+                    IconButton.filled(
+                      onPressed: () {
+                        opBloc.add(
+                          ApplyForOpportunity(
+                            opportunity: opportunity,
+                            userComment: '',
+                          ),
+                        );
+                        onApply?.call();
+                      },
+                      style: ButtonStyle(
+                        backgroundColor: MaterialStateProperty.all(
+                          tappedAccent,
+                        ),
+                      ),
+                      icon: const Icon(
+                        CupertinoIcons.star_fill,
+                        size: 42,
+                      ),
+                    ),
+                  ],
+                ),
+            };
           },
-          style: ButtonStyle(
-            backgroundColor: MaterialStateProperty.all(
-              Colors.red,
-            ),
-          ),
-          icon: const Icon(
-            CupertinoIcons.xmark,
-            size: 42,
-          ),
-        ),
-        const SizedBox(width: 69),
-        IconButton.filled(
-          onPressed: () {
-            opBloc.add(
-              ApplyForOpportunity(
-                opportunity: opportunity,
-                userComment: '',
-              ),
-            );
-            onApply?.call();
-          },
-          style: ButtonStyle(
-            backgroundColor: MaterialStateProperty.all(
-              tappedAccent,
-            ),
-          ),
-          icon: const Icon(
-            CupertinoIcons.star_fill,
-            size: 42,
-          ),
-        ),
-      ],
+        );
+      },
     );
   }
 
@@ -213,6 +240,7 @@ class OpportunityView extends StatelessWidget {
   Widget build(BuildContext context) {
     final places = context.read<PlacesRepository>();
     final opBloc = context.read<OpportunityBloc>();
+    final database = context.read<DatabaseRepository>();
     final theme = Theme.of(context);
     return FutureBuilder<Place?>(
       future: places.getPlaceById(
@@ -227,6 +255,7 @@ class OpportunityView extends StatelessWidget {
 
         return Scaffold(
           backgroundColor: theme.colorScheme.background,
+          appBar: showAppBar ? AppBar() : null,
           body: Stack(
             alignment: Alignment.center,
             children: [
@@ -238,7 +267,10 @@ class OpportunityView extends StatelessWidget {
               ),
               Positioned(
                 bottom: 42,
-                child: buildApplyButton(opBloc),
+                child: buildApplyButton(
+                  opBloc,
+                  database,
+                ),
               ),
             ],
           ),
