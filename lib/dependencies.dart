@@ -35,6 +35,7 @@ import 'package:intheloopapp/domains/onboarding_bloc/onboarding_bloc.dart';
 import 'package:intheloopapp/domains/opportunity_bloc/opportunity_bloc.dart';
 import 'package:intheloopapp/domains/search_bloc/search_bloc.dart';
 import 'package:intheloopapp/ui/app_theme_cubit.dart';
+import 'package:intheloopapp/utils/bloc_utils.dart';
 import 'package:stream_chat_flutter/stream_chat_flutter.dart';
 
 /// link all necessary repository interfaces
@@ -105,13 +106,13 @@ List<BlocProvider> buildBlocs({
     ),
     BlocProvider<NavigationBloc>(
       create: (context) => NavigationBloc(
-        database: context.read<DatabaseRepository>(),
+        database: context.database,
         navigationKey: navigatorKey,
       ),
     ),
     BlocProvider<OnboardingBloc>(
       create: (context) => OnboardingBloc(
-        databaseRepository: context.read<DatabaseRepository>(),
+        databaseRepository: context.database,
       ),
     ),
     BlocProvider<DeepLinkBloc>(
@@ -120,7 +121,7 @@ List<BlocProvider> buildBlocs({
         onboardingBloc: context.read<OnboardingBloc>(),
         navBloc: context.read<NavigationBloc>(),
         dynamicLinkRepository: context.read<DeepLinkRepository>(),
-        databaseRepository: context.read<DatabaseRepository>(),
+        databaseRepository: context.database,
       ),
     ),
     BlocProvider<DeepLinkBloc>(
@@ -129,7 +130,7 @@ List<BlocProvider> buildBlocs({
         onboardingBloc: context.read<OnboardingBloc>(),
         navBloc: context.read<NavigationBloc>(),
         dynamicLinkRepository: context.read<DeepLinkRepository>(),
-        databaseRepository: context.read<DatabaseRepository>(),
+        databaseRepository: context.database,
       ),
     ),
     BlocProvider<DownForMaintenanceBloc>(
@@ -139,19 +140,19 @@ List<BlocProvider> buildBlocs({
     ),
     BlocProvider<ActivityBloc>(
       create: (context) => ActivityBloc(
-        databaseRepository: context.read<DatabaseRepository>(),
+        databaseRepository: context.database,
         authenticationBloc: context.read<AuthenticationBloc>(),
       ),
     ),
     BlocProvider<BookingsBloc>(
       create: (context) => BookingsBloc(
-        database: context.read<DatabaseRepository>(),
+        database: context.database,
         authenticationBloc: context.read<AuthenticationBloc>(),
       ),
     ),
     BlocProvider<OpportunityBloc>(
       create: (context) => OpportunityBloc(
-        database: context.read<DatabaseRepository>(),
+        database: context.database,
         nav: context.read<NavigationBloc>(),
         auth: context.read<AuthenticationBloc>(),
       ),
@@ -159,9 +160,9 @@ List<BlocProvider> buildBlocs({
     BlocProvider<SearchBloc>(
       create: (context) => SearchBloc(
         initialIndex: 0,
-        database: context.read<DatabaseRepository>(),
+        database: context.database,
         searchRepository: context.read<SearchRepository>(),
-        places: context.read<PlacesRepository>(),
+        places: context.places,
       ),
     ),
   ];

@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:intheloopapp/data/database_repository.dart';
 import 'package:intheloopapp/domains/models/option.dart';
 import 'package:intheloopapp/domains/models/review.dart';
 import 'package:intheloopapp/domains/models/user_model.dart';
 import 'package:intheloopapp/ui/user_tile.dart';
+import 'package:intheloopapp/utils/bloc_utils.dart';
 import 'package:skeletons/skeletons.dart';
 
 class ReviewTile extends StatelessWidget {
@@ -17,7 +16,7 @@ class ReviewTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final database = context.read<DatabaseRepository>();
+    final database = context.database;
     final reviewerId = switch (review) {
       PerformerReview(:final bookerId) => bookerId,
       BookerReview(:final performerId) => performerId,

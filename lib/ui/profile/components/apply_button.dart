@@ -2,12 +2,11 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intheloopapp/data/auth_repository.dart';
-import 'package:intheloopapp/data/database_repository.dart';
 import 'package:intheloopapp/domains/models/opportunity.dart';
 import 'package:intheloopapp/domains/navigation_bloc/navigation_bloc.dart';
 import 'package:intheloopapp/domains/navigation_bloc/tapped_route.dart';
+import 'package:intheloopapp/utils/bloc_utils.dart';
 import 'package:intheloopapp/utils/current_user_builder.dart';
-import 'package:path/path.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class ApplyButton extends StatefulWidget {
@@ -30,7 +29,7 @@ class _ApplyButtonState extends State<ApplyButton> {
   @override
   Widget build(BuildContext context) {
     final auth = context.read<AuthRepository>();
-    final database = context.read<DatabaseRepository>();
+    final database = context.database;
     if (loading) {
       return const Column(
         children: [

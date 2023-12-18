@@ -5,7 +5,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intheloopapp/domains/bookings_bloc/bookings_bloc.dart';
 import 'package:intheloopapp/domains/navigation_bloc/navigation_bloc.dart';
 import 'package:intheloopapp/ui/bookings/components/bookings_list.dart';
-import 'package:intheloopapp/ui/common/easter_egg_placeholder.dart';
 
 class BookingsView extends StatelessWidget {
   const BookingsView({super.key});

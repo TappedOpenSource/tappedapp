@@ -23,7 +23,7 @@ class Opportunity extends Equatable {
   });
 
   factory Opportunity.fromDoc(DocumentSnapshot<Map<String, dynamic>> doc) {
-    final touchedVal = doc.getOrElse('touched', null) as String?;
+    final touchedVal = doc.getOrElse('touched', null);
     final touched = touchedVal != null
         ? EnumToString.fromString<OpportunityInteration>(
             OpportunityInteration.values,

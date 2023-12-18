@@ -1,15 +1,14 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:intheloopapp/data/places_repository.dart';
 import 'package:intheloopapp/domains/models/opportunity.dart';
 import 'package:intheloopapp/domains/models/option.dart';
+import 'package:intheloopapp/utils/bloc_utils.dart';
 
 Future<ImageProvider> getImageForLocation(
   BuildContext context,
   String placeId,
 ) async {
-  final places = context.read<PlacesRepository>();
+  final places = context.places;
   final place = await places.getPlaceById(
     placeId,
   );

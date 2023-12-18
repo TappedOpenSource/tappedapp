@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:intheloopapp/data/database_repository.dart';
 import 'package:intheloopapp/domains/models/option.dart';
 import 'package:intheloopapp/domains/models/service.dart';
 import 'package:intheloopapp/domains/navigation_bloc/navigation_bloc.dart';
@@ -12,6 +11,7 @@ import 'package:intheloopapp/ui/create_service/components/submit_service_button.
 import 'package:intheloopapp/ui/create_service/components/title_text_field.dart';
 import 'package:intheloopapp/ui/create_service/create_service_cubit.dart';
 import 'package:intheloopapp/ui/forms/rate_text_field.dart';
+import 'package:intheloopapp/utils/bloc_utils.dart';
 import 'package:intheloopapp/utils/current_user_builder.dart';
 
 class CreateServiceView extends StatelessWidget {
@@ -26,7 +26,7 @@ class CreateServiceView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final database = context.read<DatabaseRepository>();
+    final database = context.database;
     final nav = context.read<NavigationBloc>();
     return CurrentUserBuilder(
       builder: (context, currentUser) {

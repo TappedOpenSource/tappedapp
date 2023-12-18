@@ -1,10 +1,9 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:intheloopapp/data/database_repository.dart';
 import 'package:intheloopapp/domains/navigation_bloc/navigation_bloc.dart';
 import 'package:intheloopapp/ui/common/easter_egg_placeholder.dart';
 import 'package:intheloopapp/ui/loading/logo_wave.dart';
+import 'package:intheloopapp/utils/bloc_utils.dart';
 import 'package:intheloopapp/utils/current_user_builder.dart';
 
 class WaitlistView extends StatefulWidget {
@@ -20,7 +19,7 @@ class _WaitlistViewState extends State<WaitlistView> {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final database = context.read<DatabaseRepository>();
+    final database = context.database;
 
     if (_loading) {
       return const Center(
