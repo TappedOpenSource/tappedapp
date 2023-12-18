@@ -1,7 +1,6 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intheloopapp/data/database_repository.dart';
 import 'package:intheloopapp/domains/models/option.dart';
 import 'package:intheloopapp/domains/models/review.dart';
@@ -9,6 +8,7 @@ import 'package:intheloopapp/domains/models/user_model.dart';
 import 'package:intheloopapp/domains/navigation_bloc/navigation_bloc.dart';
 import 'package:intheloopapp/ui/profile/components/review_tile.dart';
 import 'package:intheloopapp/utils/app_logger.dart';
+import 'package:intheloopapp/utils/bloc_utils.dart';
 import 'package:rxdart/rxdart.dart';
 
 class UserReviewsFeed extends StatefulWidget {
@@ -145,7 +145,7 @@ class _UserReviewsFeedState extends State<UserReviewsFeed> {
   @override
   void initState() {
     super.initState();
-    _databaseRepository = context.read<DatabaseRepository>();
+    _databaseRepository = context.database;
     _scrollController.addListener(_onScroll);
     _initReviews();
   }

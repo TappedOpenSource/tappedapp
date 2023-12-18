@@ -1,9 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intheloopapp/data/auth_repository.dart';
-import 'package:intheloopapp/data/database_repository.dart';
-import 'package:intheloopapp/data/places_repository.dart';
-import 'package:intheloopapp/data/storage_repository.dart';
 import 'package:intheloopapp/domains/authentication_bloc/authentication_bloc.dart';
 import 'package:intheloopapp/domains/navigation_bloc/navigation_bloc.dart';
 import 'package:intheloopapp/domains/onboarding_bloc/onboarding_bloc.dart';
@@ -16,6 +13,7 @@ import 'package:intheloopapp/ui/settings/components/payment_settings_form.dart';
 import 'package:intheloopapp/ui/settings/components/save_button.dart';
 import 'package:intheloopapp/ui/settings/components/settings_form.dart';
 import 'package:intheloopapp/ui/settings/settings_cubit.dart';
+import 'package:intheloopapp/utils/bloc_utils.dart';
 import 'package:intheloopapp/utils/current_user_builder.dart';
 
 class SettingsView extends StatelessWidget {
@@ -32,10 +30,10 @@ class SettingsView extends StatelessWidget {
             authenticationBloc: context.read<AuthenticationBloc>(),
             onboardingBloc: context.read<OnboardingBloc>(),
             authRepository: context.read<AuthRepository>(),
-            databaseRepository: context.read<DatabaseRepository>(),
-            storageRepository: context.read<StorageRepository>(),
+            databaseRepository: context.database,
+            storageRepository: context.storage,
             navigationBloc: context.read<NavigationBloc>(),
-            places: context.read<PlacesRepository>(),
+            places: context.places,
             currentUser: currentUser,
           )
             ..initUserData()

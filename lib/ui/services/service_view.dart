@@ -1,7 +1,5 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:intheloopapp/data/database_repository.dart';
 import 'package:intheloopapp/domains/models/option.dart';
 import 'package:intheloopapp/domains/models/service.dart';
 import 'package:intheloopapp/domains/models/user_model.dart';
@@ -11,6 +9,7 @@ import 'package:intheloopapp/ui/common/tapped_app_bar.dart';
 import 'package:intheloopapp/ui/error/error_view.dart';
 import 'package:intheloopapp/ui/profile/components/request_to_book.dart';
 import 'package:intheloopapp/ui/user_tile.dart';
+import 'package:intheloopapp/utils/bloc_utils.dart';
 import 'package:intheloopapp/utils/current_user_builder.dart';
 
 class ServiceView extends StatelessWidget {
@@ -52,7 +51,7 @@ class ServiceView extends StatelessWidget {
   }
 
   Widget _deleteServiceButton(BuildContext context) {
-    final database = context.read<DatabaseRepository>();
+    final database = context.database;
     return SizedBox(
       width: double.infinity,
       child: CupertinoButton(
@@ -75,7 +74,7 @@ class ServiceView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final database = context.read<DatabaseRepository>();
+    final database = context.database;
     return CurrentUserBuilder(
       builder: (context, currentUser) {
         return Scaffold(

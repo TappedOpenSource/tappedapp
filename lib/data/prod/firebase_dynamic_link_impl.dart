@@ -3,8 +3,6 @@ import 'dart:async';
 import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:firebase_dynamic_links/firebase_dynamic_links.dart';
 import 'package:intheloopapp/data/deep_link_repository.dart';
-import 'package:intheloopapp/domains/models/loop.dart';
-import 'package:intheloopapp/domains/models/option.dart';
 import 'package:intheloopapp/domains/models/user_model.dart';
 import 'package:intheloopapp/utils/app_logger.dart';
 

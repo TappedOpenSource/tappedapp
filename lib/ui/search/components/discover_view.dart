@@ -1,10 +1,9 @@
 import 'package:flutter/cupertino.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:intheloopapp/data/database_repository.dart';
 import 'package:intheloopapp/domains/models/opportunity.dart';
 import 'package:intheloopapp/domains/models/user_model.dart';
 import 'package:intheloopapp/ui/profile/components/opportunity_card.dart';
 import 'package:intheloopapp/ui/user_card.dart';
+import 'package:intheloopapp/utils/bloc_utils.dart';
 import 'package:scroll_snap_list/scroll_snap_list.dart';
 
 class DiscoverView extends StatelessWidget {
@@ -59,7 +58,7 @@ class DiscoverView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final database = context.read<DatabaseRepository>();
+    final database = context.database;
     final cardWidth = MediaQuery.of(context).size.width - 48;
     return FutureBuilder<List<List<UserModel>>>(
       future: Future.wait([

@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:intheloopapp/data/database_repository.dart';
 import 'package:intheloopapp/domains/models/option.dart';
 import 'package:intheloopapp/domains/models/user_model.dart';
 import 'package:intheloopapp/ui/profile/profile_cubit.dart';
 import 'package:intheloopapp/ui/user_avatar.dart';
+import 'package:intheloopapp/utils/bloc_utils.dart';
 
 class CommonFollowersSliver extends StatelessWidget {
   const CommonFollowersSliver({super.key});
@@ -14,7 +14,7 @@ class CommonFollowersSliver extends StatelessWidget {
     UserModel currentUser,
     UserModel visitedUser,
   ) {
-    final database = context.read<DatabaseRepository>();
+    final database = context.database;
     return FutureBuilder(
       future: database.getCommonFollowers(
         currentUser.id,

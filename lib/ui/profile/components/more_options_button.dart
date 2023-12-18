@@ -1,12 +1,12 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:intheloopapp/data/database_repository.dart';
 import 'package:intheloopapp/data/deep_link_repository.dart';
 import 'package:intheloopapp/domains/models/user_model.dart';
 import 'package:intheloopapp/domains/navigation_bloc/navigation_bloc.dart';
 import 'package:intheloopapp/ui/profile/profile_cubit.dart';
 import 'package:intheloopapp/ui/themes.dart';
+import 'package:intheloopapp/utils/bloc_utils.dart';
 import 'package:share_plus/share_plus.dart';
 
 class MoreOptionsButton extends StatelessWidget {
@@ -18,7 +18,7 @@ class MoreOptionsButton extends StatelessWidget {
     UserModel currentUser,
   ) {
     final dynamic = context.read<DeepLinkRepository>();
-    final database = context.read<DatabaseRepository>();
+    final database = context.database;
     final nav = context.read<NavigationBloc>();
     showCupertinoModalPopup<void>(
       context: context,

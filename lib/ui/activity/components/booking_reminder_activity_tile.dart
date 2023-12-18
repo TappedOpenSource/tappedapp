@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:intheloopapp/data/database_repository.dart';
 import 'package:intheloopapp/domains/activity_bloc/activity_bloc.dart';
 import 'package:intheloopapp/domains/models/activity.dart';
 import 'package:intheloopapp/domains/models/option.dart';
@@ -8,6 +7,7 @@ import 'package:intheloopapp/domains/models/user_model.dart';
 import 'package:intheloopapp/domains/navigation_bloc/navigation_bloc.dart';
 import 'package:intheloopapp/domains/navigation_bloc/tapped_route.dart';
 import 'package:intheloopapp/ui/user_avatar.dart';
+import 'package:intheloopapp/utils/bloc_utils.dart';
 import 'package:timeago/timeago.dart' as timeago;
 
 class BookingReminderActivityTile extends StatelessWidget {
@@ -21,7 +21,7 @@ class BookingReminderActivityTile extends StatelessWidget {
   Future<void> onClick(BuildContext context) async {
     final nav = context.read<NavigationBloc>();
 
-    final database = context.read<DatabaseRepository>();
+    final database = context.database;
     final booking = await database.getBookingById(activity.bookingId);
     if (booking.isNone) {
       return;
@@ -38,7 +38,7 @@ class BookingReminderActivityTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final databaseRepository = context.read<DatabaseRepository>();
+    final databaseRepository = context.database;
 
     var markedRead = activity.markedRead;
 

@@ -570,7 +570,7 @@ class FirestoreDatabaseImpl extends DatabaseRepository {
           .map((activity) {
             try {
               return Activity.fromDoc(activity);
-            } catch (e, s) {
+            } catch (e) {
               // if (kDebugMode) {
               //   logger.error('getActivities', error: e, stackTrace: s);
               // }
@@ -593,7 +593,7 @@ class FirestoreDatabaseImpl extends DatabaseRepository {
           .map((activity) {
             try {
               return Activity.fromDoc(activity);
-            } catch (e, s) {
+            } catch (e) {
               // if (kDebugMode) {
               //   logger.error('getActivities', error: e, stackTrace: s);
               // }

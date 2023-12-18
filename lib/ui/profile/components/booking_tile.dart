@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:intheloopapp/data/database_repository.dart';
 import 'package:intheloopapp/domains/models/booking.dart';
 import 'package:intheloopapp/domains/models/option.dart';
 import 'package:intheloopapp/domains/models/service.dart';
 import 'package:intheloopapp/domains/models/user_model.dart';
+import 'package:intheloopapp/utils/bloc_utils.dart';
 import 'package:intheloopapp/utils/linkify.dart';
 import 'package:timeago/timeago.dart' as timeago;
 
@@ -20,7 +19,7 @@ class BookingTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final database = context.read<DatabaseRepository>();
+    final database = context.database;
     return FutureBuilder<
         (
           Option<UserModel>,

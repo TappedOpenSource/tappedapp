@@ -15,8 +15,6 @@ const navigationBarDarkColor = Color(0xff070a0d);
 
 class Themes {
   static final themeLight = ThemeData.light().copyWith(
-    useMaterial3: true,
-
     textTheme: GoogleFonts.arimoTextTheme(
       ThemeData.light().textTheme,
     ),
@@ -65,8 +63,6 @@ class Themes {
   );
 
   static final themeDark = ThemeData.dark().copyWith(
-    useMaterial3: true,
-
     textTheme: GoogleFonts.arimoTextTheme(
       ThemeData.dark().textTheme,
     ),

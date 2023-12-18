@@ -5,13 +5,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_google_places_sdk/flutter_google_places_sdk.dart';
 import 'package:intheloopapp/data/database_repository.dart';
-import 'package:intheloopapp/data/places_repository.dart';
 import 'package:intheloopapp/domains/models/opportunity.dart';
 import 'package:intheloopapp/domains/models/option.dart';
 import 'package:intheloopapp/domains/opportunity_bloc/opportunity_bloc.dart';
 import 'package:intheloopapp/ui/conditional_parent_widget.dart';
 import 'package:intheloopapp/ui/themes.dart';
 import 'package:intheloopapp/ui/user_tile.dart';
+import 'package:intheloopapp/utils/bloc_utils.dart';
 import 'package:intheloopapp/utils/current_user_builder.dart';
 import 'package:intheloopapp/utils/geohash.dart';
 import 'package:intheloopapp/utils/opportunity_image.dart';
@@ -61,7 +61,7 @@ class OpportunityView extends StatelessWidget {
 
   Widget buildOpportunityView(BuildContext context) {
     final hero = heroImage;
-    final places = context.read<PlacesRepository>();
+    final places = context.places;
     return SingleChildScrollView(
       physics: const AlwaysScrollableScrollPhysics(),
       child: Column(
@@ -271,7 +271,7 @@ class OpportunityView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final opBloc = context.read<OpportunityBloc>();
-    final database = context.read<DatabaseRepository>();
+    final database = context.database;
     final theme = Theme.of(context);
     return Scaffold(
       backgroundColor: theme.colorScheme.background,

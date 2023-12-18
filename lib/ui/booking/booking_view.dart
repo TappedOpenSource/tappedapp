@@ -3,13 +3,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_google_places_sdk/flutter_google_places_sdk.dart';
 import 'package:intheloopapp/data/database_repository.dart';
-import 'package:intheloopapp/data/places_repository.dart';
 import 'package:intheloopapp/domains/models/booking.dart';
 import 'package:intheloopapp/domains/models/option.dart';
 import 'package:intheloopapp/domains/models/service.dart';
 import 'package:intheloopapp/domains/models/user_model.dart';
 import 'package:intheloopapp/domains/navigation_bloc/navigation_bloc.dart';
 import 'package:intheloopapp/ui/user_tile.dart';
+import 'package:intheloopapp/utils/bloc_utils.dart';
 import 'package:intheloopapp/utils/current_user_builder.dart';
 import 'package:intheloopapp/utils/geohash.dart';
 import 'package:intl/intl.dart';
@@ -202,9 +202,9 @@ class BookingView extends StatelessWidget {
                 ),
                 SliverToBoxAdapter(
                   child: FutureBuilder<Place?>(
-                    future: context.read<PlacesRepository>().getPlaceById(
-                          booking.placeId.unwrapOr(''),
-                        ),
+                    future: context.places.getPlaceById(
+                      booking.placeId.unwrapOr(''),
+                    ),
                     builder: (context, snapshot) {
                       final place = snapshot.data;
                       return Text(
