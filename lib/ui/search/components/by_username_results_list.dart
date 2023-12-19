@@ -27,7 +27,7 @@ class ByUsernameResultsList extends StatelessWidget {
             ? const Center(child: Text('No users found'))
             : ListView.builder(
                 itemCount: state.searchResults.length,
-                itemBuilder: (BuildContext context, int index) {
+                itemBuilder: (context, index) {
                   final user = state.searchResults[index];
                   return UserTile(
                     userId: user.id,
