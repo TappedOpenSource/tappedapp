@@ -18,6 +18,7 @@ class InterestedUsersView extends StatelessWidget {
   Widget build(BuildContext context) {
     final database = context.database;
     return Scaffold(
+      
       appBar: AppBar(
         title: Text(opportunity.title),
       ),

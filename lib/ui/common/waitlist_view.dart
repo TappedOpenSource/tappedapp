@@ -20,6 +20,7 @@ class _WaitlistViewState extends State<WaitlistView> {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final database = context.database;
+    final nav = context.nav;
 
     if (_loading) {
       return const Center(
@@ -92,7 +93,7 @@ class _WaitlistViewState extends State<WaitlistView> {
                             });
 
                             await database.joinPremiumWaitlist(currentUser.id);
-                            context.pop();
+                            nav.pop();
                             setState(() {
                               _loading = false;
                             });

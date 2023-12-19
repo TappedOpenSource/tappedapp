@@ -15,32 +15,18 @@ part 'search_state.dart';
 
 class SearchBloc extends Bloc<SearchEvent, SearchState> {
   SearchBloc({
-    required int initialIndex,
     required this.searchRepository,
     required this.database,
     required this.places,
   }) : super(
-          SearchState(
-            tabIndex: initialIndex,
-          ),
+          const SearchState(),
         ) {
-    on<ChangeSearchTab>((event, emit) async {
-      emit(state.copyWith(tabIndex: event.index));
-      if (state.lastRememberedSearchTerm != state.searchTerm) {
-        emit(
-          state.copyWith(
-            lastRememberedSearchTerm: state.searchTerm,
-          ),
-        );
-        await _search(state.searchTerm, emit);
-      }
-    });
     on<Search>((event, emit) async {
       await _search(event.query, emit);
     });
-    on<SearchUsersByPrediction>((event, emit) async {
-      await _searchUsersByPrediction(event.prediction, emit);
-    });
+    // on<SearchUsersByPrediction>((event, emit) async {
+    //   await _searchUsersByPrediction(event.prediction, emit);
+    // });
     on<SetAdvancedSearchFilters>((event, emit) async {
       emit(
         state.copyWith(
@@ -75,12 +61,7 @@ class SearchBloc extends Bloc<SearchEvent, SearchState> {
   }
 
   Future<void> _search(String query, Emitter<SearchState> emit) async {
-    switch (state.tabIndex) {
-      case 0:
-        await _searchUsersByUsername(query, emit);
-      case 1:
-        await _searchLocations(query, emit);
-    }
+    await _searchUsersByUsername(query, emit);
   }
 
   Future<void> _searchUsersByUsername(
@@ -144,75 +125,75 @@ class SearchBloc extends Bloc<SearchEvent, SearchState> {
     }
   }
 
-  Future<void> _searchLocations(
-    String query,
-    Emitter<SearchState> emit,
-  ) async {
-    if (query.isNotEmpty) {
-      emit(
-        state.copyWith(
-          loading: true,
-          searchTerm: query,
-          searchResultsByLocation: [],
-        ),
-      );
-      const duration = Duration(milliseconds: 500);
-      final completer = Completer<void>();
-      Timer(duration, () async {
-        if (query.isNotEmpty && query == state.searchTerm) {
-          // input hasn't changed in the last 500 milliseconds..
-          // you can start search
-          // print('Now !!! search term : ${state.searchTerm}');
+  // Future<void> _searchLocations(
+  //   String query,
+  //   Emitter<SearchState> emit,
+  // ) async {
+  //   if (query.isNotEmpty) {
+  //     emit(
+  //       state.copyWith(
+  //         loading: true,
+  //         searchTerm: query,
+  //         searchResultsByLocation: [],
+  //       ),
+  //     );
+  //     const duration = Duration(milliseconds: 500);
+  //     final completer = Completer<void>();
+  //     Timer(duration, () async {
+  //       if (query.isNotEmpty && query == state.searchTerm) {
+  //         // input hasn't changed in the last 500 milliseconds..
+  //         // you can start search
+  //         // print('Now !!! search term : ${state.searchTerm}');
 
-          final locationResults = await places.searchPlace(query);
-          emit(
-            state.copyWith(
-              locationResults: locationResults,
-              loading: false,
-            ),
-          );
-        } else {
-          //wait.. Because user still writing..        print('Not Now');
-          // print('Not Now');
-        }
-        completer.complete();
-      });
-      await completer.future;
-    } else {
-      emit(
-        state.copyWith(
-          loading: false,
-          searchTerm: '',
-          searchResultsByLocation: [],
-        ),
-      );
-    }
-  }
+  //         final locationResults = await places.searchPlace(query);
+  //         emit(
+  //           state.copyWith(
+  //             locationResults: locationResults,
+  //             loading: false,
+  //           ),
+  //         );
+  //       } else {
+  //         //wait.. Because user still writing..        print('Not Now');
+  //         // print('Not Now');
+  //       }
+  //       completer.complete();
+  //     });
+  //     await completer.future;
+  //   } else {
+  //     emit(
+  //       state.copyWith(
+  //         loading: false,
+  //         searchTerm: '',
+  //         searchResultsByLocation: [],
+  //       ),
+  //     );
+  //   }
+  // }
 
-  Future<void> _searchUsersByPrediction(
-    AutocompletePrediction prediction,
-    Emitter<SearchState> emit,
-  ) async {
-    final placeId = prediction.placeId;
-    final mainText = prediction.primaryText;
-    emit(state.copyWith(loading: true, searchTerm: mainText));
+  // Future<void> _searchUsersByPrediction(
+  //   AutocompletePrediction prediction,
+  //   Emitter<SearchState> emit,
+  // ) async {
+  //   final placeId = prediction.placeId;
+  //   final mainText = prediction.primaryText;
+  //   emit(state.copyWith(loading: true, searchTerm: mainText));
 
-    final place = await places.getPlaceById(placeId);
+  //   final place = await places.getPlaceById(placeId);
 
-    // TODO(jonaylor89): In the future, this should be paginated
-    final searchRes = await database.searchUsersByLocation(
-      lat: place?.latLng?.lat ?? 0,
-      lng: place?.latLng?.lng ?? 0,
-    );
-    emit(
-      state.copyWith(
-        locationResults: [],
-        searchTerm: mainText,
-        searchResultsByLocation: searchRes,
-        loading: false,
-      ),
-    );
-  }
+  //   // TODO(jonaylor89): In the future, this should be paginated
+  //   final searchRes = await database.searchUsersByLocation(
+  //     lat: place?.latLng?.lat ?? 0,
+  //     lng: place?.latLng?.lng ?? 0,
+  //   );
+  //   emit(
+  //     state.copyWith(
+  //       locationResults: [],
+  //       searchTerm: mainText,
+  //       searchResultsByLocation: searchRes,
+  //       loading: false,
+  //     ),
+  //   );
+  // }
 
   final PlacesRepository places;
   final DatabaseRepository database;

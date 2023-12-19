@@ -2,10 +2,7 @@ part of 'search_bloc.dart';
 
 class SearchState extends Equatable {
   const SearchState({
-    required this.tabIndex,
     this.searchResults = const [],
-    this.searchResultsByLocation = const [],
-    this.locationResults = const [],
     this.searchTerm = '',
     this.lastRememberedSearchTerm = '',
     this.loading = false,
@@ -17,8 +14,6 @@ class SearchState extends Equatable {
   });
 
   final List<UserModel> searchResults;
-  final List<UserModel> searchResultsByLocation;
-  final List<AutocompletePrediction> locationResults;
   final String searchTerm;
   final String lastRememberedSearchTerm;
 
@@ -29,7 +24,6 @@ class SearchState extends Equatable {
   final Place? place;
   final String? placeId;
 
-  final int tabIndex;
   final bool loading;
 
   bool get isNotSearching => searchTerm.isEmpty &&
@@ -41,10 +35,7 @@ class SearchState extends Equatable {
 
   @override
   List<Object?> get props => [
-        tabIndex,
         searchResults,
-        searchResultsByLocation,
-        locationResults,
         searchTerm,
         lastRememberedSearchTerm,
         loading,
@@ -57,8 +48,6 @@ class SearchState extends Equatable {
 
   SearchState copyWith({
     List<UserModel>? searchResults,
-    List<UserModel>? searchResultsByLocation,
-    List<AutocompletePrediction>? locationResults,
     String? searchTerm,
     String? lastRememberedSearchTerm,
     List<String>? occupations,
@@ -66,15 +55,10 @@ class SearchState extends Equatable {
     List<String>? labels,
     Option<Place>? place,
     Option<String>? placeId,
-    int? tabIndex,
     bool? loading,
   }) {
     return SearchState(
-      tabIndex: tabIndex ?? this.tabIndex,
-      locationResults: locationResults ?? this.locationResults,
       searchResults: searchResults ?? this.searchResults,
-      searchResultsByLocation:
-          searchResultsByLocation ?? this.searchResultsByLocation,
       searchTerm: searchTerm ?? this.searchTerm,
       lastRememberedSearchTerm:
           lastRememberedSearchTerm ?? this.lastRememberedSearchTerm,

@@ -7,6 +7,8 @@ import 'package:flutter_google_places_sdk/flutter_google_places_sdk.dart';
 import 'package:intheloopapp/data/database_repository.dart';
 import 'package:intheloopapp/domains/models/opportunity.dart';
 import 'package:intheloopapp/domains/models/option.dart';
+import 'package:intheloopapp/domains/navigation_bloc/navigation_bloc.dart';
+import 'package:intheloopapp/domains/navigation_bloc/tapped_route.dart';
 import 'package:intheloopapp/domains/opportunity_bloc/opportunity_bloc.dart';
 import 'package:intheloopapp/ui/conditional_parent_widget.dart';
 import 'package:intheloopapp/ui/themes.dart';
@@ -204,6 +206,17 @@ class OpportunityView extends StatelessWidget {
   ) {
     return CurrentUserBuilder(
       builder: (context, currentUser) {
+        if (opportunity.userId == currentUser.id) {
+          return CupertinoButton.filled(
+            onPressed: () => context.push(
+              InterestedUsersPage(
+                opportunity: opportunity,
+              ),
+            ),
+            child: const Text('see who applied'),
+          );
+        }
+
         return FutureBuilder(
           future: database.isUserAppliedForOpportunity(
             opportunity: opportunity,
