@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intheloopapp/domains/models/genre.dart';
 import 'package:intheloopapp/domains/search_bloc/search_bloc.dart';
 import 'package:intheloopapp/ui/settings/components/genre_selection.dart';
+import 'package:intheloopapp/utils/bloc_utils.dart';
 
 class GenreFilter extends StatelessWidget {
   const GenreFilter({super.key});
@@ -14,16 +15,16 @@ class GenreFilter extends StatelessWidget {
         return GenreSelection(
           initialValue: state.genres,
           onConfirm: (values) {
-            context.read<SearchBloc>().add(
-                  SetAdvancedSearchFilters(
-                    genres: values
-                        .where(
-                          (element) => element != null,
-                        )
-                        .whereType<Genre>()
-                        .toList(),
-                  ),
-                );
+            context.search.add(
+              SetAdvancedSearchFilters(
+                genres: values
+                    .where(
+                      (element) => element != null,
+                    )
+                    .whereType<Genre>()
+                    .toList(),
+              ),
+            );
           },
         );
       },

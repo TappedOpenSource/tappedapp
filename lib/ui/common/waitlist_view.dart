@@ -85,20 +85,17 @@ class _WaitlistViewState extends State<WaitlistView> {
                         ),
                         const SizedBox(height: 12),
                         FilledButton(
-                          onPressed: () {
+                          onPressed: () async {
                             // apply for the waitlist
                             setState(() {
                               _loading = true;
                             });
 
-                            database.joinPremiumWaitlist(currentUser.id).then(
-                              (value) {
-                                context.pop();
-                                setState(() {
-                                  _loading = false;
-                                });
-                              },
-                            );
+                            await database.joinPremiumWaitlist(currentUser.id);
+                            context.pop();
+                            setState(() {
+                              _loading = false;
+                            });
                           },
                           child: const Text('sign me up'),
                         ),

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_google_places_sdk/flutter_google_places_sdk.dart';
 import 'package:intheloopapp/domains/search_bloc/search_bloc.dart';
+import 'package:intheloopapp/utils/bloc_utils.dart';
 
 class LocationCard extends StatelessWidget {
   const LocationCard({
@@ -18,7 +18,7 @@ class LocationCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final search = context.read<SearchBloc>();
+    final search = context.search;
     return InkWell(
       onTap: () {
         search.add(SearchUsersByPrediction(prediction: prediction));

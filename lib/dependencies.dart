@@ -152,7 +152,7 @@ List<BlocProvider> buildBlocs({
       create: (context) => SearchBloc(
         initialIndex: 0,
         database: context.database,
-        searchRepository: context.search,
+        searchRepository: context.read<SearchRepository>(),
         places: context.places,
       ),
     ),

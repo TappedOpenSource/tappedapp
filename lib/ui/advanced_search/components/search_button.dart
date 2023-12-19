@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intheloopapp/domains/navigation_bloc/navigation_bloc.dart';
 import 'package:intheloopapp/domains/search_bloc/search_bloc.dart';
+import 'package:intheloopapp/utils/bloc_utils.dart';
 
 class SearchButton extends StatelessWidget {
   const SearchButton({super.key});
@@ -10,7 +10,7 @@ class SearchButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return FilledButton(
       onPressed: () {
-        context.read<SearchBloc>().add(const Search(query: ''));
+        context.search.add(const Search(query: ''));
         context.pop();
       },
       child: const Row(
