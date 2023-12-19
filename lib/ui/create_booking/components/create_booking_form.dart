@@ -11,6 +11,7 @@ import 'package:intheloopapp/ui/create_booking/components/booking_note_text_fiel
 import 'package:intheloopapp/ui/create_booking/create_booking_cubit.dart';
 import 'package:intheloopapp/ui/forms/location_text_field.dart';
 import 'package:intheloopapp/utils/app_logger.dart';
+import 'package:intheloopapp/utils/bloc_utils.dart';
 
 class CreateBookingForm extends StatefulWidget {
   const CreateBookingForm({super.key});
@@ -48,7 +49,7 @@ class _CreateBookingFormState extends State<CreateBookingForm> {
 
   @override
   Widget build(BuildContext context) {
-    final nav = context.read<NavigationBloc>();
+    final nav = context.nav;
     return BlocBuilder<CreateBookingCubit, CreateBookingState>(
       builder: (context, state) {
         return Form(

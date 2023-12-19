@@ -19,7 +19,7 @@ class BookingUpdateActivityTile extends StatelessWidget {
   final BookingUpdate activity;
 
   Future<void> onClick(BuildContext context) async {
-    final nav = context.read<NavigationBloc>();
+    final nav = context.nav;
 
     final database = context.database;
     final booking = await database.getBookingById(activity.bookingId);

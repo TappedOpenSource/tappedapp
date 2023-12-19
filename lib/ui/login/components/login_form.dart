@@ -9,6 +9,7 @@ import 'package:intheloopapp/ui/forms/google_login_button.dart';
 import 'package:intheloopapp/ui/loading/logo_wave.dart';
 import 'package:intheloopapp/ui/login/components/traditional_login.dart';
 import 'package:intheloopapp/ui/login/login_cubit.dart';
+import 'package:intheloopapp/utils/bloc_utils.dart';
 
 class LoginForm extends StatelessWidget {
   const LoginForm({
@@ -17,7 +18,7 @@ class LoginForm extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final nav = context.read<NavigationBloc>();
+    final nav = context.nav;
     return BlocListener<LoginCubit, LoginState>(
       listener: (context, state) {
         if (state.status.isFailure) {
@@ -79,7 +80,7 @@ class LoginForm extends StatelessWidget {
                   onPressed: () async {
                     try {
                       await context.read<LoginCubit>().signInWithGoogle();
-                        nav.pop();
+                      nav.pop();
                     } catch (e) {
                       ScaffoldMessenger.of(context)
                         ..hideCurrentSnackBar()

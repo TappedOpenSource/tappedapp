@@ -105,7 +105,7 @@ class ChannelHeader extends StatelessWidget implements PreferredSizeWidget {
   // Call _startCall(BuildContext context) {
   //   final currentUser = StreamChat.of(context).currentUser;
   //   final channel = StreamChannel.of(context).channel;
-  //   final stream = context.read<StreamRepository>();
+  //   final stream = context.stream;
 
   //   final call = stream.makeVideoCall(
   //     participantIds: channel.state!.members

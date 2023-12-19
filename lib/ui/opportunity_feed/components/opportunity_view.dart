@@ -3,7 +3,6 @@ import 'dart:ui';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_google_places_sdk/flutter_google_places_sdk.dart';
 import 'package:intheloopapp/data/database_repository.dart';
 import 'package:intheloopapp/domains/models/opportunity.dart';
@@ -272,7 +271,7 @@ class OpportunityView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final opBloc = context.read<OpportunityBloc>();
+    final opBloc = context.opportunities;
     final database = context.database;
     final theme = Theme.of(context);
     return Scaffold(

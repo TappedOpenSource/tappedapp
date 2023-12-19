@@ -5,16 +5,17 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intheloopapp/domains/bookings_bloc/bookings_bloc.dart';
 import 'package:intheloopapp/domains/navigation_bloc/navigation_bloc.dart';
 import 'package:intheloopapp/ui/bookings/components/bookings_list.dart';
+import 'package:intheloopapp/utils/bloc_utils.dart';
 
 class BookingsView extends StatelessWidget {
   const BookingsView({super.key});
 
   @override
   Widget build(BuildContext context) {
-    final nav = context.read<NavigationBloc>();
+    final nav = context.nav;
     return RefreshIndicator(
       onRefresh: () {
-        context.read<BookingsBloc>().add(FetchBookings());
+        context.bookings.add(FetchBookings());
         HapticFeedback.mediumImpact();
         return Future<void>(() => null);
       },

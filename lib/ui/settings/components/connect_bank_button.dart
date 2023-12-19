@@ -29,10 +29,10 @@ class _ConnectBankButtonState extends State<ConnectBankButton> {
     required UserModel currentUser,
     String? accountId,
   }) {
-    final payments = context.read<PaymentRepository>();
+    final payments = context.payments;
     final places = context.places;
-    final onboarding = context.read<OnboardingBloc>();
-    final nav = context.read<NavigationBloc>();
+    final onboarding = context.onboarding;
+    final nav = context.nav;
     final onSurfaceColor = Theme.of(context).colorScheme.onSurface;
     return CupertinoButton.filled(
       onPressed: () async {

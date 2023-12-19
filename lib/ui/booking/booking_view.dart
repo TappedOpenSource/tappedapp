@@ -47,7 +47,7 @@ class BookingView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final database = RepositoryProvider.of<DatabaseRepository>(context);
-    final navigationBloc = context.read<NavigationBloc>();
+    final navigationBloc = context.nav;
     final validService = booking.serviceId.isSome;
     return CurrentUserBuilder(
       builder: (context, currentUser) {

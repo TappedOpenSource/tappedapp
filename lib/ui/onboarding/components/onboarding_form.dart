@@ -8,6 +8,7 @@ import 'package:intheloopapp/ui/onboarding/components/eula_button.dart';
 import 'package:intheloopapp/ui/onboarding/components/profile_picture_uploader.dart';
 import 'package:intheloopapp/ui/onboarding/onboarding_flow_cubit.dart';
 import 'package:intheloopapp/utils/app_logger.dart';
+import 'package:intheloopapp/utils/bloc_utils.dart';
 
 class OnboardingForm extends StatelessWidget {
   const OnboardingForm({super.key});
@@ -109,7 +110,7 @@ class OnboardingForm extends StatelessWidget {
                   ),
                   TextButton(
                     onPressed: () {
-                      context.read<AuthenticationBloc>().add(LoggedOut());
+                      context.authentication.add(LoggedOut());
                     },
                     child: const Text(
                       'logout',

@@ -2,8 +2,6 @@ import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:intheloopapp/data/notification_repository.dart';
-import 'package:intheloopapp/data/stream_repository.dart';
 import 'package:intheloopapp/domains/activity_bloc/activity_bloc.dart';
 import 'package:intheloopapp/domains/authentication_bloc/authentication_bloc.dart';
 import 'package:intheloopapp/domains/bookings_bloc/bookings_bloc.dart';
@@ -17,6 +15,7 @@ import 'package:intheloopapp/ui/onboarding/onboarding_view.dart';
 import 'package:intheloopapp/ui/shell/shell_view.dart';
 import 'package:intheloopapp/ui/splash/splash_view.dart';
 import 'package:intheloopapp/ui/themes.dart';
+import 'package:intheloopapp/utils/bloc_utils.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:stream_chat_flutter/stream_chat_flutter.dart';
 
@@ -41,23 +40,23 @@ class App extends StatelessWidget {
     BuildContext context,
     String currentAuthUserId,
   ) {
-    context.read<OnboardingBloc>().add(
-          OnboardingCheck(
-            userId: currentAuthUserId,
-          ),
-        );
-    context.read<StreamRepository>().connectUser(currentAuthUserId);
+    context.onboarding.add(
+      OnboardingCheck(
+        userId: currentAuthUserId,
+      ),
+    );
+    context.stream.connectUser(currentAuthUserId);
     context.read<ActivityBloc>().add(InitListenerEvent());
     context.read<DeepLinkBloc>().add(MonitorDeepLinks());
-    context.read<BookingsBloc>().add(FetchBookings());
+    context.bookings.add(FetchBookings());
 
     return BlocBuilder<OnboardingBloc, OnboardingState>(
       builder: (context, onboardState) {
         return switch (onboardState) {
           Onboarded() => () {
-              context.read<NotificationRepository>().saveDeviceToken(
-                    userId: currentAuthUserId,
-                  );
+              context.notifications.saveDeviceToken(
+                userId: currentAuthUserId,
+              );
 
               return const ShellView();
             }(),

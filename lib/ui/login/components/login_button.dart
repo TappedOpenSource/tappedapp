@@ -3,13 +3,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intheloopapp/domains/navigation_bloc/navigation_bloc.dart';
 import 'package:intheloopapp/ui/login/login_cubit.dart';
+import 'package:intheloopapp/utils/bloc_utils.dart';
 
 class LoginButton extends StatelessWidget {
   const LoginButton({super.key});
 
   @override
   Widget build(BuildContext context) {
-    final nav = context.read<NavigationBloc>();
+    final nav = context.nav;
     return BlocBuilder<LoginCubit, LoginState>(
       builder: (context, state) {
         return CupertinoButton.filled(

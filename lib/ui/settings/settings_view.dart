@@ -1,8 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:intheloopapp/domains/authentication_bloc/authentication_bloc.dart';
-import 'package:intheloopapp/domains/navigation_bloc/navigation_bloc.dart';
-import 'package:intheloopapp/domains/onboarding_bloc/onboarding_bloc.dart';
 import 'package:intheloopapp/ui/settings/components/action_menu.dart';
 import 'package:intheloopapp/ui/settings/components/change_profile_image.dart';
 import 'package:intheloopapp/ui/settings/components/delete_account_button.dart';
@@ -26,12 +23,12 @@ class SettingsView extends StatelessWidget {
       builder: (context, currentUser) {
         return BlocProvider(
           create: (_) => SettingsCubit(
-            authenticationBloc: context.read<AuthenticationBloc>(),
-            onboardingBloc: context.read<OnboardingBloc>(),
+            authenticationBloc: context.authentication,
+            onboardingBloc: context.onboarding,
             authRepository: context.auth,
             databaseRepository: context.database,
             storageRepository: context.storage,
-            navigationBloc: context.read<NavigationBloc>(),
+            navigationBloc: context.nav,
             places: context.places,
             currentUser: currentUser,
           )

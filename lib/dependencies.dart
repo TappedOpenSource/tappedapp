@@ -118,43 +118,34 @@ List<BlocProvider> buildBlocs({
     BlocProvider<DeepLinkBloc>(
       //Depreciated
       create: (context) => DeepLinkBloc(
-        onboardingBloc: context.read<OnboardingBloc>(),
-        navBloc: context.read<NavigationBloc>(),
-        dynamicLinkRepository: context.read<DeepLinkRepository>(),
-        databaseRepository: context.database,
-      ),
-    ),
-    BlocProvider<DeepLinkBloc>(
-      //Depreciated CHANGE THIS ONE
-      create: (context) => DeepLinkBloc(
-        onboardingBloc: context.read<OnboardingBloc>(),
-        navBloc: context.read<NavigationBloc>(),
+        onboardingBloc: context.onboarding,
+        navBloc: context.nav,
         dynamicLinkRepository: context.read<DeepLinkRepository>(),
         databaseRepository: context.database,
       ),
     ),
     BlocProvider<DownForMaintenanceBloc>(
       create: (context) => DownForMaintenanceBloc(
-        remoteConfigRepository: context.read<RemoteConfigRepository>(),
+        remoteConfigRepository: context.remoteConfig,
       )..add(CheckStatus()),
     ),
     BlocProvider<ActivityBloc>(
       create: (context) => ActivityBloc(
         databaseRepository: context.database,
-        authenticationBloc: context.read<AuthenticationBloc>(),
+        authenticationBloc: context.authentication,
       ),
     ),
     BlocProvider<BookingsBloc>(
       create: (context) => BookingsBloc(
         database: context.database,
-        authenticationBloc: context.read<AuthenticationBloc>(),
+        authenticationBloc: context.authentication,
       ),
     ),
     BlocProvider<OpportunityBloc>(
       create: (context) => OpportunityBloc(
         database: context.database,
-        nav: context.read<NavigationBloc>(),
-        auth: context.read<AuthenticationBloc>(),
+        nav: context.nav,
+        auth: context.authentication,
       ),
     ),
     BlocProvider<SearchBloc>(

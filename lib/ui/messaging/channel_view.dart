@@ -13,7 +13,7 @@ class ChannelView extends StatelessWidget {
   // void _startCall(BuildContext context) async {
   //   final currentUser = StreamChat.of(context).currentUser;
   //   final channel = StreamChannel.of(context).channel;
-  //   final stream = context.read<StreamRepository>();
+  //   final stream = context.stream;
 
   //   final call = stream.makeVideoCall(
   //     participantIds: [],
@@ -41,8 +41,7 @@ class ChannelView extends StatelessWidget {
       appBar: ChannelHeader(
         onImageTap: () {
           final channel = StreamChannel.of(context).channel;
-          final currentUserId =
-              StreamChat.of(context).currentUser?.id;
+          final currentUserId = StreamChat.of(context).currentUser?.id;
 
           if (currentUserId == null) {
             return;
@@ -70,8 +69,7 @@ class ChannelView extends StatelessWidget {
       body: const Column(
         children: [
           Expanded(
-            child: StreamMessageListView(
-            ),
+            child: StreamMessageListView(),
           ),
           StreamMessageInput(),
         ],
