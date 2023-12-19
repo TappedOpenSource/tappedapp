@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intheloopapp/domains/search_bloc/search_bloc.dart';
+import 'package:intheloopapp/utils/bloc_utils.dart';
 
 class CancelIcon extends StatefulWidget {
   const CancelIcon({
@@ -52,7 +53,7 @@ class _CancelIconState extends State<CancelIcon> {
           onPressed: () {
             widget.focusNode.unfocus();
             widget.searchController.clear();
-            context.read<SearchBloc>().add(ClearSearch());
+            context.search.add(ClearSearch());
           },
         );
       },

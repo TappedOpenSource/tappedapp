@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intheloopapp/domains/search_bloc/search_bloc.dart';
 import 'package:intheloopapp/ui/settings/components/occupation_selection.dart';
+import 'package:intheloopapp/utils/bloc_utils.dart';
 
 class OccupationFilter extends StatelessWidget {
   const OccupationFilter({super.key});
@@ -13,16 +14,16 @@ class OccupationFilter extends StatelessWidget {
         return OccupationSelection(
           initialValue: state.occupations,
           onConfirm: (values) {
-            context.read<SearchBloc>().add(
-                  SetAdvancedSearchFilters(
-                    occupations: values
-                        .where(
-                          (element) => element != null,
-                        )
-                        .whereType<String>()
-                        .toList(),
-                  ),
-                );
+            context.search.add(
+              SetAdvancedSearchFilters(
+                occupations: values
+                    .where(
+                      (element) => element != null,
+                    )
+                    .whereType<String>()
+                    .toList(),
+              ),
+            );
           },
         );
       },

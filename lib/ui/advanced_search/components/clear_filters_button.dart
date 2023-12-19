@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intheloopapp/domains/search_bloc/search_bloc.dart';
+import 'package:intheloopapp/utils/bloc_utils.dart';
 
 class ClearFiltersButton extends StatelessWidget {
   const ClearFiltersButton({super.key});
@@ -9,7 +9,7 @@ class ClearFiltersButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return TextButton(
       onPressed: () {
-        context.read<SearchBloc>().add(ClearFilters());
+        context.search.add(ClearFilters());
       },
       child: const Text(
         'Clear Filters',

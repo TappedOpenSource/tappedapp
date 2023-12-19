@@ -4,6 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intheloopapp/domains/navigation_bloc/navigation_bloc.dart';
 import 'package:intheloopapp/domains/navigation_bloc/tapped_route.dart';
 import 'package:intheloopapp/domains/search_bloc/search_bloc.dart';
+import 'package:intheloopapp/utils/bloc_utils.dart';
 
 class TappedSearchBar extends StatelessWidget {
   const TappedSearchBar({
@@ -40,7 +41,7 @@ class TappedSearchBar extends StatelessWidget {
             ),
           ],
           onChanged: (input) {
-            context.read<SearchBloc>().add(Search(query: input));
+            context.search.add(Search(query: input));
           },
         );
       },

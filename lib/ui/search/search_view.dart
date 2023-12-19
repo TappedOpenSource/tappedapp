@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intheloopapp/domains/search_bloc/search_bloc.dart';
 import 'package:intheloopapp/ui/search/components/by_username_results_list.dart';
 import 'package:intheloopapp/ui/search/components/cancel_icon.dart';
 import 'package:intheloopapp/ui/search/components/tapped_search_bar.dart';
+import 'package:intheloopapp/utils/bloc_utils.dart';
 
 class SearchView extends StatefulWidget {
   SearchView({
@@ -40,9 +40,9 @@ class _SearchViewState extends State<SearchView> with TickerProviderStateMixin {
   }
 
   void _handleTabChange() {
-    context.read<SearchBloc>().add(
-          ChangeSearchTab(index: _tabController.index),
-        );
+    context.search.add(
+      ChangeSearchTab(index: _tabController.index),
+    );
   }
 
   List<Widget> _buildActions() {

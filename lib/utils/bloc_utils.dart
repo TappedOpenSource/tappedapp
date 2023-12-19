@@ -6,7 +6,6 @@ import 'package:intheloopapp/data/notification_repository.dart';
 import 'package:intheloopapp/data/payment_repository.dart';
 import 'package:intheloopapp/data/places_repository.dart';
 import 'package:intheloopapp/data/remote_config_repository.dart';
-import 'package:intheloopapp/data/search_repository.dart';
 import 'package:intheloopapp/data/storage_repository.dart';
 import 'package:intheloopapp/data/stream_repository.dart';
 import 'package:intheloopapp/domains/authentication_bloc/authentication_bloc.dart';
@@ -14,13 +13,13 @@ import 'package:intheloopapp/domains/bookings_bloc/bookings_bloc.dart';
 import 'package:intheloopapp/domains/navigation_bloc/navigation_bloc.dart';
 import 'package:intheloopapp/domains/onboarding_bloc/onboarding_bloc.dart';
 import 'package:intheloopapp/domains/opportunity_bloc/opportunity_bloc.dart';
+import 'package:intheloopapp/domains/search_bloc/search_bloc.dart';
 
 extension BlocUtils on BuildContext {
   DatabaseRepository get database => read<DatabaseRepository>();
   AuthRepository get auth => read<AuthRepository>();
   StorageRepository get storage => read<StorageRepository>();
   PlacesRepository get places => read<PlacesRepository>();
-  SearchRepository get search => read<SearchRepository>();
   PaymentRepository get payments => read<PaymentRepository>();
   RemoteConfigRepository get remoteConfig => read<RemoteConfigRepository>();
   StreamRepository get stream => read<StreamRepository>();
@@ -31,4 +30,5 @@ extension BlocUtils on BuildContext {
   OnboardingBloc get onboarding => read<OnboardingBloc>();
   BookingsBloc get bookings => read<BookingsBloc>();
   OpportunityBloc get opportunities => read<OpportunityBloc>();
+  SearchBloc get search => read<SearchBloc>();
 }
