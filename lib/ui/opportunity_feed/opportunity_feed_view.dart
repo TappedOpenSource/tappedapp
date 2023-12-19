@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:intheloopapp/domains/opportunity_bloc/opportunity_bloc.dart';
 import 'package:intheloopapp/ui/opportunity_feed/components/opportunity_feed.dart';
 import 'package:intheloopapp/ui/opportunity_feed/cubit/opportunity_feed_cubit.dart';
 import 'package:intheloopapp/utils/bloc_utils.dart';
@@ -12,7 +11,7 @@ class OpportunityFeedView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final opBloc = context.read<OpportunityBloc>();
+    final opBloc = context.opportunities;
     final database = context.database;
     return CurrentUserBuilder(
       builder: (context, currentUser) {

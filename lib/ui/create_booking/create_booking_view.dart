@@ -7,12 +7,11 @@ import 'package:intheloopapp/data/stream_repository.dart';
 import 'package:intheloopapp/domains/models/option.dart';
 import 'package:intheloopapp/domains/models/service.dart';
 import 'package:intheloopapp/domains/models/user_model.dart';
-import 'package:intheloopapp/domains/navigation_bloc/navigation_bloc.dart';
-import 'package:intheloopapp/domains/onboarding_bloc/onboarding_bloc.dart';
 import 'package:intheloopapp/ui/create_booking/components/create_booking_form.dart';
 import 'package:intheloopapp/ui/create_booking/create_booking_cubit.dart';
 import 'package:intheloopapp/ui/loading/loading_view.dart';
 import 'package:intheloopapp/ui/user_tile.dart';
+import 'package:intheloopapp/utils/bloc_utils.dart';
 import 'package:intheloopapp/utils/current_user_builder.dart';
 import 'package:skeletons/skeletons.dart';
 
@@ -49,8 +48,8 @@ class CreateBookingView extends StatelessWidget {
                 requesteeStripeConnectedAccountId:
                     requesteeStripeConnectedAccountId,
                 bookingFee: bookingFee,
-                navigationBloc: context.read<NavigationBloc>(),
-                onboardingBloc: context.read<OnboardingBloc>(),
+                navigationBloc: context.nav,
+                onboardingBloc: context.onboarding,
                 database: database,
                 streamRepo: RepositoryProvider.of<StreamRepository>(context),
                 payments: RepositoryProvider.of<PaymentRepository>(context),

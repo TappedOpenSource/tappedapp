@@ -1,7 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:intheloopapp/domains/navigation_bloc/navigation_bloc.dart';
 import 'package:intheloopapp/ui/forms/email_text_field.dart';
 import 'package:intheloopapp/ui/login/login_cubit.dart';
 import 'package:intheloopapp/utils/bloc_utils.dart';
@@ -26,7 +25,7 @@ class _ForgotPasswordViewState extends State<ForgotPasswordView> {
       body: BlocProvider(
         create: (context) => LoginCubit(
           authRepository: context.auth,
-          navigationBloc: context.read<NavigationBloc>(),
+          navigationBloc: context.nav,
         ),
         child: BlocBuilder<LoginCubit, LoginState>(
           builder: (context, state) {

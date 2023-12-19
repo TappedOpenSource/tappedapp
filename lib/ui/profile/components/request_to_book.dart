@@ -1,12 +1,11 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:intheloopapp/data/payment_repository.dart';
 import 'package:intheloopapp/domains/models/option.dart';
 import 'package:intheloopapp/domains/models/payment_user.dart';
 import 'package:intheloopapp/domains/models/service.dart';
 import 'package:intheloopapp/domains/navigation_bloc/navigation_bloc.dart';
 import 'package:intheloopapp/domains/navigation_bloc/tapped_route.dart';
+import 'package:intheloopapp/utils/bloc_utils.dart';
 import 'package:intheloopapp/utils/current_user_builder.dart';
 
 class RequestToBookButton extends StatelessWidget {
@@ -51,7 +50,7 @@ class RequestToBookButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final payments = context.read<PaymentRepository>();
+    final payments = context.payments;
 
     return CurrentUserBuilder(
       builder: (context, currentUser) {

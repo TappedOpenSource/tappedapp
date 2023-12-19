@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intheloopapp/domains/bookings_bloc/bookings_bloc.dart';
 import 'package:intheloopapp/domains/models/booking.dart';
 import 'package:intheloopapp/ui/booking_container/booking_container.dart';
+import 'package:intheloopapp/utils/bloc_utils.dart';
 
 class BookingsList extends StatelessWidget {
   const BookingsList({required this.bookings, super.key});
@@ -39,12 +40,12 @@ class BookingsList extends StatelessWidget {
                   (BuildContext context, int index) {
                     return BookingContainer(
                       booking: bookings[index],
-                      onConfirm: (booking) => context.read<BookingsBloc>().add(
-                            ConfirmBooking(booking: booking),
-                          ),
-                      onDeny: (booking) => context.read<BookingsBloc>().add(
-                            DenyBooking(booking: booking),
-                          ),
+                      onConfirm: (booking) => context.bookings.add(
+                        ConfirmBooking(booking: booking),
+                      ),
+                      onDeny: (booking) => context.bookings.add(
+                        DenyBooking(booking: booking),
+                      ),
                     );
                   },
                   childCount: bookings.length,

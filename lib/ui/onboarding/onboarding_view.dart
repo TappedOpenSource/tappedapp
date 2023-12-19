@@ -3,8 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intheloopapp/domains/authentication_bloc/authentication_bloc.dart';
 import 'package:intheloopapp/domains/models/option.dart';
-import 'package:intheloopapp/domains/navigation_bloc/navigation_bloc.dart';
-import 'package:intheloopapp/domains/onboarding_bloc/onboarding_bloc.dart';
 import 'package:intheloopapp/ui/error/error_view.dart';
 import 'package:intheloopapp/ui/onboarding/components/onboarding_form.dart';
 import 'package:intheloopapp/ui/onboarding/onboarding_flow_cubit.dart';
@@ -24,9 +22,9 @@ class OnboardingView extends StatelessWidget {
           Some(:final value) => BlocProvider(
               create: (context) => OnboardingFlowCubit(
                 currentAuthUser: value,
-                onboardingBloc: context.read<OnboardingBloc>(),
-                navigationBloc: context.read<NavigationBloc>(),
-                authenticationBloc: context.read<AuthenticationBloc>(),
+                onboardingBloc: context.onboarding,
+                navigationBloc: context.nav,
+                authenticationBloc: context.authentication,
                 storageRepository: context.storage,
                 databaseRepository: context.database,
               ),

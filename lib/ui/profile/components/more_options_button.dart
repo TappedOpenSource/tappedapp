@@ -19,7 +19,7 @@ class MoreOptionsButton extends StatelessWidget {
   ) {
     final dynamic = context.read<DeepLinkRepository>();
     final database = context.database;
-    final nav = context.read<NavigationBloc>();
+    final nav = context.nav;
     showCupertinoModalPopup<void>(
       context: context,
       builder: (BuildContext context) => CupertinoActionSheet(

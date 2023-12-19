@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intheloopapp/domains/models/option.dart';
 import 'package:intheloopapp/domains/models/service.dart';
-import 'package:intheloopapp/domains/navigation_bloc/navigation_bloc.dart';
 import 'package:intheloopapp/ui/common/tapped_app_bar.dart';
 import 'package:intheloopapp/ui/create_service/components/description_text_field.dart';
 import 'package:intheloopapp/ui/create_service/components/edit_service_button.dart';
@@ -27,7 +26,7 @@ class CreateServiceView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final database = context.database;
-    final nav = context.read<NavigationBloc>();
+    final nav = context.nav;
     return CurrentUserBuilder(
       builder: (context, currentUser) {
         return BlocProvider<CreateServiceCubit>(

@@ -2,10 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_google_places_sdk/flutter_google_places_sdk.dart';
 import 'package:intheloopapp/data/places_repository.dart';
-import 'package:intheloopapp/domains/navigation_bloc/navigation_bloc.dart';
 import 'package:intheloopapp/ui/forms/location_form/location_cubit.dart';
 import 'package:intheloopapp/ui/forms/location_form/location_results.dart';
 import 'package:intheloopapp/ui/forms/location_form/location_search_bar.dart';
+import 'package:intheloopapp/utils/bloc_utils.dart';
 
 class LocationFormView extends StatelessWidget {
   const LocationFormView({
@@ -25,7 +25,7 @@ class LocationFormView extends StatelessWidget {
       create: (context) => LocationCubit(
         places: places,
         onSelected: onSelected,
-        navigationBloc: context.read<NavigationBloc>(),
+        navigationBloc: context.nav,
       ),
       child: Scaffold(
         backgroundColor: theme.colorScheme.background,
