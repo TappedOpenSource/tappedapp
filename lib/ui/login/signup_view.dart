@@ -2,7 +2,6 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:intheloopapp/data/auth_repository.dart';
 import 'package:intheloopapp/domains/navigation_bloc/navigation_bloc.dart';
 import 'package:intheloopapp/ui/forms/apple_login_button.dart';
 import 'package:intheloopapp/ui/forms/email_text_field.dart';
@@ -12,6 +11,7 @@ import 'package:intheloopapp/ui/loading/logo_wave.dart';
 import 'package:intheloopapp/ui/login/components/confirm_signup_button.dart';
 import 'package:intheloopapp/ui/login/login_cubit.dart';
 import 'package:intheloopapp/ui/themes.dart';
+import 'package:intheloopapp/utils/bloc_utils.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class SignUpView extends StatelessWidget {
@@ -23,7 +23,7 @@ class SignUpView extends StatelessWidget {
       backgroundColor: Theme.of(context).colorScheme.background,
       body: BlocProvider(
         create: (context) => LoginCubit(
-          authRepository: context.read<AuthRepository>(),
+          authRepository: context.auth,
           navigationBloc: context.read<NavigationBloc>(),
         ),
         child: BlocBuilder<LoginCubit, LoginState>(

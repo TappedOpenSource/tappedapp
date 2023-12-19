@@ -27,7 +27,7 @@ class Opportunity extends Equatable {
     final touched = touchedVal != null
         ? EnumToString.fromString<OpportunityInteration>(
             OpportunityInteration.values,
-            touchedVal,
+            touchedVal as String,
           )
         : null;
     return Opportunity(

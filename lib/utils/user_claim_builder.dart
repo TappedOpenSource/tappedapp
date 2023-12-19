@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:intheloopapp/data/auth_repository.dart';
 import 'package:intheloopapp/domains/models/option.dart';
 import 'package:intheloopapp/ui/loading/loading_view.dart';
 import 'package:intheloopapp/ui/record_label/unsubscribed_view.dart';
+import 'package:intheloopapp/utils/bloc_utils.dart';
 
 class UserClaimBuilder extends StatelessWidget {
   const UserClaimBuilder({
@@ -15,7 +14,7 @@ class UserClaimBuilder extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final auth = context.read<AuthRepository>();
+    final auth = context.auth;
     return FutureBuilder<Option<String>>(
       future: auth.getCustomClaim(),
       builder: (context, snapshot) {

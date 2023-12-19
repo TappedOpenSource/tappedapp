@@ -2,6 +2,7 @@ import 'dart:ui';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_google_places_sdk/flutter_google_places_sdk.dart';
 import 'package:intheloopapp/data/database_repository.dart';
@@ -241,6 +242,7 @@ class OpportunityView extends StatelessWidget {
                     const SizedBox(width: 69),
                     IconButton.filled(
                       onPressed: () {
+                        HapticFeedback.mediumImpact();
                         opBloc.add(
                           ApplyForOpportunity(
                             opportunity: opportunity,

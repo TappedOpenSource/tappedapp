@@ -96,12 +96,12 @@ List<BlocProvider> buildBlocs({
     ),
     BlocProvider<AuthenticationBloc>(
       create: (context) => AuthenticationBloc(
-        authRepository: context.read<AuthRepository>(),
+        authRepository: context.auth,
       )..add(AppStarted()),
     ),
     BlocProvider<ConfirmEmailBloc>(
       create: (context) => ConfirmEmailBloc(
-        authRepository: context.read<AuthRepository>(),
+        authRepository: context.auth,
       ),
     ),
     BlocProvider<NavigationBloc>(
@@ -161,7 +161,7 @@ List<BlocProvider> buildBlocs({
       create: (context) => SearchBloc(
         initialIndex: 0,
         database: context.database,
-        searchRepository: context.read<SearchRepository>(),
+        searchRepository: context.search,
         places: context.places,
       ),
     ),
