@@ -54,13 +54,19 @@ const _sendUserQuotaNotification = async (userId: string) => {
   
   const tokens: string[] = tokensSnap.docs.map((snap) => snap.id);
   await Promise.all(tokens.map(async (token) => {
-    fcm.send({
-      token,
-      notification: {
-        title: "you're back!",
-        body: "your daily opportunity quota has been reset",
-      }
-    });
+    try {
+
+      await fcm.send({
+        token,
+        notification: {
+          title: "you're back!",
+          body: "your daily opportunity quota has been reset",
+        }
+      });
+    } catch (e) {
+      error(`error sending quota notification to ${userId} - ${token}`, e);
+      await tokensRef.doc(userId).collection("tokens").doc(token).delete();
+    }
   }));
 }
 
@@ -98,6 +104,10 @@ export const copyOpportunityToFeedsOnCreate = onDocumentWritten(
         if (userDoc.id === opportunity.userId) {
           return;
         }
+        
+        await creditsRef.doc(userDoc.id).update({
+          opportunityQuota: 5,
+        });
 
         await _addOpportunityToUserFeed(userDoc.id, opportunity);
       }),
