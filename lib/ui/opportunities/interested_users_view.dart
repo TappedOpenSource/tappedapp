@@ -3,6 +3,7 @@ import 'package:intheloopapp/domains/models/opportunity.dart';
 import 'package:intheloopapp/domains/models/option.dart';
 import 'package:intheloopapp/domains/models/user_model.dart';
 import 'package:intheloopapp/ui/loading/loading_view.dart';
+import 'package:intheloopapp/ui/themes.dart';
 import 'package:intheloopapp/ui/user_tile.dart';
 import 'package:intheloopapp/utils/bloc_utils.dart';
 
@@ -18,7 +19,7 @@ class InterestedUsersView extends StatelessWidget {
   Widget build(BuildContext context) {
     final database = context.database;
     return Scaffold(
-      
+      backgroundColor: context.theme.colorScheme.background,      
       appBar: AppBar(
         title: Text(opportunity.title),
       ),

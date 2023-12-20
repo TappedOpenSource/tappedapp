@@ -8,10 +8,10 @@ const tappedAccent = Color(0xff0086CC);
 const primaryColor = tappedAccent;
 // const secondaryColor = Colors.deepPurple;
 const secondaryColor = tappedAccent;
-const backgroundLightColor = Color(0xfff8f6Fb);
-const backgroundDarkColor = Color(0xff070a0d);
+const backgroundLightColor = Color(0xff010F16);
+const backgroundDarkColor = Color(0xff010F16);
 const navigationBarLightColor = Color(0xfff8f6Fb);
-const navigationBarDarkColor = Color(0xff070a0d);
+const navigationBarDarkColor = Color(0xff010F16);
 
 class Themes {
   static final themeLight = ThemeData.light().copyWith(
@@ -105,4 +105,8 @@ class Themes {
       trackHeight: 2,
     ),
   );
+}
+
+extension ThemeUtil on BuildContext {
+  ThemeData get theme => Theme.of(this);
 }

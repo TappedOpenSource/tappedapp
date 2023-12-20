@@ -15,7 +15,12 @@ class OpportunityFeed extends StatelessWidget {
     return BlocBuilder<OpportunityFeedCubit, OpportunityFeedState>(
       builder: (context, state) {
         if (state.loading) {
-          return const LoadingView();
+          return const Center(
+            child: LogoWave(
+              height: 100,
+              width: 100,
+            ),
+          );
         }
 
         if (state.showApplyAnimation) {
