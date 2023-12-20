@@ -10,7 +10,7 @@ import { creditsRef, fcm, opportunitiesRef, opportunityFeedsRef, tokensRef, user
 import { Opportunity, OpportunityFeedItem, UserModel } from "../types/models";
 import { Timestamp } from "firebase-admin/firestore";
 import { HttpsError } from "firebase-functions/v2/https";
-import { debug } from "firebase-functions/logger";
+import { debug, error } from "firebase-functions/logger";
 import { onSchedule } from "firebase-functions/v2/scheduler";
 
 const _addOpportunityToUserFeed = async (
@@ -53,17 +53,15 @@ const _sendUserQuotaNotification = async (userId: string) => {
 
   
   const tokens: string[] = tokensSnap.docs.map((snap) => snap.id);
-
-  // send payload to tokens
-  const payload = {
-    notification: {
-      title: "you're back!",
-      body: "you're good to keep swiping on opportunities",
-    }
-  };
-
-  fcm.sendToDevice(tokens, payload);
-
+  await Promise.all(tokens.map(async (token) => {
+    fcm.send({
+      token,
+      notification: {
+        title: "you're back!",
+        body: "your daily opportunity quota has been reset",
+      }
+    });
+  }));
 }
 
 export const addActivityOnOpportunityInterest = functions
@@ -162,11 +160,15 @@ export const setDailyOpportunityQuota = onSchedule("0 0 * * *", async () => {
 
   await Promise.all(
     usersSnap.docs.map(async (userDoc) => {
-      await creditsRef.doc(userDoc.id).update({
-        opportunityQuota: 5,
-      });
+      try {
+        await creditsRef.doc(userDoc.id).update({
+          opportunityQuota: 5,
+        });
 
-      await _sendUserQuotaNotification(userDoc.id);
+        await _sendUserQuotaNotification(userDoc.id);
+      } catch (e) {
+        error("error setting daily opportunity quota", e);
+      }
     }),
   );
 });
