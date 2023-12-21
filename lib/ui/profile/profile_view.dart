@@ -9,6 +9,7 @@ import 'package:intheloopapp/domains/models/user_model.dart';
 import 'package:intheloopapp/domains/navigation_bloc/navigation_bloc.dart';
 import 'package:intheloopapp/domains/navigation_bloc/tapped_route.dart';
 import 'package:intheloopapp/domains/onboarding_bloc/onboarding_bloc.dart';
+import 'package:intheloopapp/ui/conditional_parent_widget.dart';
 import 'package:intheloopapp/ui/error/error_view.dart';
 import 'package:intheloopapp/ui/loading/loading_view.dart';
 import 'package:intheloopapp/ui/profile/components/bookings_sliver.dart';
@@ -20,11 +21,14 @@ import 'package:intheloopapp/ui/profile/components/reviews_sliver.dart';
 import 'package:intheloopapp/ui/profile/components/services_sliver.dart';
 import 'package:intheloopapp/ui/profile/profile_cubit.dart';
 import 'package:intheloopapp/ui/themes.dart';
+import 'package:intheloopapp/utils/hero_image.dart';
 
 class ProfileView extends StatelessWidget {
   ProfileView({
     required this.visitedUserId,
     required this.visitedUser,
+    this.heroImage,
+    this.titleHeroTag,
     this.collapsedBarHeight = 60.0,
     this.expandedBarHeight = 300.0,
     super.key,
@@ -33,11 +37,44 @@ class ProfileView extends StatelessWidget {
   final String visitedUserId;
   final double collapsedBarHeight;
   final double expandedBarHeight;
+  final HeroImage? heroImage;
+  final String? titleHeroTag;
 
   final scrollController = ScrollController();
 
   // callers can provide a user to avoid a database call
   final Option<UserModel> visitedUser;
+
+  ImageProvider _getProfileImage(String? profilePicture) {
+    return (profilePicture == null)
+        ? const AssetImage(
+            'assets/default_avatar.png',
+          ) as ImageProvider
+        : CachedNetworkImageProvider(
+            profilePicture,
+          );
+  }
+
+  Widget _profileImage(String? profilePicture) {
+    final hero = heroImage;
+    return ConditionalParentWidget(
+      condition: hero != null,
+      conditionalBuilder: ({required child}) {
+        return Hero(
+          tag: hero!.heroTag,
+          child: child,
+        );
+      },
+      child: Container(
+        decoration: BoxDecoration(
+          image: DecorationImage(
+            fit: BoxFit.cover,
+            image: _getProfileImage(profilePicture),
+          ),
+        ),
+      ),
+    );
+  }
 
   Widget _profilePage(
     UserModel currentUser,
@@ -182,21 +219,7 @@ class ProfileView extends StatelessWidget {
                 ),
               ],
             ),
-            background: Container(
-              decoration: BoxDecoration(
-                image: DecorationImage(
-                  fit: BoxFit.cover,
-                  image: (visitedUser.profilePicture == null ||
-                          visitedUser.profilePicture == '')
-                      ? const AssetImage(
-                          'assets/default_avatar.png',
-                        ) as ImageProvider
-                      : CachedNetworkImageProvider(
-                          visitedUser.profilePicture!,
-                        ),
-                ),
-              ),
-            ),
+            background: _profileImage(visitedUser.profilePicture),
           ),
         ),
         const SliverToBoxAdapter(
@@ -314,20 +337,7 @@ class ProfileView extends StatelessWidget {
               overflow: TextOverflow.fade,
               maxLines: 2,
             ),
-            background: Container(
-              decoration: BoxDecoration(
-                image: DecorationImage(
-                  fit: BoxFit.cover,
-                  image: (visitedUser.profilePicture == null)
-                      ? const AssetImage(
-                          'assets/default_avatar.png',
-                        ) as ImageProvider
-                      : CachedNetworkImageProvider(
-                          visitedUser.profilePicture!,
-                        ),
-                ),
-              ),
-            ),
+            background: _profileImage(visitedUser.profilePicture),
           ),
         ),
         SliverToBoxAdapter(

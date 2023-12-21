@@ -3,8 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:intheloopapp/domains/models/opportunity.dart';
 import 'package:intheloopapp/domains/navigation_bloc/navigation_bloc.dart';
 import 'package:intheloopapp/domains/navigation_bloc/tapped_route.dart';
-import 'package:intheloopapp/ui/opportunity_feed/components/opportunity_view.dart';
+import 'package:intheloopapp/utils/hero_image.dart';
 import 'package:intheloopapp/utils/opportunity_image.dart';
+import 'package:uuid/uuid.dart';
 
 class OpportunityCard extends StatelessWidget {
   const OpportunityCard({
@@ -25,15 +26,18 @@ class OpportunityCard extends StatelessWidget {
         }
 
         final provider = snapshot.data!;
+        final uuid = const Uuid().v4();
+        final heroImageTag = 'op-image-${opportunity.id}-$uuid';
+        final heroTitleTag = 'op-title-${opportunity.id}-$uuid';
         return InkWell(
           onTap: () => context.push(
             OpportunityPage(
               opportunity: opportunity,
               heroImage: HeroImage(
                 imageProvider: provider,
-                heroTag: 'op-image-${opportunity.id}',
+                heroTag: heroImageTag,
               ),
-              titleHeroTag: 'op-title-${opportunity.id}',
+              titleHeroTag: heroTitleTag,
               onApply: () => context.pop(),
               onDislike: () => context.pop(),
             ),
@@ -43,7 +47,7 @@ class OpportunityCard extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Hero(
-                  tag: 'op-image-${opportunity.id}',
+                  tag: heroImageTag,
                   child: Container(
                     width: cardWidth,
                     height: 200,
@@ -57,7 +61,7 @@ class OpportunityCard extends StatelessWidget {
                   ),
                 ),
                 Hero(
-                  tag: 'op-title-${opportunity.id}',
+                  tag: heroTitleTag,
                   child: Padding(
                     padding: const EdgeInsets.symmetric(
                       horizontal: 12,

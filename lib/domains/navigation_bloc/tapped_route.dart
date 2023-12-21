@@ -33,6 +33,7 @@ import 'package:intheloopapp/ui/reviews/user_reviews_feed.dart';
 import 'package:intheloopapp/ui/search/search_view.dart';
 import 'package:intheloopapp/ui/services/service_view.dart';
 import 'package:intheloopapp/ui/settings/settings_view.dart';
+import 'package:intheloopapp/utils/hero_image.dart';
 import 'package:stream_chat_flutter/stream_chat_flutter.dart';
 // import 'package:stream_video_flutter/stream_video_flutter.dart';
 
@@ -50,11 +51,15 @@ final class ProfilePage extends TappedRoute {
   ProfilePage({
     required String userId,
     required Option<UserModel> user,
+    HeroImage? heroImage,
+    String? titleHeroTag,
   }) : super(
           routeName: '/profile/$userId',
           view: ProfileView(
             visitedUserId: userId,
             visitedUser: user,
+            heroImage: heroImage,
+            titleHeroTag: titleHeroTag,
           ),
         );
 }
