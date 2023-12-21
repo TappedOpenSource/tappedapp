@@ -16,6 +16,7 @@ import 'package:intheloopapp/ui/user_tile.dart';
 import 'package:intheloopapp/utils/bloc_utils.dart';
 import 'package:intheloopapp/utils/current_user_builder.dart';
 import 'package:intheloopapp/utils/geohash.dart';
+import 'package:intheloopapp/utils/hero_image.dart';
 import 'package:intheloopapp/utils/opportunity_image.dart';
 import 'package:intl/intl.dart';
 import 'package:skeleton_text/skeleton_text.dart';
@@ -309,14 +310,4 @@ class OpportunityView extends StatelessWidget {
       ),
     );
   }
-}
-
-class HeroImage {
-  const HeroImage({
-    required this.imageProvider,
-    required this.heroTag,
-  });
-
-  final ImageProvider imageProvider;
-  final String heroTag;
 }

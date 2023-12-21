@@ -8,6 +8,8 @@ import 'package:intheloopapp/domains/navigation_bloc/tapped_route.dart';
 import 'package:intheloopapp/ui/user_avatar.dart';
 import 'package:intheloopapp/utils/bloc_utils.dart';
 import 'package:intheloopapp/utils/current_user_builder.dart';
+import 'package:intheloopapp/utils/hero_image.dart';
+import 'package:uuid/uuid.dart';
 
 class UserCard extends StatefulWidget {
   const UserCard({
@@ -83,7 +85,14 @@ class _UserCardState extends State<UserCard> {
           future: database.isVerified(widget.user.id),
           builder: (context, snapshot) {
             final verified = snapshot.data ?? false;
-
+            final provider = (imageUrl == null || imageUrl.isEmpty)
+                ? const AssetImage('assets/default_avatar.png') as ImageProvider
+                : CachedNetworkImageProvider(
+                    imageUrl,
+                  );
+            final uuid = const Uuid().v4();
+            final heroImageTag = 'user-image-${widget.user.id}-$uuid';
+            final heroTitleTag = 'user-title-${widget.user.id}-$uuid';
             return SizedBox(
               width: 150,
               height: 150,
@@ -97,71 +106,74 @@ class _UserCardState extends State<UserCard> {
                         user: Some(
                           widget.user,
                         ),
+                        heroImage: HeroImage(
+                          imageProvider: provider,
+                          heroTag: heroImageTag,
+                        ),
+                        titleHeroTag: heroTitleTag,
                       ),
                     ),
-                    child: Container(
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(10),
-                        image: DecorationImage(
-                          fit: BoxFit.cover,
-                          image: (imageUrl == null || imageUrl.isEmpty)
-                              ? const AssetImage('assets/default_avatar.png')
-                                  as ImageProvider
-                              : CachedNetworkImageProvider(
-                                  imageUrl,
-                                ),
+                    child: Hero(
+                      tag: heroImageTag,
+                      child: Container(
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(10),
+                          image: DecorationImage(
+                            fit: BoxFit.cover,
+                            image: provider,
+                          ),
                         ),
-                      ),
-                      child: Padding(
-                        padding: const EdgeInsets.symmetric(
-                          vertical: 8,
-                          horizontal: 8,
-                        ),
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.end,
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            RichText(
-                              text: TextSpan(
-                                text: widget.user.displayName,
-                                style: const TextStyle(
-                                  fontWeight: FontWeight.bold,
-                                  color: Colors.white,
-                                ),
-                                children: [
-                                  if (verified)
-                                    const WidgetSpan(
-                                      child: Padding(
-                                        padding: EdgeInsets.only(left: 4),
-                                        child: Icon(
-                                          Icons.verified,
-                                          size: 16,
-                                          color: Colors.white,
+                        child: Padding(
+                          padding: const EdgeInsets.symmetric(
+                            vertical: 8,
+                            horizontal: 8,
+                          ),
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.end,
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              RichText(
+                                text: TextSpan(
+                                  text: widget.user.displayName,
+                                  style: const TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                    color: Colors.white,
+                                  ),
+                                  children: [
+                                    if (verified)
+                                      const WidgetSpan(
+                                        child: Padding(
+                                          padding: EdgeInsets.only(left: 4),
+                                          child: Icon(
+                                            Icons.verified,
+                                            size: 16,
+                                            color: Colors.white,
+                                          ),
                                         ),
                                       ),
-                                    ),
-                                ],
+                                  ],
+                                ),
                               ),
-                            ),
-                            Text(
-                              '${widget.user.followerCount} followers',
-                              style: const TextStyle(
-                                color: Colors.white,
+                              Text(
+                                '${widget.user.followerCount} followers',
+                                style: const TextStyle(
+                                  color: Colors.white,
+                                ),
                               ),
-                            ),
-                            // _followButton(
-                            //   currentUser,
-                            //   database,
-                            // ),
-                          ],
+                              // _followButton(
+                              //   currentUser,
+                              //   database,
+                              // ),
+                            ],
+                          ),
                         ),
+                        // leading: UserAvatar(
+                        //   radius: 25,
+                        //   pushUser: Some(widget.user),
+                        //   imageUrl: widget.user.profilePicture,
+                        //   verified: verified,
+                        // ),
                       ),
-                      // leading: UserAvatar(
-                      //   radius: 25,
-                      //   pushUser: Some(widget.user),
-                      //   imageUrl: widget.user.profilePicture,
-                      //   verified: verified,
-                      // ),
                     ),
                   ),
                   Row(
