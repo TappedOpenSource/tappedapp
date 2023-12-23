@@ -53,6 +53,7 @@ class MockDocumentSnapshot<T extends Object?> extends _i1.Mock
         Invocation.getter(#id),
         returnValue: '',
       ) as String);
+
   @override
   _i2.DocumentReference<T> get reference => (super.noSuchMethod(
         Invocation.getter(#reference),
@@ -61,6 +62,7 @@ class MockDocumentSnapshot<T extends Object?> extends _i1.Mock
           Invocation.getter(#reference),
         ),
       ) as _i2.DocumentReference<T>);
+
   @override
   _i2.SnapshotMetadata get metadata => (super.noSuchMethod(
         Invocation.getter(#metadata),
@@ -69,16 +71,19 @@ class MockDocumentSnapshot<T extends Object?> extends _i1.Mock
           Invocation.getter(#metadata),
         ),
       ) as _i2.SnapshotMetadata);
+
   @override
   bool get exists => (super.noSuchMethod(
         Invocation.getter(#exists),
         returnValue: false,
       ) as bool);
+
   @override
   dynamic get(Object? field) => super.noSuchMethod(Invocation.method(
         #get,
         [field],
       ));
+
   @override
   dynamic operator [](Object? field) => super.noSuchMethod(Invocation.method(
         #[],

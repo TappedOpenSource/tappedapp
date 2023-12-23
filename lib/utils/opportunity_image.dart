@@ -16,7 +16,7 @@ Future<ImageProvider> getImageForLocation(
   final photoReference = place?.photoMetadatas?.first;
   if (photoReference == null) {
     return const AssetImage(
-      'assets/images/placeholder_image.png',
+      'assets/default_avatar.png',
     );
   }
 

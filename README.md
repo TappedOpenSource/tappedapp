@@ -16,7 +16,7 @@ Tapped is a platform and community that allows artists and music venues to colla
 Before you begin, ensure you have met the following requirements:
 
     A passion for music
-    An OS that is supported for flutter 2.0 or above
+    An OS that is supported for flutter 3.0 or above
     You have installed the latest version of Flutter
 
 ----

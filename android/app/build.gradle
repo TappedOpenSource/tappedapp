@@ -35,6 +35,7 @@ if (keystorePropertiesFile.exists()) {
 
 android {
     compileSdkVersion 34
+    namespace 'com.intheloopstudio'
 
     sourceSets {
         main.java.srcDirs += 'src/main/kotlin'
@@ -73,9 +74,9 @@ dependencies {
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
     implementation platform('com.google.firebase:firebase-bom:27.0.0')
     implementation 'com.android.support:multidex:1.0.3'
-    implementation 'com.google.firebase:firebase-messaging:21.1.0'
-    implementation 'androidx.appcompat:appcompat:1.6.0'
-    implementation 'com.stripe:stripe-android:20.26.0'
+    implementation 'com.google.firebase:firebase-messaging:23.4.0'
+    implementation 'androidx.appcompat:appcompat:1.6.1'
+    implementation 'com.stripe:stripe-android:20.34.4'
 }
 
 apply plugin: 'com.google.gms.google-services'

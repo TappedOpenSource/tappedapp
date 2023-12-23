@@ -48,6 +48,8 @@ export const creditsRef = db.collection("credits");
 export const opportunitiesRef = db.collection("opportunities");
 export const opportunityFeedsRef = db.collection("opportunityFeeds");
 
+export const googlePlacesCacheRef = db.collection("googlePlacesCache");
+
 // const loopLikesSubcollection = "loopLikes";
 // const loopCommentsSubcollection = "loopComments";
 export const loopsFeedSubcollection = "userFeed";
@@ -74,6 +76,7 @@ export const OPEN_AI_KEY = defineSecret("OPEN_AI_KEY");
 export const LEAP_API_KEY = defineSecret("LEAP_API_KEY");
 export const LEAP_WEBHOOK_SECRET = defineSecret("LEAP_WEBHOOK_SECRET");
 export const RESEND_API_KEY = defineSecret("RESEND_API_KEY");
+export const GOOGLE_PLACES_API_KEY = defineSecret("GOOGLE_PLACES_API_KEY");
 
 export const starterCreditsTestPriceId = "price_1OE2ptDYybu1wznEqHNMGZax";
 export const basicCreditsTestPriceId = "price_1OE2rrDYybu1wznEqv4mmjoK";

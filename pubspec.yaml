@@ -1,5 +1,5 @@
 name: intheloopapp
-version: 1.1.53+65
+version: 1.2.53+66
 publish_to: none
 description: Mobile app for Tapped.
 environment: 
@@ -12,6 +12,8 @@ dependencies:
   badges: 3.1.2
   bloc: 8.1.2
   bloc_test: 9.1.5
+  cached: ^1.6.1
+  cached_annotation: ^1.6.0
   cached_network_image: 3.3.0
   cancelable_retry: 0.1.0+1
   card_banner: 0.0.1+2

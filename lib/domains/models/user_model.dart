@@ -38,8 +38,11 @@ class UserModel extends Equatable {
     required this.epkUrl,
     required this.youtubeChannelId,
     required this.tiktokHandle,
+    required this.tiktokFollowers,
     required this.instagramHandle,
+    required this.instagramFollowers,
     required this.twitterHandle,
+    required this.twitterFollowers,
     required this.spotifyId,
     required this.pushNotificationsLikes,
     required this.pushNotificationsComments,
@@ -79,8 +82,11 @@ class UserModel extends Equatable {
         epkUrl: const None<String>(),
         youtubeChannelId: null,
         tiktokHandle: null,
+        tiktokFollowers: null,
         instagramHandle: null,
+        instagramFollowers: null,
         twitterHandle: null,
+        twitterFollowers: null,
         spotifyId: null,
         pushNotificationsLikes: true,
         pushNotificationsComments: true,
@@ -91,7 +97,6 @@ class UserModel extends Equatable {
         emailNotificationsITLUpdates: true,
         stripeConnectedAccountId: null,
         stripeCustomerId: null,
-        // aiCredits: 0,
       );
 
   factory UserModel.fromJson(Map<String, dynamic> json) =>
@@ -152,8 +157,11 @@ class UserModel extends Equatable {
       ),
       youtubeChannelId: doc.getOrElse<String?>('youtubeChannelId', null),
       tiktokHandle: doc.getOrElse<String?>('tiktokHandle', null),
+      tiktokFollowers: doc.getOrElse<int?>('tiktokFollowers', null),
       instagramHandle: doc.getOrElse<String?>('instagramHandle', null),
+      instagramFollowers: doc.getOrElse<int?>('instagramFollowers', null),
       twitterHandle: doc.getOrElse<String?>('twitterHandle', null),
+      twitterFollowers: doc.getOrElse<int?>('twitterFollowers', null),
       spotifyId: doc.getOrElse<String?>('spotifyId', null),
       pushNotificationsLikes: doc.getOrElse('pushNotificationsLikes', true),
       pushNotificationsComments:
@@ -211,9 +219,16 @@ class UserModel extends Equatable {
   final Option<String> epkUrl;
 
   final String? youtubeChannelId;
+
   final String? tiktokHandle;
+  final int? tiktokFollowers;
+
   final String? instagramHandle;
+  final int? instagramFollowers;
+
   final String? twitterHandle;
+  final int? twitterFollowers;
+
   final String? spotifyId;
 
   final bool pushNotificationsLikes;
@@ -227,8 +242,6 @@ class UserModel extends Equatable {
 
   final String? stripeConnectedAccountId;
   final String? stripeCustomerId;
-
-  // final int aiCredits;
 
   @override
   List<Object?> get props => [
@@ -257,8 +270,11 @@ class UserModel extends Equatable {
         epkUrl,
         youtubeChannelId,
         tiktokHandle,
+        tiktokFollowers,
         instagramHandle,
+        instagramFollowers,
         twitterHandle,
+        twitterFollowers,
         spotifyId,
         pushNotificationsLikes,
         pushNotificationsComments,
@@ -305,8 +321,11 @@ class UserModel extends Equatable {
     Option<String>? epkUrl,
     String? youtubeChannelId,
     String? tiktokHandle,
+    int? tiktokFollowers,
     String? instagramHandle,
+    int? instagramFollowers,
     String? twitterHandle,
+    int? twitterFollowers,
     String? spotifyId,
     bool? pushNotificationsLikes,
     bool? pushNotificationsComments,
@@ -345,8 +364,11 @@ class UserModel extends Equatable {
       epkUrl: epkUrl ?? this.epkUrl,
       youtubeChannelId: youtubeChannelId ?? this.youtubeChannelId,
       tiktokHandle: tiktokHandle ?? this.tiktokHandle,
+      tiktokFollowers: tiktokFollowers ?? this.tiktokFollowers,
       instagramHandle: instagramHandle ?? this.instagramHandle,
+      instagramFollowers: instagramFollowers ?? this.instagramFollowers,
       twitterHandle: twitterHandle ?? this.twitterHandle,
+      twitterFollowers: twitterFollowers ?? this.twitterFollowers,
       spotifyId: spotifyId ?? this.spotifyId,
       pushNotificationsLikes:
           pushNotificationsLikes ?? this.pushNotificationsLikes,
@@ -396,9 +418,12 @@ class UserModel extends Equatable {
       'epkUrl': epkUrl.asNullable(),
       'youtubeChannelId': youtubeChannelId,
       'tiktokHandle': tiktokHandle,
+      'tiktokFollowers': tiktokFollowers,
       'instagramHandle': instagramHandle,
-      'spotifyId': spotifyId,
+      'instagramFollowers': instagramFollowers,
       'twitterHandle': twitterHandle,
+      'twitterFollowers': twitterFollowers,
+      'spotifyId': spotifyId,
       'pushNotificationsLikes': pushNotificationsLikes,
       'pushNotificationsComments': pushNotificationsComments,
       'pushNotificationsFollows': pushNotificationsFollows,
@@ -408,7 +433,6 @@ class UserModel extends Equatable {
       'emailNotificationsITLUpdates': emailNotificationsITLUpdates,
       'stripeConnectedAccountId': stripeConnectedAccountId,
       'stripeCustomerId': stripeCustomerId,
-      // 'aiCredits': aiCredits,
     };
   }
 }
