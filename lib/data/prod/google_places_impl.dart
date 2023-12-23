@@ -1,3 +1,6 @@
+import 'dart:io';
+
+import 'package:cached_annotation/cached_annotation.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/widgets.dart';
@@ -6,11 +9,18 @@ import 'package:intheloopapp/data/places_repository.dart';
 import 'package:intheloopapp/domains/models/option.dart';
 import 'package:intheloopapp/utils/app_logger.dart';
 
-const _placesKey = 'AIzaSyAh3GEqDEv4lfnAgeT19-7sgyF7JxLF34g';
+// ios only, restricted
+const _placesIosKey = 'AIzaSyA5-IXbTej9XA-eV96fqf0gWuvmdnHrOnY';
+
+// android only, restricted
+const _placesAndroidKey = 'AIzaSyCD1NeNSfMRVOJz40P2v44aY-kj2pnHr14';
+final _placesKey = Platform.isIOS ? _placesIosKey : _placesAndroidKey;
 final _places = FlutterGooglePlacesSdk(_placesKey);
 
 class GooglePlacesImpl implements PlacesRepository {
+
   @override
+  @cached
   Future<Place?> getPlaceById(String placeId) async {
     if (placeId.isEmpty) return null;
 
@@ -52,6 +62,7 @@ class GooglePlacesImpl implements PlacesRepository {
   }
 
   @override
+  @cached
   Future<Option<Image>> getPhotoUrlFromReference(PhotoMetadata metadata) async {
     try {
       final photo = await _places.fetchPlacePhoto(
@@ -79,5 +90,4 @@ class GooglePlacesImpl implements PlacesRepository {
       rethrow;
     }
   }
-
 }

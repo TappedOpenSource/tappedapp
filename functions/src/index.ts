@@ -29,6 +29,7 @@ export * from "./lib/signups";
 export * from "./lib/label_applications";
 export * from "./lib/search";
 export * from "./lib/calendar";
+export * from "./lib/places";
 
 const _deleteUser = async (data: { id: string }) => {
   // Checking attribute.

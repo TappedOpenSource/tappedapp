@@ -41,14 +41,17 @@ class DiscoverView extends StatelessWidget {
       );
     }
     return SizedBox(
-      height: 275,
+      height: 250,
       child: ScrollSnapList(
         onItemFocus: (int index) {},
         // selectedItemAnchor: SelectedItemAnchor.START,
-        itemSize: cardWidth,
+        itemSize: cardWidth + 16,
         itemBuilder: (context, index) {
           final op = opportunities[index];
-          return OpportunityCard(opportunity: op);
+          return Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 8),
+            child: OpportunityCard(opportunity: op),
+          );
         },
         itemCount: opportunities.length,
         // key: sslKey,

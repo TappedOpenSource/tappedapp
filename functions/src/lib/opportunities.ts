@@ -10,7 +10,7 @@ import { creditsRef, fcm, opportunitiesRef, opportunityFeedsRef, tokensRef, user
 import { Opportunity, OpportunityFeedItem, UserModel } from "../types/models";
 import { Timestamp } from "firebase-admin/firestore";
 import { HttpsError } from "firebase-functions/v2/https";
-import { debug, error } from "firebase-functions/logger";
+import { debug, error, info } from "firebase-functions/logger";
 import { onSchedule } from "firebase-functions/v2/scheduler";
 
 const _addOpportunityToUserFeed = async (
@@ -105,11 +105,29 @@ export const copyOpportunityToFeedsOnCreate = onDocumentWritten(
           return;
         }
         
-        await creditsRef.doc(userDoc.id).update({
-          opportunityQuota: 5,
-        });
-
         await _addOpportunityToUserFeed(userDoc.id, opportunity);
+      }),
+    );
+  });
+
+export const createOpportunityFeedOnUserCreated = functions 
+  .auth
+  .user()
+  .onCreate(async (user) => {
+    const numOpsPerFeed = 500;
+    const opportunitiesSnap = await opportunitiesRef
+      .where("startTime", ">", Timestamp.now())
+      .limit(numOpsPerFeed)
+      .get();
+
+    await creditsRef.doc(user.uid).set({
+      opportunityQuota: 5,
+    });
+
+    await Promise.all(
+      opportunitiesSnap.docs.map(async (opDoc) => {
+        const op = opDoc.data() as Opportunity;
+        await _addOpportunityToUserFeed(user.uid, op);
       }),
     );
   });
@@ -171,14 +189,19 @@ export const setDailyOpportunityQuota = onSchedule("0 0 * * *", async () => {
   await Promise.all(
     usersSnap.docs.map(async (userDoc) => {
       try {
-        await creditsRef.doc(userDoc.id).update({
+        await creditsRef.doc(userDoc.id).set({
           opportunityQuota: 5,
         });
-
-        await _sendUserQuotaNotification(userDoc.id);
       } catch (e) {
         error("error setting daily opportunity quota", e);
       }
+
+      try {
+        await _sendUserQuotaNotification(userDoc.id);
+      } catch (e) {
+        error("error sending quota notification", e);
+      }
     }),
   );
+  info("daily opportunity quotas set");
 });

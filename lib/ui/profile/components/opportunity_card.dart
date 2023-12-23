@@ -22,7 +22,15 @@ class OpportunityCard extends StatelessWidget {
       future: getOpImage(context, opportunity),
       builder: (context, snapshot) {
         if (!snapshot.hasData) {
-          return const CupertinoActivityIndicator();
+          return Container(
+            width: cardWidth,
+            height: 200,
+            decoration: BoxDecoration(
+              color: Colors.grey.withOpacity(0.1),
+              borderRadius: BorderRadius.circular(12),
+            ),
+            child: const CupertinoActivityIndicator(),
+          );
         }
 
         final provider = snapshot.data!;
@@ -42,41 +50,39 @@ class OpportunityCard extends StatelessWidget {
               onDislike: () => context.pop(),
             ),
           ),
-          child: Card(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Hero(
-                  tag: heroImageTag,
-                  child: Container(
-                    width: cardWidth,
-                    height: 200,
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(12),
-                      image: DecorationImage(
-                        image: provider,
-                        fit: BoxFit.cover,
-                      ),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Hero(
+                tag: heroImageTag,
+                child: Container(
+                  width: cardWidth,
+                  height: 200,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(12),
+                    image: DecorationImage(
+                      image: provider,
+                      fit: BoxFit.cover,
                     ),
                   ),
                 ),
-                Hero(
-                  tag: heroTitleTag,
-                  child: Padding(
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: 12,
-                    ),
-                    child: Text(
-                      opportunity.title,
-                      style: const TextStyle(
-                        fontSize: 18,
-                        fontWeight: FontWeight.w900,
-                      ),
+              ),
+              Hero(
+                tag: heroTitleTag,
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 12,
+                  ),
+                  child: Text(
+                    opportunity.title,
+                    style: const TextStyle(
+                      fontSize: 18,
+                      fontWeight: FontWeight.w900,
                     ),
                   ),
                 ),
-              ],
-            ),
+              ),
+            ],
           ),
         );
       },
