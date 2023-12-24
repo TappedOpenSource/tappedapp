@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_google_places_sdk/flutter_google_places_sdk.dart';
+import 'package:intheloopapp/data/places_repository.dart';
 import 'package:intheloopapp/utils/geohash.dart';
 import 'package:maps_launcher/maps_launcher.dart';
 
@@ -11,7 +12,7 @@ class LocationChip extends StatelessWidget {
     super.key,
   });
 
-  final Place place;
+  final PlaceData place;
   final PlaceType type;
   final String defaultIdent;
 

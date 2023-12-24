@@ -60,8 +60,8 @@ const _sendUserQuotaNotification = async (userId: string) => {
         token,
         notification: {
           title: "you're back!",
-          body: "your daily opportunity quota has been reset",
-        }
+          body: "you can apply for 5 more opportunities today!",
+        },
       });
     } catch (e) {
       error(`error sending quota notification to ${userId} - ${token}`, e);

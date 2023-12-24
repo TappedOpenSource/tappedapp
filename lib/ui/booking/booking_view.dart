@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_google_places_sdk/flutter_google_places_sdk.dart';
 import 'package:intheloopapp/data/database_repository.dart';
+import 'package:intheloopapp/data/places_repository.dart';
 import 'package:intheloopapp/domains/models/booking.dart';
 import 'package:intheloopapp/domains/models/option.dart';
 import 'package:intheloopapp/domains/models/service.dart';
@@ -201,7 +202,7 @@ class BookingView extends StatelessWidget {
                   ),
                 ),
                 SliverToBoxAdapter(
-                  child: FutureBuilder<Place?>(
+                  child: FutureBuilder<PlaceData?>(
                     future: context.places.getPlaceById(
                       booking.placeId.unwrapOr(''),
                     ),

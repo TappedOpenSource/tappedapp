@@ -5,6 +5,7 @@ import 'package:flutter_google_places_sdk/flutter_google_places_sdk.dart';
 import 'package:formz/formz.dart';
 import 'package:intheloopapp/data/database_repository.dart';
 import 'package:intheloopapp/data/payment_repository.dart';
+import 'package:intheloopapp/data/places_repository.dart';
 import 'package:intheloopapp/data/stream_repository.dart';
 import 'package:intheloopapp/domains/models/booking.dart';
 import 'package:intheloopapp/domains/models/option.dart';
@@ -80,7 +81,7 @@ class CreateBookingCubit extends Cubit<CreateBookingState> {
       );
 
   void updatePlace({
-    required Option<Place> place,
+    required Option<PlaceData> place,
     required Option<String> placeId,
   }) =>
       emit(
@@ -97,10 +98,9 @@ class CreateBookingCubit extends Cubit<CreateBookingState> {
 
     final nullablePlace = state.place.asNullable();
 
-    final lat = nullablePlace?.latLng?.lat;
-    final lng = nullablePlace?.latLng?.lng;
-    final geohash =
-        (lat != null && lng != null) ? geocodeEncode(lat: lat, lng: lng) : null;
+    final lat = nullablePlace?.lat;
+    final lng = nullablePlace?.lng;
+    final geohash = nullablePlace?.geohash;
 
     final booking = Booking(
       name: state.name.value,

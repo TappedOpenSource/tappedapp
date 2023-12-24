@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_google_places_sdk/flutter_google_places_sdk.dart';
 import 'package:intheloopapp/data/database_repository.dart';
+import 'package:intheloopapp/data/places_repository.dart';
 import 'package:intheloopapp/domains/models/opportunity.dart';
 import 'package:intheloopapp/domains/models/option.dart';
 import 'package:intheloopapp/domains/navigation_bloc/navigation_bloc.dart';
@@ -146,7 +147,7 @@ class OpportunityView extends StatelessWidget {
                     fontWeight: FontWeight.bold,
                   ),
                 ),
-                FutureBuilder<Place?>(
+                FutureBuilder<PlaceData?>(
                   future: places.getPlaceById(
                     opportunity.placeId,
                   ),

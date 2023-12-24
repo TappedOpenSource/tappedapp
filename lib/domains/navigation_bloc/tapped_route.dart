@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_google_places_sdk/flutter_google_places_sdk.dart';
+import 'package:intheloopapp/data/places_repository.dart';
 import 'package:intheloopapp/domains/models/badge.dart' as badge_model;
 import 'package:intheloopapp/domains/models/booking.dart';
 import 'package:intheloopapp/domains/models/opportunity.dart';
@@ -207,8 +207,8 @@ final class LocationFormPage extends TappedRoute {
           ),
         );
 
-  final Place? initialPlace;
-  final void Function(Place?, String) onSelected;
+  final PlaceData? initialPlace;
+  final void Function(PlaceData?, String) onSelected;
 }
 
 final class ReviewsPage extends TappedRoute {
