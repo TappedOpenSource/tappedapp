@@ -2,10 +2,30 @@
 import { onCall, HttpsError } from "firebase-functions/v2/https";
 import { encodeBase32 } from "geohashing";
 import { LRUCache } from "lru-cache";
-import { 
-  GOOGLE_PLACES_API_KEY, 
+import {
+  GOOGLE_PLACES_API_KEY,
   googlePlacesCacheRef,
 } from "./firebase";
+import { debug, error } from "firebase-functions/logger";
+
+type PlaceData = {
+  placeId: string;
+  shortFormattedAddress: string;
+  addressComponents: {
+    longName: string;
+    shortName: string;
+    types: string[];
+  }[];
+  photoMetadata: {
+    height: number;
+    width: number;
+    htmlAttributions: string[];
+    photoReference: string;
+  } | null;
+  geohash: string;
+  lat: number;
+  lng: number;
+};
 
 const fields = [
   "id",
@@ -15,7 +35,10 @@ const fields = [
   "photos",
 ];
 
-const cache = new LRUCache({
+const placeDetailsCache = new LRUCache({
+  max: 500,
+});
+const placePhotosCache = new LRUCache({
   max: 500,
 });
 
@@ -24,30 +47,16 @@ const _geohashForLocation = ([ lat, lng ]: [number, number]) => {
   return hash;
 }
 
-const _getPlaceDetails = async (placeId: string): Promise<{
-    placeId: string;
-    shortFormattedAddress: string;
-    addressComponents: string[];
-    photoMetadata: string | null;
-    geohash: string;
-    lat: number;
-    lng: number;
-}> => {
+const _getPlaceDetails = async (placeId: string): Promise<PlaceData> => {
   try {
-    if (cache.has(placeId)) {
-      return cache.get(placeId) as {
-        placeId: string;
-        shortFormattedAddress: string;
-        addressComponents: string[];
-        photoMetadata: string | null;
-        geohash: string;
-        lat: number;
-        lng: number;
-    };
+    debug(`getting place details for placeId: ${placeId}`);
+
+    if (placeDetailsCache.has(placeId)) {
+      return placeDetailsCache.get(placeId) as PlaceData;
     }
 
     const res = await fetch(
-      `https://places.googleapis.com/v1/places/${placeId}`, {
+      `https://places.googleapis.com/v1/places/${placeId}?languageCode=en`, {
         method: "GET",
         headers: {
           "Content-Type": "application/json",
@@ -62,7 +71,7 @@ const _getPlaceDetails = async (placeId: string): Promise<{
       throw new Error(json.error.message);
     }
 
-    const { 
+    const {
       location,
       shortFormattedAddress,
       addressComponents,
@@ -71,20 +80,20 @@ const _getPlaceDetails = async (placeId: string): Promise<{
     const { latitude: lat, longitude: lng } = location;
     const geohash = _geohashForLocation([ lat, lng ]);
 
-    const photoMetadata = photos.length > 0 
+    const photoMetadata = photos.length > 0
       ? photos[0]
       : null;
 
-    const value = { 
+    const value = {
       placeId,
       shortFormattedAddress,
       addressComponents,
       photoMetadata,
-      geohash, 
-      lat, 
+      geohash,
+      lat,
       lng,
     };
-    cache.set(placeId, value);
+    placeDetailsCache.set(placeId, value);
     return value;
   } catch (e) {
     console.error(`error getting place details for placeId: ${placeId}`, e);
@@ -99,22 +108,113 @@ export const getPlaceById = onCall(
   async (request) => {
     const data = request.data;
 
-    // Checking attribute.
     if (data.placeId.length === 0) {
-    // Throwing an HttpsError so that the client gets the error details.
       throw new HttpsError(
         "invalid-argument",
-        "The function argument 'id' cannot be empty"
+        "The function argument 'placeId' cannot be empty"
       );
     }
-    
-    const placeSnapshot = await googlePlacesCacheRef.doc(data.id).get();
+
+    const { placeId } = data;
+
+    const placeSnapshot = await googlePlacesCacheRef.doc(placeId).get();
     if (placeSnapshot.exists) {
       return placeSnapshot.data();
     }
 
-    const place = await _getPlaceDetails(data.id);
-    await googlePlacesCacheRef.doc(data.id).set(place);
+    const place = await _getPlaceDetails(placeId);
+    await googlePlacesCacheRef.doc(placeId).set(place);
 
     return place;
+  });
+
+const _getPlacePhotoUrlFromName = async (photoName: string, photoId: string): Promise<{
+  name: string;
+  photoUri: string;
+}> => {
+  if (placePhotosCache.has(photoId)) {
+    return placePhotosCache.get(photoName) as {
+      name: string;
+      photoUri: string;
+    };
+  }
+
+  const res = await fetch(
+    `https://places.googleapis.com/v1/${
+      photoName
+    }/media?maxWidthPx=${
+      400
+    }&skipHttpRedirect=true&key=${
+      GOOGLE_PLACES_API_KEY.value()
+    }`);
+
+
+  const json = await res.json() as {
+    name: string;
+    photoUri: string;
+    error?: {
+      code: number;
+      message: string;
+      status: string;
+    };
+  };
+
+  if (json.error !== undefined) {
+    error(`error getting place photo for photoName: ${photoName}`, json.error.message);
+    throw new HttpsError("internal", json.error.message);
+  }
+
+  placePhotosCache.set(photoId, json);
+
+  return json;
+};
+
+export const getPlacePhotoUrlFromName = onCall(
+  { secrets: [ GOOGLE_PLACES_API_KEY ] },
+  async (request) => {
+    const { placeId, photoName }: {
+      placeId: string;
+      photoName: string;
+    } = request.data;
+
+
+    if (photoName.length === 0) {
+      throw new HttpsError(
+        "invalid-argument",
+        "The function argument 'photoName' cannot be empty"
+      );
+    }
+
+    if (placeId.length === 0) {
+      throw new HttpsError(
+        "invalid-argument",
+        "The function argument 'placeId' cannot be empty"
+      );
+    }
+
+    const photoId = photoName.split("/").pop();
+    if (photoId === undefined) {
+      throw new HttpsError(
+        "invalid-argument",
+        "The function argument 'photoReference' is invalid"
+      );
+    }
+
+    const placeSnapshot = await googlePlacesCacheRef
+      .doc(placeId)
+      .collection("photos")
+      .doc(photoId)
+      .get();
+    if (placeSnapshot.exists) {
+      return placeSnapshot.data();
+    }
+
+    const res = await _getPlacePhotoUrlFromName(photoName, photoId);
+    await googlePlacesCacheRef
+      .doc(placeId)
+      .collection("photos")
+      .doc(photoId)
+      .set(res);
+
+    return res;
   });

@@ -94,7 +94,7 @@ class SettingsCubit extends Cubit<SettingsState> {
   void changeSpotify(String value) => emit(state.copyWith(spotifyId: value));
   void changeYoutube(String value) =>
       emit(state.copyWith(youtubeChannelId: value));
-  void changePlace(Place? place, String placeId) {
+  void changePlace(PlaceData? place, String placeId) {
     emit(
       state.copyWith(
         place: place,
@@ -166,8 +166,6 @@ class SettingsCubit extends Cubit<SettingsState> {
         ),
       );
 
-
-
   Future<void> handleImageFromGallery() async {
     try {
       final imageFile =
@@ -205,11 +203,9 @@ class SettingsCubit extends Cubit<SettingsState> {
             )
           : currentUser.profilePicture;
 
-      final lat = state.place?.latLng?.lat;
-      final lng = state.place?.latLng?.lng;
-      final geohash = (lat != null && lng != null)
-          ? geocodeEncode(lat: lat, lng: lng)
-          : null;
+      final lat = state.place?.lat;
+      final lng = state.place?.lng;
+      final geohash = state.place?.geohash;
 
       // placeId => geohash
       final user = currentUser.copyWith(

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_google_places_sdk/flutter_google_places_sdk.dart';
+import 'package:intheloopapp/data/places_repository.dart';
 import 'package:intheloopapp/domains/navigation_bloc/navigation_bloc.dart';
 import 'package:intheloopapp/domains/navigation_bloc/tapped_route.dart';
 import 'package:intheloopapp/ui/themes.dart';
@@ -13,8 +14,8 @@ class LocationTextField extends StatelessWidget {
     super.key,
   });
 
-  final void Function(Place?, String) onChanged;
-  final Place? initialPlace;
+  final void Function(PlaceData?, String) onChanged;
+  final PlaceData? initialPlace;
   final String? initialPlaceId;
 
   @override

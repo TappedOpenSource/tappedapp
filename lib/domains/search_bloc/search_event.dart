@@ -39,7 +39,7 @@ class SetAdvancedSearchFilters extends SearchEvent {
   final List<String>? occupations;
   final List<Genre>? genres;
   final List<String>? labels;
-  final Place? place;
+  final PlaceData? place;
   final String? placeId;
 }
 

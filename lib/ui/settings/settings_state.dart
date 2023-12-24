@@ -50,7 +50,7 @@ class SettingsState extends Equatable {
   final FormzSubmissionStatus status;
 
   final String? placeId;
-  late final Place? place;
+  late final PlaceData? place;
 
   late final ImagePicker picker;
   late final GlobalKey<FormState> formKey;
@@ -101,7 +101,7 @@ class SettingsState extends Equatable {
     List<Genre>? genres,
     List<String>? occupations,
     String? label,
-    Place? place,
+    PlaceData? place,
     String? placeId,
     String? twitterHandle,
     String? instagramHandle,

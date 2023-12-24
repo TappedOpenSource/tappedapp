@@ -40,7 +40,7 @@ class ProfileState extends Equatable {
   final BadgesStatus badgeStatus;
   final UserModel visitedUser;
   final UserModel currentUser;
-  final Place? place;
+  final PlaceData? place;
 
   final bool isCollapsed;
   final bool didAddFeedback;
@@ -79,7 +79,7 @@ class ProfileState extends Equatable {
     List<Opportunity>? opportunities,
     UserModel? currentUser,
     UserModel? visitedUser,
-    Place? place,
+    PlaceData? place,
     bool? isCollapsed,
     bool? didAddFeedback,
   }) {

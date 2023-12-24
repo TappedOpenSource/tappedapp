@@ -29,7 +29,7 @@ class CreateBookingState extends Equatable with FormzMixin {
   late final BookingEndTime endTime;
   late final GlobalKey<FormState> formKey;
 
-  final Option<Place> place;
+  final Option<PlaceData> place;
   final Option<String> placeId;
 
   @override
@@ -64,7 +64,7 @@ class CreateBookingState extends Equatable with FormzMixin {
     BookingStartTime? startTime,
     BookingEndTime? endTime,
     FormzSubmissionStatus? status,
-    Option<Place>? place,
+    Option<PlaceData>? place,
     Option<String>? placeId,
   }) {
     return CreateBookingState(

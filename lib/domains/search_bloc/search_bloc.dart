@@ -88,7 +88,8 @@ class SearchBloc extends Bloc<SearchEvent, SearchState> {
           // input hasn't changed in the last 500 milliseconds..
           // you can start search
           // print('Now !!! search term : ${state.searchTerm}');
-          final latLng = state.place?.latLng;
+          final lat = state.place?.lat;
+          final lng = state.place?.lng;
           final searchRes = await searchRepository.queryUsers(
             state.searchTerm,
             occupations:
@@ -97,8 +98,8 @@ class SearchBloc extends Bloc<SearchEvent, SearchState> {
                 ? state.genres.map((e) => e.name).toList()
                 : null,
             labels: state.labels.isNotEmpty ? state.labels : null,
-            lat: latLng?.lat,
-            lng: latLng?.lng,
+            lat: lat,
+            lng: lng,
           );
           // print('RESULTS: $searchRes');
           emit(

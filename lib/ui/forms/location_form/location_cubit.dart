@@ -16,7 +16,7 @@ class LocationCubit extends Cubit<LocationState> {
   }) : super(const LocationState());
 
   final PlacesRepository places;
-  final void Function(Place?, String) onSelected;
+  final void Function(PlaceData?, String) onSelected;
 
   final NavigationBloc navigationBloc;
 

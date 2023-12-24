@@ -21,7 +21,7 @@ class SearchState extends Equatable {
   final List<Genre> genres;
   final List<String> labels;
 
-  final Place? place;
+  final PlaceData? place;
   final String? placeId;
 
   final bool loading;
@@ -53,7 +53,7 @@ class SearchState extends Equatable {
     List<String>? occupations,
     List<Genre>? genres,
     List<String>? labels,
-    Option<Place>? place,
+    Option<PlaceData>? place,
     Option<String>? placeId,
     bool? loading,
   }) {

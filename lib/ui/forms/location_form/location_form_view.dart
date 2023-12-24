@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_google_places_sdk/flutter_google_places_sdk.dart';
 import 'package:intheloopapp/data/places_repository.dart';
 import 'package:intheloopapp/ui/forms/location_form/location_cubit.dart';
 import 'package:intheloopapp/ui/forms/location_form/location_results.dart';
@@ -14,8 +13,8 @@ class LocationFormView extends StatelessWidget {
     super.key,
   });
 
-  final Place? initialPlace;
-  final void Function(Place?, String) onSelected;
+  final PlaceData? initialPlace;
+  final void Function(PlaceData?, String) onSelected;
 
   @override
   Widget build(BuildContext context) {
