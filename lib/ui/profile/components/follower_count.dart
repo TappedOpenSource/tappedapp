@@ -12,6 +12,36 @@ class FollowerCount extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocBuilder<ProfileCubit, ProfileState>(
       builder: (context, state) {
+        if (state.visitedUser.socialMediaAudience >
+            state.visitedUser.followerCount) {
+          return GestureDetector(
+            onTap: () {
+              context.push(
+                FollowRelationshipPage(
+                  userId: state.visitedUser.id,
+                  index: 0,
+                ),
+              );
+            },
+            child: Column(
+              children: [
+                Text(
+                  NumberFormat.compactCurrency(
+                    decimalDigits: 0,
+                    symbol: '',
+                  ).format(state.visitedUser.socialMediaAudience),
+                  style: const TextStyle(
+                    fontSize: 24,
+                  ),
+                ),
+                const Text(
+                  'Audience',
+                ),
+              ],
+            ),
+          );
+        }
+
         return GestureDetector(
           onTap: () {
             context.push(
@@ -27,13 +57,13 @@ class FollowerCount extends StatelessWidget {
                 NumberFormat.compactCurrency(
                   decimalDigits: 0,
                   symbol: '',
-                ).format(state.visitedUser.socialMediaAudience),
+                ).format(state.visitedUser.followerCount),
                 style: const TextStyle(
                   fontSize: 24,
                 ),
               ),
-              const Text(
-                'Audience',
+              Text(
+                state.visitedUser.followerCount == 1 ? 'Follower' : 'Followers',
               ),
             ],
           ),
