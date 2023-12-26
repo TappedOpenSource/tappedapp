@@ -54,8 +54,11 @@ class SettingsCubit extends Cubit<SettingsState> {
         occupations: currentUser.occupations,
         placeId: currentUser.placeId,
         twitterHandle: currentUser.twitterHandle,
+        twitterFollowers: currentUser.twitterFollowers,
         instagramHandle: currentUser.instagramHandle,
+        instagramFollowers: currentUser.instagramFollowers,
         tiktokHandle: currentUser.tiktokHandle,
+        tiktokFollowers: currentUser.tiktokFollowers,
         spotifyId: currentUser.spotifyId,
         youtubeChannelId: currentUser.youtubeChannelId,
         pushNotificationsLikes: currentUser.pushNotificationsLikes,
@@ -88,9 +91,16 @@ class SettingsCubit extends Cubit<SettingsState> {
       emit(state.copyWith(artistName: value));
   void changeTwitter(String value) =>
       emit(state.copyWith(twitterHandle: value));
+  void changeTwitterFollowers(int value) =>
+      emit(state.copyWith(twitterFollowers: value));
   void changeInstagram(String value) =>
       emit(state.copyWith(instagramHandle: value));
+  void changeInstagramFollowers(int value) => emit(
+        state.copyWith(instagramFollowers: value),
+      );
   void changeTikTik(String value) => emit(state.copyWith(tiktokHandle: value));
+  void changeTikTokFollowers(int value) =>
+      emit(state.copyWith(tiktokFollowers: value));
   void changeSpotify(String value) => emit(state.copyWith(spotifyId: value));
   void changeYoutube(String value) =>
       emit(state.copyWith(youtubeChannelId: value));
@@ -220,8 +230,11 @@ class SettingsCubit extends Cubit<SettingsState> {
         lat: Option.fromNullable(lat),
         lng: Option.fromNullable(lng),
         twitterHandle: state.twitterHandle,
+        twitterFollowers: state.twitterFollowers,
         instagramHandle: state.instagramHandle,
+        instagramFollowers: state.instagramFollowers,
         tiktokHandle: state.tiktokHandle,
+        tiktokFollowers: state.tiktokFollowers,
         spotifyId: state.spotifyId,
         youtubeChannelId: state.youtubeChannelId,
         profilePicture: profilePictureUrl,

@@ -10,8 +10,11 @@ class SettingsState extends Equatable {
     this.occupations = const [],
     this.placeId,
     this.twitterHandle,
+    this.twitterFollowers,
     this.instagramHandle,
+    this.instagramFollowers,
     this.tiktokHandle,
+    this.tiktokFollowers,
     this.spotifyId,
     this.youtubeChannelId,
     this.profileImage,
@@ -42,8 +45,11 @@ class SettingsState extends Equatable {
   final String bio;
 
   final String? twitterHandle;
+  final int? twitterFollowers;
   final String? instagramHandle;
+  final int? instagramFollowers;
   final String? tiktokHandle;
+  final int? tiktokFollowers;
   final String? spotifyId;
   final String? youtubeChannelId;
   final File? profileImage;
@@ -77,8 +83,11 @@ class SettingsState extends Equatable {
         place,
         placeId,
         twitterHandle,
+        twitterFollowers,
         instagramHandle,
+        instagramFollowers,
         tiktokHandle,
+        tiktokFollowers,
         spotifyId,
         youtubeChannelId,
         profileImage,
@@ -104,8 +113,11 @@ class SettingsState extends Equatable {
     PlaceData? place,
     String? placeId,
     String? twitterHandle,
+    int? twitterFollowers,
     String? instagramHandle,
+    int? instagramFollowers,
     String? tiktokHandle,
+    int? tiktokFollowers,
     String? spotifyId,
     String? youtubeChannelId,
     File? profileImage,
@@ -130,8 +142,11 @@ class SettingsState extends Equatable {
       place: place ?? this.place,
       placeId: placeId ?? this.placeId,
       twitterHandle: twitterHandle ?? this.twitterHandle,
+      twitterFollowers: twitterFollowers ?? this.twitterFollowers,
       instagramHandle: instagramHandle ?? this.instagramHandle,
+      instagramFollowers: instagramFollowers ?? this.instagramFollowers,
       tiktokHandle: tiktokHandle ?? this.tiktokHandle,
+      tiktokFollowers: tiktokFollowers ?? this.tiktokFollowers,
       spotifyId: spotifyId ?? this.spotifyId,
       youtubeChannelId: youtubeChannelId ?? this.youtubeChannelId,
       profileImage: profileImage ?? this.profileImage,

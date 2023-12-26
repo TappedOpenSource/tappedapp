@@ -69,6 +69,17 @@ class _UserTileState extends State<UserTile> {
             )
           : const SizedBox.shrink();
 
+  Widget _buildSubtitle(
+    UserModel user,
+  ) {
+    final widgetSubtitle = widget.subtitle;
+    if (widgetSubtitle != null) return widgetSubtitle;
+
+    return user.socialMediaAudience > user.followerCount
+        ? Text('${user.socialMediaAudience} audience')
+        : Text('${user.followerCount} followers');
+  }
+
   Widget _buildUserTile(
     BuildContext context,
     UserModel user,
@@ -76,6 +87,7 @@ class _UserTileState extends State<UserTile> {
     if (user.deleted) return const SizedBox.shrink();
 
     final database = context.database;
+
     return CurrentUserBuilder(
       errorWidget: const ListTile(
         leading: UserAvatar(
@@ -126,10 +138,7 @@ class _UserTileState extends State<UserTile> {
                   ],
                 ),
               ),
-              subtitle: widget.subtitle ??
-                  Text(
-                    '${user.followerCount} followers',
-                  ),
+              subtitle: _buildSubtitle(user),
               trailing: widget.trailing ??
                   _followButton(
                     currentUser,

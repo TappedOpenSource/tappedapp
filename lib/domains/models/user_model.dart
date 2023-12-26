@@ -294,6 +294,10 @@ class UserModel extends Equatable {
   // bool get isOutOfCredits => aiCredits <= 0;
 
   String get displayName => artistName.isEmpty ? username.username : artistName;
+  int get socialMediaAudience =>
+      (tiktokFollowers ?? 0) +
+      (instagramFollowers ?? 0) +
+      (twitterFollowers ?? 0);
 
   UserModel copyWith({
     String? id,

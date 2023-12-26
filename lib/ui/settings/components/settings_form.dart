@@ -4,10 +4,13 @@ import 'package:formz/formz.dart';
 import 'package:intheloopapp/domains/models/genre.dart';
 import 'package:intheloopapp/ui/forms/artist_name_text_field.dart';
 import 'package:intheloopapp/ui/forms/bio_text_field.dart';
+import 'package:intheloopapp/ui/forms/instagram_followers_text_field.dart';
 import 'package:intheloopapp/ui/forms/instagram_text_field.dart';
 import 'package:intheloopapp/ui/forms/location_text_field.dart';
 import 'package:intheloopapp/ui/forms/spotify_text_field.dart';
+import 'package:intheloopapp/ui/forms/tiktok_followers_text_field.dart';
 import 'package:intheloopapp/ui/forms/tiktok_text_field.dart';
+import 'package:intheloopapp/ui/forms/twitter_followers_text_field.dart';
 import 'package:intheloopapp/ui/forms/twitter_text_field.dart';
 import 'package:intheloopapp/ui/forms/username_text_field.dart';
 import 'package:intheloopapp/ui/forms/youtube_text_field.dart';
@@ -85,15 +88,36 @@ class SettingsForm extends StatelessWidget {
                 onChanged: (value) =>
                     context.read<SettingsCubit>().changeTwitter(value),
               ),
+              TwitterFollowersTextField(
+                initialValue: state.twitterFollowers,
+                onChanged: (value) =>
+                    context.read<SettingsCubit>().changeTwitterFollowers(
+                          value,
+                        ),
+              ),
               InstagramTextField(
                 initialValue: state.instagramHandle,
                 onChanged: (value) =>
                     context.read<SettingsCubit>().changeInstagram(value),
               ),
+              InstagramFollowersTextField(
+                initialValue: state.instagramFollowers,
+                onChanged: (value) =>
+                    context.read<SettingsCubit>().changeInstagramFollowers(
+                          value,
+                        ),
+              ),
               TikTokTextField(
                 initialValue: state.tiktokHandle,
                 onChanged: (value) =>
                     context.read<SettingsCubit>().changeTikTik(value),
+              ),
+              TikTokFollowersTextField(
+                initialValue: state.tiktokFollowers,
+                onChanged: (value) =>
+                    context.read<SettingsCubit>().changeTikTokFollowers(
+                          value,
+                        ),
               ),
               SpotifyTextField(
                 initialValue: state.spotifyId,
