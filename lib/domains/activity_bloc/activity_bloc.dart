@@ -124,6 +124,8 @@ class ActivityBloc extends Bloc<ActivityEvent, ActivityState> {
     Activity activity,
   ) async {
     try {
+      if (activity.markedRead) return;
+
       final idx = state.activities.indexOf(activity);
       final updatedActivity = activity.copyAsRead();
 

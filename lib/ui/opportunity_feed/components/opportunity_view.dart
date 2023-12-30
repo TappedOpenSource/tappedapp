@@ -107,12 +107,32 @@ class OpportunityView extends StatelessWidget {
                     tag: titleHeroTag!,
                     child: child,
                   ),
-                  child: Text(
-                    opportunity.title,
-                    style: const TextStyle(
-                      fontSize: 32,
-                      fontFamily: 'Rubik One',
-                      fontWeight: FontWeight.w900,
+                  child: RichText(
+                    text: TextSpan(
+                      text: opportunity.title,
+                      style: const TextStyle(
+                        fontSize: 32,
+                        fontFamily: 'Rubik One',
+                        fontWeight: FontWeight.w900,
+                      ),
+                      children: const [
+                        TextSpan(
+                          text: ' - ',
+                          style: TextStyle(
+                            fontSize: 32,
+                            fontFamily: 'Rubik One',
+                            fontWeight: FontWeight.w900,
+                            color: Colors.white,
+                          ),
+                        ),
+                        WidgetSpan(
+                          child: Icon(
+                            CupertinoIcons.share,
+                            color: Colors.white,
+                            size: 32,
+                          ),
+                        ),
+                      ],
                     ),
                   ),
                 ),
@@ -194,6 +214,7 @@ class OpportunityView extends StatelessWidget {
                     ),
                   ],
                 ),
+                const SizedBox(height: 24),
               ],
             ),
           ),

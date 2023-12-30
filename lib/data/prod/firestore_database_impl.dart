@@ -671,6 +671,8 @@ class FirestoreDatabaseImpl extends DatabaseRepository {
 
   @override
   Future<void> markActivityAsRead(Activity activity) async {
+    if (activity.markedRead) return;
+
     await _analytics.logEvent(
       name: 'activity_read',
       parameters: {
