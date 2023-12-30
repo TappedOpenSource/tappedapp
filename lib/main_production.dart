@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:io';
 
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
@@ -10,6 +11,7 @@ import 'package:intheloopapp/dependencies.dart';
 import 'package:intheloopapp/firebase_options.dart';
 import 'package:intheloopapp/ui/app/app.dart';
 import 'package:intheloopapp/utils/error.dart';
+import 'package:intheloopapp/utils/iap_store_config.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:stream_chat_flutter/stream_chat_flutter.dart';
 // import 'package:stream_video_flutter/stream_video_flutter.dart';
@@ -26,14 +28,15 @@ Future<void> main() async {
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
-
   await configureError();
+  await configureIapSdk();
 
   // Keep the app in portrait mode (no landscape)
   await SystemChrome.setPreferredOrientations([
     DeviceOrientation.portraitUp,
     DeviceOrientation.portraitDown,
   ]);
+
 
   FirebaseMessaging.onBackgroundMessage(
     _firebaseMessagingBackgroundHandler,

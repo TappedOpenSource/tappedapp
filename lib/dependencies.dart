@@ -145,7 +145,8 @@ List<BlocProvider> buildBlocs({
       create: (context) => OpportunityBloc(
         database: context.database,
         nav: context.nav,
-        auth: context.authentication,
+        auth: context.auth,
+        authBloc: context.authentication,
       ),
     ),
     BlocProvider<SearchBloc>(
