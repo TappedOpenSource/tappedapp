@@ -62,11 +62,10 @@ class OpportunityBloc extends Bloc<OpportunityEvent, OpportunityState> {
         userComment: userComment,
       );
 
-      await database.decrementUserOpportunityQuota(currentUserId);
-      // final claim = await auth.getCustomClaim();
-      // if (claim.isNone) {
-      //   await database.decrementUserOpportunityQuota(currentUserId);
-      // }
+      final claim = await auth.getCustomClaim();
+      if (claim.isNone) {
+        await database.decrementUserOpportunityQuota(currentUserId);
+      }
     });
   }
 
