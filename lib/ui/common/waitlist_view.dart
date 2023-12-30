@@ -37,6 +37,8 @@ class _WaitlistViewState extends State<WaitlistView> {
             future: database.isOnPremiumWailist(currentUser.id),
             builder: (context, snapshot) {
               final isOnWaitlist = snapshot.data;
+
+
               return switch (isOnWaitlist) {
                 null => const Center(
                     child: CupertinoActivityIndicator(),

@@ -27,6 +27,7 @@ import 'package:intheloopapp/ui/messaging/video_call_view.dart';
 import 'package:intheloopapp/ui/onboarding/onboarding_view.dart';
 import 'package:intheloopapp/ui/opportunities/interested_users_view.dart';
 import 'package:intheloopapp/ui/opportunity_feed/components/opportunity_view.dart';
+import 'package:intheloopapp/ui/paywall/paywall_view.dart';
 import 'package:intheloopapp/ui/profile/components/service_selection_view.dart';
 import 'package:intheloopapp/ui/profile/profile_view.dart';
 import 'package:intheloopapp/ui/reviews/user_reviews_feed.dart';
@@ -385,4 +386,12 @@ final class OpportunityPage extends TappedRoute {
   final HeroImage? heroImage;
   final void Function()? onApply;
   final void Function()? onDislike;
+}
+
+final class PaywallPage extends TappedRoute {
+  PaywallPage()
+      : super(
+          routeName: '/paywall',
+          view: const PaywallView(),
+        );
 }

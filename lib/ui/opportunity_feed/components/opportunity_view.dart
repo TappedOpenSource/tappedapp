@@ -14,6 +14,7 @@ import 'package:intheloopapp/domains/opportunity_bloc/opportunity_bloc.dart';
 import 'package:intheloopapp/ui/conditional_parent_widget.dart';
 import 'package:intheloopapp/ui/themes.dart';
 import 'package:intheloopapp/ui/user_tile.dart';
+import 'package:intheloopapp/utils/app_logger.dart';
 import 'package:intheloopapp/utils/bloc_utils.dart';
 import 'package:intheloopapp/utils/current_user_builder.dart';
 import 'package:intheloopapp/utils/geohash.dart';
@@ -115,21 +116,22 @@ class OpportunityView extends StatelessWidget {
                         fontFamily: 'Rubik One',
                         fontWeight: FontWeight.w900,
                       ),
-                      children: const [
-                        TextSpan(
-                          text: ' - ',
-                          style: TextStyle(
-                            fontSize: 32,
-                            fontFamily: 'Rubik One',
-                            fontWeight: FontWeight.w900,
-                            color: Colors.white,
-                          ),
-                        ),
+                      children: [
                         WidgetSpan(
-                          child: Icon(
-                            CupertinoIcons.share,
-                            color: Colors.white,
-                            size: 32,
+                          alignment: PlaceholderAlignment.middle,
+                          child: GestureDetector(
+                            onTap: () {
+                              logger.info('share');
+                            },
+                            child: const Padding(
+                              padding: EdgeInsets.symmetric(
+                                horizontal: 8,
+                              ),
+                              child: Icon(
+                                CupertinoIcons.share,
+                                size: 18,
+                              ),
+                            ),
                           ),
                         ),
                       ],
