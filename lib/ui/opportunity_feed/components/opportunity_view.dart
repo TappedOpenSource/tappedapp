@@ -21,6 +21,8 @@ import 'package:intheloopapp/utils/geohash.dart';
 import 'package:intheloopapp/utils/hero_image.dart';
 import 'package:intheloopapp/utils/opportunity_image.dart';
 import 'package:intl/intl.dart';
+import 'package:rxdart/rxdart.dart';
+import 'package:share_plus/share_plus.dart';
 import 'package:skeleton_text/skeleton_text.dart';
 
 class OpportunityView extends StatelessWidget {
@@ -120,8 +122,10 @@ class OpportunityView extends StatelessWidget {
                         WidgetSpan(
                           alignment: PlaceholderAlignment.middle,
                           child: GestureDetector(
-                            onTap: () {
-                              logger.info('share');
+                            onTap: () async {
+                              final link =
+                                  'https://tapped.ai/op/${opportunity.id}';
+                              await Share.share(link);
                             },
                             child: const Padding(
                               padding: EdgeInsets.symmetric(
