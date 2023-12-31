@@ -52,7 +52,7 @@ class OpportunityBloc extends Bloc<OpportunityEvent, OpportunityState> {
 
       // check credits
       if (state.opQuota == 0) {
-        nav.push(PaywallPage());
+        nav.push(WaitlistPage());
         return;
       }
 
