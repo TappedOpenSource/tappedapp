@@ -1,3 +1,4 @@
+import 'package:confetti/confetti.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:intheloopapp/domains/navigation_bloc/navigation_bloc.dart';
@@ -15,6 +16,21 @@ class WaitlistView extends StatefulWidget {
 
 class _WaitlistViewState extends State<WaitlistView> {
   bool _loading = false;
+  late final ConfettiController _confettiController;
+
+  @override
+  void initState() {
+    super.initState();
+    _confettiController = ConfettiController(
+      duration: const Duration(seconds: 2),
+    );
+  }
+
+  @override
+  void dispose() {
+    _confettiController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -37,7 +53,6 @@ class _WaitlistViewState extends State<WaitlistView> {
             future: database.isOnPremiumWailist(currentUser.id),
             builder: (context, snapshot) {
               final isOnWaitlist = snapshot.data;
-
 
               return switch (isOnWaitlist) {
                 null => const Center(
@@ -64,9 +79,16 @@ class _WaitlistViewState extends State<WaitlistView> {
                           "we'll let you know when premium is available and you can apply for UNLIMITED opportunities",
                           textAlign: TextAlign.center,
                         ),
-                        FilledButton(
-                          onPressed: () => context.pop(),
-                          child: const Text('okay'),
+                        ConfettiWidget(
+                          confettiController: _confettiController,
+                          blastDirectionality: BlastDirectionality.explosive,
+                          child: FilledButton(
+                            onPressed: () {
+                              _confettiController.play();
+                              context.pop();
+                            },
+                            child: const Text('okay'),
+                          ),
                         ),
                       ],
                     ),
@@ -87,20 +109,28 @@ class _WaitlistViewState extends State<WaitlistView> {
                           'join the waitlist to get unlimited daily opportunities!',
                         ),
                         const SizedBox(height: 12),
-                        FilledButton(
-                          onPressed: () async {
-                            // apply for the waitlist
-                            setState(() {
-                              _loading = true;
-                            });
-
-                            await database.joinPremiumWaitlist(currentUser.id);
-                            nav.pop();
-                            setState(() {
-                              _loading = false;
-                            });
-                          },
-                          child: const Text('sign me up'),
+                        Align(
+                          child: ConfettiWidget(
+                            confettiController: _confettiController,
+                            blastDirectionality: BlastDirectionality.explosive,
+                            child: FilledButton(
+                              onPressed: () async {
+                                _confettiController.play();
+                                setState(() {
+                                  _loading = true;
+                                });
+                          
+                                // apply for the waitlist
+                                await database
+                                    .joinPremiumWaitlist(currentUser.id);
+                                nav.pop();
+                                setState(() {
+                                  _loading = false;
+                                });
+                              },
+                              child: const Text('sign me up'),
+                            ),
+                          ),
                         ),
                       ],
                     ),

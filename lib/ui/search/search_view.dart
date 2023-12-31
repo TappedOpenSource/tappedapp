@@ -50,7 +50,7 @@ class _SearchViewState extends State<SearchView> with TickerProviderStateMixin {
       appBar: AppBar(
         centerTitle: true,
         elevation: 0.5,
-        backgroundColor: theme.colorScheme.background,
+        backgroundColor: Colors.transparent,
         title: TappedSearchBar(
           searchFocusNode: widget.searchFocusNode,
           searchController: _searchController,

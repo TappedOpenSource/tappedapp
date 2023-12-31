@@ -19,6 +19,7 @@ dependencies:
   card_banner: 0.0.1+2
   cloud_firestore: 4.13.5
   cloud_functions: 4.5.8
+  confetti: ^0.7.0
   crypto: 3.0.3
   cupertino_icons: 1.0.6
   currency_text_input_formatter: 2.1.11
