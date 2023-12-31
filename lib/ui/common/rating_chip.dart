@@ -16,7 +16,7 @@ class RatingChip extends StatelessWidget {
         horizontal: 4,
       ),
       child: Container(
-        width: 32,
+        width: 34,
         decoration: BoxDecoration(
           color: tappedAccent,
           borderRadius: BorderRadius.circular(15),

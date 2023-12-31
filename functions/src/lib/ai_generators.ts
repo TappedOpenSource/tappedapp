@@ -26,6 +26,7 @@ const prompts = [
   "8k close up linkedin profile picture of @subject, professional jack suite, professional headshots, photo-realistic, 4k, high-resolution image, workplace settings, upper body, modern outfit, professional suit, businessman, blurred background, glass building, office window",
 ];
 
+
 const _incrementCoverArtTestCredits = async (stripe: Stripe, checkoutSessionCompleted: {
   id: string;
   client_reference_id: string | null;

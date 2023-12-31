@@ -60,6 +60,24 @@ genre ({ARTIST_GENRES}), and any outstanding accomplishments, to craft a compell
 artist introduction. Remember to keep it captivating and suitable for press and 
 promotional materials. It should be no more than 100 words`
 
+
+export const llm = async (template: string, apiKey: string, options?: {
+    temperature?: number;
+}): Promise<string> => {
+  process.env.OPENAI_API_KEY = apiKey;
+
+  const prompt = PromptTemplate.fromTemplate(template);
+  const llm = new OpenAI(options)
+  const llmChain = new LLMChain({
+    llm,
+    prompt,
+  })
+
+  const res = await llmChain.invoke({});
+
+  return res.text;
+}
+
 export async function generateBasicAlbumName({
   artistName,
   artistGenres,

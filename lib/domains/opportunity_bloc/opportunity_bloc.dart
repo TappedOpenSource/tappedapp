@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
+import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:intheloopapp/data/auth_repository.dart';
 import 'package:intheloopapp/data/database_repository.dart';
 import 'package:intheloopapp/domains/authentication_bloc/authentication_bloc.dart';
@@ -12,6 +13,8 @@ import 'package:intheloopapp/domains/navigation_bloc/tapped_route.dart';
 
 part 'opportunity_event.dart';
 part 'opportunity_state.dart';
+
+final _analytics = FirebaseAnalytics.instance;
 
 class OpportunityBloc extends Bloc<OpportunityEvent, OpportunityState> {
   OpportunityBloc({
@@ -52,6 +55,13 @@ class OpportunityBloc extends Bloc<OpportunityEvent, OpportunityState> {
 
       // check credits
       if (state.opQuota == 0) {
+        await _analytics.logEvent(
+          name: 'quota_limit_hit',
+          parameters: {
+            'user_id': currentUserId,
+            'opportunity_id': op.id,
+          },
+        );
         nav.push(WaitlistPage());
         return;
       }
