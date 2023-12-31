@@ -6,7 +6,9 @@ import { getFirestore } from "firebase-admin/firestore";
 import { getApp, getApps, initializeApp } from "firebase-admin/app";
 import { defineSecret } from "firebase-functions/params";
 import { getAuth } from "firebase-admin/auth";
+import  { SecretManagerServiceClient } from "@google-cloud/secret-manager";
 
+const client = new SecretManagerServiceClient();
 const app = getApps().length <= 0 ?
   initializeApp() :
   getApp();
@@ -107,3 +109,12 @@ export const verifiedBotUuid = "1c0d9380-873c-493a-a3f8-1283d5408673";
 export const verifyUserBadgeId = "0aa46576-1fbe-4312-8b69-e2fef3269083";
 
 export const projectId = app.options.projectId;
+
+
+export const getSecretValue = async (secretName: string): Promise<string | null> => {
+  const fullName = `projects/${projectId}/secrets/${secretName}/versions/latest`;
+  const [ version ] = await client.accessSecretVersion({ name: fullName })
+  const secretValue = version.payload?.data?.toString();
+
+  return secretValue ?? null;
+}

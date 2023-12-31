@@ -15,6 +15,10 @@ export type UserModel = {
   loopsCount?: number;
   badgesCount?: number;
   reviewCount?: number;
+  placeId?: string;
+  geohash?: string;
+  lat?: number;
+  lng?: number;
   deleted?: boolean;
   overallRating?: number;
   shadowBanned?: boolean;

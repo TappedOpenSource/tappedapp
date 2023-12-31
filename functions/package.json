@@ -15,6 +15,7 @@
   },
   "main": "lib/index.js",
   "dependencies": {
+    "@google-cloud/secret-manager": "^5.0.1",
     "@leap-ai/sdk": "^0.0.130",
     "firebase-admin": "^11.2.1",
     "firebase-functions": "^4.5.0",
@@ -26,7 +27,7 @@
     "resend": "^1.1.0",
     "stream-chat": "^4.1.0",
     "stripe": "^11.15.0",
-    "uuid": "^9.0.0"
+    "uuid": "^9.0.1"
   },
   "devDependencies": {
     "@types/react": "^18.2.24",
