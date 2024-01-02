@@ -250,7 +250,7 @@ const _sendUserQuotaNotification = async (userId: string, openaiKey: string) => 
 
   // add new opportunities to the feed
   try {
-    await _createMockOpportunities({ count: 50, openaiKey });
+    await _createMockOpportunities({ count: 10, openaiKey });
   } catch (e) {
     error("error creating mock opportunities", e);
   }
