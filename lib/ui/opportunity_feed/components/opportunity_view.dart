@@ -69,6 +69,7 @@ class OpportunityView extends StatelessWidget {
   Widget buildOpportunityView(BuildContext context) {
     final hero = heroImage;
     final places = context.places;
+    final theme = Theme.of(context);
     return SingleChildScrollView(
       physics: const AlwaysScrollableScrollPhysics(),
       child: Column(
@@ -113,10 +114,11 @@ class OpportunityView extends StatelessWidget {
                   child: RichText(
                     text: TextSpan(
                       text: opportunity.title,
-                      style: const TextStyle(
+                      style: TextStyle(
                         fontSize: 32,
                         fontFamily: 'Rubik One',
                         fontWeight: FontWeight.w900,
+                        color: theme.colorScheme.onBackground,
                       ),
                       children: [
                         WidgetSpan(
@@ -255,9 +257,11 @@ class OpportunityView extends StatelessWidget {
             final isApplied = snapshot.data;
             return switch (isApplied) {
               null => const CupertinoActivityIndicator(),
-              true => const FilledButton(
-                  onPressed: null,
-                  child: Text('already applied :)'),
+              true => FilledButton(
+                  onPressed: () {
+                    onDislike?.call();
+                  },
+                  child: const Text('already applied (click to dismiss)'),
                 ),
               false => Row(
                   children: [

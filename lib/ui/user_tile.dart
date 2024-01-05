@@ -9,6 +9,7 @@ import 'package:intheloopapp/ui/common/rating_chip.dart';
 import 'package:intheloopapp/ui/user_avatar.dart';
 import 'package:intheloopapp/utils/bloc_utils.dart';
 import 'package:intheloopapp/utils/current_user_builder.dart';
+import 'package:intl/intl.dart';
 import 'package:skeletons/skeletons.dart';
 
 class UserTile extends StatefulWidget {
@@ -76,8 +77,14 @@ class _UserTileState extends State<UserTile> {
     if (widgetSubtitle != null) return widgetSubtitle;
 
     return user.socialMediaAudience > user.followerCount
-        ? Text('${user.socialMediaAudience} audience')
-        : Text('${user.followerCount} followers');
+        ? Text('${NumberFormat.compactCurrency(
+            decimalDigits: 0,
+            symbol: '',
+          ).format(user.socialMediaAudience)} audience')
+        : Text('${NumberFormat.compactCurrency(
+            decimalDigits: 0,
+            symbol: '',
+          ).format(user.followerCount)} followers');
   }
 
   Widget _buildUserTile(

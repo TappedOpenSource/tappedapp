@@ -72,6 +72,7 @@ export type Comment = {
 
 export type Booking = {
   id: string;
+  calendarEventId?: string;
   serviceId: string;
   name: string;
   note: string;
