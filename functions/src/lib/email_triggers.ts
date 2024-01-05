@@ -41,6 +41,11 @@ export const sendWelcomeEmailOnUserCreated = functions.auth
       throw new Error("user email is undefined, null or empty: " + JSON.stringify(user));
     }
 
+    if (email.endsWith("@tapped.ai")) {
+      debug(`user email ends with @tapped.ai, skipping welcome email: ${email}`);
+      return;
+    }
+
     debug(`sending welcome email to ${email}`);
     await mailRef.add({
       to: [ email ],
@@ -229,6 +234,16 @@ export const sendBookingRequestSentEmailOnBooking = functions
       throw new Error(`requester ${requester?.id} does not have an email`);
     }
 
+    if (email.endsWith("@tapped.ai")) {
+      debug(`requester ${requester?.id} email ends with @tapped.ai, skipping email`);
+      return;
+    }
+
+    if (booking.calendarEventId !== undefined) {
+      debug(`booking ${booking.id} already has a calendar event, skipping email`);
+      return;
+    }
+
     await mailRef.add({
       to: [ email ],
       template: {
@@ -248,6 +263,16 @@ export const sendBookingRequestReceivedEmailOnBooking = functions
 
     if (email === undefined || email === null || email === "") {
       throw new Error(`requestee ${requestee?.id} does not have an email`);
+    }
+
+    if (email.endsWith("@tapped.ai")) {
+      debug(`requestee ${requestee?.id} email ends with @tapped.ai, skipping email`);
+      return;
+    }
+
+    if (booking.calendarEventId !== undefined) {
+      debug(`booking ${booking.id} already has a calendar event, skipping email`);
+      return;
     }
 
     await mailRef.add({

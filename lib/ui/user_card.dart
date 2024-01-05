@@ -9,6 +9,7 @@ import 'package:intheloopapp/ui/user_avatar.dart';
 import 'package:intheloopapp/utils/bloc_utils.dart';
 import 'package:intheloopapp/utils/current_user_builder.dart';
 import 'package:intheloopapp/utils/hero_image.dart';
+import 'package:intl/intl.dart';
 import 'package:uuid/uuid.dart';
 
 class UserCard extends StatefulWidget {
@@ -71,6 +72,17 @@ class _UserCardState extends State<UserCard> {
     final database = context.database;
     final imageUrl = widget.user.profilePicture;
     if (widget.user.deleted) return const SizedBox.shrink();
+
+    final audienceText =
+        widget.user.socialMediaAudience > widget.user.followerCount
+            ? '${NumberFormat.compactCurrency(
+                decimalDigits: 0,
+                symbol: '',
+              ).format(widget.user.socialMediaAudience)} audience'
+            : '${NumberFormat.compactCurrency(
+                decimalDigits: 0,
+                symbol: '',
+              ).format(widget.user.followerCount)} followers';
 
     return CurrentUserBuilder(
       errorWidget: const ListTile(
@@ -155,7 +167,7 @@ class _UserCardState extends State<UserCard> {
                                 ),
                               ),
                               Text(
-                                '${widget.user.followerCount} followers',
+                                audienceText,
                                 style: const TextStyle(
                                   color: Colors.white,
                                 ),

@@ -1,7 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:intheloopapp/ui/loading/loading_view.dart';
 import 'package:intheloopapp/ui/loading/logo_wave.dart';
 import 'package:intheloopapp/ui/opportunity_feed/components/apply_animation_view.dart';
 import 'package:intheloopapp/ui/opportunity_feed/components/opportunity_view.dart';

@@ -1,8 +1,8 @@
 /* eslint-disable import/no-unresolved */
 import * as functions from "firebase-functions";
-import { 
-  onDocumentCreated, 
-  onDocumentUpdated, 
+import {
+  onDocumentCreated,
+  onDocumentUpdated,
   onDocumentWritten,
 } from "firebase-functions/v2/firestore";
 import { createActivity } from "./activities";
@@ -79,8 +79,12 @@ const copyOpportunityToFeeds = async (opportunity: Opportunity) => {
 
   await Promise.all(
     usersSnap.docs.map(async (userDoc) => {
-
       if (userDoc.id === opportunity.userId) {
+        return;
+      }
+
+      const email = userDoc.data().email;
+      if (email.includes("tapped.ai")) {
         return;
       }
 
@@ -90,60 +94,60 @@ const copyOpportunityToFeeds = async (opportunity: Opportunity) => {
 };
 
 const _createRandomOpportunity = async ({ venues, openaiKey }: {
-    venues: UserModel[];
-    openaiKey: string;
+  venues: UserModel[];
+  openaiKey: string;
 }) => {
   const eventTypes: {
-        type: string;
-        paid: number; // the probability that this event is paid
-        prompt: string; // the prompt for this event
-    }[] = [
-      {
-        type: "gig",
-        paid: 0.75,
-        prompt: "a gig opportunity",
-      },
-      {
-        type: "openMic",
-        paid: 0,
-        prompt: "a open mic"
-      },
-      {
-        type: "albumRelease",
-        paid: 0.75,
-        prompt: "needing an opening musician for an album release party",
-      },
-      {
-        type: "themedNight",
-        paid: 0.3,
-        prompt: "needing a musicians for a themed nights",
-      },
-      {
-        type: "battleOfTheBands",
-        paid: 0.9,
-        prompt: "battle of the bands opportunity for local bands",
-      },
-      {
-        type: "songwriterShowcase",
-        paid: 0.2,
-        prompt: "songwriter showcases opportunity for local songwriters",
-      },
-      {
-        type: "jamSession",
-        paid: 0,
-        prompt: "jam sessions for local bands",
-      },
-      {
-        type: "charityConcert",
-        paid: 0,
-        prompt: "needing local musicians for a charity concert",
-      },
-      {
-        type: "onlineStream",
-        paid: 0.5,
-        prompt: "needing local musicians for an online streaming event",
-      },
-    ];
+    type: string;
+    paid: number; // the probability that this event is paid
+    prompt: string; // the prompt for this event
+  }[] = [
+    {
+      type: "gig",
+      paid: 0.75,
+      prompt: "a gig opportunity",
+    },
+    {
+      type: "openMic",
+      paid: 0,
+      prompt: "a open mic"
+    },
+    {
+      type: "albumRelease",
+      paid: 0.75,
+      prompt: "needing an opening musician for an album release party",
+    },
+    {
+      type: "themedNight",
+      paid: 0.3,
+      prompt: "needing a musicians for a themed nights",
+    },
+    {
+      type: "battleOfTheBands",
+      paid: 0.9,
+      prompt: "battle of the bands opportunity for local bands",
+    },
+    {
+      type: "songwriterShowcase",
+      paid: 0.2,
+      prompt: "songwriter showcases opportunity for local songwriters",
+    },
+    {
+      type: "jamSession",
+      paid: 0,
+      prompt: "jam sessions for local bands",
+    },
+    {
+      type: "charityConcert",
+      paid: 0,
+      prompt: "needing local musicians for a charity concert",
+    },
+    {
+      type: "onlineStream",
+      paid: 0.5,
+      prompt: "needing local musicians for an online streaming event",
+    },
+  ];
 
   const uuid = uuidv4();
   const randomVenue = venues[Math.floor(Math.random() * venues.length)];
@@ -171,7 +175,7 @@ const _createRandomOpportunity = async ({ venues, openaiKey }: {
     // you get 3 tries to do this correctly
     for (let i = 0; i < 3; i++) {
       try {
-        const res = await llm(randomPrompt, openaiKey,{ temperature: 0.4 });
+        const res = await llm(randomPrompt, openaiKey, { temperature: 0.4 });
         const { title, description } = JSON.parse(res);
         return { title, description };
       } catch (e) {
@@ -215,11 +219,19 @@ const _createRandomOpportunity = async ({ venues, openaiKey }: {
 }
 
 const _createMockOpportunities = async ({ count, openaiKey }: {
-    count: number;
-    openaiKey: string;
+  count: number;
+  openaiKey: string;
 }) => {
+  const venueBlacklist: string[] = [
+    "8ObJtER8PDUYKmQ0w7Tze0P6SHa2", // The Camel
+    "FsQWuDwH5lZxEpd7TpwXi7fFKqj1", // Alley RVA
+    "8R4gqTCxxzaNt1Bt4nLjqUEn6jd2", // Get Tight
+  ];
+
   const virginiaVenues = await Promise.all(
-    virginiaVenueIds.map(async (venueId) => {
+    virginiaVenueIds.filter(
+      (venueId) => !venueBlacklist.includes(venueId),
+    ).map(async (venueId) => {
       const venueSnap = await usersRef.doc(venueId).get();
       const venue = venueSnap.data()!;
       return venue as UserModel;
@@ -242,7 +254,7 @@ const _createMockOpportunities = async ({ count, openaiKey }: {
 function _generateRandomDate(from: Date, to: Date) {
   return new Date(
     from.getTime() +
-        Math.random() * (to.getTime() - from.getTime()),
+    Math.random() * (to.getTime() - from.getTime()),
   );
 }
 
@@ -261,7 +273,7 @@ const _sendUserQuotaNotification = async (userId: string, openaiKey: string) => 
     .collection("tokens")
     .get();
 
-  
+
   const tokens: string[] = tokensSnap.docs.map((snap) => snap.id);
   await Promise.all(tokens.map(async (token) => {
     try {
@@ -314,13 +326,13 @@ export const copyOpportunityToFeedsOnCreate = onDocumentWritten(
         if (userDoc.id === opportunity.userId) {
           return;
         }
-        
+
         await _addOpportunityToUserFeed(userDoc.id, opportunity);
       }),
     );
   });
 
-export const createOpportunityFeedOnUserCreated = functions 
+export const createOpportunityFeedOnUserCreated = functions
   .auth
   .user()
   .onCreate(async (user) => {
@@ -412,6 +424,11 @@ export const setDailyOpportunityQuota = onSchedule("0 0 * * *", async () => {
       }
 
       try {
+        const email = userDoc.data().email;
+        if (email === undefined || email.includes("tapped.ai")) {
+          return;
+        }
+
         await _sendUserQuotaNotification(userDoc.id, openaiKey);
       } catch (e) {
         error("error sending quota notification", e);

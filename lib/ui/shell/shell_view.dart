@@ -46,7 +46,7 @@ class _ShellViewState extends State<ShellView> {
                 index: state.selectedTab,
                 children: [
                   const OpportunityFeedView(),
-                  const WaitlistView(),
+                  // const WaitlistView(),
                   SearchView(
                     searchFocusNode: searchFocusNode,
                   ),
