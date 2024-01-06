@@ -7,6 +7,7 @@ import 'package:intheloopapp/domains/models/option.dart';
 import 'package:intheloopapp/domains/models/service.dart';
 import 'package:intheloopapp/domains/models/user_model.dart';
 import 'package:intheloopapp/ui/activity/activity_view.dart';
+import 'package:intheloopapp/ui/admin/admin_view.dart';
 import 'package:intheloopapp/ui/advanced_search/advanced_search_view.dart';
 import 'package:intheloopapp/ui/badge/badge_view.dart';
 import 'package:intheloopapp/ui/badge/badges_view.dart';
@@ -393,5 +394,13 @@ final class PaywallPage extends TappedRoute {
       : super(
           routeName: '/paywall',
           view: const PaywallView(),
+        );
+}
+
+final class AdminPage extends TappedRoute {
+  AdminPage()
+      : super(
+          routeName: '/admin',
+          view: const AdminView(),
         );
 }
