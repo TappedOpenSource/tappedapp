@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:intheloopapp/domains/models/option.dart';
 import 'package:intheloopapp/ui/loading/logo_wave.dart';
-import 'package:intheloopapp/utils/user_claim_builder.dart';
+import 'package:intheloopapp/utils/custom_claim_builder.dart';
 
 class ApplyAnimationView extends StatelessWidget {
   const ApplyAnimationView({super.key});
@@ -19,7 +19,7 @@ class ApplyAnimationView extends StatelessWidget {
             height: 100,
             width: 100,
           ),
-          UserClaimBuilder(
+          CustomClaimBuilder(
             builder: (context, claim) {
               return switch (claim) {
                 None() => const Text(

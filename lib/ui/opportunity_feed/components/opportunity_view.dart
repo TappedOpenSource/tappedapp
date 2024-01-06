@@ -16,10 +16,10 @@ import 'package:intheloopapp/ui/themes.dart';
 import 'package:intheloopapp/ui/user_tile.dart';
 import 'package:intheloopapp/utils/bloc_utils.dart';
 import 'package:intheloopapp/utils/current_user_builder.dart';
+import 'package:intheloopapp/utils/custom_claim_builder.dart';
 import 'package:intheloopapp/utils/geohash.dart';
 import 'package:intheloopapp/utils/hero_image.dart';
 import 'package:intheloopapp/utils/opportunity_image.dart';
-import 'package:intheloopapp/utils/user_claim_builder.dart';
 import 'package:intl/intl.dart';
 import 'package:maps_launcher/maps_launcher.dart';
 import 'package:share_plus/share_plus.dart';
@@ -296,7 +296,7 @@ class OpportunityView extends StatelessWidget {
                       ),
                     ),
                     const SizedBox(width: 69),
-                    UserClaimBuilder(
+                    CustomClaimBuilder(
                       builder: (context, claim) {
                         return IconButton.filled(
                           onPressed: () {

@@ -21,8 +21,8 @@ import 'package:intheloopapp/ui/profile/components/reviews_sliver.dart';
 import 'package:intheloopapp/ui/profile/components/services_sliver.dart';
 import 'package:intheloopapp/ui/profile/profile_cubit.dart';
 import 'package:intheloopapp/ui/themes.dart';
+import 'package:intheloopapp/utils/custom_claim_builder.dart';
 import 'package:intheloopapp/utils/hero_image.dart';
-import 'package:intheloopapp/utils/user_claim_builder.dart';
 
 class ProfileView extends StatelessWidget {
   ProfileView({
@@ -185,7 +185,7 @@ class ProfileView extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.end,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                UserClaimBuilder(
+                CustomClaimBuilder(
                   builder: (context, claim) {
                     final hasClaim = claim.isSome;
                     return Text.rich(

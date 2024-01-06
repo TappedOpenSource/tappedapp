@@ -71,7 +71,7 @@ class _ApplyButtonState extends State<ApplyButton> {
         }
 
         return FutureBuilder(
-          future: auth.getCustomClaim(),
+          future: auth.getStripeClaim(),
           builder: (context, snapshot) {
             final claim = snapshot.data;
             if (claim == null) {

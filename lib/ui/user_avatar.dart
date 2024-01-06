@@ -7,7 +7,6 @@ import 'package:intheloopapp/domains/navigation_bloc/navigation_bloc.dart';
 import 'package:intheloopapp/domains/navigation_bloc/tapped_route.dart';
 import 'package:intheloopapp/ui/conditional_parent_widget.dart';
 import 'package:intheloopapp/ui/themes.dart';
-import 'package:intheloopapp/utils/user_claim_builder.dart';
 
 class UserAvatar extends StatelessWidget {
   const UserAvatar({
