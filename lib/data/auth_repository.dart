@@ -6,7 +6,8 @@ abstract class AuthRepository {
   Future<bool> isSignedIn();
   Future<String> getAuthUserId();
   Future<User?> getAuthUser();
-  Future<Option<String>> getCustomClaim();
+  Future<bool> getAdminClaim();
+  Future<Option<String>> getStripeClaim();
   Future<String?> signInWithCredentials(
     String email,
     String password,

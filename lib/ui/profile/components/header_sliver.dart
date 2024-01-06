@@ -11,6 +11,7 @@ import 'package:intheloopapp/ui/profile/components/request_to_book.dart';
 import 'package:intheloopapp/ui/profile/components/review_count.dart';
 import 'package:intheloopapp/ui/profile/components/star_rating.dart';
 import 'package:intheloopapp/ui/profile/profile_cubit.dart';
+import 'package:intheloopapp/utils/admin_builder.dart';
 
 class HeaderSliver extends StatelessWidget {
   const HeaderSliver({super.key});
@@ -56,6 +57,25 @@ class HeaderSliver extends StatelessWidget {
                   width: double.infinity,
                   child: FollowButton(),
                 ),
+              AdminBuilder(
+                builder: (context, isAdmin) {
+                  return switch (isAdmin) {
+                    false => const SizedBox.shrink(),
+                    true => const SizedBox(
+                        width: double.infinity,
+                        child: Text(
+                          'Admin',
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                            fontSize: 12,
+                            fontWeight: FontWeight.normal,
+                            color: Color(0xFF757575),
+                          ),
+                        ),
+                      ),
+                  };
+                },
+              ),
               const SizedBox(height: 8),
               SizedBox(
                 width: double.infinity,

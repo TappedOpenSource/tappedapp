@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:intheloopapp/ui/record_label/components/claim_chip.dart';
 import 'package:intheloopapp/utils/current_user_builder.dart';
-import 'package:intheloopapp/utils/user_claim_builder.dart';
+import 'package:intheloopapp/utils/custom_claim_builder.dart';
 
 class SubscribedView extends StatelessWidget {
   const SubscribedView({
@@ -11,7 +11,7 @@ class SubscribedView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    return UserClaimBuilder(
+    return CustomClaimBuilder(
       builder: (context, claim) {
         return CurrentUserBuilder(
           builder: (context, currentUser) {

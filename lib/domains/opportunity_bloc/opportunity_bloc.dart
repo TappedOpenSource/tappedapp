@@ -72,7 +72,7 @@ class OpportunityBloc extends Bloc<OpportunityEvent, OpportunityState> {
         userComment: userComment,
       );
 
-      final claim = await auth.getCustomClaim();
+      final claim = await auth.getStripeClaim();
       if (claim.isNone) {
         await database.decrementUserOpportunityQuota(currentUserId);
       }
