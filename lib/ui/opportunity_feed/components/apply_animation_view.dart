@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:intheloopapp/domains/models/option.dart';
 import 'package:intheloopapp/ui/loading/logo_wave.dart';
+import 'package:intheloopapp/utils/user_claim_builder.dart';
 
 class ApplyAnimationView extends StatelessWidget {
   const ApplyAnimationView({super.key});
@@ -9,20 +11,33 @@ class ApplyAnimationView extends StatelessWidget {
     final theme = Theme.of(context);
     return Scaffold(
       backgroundColor: theme.colorScheme.background,
-      body: const Column(
+      body: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          SizedBox(width: double.infinity),
-          LogoWave(
+          const SizedBox(width: double.infinity),
+          const LogoWave(
             height: 100,
             width: 100,
           ),
-          Text(
-            'easy applying with tappedai',
-            textAlign: TextAlign.center,
-            style: TextStyle(
-              fontSize: 22,
-            ),
+          UserClaimBuilder(
+            builder: (context, claim) {
+              return switch (claim) {
+                None() => const Text(
+                    'easy applying with tappedai',
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                      fontSize: 22,
+                    ),
+                  ),
+                Some() => const Text(
+                    "adding your info to the top of the promoter's list as a premium user",
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                      fontSize: 22,
+                    ),
+                  ),
+              };
+            },
           ),
         ],
       ),

@@ -13,20 +13,23 @@ class NotificationIconButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocBuilder<ActivityBloc, ActivityState>(
       builder: (context, state) {
-        return badges.Badge(
-          badgeContent: Text('${state.unreadActivitiesCount}'),
-          showBadge: state.unreadActivities,
-          position: badges.BadgePosition.topEnd(
-            top: -1,
-            end: 2,
-          ),
-          child: IconButton(
-            onPressed: () => context.push(ActivitiesPage()),
-            icon: Icon(
-              CupertinoIcons.bell,
-              color: Theme.of(context).colorScheme.outline,
-              size: 24,
-              semanticLabel: 'Notifications',
+        return GestureDetector(
+          onTap: () => context.push(ActivitiesPage()),
+          child: badges.Badge(
+            badgeContent: Text('${state.unreadActivitiesCount}'),
+            showBadge: state.unreadActivities,
+            position: badges.BadgePosition.topEnd(
+              top: -2,
+              end: -2,
+            ),
+            child: IconButton(
+              onPressed: () => {},
+              icon: Icon(
+                CupertinoIcons.bell,
+                color: Theme.of(context).colorScheme.outline,
+                size: 24,
+                semanticLabel: 'Notifications',
+              ),
             ),
           ),
         );
