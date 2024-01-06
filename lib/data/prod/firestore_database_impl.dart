@@ -1493,7 +1493,7 @@ class FirestoreDatabaseImpl extends DatabaseRepository {
       final opportunitiesSnapshot = await _opportunityFeedsRef
           .doc(userId)
           .collection('opportunities')
-          .orderBy('timestamp', descending: true)
+          .orderBy('startTime', descending: true)
           .where('touched', isNull: true)
           .limit(limit)
           .startAfterDocument(documentSnapshot)
@@ -1508,7 +1508,7 @@ class FirestoreDatabaseImpl extends DatabaseRepository {
     final opportunitiesSnapshot = await _opportunityFeedsRef
         .doc(userId)
         .collection('opportunities')
-        .orderBy('timestamp', descending: true)
+        .orderBy('startTime', descending: true)
         .where('touched', isNull: true)
         .limit(limit)
         .get();

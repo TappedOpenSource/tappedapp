@@ -55,6 +55,7 @@ class OpportunityFeed extends StatelessWidget {
           onDislike: () =>
               context.read<OpportunityFeedCubit>().dislikeOpportunity(),
           onApply: () => context.read<OpportunityFeedCubit>().likeOpportunity(),
+          onDismiss: () => context.read<OpportunityFeedCubit>().dismissOpportunity(),
         );
       },
     );

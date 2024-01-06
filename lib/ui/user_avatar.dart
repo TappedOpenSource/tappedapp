@@ -7,6 +7,7 @@ import 'package:intheloopapp/domains/navigation_bloc/navigation_bloc.dart';
 import 'package:intheloopapp/domains/navigation_bloc/tapped_route.dart';
 import 'package:intheloopapp/ui/conditional_parent_widget.dart';
 import 'package:intheloopapp/ui/themes.dart';
+import 'package:intheloopapp/utils/user_claim_builder.dart';
 
 class UserAvatar extends StatelessWidget {
   const UserAvatar({
@@ -14,16 +15,16 @@ class UserAvatar extends StatelessWidget {
     this.pushId = const None(),
     this.pushUser = const None(),
     this.imageUrl,
-    this.verified,
     this.radius,
     this.minRadius,
     this.maxRadius,
+    this.verified = false,
   });
 
   final Option<String> pushId;
   final Option<UserModel> pushUser;
   final String? imageUrl;
-  final bool? verified;
+  final bool verified;
   final double? radius;
   final double? minRadius;
   final double? maxRadius;
@@ -38,20 +39,20 @@ class UserAvatar extends StatelessWidget {
         (None(), None()) => child,
         (Some(:final value), None()) => GestureDetector(
             onTap: () => context.push(
-                  ProfilePage(
-                    userId: value,
-                    user: const None(),
-                  ),
-                ),
+              ProfilePage(
+                userId: value,
+                user: const None(),
+              ),
+            ),
             child: child,
           ),
         (_, Some(:final value)) => GestureDetector(
             onTap: () => context.push(
-                  ProfilePage(
-                    userId: value.id,
-                    user: pushUser,
-                  ),
-                ),
+              ProfilePage(
+                userId: value.id,
+                user: pushUser,
+              ),
+            ),
             child: child,
           ),
       };
@@ -70,7 +71,7 @@ class UserAvatar extends StatelessWidget {
           color: Colors.white,
           size: 10,
         ),
-        showBadge: verified ?? false,
+        showBadge: verified,
         badgeStyle: const badges.BadgeStyle(
           shape: badges.BadgeShape.twitter,
           badgeColor: tappedAccent,

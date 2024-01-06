@@ -39,11 +39,6 @@ class OpportunityFeedCubit extends Cubit<OpportunityFeedState> {
   }
 
   Future<void> fetchMoreOpportunities() async {
-    emit(
-      state.copyWith(
-        loading: true,
-      ),
-    );
     try {
       final opportunities = await database.getOpportunityFeedByUserId(
         currentUserId,
@@ -60,8 +55,6 @@ class OpportunityFeedCubit extends Cubit<OpportunityFeedState> {
         error: e,
         stackTrace: s,
       );
-    } finally {
-      emit(state.copyWith(loading: false));
     }
   }
 
@@ -74,6 +67,29 @@ class OpportunityFeedCubit extends Cubit<OpportunityFeedState> {
 
     if (state.curOp >= state.opportunities.length - 1) {
       await fetchMoreOpportunities();
+    }
+  }
+
+  Future<void> dismissOpportunity() async {
+    try {
+      final curOpportunity = state.opportunities[state.curOp];
+
+      // apply for opportunity just so it doesn't show up again
+      opBloc.add(
+        ApplyForOpportunity(
+          opportunity: curOpportunity,
+          userComment: '',
+        ),
+      );
+
+      await nextOpportunity();
+      await Future<void>.delayed(const Duration(milliseconds: 500));
+    } catch (e, s) {
+      logger.error(
+        'Error dismissing opportunity',
+        error: e,
+        stackTrace: s,
+      );
     }
   }
 
