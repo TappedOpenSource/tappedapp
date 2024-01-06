@@ -3,6 +3,7 @@ import 'dart:ui';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:intheloopapp/data/database_repository.dart';
 import 'package:intheloopapp/data/places_repository.dart';
 import 'package:intheloopapp/domains/models/opportunity.dart';
@@ -18,6 +19,7 @@ import 'package:intheloopapp/utils/current_user_builder.dart';
 import 'package:intheloopapp/utils/geohash.dart';
 import 'package:intheloopapp/utils/hero_image.dart';
 import 'package:intheloopapp/utils/opportunity_image.dart';
+import 'package:intheloopapp/utils/user_claim_builder.dart';
 import 'package:intl/intl.dart';
 import 'package:maps_launcher/maps_launcher.dart';
 import 'package:share_plus/share_plus.dart';
@@ -294,26 +296,43 @@ class OpportunityView extends StatelessWidget {
                       ),
                     ),
                     const SizedBox(width: 69),
-                    IconButton.filled(
-                      onPressed: () {
-                        HapticFeedback.mediumImpact();
-                        opBloc.add(
-                          ApplyForOpportunity(
-                            opportunity: opportunity,
-                            userComment: '',
-                          ),
+                    UserClaimBuilder(
+                      builder: (context, claim) {
+                        return IconButton.filled(
+                          onPressed: () {
+                            HapticFeedback.mediumImpact();
+                            opBloc.add(
+                              ApplyForOpportunity(
+                                opportunity: opportunity,
+                                userComment: '',
+                              ),
+                            );
+                            onApply?.call();
+                          },
+                          style: switch (claim) {
+                            None() => ButtonStyle(
+                                backgroundColor: MaterialStateProperty.all(
+                                  tappedAccent,
+                                ),
+                              ),
+                            Some() => ButtonStyle(
+                                backgroundColor: MaterialStateProperty.all(
+                                  const Color(0xffffd700),
+                                ),
+                              ),
+                          },
+                          icon: switch (claim) {
+                            None() => const Icon(
+                                CupertinoIcons.star_fill,
+                                size: 42,
+                              ),
+                            Some() => const Icon(
+                                FontAwesomeIcons.bolt,
+                                size: 42,
+                              ),
+                          },
                         );
-                        onApply?.call();
                       },
-                      style: ButtonStyle(
-                        backgroundColor: MaterialStateProperty.all(
-                          tappedAccent,
-                        ),
-                      ),
-                      icon: const Icon(
-                        CupertinoIcons.star_fill,
-                        size: 42,
-                      ),
                     ),
                   ],
                 ),

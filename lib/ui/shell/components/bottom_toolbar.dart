@@ -139,7 +139,7 @@ class BottomToolbar extends StatelessWidget {
                       top: -1,
                       end: 2,
                     ),
-                    badgeContent: Text('$unreadMessagesCount'),
+                    // badgeContent: Text('$unreadMessagesCount'),
                     child: const Icon(
                       CupertinoIcons.chat_bubble,
                       size: 24,
