@@ -1,7 +1,5 @@
-import 'package:flutter/material.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:intheloopapp/domains/models/option.dart';
-import 'package:intheloopapp/ui/loading/loading_view.dart';
-import 'package:intheloopapp/ui/record_label/unsubscribed_view.dart';
 import 'package:intheloopapp/utils/bloc_utils.dart';
 
 class UserClaimBuilder extends StatelessWidget {
@@ -10,7 +8,7 @@ class UserClaimBuilder extends StatelessWidget {
     super.key,
   });
 
-  final Widget Function(BuildContext, String) builder;
+  final Widget Function(BuildContext, Option<String>) builder;
 
   @override
   Widget build(BuildContext context) {
@@ -20,9 +18,8 @@ class UserClaimBuilder extends StatelessWidget {
       builder: (context, snapshot) {
         final claim = snapshot.data;
         return switch (claim) {
-          null => const LoadingView(),
-          None() => const UnsubscribedView(),
-          Some(:final value) => builder(context, value),
+          null => builder(context, const None()),
+          _ => builder(context, claim),
         };
       },
     );

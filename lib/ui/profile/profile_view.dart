@@ -22,6 +22,7 @@ import 'package:intheloopapp/ui/profile/components/services_sliver.dart';
 import 'package:intheloopapp/ui/profile/profile_cubit.dart';
 import 'package:intheloopapp/ui/themes.dart';
 import 'package:intheloopapp/utils/hero_image.dart';
+import 'package:intheloopapp/utils/user_claim_builder.dart';
 
 class ProfileView extends StatelessWidget {
   ProfileView({
@@ -184,28 +185,37 @@ class ProfileView extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.end,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text.rich(
-                  TextSpan(
-                    text: visitedUser.displayName,
-                    style: const TextStyle(
-                      color: Colors.white,
-                      fontSize: 32,
-                      fontWeight: FontWeight.w900,
-                    ),
-                    children: [
-                      if (state.isVerified)
-                        const WidgetSpan(
-                          child: Icon(
-                            Icons.verified,
-                            size: 18,
-                            color: tappedAccent,
-                          ),
-                          alignment: PlaceholderAlignment.middle,
+                UserClaimBuilder(
+                  builder: (context, claim) {
+                    final hasClaim = claim.isSome;
+                    return Text.rich(
+                      TextSpan(
+                        text: visitedUser.displayName,
+                        style: const TextStyle(
+                          color: Colors.white,
+                          fontSize: 32,
+                          fontWeight: FontWeight.w900,
                         ),
-                    ],
-                  ),
-                  overflow: TextOverflow.fade,
-                  maxLines: 2,
+                        children: [
+                          if (state.isVerified || hasClaim)
+                            WidgetSpan(
+                              child: Icon(
+                                Icons.verified,
+                                size: 18,
+                                color: switch ((hasClaim, state.isVerified)) {
+                                  (true, _) => Colors.purple,
+                                  (_, true) => tappedAccent,
+                                  (_, false) => Colors.transparent,
+                                },
+                              ),
+                              alignment: PlaceholderAlignment.middle,
+                            ),
+                        ],
+                      ),
+                      overflow: TextOverflow.fade,
+                      maxLines: 2,
+                    );
+                  },
                 ),
                 Text(
                   visitedUser.occupations.join(', '),

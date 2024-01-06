@@ -2,7 +2,6 @@ import 'dart:io';
 
 import 'package:purchases_flutter/purchases_flutter.dart';
 
-import 'package:purchases_flutter/purchases_flutter.dart';
 
 const appleApiKey = 'appl_BAFlRDdZwaZXaWiKcgCirDSzGxO';
 const googleApiKey = 'goog_JVlZMvIUbaTMKaMHkzFEQXjwXlo';

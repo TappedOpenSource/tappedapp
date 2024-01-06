@@ -3,7 +3,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intheloopapp/domains/models/option.dart';
 import 'package:intheloopapp/domains/navigation_bloc/navigation_bloc.dart';
 import 'package:intheloopapp/ui/bookings/bookings_view.dart';
-import 'package:intheloopapp/ui/common/waitlist_view.dart';
 import 'package:intheloopapp/ui/messaging/messaging_view.dart';
 import 'package:intheloopapp/ui/opportunity_feed/opportunity_feed_view.dart';
 import 'package:intheloopapp/ui/profile/profile_view.dart';

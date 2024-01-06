@@ -3,7 +3,6 @@ import 'dart:ui';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_google_places_sdk/flutter_google_places_sdk.dart';
 import 'package:intheloopapp/data/database_repository.dart';
 import 'package:intheloopapp/data/places_repository.dart';
 import 'package:intheloopapp/domains/models/opportunity.dart';
@@ -14,14 +13,13 @@ import 'package:intheloopapp/domains/opportunity_bloc/opportunity_bloc.dart';
 import 'package:intheloopapp/ui/conditional_parent_widget.dart';
 import 'package:intheloopapp/ui/themes.dart';
 import 'package:intheloopapp/ui/user_tile.dart';
-import 'package:intheloopapp/utils/app_logger.dart';
 import 'package:intheloopapp/utils/bloc_utils.dart';
 import 'package:intheloopapp/utils/current_user_builder.dart';
 import 'package:intheloopapp/utils/geohash.dart';
 import 'package:intheloopapp/utils/hero_image.dart';
 import 'package:intheloopapp/utils/opportunity_image.dart';
 import 'package:intl/intl.dart';
-import 'package:rxdart/rxdart.dart';
+import 'package:maps_launcher/maps_launcher.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:skeleton_text/skeleton_text.dart';
 
@@ -30,6 +28,7 @@ class OpportunityView extends StatelessWidget {
     required this.opportunity,
     this.onApply,
     this.onDislike,
+    this.onDismiss,
     this.heroImage,
     this.titleHeroTag,
     this.showAppBar = true,
@@ -44,6 +43,7 @@ class OpportunityView extends StatelessWidget {
   final String? titleHeroTag;
   final void Function()? onApply;
   final void Function()? onDislike;
+  final void Function()? onDismiss;
 
   Future<Option<Image>> nothing() async {
     return const None();
@@ -185,9 +185,18 @@ class OpportunityView extends StatelessWidget {
                     }
 
                     final place = snapshot.data!;
-
-                    return Text(
-                      formattedFullAddress(place.addressComponents),
+                    final formattedAddress =
+                        formattedFullAddress(place.addressComponents);
+                    return GestureDetector(
+                      onTap: () => MapsLauncher.launchQuery(
+                        formattedAddress,
+                      ),
+                      child: Text(
+                        formattedAddress,
+                        style: const TextStyle(
+                          color: tappedAccent,
+                        ),
+                      ),
                     );
                   },
                 ),
@@ -259,7 +268,7 @@ class OpportunityView extends StatelessWidget {
               null => const CupertinoActivityIndicator(),
               true => FilledButton(
                   onPressed: () {
-                    onDislike?.call();
+                    onDismiss?.call();
                   },
                   child: const Text('already applied (click to dismiss)'),
                 ),
