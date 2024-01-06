@@ -1,6 +1,9 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intheloopapp/domains/models/option.dart';
+import 'package:intheloopapp/domains/navigation_bloc/navigation_bloc.dart';
+import 'package:intheloopapp/domains/navigation_bloc/tapped_route.dart';
 import 'package:intheloopapp/ui/profile/components/badges_chip.dart';
 import 'package:intheloopapp/ui/profile/components/follow_button.dart';
 import 'package:intheloopapp/ui/profile/components/follower_count.dart';
@@ -18,6 +21,7 @@ class HeaderSliver extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
     return Padding(
       padding: const EdgeInsets.symmetric(
         horizontal: 16,
@@ -61,18 +65,25 @@ class HeaderSliver extends StatelessWidget {
                 builder: (context, isAdmin) {
                   return switch (isAdmin) {
                     false => const SizedBox.shrink(),
-                    true => const SizedBox(
-                        width: double.infinity,
-                        child: Text(
-                          'Admin',
-                          textAlign: TextAlign.center,
-                          style: TextStyle(
-                            fontSize: 12,
-                            fontWeight: FontWeight.normal,
-                            color: Color(0xFF757575),
-                          ),
-                        ),
+                    true => Padding(
+                      padding: const EdgeInsets.symmetric(
+                        vertical: 8,
                       ),
+                    child: SizedBox(
+                        width: double.infinity,
+                        child: CupertinoButton(
+                            onPressed: () => context.push(AdminPage()),
+                            color: theme.colorScheme.onSurface.withOpacity(0.1),
+                            child: Text(
+                              'admin dashboard',
+                              style: TextStyle(
+                                color: theme.colorScheme.onSurface,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                          ),
+                      ),
+                    ),
                   };
                 },
               ),
