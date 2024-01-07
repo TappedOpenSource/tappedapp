@@ -61,32 +61,33 @@ class HeaderSliver extends StatelessWidget {
                   width: double.infinity,
                   child: FollowButton(),
                 ),
-              AdminBuilder(
-                builder: (context, isAdmin) {
-                  return switch (isAdmin) {
-                    false => const SizedBox.shrink(),
-                    true => Padding(
-                      padding: const EdgeInsets.symmetric(
-                        vertical: 8,
-                      ),
-                    child: SizedBox(
-                        width: double.infinity,
-                        child: CupertinoButton(
-                            onPressed: () => context.push(AdminPage()),
-                            color: theme.colorScheme.onSurface.withOpacity(0.1),
-                            child: Text(
-                              'admin dashboard',
-                              style: TextStyle(
-                                color: theme.colorScheme.onSurface,
-                                fontWeight: FontWeight.bold,
+              if (state.visitedUser.id == state.currentUser.id)
+                AdminBuilder(
+                  builder: (context, isAdmin) {
+                    return switch (isAdmin) {
+                      false => const SizedBox.shrink(),
+                      true => Padding(
+                        padding: const EdgeInsets.symmetric(
+                          vertical: 8,
+                        ),
+                      child: SizedBox(
+                          width: double.infinity,
+                          child: CupertinoButton(
+                              onPressed: () => context.push(AdminPage()),
+                              color: theme.colorScheme.onSurface.withOpacity(0.1),
+                              child: Text(
+                                'admin dashboard',
+                                style: TextStyle(
+                                  color: theme.colorScheme.onSurface,
+                                  fontWeight: FontWeight.bold,
+                                ),
                               ),
                             ),
-                          ),
+                        ),
                       ),
-                    ),
-                  };
-                },
-              ),
+                    };
+                  },
+                ),
               const SizedBox(height: 8),
               SizedBox(
                 width: double.infinity,

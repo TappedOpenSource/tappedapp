@@ -13,7 +13,10 @@ class LocationTextField extends StatelessWidget {
     super.key,
   });
 
-  final void Function(PlaceData?, String) onChanged;
+  final void Function(
+    PlaceData? placeData,
+    String placeId,
+  ) onChanged;
   final PlaceData? initialPlace;
   final String? initialPlaceId;
 

@@ -12,10 +12,10 @@ import 'package:intheloopapp/domains/models/service.dart';
 import 'package:intheloopapp/domains/models/user_model.dart';
 import 'package:intheloopapp/domains/navigation_bloc/navigation_bloc.dart';
 import 'package:intheloopapp/domains/onboarding_bloc/onboarding_bloc.dart';
-import 'package:intheloopapp/ui/create_booking/components/booking_end_time.dart';
 import 'package:intheloopapp/ui/create_booking/components/booking_name.dart';
 import 'package:intheloopapp/ui/create_booking/components/booking_note.dart';
-import 'package:intheloopapp/ui/create_booking/components/booking_start_time.dart';
+import 'package:intheloopapp/ui/create_booking/components/end_time.dart';
+import 'package:intheloopapp/ui/create_booking/components/start_time.dart';
 import 'package:intheloopapp/utils/app_logger.dart';
 import 'package:intl/intl.dart';
 import 'package:stream_chat_flutter/stream_chat_flutter.dart';
@@ -53,16 +53,16 @@ class CreateBookingCubit extends Cubit<CreateBookingState> {
 
   void updateStartTime(DateTime value) => emit(
         state.copyWith(
-          startTime: BookingStartTime.dirty(value),
+          startTime: StartTime.dirty(value),
           endTime: value.isAfter(state.endTime.value)
-              ? BookingEndTime.dirty(value)
+              ? EndTime.dirty(value)
               : state.endTime,
         ),
       );
 
   void updateEndTime(DateTime value) => emit(
         state.copyWith(
-          endTime: BookingEndTime.dirty(value),
+          endTime: EndTime.dirty(value),
         ),
       );
 

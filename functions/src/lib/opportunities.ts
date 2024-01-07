@@ -292,6 +292,34 @@ const _sendUserQuotaNotification = async (userId: string, openaiKey: string) => 
   }));
 }
 
+const _setDailyOpportunityQuota = async (openaiKey: string) => {
+  const usersSnap = await usersRef.get();
+
+  await Promise.all(
+    usersSnap.docs.map(async (userDoc) => {
+      try {
+        await creditsRef.doc(userDoc.id).set({
+          opportunityQuota: 5,
+        });
+      } catch (e) {
+        error("error setting daily opportunity quota", e);
+      }
+
+      try {
+        const email: string | undefined = userDoc.data().email;
+        if (email === undefined || email?.includes("tapped.ai")) {
+          return;
+        }
+
+        await _sendUserQuotaNotification(userDoc.id, openaiKey);
+      } catch (e) {
+        error("error sending quota notification", e);
+      }
+    }),
+  );
+  info("daily opportunity quotas set");
+};
+
 export const addActivityOnOpportunityInterest = functions
   .firestore
   .document("opportunities/{opportunityId}/interestedUsers/{userId}")
@@ -405,35 +433,25 @@ export const copyOpportunitiesToFeedOnCreateUser = onDocumentCreated(
     );
   });
 
+export const setDailyOpportunityQuotaLegacy = functions
+  .runWith({ memory: "1GB" })
+  .pubsub
+  .schedule("0 0 * * *")
+  .onRun(
+    async () => {
+      const openaiKey = await getSecretValue("OPEN_AI_KEY")
+      if (openaiKey === null) {
+        throw new Error("OPEN_AI_KEY is null");
+      }
+
+      await _setDailyOpportunityQuota(openaiKey);
+    });
+
 export const setDailyOpportunityQuota = onSchedule("0 0 * * *", async () => {
   const openaiKey = await getSecretValue("OPEN_AI_KEY")
   if (openaiKey === null) {
     throw new Error("OPEN_AI_KEY is null");
   }
 
-  const usersSnap = await usersRef.get();
-
-  await Promise.all(
-    usersSnap.docs.map(async (userDoc) => {
-      try {
-        await creditsRef.doc(userDoc.id).set({
-          opportunityQuota: 5,
-        });
-      } catch (e) {
-        error("error setting daily opportunity quota", e);
-      }
-
-      try {
-        const email = userDoc.data().email;
-        if (email === undefined || email.includes("tapped.ai")) {
-          return;
-        }
-
-        await _sendUserQuotaNotification(userDoc.id, openaiKey);
-      } catch (e) {
-        error("error sending quota notification", e);
-      }
-    }),
-  );
-  info("daily opportunity quotas set");
+  await _setDailyOpportunityQuota(openaiKey);
 });

@@ -6,6 +6,7 @@ import 'package:intheloopapp/domains/models/option.dart';
 import 'package:intheloopapp/domains/models/service.dart';
 import 'package:intheloopapp/domains/navigation_bloc/navigation_bloc.dart';
 import 'package:intheloopapp/domains/navigation_bloc/tapped_route.dart';
+import 'package:intheloopapp/ui/common/form_item.dart';
 import 'package:intheloopapp/ui/create_booking/components/booking_name_text_field.dart';
 import 'package:intheloopapp/ui/create_booking/components/booking_note_text_field.dart';
 import 'package:intheloopapp/ui/create_booking/create_booking_cubit.dart';
@@ -69,7 +70,7 @@ class _CreateBookingFormState extends State<CreateBookingForm> {
                       );
                 },
               ),
-              _FormItem(
+              FormItem(
                 children: [
                   const Text('Start Time'),
                   CupertinoButton(
@@ -97,7 +98,7 @@ class _CreateBookingFormState extends State<CreateBookingForm> {
                   ),
                 ],
               ),
-              _FormItem(
+              FormItem(
                 children: <Widget>[
                   const Text('End Time'),
                   CupertinoButton(
@@ -123,7 +124,7 @@ class _CreateBookingFormState extends State<CreateBookingForm> {
                   ),
                 ],
               ),
-              _FormItem(
+              FormItem(
                 children: [
                   const Padding(
                     padding: EdgeInsets.symmetric(vertical: 22),
@@ -137,7 +138,7 @@ class _CreateBookingFormState extends State<CreateBookingForm> {
                   ),
                 ],
               ),
-              _FormItem(
+              FormItem(
                 children: [
                   Padding(
                     padding: const EdgeInsets.symmetric(vertical: 22),
@@ -154,7 +155,7 @@ class _CreateBookingFormState extends State<CreateBookingForm> {
                   ),
                 ],
               ),
-              _FormItem(
+              FormItem(
                 children: [
                   Padding(
                     padding: const EdgeInsets.symmetric(vertical: 22),
@@ -168,7 +169,7 @@ class _CreateBookingFormState extends State<CreateBookingForm> {
                   ),
                 ],
               ),
-              _FormItem(
+              FormItem(
                 children: [
                   const Padding(
                     padding: EdgeInsets.symmetric(vertical: 22),
@@ -249,38 +250,6 @@ class _CreateBookingFormState extends State<CreateBookingForm> {
           ),
         );
       },
-    );
-  }
-}
-
-// This class simply decorates a row of widgets.
-class _FormItem extends StatelessWidget {
-  const _FormItem({required this.children});
-
-  final List<Widget> children;
-
-  @override
-  Widget build(BuildContext context) {
-    return DecoratedBox(
-      decoration: const BoxDecoration(
-        border: Border(
-          top: BorderSide(
-            color: CupertinoColors.inactiveGray,
-            width: 0,
-          ),
-          bottom: BorderSide(
-            color: CupertinoColors.inactiveGray,
-            width: 0,
-          ),
-        ),
-      ),
-      child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 16),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: children,
-        ),
-      ),
     );
   }
 }
