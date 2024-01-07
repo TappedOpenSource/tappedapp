@@ -83,6 +83,25 @@ class Opportunity extends Equatable {
         touched,
       ];
 
+  Map<String, dynamic> toDoc() {
+    return {
+      'id': id,
+      'userId': userId,
+      'title': title,
+      'description': description,
+      'flierUrl': flierUrl.asNullable(),
+      'placeId': placeId,
+      'geohash': geohash,
+      'lat': lat,
+      'lng': lng,
+      'timestamp': Timestamp.fromDate(timestamp),
+      'startTime': Timestamp.fromDate(startTime),
+      'endTime': Timestamp.fromDate(endTime),
+      'isPaid': isPaid,
+      'touched': touched.asNullable(),
+    };
+  }
+
   Opportunity copyWith({
     String? id,
     String? userId,

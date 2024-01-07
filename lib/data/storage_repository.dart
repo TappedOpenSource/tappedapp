@@ -13,4 +13,8 @@ abstract class StorageRepository {
     required String userId,
     required String originUrl,
   });
+  Future<String> uploadOpportunityFlier({
+    required String opportunityId,
+    required File imageFile,
+  });
 }
