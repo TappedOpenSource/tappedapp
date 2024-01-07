@@ -10,12 +10,12 @@ class CreateBookingState extends Equatable with FormzMixin {
     this.status = FormzSubmissionStatus.initial,
     this.place = const None(),
     this.placeId = const None(),
-    BookingStartTime? startTime,
-    BookingEndTime? endTime,
+    StartTime? startTime,
+    EndTime? endTime,
     GlobalKey<FormState>? formKey,
   }) {
-    this.startTime = startTime ?? BookingStartTime.pure();
-    this.endTime = endTime ?? BookingEndTime.pure();
+    this.startTime = startTime ?? StartTime.pure();
+    this.endTime = endTime ?? EndTime.pure();
     this.formKey = formKey ?? GlobalKey<FormState>(debugLabel: 'settings');
   }
 
@@ -25,8 +25,8 @@ class CreateBookingState extends Equatable with FormzMixin {
   final Service service;
   final double bookingFee;
   final FormzSubmissionStatus status;
-  late final BookingStartTime startTime;
-  late final BookingEndTime endTime;
+  late final StartTime startTime;
+  late final EndTime endTime;
   late final GlobalKey<FormState> formKey;
 
   final Option<PlaceData> place;
@@ -61,8 +61,8 @@ class CreateBookingState extends Equatable with FormzMixin {
     double? bookingFee,
     BookingName? name,
     BookingNote? note,
-    BookingStartTime? startTime,
-    BookingEndTime? endTime,
+    StartTime? startTime,
+    EndTime? endTime,
     FormzSubmissionStatus? status,
     Option<PlaceData>? place,
     Option<String>? placeId,

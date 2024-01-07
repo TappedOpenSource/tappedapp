@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:intheloopapp/ui/admin/create_opportunity_cubit.dart';
+import 'package:intheloopapp/ui/admin/create_opportunity_form.dart';
 import 'package:intheloopapp/ui/common/tapped_app_bar.dart';
 
 class AdminView extends StatelessWidget {
@@ -9,24 +12,14 @@ class AdminView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    return Scaffold(
-      backgroundColor: theme.colorScheme.background,
-      appBar: const TappedAppBar(
-        title: 'Admin',
-      ),
-      body: const SingleChildScrollView(
-        child: Column(
-          children: [
-            SizedBox(width: double.infinity),
-            Text('upload flier'),
-            Text('place'),
-            Text('start time'),
-            Text('end time'),
-            Text('title'),
-            Text('description'),
-            Text('isPaid'),
-          ],
+    return BlocProvider(
+      create: (context) => CreateOpportunityCubit(),
+      child: Scaffold(
+        backgroundColor: theme.colorScheme.background,
+        appBar: const TappedAppBar(
+          title: 'Admin',
         ),
+        body: const CreateOpportunityForm(),
       ),
     );
   }
