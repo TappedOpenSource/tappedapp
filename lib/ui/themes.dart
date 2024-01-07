@@ -5,16 +5,19 @@ import 'package:google_fonts/google_fonts.dart';
 const tappedAccent = Color(0xff0086CC);
 
 // const primaryColor = Colors.deepPurple;
-const primaryColor = tappedAccent;
 // const secondaryColor = Colors.deepPurple;
-const secondaryColor = tappedAccent;
 const backgroundLightColor = Color(0xfff8f6Fb);
 const backgroundDarkColor = Color(0xff010F16);
 const navigationBarLightColor = Color(0xfff8f6Fb);
 const navigationBarDarkColor = Color(0xff010F16);
 
-class Themes {
-  static final themeLight = ThemeData.light().copyWith(
+ThemeData buildLightTheme({
+  Color accentColor = tappedAccent,
+}) {
+  final primaryColor = accentColor;
+  final secondaryColor = accentColor;
+
+  return ThemeData.light().copyWith(
     textTheme: GoogleFonts.arimoTextTheme(
       ThemeData.light().textTheme,
     ),
@@ -29,13 +32,13 @@ class Themes {
     ),
 
     // floating action button
-    floatingActionButtonTheme: const FloatingActionButtonThemeData(
+    floatingActionButtonTheme: FloatingActionButtonThemeData(
       backgroundColor: primaryColor,
       foregroundColor: Colors.white,
     ),
 
     // bottom bar
-    bottomNavigationBarTheme: const BottomNavigationBarThemeData(
+    bottomNavigationBarTheme: BottomNavigationBarThemeData(
       backgroundColor: navigationBarLightColor,
       selectedItemColor: primaryColor,
       unselectedItemColor: Colors.black,
@@ -61,8 +64,15 @@ class Themes {
       trackHeight: 2,
     ),
   );
+}
 
-  static final themeDark = ThemeData.dark().copyWith(
+ThemeData buildDarkTheme({
+  Color accentColor = tappedAccent,
+}) {
+  final primaryColor = accentColor;
+  final secondaryColor = accentColor;
+
+  return ThemeData.dark().copyWith(
     textTheme: GoogleFonts.arimoTextTheme(
       ThemeData.dark().textTheme,
     ),
@@ -75,15 +85,15 @@ class Themes {
       background: backgroundDarkColor,
     ),
     // floating action button
-    floatingActionButtonTheme: const FloatingActionButtonThemeData(
+    floatingActionButtonTheme: FloatingActionButtonThemeData(
       backgroundColor: primaryColor,
       foregroundColor: Colors.white,
     ),
     // bottom bar
-    bottomNavigationBarTheme: const BottomNavigationBarThemeData(
+    bottomNavigationBarTheme: BottomNavigationBarThemeData(
       backgroundColor: navigationBarDarkColor,
       selectedItemColor: primaryColor,
-      unselectedItemColor: Color(0xFF757575),
+      unselectedItemColor: const Color(0xFF757575),
     ),
     // switch active color
     canvasColor: backgroundDarkColor,

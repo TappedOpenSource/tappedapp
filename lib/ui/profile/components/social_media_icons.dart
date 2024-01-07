@@ -48,7 +48,7 @@ class SocialMediaIcons extends StatelessWidget {
                 color: tappedAccent,
                 icon: const Icon(
                   FontAwesomeIcons.twitter,
-                  color: tappedAccent,
+                  color: Colors.blue,
                 ),
                 onTap: () {
                   launchUrl(

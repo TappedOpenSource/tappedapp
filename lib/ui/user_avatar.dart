@@ -73,7 +73,7 @@ class UserAvatar extends StatelessWidget {
         showBadge: verified,
         badgeStyle: const badges.BadgeStyle(
           shape: badges.BadgeShape.twitter,
-          badgeColor: tappedAccent,
+          badgeColor: Colors.blue,
         ),
         child: CircleAvatar(
           radius: radius,

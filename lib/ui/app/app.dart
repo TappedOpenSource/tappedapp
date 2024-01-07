@@ -12,6 +12,7 @@ import 'package:intheloopapp/ui/app_theme_cubit.dart';
 import 'package:intheloopapp/ui/common/down_for_maintenance_view.dart';
 import 'package:intheloopapp/ui/loading/loading_view.dart';
 import 'package:intheloopapp/ui/onboarding/onboarding_view.dart';
+import 'package:intheloopapp/ui/premium_theme_cubit.dart';
 import 'package:intheloopapp/ui/shell/shell_view.dart';
 import 'package:intheloopapp/ui/splash/splash_view.dart';
 import 'package:intheloopapp/ui/themes.dart';
@@ -57,7 +58,6 @@ class App extends StatelessWidget {
               context.notifications.saveDeviceToken(
                 userId: currentAuthUserId,
               );
-
               return const ShellView();
             }(),
           Onboarding() => const OnboardingView(),
@@ -75,65 +75,74 @@ class App extends StatelessWidget {
       providers: repositories,
       child: MultiBlocProvider(
         providers: blocs,
-        child: BlocBuilder<AppThemeCubit, bool>(
-          builder: (context, isDarkSnapshot) {
-            final appTheme =
-                isDarkSnapshot ? Themes.themeDark : Themes.themeLight;
-            final defaultStreamTheme = StreamChatThemeData.fromTheme(appTheme);
-            final streamTheme = defaultStreamTheme;
+        child: BlocBuilder<PremiumThemeCubit, bool>(
+          builder: (context, isPremium) {
+          final accentColor = isPremium ? Colors.purple : tappedAccent;
+            return BlocBuilder<AppThemeCubit, bool>(
+              builder: (context, isDark) {
+                final appTheme = isDark
+                    ? buildDarkTheme(accentColor: accentColor)
+                    : buildLightTheme(accentColor: accentColor);
 
-            return MaterialApp(
-              debugShowCheckedModeBanner: false,
-              title: 'Tapped',
-              theme: appTheme,
-              navigatorObservers: <NavigatorObserver>[_observer],
-              navigatorKey: navigatorKey,
-              builder: (context, widget) {
-                try {
-                  return StreamChat(
-                    client: streamClient,
-                    streamChatThemeData: streamTheme,
-                    child: widget,
-                  );
-                } catch (e, s) {
-                  FirebaseCrashlytics.instance.recordError(e, s);
-                  return widget ?? Container();
-                }
-              },
-              home:
-                  BlocBuilder<DownForMaintenanceBloc, DownForMaintenanceState>(
-                builder: (context, downState) {
-                  // return const SplashView();
-                  // return const OnboardingView();
+                final defaultStreamTheme =
+                    StreamChatThemeData.fromTheme(appTheme);
+                final streamTheme = defaultStreamTheme;
 
-                  if (downState.downForMaintenance) {
-                    return const DownForMainenanceView();
-                  }
+                return MaterialApp(
+                  debugShowCheckedModeBanner: false,
+                  title: 'Tapped',
+                  theme: appTheme,
+                  navigatorObservers: <NavigatorObserver>[_observer],
+                  navigatorKey: navigatorKey,
+                  builder: (context, widget) {
+                    try {
+                      return StreamChat(
+                        client: streamClient,
+                        streamChatThemeData: streamTheme,
+                        child: widget,
+                      );
+                    } catch (e, s) {
+                      FirebaseCrashlytics.instance.recordError(e, s);
+                      return widget ?? Container();
+                    }
+                  },
+                  home: BlocBuilder<DownForMaintenanceBloc,
+                      DownForMaintenanceState>(
+                    builder: (context, downState) {
+                      // return const SplashView();
+                      // return const OnboardingView();
 
-                  return BlocBuilder<AuthenticationBloc, AuthenticationState>(
-                    builder:
-                        (BuildContext context, AuthenticationState authState) {
-                      try {
-                        return switch (authState) {
-                          Uninitialized() => const LoadingView(),
-                          Authenticated() => _authenticated(
-                              context,
-                              authState.currentAuthUser.uid,
-                            ),
-                          Unauthenticated() => const SplashView(),
-                        };
-                      } catch (e, s) {
-                        FirebaseCrashlytics.instance.recordError(
-                          e,
-                          s,
-                          fatal: true,
-                        );
-                        return const LoadingView();
+                      if (downState.downForMaintenance) {
+                        return const DownForMainenanceView();
                       }
+
+                      return BlocBuilder<AuthenticationBloc,
+                          AuthenticationState>(
+                        builder: (BuildContext context,
+                            AuthenticationState authState) {
+                          try {
+                            return switch (authState) {
+                              Uninitialized() => const LoadingView(),
+                              Authenticated() => _authenticated(
+                                  context,
+                                  authState.currentAuthUser.uid,
+                                ),
+                              Unauthenticated() => const SplashView(),
+                            };
+                          } catch (e, s) {
+                            FirebaseCrashlytics.instance.recordError(
+                              e,
+                              s,
+                              fatal: true,
+                            );
+                            return const LoadingView();
+                          }
+                        },
+                      );
                     },
-                  );
-                },
-              ),
+                  ),
+                );
+              },
             );
           },
         ),
