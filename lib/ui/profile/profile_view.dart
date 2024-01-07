@@ -2,6 +2,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:intheloopapp/data/database_repository.dart';
 import 'package:intheloopapp/data/places_repository.dart';
 import 'package:intheloopapp/domains/models/option.dart';
@@ -188,21 +189,23 @@ class ProfileView extends StatelessWidget {
                 CustomClaimBuilder(
                   builder: (context, claim) {
                     final hasClaim = claim.isSome;
+                    final showClaim =
+                        hasClaim && currentUser.id == visitedUser.id;
                     return Text.rich(
                       TextSpan(
                         text: visitedUser.displayName,
-                        style: const TextStyle(
+                        style: GoogleFonts.manrope(
                           color: Colors.white,
                           fontSize: 32,
                           fontWeight: FontWeight.w900,
                         ),
                         children: [
-                          if (state.isVerified || hasClaim)
+                          if (state.isVerified || showClaim)
                             WidgetSpan(
                               child: Icon(
                                 Icons.verified,
                                 size: 18,
-                                color: switch ((hasClaim, state.isVerified)) {
+                                color: switch ((showClaim, state.isVerified)) {
                                   (true, _) => Colors.purple,
                                   (_, true) => tappedAccent,
                                   (_, false) => Colors.transparent,
