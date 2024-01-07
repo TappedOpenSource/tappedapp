@@ -120,4 +120,25 @@ class FirebaseStorageImpl extends StorageRepository {
 
     return downloadUrl;
   }
+
+  @override
+  Future<String> uploadOpportunityFlier({
+    required String opportunityId,
+    required File imageFile,
+  }) async {
+    final ext = p.extension(imageFile.path);
+    const prefix = 'images/opportunities';
+
+    final uniqueImageId = const Uuid().v4();
+
+    final compressedImage = await compressImage(uniqueImageId, imageFile);
+    final uploadTask = storageRef
+        .child('$prefix/$uniqueImageId$ext')
+        .putFile(compressedImage);
+
+    final taskSnapshot = await uploadTask.whenComplete(() => null);
+    final downloadUrl = await taskSnapshot.ref.getDownloadURL();
+
+    return downloadUrl;
+  }
 }

@@ -1552,6 +1552,56 @@ class FirestoreDatabaseImpl extends DatabaseRepository {
   }
 
   @override
+  Future<void> createOpportunity(Opportunity op) async {
+    try {
+      await _analytics.logEvent(
+        name: 'create_opportunity',
+        parameters: {
+          'user_id': op.userId,
+          'opportunity_id': op.id,
+        },
+      );
+
+      await _opportunitiesRef.doc(op.id).set(op.toDoc());
+    } catch (e, s) {
+      logger.error('createOpportunity', error: e, stackTrace: s);
+    }
+  }
+
+  @override
+  Future<void> copyOpportunityToFeeds(Opportunity op) async {
+    try {
+      await _analytics.logEvent(
+        name: 'copy_opportunity_to_feeds',
+        parameters: {
+          'user_id': op.userId,
+          'opportunity_id': op.id,
+        },
+      );
+
+      final usersSnap = await _usersRef.get();
+
+      await Future.wait(
+        usersSnap.docs.map(
+          (userDoc) async {
+            if (userDoc.id == op.userId) {
+              return;
+            }
+
+            await _opportunityFeedsRef
+                .doc(userDoc.id)
+                .collection('opportunities')
+                .doc(op.id)
+                .set(op.toDoc());
+          },
+        ),
+      );
+    } catch (e, s) {
+      logger.error('copyOpportunityToFeeds', error: e, stackTrace: s);
+    }
+  }
+
+  @override
   Future<void> blockUser({
     required String currentUserId,
     required String blockedUserId,

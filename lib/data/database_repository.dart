@@ -190,6 +190,9 @@ abstract class DatabaseRepository {
   Stream<int> getUserOpportunityQuotaObserver(String userId);
   Future<void> decrementUserOpportunityQuota(String userId);
 
+  Future<void> createOpportunity(Opportunity opportunity);
+  Future<void> copyOpportunityToFeeds(Opportunity opportunity);
+
   // blocking
   Future<void> blockUser({
     required String currentUserId,
