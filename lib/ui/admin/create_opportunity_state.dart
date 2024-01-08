@@ -39,6 +39,10 @@ class CreateOpportunityState extends Equatable {
     return outputDate;
   }
 
+  Duration get duration {
+    return endTime.value.difference(startTime.value);
+  }
+
   @override
   List<Object?> get props => [
         title,
