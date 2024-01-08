@@ -80,7 +80,7 @@ const _getPlaceDetails = async (placeId: string): Promise<PlaceData> => {
     const { latitude: lat, longitude: lng } = location;
     const geohash = _geohashForLocation([ lat, lng ]);
 
-    const photoMetadata = photos.length > 0
+    const photoMetadata = (photos?.length ?? 0) > 0
       ? photos[0]
       : null;
 

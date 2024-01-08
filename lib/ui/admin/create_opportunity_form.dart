@@ -61,50 +61,50 @@ class CreateOpportunityForm extends StatelessWidget {
             children: [
               const SizedBox(width: double.infinity),
               Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                GestureDetector(
-                  onTap: () => context
-                      .read<CreateOpportunityCubit>()
-                      .handleImageFromGallery(),
-                  child: Stack(
-                    children: [
-                      CircleAvatar(
-                        radius: 45,
-                        backgroundImage: _displayPickedImage(
-                          state.pickedPhoto,
-                          const None(),
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  GestureDetector(
+                    onTap: () => context
+                        .read<CreateOpportunityCubit>()
+                        .handleImageFromGallery(),
+                    child: Stack(
+                      children: [
+                        CircleAvatar(
+                          radius: 45,
+                          backgroundImage: _displayPickedImage(
+                            state.pickedPhoto,
+                            const None(),
+                          ),
                         ),
-                      ),
-                      const CircleAvatar(
-                        radius: 45,
-                        backgroundColor: Colors.black54,
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          crossAxisAlignment: CrossAxisAlignment.stretch,
-                          children: [
-                            Icon(
-                              Icons.camera_alt,
-                              size: 50,
-                              color: Colors.white,
-                            ),
-                            Text(
-                              'Upload Flier',
-                              textAlign: TextAlign.center,
-                              style: TextStyle(
+                        const CircleAvatar(
+                          radius: 45,
+                          backgroundColor: Colors.black54,
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            crossAxisAlignment: CrossAxisAlignment.stretch,
+                            children: [
+                              Icon(
+                                Icons.camera_alt,
+                                size: 50,
                                 color: Colors.white,
-                                fontSize: 10,
-                                fontWeight: FontWeight.bold,
                               ),
-                            ),
-                          ],
+                              Text(
+                                'Upload Flier',
+                                textAlign: TextAlign.center,
+                                style: TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 10,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                            ],
+                          ),
                         ),
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
-                ),
-              ],
-            ),
+                ],
+              ),
               TextFormField(
                 decoration: const InputDecoration(
                   prefixIcon: Icon(Icons.title),
@@ -135,7 +135,6 @@ class CreateOpportunityForm extends StatelessWidget {
                 initialPlace: state.placeData,
                 onChanged: cubit.onLocationChanged,
               ),
- 
               CupertinoSlidingSegmentedControl(
                 groupValue: state.isPaid,
                 onValueChanged: (bool? value) {
@@ -181,7 +180,7 @@ class CreateOpportunityForm extends StatelessWidget {
                   ),
                 },
               ),
-             const Padding(
+              const Padding(
                 padding: EdgeInsets.symmetric(
                   vertical: 8,
                 ),
@@ -250,7 +249,20 @@ class CreateOpportunityForm extends StatelessWidget {
               ),
               const SizedBox(height: 12),
               CupertinoButton.filled(
-                onPressed: cubit.submit,
+                onPressed: () {
+                  context
+                      .read<CreateOpportunityCubit>()
+                      .submit()
+                      .onError((error, stackTrace) {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(
+                        behavior: SnackBarBehavior.floating,
+                        backgroundColor: Colors.red,
+                        content: Text('Error: $error'),
+                      ),
+                    );
+                  });
+                },
                 child: const Text('full send'),
               ),
             ],
