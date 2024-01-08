@@ -70,6 +70,12 @@ class CreateOpportunityCubit extends Cubit<CreateOpportunityState> {
   void updateStartTime(DateTime startTime) {
     emit(
       state.copyWith(
+        endTime: EndTime.dirty(startTime.add(state.duration)),
+      ),
+    );
+
+    emit(
+      state.copyWith(
         startTime: StartTime.dirty(startTime),
       ),
     );
