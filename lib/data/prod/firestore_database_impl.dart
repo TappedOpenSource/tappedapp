@@ -1569,13 +1569,13 @@ class FirestoreDatabaseImpl extends DatabaseRepository {
   }
 
   @override
-  Future<void> copyOpportunityToFeeds(Opportunity op) async {
+  Future<void> copyOpportunityToFeeds(Opportunity opportunity) async {
     try {
       await _analytics.logEvent(
         name: 'copy_opportunity_to_feeds',
         parameters: {
-          'user_id': op.userId,
-          'opportunity_id': op.id,
+          'user_id': opportunity.userId,
+          'opportunity_id': opportunity.id,
         },
       );
 
@@ -1584,15 +1584,15 @@ class FirestoreDatabaseImpl extends DatabaseRepository {
       await Future.wait(
         usersSnap.docs.map(
           (userDoc) async {
-            if (userDoc.id == op.userId) {
+            if (userDoc.id == opportunity.userId) {
               return;
             }
 
             await _opportunityFeedsRef
                 .doc(userDoc.id)
                 .collection('opportunities')
-                .doc(op.id)
-                .set(op.toDoc());
+                .doc(opportunity.id)
+                .set(opportunity.toDoc());
           },
         ),
       );

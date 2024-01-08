@@ -104,17 +104,15 @@ class CreateOpportunityCubit extends Cubit<CreateOpportunityState> {
     // validate inputs
     if (state.title.isEmpty) {
       // toast with missing title
-      return;
+      throw Exception('missing title');
     }
 
     if (state.description.isEmpty) {
-      // toast with missing description
-      return;
+      throw Exception('missing description');
     }
 
     if (thePlaceData == null || thePlaceId == null) {
-      // toast with invalid palceId
-      return;
+      throw Exception('missing location');
     }
 
     final uuid = const Uuid().v4();
@@ -152,8 +150,8 @@ class CreateOpportunityCubit extends Cubit<CreateOpportunityState> {
       endTime: state.endTime.value,
     );
 
-    // console.log({ op });
-    await database.createOpportunity(op);
-    await database.copyOpportunityToFeeds(op);
+    logger.info('op: $op');
+    // await database.createOpportunity(op);
+    // await database.copyOpportunityToFeeds(op);
   }
 }
