@@ -1,5 +1,5 @@
 name: intheloopapp
-version: 1.2.55+68
+version: 1.2.57+70
 publish_to: none
 description: Mobile app for Tapped.
 environment: 
@@ -26,6 +26,7 @@ dependencies:
   email_validator: 2.1.17
   enum_to_string: 2.0.1
   equatable: 2.0.5
+  feedback: ^3.0.0
   file_picker: 6.1.1
   firebase_analytics: 10.7.4
   firebase_auth: 4.15.2

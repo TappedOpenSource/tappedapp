@@ -103,61 +103,76 @@ class CreateOpportunityCubit extends Cubit<CreateOpportunityState> {
 
   Future<void> submit() async {
     logger.debug('creating new opportunity');
-
-    final thePlaceData = state.placeData;
-    final thePlaceId = state.placeId;
-
-    // validate inputs
-    if (state.title.isEmpty) {
-      // toast with missing title
-      throw Exception('missing title');
-    }
-
-    if (state.description.isEmpty) {
-      throw Exception('missing description');
-    }
-
-    if (thePlaceData == null || thePlaceId == null) {
-      throw Exception('missing location');
-    }
-
-    final uuid = const Uuid().v4();
-    final flierUrl = await switch (state.pickedPhoto) {
-      None() => Future.value(null),
-      Some(:final value) => () async {
-          final url = await storage.uploadOpportunityFlier(
-            opportunityId: uuid,
-            imageFile: value,
-          );
-
-          return url;
-        }(),
-    };
-
-    final placeId = thePlaceId;
-    final lat = thePlaceData.lat;
-    final lng = thePlaceData.lng;
-    final geohash = thePlaceData.geohash;
-
-    final op = Opportunity(
-      id: uuid,
-      userId: currentUserId,
-      flierUrl: Option.fromNullable(flierUrl),
-      placeId: placeId,
-      geohash: geohash,
-      lat: lat,
-      lng: lng,
-      timestamp: DateTime.now(),
-      touched: const None<OpportunityInteration>(),
-      title: state.title,
-      description: state.description,
-      isPaid: state.isPaid,
-      startTime: state.startTime.value,
-      endTime: state.endTime.value,
+    emit(
+      state.copyWith(
+        loading: true,
+      ),
     );
 
-    logger.info('op: $op');
-    // await database.createOpportunity(op);
-    // await database.copyOpportunityToFeeds(op);
+    try {
+      final thePlaceData = state.placeData;
+      final thePlaceId = state.placeId;
+
+      // validate inputs
+      if (state.title.isEmpty) {
+        // toast with missing title
+        throw Exception('missing title');
+      }
+
+      if (state.description.isEmpty) {
+        throw Exception('missing description');
+      }
+
+      if (thePlaceData == null || thePlaceId == null) {
+        throw Exception('missing location');
+      }
+
+      final uuid = const Uuid().v4();
+      final flierUrl = await switch (state.pickedPhoto) {
+        None() => Future.value(null),
+        Some(:final value) => () async {
+            final url = await storage.uploadOpportunityFlier(
+              opportunityId: uuid,
+              imageFile: value,
+            );
+
+            return url;
+          }(),
+      };
+
+      final placeId = thePlaceId;
+      final lat = thePlaceData.lat;
+      final lng = thePlaceData.lng;
+      final geohash = thePlaceData.geohash;
+
+      final op = Opportunity(
+        id: uuid,
+        userId: currentUserId,
+        flierUrl: Option.fromNullable(flierUrl),
+        placeId: placeId,
+        geohash: geohash,
+        lat: lat,
+        lng: lng,
+        timestamp: DateTime.now(),
+        touched: const None<OpportunityInteration>(),
+        title: state.title,
+        description: state.description,
+        isPaid: state.isPaid,
+        startTime: state.startTime.value,
+        endTime: state.endTime.value,
+      );
+
+      logger.debug('op: $op');
+      await database.createOpportunity(op);
+      await database.copyOpportunityToFeeds(op);
+    } catch (e, s) {
+      logger.error('error creating opportunity', error: e, stackTrace: s);
+    } finally {
+      emit(
+        state.copyWith(
+          loading: false,
+        ),
+      );
+    }
   }
 }

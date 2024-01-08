@@ -1,3 +1,4 @@
+import 'package:feedback/feedback.dart';
 import 'package:intheloopapp/domains/models/activity.dart';
 import 'package:intheloopapp/domains/models/badge.dart';
 import 'package:intheloopapp/domains/models/booking.dart';
@@ -248,4 +249,6 @@ abstract class DatabaseRepository {
   });
   Future<void> joinPremiumWaitlist(String userId);
   Future<bool> isOnPremiumWailist(String userId);
+
+  Future<void> sendFeedback(String userId, UserFeedback feedback, String imageUrl);
 }

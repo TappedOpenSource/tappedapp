@@ -1,9 +1,11 @@
 import 'dart:io';
+import 'dart:typed_data';
 
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter_cache_manager/flutter_cache_manager.dart';
 import 'package:flutter_image_compress/flutter_image_compress.dart';
 import 'package:intheloopapp/data/storage_repository.dart';
+import 'package:intheloopapp/utils/file_utils.dart';
 import 'package:path/path.dart' as p;
 import 'package:path_provider/path_provider.dart';
 import 'package:uuid/uuid.dart';
@@ -132,9 +134,28 @@ class FirebaseStorageImpl extends StorageRepository {
     final uniqueImageId = const Uuid().v4();
 
     final compressedImage = await compressImage(uniqueImageId, imageFile);
-    final uploadTask = storageRef
-        .child('$prefix/$uniqueImageId$ext')
-        .putFile(compressedImage);
+    final uploadTask =
+        storageRef.child('$prefix/$uniqueImageId$ext').putFile(compressedImage);
+
+    final taskSnapshot = await uploadTask.whenComplete(() => null);
+    final downloadUrl = await taskSnapshot.ref.getDownloadURL();
+
+    return downloadUrl;
+  }
+
+  @override
+  Future<String> uploadFeedbackScreenshot(
+    String userId,
+    Uint8List rawPng,
+  ) async {
+    const ext = '.png';
+    final file = await writeToFile(rawPng);
+    const prefix = 'images/feedback';
+
+    final uniqueImageId = const Uuid().v4();
+
+    final uploadTask =
+        storageRef.child('$prefix/$uniqueImageId$ext').putFile(file);
 
     final taskSnapshot = await uploadTask.whenComplete(() => null);
     final downloadUrl = await taskSnapshot.ref.getDownloadURL();

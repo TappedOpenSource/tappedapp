@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'dart:typed_data';
 
 abstract class StorageRepository {
   Future<String> uploadProfilePicture(
@@ -17,4 +18,8 @@ abstract class StorageRepository {
     required String opportunityId,
     required File imageFile,
   });
+  Future<String> uploadFeedbackScreenshot(
+    String userId,
+    Uint8List rawPng,
+  );
 }

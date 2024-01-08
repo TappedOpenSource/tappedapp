@@ -23,7 +23,7 @@ class NotificationIconButton extends StatelessWidget {
               end: -2,
             ),
             child: IconButton(
-              onPressed: () => {},
+              onPressed: () => context.push(ActivitiesPage()),
               icon: Icon(
                 CupertinoIcons.bell,
                 color: Theme.of(context).colorScheme.outline,

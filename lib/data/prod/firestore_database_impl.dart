@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:enum_to_string/enum_to_string.dart';
+import 'package:feedback/feedback.dart';
 import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:georange/georange.dart';
 import 'package:intheloopapp/data/database_repository.dart';
@@ -44,6 +45,7 @@ final _opportunitiesRef = _firestore.collection('opportunities');
 final _opportunityFeedsRef = _firestore.collection('opportunityFeeds');
 final _creditsRef = _firestore.collection('credits');
 final _premiumWailistRef = _firestore.collection('premiumWaitlist');
+final _userFeedbackRef = _firestore.collection('userFeedback');
 
 const verifiedBadgeId = '0aa46576-1fbe-4312-8b69-e2fef3269083';
 
@@ -1966,6 +1968,30 @@ class FirestoreDatabaseImpl extends DatabaseRepository {
     } catch (e, s) {
       logger.error(
         "can't add user to the waitlist $userId",
+        error: e,
+        stackTrace: s,
+      );
+      rethrow;
+    }
+  }
+
+  @override
+  Future<void> sendFeedback(
+    String userId,
+    UserFeedback feedback,
+    String imageUrl,
+  ) async {
+    try {
+      await _userFeedbackRef.add({
+        'userId': userId,
+        'timestamp': Timestamp.now(),
+        'text': feedback.text,
+        'screenshotUrl': imageUrl,
+        'extra': feedback.extra,
+      });
+    } catch (e, s) {
+      logger.error(
+        "can't send feedback",
         error: e,
         stackTrace: s,
       );

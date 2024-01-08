@@ -2,6 +2,7 @@ part of 'create_opportunity_cubit.dart';
 
 class CreateOpportunityState extends Equatable {
   CreateOpportunityState({
+    this.loading = false,
     this.title = '',
     this.description = '',
     this.isPaid = false,
@@ -17,6 +18,7 @@ class CreateOpportunityState extends Equatable {
     this.picker = picker ?? ImagePicker();
   }
 
+  final bool loading;
   final String title;
   final String description;
   final PlaceData? placeData;
@@ -45,6 +47,7 @@ class CreateOpportunityState extends Equatable {
 
   @override
   List<Object?> get props => [
+        loading,
         title,
         description,
         isPaid,
@@ -56,6 +59,7 @@ class CreateOpportunityState extends Equatable {
       ];
 
   CreateOpportunityState copyWith({
+    bool? loading,
     String? title,
     String? description,
     bool? isPaid,
@@ -66,6 +70,7 @@ class CreateOpportunityState extends Equatable {
     Option<File>? pickedPhoto,
   }) {
     return CreateOpportunityState(
+      loading: loading ?? this.loading,
       title: title ?? this.title,
       description: description ?? this.description,
       isPaid: isPaid ?? this.isPaid,

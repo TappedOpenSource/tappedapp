@@ -5,6 +5,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intheloopapp/domains/models/option.dart';
+import 'package:intheloopapp/domains/navigation_bloc/navigation_bloc.dart';
 import 'package:intheloopapp/ui/admin/create_opportunity_cubit.dart';
 import 'package:intheloopapp/ui/common/form_item.dart';
 import 'package:intheloopapp/ui/forms/location_text_field.dart';
@@ -250,6 +251,10 @@ class CreateOpportunityForm extends StatelessWidget {
               const SizedBox(height: 12),
               CupertinoButton.filled(
                 onPressed: () {
+                  if (state.loading) {
+                    return;
+                  }
+
                   context
                       .read<CreateOpportunityCubit>()
                       .submit()
@@ -261,6 +266,8 @@ class CreateOpportunityForm extends StatelessWidget {
                         content: Text('Error: $error'),
                       ),
                     );
+                  }).then((value) {
+                    context.pop();
                   });
                 },
                 child: const Text('full send'),

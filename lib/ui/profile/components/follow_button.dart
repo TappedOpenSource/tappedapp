@@ -36,9 +36,11 @@ class FollowButton extends StatelessWidget {
         return CupertinoButton(
           onPressed: () => context.push(SettingsPage()),
           color: theme.colorScheme.onSurface.withOpacity(0.1),
+          padding: const EdgeInsets.all(12),
           child: Text(
-            'Edit Profile',
+            'Settings',
             style: TextStyle(
+              fontSize: 17,
               color: theme.colorScheme.onSurface,
               fontWeight: FontWeight.bold,
             ),

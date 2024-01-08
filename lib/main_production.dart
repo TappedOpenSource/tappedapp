@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:feedback/feedback.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/foundation.dart';
@@ -46,13 +47,15 @@ Future<void> main() async {
   final navigatorKey = GlobalKey<NavigatorState>();
 
   runApp(
-    App(
-      repositories: buildRepositories(streamChatClient: client),
-      blocs: buildBlocs(
+    BetterFeedback(
+      child: App(
+        repositories: buildRepositories(streamChatClient: client),
+        blocs: buildBlocs(
+          navigatorKey: navigatorKey,
+        ),
+        streamClient: client,
         navigatorKey: navigatorKey,
       ),
-      streamClient: client,
-      navigatorKey: navigatorKey,
     ),
   );
 }

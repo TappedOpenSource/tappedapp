@@ -5,6 +5,7 @@ import 'package:intheloopapp/domains/models/option.dart';
 import 'package:intheloopapp/domains/navigation_bloc/navigation_bloc.dart';
 import 'package:intheloopapp/domains/navigation_bloc/tapped_route.dart';
 import 'package:intheloopapp/ui/profile/components/badges_chip.dart';
+import 'package:intheloopapp/ui/profile/components/feedback_button.dart';
 import 'package:intheloopapp/ui/profile/components/follow_button.dart';
 import 'package:intheloopapp/ui/profile/components/follower_count.dart';
 import 'package:intheloopapp/ui/profile/components/location_chip.dart';
@@ -57,9 +58,19 @@ class HeaderSliver extends StatelessWidget {
                   ],
                 )
               else
-                const SizedBox(
-                  width: double.infinity,
-                  child: FollowButton(),
+                const Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    Expanded(
+                      child: FollowButton(),
+                    ),
+                    SizedBox(
+                      width: 8,
+                    ),
+                    Expanded(
+                      child: FeedbackButton(),
+                    ),
+                  ],
                 ),
               if (state.visitedUser.id == state.currentUser.id)
                 AdminBuilder(
@@ -67,14 +78,15 @@ class HeaderSliver extends StatelessWidget {
                     return switch (isAdmin) {
                       false => const SizedBox.shrink(),
                       true => Padding(
-                        padding: const EdgeInsets.symmetric(
-                          vertical: 8,
-                        ),
-                      child: SizedBox(
-                          width: double.infinity,
-                          child: CupertinoButton(
+                          padding: const EdgeInsets.symmetric(
+                            vertical: 8,
+                          ),
+                          child: SizedBox(
+                            width: double.infinity,
+                            child: CupertinoButton(
                               onPressed: () => context.push(AdminPage()),
-                              color: theme.colorScheme.onSurface.withOpacity(0.1),
+                              color:
+                                  theme.colorScheme.onSurface.withOpacity(0.1),
                               child: Text(
                                 'admin dashboard',
                                 style: TextStyle(
@@ -83,8 +95,8 @@ class HeaderSliver extends StatelessWidget {
                                 ),
                               ),
                             ),
+                          ),
                         ),
-                      ),
                     };
                   },
                 ),
