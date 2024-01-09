@@ -99,6 +99,16 @@ class HeaderSliver extends StatelessWidget {
                         ),
                     };
                   },
+                )
+              else
+                const Padding(
+                  padding: EdgeInsets.symmetric(
+                    vertical: 8,
+                  ),
+                  child: SizedBox(
+                    width: double.infinity,
+                    child: FeedbackButton(),
+                  ),
                 ),
               const SizedBox(height: 8),
               SizedBox(
