@@ -19,12 +19,12 @@ class OpportunitiesList extends StatelessWidget {
           height: 250,
           child: ScrollSnapList(
             onItemFocus: (index) {},
-            itemSize: MediaQuery.of(context).size.width - 36,
+            itemSize: MediaQuery.of(context).size.width - 40,
             itemCount: opportunities.length,
             itemBuilder: (context, index) {
               final opportunity = opportunities[index];
               return Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 2),
+                padding: const EdgeInsets.symmetric(horizontal: 8),
                 child: OpportunityCard(
                   opportunity: opportunity,
                 ),

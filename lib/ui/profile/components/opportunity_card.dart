@@ -17,7 +17,7 @@ class OpportunityCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final cardWidth = MediaQuery.of(context).size.width - 48;
+    final cardWidth = MediaQuery.of(context).size.width - 56;
     return FutureBuilder(
       future: getOpImage(context, opportunity),
       builder: (context, snapshot) {

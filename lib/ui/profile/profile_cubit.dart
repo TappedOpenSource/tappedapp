@@ -206,16 +206,25 @@ class ProfileCubit extends Cubit<ProfileState> {
   }
 
   Future<void> initOpportunities() async {
-    logger.debug('initOpportunities');
-    final opportunities = await databaseRepository.getOpportunitiesByUserId(
-      visitedUser.id,
-    );
+    try {
+      final opportunities = await databaseRepository.getOpportunitiesByUserId(
+        visitedUser.id,
+      );
 
-    emit(
-      state.copyWith(
-        opportunities: opportunities,
-      ),
-    );
+      logger.debug('initOpportunities ${opportunities.length}');
+
+      emit(
+        state.copyWith(
+          opportunities: opportunities,
+        ),
+      );
+    } catch (e, s) {
+      logger.error(
+        'initOpportunities error',
+        error: e,
+        stackTrace: s,
+      );
+    }
   }
 
   void onServiceCreated(Service service) {

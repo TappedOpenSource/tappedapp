@@ -9,6 +9,7 @@ import 'package:intheloopapp/ui/settings/components/payment_settings_form.dart';
 import 'package:intheloopapp/ui/settings/components/save_button.dart';
 import 'package:intheloopapp/ui/settings/components/settings_form.dart';
 import 'package:intheloopapp/ui/settings/settings_cubit.dart';
+import 'package:intheloopapp/ui/themes.dart';
 import 'package:intheloopapp/utils/bloc_utils.dart';
 import 'package:intheloopapp/utils/current_user_builder.dart';
 
@@ -60,7 +61,7 @@ class SettingsView extends StatelessWidget {
                     Container(
                       height: 75,
                       decoration: const BoxDecoration(
-                        color: Colors.blue,
+                        color: tappedAccent,
                       ),
                     ),
                   ],

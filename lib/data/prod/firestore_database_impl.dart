@@ -1368,9 +1368,11 @@ class FirestoreDatabaseImpl extends DatabaseRepository {
     try {
       final userOpportunitiesSnapshot = await _opportunitiesRef
           .where('userId', isEqualTo: userId)
-          .where('startDate', isGreaterThanOrEqualTo: Timestamp.now())
-          .orderBy('startDate', descending: true)
+          .where('startTime', isGreaterThanOrEqualTo: Timestamp.now())
+          .orderBy('startTime', descending: true)
           .get();
+
+      logger.info('userOpportunitiesSnapshot ${userOpportunitiesSnapshot.docs.length}');
 
       final opportunities =
           userOpportunitiesSnapshot.docs.map(Opportunity.fromDoc).toList();

@@ -74,7 +74,7 @@ const _addInterestedUserToOpportunity = async (
   return;
 };
 
-const copyOpportunityToFeeds = async (opportunity: Opportunity) => {
+const _copyOpportunityToFeeds = async (opportunity: Opportunity) => {
   const usersSnap = await usersRef.get();
 
   await Promise.all(
@@ -215,7 +215,7 @@ const _createRandomOpportunity = async ({ venues, openaiKey }: {
     aiGenerated: true,
   });
 
-  await copyOpportunityToFeeds(op);
+  await _copyOpportunityToFeeds(op);
 }
 
 const _createMockOpportunities = async ({ count, openaiKey }: {
