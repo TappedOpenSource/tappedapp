@@ -228,13 +228,13 @@ export const sendBookingRequestSentEmailOnBooking = functions
     const booking = data.data() as Booking;
     const requesterSnapshot = await usersRef.doc(booking.requesterId).get();
     const requester = requesterSnapshot.data();
-    const email = requester?.email;
+    const requesterEmail = requester?.email;
 
-    if (email === undefined || email === null || email === "") {
+    if (requesterEmail === undefined || requesterEmail === null || requesterEmail === "") {
       throw new Error(`requester ${requester?.id} does not have an email`);
     }
 
-    if (email.endsWith("@tapped.ai")) {
+    if (requesterEmail.endsWith("@tapped.ai")) {
       debug(`requester ${requester?.id} email ends with @tapped.ai, skipping email`);
       return;
     }
@@ -245,7 +245,7 @@ export const sendBookingRequestSentEmailOnBooking = functions
     }
 
     await mailRef.add({
-      to: [ email ],
+      to: [ requesterEmail ],
       template: {
         name: "bookingRequestSent",
       },
@@ -259,13 +259,13 @@ export const sendBookingRequestReceivedEmailOnBooking = functions
     const booking = data.data() as Booking;
     const requesteeSnapshot = await usersRef.doc(booking.requesteeId).get();
     const requestee = requesteeSnapshot.data();
-    const email = requestee?.email;
+    const requesteeEmail = requestee?.email;
 
-    if (email === undefined || email === null || email === "") {
+    if (requesteeEmail === undefined || requesteeEmail === null || requesteeEmail === "") {
       throw new Error(`requestee ${requestee?.id} does not have an email`);
     }
 
-    if (email.endsWith("@tapped.ai")) {
+    if (requesteeEmail.endsWith("@tapped.ai")) {
       debug(`requestee ${requestee?.id} email ends with @tapped.ai, skipping email`);
       return;
     }
@@ -276,7 +276,7 @@ export const sendBookingRequestReceivedEmailOnBooking = functions
     }
 
     await mailRef.add({
-      to: [ email ],
+      to: [ requesteeEmail ],
       template: {
         name: "bookingRequestReceived",
       },

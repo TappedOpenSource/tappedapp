@@ -18,7 +18,7 @@ export const autoFollowUsersOnUserCreated = functions
       // "kNVsCCnDkFdYAxebMspLpnEudwq1", // Jayduhhhh
       // "xfxTCUerCyZCUB85likg7THcUGD2", // Yung Smilez
       // "EczWgsPTL1ROJ6EU93Q5vs0Osfx2", // Akimi
-      "yTIvDDidqjORseS764JZH01Nkds1", // Ryan
+      // "yTIvDDidqjORseS764JZH01Nkds1", // Ryan
     ];
 
     functions.logger.debug(`auto following users for ${userId}`)

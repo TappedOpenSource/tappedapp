@@ -2,11 +2,17 @@
 import * as functions from "firebase-functions";
 import { getFoundersDeviceTokens } from "./utils";
 import { fcm } from "./firebase";
+import { debug } from "firebase-functions/logger";
 
 export const notifyFoundersOnSignUp = functions
   .auth
   .user()
   .onCreate(async (user) => {
+    if (user.email?.endsWith("@tapped.ai")) {
+      debug("Skipping notification for tapped.ai user");
+      return;
+    }
+
     const devices = await getFoundersDeviceTokens();
     const payload = {
       notification: {

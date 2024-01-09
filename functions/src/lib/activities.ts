@@ -13,6 +13,7 @@ import { activitiesRef, fcm, tokensRef, usersRef } from "./firebase";
 import { Timestamp } from "firebase-admin/firestore";
 import { authenticated } from "./utils";
 import { messaging } from "firebase-admin";
+import { debug } from "firebase-functions/logger";
 
 export const sendToDevice = functions.firestore
   .document("activities/{activityId}")
@@ -23,6 +24,11 @@ export const sendToDevice = functions.firestore
     const user = userDoc.data();
     if (user === null || user === undefined) {
       throw new Error("User not found");
+    }
+
+    if (user.email?.endsWith("@tapped.ai")) {
+      debug("Skipping notification for tapped.ai user");
+      return;
     }
 
     const activityType = activity["type"];
