@@ -6,6 +6,7 @@ import 'package:intheloopapp/domains/models/user_model.dart';
 import 'package:intheloopapp/domains/navigation_bloc/navigation_bloc.dart';
 import 'package:intheloopapp/ui/profile/profile_cubit.dart';
 import 'package:intheloopapp/ui/themes.dart';
+import 'package:intheloopapp/utils/app_logger.dart';
 import 'package:intheloopapp/utils/bloc_utils.dart';
 import 'package:share_plus/share_plus.dart';
 
@@ -27,26 +28,38 @@ class MoreOptionsButton extends StatelessWidget {
         // message: Text(user.username.username),
         actions: <CupertinoActionSheetAction>[
           CupertinoActionSheetAction(
-            onPressed: () async {
+            onPressed: () {
               final link = 'https://tapped.ai/${user.username}';
-              await Share.share(link);
-              nav.pop();
+              Share.share(link);
             },
             child: const Text('share performer profile'),
           ),
           CupertinoActionSheetAction(
-            onPressed: () async {
+            onPressed: () {
               final link = 'https://tapped.ai/b/${user.username}';
-              await Share.share(link);
-              nav.pop();
+              Share.share(link);
             },
             child: const Text('share booker profile'),
           ),
           CupertinoActionSheetAction(
-            onPressed: () async {
-              final link = await dynamic.getShareProfileDeepLink(user);
-              await Share.share(link);
-              nav.pop();
+            onPressed: () {
+              dynamic
+                  .getShareProfileDeepLink(user)
+                  .then(Share.share)
+                  .onError((error, stackTrace) {
+                logger.error(
+                  'Error sharing profile',
+                  error: error,
+                  stackTrace: stackTrace,
+                );
+                ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(
+                    behavior: SnackBarBehavior.floating,
+                    backgroundColor: Colors.red,
+                    content: Text('Error sharing profile'),
+                  ),
+                );
+              });
             },
             child: const Text('share deep link'),
           ),
