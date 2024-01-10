@@ -33,7 +33,7 @@ Future<ImageProvider> getImageForLocation(
 
   if (image.isNone) {
     return const AssetImage(
-      'assets/images/placeholder_image.png',
+      'assets/images/default_avatar.png',
     );
   }
 
