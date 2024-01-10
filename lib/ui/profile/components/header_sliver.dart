@@ -76,7 +76,15 @@ class HeaderSliver extends StatelessWidget {
                 AdminBuilder(
                   builder: (context, isAdmin) {
                     return switch (isAdmin) {
-                      false => const SizedBox.shrink(),
+                      false => const Padding(
+                          padding: EdgeInsets.symmetric(
+                            vertical: 8,
+                          ),
+                          child: SizedBox(
+                            width: double.infinity,
+                            child: FeedbackButton(),
+                          ),
+                        ),
                       true => Padding(
                           padding: const EdgeInsets.symmetric(
                             vertical: 8,
@@ -99,16 +107,6 @@ class HeaderSliver extends StatelessWidget {
                         ),
                     };
                   },
-                )
-              else
-                const Padding(
-                  padding: EdgeInsets.symmetric(
-                    vertical: 8,
-                  ),
-                  child: SizedBox(
-                    width: double.infinity,
-                    child: FeedbackButton(),
-                  ),
                 ),
               const SizedBox(height: 8),
               SizedBox(

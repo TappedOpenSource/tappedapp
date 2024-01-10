@@ -6,7 +6,6 @@ import 'package:intheloopapp/domains/bookings_bloc/bookings_bloc.dart';
 import 'package:intheloopapp/domains/models/booking.dart';
 import 'package:intheloopapp/domains/models/user_model.dart';
 import 'package:intheloopapp/domains/navigation_bloc/navigation_bloc.dart';
-import 'package:intheloopapp/ui/themes.dart';
 import 'package:intheloopapp/ui/user_avatar.dart';
 import 'package:stream_chat_flutter/stream_chat_flutter.dart';
 

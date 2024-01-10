@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:intheloopapp/domains/navigation_bloc/navigation_bloc.dart';
 import 'package:intheloopapp/ui/forms/apple_login_button.dart';
 import 'package:intheloopapp/ui/forms/email_text_field.dart';
 import 'package:intheloopapp/ui/forms/google_login_button.dart';
@@ -22,8 +23,8 @@ class SignUpView extends StatelessWidget {
       backgroundColor: Theme.of(context).colorScheme.background,
       body: BlocProvider(
         create: (context) => LoginCubit(
-          authRepository: context.auth,
-          navigationBloc: context.nav,
+          auth: context.auth,
+          nav: context.nav,
         ),
         child: BlocBuilder<LoginCubit, LoginState>(
           builder: (context, state) {
@@ -96,37 +97,39 @@ class SignUpView extends StatelessWidget {
                         height: 25,
                       ),
                       GoogleLoginButton(
-                        onPressed: () async {
-                          try {
-                            await context.read<LoginCubit>().signInWithGoogle();
-                          } catch (e) {
+                        onPressed: () {
+                          context
+                              .read<LoginCubit>()
+                              .signInWithGoogle()
+                              .onError((error, stackTrace) {
                             ScaffoldMessenger.of(context).showSnackBar(
                               SnackBar(
                                 behavior: SnackBarBehavior.floating,
                                 backgroundColor: Colors.red,
-                                content: Text(e.toString()),
+                                content: Text(error.toString()),
                               ),
                             );
-                          }
+                          });
+                          context.pop();
                         },
                       ),
                       const SizedBox(height: 20),
                       if (Platform.isIOS)
                         AppleLoginButton(
-                          onPressed: () async {
-                            try {
-                              await context
-                                  .read<LoginCubit>()
-                                  .signInWithApple();
-                            } catch (e) {
+                          onPressed: () {
+                            context
+                                .read<LoginCubit>()
+                                .signInWithApple()
+                                .onError((error, stackTrace) {
                               ScaffoldMessenger.of(context).showSnackBar(
                                 SnackBar(
                                   behavior: SnackBarBehavior.floating,
                                   backgroundColor: Colors.red,
-                                  content: Text(e.toString()),
+                                  content: Text(error.toString()),
                                 ),
                               );
-                            }
+                            });
+                            context.pop();
                           },
                         )
                       else

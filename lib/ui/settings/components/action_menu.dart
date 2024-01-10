@@ -107,8 +107,10 @@ class ActionMenu extends StatelessWidget {
                       child: const Text('Continue'),
                       onPressed: () {
                         context.read<SettingsCubit>().logout();
-                        Navigator.pop(context);
-                        Navigator.pop(context);
+                        Navigator.of(context).pop();
+                        Navigator.of(context).popUntil(
+                          ModalRoute.withName('/'),
+                        );  
                       },
                     ),
                   ],

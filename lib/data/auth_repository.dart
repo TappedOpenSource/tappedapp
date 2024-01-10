@@ -2,13 +2,14 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:intheloopapp/domains/models/option.dart';
 
 abstract class AuthRepository {
-  Stream<User?> get user;
+  Stream<User?> get userChanges;
+  Stream<User?> get authStateChanges;
   Future<bool> isSignedIn();
   Future<String> getAuthUserId();
   Future<User?> getAuthUser();
   Future<bool> getAdminClaim();
   Future<Option<String>> getStripeClaim();
-  Future<String?> signInWithCredentials(
+  Future<Option<SignInPayload>> signInWithCredentials(
     String email,
     String password,
   );
@@ -16,11 +17,11 @@ abstract class AuthRepository {
     String email,
     String password,
   );
-  Future<String?> signUpWithCredentials(
+  Future<Option<SignInPayload>> signUpWithCredentials(
     String email,
     String password,
   );
-  Future<String> signInWithGoogle();
+  Future<Option<SignInPayload>> signInWithGoogle();
   Future<void> reauthenticateWithGoogle();
   Future<Option<SignInPayload>> signInWithApple();
   Future<void> reauthenticateWithApple();

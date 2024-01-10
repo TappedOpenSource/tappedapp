@@ -13,8 +13,8 @@ class LoginView extends StatelessWidget {
       backgroundColor: Theme.of(context).colorScheme.background,
       body: BlocProvider(
         create: (context) => LoginCubit(
-          authRepository: context.auth,
-          navigationBloc: context.nav,
+          auth: context.auth,
+          nav: context.nav,
         ),
         child: const LoginForm(),
       ),

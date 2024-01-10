@@ -79,25 +79,24 @@ class OnboardingForm extends StatelessWidget {
                   ),
                   const SizedBox(height: 20),
                   CupertinoButton.filled(
-                    onPressed: () async {
-                      try {
-                        await context
-                            .read<OnboardingFlowCubit>()
-                            .finishOnboarding();
-                      } catch (e, s) {
+                    onPressed: () {
+                      context
+                          .read<OnboardingFlowCubit>()
+                          .finishOnboarding()
+                          .onError((error, stackTrace) {
                         logger.error(
                           'Error completing onboarding',
-                          error: e,
-                          stackTrace: s,
+                          error: error,
+                          stackTrace: stackTrace,
                         );
                         ScaffoldMessenger.of(context).showSnackBar(
                           SnackBar(
                             behavior: SnackBarBehavior.floating,
                             backgroundColor: Colors.red,
-                            content: Text(e.toString()),
+                            content: Text(error.toString()),
                           ),
                         );
-                      }
+                      });
                     },
                     borderRadius: BorderRadius.circular(15),
                     child: const Text(
@@ -113,10 +112,7 @@ class OnboardingForm extends StatelessWidget {
                       context.authentication.add(LoggedOut());
                     },
                     child: const Text(
-                      'logout',
-                      style: TextStyle(
-                        color: Colors.black,
-                      ),
+                      'sign into a different account',
                     ),
                   ),
                 ],

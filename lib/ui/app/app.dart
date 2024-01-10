@@ -46,10 +46,7 @@ class App extends StatelessWidget {
         userId: currentAuthUserId,
       ),
     );
-    context.stream.connectUser(currentAuthUserId);
-    context.read<ActivityBloc>().add(InitListenerEvent());
     context.read<DeepLinkBloc>().add(MonitorDeepLinks());
-    context.bookings.add(FetchBookings());
 
     return BlocBuilder<OnboardingBloc, OnboardingState>(
       builder: (context, onboardState) {
@@ -58,6 +55,10 @@ class App extends StatelessWidget {
               context.notifications.saveDeviceToken(
                 userId: currentAuthUserId,
               );
+              context.stream.connectUser(currentAuthUserId);
+              context.read<ActivityBloc>().add(InitListenerEvent());
+              context.bookings.add(FetchBookings());
+
               return const ShellView();
             }(),
           Onboarding() => const OnboardingView(),
@@ -77,7 +78,7 @@ class App extends StatelessWidget {
         providers: blocs,
         child: BlocBuilder<PremiumThemeCubit, bool>(
           builder: (context, isPremium) {
-          final accentColor = isPremium ? Colors.purple : tappedAccent;
+            final accentColor = isPremium ? Colors.purple : tappedAccent;
             return BlocBuilder<AppThemeCubit, bool>(
               builder: (context, isDark) {
                 final appTheme = isDark
@@ -118,8 +119,10 @@ class App extends StatelessWidget {
 
                       return BlocBuilder<AuthenticationBloc,
                           AuthenticationState>(
-                        builder: (BuildContext context,
-                            AuthenticationState authState) {
+                        builder: (
+                          BuildContext context,
+                          AuthenticationState authState,
+                        ) {
                           try {
                             return switch (authState) {
                               Uninitialized() => const LoadingView(),

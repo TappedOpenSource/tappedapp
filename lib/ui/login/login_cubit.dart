@@ -2,17 +2,18 @@ import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:formz/formz.dart';
 import 'package:intheloopapp/data/auth_repository.dart';
+import 'package:intheloopapp/domains/models/option.dart';
 import 'package:intheloopapp/domains/navigation_bloc/navigation_bloc.dart';
 
 part 'login_state.dart';
 
 class LoginCubit extends Cubit<LoginState> {
   LoginCubit({
-    required this.authRepository,
-    required this.navigationBloc,
+    required this.auth,
+    required this.nav,
   }) : super(const LoginState());
-  final AuthRepository authRepository;
-  final NavigationBloc navigationBloc;
+  final AuthRepository auth;
+  final NavigationBloc nav;
 
   void resetStatus() => emit(
         state.copyWith(
@@ -38,14 +39,10 @@ class LoginCubit extends Cubit<LoginState> {
 
   Future<void> signInWithCredentials() async {
     try {
-      final uid = await authRepository.signInWithCredentials(
+      final uid = await auth.signInWithCredentials(
         state.email,
         state.password,
       );
-
-      if (uid == null) {
-        throw Exception('Failed to sign in');
-      }
       emit(
         state.copyWith(status: FormzSubmissionStatus.success),
       );
@@ -68,15 +65,12 @@ class LoginCubit extends Cubit<LoginState> {
       throw Exception('Passwords do not match');
     }
     try {
-      final uid = await authRepository.signUpWithCredentials(
+      final uid = await auth.signUpWithCredentials(
         state.email,
         state.password,
       );
 
-      if (uid == null) {
-        emit(
-          state.copyWith(status: FormzSubmissionStatus.failure),
-        );
+      if (uid.isNone) {
         throw Exception('Failed to create user');
       }
     } catch (e) {
@@ -89,7 +83,7 @@ class LoginCubit extends Cubit<LoginState> {
     emit(
       state.copyWith(status: FormzSubmissionStatus.success),
     );
-    navigationBloc.pop();
+    nav.pop();
   }
 
   Future<void> signInWithApple() async {
@@ -97,7 +91,7 @@ class LoginCubit extends Cubit<LoginState> {
       state.copyWith(status: FormzSubmissionStatus.inProgress),
     );
     try {
-      final _ = await authRepository.signInWithApple();
+      final _ = await auth.signInWithApple();
       emit(
         state.copyWith(status: FormzSubmissionStatus.success),
       );
@@ -115,7 +109,7 @@ class LoginCubit extends Cubit<LoginState> {
       state.copyWith(status: FormzSubmissionStatus.inProgress),
     );
     try {
-      await authRepository.signInWithGoogle();
+      await auth.signInWithGoogle();
       emit(
         state.copyWith(status: FormzSubmissionStatus.success),
       );
@@ -128,6 +122,6 @@ class LoginCubit extends Cubit<LoginState> {
   }
 
   Future<void> sendResetPasswordLink() async {
-    await authRepository.recoverPassword(email: state.email);
+    await auth.recoverPassword(email: state.email);
   }
 }

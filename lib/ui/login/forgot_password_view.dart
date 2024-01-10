@@ -24,8 +24,8 @@ class _ForgotPasswordViewState extends State<ForgotPasswordView> {
       ),
       body: BlocProvider(
         create: (context) => LoginCubit(
-          authRepository: context.auth,
-          navigationBloc: context.nav,
+          auth: context.auth,
+          nav: context.nav,
         ),
         child: BlocBuilder<LoginCubit, LoginState>(
           builder: (context, state) {

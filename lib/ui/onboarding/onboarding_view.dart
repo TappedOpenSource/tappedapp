@@ -6,6 +6,7 @@ import 'package:intheloopapp/domains/models/option.dart';
 import 'package:intheloopapp/ui/error/error_view.dart';
 import 'package:intheloopapp/ui/onboarding/components/onboarding_form.dart';
 import 'package:intheloopapp/ui/onboarding/onboarding_flow_cubit.dart';
+import 'package:intheloopapp/utils/app_logger.dart';
 import 'package:intheloopapp/utils/bloc_utils.dart';
 
 class OnboardingView extends StatelessWidget {
@@ -13,10 +14,18 @@ class OnboardingView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocSelector<AuthenticationBloc, AuthenticationState, Option<User>>(
-      selector: (state) =>
-          state is Authenticated ? Some(state.currentAuthUser) : const None(),
-      builder: (context, user) {
+    return BlocBuilder<AuthenticationBloc, AuthenticationState>(
+      builder: (context, state) {
+        if (state is! Authenticated) {
+          logger.info('user is authenticated');
+        }
+
+        final user = switch (state) {
+          Authenticated(:final currentAuthUser) => Some(currentAuthUser),
+          Unauthenticated() => const None<User>(),
+          Uninitialized() => const None<User>(),
+        };
+
         return switch (user) {
           None() => const ErrorView(),
           Some(:final value) => BlocProvider(

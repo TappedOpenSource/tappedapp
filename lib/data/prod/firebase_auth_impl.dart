@@ -35,12 +35,12 @@ String _sha256ofString(String input) {
 }
 
 class FirebaseAuthImpl extends AuthRepository {
-  Stream<String?> get userId => _auth.authStateChanges().map(
-        (user) => user?.uid,
-      );
 
   @override
-  Stream<User?> get user => _auth.userChanges();
+  Stream<User?> get authStateChanges => _auth.authStateChanges();
+
+  @override
+  Stream<User?> get userChanges => _auth.userChanges();
 
   @override
   Future<bool> isSignedIn() async {
@@ -89,7 +89,7 @@ class FirebaseAuthImpl extends AuthRepository {
   }
 
   @override
-  Future<String?> signInWithCredentials(
+  Future<Option<SignInPayload>> signInWithCredentials(
     String email,
     String password,
   ) async {
@@ -106,14 +106,24 @@ class FirebaseAuthImpl extends AuthRepository {
         name: 'sign_in',
       );
 
-      return uid;
+      if (uid == null) {
+        return const None();
+      }
+
+      return Some(
+        SignInPayload(
+          uid: uid,
+          displayName: email.split('@').first,
+          email: email,
+        ),
+      );
     } catch (e, s) {
       logger.error(
         'Error signing in with credentials',
         error: e,
         stackTrace: s,
       );
-      return null;
+      return const None();
     }
   }
 
@@ -130,7 +140,7 @@ class FirebaseAuthImpl extends AuthRepository {
   }
 
   @override
-  Future<String?> signUpWithCredentials(
+  Future<Option<SignInPayload>> signUpWithCredentials(
     String email,
     String password,
   ) async {
@@ -147,19 +157,29 @@ class FirebaseAuthImpl extends AuthRepository {
         name: 'sign_in',
       );
 
-      return uid;
+      if (uid == null) {
+        return const None();
+      }
+
+      return Some(
+        SignInPayload(
+          uid: uid,
+          displayName: email.split('@').first,
+          email: email,
+        ),
+      );
     } catch (e, s) {
       logger.error(
         'Error signing up with credentials',
         error: e,
         stackTrace: s,
       );
-      return null;
+      return const None();
     }
   }
 
   @override
-  Future<String> signInWithGoogle() async {
+  Future<Option<SignInPayload>> signInWithGoogle() async {
     try {
       // Trigger the authentication flow
       final googleUser = await GoogleSignIn().signIn();
@@ -186,25 +206,31 @@ class FirebaseAuthImpl extends AuthRepository {
 
       final signedInUser = authResult.user;
 
-      if (signedInUser != null) {
-        await _analytics.setUserId(id: signedInUser.uid);
-        await _analytics.logEvent(
-          name: 'sign_in',
-          parameters: {'provider': 'Google'},
-        );
-
-        return signedInUser.uid;
+      if (signedInUser == null) {
+        return const None();
       }
+      await _analytics.setUserId(id: signedInUser.uid);
+      await _analytics.logEvent(
+        name: 'sign_in',
+        parameters: {'provider': 'Google'},
+      );
+
+      return Some(
+        SignInPayload(
+          uid: signedInUser.uid,
+          displayName: signedInUser.displayName ?? '',
+          email: signedInUser.email ?? '',
+        ),
+      );
     } catch (e, s) {
       logger.error(
         'error signing in with google',
         error: e,
         stackTrace: s,
       );
-      rethrow;
-    }
 
-    return '';
+      return const None();
+    }
   }
 
   @override

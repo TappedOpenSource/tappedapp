@@ -17,7 +17,7 @@ class AuthenticationBloc
     required AuthRepository authRepository,
   })  : _authRepository = authRepository,
         super(Uninitialized()) {
-    _userSubscription = authRepository.user.listen(_onUserChanged);
+    _userSubscription = authRepository.authStateChanges.listen(_onUserChanged);
 
     on<AppStarted>((event, emit) async {
       try {
@@ -33,12 +33,9 @@ class AuthenticationBloc
         emit(Unauthenticated());
       }
     });
-    on<LoggedIn>((event, emit) async {
+    on<LoggedIn>((event, emit) {
       try {
-        return switch (event.user) {
-          None() => emit(Unauthenticated()),
-          Some(:final value) => emit(Authenticated(value)),
-        };
+        emit(Authenticated(event.user));
       } catch (e, s) {
         logger.error(
           'error logging in',
@@ -58,11 +55,13 @@ class AuthenticationBloc
   late final StreamSubscription<User?> _userSubscription;
 
   void _onUserChanged(User? user) {
-    print(user);
+    logger.info('user changed: $user');
 
-    if (user != null && state is! Authenticated) {
-      add(LoggedIn(user: Option.fromNullable(user)));
+    if (user == null || state is Authenticated) {
+      return;
     }
+
+    add(LoggedIn(user: user));
   }
 
   @override

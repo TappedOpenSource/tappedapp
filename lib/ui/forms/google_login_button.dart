@@ -13,6 +13,7 @@ class GoogleLoginButton extends StatelessWidget {
       onPressed: onPressed,
       color: Colors.white,
       borderRadius: BorderRadius.circular(15),
+      padding: const EdgeInsets.all(12),
       child: const Row(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [

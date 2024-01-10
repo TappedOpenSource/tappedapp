@@ -17,7 +17,7 @@ class LoggedIn extends AuthenticationEvent {
   const LoggedIn({
     required this.user,
   });
-  final Option<User> user;
+  final User user;
 
   @override
   String toString() => 'LoggedIn { user: $user }';

@@ -129,7 +129,7 @@ class CreateOpportunityCubit extends Cubit<CreateOpportunityState> {
 
       final uuid = const Uuid().v4();
       final flierUrl = await switch (state.pickedPhoto) {
-        None() => Future.value(null),
+        None() => Future.value(),
         Some(:final value) => () async {
             final url = await storage.uploadOpportunityFlier(
               opportunityId: uuid,
