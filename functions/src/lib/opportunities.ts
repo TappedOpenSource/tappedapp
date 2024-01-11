@@ -226,6 +226,9 @@ const _createMockOpportunities = async ({ count, openaiKey }: {
     "8ObJtER8PDUYKmQ0w7Tze0P6SHa2", // The Camel
     "FsQWuDwH5lZxEpd7TpwXi7fFKqj1", // Alley RVA
     "8R4gqTCxxzaNt1Bt4nLjqUEn6jd2", // Get Tight
+    "QGSNkGPB2wbEchwdD8VxJkhaBFN2", // VACU Ampitheatre
+    "jyz81JbwQycJoBzTTs4N724Gffc2", // The National
+    "tloWCuKGHYScMCp3YamsHKVi3XU2", // Brown's Island
   ];
 
   const virginiaVenues = await Promise.all(
