@@ -103,5 +103,9 @@ String formattedFullAddress(List<AddressComponent>? addressComponents) {
     defaultIdent: '',
   );
 
+  if (streetNumber.isEmpty && street.isEmpty) {
+    return '$city $zipCode';
+  }
+
   return '$streetNumber $street, $city $zipCode';
 }
