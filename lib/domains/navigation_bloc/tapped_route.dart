@@ -363,6 +363,7 @@ final class OpportunityPage extends TappedRoute {
     required this.opportunity,
     this.onApply,
     this.onDislike,
+    this.onDismiss,
     this.heroImage,
     this.titleHeroTag,
     this.showDislikeButton = true,
@@ -377,6 +378,7 @@ final class OpportunityPage extends TappedRoute {
             showAppBar: showAppBar,
             onApply: onApply,
             onDislike: onDislike,
+            onDismiss: onDismiss,
           ),
         );
 
@@ -387,6 +389,7 @@ final class OpportunityPage extends TappedRoute {
   final HeroImage? heroImage;
   final void Function()? onApply;
   final void Function()? onDislike;
+  final void Function()? onDismiss;
 }
 
 final class PaywallPage extends TappedRoute {

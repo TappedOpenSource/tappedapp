@@ -48,6 +48,7 @@ class OpportunityCard extends StatelessWidget {
               titleHeroTag: heroTitleTag,
               onApply: () => context.pop(),
               onDislike: () => context.pop(),
+              onDismiss: () => context.pop(),
             ),
           ),
           child: Column(

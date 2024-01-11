@@ -40,7 +40,7 @@ class ServiceView extends StatelessWidget {
         borderRadius: BorderRadius.circular(15),
         color: onSurfaceColor.withOpacity(0.1),
         child: Text(
-          'Edit Service',
+          'Save',
           style: TextStyle(
             fontWeight: FontWeight.w700,
             color: onSurfaceColor,
