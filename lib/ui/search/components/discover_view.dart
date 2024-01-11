@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:intheloopapp/domains/models/opportunity.dart';
 import 'package:intheloopapp/domains/models/user_model.dart';
+import 'package:intheloopapp/ui/profile/components/opportunities_list.dart';
 import 'package:intheloopapp/ui/profile/components/opportunity_card.dart';
 import 'package:intheloopapp/ui/user_card.dart';
 import 'package:intheloopapp/utils/bloc_utils.dart';
@@ -34,35 +35,36 @@ class DiscoverView extends StatelessWidget {
     );
   }
 
-  Widget _opSlider(List<Opportunity> opportunities, double cardWidth) {
+  Widget _opSlider(List<Opportunity> opportunities) {
     if (opportunities.isEmpty) {
       return const Center(
         child: Text('None rn'),
       );
     }
-    return SizedBox(
-      height: 250,
-      child: ScrollSnapList(
-        onItemFocus: (int index) {},
-        // selectedItemAnchor: SelectedItemAnchor.START,
-        itemSize: cardWidth + 16,
-        itemBuilder: (context, index) {
-          final op = opportunities[index];
-          return Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 8),
-            child: OpportunityCard(opportunity: op),
-          );
-        },
-        itemCount: opportunities.length,
-        // key: sslKey,
-      ),
-    );
+    return OpportunitiesList(opportunities: opportunities);
+
+    // return SizedBox(
+    //   height: 250,
+    //   child: ScrollSnapList(
+    //     onItemFocus: (int index) {},
+    //     // selectedItemAnchor: SelectedItemAnchor.START,
+    //     itemSize: cardWidth + 16,
+    //     itemBuilder: (context, index) {
+    //       final op = opportunities[index];
+    //       return Padding(
+    //         padding: const EdgeInsets.symmetric(horizontal: 8),
+    //         child: OpportunityCard(opportunity: op),
+    //       );
+    //     },
+    //     itemCount: opportunities.length,
+    //     // key: sslKey,
+    //   ),
+    // );
   }
 
   @override
   Widget build(BuildContext context) {
     final database = context.database;
-    final cardWidth = MediaQuery.of(context).size.width - 48;
     return FutureBuilder<List<List<UserModel>>>(
       future: Future.wait([
         database.getRichmondVenues(),
@@ -102,7 +104,7 @@ class DiscoverView extends StatelessWidget {
                   }
 
                   final opportunities = snapshot.data!;
-                  return _opSlider(opportunities, cardWidth);
+                  return _opSlider(opportunities);
                 },
               ),
               const Padding(

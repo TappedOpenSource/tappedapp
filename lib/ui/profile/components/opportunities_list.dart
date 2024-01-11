@@ -20,14 +20,14 @@ class OpportunitiesList extends StatelessWidget {
           child: ScrollSnapList(
             onItemFocus: (index) {},
             itemSize: MediaQuery.of(context).size.width - 40,
-            itemCount: opportunities.length + 1,
+            itemCount: opportunities.length,
             itemBuilder: (context, index) {
-              if (index == opportunities.length) {
-                return Container(
-                  width: MediaQuery.of(context).size.width - 40,
-                  color: Colors.transparent,
-                );
-              }
+              // if (index == opportunities.length) {
+              //   return Container(
+              //     width: MediaQuery.of(context).size.width - 40,
+              //     color: Colors.transparent,
+              //   );
+              // }
 
               final opportunity = opportunities[index];
               return Padding(

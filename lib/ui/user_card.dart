@@ -51,6 +51,24 @@ class _UserCardState extends State<UserCard> {
                   );
                 }
 
+                if (isFollowing) {
+                  return IconButton(
+                    onPressed: () async {
+                      await database.unfollowUser(
+                        currentUser.id,
+                        widget.user.id,
+                      );
+                      setState(() {
+                        followingOverride = true;
+                      });
+                    },
+                    icon: const Icon(
+                      Icons.check_circle,
+                      color: Colors.white,
+                    ),
+                  );
+                }
+
                 return IconButton(
                   onPressed: () async {
                     await database.followUser(
