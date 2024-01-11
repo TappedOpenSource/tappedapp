@@ -11,7 +11,7 @@ part 'onboarding_state.dart';
 class OnboardingBloc extends Bloc<OnboardingEvent, OnboardingState> {
   OnboardingBloc({
     required this.databaseRepository,
-  }) : super(Onboarding()) {
+  }) : super(Unonboarded()) {
     on<OnboardingCheck>((event, emit) async {
       try {
         logger.debug('checking onboarding status');
