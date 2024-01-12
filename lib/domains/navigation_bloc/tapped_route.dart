@@ -369,7 +369,7 @@ final class OpportunityPage extends TappedRoute {
     this.showDislikeButton = true,
     this.showAppBar = true,
   }) : super(
-          routeName: '/op/${opportunity.id}',
+          routeName: '/opportunity/${opportunity.id}',
           view: OpportunityView(
             opportunity: opportunity,
             heroImage: heroImage,

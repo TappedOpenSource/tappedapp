@@ -128,7 +128,7 @@ class OpportunityView extends StatelessWidget {
                           child: GestureDetector(
                             onTap: () async {
                               final link =
-                                  'https://tapped.ai/op/${opportunity.id}';
+                                  'https://tapped.ai/opportunity/${opportunity.id}';
                               await Share.share(link);
                             },
                             child: const Padding(

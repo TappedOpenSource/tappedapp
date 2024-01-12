@@ -3,6 +3,8 @@ import 'dart:async';
 import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:firebase_dynamic_links/firebase_dynamic_links.dart';
 import 'package:intheloopapp/data/deep_link_repository.dart';
+import 'package:intheloopapp/domains/models/opportunity.dart';
+import 'package:intheloopapp/domains/models/option.dart';
 import 'package:intheloopapp/domains/models/user_model.dart';
 import 'package:intheloopapp/utils/app_logger.dart';
 
@@ -62,13 +64,13 @@ class FirebaseDynamicLinkImpl extends DeepLinkRepository {
           type: DeepLinkType.shareProfile,
           id: userId,
         );
-      // case '/loop':
-      //   final linkParameters = deepLink.queryParameters;
-      //   final loopId = linkParameters['id'] ?? '';
-      //   return DeepLinkRedirect(
-      //     type: DeepLinkType.shareLoop,
-      //     id: loopId,
-      //   );
+      case '/opportunity':
+        final linkParameters = deepLink.queryParameters;
+        final opportunityId = linkParameters['id'] ?? '';
+        return DeepLinkRedirect(
+          type: DeepLinkType.shareOpportunity,
+          id: opportunityId,
+        );
       case '/connect_payment':
         final linkParameters = deepLink.queryParameters;
         final accountId = linkParameters['account_id'];
@@ -113,8 +115,7 @@ class FirebaseDynamicLinkImpl extends DeepLinkRepository {
       ),
       socialMetaTagParameters: SocialMetaTagParameters(
         title: '${user.displayName} on Tapped',
-        description:
-            '''Tapped Network - The online platform tailored for producers and creators to share their loops to the world, get feedback on their music, and join the world-wide community of artists to collaborate with''',
+        description: '''Tapped Ai - apply to perform for FREE''',
         imageUrl: imageUri,
       ),
     );
@@ -125,6 +126,43 @@ class FirebaseDynamicLinkImpl extends DeepLinkRepository {
     await _analytics.logShare(
       contentType: 'user',
       itemId: user.id,
+      method: 'dynamic_link',
+    );
+
+    return shortUrl.toString();
+  }
+
+  @override
+  Future<String> getShareOpportunityDeepLink(Opportunity opportunity) async {
+    final imageUri = switch (opportunity.flierUrl) {
+      None() => Uri.parse('https://tapped.ai/images/tapped_reverse.png'),
+      Some(:final value) => Uri.parse(value),
+    };
+
+    final parameters = DynamicLinkParameters(
+      uriPrefix: 'https://tappednetwork.page.link',
+      link: Uri.parse(
+        'https://tappednetwork.page.link/opportunity?id=${opportunity.id}',
+      ),
+      androidParameters: const AndroidParameters(
+        packageName: 'com.intheloopstudio',
+      ),
+      iosParameters: const IOSParameters(
+        bundleId: 'com.intheloopstudio',
+      ),
+      socialMetaTagParameters: SocialMetaTagParameters(
+        title: '${opportunity.title} on Tapped',
+        description: 'Apply for FREE on Tapped Ai - ${opportunity.description}',
+        imageUrl: imageUri,
+      ),
+    );
+
+    final shortDynamicLink = await _dynamicLinks.buildShortLink(parameters);
+    final shortUrl = shortDynamicLink.shortUrl;
+
+    await _analytics.logShare(
+      contentType: 'opportunity',
+      itemId: opportunity.id,
       method: 'dynamic_link',
     );
 
