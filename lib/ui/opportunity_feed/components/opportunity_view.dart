@@ -3,8 +3,10 @@ import 'dart:ui';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:intheloopapp/data/database_repository.dart';
+import 'package:intheloopapp/data/deep_link_repository.dart';
 import 'package:intheloopapp/data/places_repository.dart';
 import 'package:intheloopapp/domains/models/opportunity.dart';
 import 'package:intheloopapp/domains/models/option.dart';
@@ -71,6 +73,7 @@ class OpportunityView extends StatelessWidget {
   Widget buildOpportunityView(BuildContext context) {
     final hero = heroImage;
     final places = context.places;
+    final deepLinks = context.read<DeepLinkRepository>();
     final theme = Theme.of(context);
     return SingleChildScrollView(
       physics: const AlwaysScrollableScrollPhysics(),
@@ -128,7 +131,9 @@ class OpportunityView extends StatelessWidget {
                           child: GestureDetector(
                             onTap: () async {
                               final link =
-                                  'https://tapped.ai/opportunity/${opportunity.id}';
+                                  await deepLinks.getShareOpportunityDeepLink(
+                                opportunity,
+                              );
                               await Share.share(link);
                             },
                             child: const Padding(

@@ -105,8 +105,8 @@ class FirebaseDynamicLinkImpl extends DeepLinkRepository {
         : Uri.parse(user.profilePicture!);
 
     final parameters = DynamicLinkParameters(
-      uriPrefix: 'https://tappednetwork.page.link',
-      link: Uri.parse('https://tappednetwork.page.link/user?id=${user.id}'),
+      uriPrefix: 'https://tapped.ai',
+      link: Uri.parse('https://tapped.ai/user?id=${user.id}'),
       androidParameters: const AndroidParameters(
         packageName: 'com.intheloopstudio',
       ),
@@ -140,9 +140,9 @@ class FirebaseDynamicLinkImpl extends DeepLinkRepository {
     };
 
     final parameters = DynamicLinkParameters(
-      uriPrefix: 'https://tappednetwork.page.link',
+      uriPrefix: 'https://tapped.ai',
       link: Uri.parse(
-        'https://tappednetwork.page.link/opportunity?id=${opportunity.id}',
+        'https://tapped.ai/opportunity?id=${opportunity.id}',
       ),
       androidParameters: const AndroidParameters(
         packageName: 'com.intheloopstudio',
