@@ -146,89 +146,94 @@ class _UserCardState extends State<UserCard> {
                         titleHeroTag: heroTitleTag,
                       ),
                     ),
-                    child: Hero(
-                      tag: heroImageTag,
-                      child: Container(
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(10),
-                          image: DecorationImage(
-                            fit: BoxFit.cover,
-                            image: provider,
+                    child: Stack(
+                      fit: StackFit.expand,
+                      children: [
+                        Hero(
+                          tag: heroImageTag,
+                          child: Container(
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(10),
+                              image: DecorationImage(
+                                fit: BoxFit.cover,
+                                image: provider,
+                              ),
+                            ),
+                            // leading: UserAvatar(
+                            //   radius: 25,
+                            //   pushUser: Some(widget.user),
+                            //   imageUrl: widget.user.profilePicture,
+                            //   verified: verified,
+                            // ),
                           ),
                         ),
-                        // leading: UserAvatar(
-                        //   radius: 25,
-                        //   pushUser: Some(widget.user),
-                        //   imageUrl: widget.user.profilePicture,
-                        //   verified: verified,
-                        // ),
-                      ),
-                    ),
-                  ),
-                  Row(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    mainAxisAlignment: MainAxisAlignment.end,
-                    children: [
-                      _followButton(
-                        currentUser,
-                        database,
-                      ),
-                    ],
-                  ),
-                  Container(
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(10),
-                      gradient: const LinearGradient(
-                        begin: Alignment.topCenter,
-                        end: Alignment.bottomCenter,
-                        colors: [
-                          Colors.transparent,
-                          Colors.black,
-                        ],
-                      ),
-                    ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(
-                      vertical: 8,
-                      horizontal: 8,
-                    ),
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.end,
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        RichText(
-                          text: TextSpan(
-                            text: widget.user.displayName,
-                            style: const TextStyle(
-                              fontWeight: FontWeight.bold,
-                              color: Colors.white,
+                        Container(
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(10),
+                            gradient: const LinearGradient(
+                              begin: Alignment.topCenter,
+                              end: Alignment.bottomCenter,
+                              colors: [
+                                Colors.transparent,
+                                Colors.black,
+                              ],
                             ),
+                          ),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.symmetric(
+                            vertical: 8,
+                            horizontal: 8,
+                          ),
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.end,
+                            crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              if (verified)
-                                const WidgetSpan(
-                                  child: Padding(
-                                    padding: EdgeInsets.only(left: 4),
-                                    child: Icon(
-                                      Icons.verified,
-                                      size: 16,
-                                      color: Colors.white,
-                                    ),
+                              RichText(
+                                text: TextSpan(
+                                  text: widget.user.displayName,
+                                  style: const TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                    color: Colors.white,
                                   ),
+                                  children: [
+                                    if (verified)
+                                      const WidgetSpan(
+                                        child: Padding(
+                                          padding: EdgeInsets.only(left: 4),
+                                          child: Icon(
+                                            Icons.verified,
+                                            size: 16,
+                                            color: Colors.white,
+                                          ),
+                                        ),
+                                      ),
+                                  ],
                                 ),
+                              ),
+                              Text(
+                                audienceText,
+                                style: const TextStyle(
+                                  color: Colors.white,
+                                ),
+                              ),
+                              // _followButton(
+                              //   currentUser,
+                              //   database,
+                              // ),
                             ],
                           ),
                         ),
-                        Text(
-                          audienceText,
-                          style: const TextStyle(
-                            color: Colors.white,
-                          ),
+                        Row(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          mainAxisAlignment: MainAxisAlignment.end,
+                          children: [
+                            _followButton(
+                              currentUser,
+                              database,
+                            ),
+                          ],
                         ),
-                        // _followButton(
-                        //   currentUser,
-                        //   database,
-                        // ),
                       ],
                     ),
                   ),

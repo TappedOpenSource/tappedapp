@@ -187,8 +187,9 @@ class OpportunityView extends StatelessWidget {
                     }
 
                     final place = snapshot.data!;
-                    final formattedAddress =
-                        formattedFullAddress(place.addressComponents);
+                    final formattedAddress = formattedFullAddress(
+                      place.addressComponents,
+                    );
                     return GestureDetector(
                       onTap: () => MapsLauncher.launchQuery(
                         formattedAddress,
