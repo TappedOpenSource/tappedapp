@@ -2,7 +2,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:intheloopapp/domains/models/opportunity.dart';
 import 'package:intheloopapp/domains/models/user_model.dart';
 import 'package:intheloopapp/ui/profile/components/opportunities_list.dart';
-import 'package:intheloopapp/ui/profile/components/opportunity_card.dart';
 import 'package:intheloopapp/ui/user_card.dart';
 import 'package:intheloopapp/utils/bloc_utils.dart';
 import 'package:scroll_snap_list/scroll_snap_list.dart';
@@ -67,15 +66,21 @@ class DiscoverView extends StatelessWidget {
     final database = context.database;
     return FutureBuilder<List<List<UserModel>>>(
       future: Future.wait([
+        database.getDCVenues(),
+        database.getNovaVenues(),
+        database.getMarylandVenues(),
         database.getRichmondVenues(),
         database.getBookingLeaders(),
         database.getBookerLeaders(),
       ]),
       builder: (context, snapshot) {
-        final leaders = snapshot.data ?? [[], [], []];
-        final richmondVenues = leaders[0];
-        final bookingLeaders = leaders[1];
-        final bookerLeaders = leaders[2];
+        final leaders = snapshot.data ?? [[], [], [], [], [], []];
+        final dcVenues = leaders[0];
+        final novaVenues = leaders[1];
+        final marylandVenues = leaders[2];
+        final richmondVenues = leaders[3];
+        final bookingLeaders = leaders[4];
+        final bookerLeaders = leaders[5];
 
         return SingleChildScrollView(
           child: Column(
@@ -135,6 +140,48 @@ class DiscoverView extends StatelessWidget {
                 ),
               ),
               _userSlider(richmondVenues),
+              const Padding(
+                padding: EdgeInsets.symmetric(
+                  vertical: 16,
+                  horizontal: 8,
+                ),
+                child: Text(
+                  'Top DC Venues',
+                  style: TextStyle(
+                    fontSize: 28,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              ),
+              _userSlider(dcVenues),
+              const Padding(
+                padding: EdgeInsets.symmetric(
+                  vertical: 16,
+                  horizontal: 8,
+                ),
+                child: Text(
+                  'Top NoVa Venues',
+                  style: TextStyle(
+                    fontSize: 28,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              ),
+              _userSlider(novaVenues),
+              const Padding(
+                padding: EdgeInsets.symmetric(
+                  vertical: 16,
+                  horizontal: 8,
+                ),
+                child: Text(
+                  'Top Maryland Venues',
+                  style: TextStyle(
+                    fontSize: 28,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              ),
+              _userSlider(marylandVenues),
               const Padding(
                 padding: EdgeInsets.symmetric(
                   vertical: 16,

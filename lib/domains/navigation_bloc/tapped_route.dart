@@ -360,6 +360,7 @@ final class WaitlistPage extends TappedRoute {
 
 final class OpportunityPage extends TappedRoute {
   OpportunityPage({
+    required this.opportunityId,
     required this.opportunity,
     this.onApply,
     this.onDislike,
@@ -369,8 +370,9 @@ final class OpportunityPage extends TappedRoute {
     this.showDislikeButton = true,
     this.showAppBar = true,
   }) : super(
-          routeName: '/opportunity/${opportunity.id}',
+          routeName: '/opportunity/$opportunityId',
           view: OpportunityView(
+            opportunityId: opportunityId,
             opportunity: opportunity,
             heroImage: heroImage,
             titleHeroTag: titleHeroTag,
@@ -382,7 +384,8 @@ final class OpportunityPage extends TappedRoute {
           ),
         );
 
-  final Opportunity opportunity;
+  final String opportunityId;
+  final Option<Opportunity> opportunity;
   final bool showDislikeButton;
   final bool showAppBar;
   final String? titleHeroTag;

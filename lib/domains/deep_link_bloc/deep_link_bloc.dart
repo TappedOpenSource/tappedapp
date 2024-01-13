@@ -55,6 +55,15 @@ class DeepLinkBloc extends Bloc<DeepLinkEvent, DeepLinkState> {
                   ),
                 );
               }
+            case DeepLinkType.shareOpportunity:
+              if (event.id != null) {
+                navBloc.push(
+                  OpportunityPage(
+                    opportunityId: event.id!,
+                    opportunity: const None(),
+                  ),
+                );
+              }
             case DeepLinkType.connectStripeRedirect:
               if (event.id == null || event.id == '') {
                 break;

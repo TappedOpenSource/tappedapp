@@ -67,13 +67,29 @@ class ProfileView extends StatelessWidget {
           child: child,
         );
       },
-      child: Container(
-        decoration: BoxDecoration(
-          image: DecorationImage(
-            fit: BoxFit.cover,
-            image: _getProfileImage(profilePicture),
+      child: Stack(
+        children: [
+          Container(
+            decoration: BoxDecoration(
+              image: DecorationImage(
+                fit: BoxFit.cover,
+                image: _getProfileImage(profilePicture),
+              ),
+            ),
           ),
-        ),
+          Container(
+            decoration: BoxDecoration(
+              gradient: LinearGradient(
+                begin: Alignment.topCenter,
+                end: Alignment.bottomCenter,
+                colors: [
+                  Colors.transparent,
+                  Colors.black.withOpacity(0.5),
+                ],
+              ),
+            ),
+          ),
+        ],
       ),
     );
   }

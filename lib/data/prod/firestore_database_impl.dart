@@ -329,6 +329,62 @@ class FirestoreDatabaseImpl extends DatabaseRepository {
   }
 
   @override
+  Future<List<UserModel>> getDCVenues() async {
+    final leadersSnapshot = await _leadersRef.doc('leaders').get();
+
+    final leadingUsernames = leadersSnapshot.getOrElse('dcVenues', <dynamic>[]);
+
+    final leaders = await Future.wait(
+      leadingUsernames.map(
+        (username) async {
+          final user = await getUserByUsername(username as String);
+          return user;
+        },
+      ),
+    );
+
+    return leaders.whereType<Some<UserModel>>().map((e) => e.unwrap).toList();
+  }
+
+  @override
+  Future<List<UserModel>> getNovaVenues() async {
+    final leadersSnapshot = await _leadersRef.doc('leaders').get();
+
+    final leadingUsernames =
+        leadersSnapshot.getOrElse('noVaVenues', <dynamic>[]);
+
+    final leaders = await Future.wait(
+      leadingUsernames.map(
+        (username) async {
+          final user = await getUserByUsername(username as String);
+          return user;
+        },
+      ),
+    );
+
+    return leaders.whereType<Some<UserModel>>().map((e) => e.unwrap).toList();
+  }
+
+  @override
+  Future<List<UserModel>> getMarylandVenues() async {
+    final leadersSnapshot = await _leadersRef.doc('leaders').get();
+
+    final leadingUsernames =
+        leadersSnapshot.getOrElse('marylandVenues', <dynamic>[]);
+
+    final leaders = await Future.wait(
+      leadingUsernames.map(
+        (username) async {
+          final user = await getUserByUsername(username as String);
+          return user;
+        },
+      ),
+    );
+
+    return leaders.whereType<Some<UserModel>>().map((e) => e.unwrap).toList();
+  }
+
+  @override
   Future<List<UserModel>> getBookingLeaders() async {
     final leadersSnapshot = await _leadersRef.doc('leaders').get();
 
@@ -381,7 +437,7 @@ class FirestoreDatabaseImpl extends DatabaseRepository {
       ),
     );
 
-    return ops;
+    return ops.whereType<Some<Opportunity>>().map((e) => e.unwrap).toList();
   }
 
   @override
@@ -1317,14 +1373,18 @@ class FirestoreDatabaseImpl extends DatabaseRepository {
   }
 
   @override
-  Future<Opportunity> getOpportunityById(String opportunityId) async {
+  Future<Option<Opportunity>> getOpportunityById(String opportunityId) async {
     try {
       final opportunitySnapshot =
           await _opportunitiesRef.doc(opportunityId).get();
 
+      if (!opportunitySnapshot.exists) {
+        return const None();
+      }
+
       final opportunity = Opportunity.fromDoc(opportunitySnapshot);
 
-      return opportunity;
+      return Some(opportunity);
     } catch (e, s) {
       logger.error('getOpportunityById', error: e, stackTrace: s);
       rethrow;
@@ -1372,7 +1432,9 @@ class FirestoreDatabaseImpl extends DatabaseRepository {
           .orderBy('startTime', descending: true)
           .get();
 
-      logger.info('userOpportunitiesSnapshot ${userOpportunitiesSnapshot.docs.length}');
+      logger.info(
+        'userOpportunitiesSnapshot ${userOpportunitiesSnapshot.docs.length}',
+      );
 
       final opportunities =
           userOpportunitiesSnapshot.docs.map(Opportunity.fromDoc).toList();

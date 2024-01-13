@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:intheloopapp/domains/models/opportunity.dart';
+import 'package:intheloopapp/domains/models/option.dart';
 import 'package:intheloopapp/domains/navigation_bloc/navigation_bloc.dart';
 import 'package:intheloopapp/domains/navigation_bloc/tapped_route.dart';
 import 'package:intheloopapp/utils/hero_image.dart';
@@ -40,7 +41,8 @@ class OpportunityCard extends StatelessWidget {
         return InkWell(
           onTap: () => context.push(
             OpportunityPage(
-              opportunity: opportunity,
+              opportunityId: opportunity.id,
+              opportunity: Some(opportunity),
               heroImage: HeroImage(
                 imageProvider: provider,
                 heroTag: heroImageTag,

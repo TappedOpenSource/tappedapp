@@ -29,6 +29,7 @@ import 'package:skeleton_text/skeleton_text.dart';
 
 class OpportunityView extends StatelessWidget {
   const OpportunityView({
+    required this.opportunityId,
     required this.opportunity,
     this.onApply,
     this.onDislike,
@@ -40,7 +41,8 @@ class OpportunityView extends StatelessWidget {
     super.key,
   });
 
-  final Opportunity opportunity;
+  final String opportunityId;
+  final Option<Opportunity> opportunity;
   final bool showDislikeButton;
   final bool showAppBar;
   final HeroImage? heroImage;
@@ -70,7 +72,7 @@ class OpportunityView extends StatelessWidget {
         ),
       );
 
-  Widget buildOpportunityView(BuildContext context) {
+  Widget buildOpportunityView(BuildContext context, Opportunity op) {
     final hero = heroImage;
     final places = context.places;
     final deepLinks = context.read<DeepLinkRepository>();
@@ -82,7 +84,7 @@ class OpportunityView extends StatelessWidget {
         children: [
           if (hero == null)
             FutureBuilder<ImageProvider>(
-              future: getOpImage(context, opportunity),
+              future: getOpImage(context, op),
               builder: (context, snapshot) {
                 if (!snapshot.hasData) {
                   return SkeletonAnimation(
@@ -118,7 +120,7 @@ class OpportunityView extends StatelessWidget {
                   ),
                   child: RichText(
                     text: TextSpan(
-                      text: opportunity.title,
+                      text: op.title,
                       style: TextStyle(
                         fontSize: 32,
                         fontFamily: 'Rubik One',
@@ -132,7 +134,7 @@ class OpportunityView extends StatelessWidget {
                             onTap: () async {
                               final link =
                                   await deepLinks.getShareOpportunityDeepLink(
-                                opportunity,
+                                op,
                               );
                               await Share.share(link);
                             },
@@ -160,7 +162,7 @@ class OpportunityView extends StatelessWidget {
                   ),
                 ),
                 UserTile(
-                  userId: opportunity.userId,
+                  userId: op.userId,
                   user: const None(),
                 ),
                 const SizedBox(height: 12),
@@ -172,7 +174,7 @@ class OpportunityView extends StatelessWidget {
                   ),
                 ),
                 Text(
-                  opportunity.description,
+                  op.description,
                 ),
                 const SizedBox(height: 12),
                 const Text(
@@ -184,7 +186,7 @@ class OpportunityView extends StatelessWidget {
                 ),
                 FutureBuilder<PlaceData?>(
                   future: places.getPlaceById(
-                    opportunity.placeId,
+                    op.placeId,
                   ),
                   builder: (context, snapshot) {
                     if (!snapshot.hasData) {
@@ -217,7 +219,7 @@ class OpportunityView extends StatelessWidget {
                   ),
                 ),
                 Text(
-                  DateFormat('MM/dd/yyyy').format(opportunity.startTime),
+                  DateFormat('MM/dd/yyyy').format(op.startTime),
                 ),
                 const SizedBox(height: 12),
                 const Text(
@@ -231,11 +233,11 @@ class OpportunityView extends StatelessWidget {
                   children: [
                     Icon(
                       CupertinoIcons.money_dollar_circle_fill,
-                      color: opportunity.isPaid ? Colors.green : Colors.red,
+                      color: op.isPaid ? Colors.green : Colors.red,
                     ),
                     const SizedBox(width: 6),
                     Text(
-                      opportunity.isPaid ? 'paid' : 'unpaid',
+                      op.isPaid ? 'paid' : 'unpaid',
                     ),
                   ],
                 ),
@@ -251,14 +253,15 @@ class OpportunityView extends StatelessWidget {
   Widget buildApplyButton(
     OpportunityBloc opBloc,
     DatabaseRepository database,
+    Opportunity op,
   ) {
     return CurrentUserBuilder(
       builder: (context, currentUser) {
-        if (opportunity.userId == currentUser.id) {
+        if (op.userId == currentUser.id) {
           return CupertinoButton.filled(
             onPressed: () => context.push(
               InterestedUsersPage(
-                opportunity: opportunity,
+                opportunity: op,
               ),
             ),
             child: const Text('see who applied'),
@@ -267,7 +270,7 @@ class OpportunityView extends StatelessWidget {
 
         return FutureBuilder(
           future: database.isUserAppliedForOpportunity(
-            opportunity: opportunity,
+            opportunity: op,
             userId: currentUser.id,
           ),
           builder: (context, snapshot) {
@@ -286,7 +289,7 @@ class OpportunityView extends StatelessWidget {
                       onPressed: () {
                         opBloc.add(
                           DislikeOpportunity(
-                            opportunity: opportunity,
+                            opportunity: op,
                           ),
                         );
                         onDislike?.call();
@@ -309,7 +312,7 @@ class OpportunityView extends StatelessWidget {
                             HapticFeedback.mediumImpact();
                             opBloc.add(
                               ApplyForOpportunity(
-                                opportunity: opportunity,
+                                opportunity: op,
                                 userComment: '',
                               ),
                             );
@@ -357,23 +360,60 @@ class OpportunityView extends StatelessWidget {
     return Scaffold(
       backgroundColor: theme.colorScheme.background,
       appBar: showAppBar ? AppBar() : null,
-      body: Stack(
-        alignment: Alignment.center,
-        children: [
-          Positioned.fill(
-            child: buildOpportunityView(
-              context,
-            ),
+      body: switch (opportunity) {
+        None() => FutureBuilder<Option<Opportunity>>(
+            future: database.getOpportunityById(opportunityId),
+            builder: (context, snapshot) {
+              final op = snapshot.data;
+              return switch (op) {
+                null => const Center(
+                    child: CupertinoActivityIndicator(),
+                  ),
+                None() => const Center(
+                    child: Text('error'),
+                  ),
+                Some(:final value) => Stack(
+                    alignment: Alignment.center,
+                    children: [
+                      Positioned.fill(
+                        child: buildOpportunityView(
+                          context,
+                          value,
+                        ),
+                      ),
+                      Positioned(
+                        bottom: 42,
+                        child: buildApplyButton(
+                          opBloc,
+                          database,
+                          value,
+                        ),
+                      ),
+                    ],
+                  ),
+              };
+            },
           ),
-          Positioned(
-            bottom: 42,
-            child: buildApplyButton(
-              opBloc,
-              database,
-            ),
+        Some(:final value) => Stack(
+            alignment: Alignment.center,
+            children: [
+              Positioned.fill(
+                child: buildOpportunityView(
+                  context,
+                  value,
+                ),
+              ),
+              Positioned(
+                bottom: 42,
+                child: buildApplyButton(
+                  opBloc,
+                  database,
+                  value,
+                ),
+              ),
+            ],
           ),
-        ],
-      ),
+      },
     );
   }
 }
