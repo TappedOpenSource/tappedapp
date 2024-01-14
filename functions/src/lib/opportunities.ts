@@ -43,6 +43,132 @@ const virginiaVenueIds = [
   "S506h6zIMLM3BPtnEuiJWEFtrbh2", // The Loud
 ];
 
+const dcVenueIds = [
+  "00ZIBU93q0eLmzuPu5qliQHnDE92",
+  "5KXpcoAMYGW8q2PBF2WntltjC6z2",
+  "7MIWjtTGTHRSf1kppWmtntuQs2l2",
+  "cvdmcGyu7wMsBQMZbdCthXq1CCX2",
+  "tm3MiUbcpQQwAvqwTsOY5kJM1mQ2",
+  "Qar0DrUBCDerthNqajKM51LSzFn2",
+  "tga3oqoyIDXYozsKtkpus3gpMeP2",
+  "EyRV4VE5zbPLWdmsHew4KSvRCt72",
+  "RzQD4ooYk2Ss56aW5dc6DulaaDw1",
+  "kgTTomDB24OXOZlUwKuqLU8UdAW2",
+  "L5eCmlC8Ctg5NfB4J8VAo6FZFrH2",
+  "Qa2sP9JDgrX3cRuY3GyzBCpXW8c2",
+  "Y39CGyTENNRbFhgGa3aXZQXNgBb2",
+  "FzQEr1y6FRgPKDw27v6vmSFIoEr1",
+  "RsIn7VT7eseAw6DdvLnFvRGLMqy1",
+  "oH56wniKfvYa95OWTf5WANOxAbj2",
+  "GiLBU7RIAwdNw4kzfIi6O8dGebF2",
+  "NXhLa2fRxYee1FcpN4eEHM0LSxq1",
+  "QiZjKYKkrbN7ess6NvmGRp6Y5sr1",
+  "vdtlKMOSp9bEvw2ffZW0Pek95Xa2",
+  "YpqhcL4Ze4WIvDo9MvLcjZs5g2f2",
+  "VPiVSXeJwWdWEw9Vd1pAZPiWssY2",
+  "E3Z6FpYv5LXV6vGVw1n9A0TMsNH2",
+  "6GHkazi3dxPbhLJOcsfEQ9r9BFg2",
+  "n9J2e7h2HGeW0TyCPYo2cwRu9Lg1",
+  "UkqQj5ge19auK0Wr34Z8Zc9Oj6I2",
+  "1hXOE6zzYMUy2Tly9bDjHuZJ9Yz2",
+  "bMo6zfOwKbNwDxIZYXKubiiTdRl1",
+  "5X0ufOuSsXNevw8bZOQRqWkLPGB3",
+  "7isjJFsTxoTC0GlDjhgXBKncwd83",
+  "TXAvfUxOLzUCigFpPS83Jsnbi7l2",
+  "cIqJxvbC9wW1UYXWJ1MO0xDPs5D2",
+  "L9qTUbocx1fLwRVdrSu3aA11MXR2",
+  "WU9ItYebvAYwNTALeIRcpuOYZhp1",
+  "Cy2AmwSUAXcAhK3kzpY3bZK75zn1",
+  "M3uI6vhozgQFHi3fhkmcUS9L9Kb2",
+  "xsmeqE6zXEOGX0yI1dlq3rYX1jl2",
+  "CvjoKHvvsRgVVnkBbphvOXamZx03",
+  "yjjgckaVYseiPsbu36nFdPmJ2083",
+  "xAKOdUE1s8SVIGoOqyDvoI2uKOh1",
+  "oFK0eAAm3dacy5U7p3HpXW1ozA53",
+  "bHDyyJUT1mfCc17UWPwbuLdKPrF2",
+  "gYrjJB496iTREW7ncnRVtXT9jQw2",
+  "gx6LSAEkBGTWd62N8XniNBmIdZl2",
+  "dBoVTxi1lLT9r03NISpXWXoDtCt1",
+  "UT8F6eUeqzbco8LIBxee2RvKNdc2",
+  "0NAIabACqsQrBm7niDQRdNy26lA2",
+  "kIfc37QVjcVu6loGrBz5yIGUfq63",
+  "UIhIJfzDbuSJQwqFEFhtZDp5aQP2",
+  "qNcrA5Y5o4M6jg4qbq2NmmGcu1h1",
+  "qVI1SiXaDmXHpnrGG2XgohJyZb02",
+  "5V4mdhkQSYd3WnbJPBuaUOxqxJe2",
+  "GSS7g8bA5zR1TSAmbdBYJiZxwao1",
+  "8ZQmLcRUQLTVKfdaeGesuimElfk2",
+  "qw4v44tIZfbzNpveXxD13gKKm1J2",
+  "oABMmMY0TNbbCQ1sKtcZC2GqJr32",
+  "yVdp6tFlD6dUFhY66g5eumpHbqI3",
+  "fgq2S5E4tVN3A4zMtoFW0tBLoLi2",
+  "07dnM8g68eg2cmRWH8QCYMh5oiI2",
+  "EU2AkkXc5ddRFKg99bhfp9C2Ryj2",
+  "C81BKW3SdtO17NMmsV6AYBYSYMH2",
+  "bX9WH19YQXT7yetLkTqHSFhC5tz1",
+  "KEqohZWF3zWhBFuCvAZHoD1VqYf2",
+  "GtUBlO8R0Ybx9exDZ4OUDk8yKCl2",
+  "pwZDZDPMevc1esklmaREH2R2wLa2",
+  "lIDR0JCS0YPiM550iAskxYTom9M2",
+  "yCUWh4ITEWQqIqv7gcPWEN6Nc7P2",
+  "GSS7g8bA5zR1TSAmbdBYJiZxwao1",
+  "3I75may4fxVX2lZv5k5tY8qCHDH3",
+  "wsruDo3yQcb5oJWfI1mLzyAn8z93",
+  "PQfDlQkXdqhPqLYW37ZB3gKQ2Tr2",
+  "60N3iJIUT3VSQMtG8KVMuwJ22sO2",
+  "xYydBkRmRrTQ1HvBc7TNh0CeaM32"
+];
+
+const novaVenueIds = [
+  "9i5dUZgjaFQpP0dwr2ADWVkR4r42",
+  "LureUTJhufbo3WtVTOBxu8CrCLc2",
+  "x9riU2yNGLfVsVJsxdI1k6kTHCg2",
+  "y08QlfbgCrQLlrGzohCbgMwRfZw2",
+  "lkPs1LGKz5gznMj0bRpPWQKAWmi1",
+  "YgMLQ7sbDncrQyGn2wA4IS2jU0r1",
+  "miqneFyZ3lVmji81wik5h3RyUnF2",
+  "buH3UwX0UhUzpOKxBsgyPuJPpZD3",
+  "wkH5Ns6nYNQZhZ7NrivhYN7rTg82",
+  "tJifcvFdZJf8REVsn9UA46FY4Wz2",
+  "K4lMYs46JCgeP4Xnwj7FKyaE1Ht2",
+  "xY3051DN7MOGzLVZNGWNfGQhXFZ2",
+  "W2Zy3dlEmhTohNO2sa7aK1Uebl92",
+  "uYGJDSGA78clq9mzvFuCJUMJf8U2",
+  "DJOt2UF7viQOWCbBDtCGVh9RQgp1",
+  "2PMu6d6xosNBgRmOlJsVPl5vMIM2",
+  "NuLHoBVVNKQ4W5YnBEfc6bjKzNv1",
+  "LEZk5gdIkVayBvZgXHGlYoj3OG53",
+  "z7dilUXtStfxwo1ONV7lSuuvB973",
+  "dyhAON8hnKWhgQgPFXeCaXJuf6k2",
+  "zm3qGbA64xUhDoMwHmqk3AqfomB2",
+  "hOwoaYqD3Ee0x27Mc6bD2YPsFk72",
+  "RUaxeKNvfeNz7QSVz001JfjVl1w1",
+  "sRVA1QSoB2TTkT5H2XJtDCBFRoN2",
+  "DqJIJawDQVZ30jRjSmzGC4MKg6R2",
+  "xH0o8jPxrtMzoSSrs0zrWwb3y2l1",
+  "MEXvzNpe7RZHy6mN2U5yLKpPkRt2",
+  "2MCo5FTXmCN8JnshBpIDEkBgocs1",
+  "QgjyZCCznKdEowMXxBNuoipEs3B3",
+  "dG2Hk5C25AMiA4cvXdkyAYjWoXF2",
+  "vzLnzq1herXo7CbvUOHanr7NLId2",
+  "spT2s3VhnhQj80la5NIeaSRjNZo1",
+  "PMd9TPodfXRx5vYLPdRDjo7A4om2",
+  "moM87sjaPFPxdnyRomE5FF5Kmq62",
+  "7lJyh250I7frC6dHTnCAAmkRgKL2"
+];
+
+const marylandVenueIds = [
+  "ckTmjlrn3JhmPCmYVMN9HeOYnBB3",
+  "15v8PhLD2kO18Urleipgu6P4YRC2",
+  "ndI4JztVvVdUVzuWZmxSVJH5ENj2",
+  "okWXRjc5PxTyAvLeoYMgmpGOig92",
+  "kIfc37QVjcVu6loGrBz5yIGUfq63"
+];
+
+const virginiaBeachVenueIds: string[] = [];
+
+
+
 const _addOpportunityToUserFeed = async (
   userId: string,
   opData: Opportunity,
@@ -232,7 +358,12 @@ const _createMockOpportunities = async ({ count, openaiKey }: {
   ];
 
   const virginiaVenues = await Promise.all(
-    virginiaVenueIds.filter(
+    virginiaVenueIds.concat(
+      dcVenueIds,
+      novaVenueIds,
+      marylandVenueIds,
+      virginiaBeachVenueIds,
+    ).filter(
       (venueId) => !venueBlacklist.includes(venueId),
     ).map(async (venueId) => {
       const venueSnap = await usersRef.doc(venueId).get();
