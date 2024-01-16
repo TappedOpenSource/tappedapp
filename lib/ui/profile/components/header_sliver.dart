@@ -102,17 +102,19 @@ class HeaderSliver extends StatelessWidget {
                     };
                   },
                 ),
-              const SizedBox(height: 8),
-              SizedBox(
-                width: double.infinity,
-                child: RequestToBookButton(
-                  userId: state.visitedUser.id,
-                  stripeConnectedAccountId: Option.fromNullable(
-                    state.visitedUser.stripeConnectedAccountId,
+              if (state.visitedUser.id != state.currentUser.id)
+                const SizedBox(height: 8),
+              if (state.visitedUser.id != state.currentUser.id)
+                SizedBox(
+                  width: double.infinity,
+                  child: RequestToBookButton(
+                    userId: state.visitedUser.id,
+                    stripeConnectedAccountId: Option.fromNullable(
+                      state.visitedUser.stripeConnectedAccountId,
+                    ),
+                    service: const None(),
                   ),
-                  service: const None(),
                 ),
-              ),
             ],
           );
         },

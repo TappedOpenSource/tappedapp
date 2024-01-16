@@ -83,12 +83,6 @@ class InfoSliver extends StatelessWidget {
                       ),
                     ),
                   ),
-                const CupertinoListTile(
-                  leading: Icon(
-                    CupertinoIcons.star,
-                  ),
-                  title: BadgesChip(),
-                ),
                 switch (state.visitedUser.epkUrl) {
                   None() => const SizedBox.shrink(),
                   Some(:final value) => CupertinoListTile.notched(
