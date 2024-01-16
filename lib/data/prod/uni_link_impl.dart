@@ -47,20 +47,30 @@ class UniLinkImpl extends DeepLinkRepository {
       return null;
     }
 
-    // print('_handleDeepLink | deep link: $deepLink');
+    print('_handleDeepLink | deep link: $uri');
     final path = uri.path;
 
     switch (path) {
-      // case '/upload_loop':
-      //   return const DeepLinkRedirect(
-      //     type: DeepLinkType.createPost,
-      //   );
-      case '/user':
+      case '/':
         final linkParameters = uri.queryParameters;
         final userId = linkParameters['id'] ?? '';
         return DeepLinkRedirect(
           type: DeepLinkType.shareProfile,
           id: userId,
+        );
+      case '/b':
+        final linkParameters = uri.queryParameters;
+        final userId = linkParameters['id'] ?? '';
+        return DeepLinkRedirect(
+          type: DeepLinkType.shareProfile,
+          id: userId,
+        );
+      case '/opportunity':
+        final linkParameters = uri.queryParameters;
+        final opportunityId = linkParameters['id'] ?? '';
+        return DeepLinkRedirect(
+          type: DeepLinkType.shareOpportunity,
+          id: opportunityId,
         );
       case '/connect_payment':
         final linkParameters = uri.queryParameters;

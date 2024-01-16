@@ -2,10 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intheloopapp/data/deep_link_repository.dart';
 import 'package:intheloopapp/domains/models/option.dart';
-import 'package:intheloopapp/ui/profile/components/follow_button.dart';
 import 'package:intheloopapp/ui/profile/components/follower_count.dart';
 import 'package:intheloopapp/ui/profile/components/following_count.dart';
 import 'package:intheloopapp/ui/profile/components/notification_icon_button.dart';
+import 'package:intheloopapp/ui/profile/components/settings_button.dart';
 import 'package:intheloopapp/ui/profile/components/social_media_icons.dart';
 import 'package:intheloopapp/ui/profile/profile_cubit.dart';
 import 'package:intheloopapp/ui/themes.dart';
@@ -100,7 +100,7 @@ class ProfileHeader extends StatelessWidget {
                             ),
                           ),
                           const SizedBox(height: 10),
-                          const FollowButton(),
+                          const SettingsButton(),
                           const SizedBox(height: 20),
                           const SocialMediaIcons(),
                           const SizedBox(height: 20),

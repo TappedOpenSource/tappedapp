@@ -257,17 +257,6 @@ class ProfileView extends StatelessWidget {
         const SliverToBoxAdapter(
           child: SizedBox(height: 8),
         ),
-        SliverToBoxAdapter(
-          child: GestureDetector(
-            onTap: () => context.push(
-              FollowRelationshipPage(
-                userId: state.visitedUser.id,
-                index: 0,
-              ),
-            ),
-            child: const CommonFollowersSliver(),
-          ),
-        ),
         const SliverToBoxAdapter(
           child: OpportunitiesSliver(),
         ),

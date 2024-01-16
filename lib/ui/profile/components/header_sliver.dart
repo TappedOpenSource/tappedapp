@@ -6,13 +6,13 @@ import 'package:intheloopapp/domains/navigation_bloc/navigation_bloc.dart';
 import 'package:intheloopapp/domains/navigation_bloc/tapped_route.dart';
 import 'package:intheloopapp/ui/profile/components/badges_chip.dart';
 import 'package:intheloopapp/ui/profile/components/feedback_button.dart';
-import 'package:intheloopapp/ui/profile/components/follow_button.dart';
 import 'package:intheloopapp/ui/profile/components/follower_count.dart';
 import 'package:intheloopapp/ui/profile/components/location_chip.dart';
 import 'package:intheloopapp/ui/profile/components/message_button.dart';
 import 'package:intheloopapp/ui/profile/components/more_options_button.dart';
 import 'package:intheloopapp/ui/profile/components/request_to_book.dart';
 import 'package:intheloopapp/ui/profile/components/review_count.dart';
+import 'package:intheloopapp/ui/profile/components/settings_button.dart';
 import 'package:intheloopapp/ui/profile/components/star_rating.dart';
 import 'package:intheloopapp/ui/profile/profile_cubit.dart';
 import 'package:intheloopapp/utils/admin_builder.dart';
@@ -49,12 +49,6 @@ class HeaderSliver extends StatelessWidget {
                     Expanded(
                       child: MessageButton(),
                     ),
-                    SizedBox(
-                      width: 8,
-                    ),
-                    Expanded(
-                      child: FollowButton(),
-                    ),
                   ],
                 )
               else
@@ -62,7 +56,7 @@ class HeaderSliver extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
                     Expanded(
-                      child: FollowButton(),
+                      child: SettingsButton(),
                     ),
                     SizedBox(
                       width: 8,

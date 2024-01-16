@@ -356,6 +356,7 @@ const _createMockOpportunities = async ({ count, openaiKey }: {
     "QGSNkGPB2wbEchwdD8VxJkhaBFN2", // VACU Ampitheatre
     "jyz81JbwQycJoBzTTs4N724Gffc2", // The National
     "tloWCuKGHYScMCp3YamsHKVi3XU2", // Brown's Island
+    "9FKyhrndDreJtzXnJc3eh6dt0QB2", // Sine's
   ];
 
   const virginiaVenues = await Promise.all(
