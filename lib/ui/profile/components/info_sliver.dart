@@ -28,6 +28,15 @@ class InfoSliver extends StatelessWidget {
           children: [
             CupertinoListSection.insetGrouped(
               backgroundColor: theme.colorScheme.background,
+              decoration: BoxDecoration(
+                color: theme.colorScheme.onSurface.withOpacity(0.1),
+                border: Border(
+                  bottom: BorderSide(
+                    color: theme.colorScheme.onBackground.withOpacity(0.1),
+                    width: 0.5,
+                  ),
+                ),
+              ),
               children: [
                 CupertinoListTile(
                   leading: const Icon(
@@ -35,12 +44,16 @@ class InfoSliver extends StatelessWidget {
                   ),
                   title: Text(
                     state.visitedUser.username.toString(),
+                    style: TextStyle(
+                      color: theme.colorScheme.onSurface,
+                    ),
                   ),
                 ),
                 if (currPlace != null)
                   CupertinoListTile(
-                    leading: const Icon(
+                    leading: Icon(
                       CupertinoIcons.location,
+                      color: theme.colorScheme.onSurface,
                     ),
                     title: LocationChip(
                       place: currPlace,
@@ -53,9 +66,8 @@ class InfoSliver extends StatelessWidget {
                     ),
                     title: Text(
                       occupations.join(', '),
-                      style: const TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.normal,
+                      style: TextStyle(
+                        color: theme.colorScheme.onSurface,
                       ),
                     ),
                   ),
@@ -66,6 +78,9 @@ class InfoSliver extends StatelessWidget {
                     ),
                     title: Text(
                       state.visitedUser.label,
+                      style: TextStyle(
+                        color: theme.colorScheme.onSurface,
+                      ),
                     ),
                   ),
                 const CupertinoListTile(
@@ -77,16 +92,26 @@ class InfoSliver extends StatelessWidget {
                 switch (state.visitedUser.epkUrl) {
                   None() => const SizedBox.shrink(),
                   Some(:final value) => CupertinoListTile.notched(
-                      title: const Text('EPK'),
+                      title: Text(
+                        'EPK',
+                        style: TextStyle(
+                          color: theme.colorScheme.onSurface,
+                        ),
+                      ),
                       trailing: const Icon(CupertinoIcons.chevron_forward),
                       onTap: () async {
                         await launchUrl(Uri.parse(value));
                       },
                     ),
                 },
-                const CupertinoListTile(
-                  title: Text('More Options'),
-                  trailing: MoreOptionsButton(),
+                CupertinoListTile(
+                  title: Text(
+                    'More Options',
+                    style: TextStyle(
+                      color: theme.colorScheme.onSurface,
+                    ),
+                  ),
+                  trailing: const MoreOptionsButton(),
                 ),
               ],
             ),

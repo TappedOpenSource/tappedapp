@@ -12,7 +12,6 @@ import 'package:intheloopapp/data/prod/algolia_search_impl.dart';
 import 'package:intheloopapp/data/prod/audio_service_impl.dart';
 import 'package:intheloopapp/data/prod/cloud_messaging_impl.dart';
 import 'package:intheloopapp/data/prod/firebase_auth_impl.dart';
-import 'package:intheloopapp/data/prod/firebase_dynamic_link_impl.dart';
 import 'package:intheloopapp/data/prod/firebase_storage_impl.dart';
 import 'package:intheloopapp/data/prod/firestore_database_impl.dart';
 import 'package:intheloopapp/data/prod/google_places_impl.dart';

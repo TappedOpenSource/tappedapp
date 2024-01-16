@@ -23,7 +23,7 @@ class ApplyAnimationView extends StatelessWidget {
             builder: (context, claim) {
               return switch (claim) {
                 None() => const Text(
-                    'easy applying with tappedai',
+                    'we just received your application, thank you for applying',
                     textAlign: TextAlign.center,
                     style: TextStyle(
                       fontSize: 22,
