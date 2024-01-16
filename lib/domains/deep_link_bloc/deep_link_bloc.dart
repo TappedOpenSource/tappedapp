@@ -23,29 +23,28 @@ class DeepLinkBloc extends Bloc<DeepLinkEvent, DeepLinkState> {
       dynamicLinkRepository.getDeepLinks().listen((event) {
         try {
           logger.debug('new deep link ${event.type}');
-          switch (event.type) {
-            case DeepLinkType.shareProfile:
-              if (event.id != null) {
-                navBloc.push(
-                  ProfilePage(
-                    userId: event.id!,
-                    user: const None(),
-                  ),
-                );
-              }
-            case DeepLinkType.shareOpportunity:
-              if (event.id != null) {
-                navBloc.push(
-                  OpportunityPage(
-                    opportunityId: event.id!,
-                    opportunity: const None(),
-                  ),
-                );
-              }
-            case DeepLinkType.connectStripeRedirect:
-              if (event.id == null || event.id == '') {
-                break;
-              }
+          switch (event) {
+            case ShareProfileDeepLink(
+                :final userId,
+                :final user,
+              ):
+              navBloc.push(
+                ProfilePage(
+                  userId: userId,
+                  user: user,
+                ),
+              );
+            case ShareOpportunityDeepLink(
+                :final opportunityId,
+                :final opportunity,
+              ):
+              navBloc.push(
+                OpportunityPage(
+                  opportunityId: opportunityId,
+                  opportunity: opportunity,
+                ),
+              );
+            case ConnectStripeRedirectDeepLink(:final id):
               // add accountId to the users data
               if (onboardingBloc.state is! Onboarded) {
                 break;
@@ -53,7 +52,7 @@ class DeepLinkBloc extends Bloc<DeepLinkEvent, DeepLinkState> {
 
               final currentUser =
                   (onboardingBloc.state as Onboarded).currentUser.copyWith(
-                        stripeConnectedAccountId: event.id,
+                        stripeConnectedAccountId: id,
                       );
 
               onboardingBloc.add(
@@ -63,10 +62,10 @@ class DeepLinkBloc extends Bloc<DeepLinkEvent, DeepLinkState> {
               );
 
               navBloc.push(SettingsPage());
-            case DeepLinkType.connectStripeRefresh:
-              if (event.id != null) {
-                // resend the create account request?
-              }
+            // case DeepLinkType.connectStripeRefresh:
+            //   if (event.id != null) {
+            //     // resend the create account request?
+            //   }
           }
         } catch (e, s) {
           logger.error('deep link error', error: e, stackTrace: s);

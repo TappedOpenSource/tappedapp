@@ -82,10 +82,10 @@ class UniLinkImpl extends DeepLinkRepository {
           return null;
         }
 
-        final userId = userRef.docs.first.id;
-        return DeepLinkRedirect(
-          type: DeepLinkType.shareProfile,
-          id: userId,
+        final user = UserModel.fromDoc(userRef.docs.first);
+        return ShareProfileDeepLink(
+          userId: user.id,
+          user: Some(user),
         );
       case 'opportunity':
         if (segments.length < 2) {
@@ -93,9 +93,9 @@ class UniLinkImpl extends DeepLinkRepository {
         }
 
         final opportunityId = segments[1];
-        return DeepLinkRedirect(
-          type: DeepLinkType.shareOpportunity,
-          id: opportunityId,
+        return ShareOpportunityDeepLink(
+          opportunityId: opportunityId,
+          opportunity: const None(),
         );
       case 'connect_payment':
         final linkParameters = uri.queryParameters;
@@ -112,8 +112,7 @@ class UniLinkImpl extends DeepLinkRepository {
         //   );
         // }
 
-        return DeepLinkRedirect(
-          type: DeepLinkType.connectStripeRedirect,
+        return ConnectStripeRedirectDeepLink(
           id: accountId,
         );
       default:
@@ -130,10 +129,10 @@ class UniLinkImpl extends DeepLinkRepository {
           return null;
         }
 
-        final userId = userRef.docs.first.id;
-        return DeepLinkRedirect(
-          type: DeepLinkType.shareProfile,
-          id: userId,
+        final user = UserModel.fromDoc(userRef.docs.first);
+        return ShareProfileDeepLink(
+          userId: user.id,
+          user: Some(user),
         );
     }
   }
