@@ -21,11 +21,11 @@ class DiscoverView extends StatelessWidget {
         onItemFocus: (index) {},
         selectedItemAnchor: SelectedItemAnchor.START,
         itemCount: users.length,
-        itemSize: 200,
+        itemSize: 150 + (8 * 2),
         itemBuilder: (context, index) {
           return Padding(
             padding: const EdgeInsets.symmetric(
-              horizontal: 12,
+              horizontal: 8,
             ),
             child: UserCard(user: users[index]),
           );

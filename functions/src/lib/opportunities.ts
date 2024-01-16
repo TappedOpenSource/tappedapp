@@ -16,6 +16,7 @@ import { v4 as uuidv4 } from "uuid";
 import { llm } from "./openai";
 
 const virginiaVenueIds = [
+  "DGeZx8VvolPscUOJzFX8cfgE3Rr2", // Jungle Room
   "z9INma3qmmPOTw3ncnzHTWSEvPF2", // The Canal Club
   "tloWCuKGHYScMCp3YamsHKVi3XU2", // Brown's Island
   "jyz81JbwQycJoBzTTs4N724Gffc2", // The National

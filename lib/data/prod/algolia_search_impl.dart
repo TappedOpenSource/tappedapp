@@ -2,7 +2,6 @@ import 'package:algolia/algolia.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:intheloopapp/data/search_repository.dart';
-import 'package:intheloopapp/domains/models/loop.dart';
 import 'package:intheloopapp/domains/models/user_model.dart';
 
 final _analytics = FirebaseAnalytics.instance;
@@ -26,41 +25,6 @@ class AlgoliaSearchImpl extends SearchRepository {
     final user = UserModel.fromDoc(userSnapshot);
 
     return user;
-  }
-
-  Future<Loop> _getLoop(String loopId) async {
-    final loopSnapshot = await loopsRef.doc(loopId).get();
-    final loop = Loop.fromDoc(loopSnapshot);
-
-    return loop;
-  }
-
-  @override
-  Future<List<Loop>> queryLoops(String input) async {
-    var results = <AlgoliaObjectSnapshot>[];
-
-    try {
-      final query = algolia.index('prod_loops').query(input)
-        ..filters('deleted:false');
-
-      final snap = await query.getObjects();
-
-      await _analytics.logSearch(searchTerm: input);
-
-      results = snap.hits;
-    } on AlgoliaError {
-      // print(e.error);
-      rethrow;
-    }
-
-    final loopResults = await Future.wait(
-      results.map((res) async {
-        final loop = await _getLoop(res.objectID);
-        return loop;
-      }),
-    );
-
-    return loopResults.where((element) => !element.deleted).toList();
   }
 
   @override

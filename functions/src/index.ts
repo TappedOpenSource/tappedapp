@@ -15,6 +15,7 @@ import {
   getFileFromURL,
 } from "./lib/utils";
 
+export * from "./lib/rest";
 export * from "./lib/email_triggers";
 export * from "./lib/bookings";
 export * from "./lib/activities";
