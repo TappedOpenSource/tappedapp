@@ -24,28 +24,6 @@ class DeepLinkBloc extends Bloc<DeepLinkEvent, DeepLinkState> {
         try {
           logger.debug('new deep link ${event.type}');
           switch (event.type) {
-            // case DeepLinkType.createPost:
-            //   navBloc.push(
-            //     CreateLoopPage(),
-            //   );
-            // case DeepLinkType.shareLoop:
-            //   final loopId = event.id;
-            //   if (loopId != null) {
-            //     databaseRepository
-            //         .getLoopById(
-            //       loopId,
-            //     )
-            //         .then((shareLoop) {
-            //       if (shareLoop.isSome) {
-            //         navBloc.push(
-            //           LoopPage(
-            //             loop: shareLoop.unwrap,
-            //             loopUser: const None(),
-            //           ),
-            //         );
-            //       }
-            //     });
-            //   }
             case DeepLinkType.shareProfile:
               if (event.id != null) {
                 navBloc.push(

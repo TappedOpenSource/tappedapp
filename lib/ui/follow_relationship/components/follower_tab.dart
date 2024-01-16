@@ -16,7 +16,6 @@ class FollowerTab extends StatelessWidget {
             onRefresh: () =>
                 context.read<FollowRelationshipCubit>().initFollowers(),
             child: state.followers.isEmpty
-                // TODO(jonaylor89): Put in something with an action - perhaps a call to upload more loops?, https://github.com/InTheLoopStudio/pangolin/issues/51
                 ? const Text('No Followers')
                 : ListView.builder(
                     itemCount: state.followers.length,

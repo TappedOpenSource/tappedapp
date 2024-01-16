@@ -16,7 +16,7 @@ class FollowingTab extends StatelessWidget {
             onRefresh: () =>
                 context.read<FollowRelationshipCubit>().initFollowing(),
             child: state.following.isEmpty
-                // TODO(jonaylor): Replace with follow recommendations, https://github.com/InTheLoopStudio/pangolin/issues/50
+                // TODO(jonaylor): Replace with follow recommendations, https://github.com/TappedOpenSource/pangolin/issues/50
                 ? const Text('No Following')
                 : ListView.builder(
                     itemCount: state.following.length,

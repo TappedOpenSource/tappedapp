@@ -29,9 +29,6 @@ class ActivityTile extends StatelessWidget {
       BookingUpdate() => BookingUpdateActivityTile(
           activity: activity as BookingUpdate,
         ),
-      // LoopMention() => LoopMentionActivityTile(
-      //     activity: activity as LoopMention,
-      //   ),
       // CommentMention() => CommentMentionActivityTile(
       //     activity: activity as CommentMention,
       //   ),

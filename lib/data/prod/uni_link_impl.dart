@@ -61,13 +61,6 @@ class UniLinkImpl extends DeepLinkRepository {
           type: DeepLinkType.shareProfile,
           id: userId,
         );
-      // case '/loop':
-      //   final linkParameters = uri.queryParameters;
-      //   final loopId = linkParameters['id'] ?? '';
-      //   return DeepLinkRedirect(
-      //     type: DeepLinkType.shareLoop,
-      //     id: loopId,
-      //   );
       case '/connect_payment':
         final linkParameters = uri.queryParameters;
         final accountId = linkParameters['account_id'];
@@ -91,45 +84,6 @@ class UniLinkImpl extends DeepLinkRepository {
       default:
         return null;
     }
-  }
-
-  @override
-  Future<String> getShareLoopDeepLink(Loop loop) async {
-    final imageUri =
-        (loop.imagePaths.isNotEmpty && loop.imagePaths[0].isNotEmpty)
-            ? Uri.parse(loop.imagePaths[0])
-            : Uri.parse('https://tapped.ai/images/tapped_reverse.png');
-
-    final parameters = DynamicLinkParameters(
-      //TODO switch this function to one that makes sense
-      uriPrefix: 'https://tappednetwork.page.link',
-      link: Uri.parse(
-        'https://tappednetwork.page.link/loop?id=${loop.id}',
-      ),
-      androidParameters: const AndroidParameters(
-        packageName: 'com.intheloopstudio',
-      ),
-      iosParameters: const IOSParameters(
-        bundleId: 'com.intheloopstudio',
-      ),
-      socialMetaTagParameters: SocialMetaTagParameters(
-        title: 'Tapped Network | ${loop.title.unwrapOr('')}',
-        description:
-            '''Tapped Network - The online platform tailored for producers and creators to share their loops to the world, get feedback on their music, and join the world-wide community of artists to collaborate with''',
-        imageUrl: imageUri,
-      ),
-    );
-
-    final shortDynamicLink = await _dynamic.buildShortLink(parameters);
-    final shortUrl = shortDynamicLink.shortUrl;
-
-    await _analytics.logShare(
-      contentType: 'loop',
-      itemId: loop.id,
-      method: 'dynamic_link',
-    );
-
-    return shortUrl.toString();
   }
 
   @override

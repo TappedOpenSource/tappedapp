@@ -103,7 +103,6 @@ abstract class DatabaseRepository {
     required String currentUserId,
     required String visitedUserId,
     required ActivityType type,
-    Loop? loop,
   });
   Future<void> markActivityAsRead(Activity activity);
 

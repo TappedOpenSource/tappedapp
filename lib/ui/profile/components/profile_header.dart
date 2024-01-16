@@ -104,18 +104,11 @@ class ProfileHeader extends StatelessWidget {
                           const SizedBox(height: 20),
                           const SocialMediaIcons(),
                           const SizedBox(height: 20),
-                          Row(
+                          const Row(
                             mainAxisAlignment: MainAxisAlignment.spaceAround,
                             children: [
-                              Text(
-                                '${state.visitedUser.loopsCount} Loops',
-                                style: const TextStyle(
-                                  fontSize: 14,
-                                  fontWeight: FontWeight.w500,
-                                ),
-                              ),
-                              const FollowerCount(),
-                              const FollowingCount(),
+                              FollowerCount(),
+                              FollowingCount(),
                             ],
                           ),
                           const SizedBox(height: 20),

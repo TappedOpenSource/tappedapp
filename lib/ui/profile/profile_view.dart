@@ -175,7 +175,6 @@ class ProfileView extends StatelessWidget {
             final cubit = context.read<ProfileCubit>();
             await Future.wait([
               HapticFeedback.mediumImpact(),
-              // cubit.getLatestLoop(),
               // cubit.getLatestOpportunity(),
               cubit.getLatestBooking(),
               cubit.getLatestReview(),
