@@ -20,6 +20,7 @@ import 'package:intheloopapp/data/prod/image_picker_impl.dart';
 import 'package:intheloopapp/data/prod/remote_config_impl.dart';
 import 'package:intheloopapp/data/prod/stream_impl.dart';
 import 'package:intheloopapp/data/prod/stripe_payment_impl.dart';
+import 'package:intheloopapp/data/prod/uni_link_impl.dart';
 import 'package:intheloopapp/data/remote_config_repository.dart';
 import 'package:intheloopapp/data/search_repository.dart';
 import 'package:intheloopapp/data/storage_repository.dart';
@@ -64,7 +65,7 @@ List<RepositoryProvider<Object>> buildRepositories({
       ),
     ),
     RepositoryProvider<DeepLinkRepository>(
-      create: (_) => FirebaseDynamicLinkImpl(),
+      create: (_) => UniLinkImpl(),
     ),
     RepositoryProvider<StreamRepository>(
       create: (_) => StreamImpl(streamChatClient),

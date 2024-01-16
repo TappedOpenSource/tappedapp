@@ -27,67 +27,6 @@ class UserCard extends StatefulWidget {
 class _UserCardState extends State<UserCard> {
   bool followingOverride = false;
 
-  Widget _followButton(
-    UserModel currentUser,
-    DatabaseRepository database,
-  ) =>
-      currentUser.id != widget.user.id
-          ? FutureBuilder<bool>(
-              future: database.isFollowingUser(
-                currentUser.id,
-                widget.user.id,
-              ),
-              builder: (context, snapshot) {
-                if (!snapshot.hasData) return const SizedBox.shrink();
-                final isFollowing = snapshot.data ?? false;
-
-                if (followingOverride) {
-                  return IconButton(
-                    onPressed: () {},
-                    icon: const Icon(
-                      Icons.check_circle,
-                      color: Colors.white,
-                    ),
-                  );
-                }
-
-                if (isFollowing) {
-                  return IconButton(
-                    onPressed: () async {
-                      await database.unfollowUser(
-                        currentUser.id,
-                        widget.user.id,
-                      );
-                      setState(() {
-                        followingOverride = true;
-                      });
-                    },
-                    icon: const Icon(
-                      Icons.check_circle,
-                      color: Colors.white,
-                    ),
-                  );
-                }
-
-                return IconButton(
-                  onPressed: () async {
-                    await database.followUser(
-                      currentUser.id,
-                      widget.user.id,
-                    );
-                    setState(() {
-                      followingOverride = true;
-                    });
-                  },
-                  icon: const Icon(
-                    Icons.add_circle,
-                    color: Colors.white,
-                  ),
-                );
-              },
-            )
-          : const SizedBox.shrink();
-
   @override
   Widget build(BuildContext context) {
     final database = context.database;
@@ -217,16 +156,6 @@ class _UserCardState extends State<UserCard> {
                               // ),
                             ],
                           ),
-                        ),
-                        Row(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          mainAxisAlignment: MainAxisAlignment.end,
-                          children: [
-                            _followButton(
-                              currentUser,
-                              database,
-                            ),
-                          ],
                         ),
                       ],
                     ),

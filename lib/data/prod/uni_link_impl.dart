@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:firebase_dynamic_links/firebase_dynamic_links.dart';
 import 'package:intheloopapp/data/deep_link_repository.dart';
@@ -11,6 +12,9 @@ import 'package:uni_links/uni_links.dart';
 
 final _dynamic = FirebaseDynamicLinks.instance;
 final _analytics = FirebaseAnalytics.instance;
+final _firestore = FirebaseFirestore.instance;
+
+final _usersRef = _firestore.collection('users');
 
 /// The unilink link implementation for Deep Link
 class UniLinkImpl extends DeepLinkRepository {
@@ -21,14 +25,14 @@ class UniLinkImpl extends DeepLinkRepository {
 
     final uri = await getInitialUri();
 
-    final redirect = _handleDeepLink(uri);
+    final redirect = await _handleDeepLink(uri);
     if (redirect != null) {
       uniLinkStream.add(redirect);
     }
 
-    uriLinkStream.listen((Uri? deepLink) {
+    uriLinkStream.listen((Uri? deepLink) async {
       logger.debug('new deep link - $deepLink');
-      final redirect = _handleDeepLink(deepLink);
+      final redirect = await _handleDeepLink(deepLink);
 
       if (redirect != null) {
         uniLinkStream.add(redirect);
@@ -42,40 +46,60 @@ class UniLinkImpl extends DeepLinkRepository {
     yield* uniLinkStream.stream;
   }
 
-  DeepLinkRedirect? _handleDeepLink(Uri? uri) {
+  FutureOr<DeepLinkRedirect?> _handleDeepLink(Uri? uri) async {
     if (uri == null) {
       return null;
     }
 
-    print('_handleDeepLink | deep link: $uri');
-    final path = uri.path;
+    // final path = uri.path;
+    final segments = uri.pathSegments;
 
-    switch (path) {
-      case '/':
-        final linkParameters = uri.queryParameters;
-        final userId = linkParameters['id'] ?? '';
+    // logger.info('_handleDeepLink | deep link: $uri');
+    // logger.info('_handleDeepLink | segments: $segments');
+
+    if (segments.isEmpty) {
+      return null;
+    }
+
+    final firstSegment = segments.first;
+
+    switch (firstSegment) {
+      case 'b':
+        if (segments.length < 2) {
+          return null;
+        }
+
+        final username = segments[1];
+
+        // get user from username
+        final userRef = await _usersRef
+            .where(
+              'username',
+              isEqualTo: username,
+            )
+            .get();
+        if (userRef.docs.isEmpty) {
+          return null;
+        }
+
+        final userId = userRef.docs.first.id;
         return DeepLinkRedirect(
           type: DeepLinkType.shareProfile,
           id: userId,
         );
-      case '/b':
-        final linkParameters = uri.queryParameters;
-        final userId = linkParameters['id'] ?? '';
-        return DeepLinkRedirect(
-          type: DeepLinkType.shareProfile,
-          id: userId,
-        );
-      case '/opportunity':
-        final linkParameters = uri.queryParameters;
-        final opportunityId = linkParameters['id'] ?? '';
+      case 'opportunity':
+        if (segments.length < 2) {
+          return null;
+        }
+
+        final opportunityId = segments[1];
         return DeepLinkRedirect(
           type: DeepLinkType.shareOpportunity,
           id: opportunityId,
         );
-      case '/connect_payment':
+      case 'connect_payment':
         final linkParameters = uri.queryParameters;
         final accountId = linkParameters['account_id'];
-
         if (accountId == null) {
           return null;
         }
@@ -93,7 +117,24 @@ class UniLinkImpl extends DeepLinkRepository {
           id: accountId,
         );
       default:
-        return null;
+        final username = segments.first;
+
+        // get user from username
+        final userRef = await _usersRef
+            .where(
+              'username',
+              isEqualTo: username,
+            )
+            .get();
+        if (userRef.docs.isEmpty) {
+          return null;
+        }
+
+        final userId = userRef.docs.first.id;
+        return DeepLinkRedirect(
+          type: DeepLinkType.shareProfile,
+          id: userId,
+        );
     }
   }
 
@@ -105,8 +146,8 @@ class UniLinkImpl extends DeepLinkRepository {
 
     final parameters = DynamicLinkParameters(
       //TODO change this to the proper function
-      uriPrefix: 'https://tappednetwork.page.link',
-      link: Uri.parse('https://tappednetwork.page.link/user?id=${user.id}'),
+      uriPrefix: 'https://tapped.ai',
+      link: Uri.parse('https://tappednetwork.ai/${user.username}'),
       androidParameters: const AndroidParameters(
         packageName: 'com.intheloopstudio',
       ),
@@ -143,7 +184,7 @@ class UniLinkImpl extends DeepLinkRepository {
     final parameters = DynamicLinkParameters(
       //TODO change this to the proper function
       uriPrefix: 'https://tapped.ai',
-      link: Uri.parse('https://tapped.ai/opportunity?id=${opportunity.id}'),
+      link: Uri.parse('https://tapped.ai/opportunity/${opportunity.id}'),
       androidParameters: const AndroidParameters(
         packageName: 'com.intheloopstudio',
       ),
