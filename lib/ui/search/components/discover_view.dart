@@ -92,7 +92,7 @@ class DiscoverView extends StatelessWidget {
                   horizontal: 8,
                 ),
                 child: Text(
-                  'Featured',
+                  'Featured Opportunities',
                   style: TextStyle(
                     fontSize: 28,
                     fontWeight: FontWeight.bold,

@@ -113,25 +113,6 @@ class HeaderSliver extends StatelessWidget {
                   service: const None(),
                 ),
               ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text(
-                    '@${state.visitedUser.username}',
-                    style: const TextStyle(
-                      fontSize: 12,
-                      fontWeight: FontWeight.normal,
-                      color: Color(0xFF757575),
-                    ),
-                  ),
-                  const BadgesChip(),
-                  if (currPlace != null)
-                    LocationChip(
-                      place: currPlace,
-                    ),
-                  const MoreOptionsButton(),
-                ],
-              ),
             ],
           );
         },
