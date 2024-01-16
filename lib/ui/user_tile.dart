@@ -35,56 +35,16 @@ class UserTile extends StatefulWidget {
 class _UserTileState extends State<UserTile> {
   bool followingOverride = false;
 
-  Widget _followButton(
-    UserModel currentUser,
-    DatabaseRepository database,
-  ) =>
-      (currentUser.id != widget.userId) && widget.showFollowButton
-          ? FutureBuilder<bool>(
-              future: database.isFollowingUser(
-                currentUser.id,
-                widget.userId,
-              ),
-              builder: (context, snapshot) {
-                if (!snapshot.hasData) return const SizedBox.shrink();
-
-                final isFollowing = snapshot.data ?? false;
-
-                return CupertinoButton(
-                  onPressed: (!isFollowing && !followingOverride)
-                      ? () async {
-                          await database.followUser(
-                            currentUser.id,
-                            widget.userId,
-                          );
-                          setState(() {
-                            followingOverride = true;
-                          });
-                        }
-                      : null,
-                  child: (!isFollowing && !followingOverride)
-                      ? const Text('Follow')
-                      : const Text('Following'),
-                );
-              },
-            )
-          : const SizedBox.shrink();
-
   Widget _buildSubtitle(
     UserModel user,
   ) {
     final widgetSubtitle = widget.subtitle;
     if (widgetSubtitle != null) return widgetSubtitle;
 
-    return user.socialMediaAudience > user.followerCount
-        ? Text('${NumberFormat.compactCurrency(
-            decimalDigits: 0,
-            symbol: '',
-          ).format(user.socialMediaAudience)} audience')
-        : Text('${NumberFormat.compactCurrency(
-            decimalDigits: 0,
-            symbol: '',
-          ).format(user.followerCount)} followers');
+    return Text('${NumberFormat.compactCurrency(
+      decimalDigits: 0,
+      symbol: '',
+    ).format(user.socialMediaAudience)} followers');
   }
 
   Widget _buildUserTile(
@@ -146,11 +106,7 @@ class _UserTileState extends State<UserTile> {
                 ),
               ),
               subtitle: _buildSubtitle(user),
-              trailing: widget.trailing ??
-                  _followButton(
-                    currentUser,
-                    database,
-                  ),
+              trailing: widget.trailing,
               onTap: () => context.push(
                 ProfilePage(
                   userId: user.id,

@@ -94,13 +94,7 @@ class _UserCardState extends State<UserCard> {
     final imageUrl = widget.user.profilePicture;
     if (widget.user.deleted) return const SizedBox.shrink();
 
-    final audienceText =
-        widget.user.socialMediaAudience > widget.user.followerCount
-            ? '${NumberFormat.compactCurrency(
-                decimalDigits: 0,
-                symbol: '',
-              ).format(widget.user.socialMediaAudience)} audience'
-            : '${NumberFormat.compactCurrency(
+    final audienceText = '${NumberFormat.compactCurrency(
                 decimalDigits: 0,
                 symbol: '',
               ).format(widget.user.followerCount)} followers';
