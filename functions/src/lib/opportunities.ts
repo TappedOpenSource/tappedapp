@@ -557,7 +557,7 @@ export const copyOpportunitiesToFeedOnCreateUser = onDocumentCreated(
 
     const opportunitiesSnap = await opportunitiesRef
       .where("startTime", ">", Timestamp.now())
-      .limit(500)
+      .limit(25)
       .get();
 
     await Promise.all(

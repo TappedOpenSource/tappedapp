@@ -1,5 +1,5 @@
 /* eslint-disable import/no-unresolved */
-import { onRequest } from "firebase-functions/v1/https";
+import { onRequest } from "firebase-functions/v2/https";
 import { opportunitiesRef, usersRef } from "./firebase";
 
 export const getUserById = onRequest(async (req, res) => {
