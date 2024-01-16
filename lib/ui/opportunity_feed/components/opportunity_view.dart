@@ -133,9 +133,7 @@ class OpportunityView extends StatelessWidget {
                           child: GestureDetector(
                             onTap: () async {
                               final link =
-                                  await deepLinks.getShareOpportunityDeepLink(
-                                op,
-                              );
+                                  'https://tapped.ai/opportunity/${op.id}';
                               await Share.share(link);
                             },
                             child: const Padding(

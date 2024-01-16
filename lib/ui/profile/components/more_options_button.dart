@@ -18,9 +18,9 @@ class MoreOptionsButton extends StatelessWidget {
     UserModel user,
     UserModel currentUser,
   ) {
-    final dynamic = context.read<DeepLinkRepository>();
     final database = context.database;
     final nav = context.nav;
+    final scaffoldMessenger = ScaffoldMessenger.of(context);
     showCupertinoModalPopup<void>(
       context: context,
       builder: (BuildContext context) => CupertinoActionSheet(
@@ -29,16 +29,14 @@ class MoreOptionsButton extends StatelessWidget {
         actions: <CupertinoActionSheetAction>[
           CupertinoActionSheetAction(
             onPressed: () {
-              dynamic
-                  .getShareProfileDeepLink(user)
-                  .then(Share.share)
+              Share.share('https://tapped.ai/${user.username}')
                   .onError((error, stackTrace) {
                 logger.error(
                   'Error sharing profile',
                   error: error,
                   stackTrace: stackTrace,
                 );
-                ScaffoldMessenger.of(context).showSnackBar(
+                scaffoldMessenger.showSnackBar(
                   const SnackBar(
                     behavior: SnackBarBehavior.floating,
                     backgroundColor: Colors.red,
@@ -47,7 +45,7 @@ class MoreOptionsButton extends StatelessWidget {
                 );
               });
             },
-            child: const Text('share'),
+            child: const Text('share profile'),
           ),
           if (user.id != currentUser.id)
             CupertinoActionSheetAction(
@@ -59,7 +57,7 @@ class MoreOptionsButton extends StatelessWidget {
                   reporter: currentUser,
                 )
                     .then((value) {
-                  ScaffoldMessenger.of(context).showSnackBar(
+                  scaffoldMessenger.showSnackBar(
                     const SnackBar(
                       behavior: SnackBarBehavior.floating,
                       backgroundColor: tappedAccent,
