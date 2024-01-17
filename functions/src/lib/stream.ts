@@ -3,11 +3,40 @@ import { StreamChat } from "stream-chat";
 import * as functions from "firebase-functions";
 import { streamKey, streamSecret } from "./firebase";
 
+const _introMessage = async (
+  streamClient: StreamChat,
+  newUserId: string,
+) => {
+  const johannesId = "8yYVxpQ7cURSzNfBsaBGF7A7kkv2";
+  const token = await streamClient.createToken(johannesId);
+  await streamClient.connectUser({
+    id: johannesId,
+  }, token);
+
+  // join channel
+  const channel = streamClient.channel("messaging", {
+    members: [ johannesId, newUserId ],
+  });
+  await channel.create();
+
+  // post msg
+  await channel.sendMessage({ 
+    text: "welcome to tapped!",
+  });
+  await channel.sendMessage({ 
+    text: "I work with the engineering team so if you have any ideas on how to make the app better lemme know and I can send it to them",
+  });
+
+  // disconnectUser
+  await streamClient.disconnectUser();
+}
+
 export const createStreamUserOnUserCreated = functions
   .runWith({ secrets: [ streamKey, streamSecret ] })
   .firestore
   .document("users/{userId}")
   .onCreate(async (snapshot) => {
+    const userId = snapshot.id;
     const streamClient = StreamChat.getInstance(
       streamKey.value(),
       streamSecret.value(),
@@ -21,6 +50,9 @@ export const createStreamUserOnUserCreated = functions
       email: user.email,
       image: user.profilePicture,
     });
+
+    // intro msg from me
+    await _introMessage(streamClient, userId);
   });
 
 export const updateStreamUserOnUserUpdate = functions

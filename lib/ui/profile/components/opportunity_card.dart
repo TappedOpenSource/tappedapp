@@ -38,55 +38,59 @@ class OpportunityCard extends StatelessWidget {
         final uuid = const Uuid().v4();
         final heroImageTag = 'op-image-${opportunity.id}-$uuid';
         final heroTitleTag = 'op-title-${opportunity.id}-$uuid';
-        return InkWell(
-          onTap: () => context.push(
-            OpportunityPage(
-              opportunityId: opportunity.id,
-              opportunity: Some(opportunity),
-              heroImage: HeroImage(
-                imageProvider: provider,
-                heroTag: heroImageTag,
+        return SizedBox(
+          width: cardWidth,
+          height: 200,
+          child: InkWell(
+            onTap: () => context.push(
+              OpportunityPage(
+                opportunityId: opportunity.id,
+                opportunity: Some(opportunity),
+                heroImage: HeroImage(
+                  imageProvider: provider,
+                  heroTag: heroImageTag,
+                ),
+                titleHeroTag: heroTitleTag,
+                onApply: () => context.pop(),
+                onDislike: () => context.pop(),
+                onDismiss: () => context.pop(),
               ),
-              titleHeroTag: heroTitleTag,
-              onApply: () => context.pop(),
-              onDislike: () => context.pop(),
-              onDismiss: () => context.pop(),
             ),
-          ),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Hero(
-                tag: heroImageTag,
-                child: Container(
-                  width: cardWidth,
-                  height: 200,
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(12),
-                    image: DecorationImage(
-                      image: provider,
-                      fit: BoxFit.cover,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Hero(
+                  tag: heroImageTag,
+                  child: Container(
+                    width: cardWidth,
+                    height: 200,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(12),
+                      image: DecorationImage(
+                        image: provider,
+                        fit: BoxFit.cover,
+                      ),
                     ),
                   ),
                 ),
-              ),
-              Hero(
-                tag: heroTitleTag,
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 12,
-                  ),
-                  child: Text(
-                    opportunity.title,
-                    style: const TextStyle(
-                      fontSize: 18,
-                      fontWeight: FontWeight.w900,
+                Hero(
+                  tag: heroTitleTag,
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 12,
+                    ),
+                    child: Text(
+                      opportunity.title,
+                      style: const TextStyle(
+                        overflow: TextOverflow.ellipsis,
+                        fontSize: 18,
+                        fontWeight: FontWeight.w900,
+                      ),
                     ),
                   ),
                 ),
-              ),
-              
-            ],
+              ],
+            ),
           ),
         );
       },
