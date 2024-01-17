@@ -129,7 +129,7 @@ class CreateOpportunityCubit extends Cubit<CreateOpportunityState> {
 
       final uuid = const Uuid().v4();
       final flierUrl = await switch (state.pickedPhoto) {
-        None() => Future.value(),
+        None() => Future<String?>.value(),
         Some(:final value) => () async {
             final url = await storage.uploadOpportunityFlier(
               opportunityId: uuid,
@@ -160,6 +160,7 @@ class CreateOpportunityCubit extends Cubit<CreateOpportunityState> {
         isPaid: state.isPaid,
         startTime: state.startTime.value,
         endTime: state.endTime.value,
+        deleted: false,
       );
 
       logger.debug('op: $op');

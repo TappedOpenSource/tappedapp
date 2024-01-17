@@ -34,6 +34,7 @@ class OpportunitiesList extends StatelessWidget {
                 padding: const EdgeInsets.symmetric(horizontal: 8),
                 child: OpportunityCard(
                   opportunity: opportunity,
+                  onOpportunityDeleted: () => opportunities.removeAt(index),
                 ),
               );
             },
