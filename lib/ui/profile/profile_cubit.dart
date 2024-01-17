@@ -215,7 +215,8 @@ class ProfileCubit extends Cubit<ProfileState> {
 
       emit(
         state.copyWith(
-          opportunities: opportunities,
+          opportunities:
+              opportunities.where((element) => !element.deleted).toList(),
         ),
       );
     } catch (e, s) {

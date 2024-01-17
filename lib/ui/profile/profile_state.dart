@@ -17,15 +17,8 @@ class ProfileState extends Equatable {
     this.isCollapsed = false,
     this.didAddFeedback = false,
     this.place,
-    int? followerCount,
-    int? followingCount,
-  }) {
-    this.followerCount = followerCount ?? visitedUser.followerCount;
-    this.followingCount = followingCount ?? visitedUser.followingCount;
-  }
+  });
 
-  late final int followerCount;
-  late final int followingCount;
   final bool isFollowing;
   final bool isBlocked;
   final bool isVerified;
@@ -47,8 +40,6 @@ class ProfileState extends Equatable {
 
   @override
   List<Object?> get props => [
-        followingCount,
-        followerCount,
         isFollowing,
         isBlocked,
         isVerified,
@@ -65,8 +56,6 @@ class ProfileState extends Equatable {
       ];
 
   ProfileState copyWith({
-    int? followerCount,
-    int? followingCount,
     bool? isFollowing,
     bool? isBlocked,
     bool? isVerified,
@@ -84,8 +73,6 @@ class ProfileState extends Equatable {
     bool? didAddFeedback,
   }) {
     return ProfileState(
-      followingCount: followingCount ?? this.followingCount,
-      followerCount: followerCount ?? this.followerCount,
       isFollowing: isFollowing ?? this.isFollowing,
       isBlocked: isBlocked ?? this.isBlocked,
       isVerified: isVerified ?? this.isVerified,

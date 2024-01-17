@@ -27,11 +27,8 @@ class UserModel extends Equatable {
     required this.geohash,
     required this.lat,
     required this.lng,
-    required this.loopsCount,
     required this.badgesCount,
     required this.reviewCount,
-    required this.followerCount,
-    required this.followingCount,
     required this.overallRating,
     required this.deleted,
     required this.shadowBanned,
@@ -53,7 +50,6 @@ class UserModel extends Equatable {
     required this.emailNotificationsITLUpdates,
     required this.stripeConnectedAccountId,
     required this.stripeCustomerId,
-    // required this.aiCredits,
   });
 
   factory UserModel.empty() => UserModel(
@@ -71,11 +67,8 @@ class UserModel extends Equatable {
         geohash: null,
         lat: null,
         lng: null,
-        loopsCount: 0,
         badgesCount: 0,
         reviewCount: 0,
-        followerCount: 0,
-        followingCount: 0,
         overallRating: const None<double>(),
         deleted: false,
         shadowBanned: false,
@@ -144,11 +137,8 @@ class UserModel extends Equatable {
       geohash: doc.getOrElse<String?>('geohash', null),
       lat: doc.getOrElse<double?>('lat', null),
       lng: doc.getOrElse<double?>('lng', null),
-      loopsCount: doc.getOrElse<int>('loopsCount', 0),
       badgesCount: doc.getOrElse<int>('badgesCount', 0),
       reviewCount: doc.getOrElse<int>('reviewCount', 0),
-      followerCount: doc.getOrElse<int>('followerCount', 0),
-      followingCount: doc.getOrElse<int>('followingCount', 0),
       overallRating: overallRating,
       deleted: doc.getOrElse<bool>('deleted', false),
       shadowBanned: doc.getOrElse<bool>('shadowBanned', false),
@@ -180,7 +170,6 @@ class UserModel extends Equatable {
         null,
       ),
       stripeCustomerId: doc.getOrElse<String?>('stripeCustomerId', null),
-      // aiCredits: doc.getOrElse<int>('aiCredits', 0),
     );
   }
   final String id;
@@ -203,11 +192,8 @@ class UserModel extends Equatable {
   final double? lat;
   final double? lng;
 
-  final int loopsCount;
   final int badgesCount;
   final int reviewCount;
-  final int followerCount;
-  final int followingCount;
 
   @OptionalDoubleConverter()
   final Option<double> overallRating;
@@ -259,11 +245,8 @@ class UserModel extends Equatable {
         geohash,
         lat,
         lng,
-        loopsCount,
         badgesCount,
         reviewCount,
-        followerCount,
-        followingCount,
         overallRating,
         deleted,
         shadowBanned,
@@ -285,13 +268,10 @@ class UserModel extends Equatable {
         emailNotificationsITLUpdates,
         stripeConnectedAccountId,
         stripeCustomerId,
-        // aiCredits,
       ];
   bool get isEmpty => this == UserModel.empty();
   bool get isNotEmpty => this != UserModel.empty();
   Map<String, dynamic> toJson() => _$UserModelToJson(this);
-
-  // bool get isOutOfCredits => aiCredits <= 0;
 
   String get displayName => artistName.isEmpty ? username.username : artistName;
   int get socialMediaAudience =>
@@ -314,11 +294,8 @@ class UserModel extends Equatable {
     Option<String>? geohash,
     Option<double>? lat,
     Option<double>? lng,
-    int? loopsCount,
     int? badgesCount,
     int? reviewCount,
-    int? followerCount,
-    int? followingCount,
     Option<double>? overallRating,
     bool? deleted,
     bool? shadowBanned,
@@ -340,7 +317,6 @@ class UserModel extends Equatable {
     bool? emailNotificationsITLUpdates,
     String? stripeConnectedAccountId,
     String? stripeCustomerId,
-    // int? aiCredits,
   }) {
     return UserModel(
       id: id ?? this.id,
@@ -357,11 +333,8 @@ class UserModel extends Equatable {
       geohash: geohash != null ? geohash.asNullable() : this.geohash,
       lat: lat != null ? lat.asNullable() : this.lat,
       lng: lng != null ? lng.asNullable() : this.lng,
-      loopsCount: loopsCount ?? this.loopsCount,
       badgesCount: badgesCount ?? this.badgesCount,
       reviewCount: reviewCount ?? this.reviewCount,
-      followerCount: followerCount ?? this.followerCount,
-      followingCount: followingCount ?? this.followingCount,
       overallRating: overallRating ?? this.overallRating,
       deleted: deleted ?? this.deleted,
       shadowBanned: shadowBanned ?? this.shadowBanned,
@@ -391,7 +364,6 @@ class UserModel extends Equatable {
       stripeConnectedAccountId:
           stripeConnectedAccountId ?? this.stripeConnectedAccountId,
       stripeCustomerId: stripeCustomerId ?? this.stripeCustomerId,
-      // aiCredits: aiCredits ?? this.aiCredits,
     );
   }
 
@@ -411,11 +383,8 @@ class UserModel extends Equatable {
       'geohash': geohash,
       'lat': lat,
       'lng': lng,
-      // 'loopsCount': loopsCount,
       // 'badgesCount': badgesCount,
       // 'reviewCount': reviewCount,
-      // 'followerCount': followerCount,
-      // 'followingCount': followingCount,
       // 'overallRating': overallRating.asNullable(),
       'deleted': deleted,
       'shadowBanned': shadowBanned,
@@ -439,4 +408,12 @@ class UserModel extends Equatable {
       'stripeCustomerId': stripeCustomerId,
     };
   }
+}
+
+class VenueInfo {
+  const VenueInfo({
+    required this.capacity,
+  });
+
+  final int capacity;
 }

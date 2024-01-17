@@ -4,12 +4,9 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intheloopapp/domains/models/option.dart';
 import 'package:intheloopapp/domains/navigation_bloc/navigation_bloc.dart';
 import 'package:intheloopapp/domains/navigation_bloc/tapped_route.dart';
-import 'package:intheloopapp/ui/profile/components/badges_chip.dart';
 import 'package:intheloopapp/ui/profile/components/feedback_button.dart';
 import 'package:intheloopapp/ui/profile/components/follower_count.dart';
-import 'package:intheloopapp/ui/profile/components/location_chip.dart';
 import 'package:intheloopapp/ui/profile/components/message_button.dart';
-import 'package:intheloopapp/ui/profile/components/more_options_button.dart';
 import 'package:intheloopapp/ui/profile/components/request_to_book.dart';
 import 'package:intheloopapp/ui/profile/components/review_count.dart';
 import 'package:intheloopapp/ui/profile/components/settings_button.dart';
@@ -29,7 +26,6 @@ class HeaderSliver extends StatelessWidget {
       ),
       child: BlocBuilder<ProfileCubit, ProfileState>(
         builder: (context, state) {
-          final currPlace = state.place;
           return Column(
             children: [
               const SizedBox(height: 18),

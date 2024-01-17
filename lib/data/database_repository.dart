@@ -67,8 +67,6 @@ abstract class DatabaseRepository {
   );
 
   // Following related stuff
-  Future<int> followersNum(String userid);
-  Future<int> followingNum(String userid);
   Future<void> followUser(
     String currentUserId,
     String visitedUserId,
@@ -80,12 +78,6 @@ abstract class DatabaseRepository {
   Future<bool> isFollowingUser(
     String currentUserId,
     String visitedUserId,
-  );
-  Future<List<UserModel>> getFollowing(String currentUserId);
-  Future<List<UserModel>> getFollowers(String currentUserId);
-  Future<List<UserModel>> getCommonFollowers(
-    String currentUserID,
-    String observedUserId,
   );
 
   // Activity related stuff

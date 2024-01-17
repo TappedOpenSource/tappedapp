@@ -153,29 +153,6 @@ class OpportunityView extends StatelessWidget {
                 ),
                 const SizedBox(height: 12),
                 const Text(
-                  'booker',
-                  style: TextStyle(
-                    fontSize: 24,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-                UserTile(
-                  userId: op.userId,
-                  user: const None(),
-                ),
-                const SizedBox(height: 12),
-                const Text(
-                  'description',
-                  style: TextStyle(
-                    fontSize: 24,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-                Text(
-                  op.description,
-                ),
-                const SizedBox(height: 12),
-                const Text(
                   'location',
                   style: TextStyle(
                     fontSize: 24,
@@ -239,7 +216,30 @@ class OpportunityView extends StatelessWidget {
                     ),
                   ],
                 ),
-                const SizedBox(height: 24),
+                const SizedBox(height: 12),
+                const Text(
+                  'booker',
+                  style: TextStyle(
+                    fontSize: 24,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                UserTile(
+                  userId: op.userId,
+                  user: const None(),
+                ),
+                const SizedBox(height: 12),
+                const Text(
+                  'description',
+                  style: TextStyle(
+                    fontSize: 24,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                Text(
+                  op.description,
+                ),
+                const SizedBox(height: 96),
               ],
             ),
           ),

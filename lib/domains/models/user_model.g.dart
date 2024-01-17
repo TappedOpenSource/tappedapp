@@ -25,11 +25,8 @@ UserModel _$UserModelFromJson(Map<String, dynamic> json) => UserModel(
       geohash: json['geohash'] as String?,
       lat: (json['lat'] as num?)?.toDouble(),
       lng: (json['lng'] as num?)?.toDouble(),
-      loopsCount: json['loopsCount'] as int,
       badgesCount: json['badgesCount'] as int,
       reviewCount: json['reviewCount'] as int,
-      followerCount: json['followerCount'] as int,
-      followingCount: json['followingCount'] as int,
       overallRating: const OptionalDoubleConverter()
           .fromJson(json['overallRating'] as double?),
       deleted: json['deleted'] as bool,
@@ -73,11 +70,8 @@ Map<String, dynamic> _$UserModelToJson(UserModel instance) => <String, dynamic>{
       'geohash': instance.geohash,
       'lat': instance.lat,
       'lng': instance.lng,
-      'loopsCount': instance.loopsCount,
       'badgesCount': instance.badgesCount,
       'reviewCount': instance.reviewCount,
-      'followerCount': instance.followerCount,
-      'followingCount': instance.followingCount,
       'overallRating':
           const OptionalDoubleConverter().toJson(instance.overallRating),
       'deleted': instance.deleted,

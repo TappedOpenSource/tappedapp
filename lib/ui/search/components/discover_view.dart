@@ -64,142 +64,194 @@ class DiscoverView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final database = context.database;
-    return FutureBuilder<List<List<UserModel>>>(
-      future: Future.wait([
-        database.getDCVenues(),
-        database.getNovaVenues(),
-        database.getMarylandVenues(),
-        database.getRichmondVenues(),
-        database.getBookingLeaders(),
-        database.getBookerLeaders(),
-      ]),
-      builder: (context, snapshot) {
-        final leaders = snapshot.data ?? [[], [], [], [], [], []];
-        final dcVenues = leaders[0];
-        final novaVenues = leaders[1];
-        final marylandVenues = leaders[2];
-        final richmondVenues = leaders[3];
-        final bookingLeaders = leaders[4];
-        final bookerLeaders = leaders[5];
-
-        return SingleChildScrollView(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              const Padding(
-                padding: EdgeInsets.symmetric(
-                  vertical: 16,
-                  horizontal: 8,
-                ),
-                child: Text(
-                  'Featured Opportunities',
-                  style: TextStyle(
-                    fontSize: 28,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
+    return SingleChildScrollView(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          const Padding(
+            padding: EdgeInsets.symmetric(
+              vertical: 16,
+              horizontal: 8,
+            ),
+            child: Text(
+              'Featured Opportunities',
+              style: TextStyle(
+                fontSize: 28,
+                fontWeight: FontWeight.bold,
               ),
-              FutureBuilder<List<Opportunity>>(
-                future: database.getFeaturedOpportunities(),
-                builder: (context, snapshot) {
-                  if (!snapshot.hasData) {
-                    return const Center(
-                      child: CupertinoActivityIndicator(),
-                    );
-                  }
-
-                  final opportunities = snapshot.data!;
-                  return _opSlider(opportunities);
-                },
-              ),
-              const Padding(
-                padding: EdgeInsets.symmetric(
-                  vertical: 16,
-                  horizontal: 8,
-                ),
-                child: Text(
-                  'Top Bookers',
-                  style: TextStyle(
-                    fontSize: 28,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-              ),
-              _userSlider(bookerLeaders),
-              const Padding(
-                padding: EdgeInsets.symmetric(
-                  vertical: 16,
-                  horizontal: 8,
-                ),
-                child: Text(
-                  'Top Richmond Venues',
-                  style: TextStyle(
-                    fontSize: 28,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-              ),
-              _userSlider(richmondVenues),
-              const Padding(
-                padding: EdgeInsets.symmetric(
-                  vertical: 16,
-                  horizontal: 8,
-                ),
-                child: Text(
-                  'Top DC Venues',
-                  style: TextStyle(
-                    fontSize: 28,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-              ),
-              _userSlider(dcVenues),
-              const Padding(
-                padding: EdgeInsets.symmetric(
-                  vertical: 16,
-                  horizontal: 8,
-                ),
-                child: Text(
-                  'Top NoVa Venues',
-                  style: TextStyle(
-                    fontSize: 28,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-              ),
-              _userSlider(novaVenues),
-              const Padding(
-                padding: EdgeInsets.symmetric(
-                  vertical: 16,
-                  horizontal: 8,
-                ),
-                child: Text(
-                  'Top Maryland Venues',
-                  style: TextStyle(
-                    fontSize: 28,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-              ),
-              _userSlider(marylandVenues),
-              const Padding(
-                padding: EdgeInsets.symmetric(
-                  vertical: 16,
-                  horizontal: 8,
-                ),
-                child: Text(
-                  'Top Performers',
-                  style: TextStyle(
-                    fontSize: 28,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-              ),
-              _userSlider(bookingLeaders),
-            ],
+            ),
           ),
-        );
-      },
+          FutureBuilder<List<Opportunity>>(
+            future: database.getFeaturedOpportunities(),
+            builder: (context, snapshot) {
+              if (!snapshot.hasData) {
+                return const Center(
+                  child: CupertinoActivityIndicator(),
+                );
+              }
+    
+              final opportunities = snapshot.data!;
+              return _opSlider(opportunities);
+            },
+          ),
+          const Padding(
+            padding: EdgeInsets.symmetric(
+              vertical: 16,
+              horizontal: 8,
+            ),
+            child: Text(
+              'Top Bookers',
+              style: TextStyle(
+                fontSize: 28,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+          ),
+          FutureBuilder(
+            future: database.getBookerLeaders(),
+            builder: (context, snapshot) {
+              if (!snapshot.hasData) {
+                return const Center(
+                  child: CupertinoActivityIndicator(),
+                );
+              }
+    
+              final bookerLeaders = snapshot.data ?? [];
+              return _userSlider(bookerLeaders);
+            },
+          ),
+          const Padding(
+            padding: EdgeInsets.symmetric(
+              vertical: 16,
+              horizontal: 8,
+            ),
+            child: Text(
+              'Top Richmond Venues',
+              style: TextStyle(
+                fontSize: 28,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+          ),
+          FutureBuilder(
+            future: database.getRichmondVenues(),
+            builder: (context, snapshot) {
+              if (!snapshot.hasData) {
+                return const Center(
+                  child: CupertinoActivityIndicator(),
+                );
+              }
+    
+              final richmondVenues = snapshot.data ?? [];
+              return _userSlider(richmondVenues);
+            },
+          ),
+          const Padding(
+            padding: EdgeInsets.symmetric(
+              vertical: 16,
+              horizontal: 8,
+            ),
+            child: Text(
+              'Top DC Venues',
+              style: TextStyle(
+                fontSize: 28,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+          ),
+          FutureBuilder(
+            future: database.getDCVenues(),
+            builder: (context, snapshot) {
+              if (!snapshot.hasData) {
+                return const Center(
+                  child: CupertinoActivityIndicator(),
+                );
+              }
+    
+              final dcVenues = snapshot.data ?? [];
+              return _userSlider(dcVenues);
+            },
+          ),
+          const Padding(
+            padding: EdgeInsets.symmetric(
+              vertical: 16,
+              horizontal: 8,
+            ),
+            child: Text(
+              'Top NoVa Venues',
+              style: TextStyle(
+                fontSize: 28,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+          ),
+          FutureBuilder(
+            future: database.getNovaVenues(),
+            builder: (context, snapshot) {
+              if (!snapshot.hasData) {
+                return const Center(
+                  child: CupertinoActivityIndicator(),
+                );
+              }
+    
+              final novaVenues = snapshot.data ?? [];
+              return _userSlider(novaVenues);
+            },
+          ),
+          const Padding(
+            padding: EdgeInsets.symmetric(
+              vertical: 16,
+              horizontal: 8,
+            ),
+            child: Text(
+              'Top Maryland Venues',
+              style: TextStyle(
+                fontSize: 28,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+          ),
+          FutureBuilder(
+            future: database.getMarylandVenues(),
+            builder: (context, snapshot) {
+              if (!snapshot.hasData) {
+                return const Center(
+                  child: CupertinoActivityIndicator(),
+                );
+              }
+    
+              final marylandVenues = snapshot.data ?? [];
+              return _userSlider(marylandVenues);
+            },
+          ),
+          const Padding(
+            padding: EdgeInsets.symmetric(
+              vertical: 16,
+              horizontal: 8,
+            ),
+            child: Text(
+              'Top Performers',
+              style: TextStyle(
+                fontSize: 28,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+          ),
+          FutureBuilder(
+            future: database.getBookingLeaders(),
+            builder: (context, snapshot) {
+              if (!snapshot.hasData) {
+                return const Center(
+                  child: CupertinoActivityIndicator(),
+                );
+              }
+    
+              final bookingLeaders = snapshot.data ?? [];
+              return _userSlider(bookingLeaders);
+            },
+          ),
+        ],
+      ),
     );
   }
 }

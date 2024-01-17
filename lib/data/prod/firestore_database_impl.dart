@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:cached_annotation/cached_annotation.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:enum_to_string/enum_to_string.dart';
 import 'package:feedback/feedback.dart';
@@ -440,32 +441,6 @@ class FirestoreDatabaseImpl extends DatabaseRepository {
   }
 
   @override
-  Future<int> followersNum(String userid) async {
-    try {
-      final followersSnapshot =
-          await _followersRef.doc(userid).collection('Followers').get();
-
-      return followersSnapshot.docs.length;
-    } catch (e, s) {
-      logger.error('followersNum', error: e, stackTrace: s);
-      return 0;
-    }
-  }
-
-  @override
-  Future<int> followingNum(String userid) async {
-    try {
-      final followingSnapshot =
-          await _followingRef.doc(userid).collection('Following').get();
-
-      return followingSnapshot.docs.length;
-    } catch (e, s) {
-      logger.error('followingNum', error: e, stackTrace: s);
-      return 0;
-    }
-  }
-
-  @override
   Future<void> updateUserData(UserModel user) async {
     try {
       await _analytics.logEvent(name: 'user_data_update');
@@ -546,65 +521,6 @@ class FirestoreDatabaseImpl extends DatabaseRepository {
     } catch (e) {
       return false;
     }
-  }
-
-  @override
-  Future<List<UserModel>> getFollowing(String currentUserId) async {
-    final userFollowingSnapshot =
-        await _followingRef.doc(currentUserId).collection('Following').get();
-
-    final followingFutures = userFollowingSnapshot.docs.map(
-      (doc) async {
-        final userDoc = await _usersRef.doc(doc.id).get();
-        return UserModel.fromDoc(userDoc);
-      },
-    ).toList();
-
-    final following = await Future.wait(followingFutures);
-
-    return following;
-  }
-
-  @override
-  Future<List<UserModel>> getFollowers(String currentUserId) async {
-    final userFollowerSnapshot =
-        await _followersRef.doc(currentUserId).collection('Followers').get();
-
-    final followerFutures = userFollowerSnapshot.docs.map(
-      (doc) async {
-        final userDoc = await _usersRef.doc(doc.id).get();
-        return UserModel.fromDoc(userDoc);
-      },
-    ).toList();
-
-    final followers = await Future.wait(followerFutures);
-
-    return followers;
-  }
-
-  @override
-  Future<List<UserModel>> getCommonFollowers(
-    String currentUserID,
-    String observedUserId,
-  ) async {
-    final [userFollowingSnapshot, followsViewedSnapshot] = await Future.wait([
-      //current user must follow a person to qualify
-      getFollowing(currentUserID),
-
-      //person must follow the observed to qualify
-      getFollowers(observedUserId),
-    ]);
-    final result = userFollowingSnapshot
-        .toSet()
-        .intersection(followsViewedSnapshot.toSet());
-    final intersection = await Future.wait(
-      result.map((id) async {
-        final user = await getUserById(id.id);
-        return user.asNullable();
-      }),
-    );
-
-    return intersection.whereType<UserModel>().toList();
   }
 
   @override
@@ -1339,6 +1255,13 @@ class FirestoreDatabaseImpl extends DatabaseRepository {
   @override
   Future<List<Service>> getUserServices(String userId) async {
     try {
+      await _analytics.logEvent(
+        name: 'get_user_services',
+        parameters: {
+          'user_id': userId,
+        },
+      );
+
       final userServicesSnapshot = await _servicesRef
           .doc(userId)
           .collection('userServices')
@@ -1394,6 +1317,10 @@ class FirestoreDatabaseImpl extends DatabaseRepository {
     int limit = 20,
     String? lastOpportunityId,
   }) async {
+    await _analytics.logEvent(
+      name: 'get_opportunities',
+    );
+
     if (lastOpportunityId != null) {
       final documentSnapshot =
           await _opportunitiesRef.doc(lastOpportunityId).get();
@@ -1424,9 +1351,15 @@ class FirestoreDatabaseImpl extends DatabaseRepository {
   @override
   Future<List<Opportunity>> getOpportunitiesByUserId(String userId) async {
     try {
+      await _analytics.logEvent(
+        name: 'get_opportunities_by_user_id',
+        parameters: {
+          'user_id': userId,
+        },
+      );
+
       final userOpportunitiesSnapshot = await _opportunitiesRef
           .where('userId', isEqualTo: userId)
-          .where('deleted', isNotEqualTo: false)
           .where('startTime', isGreaterThanOrEqualTo: Timestamp.now())
           .orderBy('startTime', descending: true)
           .get();
@@ -1467,6 +1400,13 @@ class FirestoreDatabaseImpl extends DatabaseRepository {
   @override
   Future<List<UserModel>> getInterestedUsers(Opportunity opportunity) async {
     try {
+      await _analytics.logEvent(
+        name: 'get_interested_users',
+        parameters: {
+          'opportunity_id': opportunity.id,
+        },
+      );
+
       final interestedUsersSnapshot = await _opportunitiesRef
           .doc(opportunity.id)
           .collection('interestedUsers')
@@ -1548,6 +1488,13 @@ class FirestoreDatabaseImpl extends DatabaseRepository {
     int limit = 20,
     String? lastOpportunityId,
   }) async {
+    await _analytics.logEvent(
+      name: 'get_opportunity_feed_by_user_id',
+      parameters: {
+        'user_id': userId,
+      },
+    );
+
     if (lastOpportunityId != null) {
       final documentSnapshot = await _opportunityFeedsRef
           .doc(userId)
@@ -1644,12 +1591,21 @@ class FirestoreDatabaseImpl extends DatabaseRepository {
         },
       );
 
-      final usersSnap = await _usersRef.get();
+      final usersSnap =
+          await _usersRef
+            .where(
+              'deleted', 
+              isNotEqualTo: true,
+            ).get();
 
       await Future.wait(
         usersSnap.docs.map(
           (userDoc) async {
             if (userDoc.id == opportunity.userId) {
+              return;
+            }
+
+            if (userDoc.getOrElse('email', '').endsWith('tapped.ai')) {
               return;
             }
 
@@ -1841,6 +1797,12 @@ class FirestoreDatabaseImpl extends DatabaseRepository {
     String? lastReviewId,
   }) async {
     try {
+      await _analytics.logEvent(
+        name: 'get_booker_reviews_by_booker_id',
+        parameters: {
+          'booker_id': bookerId,
+        },
+      );
       final reviewsQuery = _reviewsRef
           .doc(bookerId)
           .collection(bookerReviewsSubcollection)
@@ -1949,6 +1911,12 @@ class FirestoreDatabaseImpl extends DatabaseRepository {
     String? lastReviewId,
   }) async {
     try {
+      await _analytics.logEvent(
+        name: 'get_performer_reviews_by_performer_id',
+        parameters: {
+          'performer_id': performerId,
+        },
+      );
       final reviewsQuery = _reviewsRef
           .doc(performerId)
           .collection(performerReviewsSubcollection)
@@ -2043,6 +2011,12 @@ class FirestoreDatabaseImpl extends DatabaseRepository {
   @override
   Future<void> joinPremiumWaitlist(String userId) async {
     try {
+      await _analytics.logEvent(
+        name: 'join_premium_waitlist',
+        parameters: {
+          'user_id': userId,
+        },
+      );
       await _premiumWailistRef.doc(userId).set({
         'timestamp': Timestamp.now(),
       });
@@ -2063,6 +2037,12 @@ class FirestoreDatabaseImpl extends DatabaseRepository {
     String imageUrl,
   ) async {
     try {
+      await _analytics.logEvent(
+        name: 'send_feedback',
+        parameters: {
+          'user_id': userId,
+        },
+      );
       await _userFeedbackRef.add({
         'userId': userId,
         'timestamp': Timestamp.now(),
