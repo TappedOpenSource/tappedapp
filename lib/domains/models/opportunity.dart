@@ -20,6 +20,7 @@ class Opportunity extends Equatable {
     required this.endTime,
     required this.isPaid,
     required this.touched,
+    required this.deleted,
   });
 
   factory Opportunity.fromDoc(DocumentSnapshot<Map<String, dynamic>> doc) {
@@ -47,6 +48,7 @@ class Opportunity extends Equatable {
       endTime: (doc.get('endTime') as Timestamp).toDate(),
       isPaid: doc.getOrElse('isPaid', false),
       touched: Option.fromNullable(touched),
+      deleted: doc.getOrElse('deleted', false),
     );
   }
 
@@ -64,6 +66,7 @@ class Opportunity extends Equatable {
   final DateTime endTime;
   final bool isPaid;
   final Option<OpportunityInteration> touched;
+  final bool deleted;
 
   @override
   List<Object?> get props => [
@@ -81,6 +84,7 @@ class Opportunity extends Equatable {
         endTime,
         isPaid,
         touched,
+        deleted,
       ];
 
   Map<String, dynamic> toDoc() {
@@ -99,6 +103,7 @@ class Opportunity extends Equatable {
       'endTime': Timestamp.fromDate(endTime),
       'isPaid': isPaid,
       'touched': touched.asNullable(),
+      'deleted': deleted,
     };
   }
 
@@ -117,6 +122,7 @@ class Opportunity extends Equatable {
     DateTime? endTime,
     bool? isPaid,
     Option<OpportunityInteration>? touched,
+    bool? deleted,
   }) {
     return Opportunity(
       id: id ?? this.id,
@@ -133,6 +139,7 @@ class Opportunity extends Equatable {
       endTime: endTime ?? this.endTime,
       isPaid: isPaid ?? this.isPaid,
       touched: touched ?? this.touched,
+      deleted: deleted ?? this.deleted,
     );
   }
 }

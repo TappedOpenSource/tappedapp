@@ -1666,6 +1666,24 @@ class FirestoreDatabaseImpl extends DatabaseRepository {
   }
 
   @override
+  Future<void> deleteOpportunity(String opportunityId) async {
+    try {
+      await _analytics.logEvent(
+        name: 'delete_opportunity',
+        parameters: {
+          'opportunity_id': opportunityId,
+        },
+      );
+
+      await _opportunitiesRef.doc(opportunityId).update({
+        'deleted': true,
+      });
+    } catch (e, s) {
+      logger.error('deleteOpportunity', error: e, stackTrace: s);
+    }
+  }
+
+  @override
   Future<void> blockUser({
     required String currentUserId,
     required String blockedUserId,

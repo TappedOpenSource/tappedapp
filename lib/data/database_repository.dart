@@ -195,6 +195,8 @@ abstract class DatabaseRepository {
   Future<void> createOpportunity(Opportunity opportunity);
   Future<void> copyOpportunityToFeeds(Opportunity opportunity);
 
+  Future<void> deleteOpportunity(String opportunityId);
+
   // blocking
   Future<void> blockUser({
     required String currentUserId,
