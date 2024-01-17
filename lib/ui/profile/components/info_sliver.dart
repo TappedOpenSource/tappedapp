@@ -64,10 +64,13 @@ class InfoSliver extends StatelessWidget {
                     leading: const Icon(
                       CupertinoIcons.briefcase,
                     ),
-                    title: Text(
-                      occupations.join(', '),
-                      style: TextStyle(
-                        color: theme.colorScheme.onSurface,
+                    title: SingleChildScrollView(
+                      scrollDirection: Axis.horizontal,
+                      child: Text(
+                        occupations.join(', '),
+                        style: TextStyle(
+                          color: theme.colorScheme.onSurface,
+                        ),
                       ),
                     ),
                   ),

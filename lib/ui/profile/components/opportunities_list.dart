@@ -16,7 +16,7 @@ class OpportunitiesList extends StatelessWidget {
     return Column(
       children: [
         SizedBox(
-          height: 250,
+          height: 260,
           child: ScrollSnapList(
             onItemFocus: (index) {},
             itemSize: MediaQuery.of(context).size.width - 40,

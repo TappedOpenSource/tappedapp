@@ -38,20 +38,49 @@ class OpportunityCard extends StatelessWidget {
                 required Widget child,
               }) {
                 return badges.Badge(
-                  onTap: () {
-                    database
-                        .deleteOpportunity(opportunity.id)
-                        .then((value) => onOpportunityDeleted?.call())
-                        .onError((error, stackTrace) {
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(
-                          behavior: SnackBarBehavior.floating,
-                          backgroundColor: Colors.red,
-                          content: Text('Error deleting opportunity'),
+                  onTap: () => showDialog<AlertDialog>(
+                    context: context,
+                    builder: (_) => AlertDialog(
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(25),
+                      ),
+                      elevation: 5,
+                      title: const Text('are your sure?'),
+                      content:
+                          const Text('do you want to delete this opportunity'),
+                      actions: [
+                        TextButton(
+                          onPressed: () {
+                            database
+                                .deleteOpportunity(opportunity.id)
+                                .then((value) {
+                              onOpportunityDeleted?.call();
+                              Navigator.of(context, rootNavigator: true).pop();
+                            }).onError((error, stackTrace) {
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                const SnackBar(
+                                  behavior: SnackBarBehavior.floating,
+                                  backgroundColor: Colors.red,
+                                  content: Text('Error deleting opportunity'),
+                                ),
+                              );
+                            });
+                          },
+                          child: const Text('Cancel'),
                         ),
-                      );
-                    });
-                  },
+                        TextButton(
+                          onPressed: Navigator.of(
+                            context,
+                            rootNavigator: true,
+                          ).pop,
+                          child: const Text('Confirm'),
+                        ),
+                      ],
+                    ),
+                  ),
+                  // onTap: () {
+
+                  // },
                   position: badges.BadgePosition.custom(
                     top: 0,
                     end: 0,
@@ -73,7 +102,7 @@ class OpportunityCard extends StatelessWidget {
                   if (!snapshot.hasData) {
                     return Container(
                       width: cardWidth,
-                      height: 200,
+                      height: 230,
                       decoration: BoxDecoration(
                         color: Colors.grey.withOpacity(0.1),
                         borderRadius: BorderRadius.circular(12),
@@ -81,14 +110,14 @@ class OpportunityCard extends StatelessWidget {
                       child: const CupertinoActivityIndicator(),
                     );
                   }
-            
+
                   final provider = snapshot.data!;
                   final uuid = const Uuid().v4();
                   final heroImageTag = 'op-image-${opportunity.id}-$uuid';
                   final heroTitleTag = 'op-title-${opportunity.id}-$uuid';
                   return SizedBox(
                     width: cardWidth,
-                    height: 230,
+                    height: 250,
                     child: InkWell(
                       onTap: () => context.push(
                         OpportunityPage(
@@ -127,7 +156,7 @@ class OpportunityCard extends StatelessWidget {
                               opportunity.title,
                               style: const TextStyle(
                                 overflow: TextOverflow.ellipsis,
-                                fontSize: 18,
+                                fontSize: 16,
                                 fontWeight: FontWeight.w900,
                               ),
                             ),
