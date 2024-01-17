@@ -2,15 +2,12 @@ import 'dart:async';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_analytics/firebase_analytics.dart';
-import 'package:firebase_dynamic_links/firebase_dynamic_links.dart';
 import 'package:intheloopapp/data/deep_link_repository.dart';
-import 'package:intheloopapp/domains/models/opportunity.dart';
 import 'package:intheloopapp/domains/models/option.dart';
 import 'package:intheloopapp/domains/models/user_model.dart';
 import 'package:intheloopapp/utils/app_logger.dart';
 import 'package:uni_links/uni_links.dart';
 
-final _dynamic = FirebaseDynamicLinks.instance;
 final _analytics = FirebaseAnalytics.instance;
 final _firestore = FirebaseFirestore.instance;
 
@@ -18,20 +15,24 @@ final _usersRef = _firestore.collection('users');
 
 /// The unilink link implementation for Deep Link
 class UniLinkImpl extends DeepLinkRepository {
+  UniLinkImpl() {
+    uniLinkStream = StreamController<DeepLinkRedirect>();
+  }
+
+  late final StreamController<DeepLinkRedirect> uniLinkStream;
+
   @override
   Stream<DeepLinkRedirect> getDeepLinks() async* {
-    // ignore: close_sinks
-    final uniLinkStream = StreamController<DeepLinkRedirect>();
+    logger.debug('initializing uni link stream');
 
     final uri = await getInitialUri();
-
     final redirect = await _handleDeepLink(uri);
     if (redirect != null) {
       uniLinkStream.add(redirect);
     }
 
     uriLinkStream.listen((Uri? deepLink) async {
-      logger.debug('new deep link - $deepLink');
+      // logger.debug('new deep link - $deepLink');
       final redirect = await _handleDeepLink(deepLink);
 
       if (redirect != null) {

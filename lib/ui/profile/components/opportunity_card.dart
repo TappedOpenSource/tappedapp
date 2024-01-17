@@ -6,6 +6,7 @@ import 'package:intheloopapp/domains/navigation_bloc/navigation_bloc.dart';
 import 'package:intheloopapp/domains/navigation_bloc/tapped_route.dart';
 import 'package:intheloopapp/utils/hero_image.dart';
 import 'package:intheloopapp/utils/opportunity_image.dart';
+import 'package:intl/intl.dart';
 import 'package:uuid/uuid.dart';
 
 class OpportunityCard extends StatelessWidget {
@@ -75,18 +76,20 @@ class OpportunityCard extends StatelessWidget {
                 ),
                 Hero(
                   tag: heroTitleTag,
-                  child: Padding(
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: 12,
+                  child: Text(
+                    opportunity.title,
+                    style: const TextStyle(
+                      overflow: TextOverflow.ellipsis,
+                      fontSize: 18,
+                      fontWeight: FontWeight.w900,
                     ),
-                    child: Text(
-                      opportunity.title,
-                      style: const TextStyle(
-                        overflow: TextOverflow.ellipsis,
-                        fontSize: 18,
-                        fontWeight: FontWeight.w900,
-                      ),
-                    ),
+                  ),
+                ),
+                Text(
+                  DateFormat(
+                    'MM/dd/yyyy',
+                  ).format(
+                    opportunity.startTime,
                   ),
                 ),
               ],

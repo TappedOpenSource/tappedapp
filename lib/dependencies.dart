@@ -123,9 +123,9 @@ List<BlocProvider> buildBlocs({
       //Depreciated
       create: (context) => DeepLinkBloc(
         onboardingBloc: context.onboarding,
-        navBloc: context.nav,
-        dynamicLinkRepository: context.read<DeepLinkRepository>(),
-        databaseRepository: context.database,
+        nav: context.nav,
+        deepLinks: context.read<DeepLinkRepository>(),
+        database: context.database,
       ),
     ),
     BlocProvider<DownForMaintenanceBloc>(
