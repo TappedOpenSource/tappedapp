@@ -121,7 +121,8 @@ class UserModel extends Equatable {
       artistName: doc.getOrElse('artistName', ''),
       profilePicture: doc.getOrElse<String?>('profilePicture', null),
       bio: doc.getOrElse<String>('bio', ''),
-      genres: doc.getOrElse<List<dynamic>>('genres', [])
+      genres: doc
+          .getOrElse<List<dynamic>>('genres', [])
           .map(
             (dynamic e) =>
                 EnumToString.fromString<Genre>(Genre.values, e as String),
@@ -129,7 +130,8 @@ class UserModel extends Equatable {
           .where((element) => element != null)
           .whereType<Genre>()
           .toList(),
-      occupations: doc.getOrElse<List<dynamic>>('occupations', [])
+      occupations: doc
+          .getOrElse<List<dynamic>>('occupations', [])
           .whereType<String>()
           .toList(),
       label: doc.getOrElse<String>('label', 'None'),
@@ -412,8 +414,18 @@ class UserModel extends Equatable {
 
 class VenueInfo {
   const VenueInfo({
-    required this.capacity,
+    this.capacity,
+    this.productionInfo,
+    this.frontOfHouse,
+    this.monitors,
+    this.microphones,
+    this.lights,
   });
 
-  final int capacity;
+  final int? capacity;
+  final String? productionInfo;
+  final String? frontOfHouse;
+  final String? monitors;
+  final String? microphones;
+  final String? lights;
 }

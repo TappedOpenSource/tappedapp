@@ -34,9 +34,9 @@ class _UserCardState extends State<UserCard> {
     if (widget.user.deleted) return const SizedBox.shrink();
 
     final audienceText = '${NumberFormat.compactCurrency(
-                decimalDigits: 0,
-                symbol: '',
-              ).format(widget.user.followerCount)} followers';
+      decimalDigits: 0,
+      symbol: '',
+    ).format(widget.user.socialMediaAudience)} followers';
 
     return CurrentUserBuilder(
       errorWidget: const ListTile(
