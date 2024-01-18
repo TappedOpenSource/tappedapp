@@ -26,6 +26,7 @@ class HeaderSliver extends StatelessWidget {
       ),
       child: BlocBuilder<ProfileCubit, ProfileState>(
         builder: (context, state) {
+          final isCurrentUser = state.currentUser.id == state.visitedUser.id;
           return Column(
             children: [
               const SizedBox(height: 18),
@@ -38,7 +39,7 @@ class HeaderSliver extends StatelessWidget {
                 ],
               ),
               const SizedBox(height: 12),
-              if (state.visitedUser.id != state.currentUser.id)
+              if (!isCurrentUser)
                 const Row(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
@@ -62,7 +63,7 @@ class HeaderSliver extends StatelessWidget {
                     ),
                   ],
                 ),
-              if (state.visitedUser.id == state.currentUser.id)
+              if (isCurrentUser)
                 AdminBuilder(
                   builder: (context, isAdmin) {
                     return switch (isAdmin) {
@@ -98,9 +99,9 @@ class HeaderSliver extends StatelessWidget {
                     };
                   },
                 ),
-              if (state.visitedUser.id != state.currentUser.id)
+              if (!isCurrentUser && state.services.isNotEmpty)
                 const SizedBox(height: 8),
-              if (state.visitedUser.id != state.currentUser.id)
+              if (!isCurrentUser && state.services.isNotEmpty)
                 SizedBox(
                   width: double.infinity,
                   child: RequestToBookButton(

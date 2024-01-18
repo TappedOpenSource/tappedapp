@@ -12,7 +12,7 @@ import 'package:intheloopapp/utils/hero_image.dart';
 import 'package:intl/intl.dart';
 import 'package:uuid/uuid.dart';
 
-class UserCard extends StatefulWidget {
+class UserCard extends StatelessWidget {
   const UserCard({
     required this.user,
     super.key,
@@ -21,22 +21,15 @@ class UserCard extends StatefulWidget {
   final UserModel user;
 
   @override
-  State<UserCard> createState() => _UserCardState();
-}
-
-class _UserCardState extends State<UserCard> {
-  bool followingOverride = false;
-
-  @override
   Widget build(BuildContext context) {
     final database = context.database;
-    final imageUrl = widget.user.profilePicture;
-    if (widget.user.deleted) return const SizedBox.shrink();
+    final imageUrl = user.profilePicture;
+    if (user.deleted) return const SizedBox.shrink();
 
     final audienceText = '${NumberFormat.compactCurrency(
       decimalDigits: 0,
       symbol: '',
-    ).format(widget.user.socialMediaAudience)} followers';
+    ).format(user.socialMediaAudience)} followers';
 
     return CurrentUserBuilder(
       errorWidget: const ListTile(
@@ -48,7 +41,7 @@ class _UserCardState extends State<UserCard> {
       ),
       builder: (context, currentUser) {
         return FutureBuilder<bool>(
-          future: database.isVerified(widget.user.id),
+          future: database.isVerified(user.id),
           builder: (context, snapshot) {
             final verified = snapshot.data ?? false;
             final provider = (imageUrl == null || imageUrl.isEmpty)
@@ -57,8 +50,8 @@ class _UserCardState extends State<UserCard> {
                     imageUrl,
                   );
             final uuid = const Uuid().v4();
-            final heroImageTag = 'user-image-${widget.user.id}-$uuid';
-            final heroTitleTag = 'user-title-${widget.user.id}-$uuid';
+            final heroImageTag = 'user-image-${user.id}-$uuid';
+            final heroTitleTag = 'user-title-${user.id}-$uuid';
             return SizedBox(
               width: 150,
               height: 150,
@@ -68,10 +61,8 @@ class _UserCardState extends State<UserCard> {
                   GestureDetector(
                     onTap: () => context.push(
                       ProfilePage(
-                        userId: widget.user.id,
-                        user: Some(
-                          widget.user,
-                        ),
+                        userId: user.id,
+                        user: Some(user),
                         heroImage: HeroImage(
                           imageProvider: provider,
                           heroTag: heroImageTag,
@@ -124,7 +115,7 @@ class _UserCardState extends State<UserCard> {
                             children: [
                               RichText(
                                 text: TextSpan(
-                                  text: widget.user.displayName,
+                                  text: user.displayName,
                                   style: const TextStyle(
                                     fontWeight: FontWeight.bold,
                                     color: Colors.white,

@@ -374,44 +374,6 @@ class ProfileCubit extends Cubit<ProfileState> {
     }
   }
 
-  void toggleFollow(String currentUserId, String visitedUserId) {
-    if (state.isFollowing) {
-      unfollow(currentUserId, visitedUserId);
-    } else {
-      follow(currentUserId, visitedUserId);
-    }
-  }
-
-  Future<void> follow(String currentUserId, String visitedUserId) async {
-    try {
-      logger.debug('follow $visitedUserId');
-      emit(
-        state.copyWith(
-          followerCount: state.followerCount + 1,
-          isFollowing: true,
-        ),
-      );
-      await databaseRepository.followUser(currentUserId, visitedUserId);
-    } catch (e, s) {
-      logger.error('follow error', error: e, stackTrace: s);
-    }
-  }
-
-  Future<void> unfollow(String currentUserId, String visitedUserId) async {
-    try {
-      logger.debug('unfollow $visitedUserId');
-      emit(
-        state.copyWith(
-          followerCount: state.followerCount - 1,
-          isFollowing: false,
-        ),
-      );
-      await databaseRepository.unfollowUser(currentUserId, visitedUserId);
-    } catch (e, s) {
-      logger.error('unfollow error', error: e, stackTrace: s);
-    }
-  }
-
   Future<void> block() async {
     try {
       logger.debug('block ${state.visitedUser.id}');
@@ -452,26 +414,6 @@ class ProfileCubit extends Cubit<ProfileState> {
       );
     } catch (e, s) {
       logger.error('loadIsBlocked error', error: e, stackTrace: s);
-    }
-  }
-
-  Future<void> loadIsFollowing(
-    String currentUserId,
-    String visitedUserId,
-  ) async {
-    try {
-      final isFollowing = await databaseRepository.isFollowingUser(
-        currentUserId,
-        visitedUserId,
-      );
-
-      emit(
-        state.copyWith(
-          isFollowing: isFollowing,
-        ),
-      );
-    } catch (e, s) {
-      logger.error('loadIsFollowing error', error: e, stackTrace: s);
     }
   }
 

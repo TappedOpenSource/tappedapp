@@ -412,7 +412,8 @@ class UserModel extends Equatable {
   }
 }
 
-class VenueInfo {
+@JsonSerializable()
+class VenueInfo extends Equatable {
   const VenueInfo({
     this.capacity,
     this.productionInfo,
@@ -428,4 +429,14 @@ class VenueInfo {
   final String? monitors;
   final String? microphones;
   final String? lights;
+
+  @override
+  List<Object?> get props => [
+        capacity,
+        productionInfo,
+        frontOfHouse,
+        monitors,
+        microphones,
+        lights,
+      ];
 }

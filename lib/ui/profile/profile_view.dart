@@ -109,7 +109,6 @@ class ProfileView extends StatelessWidget {
           ..initBadges()
           ..initServices()
           ..initOpportunities()
-          ..loadIsFollowing(currentUser.id, visitedUser.id)
           ..loadIsBlocked()
           ..loadIsVerified(visitedUser.id)
           ..initPlace(),
@@ -139,7 +138,6 @@ class ProfileView extends StatelessWidget {
                       ? _blockedSlivers(
                           context,
                           state,
-                          currentUser,
                           visitedUser,
                         )
                       : _unblockedSlivers(
@@ -179,7 +177,6 @@ class ProfileView extends StatelessWidget {
               cubit.initServices(),
               cubit.initOpportunities(),
               cubit.refetchVisitedUser(),
-              cubit.loadIsFollowing(currentUser.id, visitedUser.id),
               cubit.loadIsVerified(visitedUser.id),
             ]);
           },
@@ -293,7 +290,6 @@ class ProfileView extends StatelessWidget {
   List<Widget> _blockedSlivers(
     BuildContext context,
     ProfileState state,
-    UserModel currentUser,
     UserModel visitedUser,
   ) =>
       [
@@ -310,7 +306,6 @@ class ProfileView extends StatelessWidget {
               cubit.initBadges(),
               cubit.initServices(),
               cubit.refetchVisitedUser(),
-              cubit.loadIsFollowing(currentUser.id, visitedUser.id),
               cubit.loadIsVerified(visitedUser.id),
             ]);
           },
