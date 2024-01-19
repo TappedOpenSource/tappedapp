@@ -9,6 +9,7 @@ import 'package:intheloopapp/ui/premium_theme_cubit.dart';
 import 'package:intheloopapp/ui/profile/profile_view.dart';
 import 'package:intheloopapp/ui/search/search_view.dart';
 import 'package:intheloopapp/ui/shell/components/bottom_toolbar.dart';
+import 'package:intheloopapp/ui/splash/splash_view.dart';
 import 'package:intheloopapp/utils/current_user_builder.dart';
 import 'package:intheloopapp/utils/custom_claim_builder.dart';
 
@@ -53,7 +54,6 @@ class _ShellViewState extends State<ShellView> {
                     index: state.selectedTab,
                     children: [
                       const OpportunityFeedView(),
-                      // const WaitlistView(),
                       SearchView(
                         searchFocusNode: searchFocusNode,
                       ),
