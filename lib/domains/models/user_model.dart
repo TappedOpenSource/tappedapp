@@ -416,6 +416,7 @@ class UserModel extends Equatable {
 class VenueInfo extends Equatable {
   const VenueInfo({
     this.capacity,
+    this.idealArtistProfile,
     this.productionInfo,
     this.frontOfHouse,
     this.monitors,
@@ -424,6 +425,7 @@ class VenueInfo extends Equatable {
   });
 
   final int? capacity;
+  final String? idealArtistProfile;
   final String? productionInfo;
   final String? frontOfHouse;
   final String? monitors;

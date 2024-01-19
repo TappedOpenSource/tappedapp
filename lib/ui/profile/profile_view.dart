@@ -100,7 +100,7 @@ class ProfileView extends StatelessWidget {
       BlocProvider(
         create: (context) => ProfileCubit(
           places: places,
-          databaseRepository: databaseRepository,
+          database: databaseRepository,
           currentUser: currentUser,
           visitedUser: visitedUser,
         )

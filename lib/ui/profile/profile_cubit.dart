@@ -19,7 +19,7 @@ part 'profile_state.dart';
 
 class ProfileCubit extends Cubit<ProfileState> {
   ProfileCubit({
-    required this.databaseRepository,
+    required this.database,
     required this.places,
     required this.currentUser,
     required this.visitedUser,
@@ -29,7 +29,7 @@ class ProfileCubit extends Cubit<ProfileState> {
             visitedUser: visitedUser,
           ),
         );
-  final DatabaseRepository databaseRepository;
+  final DatabaseRepository database;
   final PlacesRepository places;
   final UserModel currentUser;
   final UserModel visitedUser;
@@ -68,7 +68,7 @@ class ProfileCubit extends Cubit<ProfileState> {
       );
       if (newUserData == null) {
         final refreshedVisitedUser =
-            await databaseRepository.getUserById(state.visitedUser.id);
+            await database.getUserById(state.visitedUser.id);
         emit(state.copyWith(visitedUser: refreshedVisitedUser.asNullable()));
       } else {
         emit(state.copyWith(visitedUser: newUserData));
@@ -86,12 +86,12 @@ class ProfileCubit extends Cubit<ProfileState> {
     final trace = logger.createTrace('getLatestBooking');
     await trace.start();
     try {
-      final bookingsRequestee = await databaseRepository.getBookingsByRequestee(
+      final bookingsRequestee = await database.getBookingsByRequestee(
         visitedUser.id,
         limit: 1,
         status: BookingStatus.confirmed,
       );
-      final bookingsRequester = await databaseRepository.getBookingsByRequester(
+      final bookingsRequester = await database.getBookingsByRequester(
         visitedUser.id,
         limit: 1,
         status: BookingStatus.confirmed,
@@ -143,11 +143,11 @@ class ProfileCubit extends Cubit<ProfileState> {
     await trace.start();
     try {
       final performerReviews =
-          await databaseRepository.getPerformerReviewsByPerformerId(
+          await database.getPerformerReviewsByPerformerId(
         visitedUser.id,
         limit: 1,
       );
-      final bookerReviews = await databaseRepository.getBookerReviewsByBookerId(
+      final bookerReviews = await database.getBookerReviewsByBookerId(
         visitedUser.id,
         limit: 1,
       );
@@ -194,7 +194,7 @@ class ProfileCubit extends Cubit<ProfileState> {
   }
 
   Future<void> initServices() async {
-    final services = await databaseRepository.getUserServices(visitedUser.id);
+    final services = await database.getUserServices(visitedUser.id);
     emit(
       state.copyWith(
         services: services
@@ -207,8 +207,9 @@ class ProfileCubit extends Cubit<ProfileState> {
 
   Future<void> initOpportunities() async {
     try {
-      final opportunities = await databaseRepository.getOpportunitiesByUserId(
+      final opportunities = await database.getOpportunitiesByUserId(
         visitedUser.id,
+        limit: 5,
       );
 
       logger.debug('initOpportunities ${opportunities.length}');
@@ -255,7 +256,7 @@ class ProfileCubit extends Cubit<ProfileState> {
 
   Future<void> removeService(Service service) async {
     try {
-      await databaseRepository.deleteService(
+      await database.deleteService(
         currentUser.id,
         service.id,
       );
@@ -293,13 +294,13 @@ class ProfileCubit extends Cubit<ProfileState> {
       }
 
       final badgesAvailable =
-          (await databaseRepository.getUserBadges(visitedUser.id, limit: 1))
+          (await database.getUserBadges(visitedUser.id, limit: 1))
               .isNotEmpty;
       if (!badgesAvailable) {
         emit(state.copyWith(badgeStatus: BadgesStatus.success));
       }
 
-      badgeListener = databaseRepository
+      badgeListener = database
           .userBadgesObserver(visitedUser.id)
           .listen((badge.Badge event) {
         logger.debug('badge { ${event.id} : ${event.name} }');
@@ -338,6 +339,42 @@ class ProfileCubit extends Cubit<ProfileState> {
     }
   }
 
+  Future<void> fetchMoreOpportunities() async {
+    if (state.hasReachedMaxOpportunities) return;
+
+    final trace = logger.createTrace('fetchMoreOpportunities');
+    await trace.start();
+    try {
+      if (state.opportunityStatus == OpportunitiesStatus.initial) {
+        await initOpportunities();
+      }
+
+      final opportunities = await database.getOpportunitiesByUserId(
+        visitedUser.id,
+        limit: 5,
+        lastOpportunityId: state.opportunities.last.id,
+      );
+      opportunities.isEmpty
+          ? emit(state.copyWith(hasReachedMaxOpportunities: true))
+          : emit(
+              state.copyWith(
+                opportunityStatus: OpportunitiesStatus.success,
+                opportunities: List.of(state.opportunities)..addAll(opportunities),
+                hasReachedMaxOpportunities: false,
+              ),
+            );
+    } catch (e, s) {
+      logger.error(
+        'fetchMoreOpportunities error',
+        error: e,
+        stackTrace: s,
+      );
+      emit(state.copyWith(opportunityStatus: OpportunitiesStatus.failure));
+    } finally {
+      await trace.stop();
+    }
+  }
+
   Future<void> fetchMoreBadges() async {
     if (state.hasReachedMaxBadges) return;
 
@@ -348,7 +385,7 @@ class ProfileCubit extends Cubit<ProfileState> {
         await initBadges();
       }
 
-      final badges = await databaseRepository.getUserBadges(
+      final badges = await database.getUserBadges(
         visitedUser.id,
         limit: 10,
         lastBadgeId: state.userBadges.last.id,
@@ -378,7 +415,7 @@ class ProfileCubit extends Cubit<ProfileState> {
     try {
       logger.debug('block ${state.visitedUser.id}');
       emit(state.copyWith(isBlocked: true));
-      await databaseRepository.blockUser(
+      await database.blockUser(
         currentUserId: state.currentUser.id,
         blockedUserId: state.visitedUser.id,
       );
@@ -391,7 +428,7 @@ class ProfileCubit extends Cubit<ProfileState> {
     try {
       logger.debug('unblock ${state.visitedUser.id}');
       emit(state.copyWith(isBlocked: false));
-      await databaseRepository.unblockUser(
+      await database.unblockUser(
         currentUserId: state.currentUser.id,
         blockedUserId: state.visitedUser.id,
       );
@@ -402,7 +439,7 @@ class ProfileCubit extends Cubit<ProfileState> {
 
   Future<void> loadIsBlocked() async {
     try {
-      final isBlocked = await databaseRepository.isBlocked(
+      final isBlocked = await database.isBlocked(
         currentUserId: state.currentUser.id,
         blockedUserId: state.visitedUser.id,
       );
@@ -419,7 +456,7 @@ class ProfileCubit extends Cubit<ProfileState> {
 
   Future<void> loadIsVerified(String visitedUserId) async {
     try {
-      final isVerified = await databaseRepository.isVerified(visitedUserId);
+      final isVerified = await database.isVerified(visitedUserId);
 
       emit(
         state.copyWith(

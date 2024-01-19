@@ -53,7 +53,7 @@
 	<key>NSAppleMusicUsageDescription</key>
 	<string>To play the audio from user uploaded loops</string>
 	<key>NSCameraUsageDescription</key>
-	<string>All users to send pictures through direct messages</string>
+	<string>Allow users to send pictures through direct messages</string>
 	<key>NSMicrophoneUsageDescription</key>
 	<string>Tapped requires microphone access to capture and transmit audio</string>
 	<key>NSPhotoLibraryUsageDescription</key>

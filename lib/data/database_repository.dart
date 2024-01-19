@@ -66,20 +66,6 @@ abstract class DatabaseRepository {
     Comment comment,
   );
 
-  // Following related stuff
-  Future<void> followUser(
-    String currentUserId,
-    String visitedUserId,
-  );
-  Future<void> unfollowUser(
-    String currentUserId,
-    String visitedUserId,
-  );
-  Future<bool> isFollowingUser(
-    String currentUserId,
-    String visitedUserId,
-  );
-
   // Activity related stuff
   Future<List<Activity>> getActivities(
     String userId, {
@@ -160,7 +146,10 @@ abstract class DatabaseRepository {
     int limit = 20,
     String? lastOpportunityId,
   });
-  Future<List<Opportunity>> getOpportunitiesByUserId(String userId);
+  Future<List<Opportunity>> getOpportunitiesByUserId(String userId, {
+    int limit = 20,
+    String? lastOpportunityId,
+  });
   Future<List<Opportunity>> getOpportunityFeedByUserId(
     String userId, {
     int limit = 20,

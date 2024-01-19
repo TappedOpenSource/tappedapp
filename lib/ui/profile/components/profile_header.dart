@@ -2,15 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intheloopapp/data/deep_link_repository.dart';
 import 'package:intheloopapp/domains/models/option.dart';
-import 'package:intheloopapp/ui/profile/components/follower_count.dart';
-import 'package:intheloopapp/ui/profile/components/following_count.dart';
 import 'package:intheloopapp/ui/profile/components/notification_icon_button.dart';
 import 'package:intheloopapp/ui/profile/components/settings_button.dart';
 import 'package:intheloopapp/ui/profile/components/social_media_icons.dart';
 import 'package:intheloopapp/ui/profile/profile_cubit.dart';
 import 'package:intheloopapp/ui/themes.dart';
 import 'package:intheloopapp/ui/user_avatar.dart';
-import 'package:share_plus/share_plus.dart';
 
 class ProfileHeader extends StatelessWidget {
   const ProfileHeader({super.key});
@@ -75,21 +72,6 @@ class ProfileHeader extends StatelessWidget {
                                   fontWeight: FontWeight.bold,
                                 ),
                               ),
-                              Padding(
-                                padding: const EdgeInsets.only(left: 3),
-                                child: GestureDetector(
-                                  onTap: () async {
-                                    final link = await dynamicLinkRepository
-                                        .getShareProfileDeepLink(
-                                      state.visitedUser,
-                                    );
-                                    await Share.share(
-                                      'Check out this profile on Tapped $link',
-                                    );
-                                  },
-                                  child: const Icon(Icons.share),
-                                ),
-                              ),
                             ],
                           ),
                           const SizedBox(height: 10),
@@ -104,13 +86,6 @@ class ProfileHeader extends StatelessWidget {
                           const SizedBox(height: 20),
                           const SocialMediaIcons(),
                           const SizedBox(height: 20),
-                          const Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceAround,
-                            children: [
-                              FollowerCount(),
-                              FollowingCount(),
-                            ],
-                          ),
                           const SizedBox(height: 20),
                         ],
                       ),

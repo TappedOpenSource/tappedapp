@@ -26,10 +26,6 @@ final _firestore = FirebaseFirestore.instance;
 final _analytics = FirebaseAnalytics.instance;
 
 final _usersRef = _firestore.collection('users');
-final _followersRef = _firestore.collection('followers');
-final _followingRef = _firestore.collection('following');
-// final _loopsRef = _firestore.collection('loops');
-// final _feedRefs = _firestore.collection('feeds');
 final _activitiesRef = _firestore.collection('activities');
 final _commentsRef = _firestore.collection('comments');
 final _badgesRef = _firestore.collection('badges');
@@ -455,71 +451,6 @@ class FirestoreDatabaseImpl extends DatabaseRepository {
       await _usersRef.doc(user.id).update(user.toMap());
     } catch (e, s) {
       logger.error('updateUserData', error: e, stackTrace: s);
-    }
-  }
-
-  @override
-  Future<void> followUser(
-    String currentUserId,
-    String visitedUserId,
-  ) async {
-    try {
-      await _analytics.logEvent(
-        name: 'follow_user',
-        parameters: {
-          'follower': currentUserId,
-          'followee': visitedUserId,
-        },
-      );
-      await _followingRef
-          .doc(currentUserId)
-          .collection('Following')
-          .doc(visitedUserId)
-          .set({});
-    } catch (e, s) {
-      logger.error('followUser', error: e, stackTrace: s);
-    }
-  }
-
-  @override
-  Future<void> unfollowUser(
-    String currentUserId,
-    String visitedUserId,
-  ) async {
-    try {
-      await _analytics.logEvent(
-        name: 'unfollow_user',
-        parameters: {
-          'follower': currentUserId,
-          'followed': visitedUserId,
-        },
-      );
-      final doc = await _followingRef
-          .doc(currentUserId)
-          .collection('Following')
-          .doc(visitedUserId)
-          .get();
-
-      await doc.reference.delete();
-    } catch (e, s) {
-      logger.error('unfollowUser', error: e, stackTrace: s);
-    }
-  }
-
-  @override
-  Future<bool> isFollowingUser(
-    String currentUserId,
-    String visitedUserId,
-  ) async {
-    try {
-      final followingDoc = await _followingRef
-          .doc(currentUserId)
-          .collection('Following')
-          .doc(visitedUserId)
-          .get();
-      return followingDoc.exists;
-    } catch (e) {
-      return false;
     }
   }
 
@@ -1349,7 +1280,10 @@ class FirestoreDatabaseImpl extends DatabaseRepository {
   }
 
   @override
-  Future<List<Opportunity>> getOpportunitiesByUserId(String userId) async {
+  Future<List<Opportunity>> getOpportunitiesByUserId(String userId, {
+    int limit = 20,
+    String? lastOpportunityId,
+  }) async {
     try {
       await _analytics.logEvent(
         name: 'get_opportunities_by_user_id',
@@ -1358,10 +1292,28 @@ class FirestoreDatabaseImpl extends DatabaseRepository {
         },
       );
 
+      if (lastOpportunityId != null) {
+        final documentSnapshot =
+            await _opportunitiesRef.doc(lastOpportunityId).get();
+
+        final opportunitiesSnapshot = await _opportunitiesRef
+            .where('userId', isEqualTo: userId)
+            .orderBy('timestamp', descending: true)
+            .limit(limit)
+            .startAfterDocument(documentSnapshot)
+            .get();
+
+        final opportunities =
+            opportunitiesSnapshot.docs.map(Opportunity.fromDoc).toList();
+
+        return opportunities;
+      }
+
       final userOpportunitiesSnapshot = await _opportunitiesRef
           .where('userId', isEqualTo: userId)
           .where('startTime', isGreaterThanOrEqualTo: Timestamp.now())
           .orderBy('startTime', descending: true)
+          .limit(limit)
           .get();
 
       logger.info(

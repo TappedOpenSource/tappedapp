@@ -13,7 +13,9 @@ class ProfileState extends Equatable {
     this.services = const [],
     this.opportunities = const [],
     this.hasReachedMaxBadges = false,
+    this.hasReachedMaxOpportunities = false,
     this.badgeStatus = BadgesStatus.initial,
+    this.opportunityStatus = OpportunitiesStatus.initial,
     this.isCollapsed = false,
     this.didAddFeedback = false,
     this.place,
@@ -31,6 +33,8 @@ class ProfileState extends Equatable {
 
   final bool hasReachedMaxBadges;
   final BadgesStatus badgeStatus;
+  final bool hasReachedMaxOpportunities;
+  final OpportunitiesStatus opportunityStatus;
   final UserModel visitedUser;
   final UserModel currentUser;
   final PlaceData? place;
@@ -48,6 +52,8 @@ class ProfileState extends Equatable {
         userBadges,
         hasReachedMaxBadges,
         badgeStatus,
+        hasReachedMaxOpportunities,
+        opportunityStatus,
         services,
         opportunities,
         visitedUser,
@@ -64,6 +70,8 @@ class ProfileState extends Equatable {
     List<badge.Badge>? userBadges,
     bool? hasReachedMaxBadges,
     BadgesStatus? badgeStatus,
+    bool? hasReachedMaxOpportunities,
+    OpportunitiesStatus? opportunityStatus,
     List<Service>? services,
     List<Opportunity>? opportunities,
     UserModel? currentUser,
@@ -81,6 +89,8 @@ class ProfileState extends Equatable {
       userBadges: userBadges ?? this.userBadges,
       hasReachedMaxBadges: hasReachedMaxBadges ?? this.hasReachedMaxBadges,
       badgeStatus: badgeStatus ?? this.badgeStatus,
+      hasReachedMaxOpportunities: hasReachedMaxOpportunities ?? this.hasReachedMaxOpportunities,
+      opportunityStatus: opportunityStatus ?? this.opportunityStatus,
       services: services ?? this.services,
       opportunities: opportunities ?? this.opportunities,
       currentUser: currentUser ?? this.currentUser,
@@ -93,6 +103,12 @@ class ProfileState extends Equatable {
 }
 
 enum BadgesStatus {
+  initial,
+  success,
+  failure,
+}
+
+enum OpportunitiesStatus {
   initial,
   success,
   failure,
