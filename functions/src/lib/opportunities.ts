@@ -394,7 +394,10 @@ const _addInterestedUserToOpportunity = async (
 //   );
 // }
 
-const _sendUserQuotaNotification = async (userId: string, openaiKey: string) => {
+const _sendUserQuotaNotification = async (
+  userId: string, 
+  openaiKey: string,
+) => {
 
   // add new opportunities to the feed
   // try {

@@ -42,6 +42,8 @@ final _opportunityFeedsRef = _firestore.collection('opportunityFeeds');
 final _creditsRef = _firestore.collection('credits');
 final _premiumWailistRef = _firestore.collection('premiumWaitlist');
 final _userFeedbackRef = _firestore.collection('userFeedback');
+// final _notificationPreferencesRef =
+//     _firestore.collection('notificationPreferences');
 
 const verifiedBadgeId = '0aa46576-1fbe-4312-8b69-e2fef3269083';
 

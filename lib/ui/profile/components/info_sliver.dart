@@ -20,8 +20,8 @@ class InfoSliver extends StatelessWidget {
     final theme = Theme.of(context);
     return BlocBuilder<ProfileCubit, ProfileState>(
       builder: (context, state) {
-        final bio = state.visitedUser.bio;
         final occupations = state.visitedUser.occupations;
+        final genres = state.visitedUser.genres;
         final currPlace = state.place;
         return Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -68,6 +68,21 @@ class InfoSliver extends StatelessWidget {
                       scrollDirection: Axis.horizontal,
                       child: Text(
                         occupations.join(', '),
+                        style: TextStyle(
+                          color: theme.colorScheme.onSurface,
+                        ),
+                      ),
+                    ),
+                  ),
+                if (genres.isNotEmpty)
+                  CupertinoListTile(
+                    leading: const Icon(
+                      CupertinoIcons.music_note,
+                    ),
+                    title: SingleChildScrollView(
+                      scrollDirection: Axis.horizontal,
+                      child: Text(
+                        genres.map((e) => e.name).join(', '),
                         style: TextStyle(
                           color: theme.colorScheme.onSurface,
                         ),
