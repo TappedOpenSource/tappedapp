@@ -12,10 +12,10 @@ import { Timestamp } from "firebase-admin/firestore";
 import { HttpsError } from "firebase-functions/v2/https";
 import { debug, error, info } from "firebase-functions/logger";
 import { onSchedule } from "firebase-functions/v2/scheduler";
-import { v4 as uuidv4 } from "uuid";
-import { llm } from "./openai";
+// import { v4 as uuidv4 } from "uuid";
+// import { llm } from "./openai";
 
-const virginiaVenueIds = [
+export const virginiaVenueIds = [
   "DGeZx8VvolPscUOJzFX8cfgE3Rr2", // Jungle Room
   "z9INma3qmmPOTw3ncnzHTWSEvPF2", // The Canal Club
   "tloWCuKGHYScMCp3YamsHKVi3XU2", // Brown's Island
@@ -44,7 +44,7 @@ const virginiaVenueIds = [
   "S506h6zIMLM3BPtnEuiJWEFtrbh2", // The Loud
 ];
 
-const dcVenueIds = [
+export const dcVenueIds = [
   "00ZIBU93q0eLmzuPu5qliQHnDE92",
   "5KXpcoAMYGW8q2PBF2WntltjC6z2",
   "7MIWjtTGTHRSf1kppWmtntuQs2l2",
@@ -120,7 +120,7 @@ const dcVenueIds = [
   "xYydBkRmRrTQ1HvBc7TNh0CeaM32"
 ];
 
-const novaVenueIds = [
+export const novaVenueIds = [
   "9i5dUZgjaFQpP0dwr2ADWVkR4r42",
   "LureUTJhufbo3WtVTOBxu8CrCLc2",
   "x9riU2yNGLfVsVJsxdI1k6kTHCg2",
@@ -158,7 +158,7 @@ const novaVenueIds = [
   "7lJyh250I7frC6dHTnCAAmkRgKL2"
 ];
 
-const marylandVenueIds = [
+export const marylandVenueIds = [
   "ckTmjlrn3JhmPCmYVMN9HeOYnBB3",
   "15v8PhLD2kO18Urleipgu6P4YRC2",
   "ndI4JztVvVdUVzuWZmxSVJH5ENj2",
@@ -166,7 +166,7 @@ const marylandVenueIds = [
   "kIfc37QVjcVu6loGrBz5yIGUfq63"
 ];
 
-const virginiaBeachVenueIds: string[] = [];
+export const virginiaBeachVenueIds: string[] = [];
 
 
 
@@ -201,207 +201,207 @@ const _addInterestedUserToOpportunity = async (
   return;
 };
 
-const _copyOpportunityToFeeds = async (opportunity: Opportunity) => {
-  const usersSnap = await usersRef.get();
+// const _copyOpportunityToFeeds = async (opportunity: Opportunity) => {
+//   const usersSnap = await usersRef.get();
 
-  await Promise.all(
-    usersSnap.docs.map(async (userDoc) => {
-      if (userDoc.id === opportunity.userId) {
-        return;
-      }
+//   await Promise.all(
+//     usersSnap.docs.map(async (userDoc) => {
+//       if (userDoc.id === opportunity.userId) {
+//         return;
+//       }
 
-      const email = userDoc.data().email;
-      if (email.includes("tapped.ai")) {
-        return;
-      }
+//       const email = userDoc.data().email;
+//       if (email.includes("tapped.ai")) {
+//         return;
+//       }
 
-      await _addOpportunityToUserFeed(userDoc.id, opportunity);
-    }),
-  );
-};
+//       await _addOpportunityToUserFeed(userDoc.id, opportunity);
+//     }),
+//   );
+// };
 
-const _createRandomOpportunity = async ({ venues, openaiKey }: {
-  venues: UserModel[];
-  openaiKey: string;
-}) => {
-  const eventTypes: {
-    type: string;
-    paid: number; // the probability that this event is paid
-    prompt: string; // the prompt for this event
-  }[] = [
-    {
-      type: "gig",
-      paid: 0.75,
-      prompt: "a gig opportunity",
-    },
-    {
-      type: "openMic",
-      paid: 0,
-      prompt: "a open mic"
-    },
-    {
-      type: "albumRelease",
-      paid: 0.75,
-      prompt: "needing an opening musician for an album release party",
-    },
-    {
-      type: "themedNight",
-      paid: 0.3,
-      prompt: "needing a musicians for a themed nights",
-    },
-    {
-      type: "battleOfTheBands",
-      paid: 0.9,
-      prompt: "battle of the bands opportunity for local bands",
-    },
-    {
-      type: "songwriterShowcase",
-      paid: 0.2,
-      prompt: "songwriter showcases opportunity for local songwriters",
-    },
-    {
-      type: "jamSession",
-      paid: 0,
-      prompt: "jam sessions for local bands",
-    },
-    {
-      type: "charityConcert",
-      paid: 0,
-      prompt: "needing local musicians for a charity concert",
-    },
-    {
-      type: "onlineStream",
-      paid: 0.5,
-      prompt: "needing local musicians for an online streaming event",
-    },
-  ];
+// const _createRandomOpportunity = async ({ venues, openaiKey }: {
+//   venues: UserModel[];
+//   openaiKey: string;
+// }) => {
+//   const eventTypes: {
+//     type: string;
+//     paid: number; // the probability that this event is paid
+//     prompt: string; // the prompt for this event
+//   }[] = [
+//     {
+//       type: "gig",
+//       paid: 0.75,
+//       prompt: "a gig opportunity",
+//     },
+//     {
+//       type: "openMic",
+//       paid: 0,
+//       prompt: "a open mic"
+//     },
+//     {
+//       type: "albumRelease",
+//       paid: 0.75,
+//       prompt: "needing an opening musician for an album release party",
+//     },
+//     {
+//       type: "themedNight",
+//       paid: 0.3,
+//       prompt: "needing a musicians for a themed nights",
+//     },
+//     {
+//       type: "battleOfTheBands",
+//       paid: 0.9,
+//       prompt: "battle of the bands opportunity for local bands",
+//     },
+//     {
+//       type: "songwriterShowcase",
+//       paid: 0.2,
+//       prompt: "songwriter showcases opportunity for local songwriters",
+//     },
+//     {
+//       type: "jamSession",
+//       paid: 0,
+//       prompt: "jam sessions for local bands",
+//     },
+//     {
+//       type: "charityConcert",
+//       paid: 0,
+//       prompt: "needing local musicians for a charity concert",
+//     },
+//     {
+//       type: "onlineStream",
+//       paid: 0.5,
+//       prompt: "needing local musicians for an online streaming event",
+//     },
+//   ];
 
-  const uuid = uuidv4();
-  const randomVenue = venues[Math.floor(Math.random() * venues.length)];
-  const currentDate = new Date();
-  const plusOneMonth = new Date(currentDate.setMonth(currentDate.getMonth() + 1));
-  const plusThreeMonths = new Date(currentDate.setMonth(currentDate.getMonth() + 3));
-  const randomDate = _generateRandomDate(plusOneMonth, plusThreeMonths);
-  const oneHourAhead = new Date(randomDate.getTime() + 60 * 60 * 1000);
-  const eventType = eventTypes[Math.floor(Math.random() * eventTypes.length)];
+//   const uuid = uuidv4();
+//   const randomVenue = venues[Math.floor(Math.random() * venues.length)];
+//   const currentDate = new Date();
+//   const plusOneMonth = new Date(currentDate.setMonth(currentDate.getMonth() + 1));
+//   const plusThreeMonths = new Date(currentDate.setMonth(currentDate.getMonth() + 3));
+//   const randomDate = _generateRandomDate(plusOneMonth, plusThreeMonths);
+//   const oneHourAhead = new Date(randomDate.getTime() + 60 * 60 * 1000);
+//   const eventType = eventTypes[Math.floor(Math.random() * eventTypes.length)];
 
-  const randomPrompt = (() => {
-    // 8% of the time it'll have a crazy good prompt
-    // if (Math.random() > 0.05) {
-    //     return crazyIliasIdeaPrompt;
-    // }
+//   const randomPrompt = (() => {
+//     // 8% of the time it'll have a crazy good prompt
+//     // if (Math.random() > 0.05) {
+//     //     return crazyIliasIdeaPrompt;
+//     // }
 
-    const thePrompt = `you're a promoter looking to post online about ${eventType.prompt}. 
-        what would the title of the event be and what would the 2 sentence description be? 
-        the venue is called ${randomVenue.artistName}. 
-        format your response as a valid JSON object`;
-    return thePrompt;
-  })();
+//     const thePrompt = `you're a promoter looking to post online about ${eventType.prompt}. 
+//         what would the title of the event be and what would the 2 sentence description be? 
+//         the venue is called ${randomVenue.artistName}. 
+//         format your response as a valid JSON object`;
+//     return thePrompt;
+//   })();
 
-  const { title, description } = await (async () => {
-    // you get 3 tries to do this correctly
-    for (let i = 0; i < 3; i++) {
-      try {
-        const res = await llm(randomPrompt, openaiKey, { temperature: 0.4 });
-        const { title, description } = JSON.parse(res);
-        return { title, description };
-      } catch (e) {
-        console.error(e);
-        continue;
-      }
-    }
+//   const { title, description } = await (async () => {
+//     // you get 3 tries to do this correctly
+//     for (let i = 0; i < 3; i++) {
+//       try {
+//         const res = await llm(randomPrompt, openaiKey, { temperature: 0.4 });
+//         const { title, description } = JSON.parse(res);
+//         return { title, description };
+//       } catch (e) {
+//         console.error(e);
+//         continue;
+//       }
+//     }
 
-    throw new Error(`your prompt fkn sucks - ${randomPrompt}`);
-  })()
+//     throw new Error(`your prompt fkn sucks - ${randomPrompt}`);
+//   })()
 
-  if (title === undefined || description === undefined) {
-    console.log(`your prompt fkn sucks - ${randomPrompt}`);
-    return;
-  }
+//   if (title === undefined || description === undefined) {
+//     console.log(`your prompt fkn sucks - ${randomPrompt}`);
+//     return;
+//   }
 
-  const op: Opportunity = {
-    id: uuid,
-    userId: randomVenue.id,
-    title,
-    description,
-    placeId: randomVenue.placeId!,
-    geohash: randomVenue.geohash!,
-    lat: randomVenue.lat!,
-    lng: randomVenue.lng!,
-    timestamp: new Date(),
-    startTime: randomDate,
-    endTime: oneHourAhead,
-    isPaid: Math.random() < eventType.paid,
-    touched: null,
-  }
+//   const op: Opportunity = {
+//     id: uuid,
+//     userId: randomVenue.id,
+//     title,
+//     description,
+//     placeId: randomVenue.placeId!,
+//     geohash: randomVenue.geohash!,
+//     lat: randomVenue.lat!,
+//     lng: randomVenue.lng!,
+//     timestamp: new Date(),
+//     startTime: randomDate,
+//     endTime: oneHourAhead,
+//     isPaid: Math.random() < eventType.paid,
+//     touched: null,
+//   }
 
-  console.log({ op });
+//   console.log({ op });
 
-  await opportunitiesRef.doc(uuid).set({
-    ...op,
-    aiGenerated: true,
-  });
+//   await opportunitiesRef.doc(uuid).set({
+//     ...op,
+//     aiGenerated: true,
+//   });
 
-  await _copyOpportunityToFeeds(op);
-}
+//   await _copyOpportunityToFeeds(op);
+// }
 
-const _createMockOpportunities = async ({ count, openaiKey }: {
-  count: number;
-  openaiKey: string;
-}) => {
-  const venueBlacklist: string[] = [
-    "8ObJtER8PDUYKmQ0w7Tze0P6SHa2", // The Camel
-    "FsQWuDwH5lZxEpd7TpwXi7fFKqj1", // Alley RVA
-    "8R4gqTCxxzaNt1Bt4nLjqUEn6jd2", // Get Tight
-    "QGSNkGPB2wbEchwdD8VxJkhaBFN2", // VACU Ampitheatre
-    "jyz81JbwQycJoBzTTs4N724Gffc2", // The National
-    "tloWCuKGHYScMCp3YamsHKVi3XU2", // Brown's Island
-    "9FKyhrndDreJtzXnJc3eh6dt0QB2", // Sine's
-  ];
+// const _createMockOpportunities = async ({ count, openaiKey }: {
+//   count: number;
+//   openaiKey: string;
+// }) => {
+//   const venueBlacklist: string[] = [
+//     "8ObJtER8PDUYKmQ0w7Tze0P6SHa2", // The Camel
+//     "FsQWuDwH5lZxEpd7TpwXi7fFKqj1", // Alley RVA
+//     "8R4gqTCxxzaNt1Bt4nLjqUEn6jd2", // Get Tight
+//     "QGSNkGPB2wbEchwdD8VxJkhaBFN2", // VACU Ampitheatre
+//     "jyz81JbwQycJoBzTTs4N724Gffc2", // The National
+//     "tloWCuKGHYScMCp3YamsHKVi3XU2", // Brown's Island
+//     "9FKyhrndDreJtzXnJc3eh6dt0QB2", // Sine's
+//   ];
 
-  const virginiaVenues = await Promise.all(
-    virginiaVenueIds.concat(
-      dcVenueIds,
-      novaVenueIds,
-      marylandVenueIds,
-      virginiaBeachVenueIds,
-    ).filter(
-      (venueId) => !venueBlacklist.includes(venueId),
-    ).map(async (venueId) => {
-      const venueSnap = await usersRef.doc(venueId).get();
-      const venue = venueSnap.data()!;
-      return venue as UserModel;
-    }),
-  );
+//   const virginiaVenues = await Promise.all(
+//     virginiaVenueIds.concat(
+//       dcVenueIds,
+//       novaVenueIds,
+//       marylandVenueIds,
+//       virginiaBeachVenueIds,
+//     ).filter(
+//       (venueId) => !venueBlacklist.includes(venueId),
+//     ).map(async (venueId) => {
+//       const venueSnap = await usersRef.doc(venueId).get();
+//       const venue = venueSnap.data()!;
+//       return venue as UserModel;
+//     }),
+//   );
 
-  // const crazyIliasIdeaPrompt = `you're a promoter looking to post online about ${eventType}. 
-  // what would the title of the event be and what would the 2 sentence description be? 
-  // the venue is called ${randomVenue.artistName}. 
-  // format your response as a valid JSON object`
+//   // const crazyIliasIdeaPrompt = `you're a promoter looking to post online about ${eventType}. 
+//   // what would the title of the event be and what would the 2 sentence description be? 
+//   // the venue is called ${randomVenue.artistName}. 
+//   // format your response as a valid JSON object`
 
-  const opPromises: Promise<void>[] = [];
-  for (let i = 0; i < count; i++) {
-    opPromises.push(_createRandomOpportunity({ venues: virginiaVenues, openaiKey }));
-  }
+//   const opPromises: Promise<void>[] = [];
+//   for (let i = 0; i < count; i++) {
+//     opPromises.push(_createRandomOpportunity({ venues: virginiaVenues, openaiKey }));
+//   }
 
-  await Promise.all(opPromises);
-};
+//   await Promise.all(opPromises);
+// };
 
-function _generateRandomDate(from: Date, to: Date) {
-  return new Date(
-    from.getTime() +
-    Math.random() * (to.getTime() - from.getTime()),
-  );
-}
+// function _generateRandomDate(from: Date, to: Date) {
+//   return new Date(
+//     from.getTime() +
+//     Math.random() * (to.getTime() - from.getTime()),
+//   );
+// }
 
 const _sendUserQuotaNotification = async (userId: string, openaiKey: string) => {
 
   // add new opportunities to the feed
-  try {
-    await _createMockOpportunities({ count: 10, openaiKey });
-  } catch (e) {
-    error("error creating mock opportunities", e);
-  }
+  // try {
+  //   await _createMockOpportunities({ count: 10, openaiKey });
+  // } catch (e) {
+  //   error("error creating mock opportunities", e);
+  // }
 
   // get userId device tokens
   const tokensSnap = await tokensRef
@@ -429,10 +429,17 @@ const _sendUserQuotaNotification = async (userId: string, openaiKey: string) => 
 }
 
 const _setDailyOpportunityQuota = async (openaiKey: string) => {
-  const usersSnap = await usersRef.get();
+  const usersSnap = await usersRef
+    .where("deleted", "!=", true)
+    .get();
 
   await Promise.all(
     usersSnap.docs.map(async (userDoc) => {
+      const email: string | undefined = userDoc.data().email;
+      if (email === undefined || email?.includes("tapped.ai")) {
+        return;
+      }
+
       try {
         await creditsRef.doc(userDoc.id).set({
           opportunityQuota: 5,
@@ -442,11 +449,6 @@ const _setDailyOpportunityQuota = async (openaiKey: string) => {
       }
 
       try {
-        const email: string | undefined = userDoc.data().email;
-        if (email === undefined || email?.includes("tapped.ai")) {
-          return;
-        }
-
         await _sendUserQuotaNotification(userDoc.id, openaiKey);
       } catch (e) {
         error("error sending quota notification", e);
@@ -568,20 +570,6 @@ export const copyOpportunitiesToFeedOnCreateUser = onDocumentCreated(
       }),
     );
   });
-
-export const setDailyOpportunityQuotaLegacy = functions
-  .runWith({ memory: "1GB" })
-  .pubsub
-  .schedule("0 0 * * *")
-  .onRun(
-    async () => {
-      const openaiKey = await getSecretValue("OPEN_AI_KEY")
-      if (openaiKey === null) {
-        throw new Error("OPEN_AI_KEY is null");
-      }
-
-      await _setDailyOpportunityQuota(openaiKey);
-    });
 
 export const setDailyOpportunityQuota = onSchedule("0 0 * * *", async () => {
   const openaiKey = await getSecretValue("OPEN_AI_KEY")
