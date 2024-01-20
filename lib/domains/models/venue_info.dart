@@ -18,19 +18,19 @@ class VenueInfo extends Equatable {
     required this.lights,
   });
 
-  @OptionalIntConverter()
+  // @OptionalIntConverter()
   final Option<int> capacity;
-  @OptionalStringConverter()
+  // @OptionalStringConverter()
   final Option<String> idealArtistProfile;
-  @OptionalStringConverter()
+  // @OptionalStringConverter()
   final Option<String> productionInfo;
-  @OptionalStringConverter()
+  // @OptionalStringConverter()
   final Option<String> frontOfHouse;
-  @OptionalStringConverter()
+  // @OptionalStringConverter()
   final Option<String> monitors;
-  @OptionalStringConverter()
+  // @OptionalStringConverter()
   final Option<String> microphones;
-  @OptionalStringConverter()
+  // @OptionalStringConverter()
   final Option<String> lights;
 
   @override

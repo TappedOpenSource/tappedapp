@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:equatable/equatable.dart';
+import 'package:intheloopapp/data/prod/firestore_database_impl.dart';
 import 'package:intheloopapp/domains/models/booker_info.dart';
 import 'package:intheloopapp/domains/models/email_notifications.dart';
 import 'package:intheloopapp/domains/models/location.dart';
@@ -9,7 +10,6 @@ import 'package:intheloopapp/domains/models/push_notifications.dart';
 import 'package:intheloopapp/domains/models/social_following.dart';
 import 'package:intheloopapp/domains/models/username.dart';
 import 'package:intheloopapp/domains/models/venue_info.dart';
-import 'package:intheloopapp/utils/default_value.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:uuid/uuid.dart';
 
@@ -65,170 +65,78 @@ class UserModel extends Equatable {
       _$UserModelFromJson(json);
 
   factory UserModel.fromDoc(DocumentSnapshot<Map<String, dynamic>> doc) {
-    final tmpTimestamp = doc.getOrElse(
-      'timestamp',
-      Timestamp.now(),
-    );
+    final userData = doc.data();
+    if (userData == null) {
+      throw Exception('user data is null');
+    }
 
-    final performerInfoData = doc.getOrElse<Map<String, dynamic>?>(
-      'performerInfo',
-      null,
-    );
-
-    final performerInfo = performerInfoData != null
-      ? Some<PerformerInfo>(
-        PerformerInfo.fromJson(performerInfoData),
-      )
-      : const None<PerformerInfo>();
-
-    final bookerInfoData = doc.getOrElse<Map<String, dynamic>?>(
-      'bookerInfo',
-      null,
-    );
-
-    final bookerInfo = bookerInfoData != null
-      ? Some<BookerInfo>(
-        BookerInfo.fromJson(bookerInfoData),
-      )
-      : const None<BookerInfo>();
-
-    final venueInfoData = doc.getOrElse<Map<String, dynamic>?>(
-      'venueInfo',
-      null,
-    );
-
-    final venueInfo = venueInfoData != null
-        ? Some<VenueInfo>(
-      VenueInfo.fromJson(venueInfoData),
-    )
-        : const None<VenueInfo>();
-
-    final socialFollowingData = doc.getOrElse<Map<String, dynamic>?>(
-      'socialFollowing',
-      null,
-    );
-
-    final socialFollowing = socialFollowingData != null
-      ? SocialFollowing.fromJson(socialFollowingData)
-      : SocialFollowing.empty();
-
-    final emailNotificationsData = doc.getOrElse<Map<String, dynamic>?>(
-      'emailNotifications',
-      null,
-    );
-
-    final emailNotifications = emailNotificationsData != null
-      ? EmailNotifications.fromJson(emailNotificationsData)
-      : EmailNotifications.empty();
-
-    final pushNotificationsData = doc.getOrElse<Map<String, dynamic>?>(
-      'pushNotifications',
-      null,
-    );
-
-    final pushNotifications = pushNotificationsData != null
-      ? PushNotifications.fromJson(pushNotificationsData)
-      : PushNotifications.empty();
-
-    final tmpLocation = doc.getOrElse<Map<String, dynamic>?>(
-      'location',
-      null,
-    );
-
-    final location = tmpLocation != null
-      ? Some<Location>(
-        Location.fromJson(tmpLocation),
-      )
-      : const None<Location>();
-
-    return UserModel(
-      id: doc.id,
-      email: doc.getOrElse('email', ''),
-      timestamp: tmpTimestamp.toDate(),
-      username: Username.fromString(doc.getOrElse('username', 'anonymous')),
-      artistName: doc.getOrElse('artistName', ''),
-      profilePicture: Option.fromNullable(doc.getOrElse<String?>('profilePicture', null),),
-      bio: doc.getOrElse<String>('bio', ''),
-      occupations: doc
-          .getOrElse<List<dynamic>>('occupations', [])
-          .whereType<String>()
-          .toList(),
-      location: location,
-      badgesCount: doc.getOrElse<int>('badgesCount', 0),
-      performerInfo: performerInfo,
-      bookerInfo: bookerInfo,
-      venueInfo: venueInfo,
-      socialFollowing: socialFollowing,
-      deleted: doc.getOrElse<bool>('deleted', false),
-      emailNotifications: emailNotifications,
-      pushNotifications: pushNotifications,
-      stripeConnectedAccountId: Option.fromNullable(
-    doc.getOrElse<String?>(
-        'stripeConnectedAccountId',
-        null,
-      ),
-      ),
-      stripeCustomerId: Option.fromNullable(
-    doc.getOrElse<String?>('stripeCustomerId', null),
-      ),
-    );
+    return UserModel.fromJson(userData);
   }
+
   final String id;
+
+  @JsonKey(defaultValue: '')
   final String email;
+
+  @JsonKey(
+    defaultValue: DateTime.now,
+    fromJson: timestampToDateTime,
+    toJson: dateTimeToTimestamp,
+  )
   final DateTime timestamp;
 
-  @JsonKey(fromJson: Username.fromJson, toJson: Username.usernameToString)
+  @UsernameConverter()
   final Username username;
 
+  @JsonKey(defaultValue: '')
   final String artistName;
+  @JsonKey(defaultValue: '')
   final String bio;
+  @JsonKey(defaultValue: [])
   final List<String> occupations;
-
-  @OptionalStringConverter()
   final Option<String> profilePicture;
 
-  @OptionalLocationConverter()
   final Option<Location> location;
 
+  @JsonKey(defaultValue: 0)
   final int badgesCount;
 
-  @OptionalPerformerInfoConverter()
   final Option<PerformerInfo> performerInfo;
 
-  @OptionalVenueInfoConverter()
   final Option<VenueInfo> venueInfo;
 
-  @OptionalBookerInfoConverter()
   final Option<BookerInfo> bookerInfo;
 
   final EmailNotifications emailNotifications;
   final PushNotifications pushNotifications;
 
+  @JsonKey(defaultValue: false)
   final bool deleted;
 
+  @JsonKey(defaultValue: SocialFollowing.empty)
   final SocialFollowing socialFollowing;
 
-  @OptionalStringConverter()
   final Option<String> stripeConnectedAccountId;
-
-  @OptionalStringConverter()
   final Option<String> stripeCustomerId;
 
   Option<double> get overallRating {
-    final performerRating = performerInfo.map((e) => e.rating).unwrapOr(None());
-    final bookerRating = bookerInfo.map((e) => e.rating).unwrapOr(None());
+    final performerRating = performerInfo.map((e) => e.rating).unwrapOr(const None());
+    final bookerRating = bookerInfo.map((e) => e.rating).unwrapOr(const None());
 
     return switch ((performerRating, bookerRating)) {
-      (None(), None()) => None(),
+      (None(), None()) => const None(),
       (Some(:final value), None()) => Some(value),
       (None(), Some(:final value)) => Some(value),
       (Some(), Some()) => () {
-        final overallRating = (performerRating.unwrap + bookerRating.unwrap) / 2;
+          final overallRating =
+              (performerRating.unwrap + bookerRating.unwrap) / 2;
 
-        return Some(overallRating);
-      }()
+          return Some(overallRating);
+        }()
     };
   }
+
+  String get displayName => artistName.isEmpty ? username.username : artistName;
 
   @override
   List<Object?> get props => [
@@ -252,11 +160,11 @@ class UserModel extends Equatable {
         stripeConnectedAccountId,
         stripeCustomerId,
       ];
+
   bool get isEmpty => this == UserModel.empty();
   bool get isNotEmpty => this != UserModel.empty();
-  Map<String, dynamic> toJson() => _$UserModelToJson(this);
 
-  String get displayName => artistName.isEmpty ? username.username : artistName;
+  Map<String, dynamic> toJson() => _$UserModelToJson(this);
 
   UserModel copyWith({
     String? id,
@@ -301,28 +209,5 @@ class UserModel extends Equatable {
           stripeConnectedAccountId ?? this.stripeConnectedAccountId,
       stripeCustomerId: stripeCustomerId ?? this.stripeCustomerId,
     );
-  }
-
-  Map<String, dynamic> toMap() {
-    return {
-      'id': id,
-      'email': email,
-      'timestamp': timestamp,
-      'username': username.toString(),
-      'artistName': artistName,
-      'bio': bio,
-      'occupations': occupations,
-      'profilePicture': profilePicture.asNullable(),
-      'location': location.asNullable()?.toMap(),
-      'performerInfo': performerInfo.asNullable()?.toMap(),
-      'bookerInfo': bookerInfo.asNullable()?.toMap(),
-      'venueInfo': venueInfo.asNullable()?.toMap(),
-      'socialFollowing': socialFollowing.toMap(),
-      'deleted': deleted,
-      'emailNotifications': emailNotifications.toMap(),
-      'pushNotifications': pushNotifications.toMap(),
-      'stripeConnectedAccountId': stripeConnectedAccountId.asNullable(),
-      'stripeCustomerId': stripeCustomerId.asNullable(),
-    };
   }
 }

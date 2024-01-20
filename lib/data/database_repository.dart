@@ -37,35 +37,6 @@ abstract class DatabaseRepository {
   Future<List<UserModel>> getBookerLeaders();
   Future<List<Opportunity>> getFeaturedOpportunities();
 
-  // Commenting related stuff
-  Future<List<Comment>> getComments(
-    String rootId, {
-    int limit = 100,
-  });
-  Stream<Comment> commentsObserver(
-    String rootId, {
-    int limit = 100,
-  });
-  Future<Comment> getComment(
-    String rootId,
-    String commentId,
-  );
-  Future<void> addComment(
-    Comment comment,
-  );
-  Future<void> likeComment(
-    String currentUserId,
-    Comment comment,
-  );
-  Future<void> unlikeComment(
-    String currentUserId,
-    Comment comment,
-  );
-  Future<bool> isCommentLiked(
-    String currentUserId,
-    Comment comment,
-  );
-
   // Activity related stuff
   Future<List<Activity>> getActivities(
     String userId, {

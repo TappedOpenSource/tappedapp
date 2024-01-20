@@ -3,6 +3,7 @@ import 'package:intheloopapp/domains/models/opportunity.dart';
 import 'package:intheloopapp/domains/models/user_model.dart';
 import 'package:intheloopapp/ui/profile/components/opportunities_list.dart';
 import 'package:intheloopapp/ui/user_card.dart';
+import 'package:intheloopapp/utils/app_logger.dart';
 import 'package:intheloopapp/utils/bloc_utils.dart';
 import 'package:scroll_snap_list/scroll_snap_list.dart';
 
@@ -89,7 +90,7 @@ class DiscoverView extends StatelessWidget {
                   child: CupertinoActivityIndicator(),
                 );
               }
-    
+
               final opportunities = snapshot.data!;
               return _opSlider(opportunities);
             },
@@ -115,7 +116,7 @@ class DiscoverView extends StatelessWidget {
                   child: CupertinoActivityIndicator(),
                 );
               }
-    
+
               final bookerLeaders = snapshot.data ?? [];
               return _userSlider(bookerLeaders);
             },
@@ -141,7 +142,7 @@ class DiscoverView extends StatelessWidget {
                   child: CupertinoActivityIndicator(),
                 );
               }
-    
+
               final richmondVenues = snapshot.data ?? [];
               return _userSlider(richmondVenues);
             },
@@ -167,7 +168,7 @@ class DiscoverView extends StatelessWidget {
                   child: CupertinoActivityIndicator(),
                 );
               }
-    
+
               final dcVenues = snapshot.data ?? [];
               return _userSlider(dcVenues);
             },
@@ -193,7 +194,7 @@ class DiscoverView extends StatelessWidget {
                   child: CupertinoActivityIndicator(),
                 );
               }
-    
+
               final novaVenues = snapshot.data ?? [];
               return _userSlider(novaVenues);
             },
@@ -219,7 +220,7 @@ class DiscoverView extends StatelessWidget {
                   child: CupertinoActivityIndicator(),
                 );
               }
-    
+
               final marylandVenues = snapshot.data ?? [];
               return _userSlider(marylandVenues);
             },
@@ -245,7 +246,7 @@ class DiscoverView extends StatelessWidget {
                   child: CupertinoActivityIndicator(),
                 );
               }
-    
+
               final bookingLeaders = snapshot.data ?? [];
               return _userSlider(bookingLeaders);
             },

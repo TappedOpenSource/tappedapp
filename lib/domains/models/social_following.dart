@@ -19,18 +19,18 @@ class SocialFollowing extends Equatable {
     required this.twitterFollowers,
   });
 
-  @OptionalStringConverter()
+  // @OptionalStringConverter()
   final Option<String> youtubeChannelId;
 
-  @OptionalStringConverter()
+  // @OptionalStringConverter()
   final Option<String> tiktokHandle;
   final int tiktokFollowers;
 
-  @OptionalStringConverter()
+  // @OptionalStringConverter()
   final Option<String> instagramHandle;
   final int instagramFollowers;
 
-  @OptionalStringConverter()
+  // @OptionalStringConverter()
   final Option<String> twitterHandle;
   final int twitterFollowers;
 

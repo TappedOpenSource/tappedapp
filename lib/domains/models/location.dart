@@ -48,24 +48,14 @@ class Location extends Equatable {
       lng: lng ?? this.lng,
     );
   }
-
-  // toMap
-  Map<String, dynamic> toMap() {
-    return {
-      'placeId': placeId,
-      'geohash': geohash,
-      'lat': lat,
-      'lng': lng,
-    };
-  }
 }
 
 class OptionalLocationConverter extends JsonConverter<Option<Location>, Location?> {
   const OptionalLocationConverter();
 
   @override
-  Option<Location> fromJson(Location? value) => Option.fromNullable(value);
+  Option<Location> fromJson(Location? json) => Option.fromNullable(json);
 
   @override
-  Location? toJson(Option<Location> location) => location.asNullable();
+  Location? toJson(Option<Location> object) => object.asNullable();
 }

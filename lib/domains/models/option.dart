@@ -24,9 +24,24 @@ sealed class Option<T> {
     return value == null ? const Option.none() : Option.some(value);
   }
 
-  static Object? toJson(Option<dynamic> option) => option.asNullable();
+  factory Option.tryCatch(T Function() f) {
+    try {
+      return Some(f());
+    } catch (_) {
+      return const Option.none();
+    }
+  }
 
-  static Option<dynamic> fromJson(dynamic value) => Option.fromNullable(value);
+  factory Option.fromJson(
+    dynamic json,
+    T Function(dynamic json) fromJsonT,
+  ) =>
+      json != null ? Option.tryCatch(() => fromJsonT(json)) : const None();
+
+  Object? toJson(Object? Function(T) toJsonT) => switch (this) {
+        Some(:final value) => toJsonT(value),
+        None() => null,
+      };
 }
 
 /// An [Option] that has a [value].
@@ -62,6 +77,10 @@ final class None<T> extends Option<T> {
 
   @override
   String toString() => 'None()';
+}
+
+extension NullableOption<T> on T? {
+  Option<T> toOption() => Option.fromNullable(this);
 }
 
 /// Convenience methods for handling [Option]s.
@@ -128,48 +147,4 @@ extension OptionConvenience<T> on Option<T> {
       None() => null,
     };
   }
-}
-
-class OptionalStringConverter
-    implements JsonConverter<Option<String>, String?> {
-  const OptionalStringConverter();
-
-  @override
-  Option<String> fromJson(String? value) => Option.fromNullable(value);
-
-  @override
-  String? toJson(Option<String> option) => option.asNullable();
-}
-
-class OptionalIntConverter implements JsonConverter<Option<int>, int?> {
-  const OptionalIntConverter();
-
-  @override
-  Option<int> fromJson(int? value) => Option.fromNullable(value);
-
-  @override
-  int? toJson(Option<int> option) => option.asNullable();
-}
-
-class OptionalDoubleConverter
-    implements JsonConverter<Option<double>, double?> {
-  const OptionalDoubleConverter();
-
-  @override
-  Option<double> fromJson(double? value) => Option.fromNullable(value);
-
-  @override
-  double? toJson(Option<double> option) => option.asNullable();
-}
-
-double? optionalDoubleToJson (Option<double> option) => option.asNullable();
-
-class OptionalObjectConverter<T> implements JsonConverter<Option<T>, T?> {
-  const OptionalObjectConverter();
-
-  @override
-  Option<T> fromJson(T? value) => Option.fromNullable(value);
-
-  @override
-  T? toJson(Option<T> option) => option.asNullable();
 }

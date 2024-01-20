@@ -52,6 +52,15 @@ class SettingsCubit extends Cubit<SettingsState> {
         genres: currentUser.performerInfo.asNullable()?.genres,
         label: currentUser.performerInfo.asNullable()?.label,
         occupations: currentUser.occupations,
+        tiktokFollowers: currentUser.socialFollowing.tiktokFollowers,
+        tiktokHandle: currentUser.socialFollowing.tiktokHandle.asNullable(),
+        twitterFollowers: currentUser.socialFollowing.twitterFollowers,
+        twitterHandle: currentUser.socialFollowing.twitterHandle.asNullable(),
+        instagramFollowers: currentUser.socialFollowing.instagramFollowers,
+        instagramHandle:
+            currentUser.socialFollowing.instagramHandle.asNullable(),
+        youtubeChannelId:
+            currentUser.socialFollowing.youtubeChannelId.asNullable(),
         placeId: currentUser.location.asNullable()?.placeId,
         spotifyId:
             currentUser.performerInfo.asNullable()?.spotifyId.asNullable(),

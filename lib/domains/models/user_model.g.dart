@@ -8,62 +8,75 @@ part of 'user_model.dart';
 
 UserModel _$UserModelFromJson(Map<String, dynamic> json) => UserModel(
       id: json['id'] as String,
-      email: json['email'] as String,
-      timestamp: DateTime.parse(json['timestamp'] as String),
-      username: Username.fromJson(json['username'] as Map<String, dynamic>),
-      artistName: json['artistName'] as String,
-      profilePicture: const OptionalStringConverter()
-          .fromJson(json['profilePicture'] as String?),
-      bio: json['bio'] as String,
-      occupations: (json['occupations'] as List<dynamic>)
-          .map((e) => e as String)
-          .toList(),
-      location: const OptionalLocationConverter()
-          .fromJson(json['location'] as Location?),
-      badgesCount: json['badgesCount'] as int,
-      performerInfo: const OptionalPerformerInfoConverter()
-          .fromJson(json['performerInfo'] as PerformerInfo?),
-      bookerInfo: const OptionalBookerInfoConverter()
-          .fromJson(json['bookerInfo'] as BookerInfo?),
-      venueInfo: const OptionalVenueInfoConverter()
-          .fromJson(json['venueInfo'] as VenueInfo?),
-      socialFollowing: SocialFollowing.fromJson(
-          json['socialFollowing'] as Map<String, dynamic>),
+      email: json['email'] as String? ?? '',
+      timestamp: json['timestamp'] == null
+          ? DateTime.now()
+          : timestampToDateTime(json['timestamp'] as Timestamp),
+      username: const UsernameConverter().fromJson(json['username'] as String),
+      artistName: json['artistName'] as String? ?? '',
+      profilePicture: Option<String>.fromJson(
+          json['profilePicture'], (value) => value as String),
+      bio: json['bio'] as String? ?? '',
+      occupations: (json['occupations'] as List<dynamic>?)
+              ?.map((e) => e as String)
+              .toList() ??
+          [],
+      location: Option<Location>.fromJson(json['location'],
+          (value) => Location.fromJson(value as Map<String, dynamic>)),
+      badgesCount: json['badgesCount'] as int? ?? 0,
+      performerInfo: Option<PerformerInfo>.fromJson(json['performerInfo'],
+          (value) => PerformerInfo.fromJson(value as Map<String, dynamic>)),
+      bookerInfo: Option<BookerInfo>.fromJson(json['bookerInfo'],
+          (value) => BookerInfo.fromJson(value as Map<String, dynamic>)),
+      venueInfo: Option<VenueInfo>.fromJson(json['venueInfo'],
+          (value) => VenueInfo.fromJson(value as Map<String, dynamic>)),
+      socialFollowing: json['socialFollowing'] == null
+          ? SocialFollowing.empty()
+          : SocialFollowing.fromJson(
+              json['socialFollowing'] as Map<String, dynamic>),
       emailNotifications: EmailNotifications.fromJson(
           json['emailNotifications'] as Map<String, dynamic>),
       pushNotifications: PushNotifications.fromJson(
           json['pushNotifications'] as Map<String, dynamic>),
-      deleted: json['deleted'] as bool,
-      stripeConnectedAccountId: const OptionalStringConverter()
-          .fromJson(json['stripeConnectedAccountId'] as String?),
-      stripeCustomerId: const OptionalStringConverter()
-          .fromJson(json['stripeCustomerId'] as String?),
+      deleted: json['deleted'] as bool? ?? false,
+      stripeConnectedAccountId: Option<String>.fromJson(
+          json['stripeConnectedAccountId'], (value) => value as String),
+      stripeCustomerId: Option<String>.fromJson(
+          json['stripeCustomerId'], (value) => value as String),
     );
 
 Map<String, dynamic> _$UserModelToJson(UserModel instance) => <String, dynamic>{
       'id': instance.id,
       'email': instance.email,
-      'timestamp': instance.timestamp.toIso8601String(),
-      'username': Username.usernameToString(instance.username),
+      'timestamp': dateTimeToTimestamp(instance.timestamp),
+      'username': const UsernameConverter().toJson(instance.username),
       'artistName': instance.artistName,
       'bio': instance.bio,
       'occupations': instance.occupations,
-      'profilePicture':
-          const OptionalStringConverter().toJson(instance.profilePicture),
-      'location': const OptionalLocationConverter().toJson(instance.location),
+      'profilePicture': instance.profilePicture.toJson(
+        (value) => value,
+      ),
+      'location': instance.location.toJson(
+        (value) => value,
+      ),
       'badgesCount': instance.badgesCount,
-      'performerInfo':
-          const OptionalPerformerInfoConverter().toJson(instance.performerInfo),
-      'venueInfo':
-          const OptionalVenueInfoConverter().toJson(instance.venueInfo),
-      'bookerInfo':
-          const OptionalBookerInfoConverter().toJson(instance.bookerInfo),
+      'performerInfo': instance.performerInfo.toJson(
+        (value) => value,
+      ),
+      'venueInfo': instance.venueInfo.toJson(
+        (value) => value,
+      ),
+      'bookerInfo': instance.bookerInfo.toJson(
+        (value) => value,
+      ),
       'emailNotifications': instance.emailNotifications,
       'pushNotifications': instance.pushNotifications,
       'deleted': instance.deleted,
       'socialFollowing': instance.socialFollowing,
-      'stripeConnectedAccountId': const OptionalStringConverter()
-          .toJson(instance.stripeConnectedAccountId),
-      'stripeCustomerId':
-          const OptionalStringConverter().toJson(instance.stripeCustomerId),
+      'stripeConnectedAccountId': instance.stripeConnectedAccountId.toJson(
+        (value) => value,
+      ),
+      'stripeCustomerId': instance.stripeCustomerId.toJson(
+        (value) => value,
+      ),
     };

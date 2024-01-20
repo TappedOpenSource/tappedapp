@@ -8,27 +8,33 @@ part of 'performer_info.dart';
 
 PerformerInfo _$PerformerInfoFromJson(Map<String, dynamic> json) =>
     PerformerInfo(
-      pressKitUrl: const OptionalStringConverter()
-          .fromJson(json['pressKitUrl'] as String?),
-      genres: (json['genres'] as List<dynamic>)
-          .map((e) => $enumDecode(_$GenreEnumMap, e))
-          .toList(),
+      pressKitUrl: Option<String>.fromJson(
+          json['pressKitUrl'], (value) => value as String),
+      genres: (json['genres'] as List<dynamic>?)
+              ?.map((e) => $enumDecode(_$GenreEnumMap, e))
+              .toList() ??
+          [],
       rating: optionalDoubleFromJson(json['rating']),
-      reviewCount: json['reviewCount'] as int,
-      label: json['label'] as String,
-      spotifyId: const OptionalStringConverter()
-          .fromJson(json['spotifyId'] as String?),
+      reviewCount: json['reviewCount'] as int? ?? 0,
+      label: json['label'] as String? ?? 'None',
+      spotifyId: Option<String>.fromJson(
+          json['spotifyId'], (value) => value as String),
     );
 
 Map<String, dynamic> _$PerformerInfoToJson(PerformerInfo instance) =>
     <String, dynamic>{
-      'pressKitUrl':
-          const OptionalStringConverter().toJson(instance.pressKitUrl),
+      'pressKitUrl': instance.pressKitUrl.toJson(
+        (value) => value,
+      ),
       'genres': instance.genres.map((e) => _$GenreEnumMap[e]!).toList(),
-      'rating': optionalDoubleToJson(instance.rating),
+      'rating': instance.rating.toJson(
+        (value) => value,
+      ),
       'reviewCount': instance.reviewCount,
       'label': instance.label,
-      'spotifyId': const OptionalStringConverter().toJson(instance.spotifyId),
+      'spotifyId': instance.spotifyId.toJson(
+        (value) => value,
+      ),
     };
 
 const _$GenreEnumMap = {

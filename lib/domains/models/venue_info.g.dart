@@ -7,31 +7,41 @@ part of 'venue_info.dart';
 // **************************************************************************
 
 VenueInfo _$VenueInfoFromJson(Map<String, dynamic> json) => VenueInfo(
-      capacity: const OptionalIntConverter().fromJson(json['capacity'] as int?),
-      idealArtistProfile: const OptionalStringConverter()
-          .fromJson(json['idealArtistProfile'] as String?),
-      productionInfo: const OptionalStringConverter()
-          .fromJson(json['productionInfo'] as String?),
-      frontOfHouse: const OptionalStringConverter()
-          .fromJson(json['frontOfHouse'] as String?),
+      capacity: Option<int>.fromJson(json['capacity'], (value) => value as int),
+      idealArtistProfile: Option<String>.fromJson(
+          json['idealArtistProfile'], (value) => value as String),
+      productionInfo: Option<String>.fromJson(
+          json['productionInfo'], (value) => value as String),
+      frontOfHouse: Option<String>.fromJson(
+          json['frontOfHouse'], (value) => value as String),
       monitors:
-          const OptionalStringConverter().fromJson(json['monitors'] as String?),
-      microphones: const OptionalStringConverter()
-          .fromJson(json['microphones'] as String?),
+          Option<String>.fromJson(json['monitors'], (value) => value as String),
+      microphones: Option<String>.fromJson(
+          json['microphones'], (value) => value as String),
       lights:
-          const OptionalStringConverter().fromJson(json['lights'] as String?),
+          Option<String>.fromJson(json['lights'], (value) => value as String),
     );
 
 Map<String, dynamic> _$VenueInfoToJson(VenueInfo instance) => <String, dynamic>{
-      'capacity': const OptionalIntConverter().toJson(instance.capacity),
-      'idealArtistProfile':
-          const OptionalStringConverter().toJson(instance.idealArtistProfile),
-      'productionInfo':
-          const OptionalStringConverter().toJson(instance.productionInfo),
-      'frontOfHouse':
-          const OptionalStringConverter().toJson(instance.frontOfHouse),
-      'monitors': const OptionalStringConverter().toJson(instance.monitors),
-      'microphones':
-          const OptionalStringConverter().toJson(instance.microphones),
-      'lights': const OptionalStringConverter().toJson(instance.lights),
+      'capacity': instance.capacity.toJson(
+        (value) => value,
+      ),
+      'idealArtistProfile': instance.idealArtistProfile.toJson(
+        (value) => value,
+      ),
+      'productionInfo': instance.productionInfo.toJson(
+        (value) => value,
+      ),
+      'frontOfHouse': instance.frontOfHouse.toJson(
+        (value) => value,
+      ),
+      'monitors': instance.monitors.toJson(
+        (value) => value,
+      ),
+      'microphones': instance.microphones.toJson(
+        (value) => value,
+      ),
+      'lights': instance.lights.toJson(
+        (value) => value,
+      ),
     };

@@ -8,30 +8,34 @@ part of 'social_following.dart';
 
 SocialFollowing _$SocialFollowingFromJson(Map<String, dynamic> json) =>
     SocialFollowing(
-      youtubeChannelId: const OptionalStringConverter()
-          .fromJson(json['youtubeChannelId'] as String?),
-      tiktokHandle: const OptionalStringConverter()
-          .fromJson(json['tiktokHandle'] as String?),
+      youtubeChannelId: Option<String>.fromJson(
+          json['youtubeChannelId'], (value) => value as String),
+      tiktokHandle: Option<String>.fromJson(
+          json['tiktokHandle'], (value) => value as String),
       tiktokFollowers: json['tiktokFollowers'] as int,
-      instagramHandle: const OptionalStringConverter()
-          .fromJson(json['instagramHandle'] as String?),
+      instagramHandle: Option<String>.fromJson(
+          json['instagramHandle'], (value) => value as String),
       instagramFollowers: json['instagramFollowers'] as int,
-      twitterHandle: const OptionalStringConverter()
-          .fromJson(json['twitterHandle'] as String?),
+      twitterHandle: Option<String>.fromJson(
+          json['twitterHandle'], (value) => value as String),
       twitterFollowers: json['twitterFollowers'] as int,
     );
 
 Map<String, dynamic> _$SocialFollowingToJson(SocialFollowing instance) =>
     <String, dynamic>{
-      'youtubeChannelId':
-          const OptionalStringConverter().toJson(instance.youtubeChannelId),
-      'tiktokHandle':
-          const OptionalStringConverter().toJson(instance.tiktokHandle),
+      'youtubeChannelId': instance.youtubeChannelId.toJson(
+        (value) => value,
+      ),
+      'tiktokHandle': instance.tiktokHandle.toJson(
+        (value) => value,
+      ),
       'tiktokFollowers': instance.tiktokFollowers,
-      'instagramHandle':
-          const OptionalStringConverter().toJson(instance.instagramHandle),
+      'instagramHandle': instance.instagramHandle.toJson(
+        (value) => value,
+      ),
       'instagramFollowers': instance.instagramFollowers,
-      'twitterHandle':
-          const OptionalStringConverter().toJson(instance.twitterHandle),
+      'twitterHandle': instance.twitterHandle.toJson(
+        (value) => value,
+      ),
       'twitterFollowers': instance.twitterFollowers,
     };

@@ -1,9 +1,6 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:enum_to_string/enum_to_string.dart';
 import 'package:equatable/equatable.dart';
 import 'package:intheloopapp/domains/models/genre.dart';
 import 'package:intheloopapp/domains/models/option.dart';
-import 'package:intheloopapp/utils/default_value.dart';
 import 'package:intheloopapp/utils/deserialize.dart';
 import 'package:json_annotation/json_annotation.dart';
 
@@ -20,20 +17,25 @@ class PerformerInfo extends Equatable {
     required this.spotifyId,
   });
 
-  @OptionalStringConverter()
+  // @OptionalStringConverter()
   final Option<String> pressKitUrl;
+
+  @JsonKey(defaultValue: [])
   final List<Genre> genres;
 
   @JsonKey(
-    toJson: optionalDoubleToJson,
+    // toJson: optionalDoubleToJson,
     fromJson: optionalDoubleFromJson,
   )
   final Option<double> rating;
+
+  @JsonKey(defaultValue: 0)
   final int reviewCount;
 
+  @JsonKey(defaultValue: 'None')
   final String label;
 
-  @OptionalStringConverter()
+  // @OptionalStringConverter()
   final Option<String> spotifyId;
 
   @override

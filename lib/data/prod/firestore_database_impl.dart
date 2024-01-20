@@ -19,6 +19,7 @@ import 'package:intheloopapp/domains/models/user_model.dart';
 import 'package:intheloopapp/utils/app_logger.dart';
 import 'package:intheloopapp/utils/default_value.dart';
 import 'package:intheloopapp/utils/geohash.dart';
+import 'package:json_annotation/json_annotation.dart';
 import 'package:rxdart/rxdart.dart';
 
 // final _storage = FirebaseStorage.instance.ref();
@@ -141,7 +142,7 @@ class FirestoreDatabaseImpl extends DatabaseRepository {
         );
       }
 
-      await _usersRef.doc(user.id).set(user.toMap());
+      await _usersRef.doc(user.id).set(user.toJson());
     } catch (e, s) {
       logger.error(
         'createUser',
@@ -454,7 +455,7 @@ class FirestoreDatabaseImpl extends DatabaseRepository {
         );
       }
 
-      await _usersRef.doc(user.id).update(user.toMap());
+      await _usersRef.doc(user.id).update(user.toJson());
     } catch (e, s) {
       logger.error('updateUserData', error: e, stackTrace: s);
     }
@@ -591,156 +592,6 @@ class FirestoreDatabaseImpl extends DatabaseRepository {
     await _activitiesRef.doc(activity.id).update({
       'markedRead': true,
     });
-  }
-
-  @override
-  Future<List<Comment>> getComments(
-    String rootId, {
-    int limit = 30,
-  }) async {
-    final commentsSnapshot = await _commentsRef
-        .doc(rootId)
-        .collection(commentsSubcollection)
-        .orderBy('timestamp')
-        // .where('parentId', isNull: true) // Needed for threaded comments
-        .limit(limit)
-        .get();
-
-    final comments = commentsSnapshot.docs.map(Comment.fromDoc).toList();
-
-    return comments;
-  }
-
-  @override
-  Stream<Comment> commentsObserver(
-    String rootId, {
-    int limit = 30,
-  }) async* {
-    final commentsSnapshotObserver = _commentsRef
-        .doc(rootId)
-        .collection(commentsSubcollection)
-        .orderBy('timestamp')
-        .limit(limit)
-        // .where('parentId', isNull: true) // Needed for threaded comments
-        .snapshots();
-
-    final commentsObserver = commentsSnapshotObserver
-        .map((event) {
-          return event.docChanges
-              .where(
-            (DocumentChange<Map<String, dynamic>> element) =>
-                element.type == DocumentChangeType.added,
-          )
-              .map((DocumentChange<Map<String, dynamic>> element) {
-            try {
-              return Comment.fromDoc(element.doc);
-            } catch (e, s) {
-              logger.error('Error parsing comment', error: e, stackTrace: s);
-              return null;
-            }
-            // if (element.type == DocumentChangeType.modified) {}
-            // if (element.type == DocumentChangeType.removed) {}
-          });
-        })
-        .flatMap(Stream.fromIterable)
-        .whereType<Comment>();
-
-    yield* commentsObserver;
-  }
-
-  @override
-  Future<Comment> getComment(
-    String rootId,
-    String commentId,
-  ) async {
-    final commentSnapshot = await _commentsRef
-        .doc(rootId)
-        .collection(commentsSubcollection)
-        .doc(commentId)
-        .get();
-
-    final comment = Comment.fromDoc(commentSnapshot);
-
-    return comment;
-  }
-
-  @override
-  Future<void> addComment(
-    Comment comment,
-  ) async {
-    await _analytics.logEvent(
-      name: 'new_comment',
-      parameters: {
-        'root_id': comment.rootId,
-        'user_id': comment.userId,
-      },
-    );
-
-    await _commentsRef
-        .doc(comment.rootId)
-        .collection(commentsSubcollection)
-        .doc(comment.id)
-        .set(comment.toMap());
-  }
-
-  @override
-  Future<void> likeComment(
-    String currentUserId,
-    Comment comment,
-  ) async {
-    await _analytics.logEvent(
-      name: 'like_comment',
-      parameters: {
-        'comment_id': comment.id,
-        'user_id': currentUserId,
-      },
-    );
-
-    await _commentsRef
-        .doc(comment.rootId)
-        .collection(commentsSubcollection)
-        .doc(comment.id)
-        .collection('commentLikes')
-        .doc(currentUserId)
-        .set({});
-  }
-
-  @override
-  Future<void> unlikeComment(
-    String currentUserId,
-    Comment comment,
-  ) async {
-    await _analytics.logEvent(
-      name: 'unlike_comment',
-      parameters: {
-        'comment_id': comment.id,
-        'user_id': currentUserId,
-      },
-    );
-
-    await _commentsRef
-        .doc(comment.rootId)
-        .collection(commentsSubcollection)
-        .doc(comment.id)
-        .collection('commentLikes')
-        .doc(currentUserId)
-        .delete();
-  }
-
-  @override
-  Future<bool> isCommentLiked(
-    String currentUserId,
-    Comment comment,
-  ) async {
-    final commentLikeSnapshot = await _commentsRef
-        .doc(comment.rootId)
-        .collection(commentsSubcollection)
-        .doc(comment.id)
-        .collection('commentLikes')
-        .doc(currentUserId)
-        .get();
-
-    return commentLikeSnapshot.exists;
   }
 
   @override
@@ -2024,4 +1875,12 @@ class HandleAlreadyExistsException implements Exception {
   HandleAlreadyExistsException(this.cause);
 
   String cause;
+}
+
+DateTime timestampToDateTime(Timestamp json) {
+  return json.toDate();
+}
+
+Timestamp dateTimeToTimestamp(DateTime object) {
+  return Timestamp.fromDate(object);
 }
