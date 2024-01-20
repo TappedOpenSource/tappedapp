@@ -889,10 +889,10 @@ export const generateEnhancedBio = onCall(
     const userData = userSnapshot.data() as UserModel;
 
     const displayName = userData?.artistName ?? userData?.username ?? "";
-    const twitterHandle = userData?.twitterHandle ?? "";
-    const tiktokHandle = userData?.tiktokHandle ?? "";
-    const instagramHandle = userData?.instagramHandle ?? "";
-    const artistGenres = userData?.genres ?? [];
+    const twitterHandle = userData?.socialFollowing?.twitterHandle ?? "";
+    const tiktokHandle = userData?.socialFollowing?.tiktokHandle ?? "";
+    const instagramHandle = userData?.socialFollowing?.instagramHandle ?? "";
+    const artistGenres = userData?.performerInfo?.genres ?? [];
 
     const openAiKey = OPEN_AI_KEY.value();
     const { content } = await basicEnhancedBio({

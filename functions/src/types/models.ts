@@ -2,7 +2,9 @@
 import type { Timestamp } from "firebase-admin/firestore";
 import { firestore } from "firebase-admin";
 
-export type UserModel = {
+type Option<T> = T | null | undefined;
+
+export type OldUserModel = {
   id: string;
   email?: string;
   username?: string;
@@ -38,36 +40,88 @@ export type UserModel = {
   stripeCustomerId?: string;
 };
 
+export type Location = {
+    placeId: string;
+    geohash: string;
+    lat: number;
+    lng: number;
+};
+
+export type SocialFollowing = {
+    youtubeChannelId?: Option<string>;
+    tiktokHandle?: Option<string>;
+    tiktokFollowers: number;
+    instagramHandle?: Option<string>;
+    instagramFollowers: number;
+    twitterHandle?: Option<string>;
+    twitterFollowers: number;
+}
+
+export type BookerInfo = {
+    rating?: Option<number>;
+    reviewCount: number;
+}
+
+export type PerformerInfo = {
+    pressKitUrl?: Option<string>;
+    genres: string[];
+    rating?: Option<number>;
+    reviewCount: number;
+    label: string;
+    spotifyId?: Option<string>;
+}
+
+export type VenueInfo = {
+    capacity?: Option<number>;
+    idealArtistProfile?: Option<string>;
+    productionInfo?: Option<string>;
+    frontOfHouse?: Option<string>;
+    monitors?: Option<string>;
+    microphones?: Option<string>;
+    lights?: Option<string>;
+}
+
+export type EmailNotifications = {
+    appReleases: boolean;
+    tappedUpdates: boolean;
+    bookingRequests: boolean;
+}
+
+export type PushNotifications = {
+    appReleases: boolean;
+    tappedUpdates: boolean;
+    bookingRequests: boolean;
+    directMessages: boolean;
+}
+
+export type UserModel = {
+    id: string;
+    email: string;
+    timestamp: Timestamp;
+    username: string;
+    artistName: string;
+    bio: string;
+    occupations: string[];
+    profilePicture?: Option<string>;
+    location?: Option<Location>;
+    badgesCount: number;
+    performerInfo?: Option<PerformerInfo>;
+    venueInfo?: Option<VenueInfo>;
+    bookerInfo?: Option<BookerInfo>;
+    emailNotifications: EmailNotifications;
+    pushNotifications: PushNotifications;
+    deleted: boolean;
+    socialFollowing: SocialFollowing;
+    stripeConnectedAccountId?: Option<string>;
+    stripeCustomerId?: Option<string>;
+}
+
 export type Badge = {
   id: string;
   name: string;
   creatorId: string;
   imageUrl: string;
   description: string;
-};
-
-export type Loop = {
-  id: string;
-  userId: string;
-  title: string;
-  description: string;
-  audioPath: string;
-  likeCount: number;
-  downloads: number;
-  commentCount: number;
-  shareCount: number;
-  imagePaths: Array<string>;
-  tags: Array<string>;
-  deleted: boolean;
-};
-
-export type Comment = {
-  visitedUserId: string;
-  rootLoopId: string;
-  userId: string;
-  content: string;
-  parentId: string | null;
-  children: Array<string>;
 };
 
 export type Booking = {
