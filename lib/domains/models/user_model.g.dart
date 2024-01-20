@@ -34,10 +34,14 @@ UserModel _$UserModelFromJson(Map<String, dynamic> json) => UserModel(
           ? SocialFollowing.empty()
           : SocialFollowing.fromJson(
               json['socialFollowing'] as Map<String, dynamic>),
-      emailNotifications: EmailNotifications.fromJson(
-          json['emailNotifications'] as Map<String, dynamic>),
-      pushNotifications: PushNotifications.fromJson(
-          json['pushNotifications'] as Map<String, dynamic>),
+      emailNotifications: json['emailNotifications'] == null
+          ? EmailNotifications.empty()
+          : EmailNotifications.fromJson(
+              json['emailNotifications'] as Map<String, dynamic>),
+      pushNotifications: json['pushNotifications'] == null
+          ? PushNotifications.empty()
+          : PushNotifications.fromJson(
+              json['pushNotifications'] as Map<String, dynamic>),
       deleted: json['deleted'] as bool? ?? false,
       stripeConnectedAccountId: Option<String>.fromJson(
           json['stripeConnectedAccountId'], (value) => value as String),

@@ -90,10 +90,13 @@ class UserModel extends Equatable {
 
   @JsonKey(defaultValue: '')
   final String artistName;
+
   @JsonKey(defaultValue: '')
   final String bio;
+
   @JsonKey(defaultValue: [])
   final List<String> occupations;
+
   final Option<String> profilePicture;
 
   final Option<Location> location;
@@ -107,7 +110,10 @@ class UserModel extends Equatable {
 
   final Option<BookerInfo> bookerInfo;
 
+  @JsonKey(defaultValue: EmailNotifications.empty)
   final EmailNotifications emailNotifications;
+
+  @JsonKey(defaultValue: PushNotifications.empty)
   final PushNotifications pushNotifications;
 
   @JsonKey(defaultValue: false)

@@ -389,40 +389,50 @@ class FirestoreDatabaseImpl extends DatabaseRepository {
 
   @override
   Future<List<UserModel>> getBookingLeaders() async {
-    final leadersSnapshot = await _leadersRef.doc('leaders').get();
+    try {
+      final leadersSnapshot = await _leadersRef.doc('leaders').get();
 
-    final leadingUsernames =
-        leadersSnapshot.getOrElse('bookingLeaders', <dynamic>[]);
+      final leadingUsernames =
+          leadersSnapshot.getOrElse('bookingLeaders', <dynamic>[]);
 
-    final leaders = await Future.wait(
-      leadingUsernames.map(
-        (username) async {
-          final user = await getUserByUsername(username as String);
-          return user;
-        },
-      ),
-    );
+      final leaders = await Future.wait(
+        leadingUsernames.map(
+          (username) async {
+            final user = await getUserByUsername(username as String);
+            return user;
+          },
+        ),
+      );
 
-    return leaders.whereType<Some<UserModel>>().map((e) => e.unwrap).toList();
+      return leaders.whereType<Some<UserModel>>().map((e) => e.unwrap).toList();
+    } catch (e, s) {
+      logger.error('getBookingLeaders', error: e, stackTrace: s);
+      return [];
+    }
   }
 
   @override
   Future<List<UserModel>> getBookerLeaders() async {
-    final leadersSnapshot = await _leadersRef.doc('leaders').get();
+    try {
+      final leadersSnapshot = await _leadersRef.doc('leaders').get();
 
-    final leadingUsernames =
-        leadersSnapshot.getOrElse('bookerLeaders', <dynamic>[]);
+      final leadingUsernames =
+          leadersSnapshot.getOrElse('bookerLeaders', <dynamic>[]);
 
-    final leaders = await Future.wait(
-      leadingUsernames.map(
-        (username) async {
-          final user = await getUserByUsername(username as String);
-          return user;
-        },
-      ),
-    );
+      final leaders = await Future.wait(
+        leadingUsernames.map(
+          (username) async {
+            final user = await getUserByUsername(username as String);
+            return user;
+          },
+        ),
+      );
 
-    return leaders.whereType<Some<UserModel>>().map((e) => e.unwrap).toList();
+      return leaders.whereType<Some<UserModel>>().map((e) => e.unwrap).toList();
+    } catch (e, s) {
+      logger.error('getBookerLeaders', error: e, stackTrace: s);
+      return [];
+    }
   }
 
   @override
