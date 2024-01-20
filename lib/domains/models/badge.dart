@@ -19,21 +19,24 @@ class Badge extends Equatable {
   factory Badge.fromJson(Map<String, dynamic> json) => _$BadgeFromJson(json);
 
   factory Badge.fromDoc(DocumentSnapshot<Map<String, dynamic>> doc) {
-    final tmpTimestamp = doc.getOrElse('timestamp', Timestamp.now());
-    return Badge(
-      id: doc.id,
-      creatorId: doc.getOrElse('creatorId', ''),
-      imageUrl: doc.getOrElse('imageUrl', ''),
-      name: doc.getOrElse('name', ''),
-      description: doc.getOrElse('description', ''),
-      timestamp: tmpTimestamp.toDate(),
-    );
+    final data = doc.data();
+    if (data == null) {
+      throw Exception('Document does not exist!');
+    }
+
+    return Badge.fromJson(data);
   }
   final String id;
   final String creatorId;
   final String imageUrl;
+
+  @JsonKey(defaultValue: '')
   final String name;
+
+  @JsonKey(defaultValue: '')
   final String description;
+
+  @JsonKey(defaultValue: DateTime.now)
   final DateTime timestamp;
 
   @override

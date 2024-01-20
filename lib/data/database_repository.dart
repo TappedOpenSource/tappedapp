@@ -2,12 +2,10 @@ import 'package:feedback/feedback.dart';
 import 'package:intheloopapp/domains/models/activity.dart';
 import 'package:intheloopapp/domains/models/badge.dart';
 import 'package:intheloopapp/domains/models/booking.dart';
-import 'package:intheloopapp/domains/models/comment.dart';
 import 'package:intheloopapp/domains/models/opportunity.dart';
 import 'package:intheloopapp/domains/models/option.dart';
 import 'package:intheloopapp/domains/models/review.dart';
 import 'package:intheloopapp/domains/models/service.dart';
-// import 'package:intheloopapp/domains/models/tag.dart';
 import 'package:intheloopapp/domains/models/user_model.dart';
 
 abstract class DatabaseRepository {

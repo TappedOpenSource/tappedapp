@@ -9,12 +9,13 @@ part of 'service.dart';
 Service _$ServiceFromJson(Map<String, dynamic> json) => Service(
       id: json['id'] as String,
       userId: json['userId'] as String,
-      title: json['title'] as String,
-      description: json['description'] as String,
-      rate: json['rate'] as int,
-      rateType: $enumDecode(_$RateTypeEnumMap, json['rateType']),
-      count: json['count'] as int,
-      deleted: json['deleted'] as bool,
+      title: json['title'] as String? ?? '',
+      description: json['description'] as String? ?? '',
+      rate: json['rate'] as int? ?? 0,
+      rateType: $enumDecodeNullable(_$RateTypeEnumMap, json['rateType']) ??
+          RateType.hourly,
+      count: json['count'] as int? ?? 0,
+      deleted: json['deleted'] as bool? ?? false,
     );
 
 Map<String, dynamic> _$ServiceToJson(Service instance) => <String, dynamic>{

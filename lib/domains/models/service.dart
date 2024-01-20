@@ -1,7 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:enum_to_string/enum_to_string.dart';
 import 'package:equatable/equatable.dart';
-import 'package:intheloopapp/utils/default_value.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:uuid/uuid.dart';
 
@@ -24,20 +22,12 @@ class Service extends Equatable {
       _$ServiceFromJson(json);
 
   factory Service.fromDoc(DocumentSnapshot<Map<String, dynamic>> doc) {
-    return Service(
-      id: doc.id,
-      userId: doc.getOrElse('userId', ''),
-      title: doc.getOrElse('title', ''),
-      description: doc.getOrElse('description', ''),
-      rate: doc.getOrElse('rate', 0),
-      rateType: EnumToString.fromString(
-            RateType.values,
-            doc.getOrElse('rateType', ''),
-          ) ??
-          RateType.hourly,
-      count: doc.getOrElse('count', 0),
-      deleted: doc.getOrElse('deleted', false),
-    );
+    final data = doc.data();
+    if (data == null) {
+      throw Exception('Document does not exist!');
+    }
+
+    return Service.fromJson(data);
   }
 
   factory Service.empty() => Service(
@@ -53,11 +43,23 @@ class Service extends Equatable {
 
   final String id;
   final String userId;
+
+  @JsonKey(defaultValue: '')
   final String title;
+
+  @JsonKey(defaultValue: '')
   final String description;
+
+  @JsonKey(defaultValue: 0)
   final int rate;
+
+  @JsonKey(defaultValue: RateType.hourly)
   final RateType rateType;
+
+  @JsonKey(defaultValue: 0)
   final int count;
+
+  @JsonKey(defaultValue: false)
   final bool deleted;
 
   Map<String, dynamic> toJson() => _$ServiceToJson(this);

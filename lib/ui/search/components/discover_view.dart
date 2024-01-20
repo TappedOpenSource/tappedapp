@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:intheloopapp/domains/models/opportunity.dart';
 import 'package:intheloopapp/domains/models/user_model.dart';
 import 'package:intheloopapp/ui/profile/components/opportunities_list.dart';
+import 'package:intheloopapp/ui/search/components/venue_card.dart';
 import 'package:intheloopapp/ui/user_card.dart';
 import 'package:intheloopapp/utils/app_logger.dart';
 import 'package:intheloopapp/utils/bloc_utils.dart';
@@ -29,6 +30,32 @@ class DiscoverView extends StatelessWidget {
               horizontal: 8,
             ),
             child: UserCard(user: users[index]),
+          );
+        },
+      ),
+    );
+  }
+
+
+  Widget _venueSlider(List<UserModel> users) {
+    if (users.isEmpty) {
+      return const Center(
+        child: Text('None rn'),
+      );
+    }
+    return SizedBox(
+      height: 150,
+      child: ScrollSnapList(
+        onItemFocus: (index) {},
+        selectedItemAnchor: SelectedItemAnchor.START,
+        itemCount: users.length,
+        itemSize: 150 + (8 * 2),
+        itemBuilder: (context, index) {
+          return Padding(
+            padding: const EdgeInsets.symmetric(
+              horizontal: 8,
+            ),
+            child: VenueCard(venue: users[index]),
           );
         },
       ),
@@ -144,7 +171,7 @@ class DiscoverView extends StatelessWidget {
               }
 
               final richmondVenues = snapshot.data ?? [];
-              return _userSlider(richmondVenues);
+              return _venueSlider(richmondVenues);
             },
           ),
           const Padding(
@@ -170,7 +197,7 @@ class DiscoverView extends StatelessWidget {
               }
 
               final dcVenues = snapshot.data ?? [];
-              return _userSlider(dcVenues);
+              return _venueSlider(dcVenues);
             },
           ),
           const Padding(
@@ -196,7 +223,7 @@ class DiscoverView extends StatelessWidget {
               }
 
               final novaVenues = snapshot.data ?? [];
-              return _userSlider(novaVenues);
+              return _venueSlider(novaVenues);
             },
           ),
           const Padding(
@@ -222,7 +249,7 @@ class DiscoverView extends StatelessWidget {
               }
 
               final marylandVenues = snapshot.data ?? [];
-              return _userSlider(marylandVenues);
+              return _venueSlider(marylandVenues);
             },
           ),
           const Padding(

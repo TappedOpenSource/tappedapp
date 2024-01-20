@@ -10,9 +10,11 @@ Badge _$BadgeFromJson(Map<String, dynamic> json) => Badge(
       id: json['id'] as String,
       creatorId: json['creatorId'] as String,
       imageUrl: json['imageUrl'] as String,
-      name: json['name'] as String,
-      description: json['description'] as String,
-      timestamp: DateTime.parse(json['timestamp'] as String),
+      name: json['name'] as String? ?? '',
+      description: json['description'] as String? ?? '',
+      timestamp: json['timestamp'] == null
+          ? DateTime.now()
+          : DateTime.parse(json['timestamp'] as String),
     );
 
 Map<String, dynamic> _$BadgeToJson(Badge instance) => <String, dynamic>{
