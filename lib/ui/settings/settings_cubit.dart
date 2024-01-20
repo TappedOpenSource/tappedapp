@@ -12,7 +12,9 @@ import 'package:intheloopapp/data/prod/firestore_database_impl.dart';
 import 'package:intheloopapp/data/storage_repository.dart';
 import 'package:intheloopapp/domains/authentication_bloc/authentication_bloc.dart';
 import 'package:intheloopapp/domains/models/genre.dart';
+import 'package:intheloopapp/domains/models/location.dart';
 import 'package:intheloopapp/domains/models/option.dart';
+import 'package:intheloopapp/domains/models/performer_info.dart';
 import 'package:intheloopapp/domains/models/user_model.dart';
 import 'package:intheloopapp/domains/models/username.dart';
 import 'package:intheloopapp/domains/navigation_bloc/navigation_bloc.dart';
@@ -47,36 +49,24 @@ class SettingsCubit extends Cubit<SettingsState> {
         username: currentUser.username.toString(),
         artistName: currentUser.artistName,
         bio: currentUser.bio,
-        genres: currentUser.genres,
-        label: currentUser.label,
+        genres: currentUser.performerInfo.asNullable()?.genres,
+        label: currentUser.performerInfo.asNullable()?.label,
         occupations: currentUser.occupations,
-        placeId: currentUser.placeId,
-        twitterHandle: currentUser.twitterHandle,
-        twitterFollowers: currentUser.twitterFollowers,
-        instagramHandle: currentUser.instagramHandle,
-        instagramFollowers: currentUser.instagramFollowers,
-        tiktokHandle: currentUser.tiktokHandle,
-        tiktokFollowers: currentUser.tiktokFollowers,
-        spotifyId: currentUser.spotifyId,
-        youtubeChannelId: currentUser.youtubeChannelId,
-        pushNotificationsLikes: currentUser.pushNotificationsLikes,
-        pushNotificationsComments: currentUser.pushNotificationsComments,
-        pushNotificationsFollows: currentUser.pushNotificationsComments,
+        placeId: currentUser.location.asNullable()?.placeId,
+        spotifyId:
+            currentUser.performerInfo.asNullable()?.spotifyId.asNullable(),
         pushNotificationsDirectMessages:
-            currentUser.pushNotificationsDirectMessages,
-        pushNotificationsITLUpdates: currentUser.pushNotificationsITLUpdates,
-        emailNotificationsAppReleases:
-            currentUser.emailNotificationsAppReleases,
-        emailNotificationsITLUpdates: currentUser.emailNotificationsITLUpdates,
+            currentUser.pushNotifications.directMessages,
       ),
     );
   }
 
   Future<void> initPlace() async {
     try {
-      final place = currentUser.placeId != null
-          ? await places.getPlaceById(currentUser.placeId!)
-          : null;
+      final place = switch (currentUser.location) {
+        None() => null,
+        Some(:final value) => await places.getPlaceById(value.placeId),
+      };
       emit(state.copyWith(place: place));
     } catch (e) {
       emit(state.copyWith());
@@ -84,24 +74,35 @@ class SettingsCubit extends Cubit<SettingsState> {
   }
 
   void changeBio(String value) => emit(state.copyWith(bio: value));
+
   void changeUsername(String value) => emit(state.copyWith(username: value));
+
   void changeArtistName(String value) =>
       emit(state.copyWith(artistName: value));
+
   void changeTwitter(String value) =>
       emit(state.copyWith(twitterHandle: value));
+
   void changeTwitterFollowers(int value) =>
       emit(state.copyWith(twitterFollowers: value));
+
   void changeInstagram(String value) =>
       emit(state.copyWith(instagramHandle: value));
+
   void changeInstagramFollowers(int value) => emit(
         state.copyWith(instagramFollowers: value),
       );
+
   void changeTikTik(String value) => emit(state.copyWith(tiktokHandle: value));
+
   void changeTikTokFollowers(int value) =>
       emit(state.copyWith(tiktokFollowers: value));
+
   void changeSpotify(String value) => emit(state.copyWith(spotifyId: value));
+
   void changeYoutube(String value) =>
       emit(state.copyWith(youtubeChannelId: value));
+
   void changePlace(PlaceData? place, String placeId) {
     emit(
       state.copyWith(
@@ -114,6 +115,7 @@ class SettingsCubit extends Cubit<SettingsState> {
   void changeGenres(List<Genre> genres) => emit(
         state.copyWith(genres: genres),
       );
+
   void removeGenre(Genre genre) {
     emit(
       state.copyWith(
@@ -125,6 +127,7 @@ class SettingsCubit extends Cubit<SettingsState> {
   void changeOccupations(List<String> value) => emit(
         state.copyWith(occupations: value),
       );
+
   void removeOccupation(String occupation) {
     emit(
       state.copyWith(
@@ -143,36 +146,11 @@ class SettingsCubit extends Cubit<SettingsState> {
         state.copyWith(password: input),
       );
 
-  void changeNewLikesPush({required bool selected}) =>
-      emit(state.copyWith(pushNotificationsLikes: selected));
-  void changeNewCommentsPush({required bool selected}) =>
-      emit(state.copyWith(pushNotificationsComments: selected));
-  void changeNewFollowerPush({required bool selected}) =>
-      emit(state.copyWith(pushNotificationsFollows: selected));
   void changeDirectMsgPush({required bool selected}) =>
       emit(state.copyWith(pushNotificationsDirectMessages: selected));
-  void changeITLUpdatesPush({required bool selected}) =>
-      emit(state.copyWith(pushNotificationsITLUpdates: selected));
-  void changeAllPush({required bool selected}) => emit(
-        state.copyWith(
-          pushNotificationsLikes: selected,
-          pushNotificationsComments: selected,
-          pushNotificationsFollows: selected,
-          pushNotificationsDirectMessages: selected,
-          pushNotificationsITLUpdates: selected,
-        ),
-      );
 
   void changeAppReleaseEmail({required bool selected}) =>
       emit(state.copyWith(emailNotificationsAppReleases: selected));
-  void changeITLUpdatesEmail({required bool selected}) =>
-      emit(state.copyWith(emailNotificationsITLUpdates: selected));
-  void changeAllEmail({required bool selected}) => emit(
-        state.copyWith(
-          emailNotificationsAppReleases: selected,
-          emailNotificationsITLUpdates: selected,
-        ),
-      );
 
   Future<void> handleImageFromGallery() async {
     try {
@@ -205,44 +183,66 @@ class SettingsCubit extends Cubit<SettingsState> {
       }
 
       final profilePictureUrl = state.profileImage != null
-          ? await storageRepository.uploadProfilePicture(
-              currentUser.id,
-              state.profileImage!,
+          ? Some(
+              await storageRepository.uploadProfilePicture(
+                currentUser.id,
+                state.profileImage!,
+              ),
             )
           : currentUser.profilePicture;
 
-      final lat = state.place?.lat;
-      final lng = state.place?.lng;
-      final geohash = state.place?.geohash;
+      final optionalPlace = Option.fromNullable(state.place);
+      final location = switch (optionalPlace) {
+        None() => const None<Location>(),
+        Some(:final value) => Some<Location>(
+            Location(
+              placeId: value.placeId,
+              geohash: value.geohash,
+              lat: value.lat,
+              lng: value.lng,
+            ),
+          ),
+      };
 
-      // placeId => geohash
+      final newPerformerInfo = switch (currentUser.performerInfo) {
+        None() => PerformerInfo(
+            genres: state.genres,
+            label: state.label ?? 'None',
+            spotifyId: Option.fromNullable(state.spotifyId),
+            rating: const None(),
+            reviewCount: 0,
+            pressKitUrl: const None<String>(),
+          ),
+        Some(:final value) => value.copyWith(
+            genres: state.genres,
+            label: state.label,
+            spotifyId: Option.fromNullable(state.spotifyId),
+          ),
+      };
+
       final user = currentUser.copyWith(
         username: Username.fromString(state.username),
         artistName: state.artistName,
         bio: state.bio,
-        genres: state.genres,
-        label: state.label,
+        performerInfo: Some(newPerformerInfo),
+        socialFollowing: currentUser.socialFollowing.copyWith(
+          twitterHandle: Option.fromNullable(state.twitterHandle),
+          twitterFollowers: state.twitterFollowers,
+          instagramHandle: Option.fromNullable(state.instagramHandle),
+          instagramFollowers: state.instagramFollowers,
+          tiktokHandle: Option.fromNullable(state.tiktokHandle),
+          tiktokFollowers: state.tiktokFollowers,
+          youtubeChannelId: Option.fromNullable(state.youtubeChannelId),
+        ),
+        pushNotifications: currentUser.pushNotifications.copyWith(
+          directMessages: state.pushNotificationsDirectMessages,
+        ),
+        emailNotifications: currentUser.emailNotifications.copyWith(
+          appReleases: state.emailNotificationsAppReleases,
+        ),
         occupations: state.occupations,
-        placeId: Option.fromNullable(state.placeId),
-        geohash: Option.fromNullable(geohash),
-        lat: Option.fromNullable(lat),
-        lng: Option.fromNullable(lng),
-        twitterHandle: state.twitterHandle,
-        twitterFollowers: state.twitterFollowers,
-        instagramHandle: state.instagramHandle,
-        instagramFollowers: state.instagramFollowers,
-        tiktokHandle: state.tiktokHandle,
-        tiktokFollowers: state.tiktokFollowers,
-        spotifyId: state.spotifyId,
-        youtubeChannelId: state.youtubeChannelId,
+        location: location,
         profilePicture: profilePictureUrl,
-        pushNotificationsLikes: state.pushNotificationsLikes,
-        pushNotificationsComments: state.pushNotificationsComments,
-        pushNotificationsFollows: state.pushNotificationsFollows,
-        pushNotificationsDirectMessages: state.pushNotificationsDirectMessages,
-        pushNotificationsITLUpdates: state.pushNotificationsITLUpdates,
-        emailNotificationsAppReleases: state.emailNotificationsAppReleases,
-        emailNotificationsITLUpdates: state.emailNotificationsITLUpdates,
         // stripeConnectedAccountId: state.stripeConnectedAccountId,
       );
 

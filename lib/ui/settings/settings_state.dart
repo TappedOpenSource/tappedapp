@@ -19,13 +19,8 @@ class SettingsState extends Equatable {
     this.youtubeChannelId,
     this.profileImage,
     this.status = FormzSubmissionStatus.initial,
-    this.pushNotificationsLikes = true,
-    this.pushNotificationsComments = true,
-    this.pushNotificationsFollows = true,
     this.pushNotificationsDirectMessages = true,
-    this.pushNotificationsITLUpdates = true,
     this.emailNotificationsAppReleases = true,
-    this.emailNotificationsITLUpdates = true,
     this.email = '',
     this.password = '',
     this.place,
@@ -52,6 +47,7 @@ class SettingsState extends Equatable {
   final int? tiktokFollowers;
   final String? spotifyId;
   final String? youtubeChannelId;
+
   final File? profileImage;
   final FormzSubmissionStatus status;
 
@@ -61,13 +57,8 @@ class SettingsState extends Equatable {
   late final ImagePicker picker;
   late final GlobalKey<FormState> formKey;
 
-  final bool pushNotificationsLikes;
-  final bool pushNotificationsComments;
-  final bool pushNotificationsFollows;
   final bool pushNotificationsDirectMessages;
-  final bool pushNotificationsITLUpdates;
   final bool emailNotificationsAppReleases;
-  final bool emailNotificationsITLUpdates;
 
   final String email;
   final String password;
@@ -92,13 +83,8 @@ class SettingsState extends Equatable {
         youtubeChannelId,
         profileImage,
         status,
-        pushNotificationsLikes,
-        pushNotificationsComments,
-        pushNotificationsFollows,
         pushNotificationsDirectMessages,
-        pushNotificationsITLUpdates,
         emailNotificationsAppReleases,
-        emailNotificationsITLUpdates,
         email,
         password,
       ];
@@ -110,8 +96,8 @@ class SettingsState extends Equatable {
     List<Genre>? genres,
     List<String>? occupations,
     String? label,
-    PlaceData? place,
     String? placeId,
+    PlaceData? place,
     String? twitterHandle,
     int? twitterFollowers,
     String? instagramHandle,
@@ -122,13 +108,8 @@ class SettingsState extends Equatable {
     String? youtubeChannelId,
     File? profileImage,
     FormzSubmissionStatus? status,
-    bool? pushNotificationsLikes,
-    bool? pushNotificationsComments,
-    bool? pushNotificationsFollows,
     bool? pushNotificationsDirectMessages,
-    bool? pushNotificationsITLUpdates,
     bool? emailNotificationsAppReleases,
-    bool? emailNotificationsITLUpdates,
     String? email,
     String? password,
   }) {
@@ -151,20 +132,10 @@ class SettingsState extends Equatable {
       youtubeChannelId: youtubeChannelId ?? this.youtubeChannelId,
       profileImage: profileImage ?? this.profileImage,
       status: status ?? this.status,
-      pushNotificationsLikes:
-          pushNotificationsLikes ?? this.pushNotificationsLikes,
-      pushNotificationsComments:
-          pushNotificationsComments ?? this.pushNotificationsComments,
-      pushNotificationsFollows:
-          pushNotificationsFollows ?? this.pushNotificationsFollows,
       pushNotificationsDirectMessages: pushNotificationsDirectMessages ??
           this.pushNotificationsDirectMessages,
-      pushNotificationsITLUpdates:
-          pushNotificationsITLUpdates ?? this.pushNotificationsITLUpdates,
       emailNotificationsAppReleases:
           emailNotificationsAppReleases ?? this.emailNotificationsAppReleases,
-      emailNotificationsITLUpdates:
-          emailNotificationsITLUpdates ?? this.emailNotificationsITLUpdates,
       picker: picker,
       formKey: formKey,
       email: email ?? this.email,

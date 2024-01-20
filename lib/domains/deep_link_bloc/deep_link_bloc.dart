@@ -2,7 +2,6 @@ import 'dart:async';
 
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
-import 'package:flutter/foundation.dart';
 import 'package:intheloopapp/data/database_repository.dart';
 import 'package:intheloopapp/data/deep_link_repository.dart';
 import 'package:intheloopapp/domains/models/option.dart';
@@ -64,7 +63,7 @@ class DeepLinkBloc extends Bloc<DeepLinkEvent, DeepLinkState> {
 
           final currentUser =
               (onboardingBloc.state as Onboarded).currentUser.copyWith(
-                    stripeConnectedAccountId: id,
+                    stripeConnectedAccountId: Some(id),
                   );
 
           onboardingBloc.add(

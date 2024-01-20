@@ -44,7 +44,7 @@ class _UserTileState extends State<UserTile> {
     return Text('${NumberFormat.compactCurrency(
       decimalDigits: 0,
       symbol: '',
-    ).format(user.socialMediaAudience)} followers');
+    ).format(user.socialFollowing.audienceSize)} followers');
   }
 
   Widget _buildUserTile(
@@ -88,7 +88,7 @@ class _UserTileState extends State<UserTile> {
               leading: UserAvatar(
                 radius: 25,
                 pushUser: Some(user),
-                imageUrl: user.profilePicture,
+                imageUrl: user.profilePicture.asNullable(),
                 verified: verified,
               ),
               title: RichText(

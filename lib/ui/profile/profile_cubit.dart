@@ -328,9 +328,12 @@ class ProfileCubit extends Cubit<ProfileState> {
     await trace.start();
     try {
       logger.debug('initPlace ${state.visitedUser}');
-      final place = visitedUser.placeId != null
-          ? await places.getPlaceById(visitedUser.placeId!)
-          : null;
+      final place = await switch (visitedUser.location) {
+        None() => Future.value(null),
+        Some(:final value) => (() async {
+          return await places.getPlaceById(value.placeId);
+        })(),
+      };
       emit(state.copyWith(place: place));
     } catch (e, s) {
       logger.error('initPlace error', error: e, stackTrace: s);

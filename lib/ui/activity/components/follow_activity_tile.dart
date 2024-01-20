@@ -73,7 +73,7 @@ class FollowActivityTile extends StatelessWidget {
                               leading: UserAvatar(
                                 radius: 20,
                                 pushUser: user,
-                                imageUrl: value.profilePicture,
+                                imageUrl: value.profilePicture.asNullable(),
                                 verified: isVerified,
                               ),
                               trailing: Text(

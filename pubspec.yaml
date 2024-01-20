@@ -80,6 +80,7 @@ dependencies:
   pull_down_button: 0.9.3
   purchases_flutter: ^6.5.1
   quiver: 3.2.1
+  readmore: ^2.2.0
   rive: 0.12.3
   rxdart: 0.27.7
   scroll_snap_list: 0.9.1

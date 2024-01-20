@@ -128,7 +128,7 @@ class CreateBookingCubit extends Cubit<CreateBookingState> {
 
         final stripeAccountId = requesteeStripeConnectedAccountId.unwrap;
         final intent = await payments.initPaymentSheet(
-          payerCustomerId: currentUser.stripeCustomerId,
+          payerCustomerId: currentUser.stripeCustomerId.asNullable(),
           customerEmail: currentUser.email,
           payeeConnectedAccountId: stripeAccountId,
           amount: total,
@@ -138,7 +138,7 @@ class CreateBookingCubit extends Cubit<CreateBookingState> {
           onboardingBloc.add(
             UpdateOnboardedUser(
               user: currentUser.copyWith(
-                stripeCustomerId: intent.customer,
+                stripeCustomerId: Some(intent.customer),
               ),
             ),
           );

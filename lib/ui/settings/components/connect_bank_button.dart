@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intheloopapp/data/payment_repository.dart';
+import 'package:intheloopapp/data/places_repository.dart';
 import 'package:intheloopapp/domains/models/option.dart';
 import 'package:intheloopapp/domains/models/payment_user.dart';
 import 'package:intheloopapp/domains/models/user_model.dart';
@@ -45,9 +46,12 @@ class _ConnectBankButtonState extends State<ConnectBankButton> {
             loading = true;
           });
 
-          final placeId = currentUser.placeId;
-          final place =
-              placeId != null ? await places.getPlaceById(placeId) : null;
+          final place = await switch (currentUser.location) {
+            None() => Future<PlaceData?>.value(null),
+            Some(:final value) => (() async {
+                return await places.getPlaceById(value.placeId);
+              })(),
+          };
 
           final addressComponents = place?.addressComponents ?? [];
           final countryCode = addressComponents
@@ -70,7 +74,7 @@ class _ConnectBankButtonState extends State<ConnectBankButton> {
           logger.info('connecting account : accountId ${res.accountId}');
           if (res.accountId != null || res.accountId != '') {
             final updatedUser = currentUser.copyWith(
-              stripeConnectedAccountId: res.accountId,
+              stripeConnectedAccountId: Option.fromNullable(res.accountId),
             );
 
             onboarding.add(
@@ -143,65 +147,68 @@ class _ConnectBankButtonState extends State<ConnectBankButton> {
         ),
       ),
       builder: (context, currentUser) {
-        if (currentUser.stripeConnectedAccountId == null ||
-            currentUser.stripeConnectedAccountId == '') {
-          return _connectBankAccountButton(
-            context: context,
-            currentUser: currentUser,
-          );
-        }
-
-        return FutureBuilder<Option<PaymentUser>>(
-          future: payments.getAccountById(
-            currentUser.stripeConnectedAccountId!,
-          ),
-          builder: (context, snapshot) {
-            if (!snapshot.hasData) {
-              return CupertinoButton(
-                onPressed: null,
-                color: onSurfaceColor.withOpacity(0.1),
-                borderRadius: BorderRadius.circular(15),
-                child: const CupertinoActivityIndicator(),
-              );
-            }
-
-            final paymentUser = snapshot.data;
-            return switch (paymentUser) {
-              null => CupertinoButton(
-                  onPressed: null,
-                  color: onSurfaceColor.withOpacity(0.1),
-                  borderRadius: BorderRadius.circular(15),
-                  child: const CupertinoActivityIndicator(),
-                ),
-              None() => _connectBankAccountButton(
+        return switch (currentUser.stripeConnectedAccountId) {
+          None() => _connectBankAccountButton(
+              context: context,
+              currentUser: currentUser,
+            ),
+          Some(:final value) => () {
+              if (value == '') {
+                return _connectBankAccountButton(
                   context: context,
                   currentUser: currentUser,
-                ),
-              Some(:final value) => () {
-                  if (!value.payoutsEnabled) {
-                    return _connectBankAccountButton(
-                      context: context,
-                      currentUser: currentUser,
-                      accountId: value.id,
+                );
+              }
+
+              return FutureBuilder<Option<PaymentUser>>(
+                future: payments.getAccountById(value),
+                builder: (context, snapshot) {
+                  if (!snapshot.hasData) {
+                    return CupertinoButton(
+                      onPressed: null,
+                      color: onSurfaceColor.withOpacity(0.1),
+                      borderRadius: BorderRadius.circular(15),
+                      child: const CupertinoActivityIndicator(),
                     );
                   }
 
-                  return CupertinoButton(
-                    onPressed: null,
-                    color: onSurfaceColor.withOpacity(0.1),
-                    borderRadius: BorderRadius.circular(15),
-                    child: const Text(
-                      '✅ Bank Connected',
-                      style: TextStyle(
-                        color: Colors.grey,
-                        fontWeight: FontWeight.w700,
+                  final paymentUser = snapshot.data;
+                  return switch (paymentUser) {
+                    null => _connectBankAccountButton(
+                        context: context,
+                        currentUser: currentUser,
                       ),
-                    ),
-                  );
-                }(),
-            };
-          },
-        );
+                    None() => _connectBankAccountButton(
+                        context: context,
+                        currentUser: currentUser,
+                      ),
+                    Some(:final value) => () {
+                        if (!value.payoutsEnabled) {
+                          return _connectBankAccountButton(
+                            context: context,
+                            currentUser: currentUser,
+                            accountId: value.id,
+                          );
+                        }
+
+                        return CupertinoButton(
+                          onPressed: null,
+                          color: onSurfaceColor.withOpacity(0.1),
+                          borderRadius: BorderRadius.circular(15),
+                          child: const Text(
+                            '✅ Bank Connected',
+                            style: TextStyle(
+                              color: Colors.grey,
+                              fontWeight: FontWeight.w700,
+                            ),
+                          ),
+                        );
+                      }(),
+                  };
+                },
+              );
+            }(),
+        };
       },
     );
   }

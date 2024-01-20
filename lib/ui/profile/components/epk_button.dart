@@ -11,14 +11,17 @@ class EPKButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocBuilder<ProfileCubit, ProfileState>(
       builder: (context, state) {
-        return switch (state.visitedUser.epkUrl) {
+        return switch (state.visitedUser.performerInfo) {
           None() => const SizedBox.shrink(),
-          Some(:final value) => FilledButton(
-              child: const Text('View EPK'),
-              onPressed: () async {
-                await launchUrl(Uri.parse(value));
-              },
-            ),
+          Some(:final value) => switch (value.pressKitUrl) {
+              None() => const SizedBox.shrink(),
+              Some(:final value) => FilledButton(
+                  child: const Text('View EPK'),
+                  onPressed: () async {
+                    await launchUrl(Uri.parse(value));
+                  },
+                ),
+            },
         };
       },
     );

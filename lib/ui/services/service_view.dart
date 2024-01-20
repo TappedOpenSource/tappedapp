@@ -145,9 +145,8 @@ class ServiceView extends StatelessWidget {
                                 child: RequestToBookButton(
                                   userId: service.userId,
                                   service: Some(service),
-                                  stripeConnectedAccountId: Option.fromNullable(
-                                    value.stripeConnectedAccountId,
-                                  ),
+                                  stripeConnectedAccountId:
+                                      value.stripeConnectedAccountId,
                                 ),
                               );
                             }(),

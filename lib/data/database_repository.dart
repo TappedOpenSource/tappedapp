@@ -156,7 +156,7 @@ abstract class DatabaseRepository {
     String? lastOpportunityId,
   });
   Future<bool> isUserAppliedForOpportunity({
-    required Opportunity opportunity,
+    required String opportunityId,
     required String userId,
   });
   Future<List<UserModel>> getInterestedUsers(Opportunity opportunity);

@@ -23,13 +23,13 @@ class UserCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final database = context.database;
-    final imageUrl = user.profilePicture;
+    final imageUrl = user.profilePicture.asNullable();
     if (user.deleted) return const SizedBox.shrink();
 
     final audienceText = '${NumberFormat.compactCurrency(
       decimalDigits: 0,
       symbol: '',
-    ).format(user.socialMediaAudience)} followers';
+    ).format(user.socialFollowing.audienceSize)} followers';
 
     return CurrentUserBuilder(
       errorWidget: const ListTile(

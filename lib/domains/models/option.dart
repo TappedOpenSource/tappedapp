@@ -25,6 +25,7 @@ sealed class Option<T> {
   }
 
   static Object? toJson(Option<dynamic> option) => option.asNullable();
+
   static Option<dynamic> fromJson(dynamic value) => Option.fromNullable(value);
 }
 
@@ -140,6 +141,16 @@ class OptionalStringConverter
   String? toJson(Option<String> option) => option.asNullable();
 }
 
+class OptionalIntConverter implements JsonConverter<Option<int>, int?> {
+  const OptionalIntConverter();
+
+  @override
+  Option<int> fromJson(int? value) => Option.fromNullable(value);
+
+  @override
+  int? toJson(Option<int> option) => option.asNullable();
+}
+
 class OptionalDoubleConverter
     implements JsonConverter<Option<double>, double?> {
   const OptionalDoubleConverter();
@@ -149,4 +160,16 @@ class OptionalDoubleConverter
 
   @override
   double? toJson(Option<double> option) => option.asNullable();
+}
+
+double? optionalDoubleToJson (Option<double> option) => option.asNullable();
+
+class OptionalObjectConverter<T> implements JsonConverter<Option<T>, T?> {
+  const OptionalObjectConverter();
+
+  @override
+  Option<T> fromJson(T? value) => Option.fromNullable(value);
+
+  @override
+  T? toJson(Option<T> option) => option.asNullable();
 }

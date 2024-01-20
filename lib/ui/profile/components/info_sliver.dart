@@ -10,6 +10,7 @@ import 'package:intheloopapp/ui/profile/components/social_media_icons.dart';
 import 'package:intheloopapp/ui/profile/profile_cubit.dart';
 import 'package:intheloopapp/ui/themes.dart';
 import 'package:intheloopapp/utils/linkify.dart';
+import 'package:readmore/readmore.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class InfoSliver extends StatelessWidget {
@@ -21,7 +22,11 @@ class InfoSliver extends StatelessWidget {
     return BlocBuilder<ProfileCubit, ProfileState>(
       builder: (context, state) {
         final occupations = state.visitedUser.occupations;
-        final genres = state.visitedUser.genres;
+        final performerInfo = state.visitedUser.performerInfo.asNullable();
+        final genres = performerInfo?.genres ?? [];
+        final label = performerInfo?.label ?? 'None';
+        final pressKitUrl = performerInfo?.pressKitUrl ?? const None();
+        final bio = state.visitedUser.bio;
         final currPlace = state.place;
         return Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -89,19 +94,19 @@ class InfoSliver extends StatelessWidget {
                       ),
                     ),
                   ),
-                if (state.visitedUser.label != 'None')
+                if (label != 'None')
                   CupertinoListTile(
                     leading: const Icon(
                       CupertinoIcons.tag,
                     ),
                     title: Text(
-                      state.visitedUser.label,
+                      label,
                       style: TextStyle(
                         color: theme.colorScheme.onSurface,
                       ),
                     ),
                   ),
-                switch (state.visitedUser.epkUrl) {
+                switch (pressKitUrl) {
                   None() => const SizedBox.shrink(),
                   Some(:final value) => CupertinoListTile.notched(
                       title: Text(
@@ -127,23 +132,26 @@ class InfoSliver extends StatelessWidget {
                 ),
               ],
             ),
-            // if (bio.isNotEmpty)
-            //   Padding(
-            //     padding: const EdgeInsets.symmetric(
-            //       vertical: 8,
-            //       horizontal: 16,
-            //     ),
-            //     child: Linkify(
-            //       text: bio,
-            //       maxLines: 6,
-            //       style: const TextStyle(
-            //         fontSize: 16,
-            //         fontWeight: FontWeight.normal,
-            //         // color: Color(0xFF757575),
-            //       ),
-            //     ),
-            //   ),
-            // const EPKButton(),
+            if (bio.isNotEmpty)
+              Padding(
+                padding: const EdgeInsets.symmetric(
+                  vertical: 8,
+                  horizontal: 16,
+                ),
+                child: ReadMoreText(
+                  bio,
+                  trimLines: 2,
+                  colorClickableText: tappedAccent,
+                  trimMode: TrimMode.Line,
+                  trimCollapsedText: ' show more',
+                  trimExpandedText: ' show less',
+                  style: const TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.normal,
+                    // color: Color(0xFF757575),
+                  ),
+                ),
+              ),
             const SocialMediaIcons(),
           ],
         );

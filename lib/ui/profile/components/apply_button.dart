@@ -93,7 +93,7 @@ class _ApplyButtonState extends State<ApplyButton> {
             return FutureBuilder<bool>(
               future: database.isUserAppliedForOpportunity(
                 userId: currentUser.id,
-                opportunity: _opportunity,
+                opportunityId: _opportunity.id,
               ),
               builder: (context, snapshot) {
                 if (!snapshot.hasData) {

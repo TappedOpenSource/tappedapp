@@ -1,9 +1,14 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:enum_to_string/enum_to_string.dart';
 import 'package:equatable/equatable.dart';
-import 'package:intheloopapp/domains/models/genre.dart';
+import 'package:intheloopapp/domains/models/booker_info.dart';
+import 'package:intheloopapp/domains/models/email_notifications.dart';
+import 'package:intheloopapp/domains/models/location.dart';
 import 'package:intheloopapp/domains/models/option.dart';
+import 'package:intheloopapp/domains/models/performer_info.dart';
+import 'package:intheloopapp/domains/models/push_notifications.dart';
+import 'package:intheloopapp/domains/models/social_following.dart';
 import 'package:intheloopapp/domains/models/username.dart';
+import 'package:intheloopapp/domains/models/venue_info.dart';
 import 'package:intheloopapp/utils/default_value.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:uuid/uuid.dart';
@@ -20,34 +25,16 @@ class UserModel extends Equatable {
     required this.artistName,
     required this.profilePicture,
     required this.bio,
-    required this.genres,
     required this.occupations,
-    required this.label,
-    required this.placeId,
-    required this.geohash,
-    required this.lat,
-    required this.lng,
+    required this.location,
     required this.badgesCount,
-    required this.reviewCount,
-    required this.overallRating,
+    required this.performerInfo,
+    required this.bookerInfo,
+    required this.venueInfo,
+    required this.socialFollowing,
+    required this.emailNotifications,
+    required this.pushNotifications,
     required this.deleted,
-    required this.shadowBanned,
-    required this.epkUrl,
-    required this.youtubeChannelId,
-    required this.tiktokHandle,
-    required this.tiktokFollowers,
-    required this.instagramHandle,
-    required this.instagramFollowers,
-    required this.twitterHandle,
-    required this.twitterFollowers,
-    required this.spotifyId,
-    required this.pushNotificationsLikes,
-    required this.pushNotificationsComments,
-    required this.pushNotificationsFollows,
-    required this.pushNotificationsDirectMessages,
-    required this.pushNotificationsITLUpdates,
-    required this.emailNotificationsAppReleases,
-    required this.emailNotificationsITLUpdates,
     required this.stripeConnectedAccountId,
     required this.stripeCustomerId,
   });
@@ -59,37 +46,19 @@ class UserModel extends Equatable {
         username: Username.fromString('anonymous'),
         artistName: '',
         bio: '',
-        genres: const [],
         occupations: const [],
-        label: 'None',
-        profilePicture: null,
-        placeId: null,
-        geohash: null,
-        lat: null,
-        lng: null,
+        profilePicture: const None<String>(),
+        location: const None<Location>(),
         badgesCount: 0,
-        reviewCount: 0,
-        overallRating: const None<double>(),
+        performerInfo: const None<PerformerInfo>(),
+        bookerInfo: const None<BookerInfo>(),
+        venueInfo: const None<VenueInfo>(),
+        socialFollowing: SocialFollowing.empty(),
+        emailNotifications: EmailNotifications.empty(),
+        pushNotifications: PushNotifications.empty(),
         deleted: false,
-        shadowBanned: false,
-        epkUrl: const None<String>(),
-        youtubeChannelId: null,
-        tiktokHandle: null,
-        tiktokFollowers: null,
-        instagramHandle: null,
-        instagramFollowers: null,
-        twitterHandle: null,
-        twitterFollowers: null,
-        spotifyId: null,
-        pushNotificationsLikes: true,
-        pushNotificationsComments: true,
-        pushNotificationsFollows: true,
-        pushNotificationsDirectMessages: true,
-        pushNotificationsITLUpdates: true,
-        emailNotificationsAppReleases: true,
-        emailNotificationsITLUpdates: true,
-        stripeConnectedAccountId: null,
-        stripeCustomerId: null,
+        stripeConnectedAccountId: const None<String>(),
+        stripeCustomerId: const None<String>(),
       );
 
   factory UserModel.fromJson(Map<String, dynamic> json) =>
@@ -101,17 +70,76 @@ class UserModel extends Equatable {
       Timestamp.now(),
     );
 
-    final tmpOverallRating = doc.getOrElse<dynamic>('overallRating', null);
+    final performerInfoData = doc.getOrElse<Map<String, dynamic>?>(
+      'performerInfo',
+      null,
+    );
 
-    // firestore can suck my nuts for this
-    // firestore only stores "numbers" so I have to figure out if
-    // it's an int or double
-    final overallRating = switch (tmpOverallRating.runtimeType) {
-      String => const None<double>(),
-      double => Some<double>(tmpOverallRating as double),
-      int => Some<double>((tmpOverallRating as int).toDouble()),
-      _ => const None<double>(),
-    };
+    final performerInfo = performerInfoData != null
+      ? Some<PerformerInfo>(
+        PerformerInfo.fromJson(performerInfoData),
+      )
+      : const None<PerformerInfo>();
+
+    final bookerInfoData = doc.getOrElse<Map<String, dynamic>?>(
+      'bookerInfo',
+      null,
+    );
+
+    final bookerInfo = bookerInfoData != null
+      ? Some<BookerInfo>(
+        BookerInfo.fromJson(bookerInfoData),
+      )
+      : const None<BookerInfo>();
+
+    final venueInfoData = doc.getOrElse<Map<String, dynamic>?>(
+      'venueInfo',
+      null,
+    );
+
+    final venueInfo = venueInfoData != null
+        ? Some<VenueInfo>(
+      VenueInfo.fromJson(venueInfoData),
+    )
+        : const None<VenueInfo>();
+
+    final socialFollowingData = doc.getOrElse<Map<String, dynamic>?>(
+      'socialFollowing',
+      null,
+    );
+
+    final socialFollowing = socialFollowingData != null
+      ? SocialFollowing.fromJson(socialFollowingData)
+      : SocialFollowing.empty();
+
+    final emailNotificationsData = doc.getOrElse<Map<String, dynamic>?>(
+      'emailNotifications',
+      null,
+    );
+
+    final emailNotifications = emailNotificationsData != null
+      ? EmailNotifications.fromJson(emailNotificationsData)
+      : EmailNotifications.empty();
+
+    final pushNotificationsData = doc.getOrElse<Map<String, dynamic>?>(
+      'pushNotifications',
+      null,
+    );
+
+    final pushNotifications = pushNotificationsData != null
+      ? PushNotifications.fromJson(pushNotificationsData)
+      : PushNotifications.empty();
+
+    final tmpLocation = doc.getOrElse<Map<String, dynamic>?>(
+      'location',
+      null,
+    );
+
+    final location = tmpLocation != null
+      ? Some<Location>(
+        Location.fromJson(tmpLocation),
+      )
+      : const None<Location>();
 
     return UserModel(
       id: doc.id,
@@ -119,59 +147,30 @@ class UserModel extends Equatable {
       timestamp: tmpTimestamp.toDate(),
       username: Username.fromString(doc.getOrElse('username', 'anonymous')),
       artistName: doc.getOrElse('artistName', ''),
-      profilePicture: doc.getOrElse<String?>('profilePicture', null),
+      profilePicture: Option.fromNullable(doc.getOrElse<String?>('profilePicture', null),),
       bio: doc.getOrElse<String>('bio', ''),
-      genres: doc
-          .getOrElse<List<dynamic>>('genres', [])
-          .map(
-            (dynamic e) =>
-                EnumToString.fromString<Genre>(Genre.values, e as String),
-          )
-          .where((element) => element != null)
-          .whereType<Genre>()
-          .toList(),
       occupations: doc
           .getOrElse<List<dynamic>>('occupations', [])
           .whereType<String>()
           .toList(),
-      label: doc.getOrElse<String>('label', 'None'),
-      placeId: doc.getOrElse<String?>('placeId', null),
-      geohash: doc.getOrElse<String?>('geohash', null),
-      lat: doc.getOrElse<double?>('lat', null),
-      lng: doc.getOrElse<double?>('lng', null),
+      location: location,
       badgesCount: doc.getOrElse<int>('badgesCount', 0),
-      reviewCount: doc.getOrElse<int>('reviewCount', 0),
-      overallRating: overallRating,
+      performerInfo: performerInfo,
+      bookerInfo: bookerInfo,
+      venueInfo: venueInfo,
+      socialFollowing: socialFollowing,
       deleted: doc.getOrElse<bool>('deleted', false),
-      shadowBanned: doc.getOrElse<bool>('shadowBanned', false),
-      epkUrl: Option.fromNullable(
-        doc.getOrElse<String?>('epkUrl', null),
-      ),
-      youtubeChannelId: doc.getOrElse<String?>('youtubeChannelId', null),
-      tiktokHandle: doc.getOrElse<String?>('tiktokHandle', null),
-      tiktokFollowers: doc.getOrElse<int?>('tiktokFollowers', null),
-      instagramHandle: doc.getOrElse<String?>('instagramHandle', null),
-      instagramFollowers: doc.getOrElse<int?>('instagramFollowers', null),
-      twitterHandle: doc.getOrElse<String?>('twitterHandle', null),
-      twitterFollowers: doc.getOrElse<int?>('twitterFollowers', null),
-      spotifyId: doc.getOrElse<String?>('spotifyId', null),
-      pushNotificationsLikes: doc.getOrElse('pushNotificationsLikes', true),
-      pushNotificationsComments:
-          doc.getOrElse('pushNotificationsComments', true),
-      pushNotificationsFollows: doc.getOrElse('pushNotificationsFollows', true),
-      pushNotificationsDirectMessages:
-          doc.getOrElse('pushNotificationsDirectMessages', true),
-      pushNotificationsITLUpdates:
-          doc.getOrElse('pushNotificationsITLUpdates', true),
-      emailNotificationsAppReleases:
-          doc.getOrElse('emailNotificationsAppReleases', true),
-      emailNotificationsITLUpdates:
-          doc.getOrElse('emailNotificationsITLUpdates', true),
-      stripeConnectedAccountId: doc.getOrElse<String?>(
+      emailNotifications: emailNotifications,
+      pushNotifications: pushNotifications,
+      stripeConnectedAccountId: Option.fromNullable(
+    doc.getOrElse<String?>(
         'stripeConnectedAccountId',
         null,
       ),
-      stripeCustomerId: doc.getOrElse<String?>('stripeCustomerId', null),
+      ),
+      stripeCustomerId: Option.fromNullable(
+    doc.getOrElse<String?>('stripeCustomerId', null),
+      ),
     );
   }
   final String id;
@@ -183,53 +182,53 @@ class UserModel extends Equatable {
 
   final String artistName;
   final String bio;
-  final List<Genre> genres;
   final List<String> occupations;
-  final String label;
-
-  final String? profilePicture;
-
-  final String? placeId;
-  final String? geohash;
-  final double? lat;
-  final double? lng;
-
-  final int badgesCount;
-  final int reviewCount;
-
-  @OptionalDoubleConverter()
-  final Option<double> overallRating;
-
-  final bool deleted;
-  final bool shadowBanned;
 
   @OptionalStringConverter()
-  final Option<String> epkUrl;
+  final Option<String> profilePicture;
 
-  final String? youtubeChannelId;
+  @OptionalLocationConverter()
+  final Option<Location> location;
 
-  final String? tiktokHandle;
-  final int? tiktokFollowers;
+  final int badgesCount;
 
-  final String? instagramHandle;
-  final int? instagramFollowers;
+  @OptionalPerformerInfoConverter()
+  final Option<PerformerInfo> performerInfo;
 
-  final String? twitterHandle;
-  final int? twitterFollowers;
+  @OptionalVenueInfoConverter()
+  final Option<VenueInfo> venueInfo;
 
-  final String? spotifyId;
+  @OptionalBookerInfoConverter()
+  final Option<BookerInfo> bookerInfo;
 
-  final bool pushNotificationsLikes;
-  final bool pushNotificationsComments;
-  final bool pushNotificationsFollows;
-  final bool pushNotificationsDirectMessages;
-  final bool pushNotificationsITLUpdates;
+  final EmailNotifications emailNotifications;
+  final PushNotifications pushNotifications;
 
-  final bool emailNotificationsAppReleases;
-  final bool emailNotificationsITLUpdates;
+  final bool deleted;
 
-  final String? stripeConnectedAccountId;
-  final String? stripeCustomerId;
+  final SocialFollowing socialFollowing;
+
+  @OptionalStringConverter()
+  final Option<String> stripeConnectedAccountId;
+
+  @OptionalStringConverter()
+  final Option<String> stripeCustomerId;
+
+  Option<double> get overallRating {
+    final performerRating = performerInfo.map((e) => e.rating).unwrapOr(None());
+    final bookerRating = bookerInfo.map((e) => e.rating).unwrapOr(None());
+
+    return switch ((performerRating, bookerRating)) {
+      (None(), None()) => None(),
+      (Some(:final value), None()) => Some(value),
+      (None(), Some(:final value)) => Some(value),
+      (Some(), Some()) => () {
+        final overallRating = (performerRating.unwrap + bookerRating.unwrap) / 2;
+
+        return Some(overallRating);
+      }()
+    };
+  }
 
   @override
   List<Object?> get props => [
@@ -240,34 +239,16 @@ class UserModel extends Equatable {
         artistName,
         profilePicture,
         bio,
-        genres,
         occupations,
-        label,
-        placeId,
-        geohash,
-        lat,
-        lng,
+        location,
         badgesCount,
-        reviewCount,
-        overallRating,
+        performerInfo,
+        bookerInfo,
+        venueInfo,
+        socialFollowing,
         deleted,
-        shadowBanned,
-        epkUrl,
-        youtubeChannelId,
-        tiktokHandle,
-        tiktokFollowers,
-        instagramHandle,
-        instagramFollowers,
-        twitterHandle,
-        twitterFollowers,
-        spotifyId,
-        pushNotificationsLikes,
-        pushNotificationsComments,
-        pushNotificationsFollows,
-        pushNotificationsDirectMessages,
-        pushNotificationsITLUpdates,
-        emailNotificationsAppReleases,
-        emailNotificationsITLUpdates,
+        emailNotifications,
+        pushNotifications,
         stripeConnectedAccountId,
         stripeCustomerId,
       ];
@@ -276,10 +257,6 @@ class UserModel extends Equatable {
   Map<String, dynamic> toJson() => _$UserModelToJson(this);
 
   String get displayName => artistName.isEmpty ? username.username : artistName;
-  int get socialMediaAudience =>
-      (tiktokFollowers ?? 0) +
-      (instagramFollowers ?? 0) +
-      (twitterFollowers ?? 0);
 
   UserModel copyWith({
     String? id,
@@ -287,38 +264,20 @@ class UserModel extends Equatable {
     DateTime? timestamp,
     Username? username,
     String? artistName,
-    String? profilePicture,
+    Option<String>? profilePicture,
     String? bio,
-    List<Genre>? genres,
     List<String>? occupations,
-    String? label,
-    Option<String>? placeId,
-    Option<String>? geohash,
-    Option<double>? lat,
-    Option<double>? lng,
+    Option<Location>? location,
     int? badgesCount,
-    int? reviewCount,
-    Option<double>? overallRating,
+    Option<PerformerInfo>? performerInfo,
+    Option<BookerInfo>? bookerInfo,
+    Option<VenueInfo>? venueInfo,
+    SocialFollowing? socialFollowing,
     bool? deleted,
-    bool? shadowBanned,
-    Option<String>? epkUrl,
-    String? youtubeChannelId,
-    String? tiktokHandle,
-    int? tiktokFollowers,
-    String? instagramHandle,
-    int? instagramFollowers,
-    String? twitterHandle,
-    int? twitterFollowers,
-    String? spotifyId,
-    bool? pushNotificationsLikes,
-    bool? pushNotificationsComments,
-    bool? pushNotificationsFollows,
-    bool? pushNotificationsDirectMessages,
-    bool? pushNotificationsITLUpdates,
-    bool? emailNotificationsAppReleases,
-    bool? emailNotificationsITLUpdates,
-    String? stripeConnectedAccountId,
-    String? stripeCustomerId,
+    EmailNotifications? emailNotifications,
+    PushNotifications? pushNotifications,
+    Option<String>? stripeCustomerId,
+    Option<String>? stripeConnectedAccountId,
   }) {
     return UserModel(
       id: id ?? this.id,
@@ -328,41 +287,16 @@ class UserModel extends Equatable {
       artistName: artistName ?? this.artistName,
       profilePicture: profilePicture ?? this.profilePicture,
       bio: bio ?? this.bio,
-      genres: genres ?? this.genres,
       occupations: occupations ?? this.occupations,
-      label: label ?? this.label,
-      placeId: placeId != null ? placeId.asNullable() : this.placeId,
-      geohash: geohash != null ? geohash.asNullable() : this.geohash,
-      lat: lat != null ? lat.asNullable() : this.lat,
-      lng: lng != null ? lng.asNullable() : this.lng,
+      location: location ?? this.location,
       badgesCount: badgesCount ?? this.badgesCount,
-      reviewCount: reviewCount ?? this.reviewCount,
-      overallRating: overallRating ?? this.overallRating,
+      performerInfo: performerInfo ?? this.performerInfo,
+      bookerInfo: bookerInfo ?? this.bookerInfo,
+      venueInfo: venueInfo ?? this.venueInfo,
+      socialFollowing: socialFollowing ?? this.socialFollowing,
       deleted: deleted ?? this.deleted,
-      shadowBanned: shadowBanned ?? this.shadowBanned,
-      epkUrl: epkUrl ?? this.epkUrl,
-      youtubeChannelId: youtubeChannelId ?? this.youtubeChannelId,
-      tiktokHandle: tiktokHandle ?? this.tiktokHandle,
-      tiktokFollowers: tiktokFollowers ?? this.tiktokFollowers,
-      instagramHandle: instagramHandle ?? this.instagramHandle,
-      instagramFollowers: instagramFollowers ?? this.instagramFollowers,
-      twitterHandle: twitterHandle ?? this.twitterHandle,
-      twitterFollowers: twitterFollowers ?? this.twitterFollowers,
-      spotifyId: spotifyId ?? this.spotifyId,
-      pushNotificationsLikes:
-          pushNotificationsLikes ?? this.pushNotificationsLikes,
-      pushNotificationsComments:
-          pushNotificationsComments ?? this.pushNotificationsComments,
-      pushNotificationsFollows:
-          pushNotificationsFollows ?? this.pushNotificationsFollows,
-      pushNotificationsDirectMessages: pushNotificationsDirectMessages ??
-          this.pushNotificationsDirectMessages,
-      pushNotificationsITLUpdates:
-          pushNotificationsITLUpdates ?? this.pushNotificationsITLUpdates,
-      emailNotificationsAppReleases:
-          emailNotificationsAppReleases ?? this.emailNotificationsAppReleases,
-      emailNotificationsITLUpdates:
-          emailNotificationsITLUpdates ?? this.emailNotificationsITLUpdates,
+      emailNotifications: emailNotifications ?? this.emailNotifications,
+      pushNotifications: pushNotifications ?? this.pushNotifications,
       stripeConnectedAccountId:
           stripeConnectedAccountId ?? this.stripeConnectedAccountId,
       stripeCustomerId: stripeCustomerId ?? this.stripeCustomerId,
@@ -377,68 +311,18 @@ class UserModel extends Equatable {
       'username': username.toString(),
       'artistName': artistName,
       'bio': bio,
-      'genres': genres.map((e) => e.name).toList(),
       'occupations': occupations,
-      'label': label,
-      'profilePicture': profilePicture,
-      'placeId': placeId,
-      'geohash': geohash,
-      'lat': lat,
-      'lng': lng,
-      // 'badgesCount': badgesCount,
-      // 'reviewCount': reviewCount,
-      // 'overallRating': overallRating.asNullable(),
+      'profilePicture': profilePicture.asNullable(),
+      'location': location.asNullable()?.toMap(),
+      'performerInfo': performerInfo.asNullable()?.toMap(),
+      'bookerInfo': bookerInfo.asNullable()?.toMap(),
+      'venueInfo': venueInfo.asNullable()?.toMap(),
+      'socialFollowing': socialFollowing.toMap(),
       'deleted': deleted,
-      'shadowBanned': shadowBanned,
-      'epkUrl': epkUrl.asNullable(),
-      'youtubeChannelId': youtubeChannelId,
-      'tiktokHandle': tiktokHandle,
-      'tiktokFollowers': tiktokFollowers,
-      'instagramHandle': instagramHandle,
-      'instagramFollowers': instagramFollowers,
-      'twitterHandle': twitterHandle,
-      'twitterFollowers': twitterFollowers,
-      'spotifyId': spotifyId,
-      'pushNotificationsLikes': pushNotificationsLikes,
-      'pushNotificationsComments': pushNotificationsComments,
-      'pushNotificationsFollows': pushNotificationsFollows,
-      'pushNotificationsDirectMessages': pushNotificationsDirectMessages,
-      'pushNotificationsITLUpdates': pushNotificationsITLUpdates,
-      'emailNotificationsAppReleases': emailNotificationsAppReleases,
-      'emailNotificationsITLUpdates': emailNotificationsITLUpdates,
-      'stripeConnectedAccountId': stripeConnectedAccountId,
-      'stripeCustomerId': stripeCustomerId,
+      'emailNotifications': emailNotifications.toMap(),
+      'pushNotifications': pushNotifications.toMap(),
+      'stripeConnectedAccountId': stripeConnectedAccountId.asNullable(),
+      'stripeCustomerId': stripeCustomerId.asNullable(),
     };
   }
-}
-
-@JsonSerializable()
-class VenueInfo extends Equatable {
-  const VenueInfo({
-    this.capacity,
-    this.idealArtistProfile,
-    this.productionInfo,
-    this.frontOfHouse,
-    this.monitors,
-    this.microphones,
-    this.lights,
-  });
-
-  final int? capacity;
-  final String? idealArtistProfile;
-  final String? productionInfo;
-  final String? frontOfHouse;
-  final String? monitors;
-  final String? microphones;
-  final String? lights;
-
-  @override
-  List<Object?> get props => [
-        capacity,
-        productionInfo,
-        frontOfHouse,
-        monitors,
-        microphones,
-        lights,
-      ];
 }

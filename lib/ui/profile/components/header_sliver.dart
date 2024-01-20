@@ -106,9 +106,8 @@ class HeaderSliver extends StatelessWidget {
                   width: double.infinity,
                   child: RequestToBookButton(
                     userId: state.visitedUser.id,
-                    stripeConnectedAccountId: Option.fromNullable(
-                      state.visitedUser.stripeConnectedAccountId,
-                    ),
+                    stripeConnectedAccountId:
+                        state.visitedUser.stripeConnectedAccountId,
                     service: const None(),
                   ),
                 ),

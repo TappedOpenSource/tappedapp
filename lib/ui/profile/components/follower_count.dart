@@ -16,7 +16,7 @@ class FollowerCount extends StatelessWidget {
               NumberFormat.compactCurrency(
                 decimalDigits: 0,
                 symbol: '',
-              ).format(state.visitedUser.socialMediaAudience),
+              ).format(state.visitedUser.socialFollowing.audienceSize),
               style: const TextStyle(
                 fontSize: 24,
               ),

@@ -134,7 +134,7 @@ class OnboardingFlowCubit extends Cubit<OnboardingFlowState> {
         email: currentAuthUser.email,
         username: Username.fromString(state.username.value),
         artistName: currentAuthUser.displayName ?? state.username.value,
-        profilePicture: profilePictureUrl.asNullable(),
+        profilePicture: profilePictureUrl,
         // bio: state.bio.value,
         // placeId: state.placeId,
         // geohash: Option.fromNullable(geohash),

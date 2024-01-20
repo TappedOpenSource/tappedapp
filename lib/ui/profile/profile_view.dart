@@ -241,7 +241,7 @@ class ProfileView extends StatelessWidget {
                 ),
               ],
             ),
-            background: _profileImage(visitedUser.profilePicture),
+            background: _profileImage(visitedUser.profilePicture.asNullable()),
           ),
         ),
         const SliverToBoxAdapter(
@@ -345,7 +345,7 @@ class ProfileView extends StatelessWidget {
               overflow: TextOverflow.fade,
               maxLines: 2,
             ),
-            background: _profileImage(visitedUser.profilePicture),
+            background: _profileImage(visitedUser.profilePicture.asNullable()),
           ),
         ),
         SliverToBoxAdapter(

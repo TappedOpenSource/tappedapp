@@ -42,8 +42,6 @@ final _opportunityFeedsRef = _firestore.collection('opportunityFeeds');
 final _creditsRef = _firestore.collection('credits');
 final _premiumWailistRef = _firestore.collection('premiumWaitlist');
 final _userFeedbackRef = _firestore.collection('userFeedback');
-// final _notificationPreferencesRef =
-//     _firestore.collection('notificationPreferences');
 
 const verifiedBadgeId = '0aa46576-1fbe-4312-8b69-e2fef3269083';
 
@@ -242,23 +240,26 @@ class FirestoreDatabaseImpl extends DatabaseRepository {
 
       final users = usersWithFP
           .map((user) {
-            if (user.lat == null || user.lng == null) {
-              return null;
-            }
+            final filteredUser = switch (user.location) {
+              None() => null,
+              Some(:final value) => (() {
+                  // We have to filter out a few false positives due to GeoHash
+                  // accuracy, but most will match
+                  final distanceInKm = geoDistance(
+                    Point(latitude: value.lat, longitude: value.lng),
+                    Point(latitude: lat, longitude: lng),
+                  );
 
-            // We have to filter out a few false positives due to GeoHash
-            // accuracy, but most will match
-            final distanceInKm = geoDistance(
-              Point(latitude: user.lat!, longitude: user.lng!),
-              Point(latitude: lat, longitude: lng),
-            );
+                  final distanceInM = distanceInKm * 1000;
+                  if (distanceInM > radiusInMeters) {
+                    return null;
+                  }
 
-            final distanceInM = distanceInKm * 1000;
-            if (distanceInM > radiusInMeters) {
-              return null;
-            }
+                  return user;
+                })(),
+            };
 
-            return user;
+            return filteredUser;
           })
           .where((e) => e != null)
           .whereType<UserModel>()
@@ -281,23 +282,26 @@ class FirestoreDatabaseImpl extends DatabaseRepository {
 
       final users = usersWithFP
           .map((user) {
-            if (user.lat == null || user.lng == null) {
-              return null;
-            }
+            final filteredUser = switch (user.location) {
+              None() => null,
+              Some(:final value) => (() {
+                  // We have to filter out a few false positives due to GeoHash
+                  // accuracy, but most will match
+                  final distanceInKm = geoDistance(
+                    Point(latitude: value.lat, longitude: value.lng),
+                    Point(latitude: lat, longitude: lng),
+                  );
 
-            // We have to filter out a few false positives due to GeoHash
-            // accuracy, but most will match
-            final distanceInKm = geoDistance(
-              Point(latitude: user.lat!, longitude: user.lng!),
-              Point(latitude: lat, longitude: lng),
-            );
+                  final distanceInM = distanceInKm * 1000;
+                  if (distanceInM > radiusInMeters) {
+                    return null;
+                  }
 
-            final distanceInM = distanceInKm * 1000;
-            if (distanceInM > radiusInMeters) {
-              return null;
-            }
+                  return user;
+                })(),
+            };
 
-            return user;
+            return filteredUser;
           })
           .where((e) => e != null)
           .whereType<UserModel>()
@@ -1282,7 +1286,8 @@ class FirestoreDatabaseImpl extends DatabaseRepository {
   }
 
   @override
-  Future<List<Opportunity>> getOpportunitiesByUserId(String userId, {
+  Future<List<Opportunity>> getOpportunitiesByUserId(
+    String userId, {
     int limit = 20,
     String? lastOpportunityId,
   }) async {
@@ -1335,11 +1340,11 @@ class FirestoreDatabaseImpl extends DatabaseRepository {
   @override
   Future<bool> isUserAppliedForOpportunity({
     required String userId,
-    required Opportunity opportunity,
+    required String opportunityId,
   }) async {
     try {
       final userSnapshot = await _opportunitiesRef
-          .doc(opportunity.id)
+          .doc(opportunityId)
           .collection('interestedUsers')
           .doc(userId)
           .get();
@@ -1545,12 +1550,12 @@ class FirestoreDatabaseImpl extends DatabaseRepository {
         },
       );
 
-      final usersSnap =
-          await _usersRef
-            .where(
-              'deleted', 
-              isNotEqualTo: true,
-            ).get();
+      final usersSnap = await _usersRef
+          .where(
+            'deleted',
+            isNotEqualTo: true,
+          )
+          .get();
 
       await Future.wait(
         usersSnap.docs.map(
@@ -2017,5 +2022,6 @@ class FirestoreDatabaseImpl extends DatabaseRepository {
 
 class HandleAlreadyExistsException implements Exception {
   HandleAlreadyExistsException(this.cause);
+
   String cause;
 }

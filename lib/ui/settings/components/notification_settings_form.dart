@@ -25,54 +25,10 @@ class NotificationSettingsForm extends StatelessWidget {
               ],
             ),
             SettingsSwitch(
-              label: 'New Likes',
-              activated: state.pushNotificationsLikes,
-              onChanged: (selected) =>
-                  context.read<SettingsCubit>().changeNewLikesPush(
-                        selected: selected,
-                      ),
-            ),
-            SettingsSwitch(
-              label: 'New Comment',
-              activated: state.pushNotificationsComments,
-              onChanged: (selected) =>
-                  context.read<SettingsCubit>().changeNewCommentsPush(
-                        selected: selected,
-                      ),
-            ),
-            SettingsSwitch(
-              label: 'New Followers',
-              activated: state.pushNotificationsFollows,
-              onChanged: (selected) =>
-                  context.read<SettingsCubit>().changeNewFollowerPush(
-                        selected: selected,
-                      ),
-            ),
-            SettingsSwitch(
               label: 'New DMs',
               activated: state.pushNotificationsDirectMessages,
               onChanged: (selected) =>
                   context.read<SettingsCubit>().changeDirectMsgPush(
-                        selected: selected,
-                      ),
-            ),
-            SettingsSwitch(
-              label: 'Tapped Updates',
-              activated: state.pushNotificationsITLUpdates,
-              onChanged: (selected) =>
-                  context.read<SettingsCubit>().changeITLUpdatesPush(
-                        selected: selected,
-                      ),
-            ),
-            SettingsSwitch(
-              label: 'All Push Notifications',
-              activated: state.pushNotificationsLikes &&
-                  state.pushNotificationsComments &&
-                  state.pushNotificationsFollows &&
-                  state.pushNotificationsDirectMessages &&
-                  state.pushNotificationsITLUpdates,
-              onChanged: (selected) =>
-                  context.read<SettingsCubit>().changeAllPush(
                         selected: selected,
                       ),
             ),
@@ -93,23 +49,6 @@ class NotificationSettingsForm extends StatelessWidget {
               activated: state.emailNotificationsAppReleases,
               onChanged: (selected) =>
                   context.read<SettingsCubit>().changeAppReleaseEmail(
-                        selected: selected,
-                      ),
-            ),
-            SettingsSwitch(
-              label: 'Tapped Updates',
-              activated: state.emailNotificationsITLUpdates,
-              onChanged: (selected) =>
-                  context.read<SettingsCubit>().changeITLUpdatesEmail(
-                        selected: selected,
-                      ),
-            ),
-            SettingsSwitch(
-              label: 'All Emails',
-              activated: state.emailNotificationsAppReleases &&
-                  state.emailNotificationsITLUpdates,
-              onChanged: (selected) =>
-                  context.read<SettingsCubit>().changeAllEmail(
                         selected: selected,
                       ),
             ),
