@@ -47,8 +47,8 @@ class VenueCard extends StatelessWidget {
         final heroImageTag = 'user-image-${venue.id}-$uuid';
         final heroTitleTag = 'user-title-${venue.id}-$uuid';
         return SizedBox(
-          width: 150,
-          height: 150,
+          width: 200,
+          height: 200,
           child: Stack(
             fit: StackFit.expand,
             children: [

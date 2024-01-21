@@ -48,13 +48,43 @@ class BookingsView extends StatelessWidget {
                       )
                     else
                       SliverToBoxAdapter(
-                        child: CupertinoButton.filled(
-                          onPressed: () => nav.add(
-                            const ChangeTab(
-                              selectedTab: 0,
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Container(
+                              height: 300,
+                              decoration: const BoxDecoration(
+                                borderRadius: BorderRadius.all(
+                                  Radius.circular(10),
+                                ),
+                                image: DecorationImage(
+                                  image: AssetImage(
+                                    'assets/splash.gif',
+                                  ),
+                                  fit: BoxFit.cover,
+                                ),
+                              ),
                             ),
-                          ),
-                          child: const Text("let's get you booked!"),
+                            const SizedBox(height: 12),
+                            SizedBox(
+                              width: double.infinity,
+                              child: CupertinoButton.filled(
+                                onPressed: () => nav.add(
+                                  const ChangeTab(
+                                    selectedTab: 0,
+                                  ),
+                                ),
+                                borderRadius: BorderRadius.circular(15),
+                                child: const Text(
+                                  "let's get you booked!",
+                                  style: TextStyle(
+                                    fontWeight: FontWeight.w700,
+                                    color: Colors.white,
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ],
                         ),
                       ),
                     const SliverToBoxAdapter(

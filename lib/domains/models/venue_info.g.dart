@@ -20,6 +20,8 @@ VenueInfo _$VenueInfoFromJson(Map<String, dynamic> json) => VenueInfo(
           json['microphones'], (value) => value as String),
       lights:
           Option<String>.fromJson(json['lights'], (value) => value as String),
+      type: $enumDecodeNullable(_$VenueTypeEnumMap, json['type']) ??
+          VenueType.other,
     );
 
 Map<String, dynamic> _$VenueInfoToJson(VenueInfo instance) => <String, dynamic>{
@@ -44,4 +46,16 @@ Map<String, dynamic> _$VenueInfoToJson(VenueInfo instance) => <String, dynamic>{
       'lights': instance.lights.toJson(
         (value) => value,
       ),
+      'type': _$VenueTypeEnumMap[instance.type]!,
     };
+
+const _$VenueTypeEnumMap = {
+  VenueType.bar: 'bar',
+  VenueType.club: 'club',
+  VenueType.restaurant: 'restaurant',
+  VenueType.theater: 'theater',
+  VenueType.arena: 'arena',
+  VenueType.stadium: 'stadium',
+  VenueType.festival: 'festival',
+  VenueType.other: 'other',
+};

@@ -1,7 +1,5 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:equatable/equatable.dart';
 import 'package:intheloopapp/domains/models/option.dart';
-import 'package:intheloopapp/utils/default_value.dart';
 import 'package:json_annotation/json_annotation.dart';
 
 part 'venue_info.g.dart';
@@ -16,84 +14,46 @@ class VenueInfo extends Equatable {
     required this.monitors,
     required this.microphones,
     required this.lights,
+    required this.type,
   });
-
-  // @OptionalIntConverter()
-  final Option<int> capacity;
-  // @OptionalStringConverter()
-  final Option<String> idealArtistProfile;
-  // @OptionalStringConverter()
-  final Option<String> productionInfo;
-  // @OptionalStringConverter()
-  final Option<String> frontOfHouse;
-  // @OptionalStringConverter()
-  final Option<String> monitors;
-  // @OptionalStringConverter()
-  final Option<String> microphones;
-  // @OptionalStringConverter()
-  final Option<String> lights;
-
-  @override
-  List<Object?> get props => [
-    capacity,
-    productionInfo,
-    frontOfHouse,
-    monitors,
-    microphones,
-    lights,
-  ];
 
   // empty
   factory VenueInfo.empty() => const VenueInfo(
-    capacity: None<int>(),
-    idealArtistProfile: None<String>(),
-    productionInfo: None<String>(),
-    frontOfHouse: None<String>(),
-    monitors: None<String>(),
-    microphones: None<String>(),
-    lights: None<String>(),
-  );
+        capacity: None<int>(),
+        idealArtistProfile: None<String>(),
+        productionInfo: None<String>(),
+        frontOfHouse: None<String>(),
+        monitors: None<String>(),
+        microphones: None<String>(),
+        lights: None<String>(),
+        type: VenueType.other,
+      );
 
   // fromJson
   factory VenueInfo.fromJson(Map<String, dynamic> json) =>
       _$VenueInfoFromJson(json);
 
-  // fromDoc
-  factory VenueInfo.fromDoc(DocumentSnapshot<Map<String, dynamic>> doc) {
-    final tmpCapacity = doc.getOrElse<int?>('capacity', null);
-    final tmpIdealArtistProfile = doc.getOrElse<String?>('idealArtistProfile', null);
-    final tmpProductionInfo = doc.getOrElse<String?>('productionInfo', null);
-    final tmpFrontOfHouse = doc.getOrElse<String?>('frontOfHouse', null);
-    final tmpMonitors = doc.getOrElse<String?>('monitors', null);
-    final tmpMicrophones = doc.getOrElse<String?>('microphones', null);
-    final tmpLights = doc.getOrElse<String?>('lights', null);
+  final Option<int> capacity;
+  final Option<String> idealArtistProfile;
+  final Option<String> productionInfo;
+  final Option<String> frontOfHouse;
+  final Option<String> monitors;
+  final Option<String> microphones;
+  final Option<String> lights;
 
-    // firestore can suck my nuts for this
-    // firestore only stores "numbers" so I have to figure out if
-    // it's an int or double
-    final capacity = switch (tmpCapacity.runtimeType) {
-      String => const None<int>(),
-      int => Some<int>(tmpCapacity as int),
-      double => Some<int>((tmpCapacity as double).toInt()),
-      _ => const None<int>()
-    };
-    final idealArtistProfile = Option.fromNullable(tmpIdealArtistProfile);
-    final productionInfo = Option.fromNullable(tmpProductionInfo);
-    final frontOfHouse = Option.fromNullable(tmpFrontOfHouse);
-    final monitors = Option.fromNullable(tmpMonitors);
-    final microphones = Option.fromNullable(tmpMicrophones);
-    final lights = Option.fromNullable(tmpLights);
+  @JsonKey(defaultValue: VenueType.other)
+  final VenueType type;
 
-    return VenueInfo(
-      capacity: capacity,
-      idealArtistProfile: idealArtistProfile,
-      productionInfo: productionInfo,
-      frontOfHouse: frontOfHouse,
-      monitors: monitors,
-      microphones: microphones,
-      lights: lights,
-    );
-  }
+  @override
+  List<Object?> get props => [
+        capacity,
+        productionInfo,
+        frontOfHouse,
+        monitors,
+        microphones,
+        lights,
+        type,
+      ];
 
   // toJson
   Map<String, dynamic> toJson() => _$VenueInfoToJson(this);
@@ -107,6 +67,7 @@ class VenueInfo extends Equatable {
     Option<String>? monitors,
     Option<String>? microphones,
     Option<String>? lights,
+    VenueType? type,
   }) {
     return VenueInfo(
       capacity: capacity ?? this.capacity,
@@ -116,6 +77,7 @@ class VenueInfo extends Equatable {
       monitors: monitors ?? this.monitors,
       microphones: microphones ?? this.microphones,
       lights: lights ?? this.lights,
+      type: type ?? this.type,
     );
   }
 
@@ -129,11 +91,25 @@ class VenueInfo extends Equatable {
       'monitors': monitors.asNullable(),
       'microphones': microphones.asNullable(),
       'lights': lights.asNullable(),
+      'type': type,
     };
   }
 }
 
-class OptionalVenueInfoConverter implements JsonConverter<Option<VenueInfo>, VenueInfo?> {
+@JsonEnum()
+enum VenueType {
+  bar,
+  club,
+  restaurant,
+  theater,
+  arena,
+  stadium,
+  festival,
+  other,
+}
+
+class OptionalVenueInfoConverter
+    implements JsonConverter<Option<VenueInfo>, VenueInfo?> {
   const OptionalVenueInfoConverter();
 
   @override

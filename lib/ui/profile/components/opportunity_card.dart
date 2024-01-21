@@ -9,9 +9,11 @@ import 'package:intheloopapp/ui/conditional_parent_widget.dart';
 import 'package:intheloopapp/utils/admin_builder.dart';
 import 'package:intheloopapp/utils/bloc_utils.dart';
 import 'package:intheloopapp/utils/current_user_builder.dart';
+import 'package:intheloopapp/utils/geohash.dart';
 import 'package:intheloopapp/utils/hero_image.dart';
 import 'package:intheloopapp/utils/opportunity_image.dart';
 import 'package:intl/intl.dart';
+import 'package:skeletons/skeletons.dart';
 import 'package:uuid/uuid.dart';
 
 class OpportunityCard extends StatelessWidget {
@@ -28,6 +30,7 @@ class OpportunityCard extends StatelessWidget {
   Widget build(BuildContext context) {
     final cardWidth = MediaQuery.of(context).size.width - 56;
     final database = context.database;
+    final places = context.places;
     return CurrentUserBuilder(
       builder: (context, currentUser) {
         return AdminBuilder(
@@ -117,7 +120,7 @@ class OpportunityCard extends StatelessWidget {
                   final heroTitleTag = 'op-title-${opportunity.id}-$uuid';
                   return SizedBox(
                     width: cardWidth,
-                    height: 250,
+                    height: 300,
                     child: InkWell(
                       onTap: () => context.push(
                         OpportunityPage(
@@ -160,6 +163,25 @@ class OpportunityCard extends StatelessWidget {
                                 fontWeight: FontWeight.w900,
                               ),
                             ),
+                          ),
+                          FutureBuilder(
+                            future: places
+                                .getPlaceById(opportunity.location.placeId),
+                            builder: (context, snapshot) {
+                              final place = snapshot.data;
+                              return switch (place) {
+                                null => const SizedBox.shrink(),
+                                _ => Text(
+                                    formattedFullAddress(
+                                      place.addressComponents,
+                                    ),
+                                    style: const TextStyle(
+                                      overflow: TextOverflow.ellipsis,
+                                      fontSize: 14,
+                                    ),
+                                  ),
+                              };
+                            },
                           ),
                           Text(
                             DateFormat(

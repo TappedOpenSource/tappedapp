@@ -54,6 +54,23 @@ class InfoSliver extends StatelessWidget {
                     ),
                   ),
                 ),
+                switch (state.visitedUser.venueInfo) {
+                  None() => const SizedBox.shrink(),
+                  Some(:final value) => switch (value.capacity) {
+                      None() => const SizedBox.shrink(),
+                      Some(:final value) => CupertinoListTile(
+                          leading: const Icon(
+                            CupertinoIcons.person_2_alt,
+                          ),
+                          title: Text(
+                            '$value capacity',
+                            style: TextStyle(
+                              color: theme.colorScheme.onSurface,
+                            ),
+                          ),
+                        ),
+                    },
+                },
                 if (currPlace != null)
                   CupertinoListTile(
                     leading: Icon(

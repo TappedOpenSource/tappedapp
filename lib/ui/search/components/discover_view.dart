@@ -44,12 +44,12 @@ class DiscoverView extends StatelessWidget {
       );
     }
     return SizedBox(
-      height: 150,
+      height: 200,
       child: ScrollSnapList(
         onItemFocus: (index) {},
         selectedItemAnchor: SelectedItemAnchor.START,
         itemCount: users.length,
-        itemSize: 150 + (8 * 2),
+        itemSize: 200 + (8 * 2),
         itemBuilder: (context, index) {
           return Padding(
             padding: const EdgeInsets.symmetric(
