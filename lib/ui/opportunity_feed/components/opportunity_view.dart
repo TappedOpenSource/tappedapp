@@ -3,8 +3,6 @@ import 'dart:ui';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:intheloopapp/data/database_repository.dart';
 import 'package:intheloopapp/data/places_repository.dart';
 import 'package:intheloopapp/domains/models/opportunity.dart';
 import 'package:intheloopapp/domains/models/option.dart';
@@ -219,7 +217,7 @@ class OpportunityView extends StatelessWidget {
                   ),
                   FutureBuilder<PlaceData?>(
                     future: places.getPlaceById(
-                      op.placeId,
+                      op.location.placeId,
                     ),
                     builder: (context, snapshot) {
                       if (!snapshot.hasData) {

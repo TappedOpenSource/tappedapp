@@ -1,9 +1,13 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:enum_to_string/enum_to_string.dart';
 import 'package:equatable/equatable.dart';
+import 'package:intheloopapp/data/prod/firestore_database_impl.dart';
+import 'package:intheloopapp/domains/models/location.dart';
 import 'package:intheloopapp/domains/models/option.dart';
-import 'package:intheloopapp/utils/default_value.dart';
+import 'package:json_annotation/json_annotation.dart';
 
+part 'opportunity.g.dart';
+
+@JsonSerializable()
 class Opportunity extends Equatable {
   const Opportunity({
     required this.id,
@@ -11,10 +15,7 @@ class Opportunity extends Equatable {
     required this.title,
     required this.description,
     required this.flierUrl,
-    required this.placeId,
-    required this.geohash,
-    required this.lat,
-    required this.lng,
+    required this.location,
     required this.timestamp,
     required this.startTime,
     required this.endTime,
@@ -23,49 +24,59 @@ class Opportunity extends Equatable {
     required this.deleted,
   });
 
+  factory Opportunity.fromJson(Map<String, dynamic> json) =>
+      _$OpportunityFromJson(json);
+
   factory Opportunity.fromDoc(DocumentSnapshot<Map<String, dynamic>> doc) {
-    final touchedVal = doc.getOrElse('touched', null);
-    final touched = touchedVal != null
-        ? EnumToString.fromString<OpportunityInteration>(
-            OpportunityInteration.values,
-            touchedVal as String,
-          )
-        : null;
-    return Opportunity(
-      id: doc.id,
-      userId: doc.get('userId') as String,
-      title: doc.get('title') as String,
-      description: doc.get('description') as String,
-      flierUrl: Option.fromNullable(
-        doc.getOrElse('flierUrl', null),
-      ),
-      placeId: doc.get('placeId') as String,
-      geohash: doc.get('geohash') as String,
-      lat: doc.get('lat') as double,
-      lng: doc.get('lng') as double,
-      timestamp: (doc.get('timestamp') as Timestamp).toDate(),
-      startTime: (doc.get('startTime') as Timestamp).toDate(),
-      endTime: (doc.get('endTime') as Timestamp).toDate(),
-      isPaid: doc.getOrElse('isPaid', false),
-      touched: Option.fromNullable(touched),
-      deleted: doc.getOrElse('deleted', false),
-    );
+    final data = doc.data();
+    if (data == null) {
+      throw Exception('Document does not exist!');
+    }
+
+    return Opportunity.fromJson(data);
   }
 
   final String id;
   final String userId;
+
+  @JsonKey(defaultValue: '')
   final String title;
+
+  @JsonKey(defaultValue: '')
   final String description;
+
   final Option<String> flierUrl;
-  final String placeId;
-  final String geohash;
-  final double lat;
-  final double lng;
+
+  @JsonKey(defaultValue: Location.rva)
+  final Location location;
+
+  @JsonKey(
+    defaultValue: DateTime.now,
+    fromJson: timestampToDateTime,
+    toJson: dateTimeToTimestamp,
+  )
   final DateTime timestamp;
+
+  @JsonKey(
+    defaultValue: DateTime.now,
+    fromJson: timestampToDateTime,
+    toJson: dateTimeToTimestamp,
+  )
   final DateTime startTime;
+
+  @JsonKey(
+    defaultValue: DateTime.now,
+    fromJson: timestampToDateTime,
+    toJson: dateTimeToTimestamp,
+  )
   final DateTime endTime;
+
+  @JsonKey(defaultValue: false)
   final bool isPaid;
-  final Option<OpportunityInteration> touched;
+
+  final Option<OpportunityInteraction> touched;
+
+  @JsonKey(defaultValue: false)
   final bool deleted;
 
   @override
@@ -75,10 +86,7 @@ class Opportunity extends Equatable {
         title,
         description,
         flierUrl,
-        placeId,
-        geohash,
-        lat,
-        lng,
+        location,
         timestamp,
         startTime,
         endTime,
@@ -87,25 +95,7 @@ class Opportunity extends Equatable {
         deleted,
       ];
 
-  Map<String, dynamic> toDoc() {
-    return {
-      'id': id,
-      'userId': userId,
-      'title': title,
-      'description': description,
-      'flierUrl': flierUrl.asNullable(),
-      'placeId': placeId,
-      'geohash': geohash,
-      'lat': lat,
-      'lng': lng,
-      'timestamp': Timestamp.fromDate(timestamp),
-      'startTime': Timestamp.fromDate(startTime),
-      'endTime': Timestamp.fromDate(endTime),
-      'isPaid': isPaid,
-      'touched': touched.asNullable(),
-      'deleted': deleted,
-    };
-  }
+  Map<String, dynamic> toJson() => _$OpportunityToJson(this);
 
   Opportunity copyWith({
     String? id,
@@ -113,15 +103,12 @@ class Opportunity extends Equatable {
     String? title,
     String? description,
     Option<String>? flierUrl,
-    String? placeId,
-    String? geohash,
-    double? lat,
-    double? lng,
+    Location? location,
     DateTime? timestamp,
     DateTime? startTime,
     DateTime? endTime,
     bool? isPaid,
-    Option<OpportunityInteration>? touched,
+    Option<OpportunityInteraction>? touched,
     bool? deleted,
   }) {
     return Opportunity(
@@ -130,10 +117,7 @@ class Opportunity extends Equatable {
       title: title ?? this.title,
       description: description ?? this.description,
       flierUrl: flierUrl ?? this.flierUrl,
-      placeId: placeId ?? this.placeId,
-      geohash: geohash ?? this.geohash,
-      lat: lat ?? this.lat,
-      lng: lng ?? this.lng,
+      location: location ?? this.location,
       timestamp: timestamp ?? this.timestamp,
       startTime: startTime ?? this.startTime,
       endTime: endTime ?? this.endTime,
@@ -144,4 +128,10 @@ class Opportunity extends Equatable {
   }
 }
 
-enum OpportunityInteration { like, dislike }
+@JsonEnum()
+enum OpportunityInteraction {
+  @JsonValue('like')
+  like,
+  @JsonValue('dislike')
+  dislike,
+}

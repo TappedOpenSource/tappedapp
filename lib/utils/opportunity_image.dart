@@ -46,6 +46,6 @@ Future<ImageProvider> getOpImage(BuildContext context, Opportunity op) async {
       op.flierUrl.unwrap,
     );
   }
-  final provider = await getImageForLocation(context, op.placeId);
+  final provider = await getImageForLocation(context, op.location.placeId);
   return provider;
 }

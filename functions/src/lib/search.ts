@@ -7,7 +7,12 @@ import { createActivity } from "./activities";
 export const transformLoopPayloadForSearch = functions.https
   .onCall((data) => {
 
-    const { lat, lng, ...rest } = data;
+    const { location, ...rest } = data;
+    if (!location) {
+      return rest;
+    }
+
+    const { lat, lng } = location;
 
     const payload: Record<string, any> = rest;
 

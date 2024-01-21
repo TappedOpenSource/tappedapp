@@ -1393,7 +1393,7 @@ class FirestoreDatabaseImpl extends DatabaseRepository {
         },
       );
 
-      await _opportunitiesRef.doc(op.id).set(op.toDoc());
+      await _opportunitiesRef.doc(op.id).set(op.toJson());
     } catch (e, s) {
       logger.error('createOpportunity', error: e, stackTrace: s);
     }
@@ -1432,7 +1432,7 @@ class FirestoreDatabaseImpl extends DatabaseRepository {
                 .doc(userDoc.id)
                 .collection('opportunities')
                 .doc(opportunity.id)
-                .set(opportunity.toDoc());
+                .set(opportunity.toJson());
           },
         ),
       );

@@ -6,6 +6,7 @@ import 'package:image_picker/image_picker.dart';
 import 'package:intheloopapp/data/database_repository.dart';
 import 'package:intheloopapp/data/places_repository.dart';
 import 'package:intheloopapp/data/storage_repository.dart';
+import 'package:intheloopapp/domains/models/location.dart';
 import 'package:intheloopapp/domains/models/opportunity.dart';
 import 'package:intheloopapp/domains/models/option.dart';
 import 'package:intheloopapp/ui/create_booking/components/end_time.dart';
@@ -140,21 +141,20 @@ class CreateOpportunityCubit extends Cubit<CreateOpportunityState> {
           }(),
       };
 
-      final placeId = thePlaceId;
-      final lat = thePlaceData.lat;
-      final lng = thePlaceData.lng;
-      final geohash = thePlaceData.geohash;
+      final location = Location(
+        placeId: thePlaceId,
+        geohash: thePlaceData.geohash,
+        lat: thePlaceData.lat,
+        lng: thePlaceData.lng,
+      );
 
       final op = Opportunity(
         id: uuid,
         userId: currentUserId,
         flierUrl: Option.fromNullable(flierUrl),
-        placeId: placeId,
-        geohash: geohash,
-        lat: lat,
-        lng: lng,
+        location: location,
         timestamp: DateTime.now(),
-        touched: const None<OpportunityInteration>(),
+        touched: const None<OpportunityInteraction>(),
         title: state.title,
         description: state.description,
         isPaid: state.isPaid,
