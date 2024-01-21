@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:equatable/equatable.dart';
+import 'package:intheloopapp/data/prod/firestore_database_impl.dart';
 import 'package:intheloopapp/utils/default_value.dart';
 import 'package:json_annotation/json_annotation.dart';
 
@@ -24,8 +25,11 @@ class Badge extends Equatable {
       throw Exception('Document does not exist!');
     }
 
+    data['id'] = doc.id;
+
     return Badge.fromJson(data);
   }
+
   final String id;
   final String creatorId;
   final String imageUrl;
@@ -36,7 +40,11 @@ class Badge extends Equatable {
   @JsonKey(defaultValue: '')
   final String description;
 
-  @JsonKey(defaultValue: DateTime.now)
+  @JsonKey(
+    defaultValue: DateTime.now,
+    fromJson: timestampToDateTime,
+    toJson: dateTimeToTimestamp,
+  )
   final DateTime timestamp;
 
   @override
@@ -48,6 +56,7 @@ class Badge extends Equatable {
         description,
         timestamp,
       ];
+
   Map<String, dynamic> toJson() => _$BadgeToJson(this);
 
   Badge copyWith({

@@ -14,7 +14,7 @@ Badge _$BadgeFromJson(Map<String, dynamic> json) => Badge(
       description: json['description'] as String? ?? '',
       timestamp: json['timestamp'] == null
           ? DateTime.now()
-          : DateTime.parse(json['timestamp'] as String),
+          : timestampToDateTime(json['timestamp'] as Timestamp),
     );
 
 Map<String, dynamic> _$BadgeToJson(Badge instance) => <String, dynamic>{
@@ -23,5 +23,5 @@ Map<String, dynamic> _$BadgeToJson(Badge instance) => <String, dynamic>{
       'imageUrl': instance.imageUrl,
       'name': instance.name,
       'description': instance.description,
-      'timestamp': instance.timestamp.toIso8601String(),
+      'timestamp': dateTimeToTimestamp(instance.timestamp),
     };
