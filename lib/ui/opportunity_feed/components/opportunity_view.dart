@@ -208,13 +208,6 @@ class OpportunityView extends StatelessWidget {
                     ],
                   ),
                   const SizedBox(height: 12),
-                  const Text(
-                    'location',
-                    style: TextStyle(
-                      fontSize: 24,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
                   FutureBuilder<PlaceData?>(
                     future: places.getPlaceById(
                       op.location.placeId,
@@ -232,68 +225,59 @@ class OpportunityView extends StatelessWidget {
                         onTap: () => MapsLauncher.launchQuery(
                           formattedAddress,
                         ),
-                        child: Text(
-                          formattedAddress,
-                          style: const TextStyle(
-                            color: tappedAccent,
-                          ),
+                        child: Row(
+                          children: [
+                            Icon(
+                              CupertinoIcons.location_circle_fill,
+                              color: theme.colorScheme.onSurface
+                                  .withOpacity(0.5),
+                            ),
+                            const SizedBox(width: 8),
+                            Text(
+                              formattedAddress,
+                              style: const TextStyle(
+                                color: tappedAccent,
+                              ),
+                            ),
+                          ],
                         ),
                       );
                     },
                   ),
                   const SizedBox(height: 12),
-                  const Text(
-                    'date',
-                    style: TextStyle(
-                      fontSize: 24,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                  Text(
-                    DateFormat('MM/dd/yyyy').format(op.startTime),
+                  Row(
+                    children: [
+                      Icon(
+                        CupertinoIcons.calendar_circle_fill,
+                        color: theme.colorScheme.onSurface.withOpacity(0.5),
+                      ),
+                      const SizedBox(width: 8),
+                      Text(
+                        DateFormat('MM/dd/yyyy').format(op.startTime),
+                      ),
+                    ],
                   ),
                   const SizedBox(height: 12),
-                  const Text(
-                    'compensation',
-                    style: TextStyle(
-                      fontSize: 24,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
                   Row(
                     children: [
                       Icon(
                         CupertinoIcons.money_dollar_circle_fill,
                         color: op.isPaid ? Colors.green : Colors.red,
                       ),
-                      const SizedBox(width: 6),
+                      const SizedBox(width: 8),
                       Text(
                         op.isPaid ? 'paid' : 'unpaid',
                       ),
                     ],
                   ),
                   const SizedBox(height: 12),
-                  const Text(
-                    'booker',
-                    style: TextStyle(
-                      fontSize: 24,
-                      fontWeight: FontWeight.bold,
-                    ),
+                  Text(
+                    op.description,
                   ),
+                  const SizedBox(height: 12),
                   UserTile(
                     userId: op.userId,
                     user: const None(),
-                  ),
-                  const SizedBox(height: 12),
-                  const Text(
-                    'description',
-                    style: TextStyle(
-                      fontSize: 24,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                  Text(
-                    op.description,
                   ),
                   const SizedBox(height: 96),
                 ],

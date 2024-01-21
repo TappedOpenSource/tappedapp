@@ -33,15 +33,16 @@ class BookingsView extends StatelessWidget {
               child: SafeArea(
                 child: CustomScrollView(
                   slivers: [
-                    const SliverToBoxAdapter(
-                      child: Text(
-                        'Booking Requests',
-                        style: TextStyle(
-                          fontSize: 28,
-                          fontWeight: FontWeight.bold,
+                    if (state.pendingBookings.isNotEmpty)
+                      const SliverToBoxAdapter(
+                        child: Text(
+                          'Booking Requests',
+                          style: TextStyle(
+                            fontSize: 28,
+                            fontWeight: FontWeight.bold,
+                          ),
                         ),
                       ),
-                    ),
                     if (state.pendingBookings.isNotEmpty)
                       BookingsList(
                         bookings: state.pendingBookings,
@@ -52,7 +53,7 @@ class BookingsView extends StatelessWidget {
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
                             Container(
-                              height: 300,
+                              height: 400,
                               decoration: const BoxDecoration(
                                 borderRadius: BorderRadius.all(
                                   Radius.circular(10),
