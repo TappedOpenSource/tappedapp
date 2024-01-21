@@ -137,6 +137,9 @@ class InfoSliver extends StatelessWidget {
                     ),
                     title: Text(
                       getAddressComponent(currPlace.addressComponents),
+                      style: TextStyle(
+                        color: theme.colorScheme.onSurface,
+                      ),
                     ),
                   ),
                 CupertinoListTile(
