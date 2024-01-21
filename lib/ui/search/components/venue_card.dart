@@ -30,7 +30,8 @@ class VenueCard extends StatelessWidget {
     ).format(venue.socialFollowing.audienceSize)} followers';
     final venueText = venue
         .venueInfo
-        .map((e) => '${e.capacity} capacity')
+        .map((e) => e.capacity.map((cap) => '$cap capacity'))
+        .unwrapOr(Some(audienceText))
         .unwrapOr(audienceText);
 
     return FutureBuilder(
