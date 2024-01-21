@@ -107,6 +107,7 @@ enum VenueType {
   stadium,
   festival,
   artGallery,
+  studio,
   other,
 }
 

@@ -4,13 +4,12 @@ import 'package:intheloopapp/domains/models/user_model.dart';
 
 abstract class DeepLinkRepository {
   Stream<DeepLinkRedirect> getDeepLinks();
-  // Future<String> getShareProfileDeepLink(UserModel user);
-  // Future<String> getShareOpportunityDeepLink(Opportunity opportunity);
 }
 
 enum DeepLinkType {
   shareProfile,
   shareOpportunity,
+  settings,
   connectStripeRedirect,
   connectStripeRefresh,
 }
@@ -41,6 +40,10 @@ final class ShareOpportunityDeepLink extends DeepLinkRedirect {
 
   final String opportunityId;
   final Option<Opportunity> opportunity;
+}
+
+final class SettingsDeepLink extends DeepLinkRedirect {
+  const SettingsDeepLink() : super(type: DeepLinkType.settings);
 }
 
 final class ConnectStripeRedirectDeepLink extends DeepLinkRedirect {

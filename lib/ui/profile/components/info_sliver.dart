@@ -9,6 +9,7 @@ import 'package:intheloopapp/ui/profile/components/more_options_button.dart';
 import 'package:intheloopapp/ui/profile/components/social_media_icons.dart';
 import 'package:intheloopapp/ui/profile/profile_cubit.dart';
 import 'package:intheloopapp/ui/themes.dart';
+import 'package:intheloopapp/utils/geohash.dart';
 import 'package:intheloopapp/utils/linkify.dart';
 import 'package:readmore/readmore.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -134,8 +135,8 @@ class InfoSliver extends StatelessWidget {
                       CupertinoIcons.location,
                       color: theme.colorScheme.onSurface,
                     ),
-                    title: LocationChip(
-                      place: currPlace,
+                    title: Text(
+                      getAddressComponent(currPlace.addressComponents),
                     ),
                   ),
                 CupertinoListTile(

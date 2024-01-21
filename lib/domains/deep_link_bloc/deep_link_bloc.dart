@@ -55,6 +55,8 @@ class DeepLinkBloc extends Bloc<DeepLinkEvent, DeepLinkState> {
               opportunity: opportunity,
             ),
           );
+        case SettingsDeepLink():
+          nav.push(SettingsPage());
         case ConnectStripeRedirectDeepLink(:final id):
           // add accountId to the users data
           if (onboardingBloc.state is! Onboarded) {

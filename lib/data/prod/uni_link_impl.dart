@@ -98,6 +98,8 @@ class UniLinkImpl extends DeepLinkRepository {
           opportunityId: opportunityId,
           opportunity: const None(),
         );
+      case 'settings':
+        return const SettingsDeepLink();
       case 'connect_payment':
         final linkParameters = uri.queryParameters;
         final accountId = linkParameters['account_id'];
@@ -138,76 +140,76 @@ class UniLinkImpl extends DeepLinkRepository {
     }
   }
 
-  // @override
-  // Future<String> getShareProfileDeepLink(UserModel user) async {
-  //   final imageUri = user.profilePicture == null
-  //       ? Uri.parse('https://tapped.ai/images/tapped_reverse.png')
-  //       : Uri.parse(user.profilePicture!);
+// @override
+// Future<String> getShareProfileDeepLink(UserModel user) async {
+//   final imageUri = user.profilePicture == null
+//       ? Uri.parse('https://tapped.ai/images/tapped_reverse.png')
+//       : Uri.parse(user.profilePicture!);
 
-  //   final parameters = DynamicLinkParameters(
-  //     //TODO change this to the proper function
-  //     uriPrefix: 'https://tapped.ai',
-  //     link: Uri.parse('https://tappednetwork.ai/${user.username}'),
-  //     androidParameters: const AndroidParameters(
-  //       packageName: 'com.intheloopstudio',
-  //     ),
-  //     iosParameters: const IOSParameters(
-  //       bundleId: 'com.intheloopstudio',
-  //     ),
-  //     socialMetaTagParameters: SocialMetaTagParameters(
-  //       title: '${user.displayName} on Tapped',
-  //       description:
-  //           '''Tapped Network - The online platform tailored for producers and creators to share their loops to the world, get feedback on their music, and join the world-wide community of artists to collaborate with''',
-  //       imageUrl: imageUri,
-  //     ),
-  //   );
+//   final parameters = DynamicLinkParameters(
+//     //TODO change this to the proper function
+//     uriPrefix: 'https://tapped.ai',
+//     link: Uri.parse('https://tappednetwork.ai/${user.username}'),
+//     androidParameters: const AndroidParameters(
+//       packageName: 'com.intheloopstudio',
+//     ),
+//     iosParameters: const IOSParameters(
+//       bundleId: 'com.intheloopstudio',
+//     ),
+//     socialMetaTagParameters: SocialMetaTagParameters(
+//       title: '${user.displayName} on Tapped',
+//       description:
+//           '''Tapped Network - The online platform tailored for producers and creators to share their loops to the world, get feedback on their music, and join the world-wide community of artists to collaborate with''',
+//       imageUrl: imageUri,
+//     ),
+//   );
 
-  //   final shortUniLink = await _dynamic.buildShortLink(parameters);
-  //   final shortUrl = shortUniLink.shortUrl;
+//   final shortUniLink = await _dynamic.buildShortLink(parameters);
+//   final shortUrl = shortUniLink.shortUrl;
 
-  //   await _analytics.logShare(
-  //     contentType: 'user',
-  //     itemId: user.id,
-  //     method: 'dynamic_link',
-  //   );
+//   await _analytics.logShare(
+//     contentType: 'user',
+//     itemId: user.id,
+//     method: 'dynamic_link',
+//   );
 
-  //   return shortUrl.toString();
-  // }
+//   return shortUrl.toString();
+// }
 
-  // @override
-  // Future<String> getShareOpportunityDeepLink(Opportunity opportunity) async {
-  //   final imageUri = switch (opportunity.flierUrl) {
-  //     None() => Uri.parse('https://tapped.ai/images/tapped_reverse.png'),
-  //     Some(:final value) => Uri.parse(value),
-  //   };
+// @override
+// Future<String> getShareOpportunityDeepLink(Opportunity opportunity) async {
+//   final imageUri = switch (opportunity.flierUrl) {
+//     None() => Uri.parse('https://tapped.ai/images/tapped_reverse.png'),
+//     Some(:final value) => Uri.parse(value),
+//   };
 
-  //   final parameters = DynamicLinkParameters(
-  //     //TODO change this to the proper function
-  //     uriPrefix: 'https://tapped.ai',
-  //     link: Uri.parse('https://tapped.ai/opportunity/${opportunity.id}'),
-  //     androidParameters: const AndroidParameters(
-  //       packageName: 'com.intheloopstudio',
-  //     ),
-  //     iosParameters: const IOSParameters(
-  //       bundleId: 'com.intheloopstudio',
-  //     ),
-  //     socialMetaTagParameters: SocialMetaTagParameters(
-  //       title: '${opportunity.title} on Tapped',
-  //       description:
-  //           '''Tapped Network - The online platform tailored for producers and creators to share their loops to the world, get feedback on their music, and join the world-wide community of artists to collaborate with''',
-  //       imageUrl: imageUri,
-  //     ),
-  //   );
+//   final parameters = DynamicLinkParameters(
+//     //TODO change this to the proper function
+//     uriPrefix: 'https://tapped.ai',
+//     link: Uri.parse('https://tapped.ai/opportunity/${opportunity.id}'),
+//     androidParameters: const AndroidParameters(
+//       packageName: 'com.intheloopstudio',
+//     ),
+//     iosParameters: const IOSParameters(
+//       bundleId: 'com.intheloopstudio',
+//     ),
+//     socialMetaTagParameters: SocialMetaTagParameters(
+//       title: '${opportunity.title} on Tapped',
+//       description:
+//           '''Tapped Network - The online platform tailored for producers and creators to share their loops to the world, get feedback on their music, and join the world-wide community of artists to collaborate with''',
+//       imageUrl: imageUri,
+//     ),
+//   );
 
-  //   final shortUniLink = await _dynamic.buildShortLink(parameters);
-  //   final shortUrl = shortUniLink.shortUrl;
+//   final shortUniLink = await _dynamic.buildShortLink(parameters);
+//   final shortUrl = shortUniLink.shortUrl;
 
-  //   await _analytics.logShare(
-  //     contentType: 'user',
-  //     itemId: opportunity.id,
-  //     method: 'dynamic_link',
-  //   );
+//   await _analytics.logShare(
+//     contentType: 'user',
+//     itemId: opportunity.id,
+//     method: 'dynamic_link',
+//   );
 
-  //   return shortUrl.toString();
-  // }
+//   return shortUrl.toString();
+// }
 }
