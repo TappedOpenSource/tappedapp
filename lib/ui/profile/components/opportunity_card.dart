@@ -172,7 +172,7 @@ class OpportunityCard extends StatelessWidget {
                               return switch (place) {
                                 null => const SizedBox.shrink(),
                                 _ => Text(
-                                    formattedFullAddress(
+                                    getAddressComponent(
                                       place.addressComponents,
                                     ),
                                     style: const TextStyle(

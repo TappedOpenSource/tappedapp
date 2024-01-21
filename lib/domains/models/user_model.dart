@@ -70,6 +70,8 @@ class UserModel extends Equatable {
       throw Exception('user data is null');
     }
 
+    userData['id'] = doc.id;
+
     return UserModel.fromJson(userData);
   }
 

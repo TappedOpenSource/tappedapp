@@ -2,11 +2,13 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:intheloopapp/domains/models/option.dart';
 import 'package:intheloopapp/domains/models/user_model.dart';
+import 'package:intheloopapp/domains/models/venue_info.dart';
 import 'package:intheloopapp/domains/navigation_bloc/navigation_bloc.dart';
 import 'package:intheloopapp/domains/navigation_bloc/tapped_route.dart';
+import 'package:intheloopapp/utils/app_logger.dart';
 import 'package:intheloopapp/utils/bloc_utils.dart';
 import 'package:intheloopapp/utils/hero_image.dart';
-import 'package:intl/intl.dart';
+import 'package:stream_chat_flutter/stream_chat_flutter.dart';
 import 'package:uuid/uuid.dart';
 
 class VenueCard extends StatelessWidget {
@@ -24,16 +26,8 @@ class VenueCard extends StatelessWidget {
     final database = context.database;
     final imageUrl = venue.profilePicture.asNullable();
 
-    final audienceText = '${NumberFormat.compactCurrency(
-      decimalDigits: 0,
-      symbol: '',
-    ).format(venue.socialFollowing.audienceSize)} followers';
-    final venueText = venue
-        .venueInfo
-        .map((e) => e.capacity.map((cap) => '$cap capacity'))
-        .unwrapOr(Some(audienceText))
-        .unwrapOr(audienceText);
-
+    final venueType =
+        venue.venueInfo.map((e) => e.type).unwrapOr(VenueType.other);
     return FutureBuilder(
       future: database.isVerified(venue.id),
       builder: (context, snapshot) {
@@ -123,12 +117,13 @@ class VenueCard extends StatelessWidget {
                               ],
                             ),
                           ),
-                          Text(
-                             venueText,
-                            style: const TextStyle(
-                              color: Colors.white,
+                          if (venueType != VenueType.other)
+                            Text(
+                              venueType.name.capitalize(),
+                              style: const TextStyle(
+                                color: Colors.white,
+                              ),
                             ),
-                          ),
                         ],
                       ),
                     ),

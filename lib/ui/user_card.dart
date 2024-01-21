@@ -135,16 +135,13 @@ class UserCard extends StatelessWidget {
                                   ],
                                 ),
                               ),
-                              Text(
-                                audienceText,
-                                style: const TextStyle(
-                                  color: Colors.white,
+                              if (user.socialFollowing.audienceSize != 0)
+                                Text(
+                                  audienceText,
+                                  style: const TextStyle(
+                                    color: Colors.white,
+                                  ),
                                 ),
-                              ),
-                              // _followButton(
-                              //   currentUser,
-                              //   database,
-                              // ),
                             ],
                           ),
                         ),

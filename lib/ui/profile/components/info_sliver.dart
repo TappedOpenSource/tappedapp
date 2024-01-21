@@ -71,16 +71,6 @@ class InfoSliver extends StatelessWidget {
                         ),
                     },
                 },
-                if (currPlace != null)
-                  CupertinoListTile(
-                    leading: Icon(
-                      CupertinoIcons.location,
-                      color: theme.colorScheme.onSurface,
-                    ),
-                    title: LocationChip(
-                      place: currPlace,
-                    ),
-                  ),
                 if (occupations.isNotEmpty)
                   CupertinoListTile(
                     leading: const Icon(
@@ -138,6 +128,16 @@ class InfoSliver extends StatelessWidget {
                       },
                     ),
                 },
+                if (currPlace != null)
+                  CupertinoListTile(
+                    leading: Icon(
+                      CupertinoIcons.location,
+                      color: theme.colorScheme.onSurface,
+                    ),
+                    title: LocationChip(
+                      place: currPlace,
+                    ),
+                  ),
                 CupertinoListTile(
                   title: Text(
                     'More Options',

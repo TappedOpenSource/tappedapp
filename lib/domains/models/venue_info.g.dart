@@ -50,6 +50,7 @@ Map<String, dynamic> _$VenueInfoToJson(VenueInfo instance) => <String, dynamic>{
     };
 
 const _$VenueTypeEnumMap = {
+  VenueType.concertHall: 'concertHall',
   VenueType.bar: 'bar',
   VenueType.club: 'club',
   VenueType.restaurant: 'restaurant',
@@ -57,5 +58,6 @@ const _$VenueTypeEnumMap = {
   VenueType.arena: 'arena',
   VenueType.stadium: 'stadium',
   VenueType.festival: 'festival',
+  VenueType.artGallery: 'artGallery',
   VenueType.other: 'other',
 };

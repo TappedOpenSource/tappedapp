@@ -4,7 +4,6 @@ import 'package:intheloopapp/domains/models/user_model.dart';
 import 'package:intheloopapp/ui/profile/components/opportunities_list.dart';
 import 'package:intheloopapp/ui/search/components/venue_card.dart';
 import 'package:intheloopapp/ui/user_card.dart';
-import 'package:intheloopapp/utils/app_logger.dart';
 import 'package:intheloopapp/utils/bloc_utils.dart';
 import 'package:scroll_snap_list/scroll_snap_list.dart';
 
@@ -277,6 +276,9 @@ class DiscoverView extends StatelessWidget {
               final bookingLeaders = snapshot.data ?? [];
               return _userSlider(bookingLeaders);
             },
+          ),
+          const SizedBox(
+            height: 100,
           ),
         ],
       ),

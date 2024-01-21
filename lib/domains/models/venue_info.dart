@@ -98,6 +98,7 @@ class VenueInfo extends Equatable {
 
 @JsonEnum()
 enum VenueType {
+  concertHall,
   bar,
   club,
   restaurant,
@@ -105,6 +106,7 @@ enum VenueType {
   arena,
   stadium,
   festival,
+  artGallery,
   other,
 }
 

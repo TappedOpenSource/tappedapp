@@ -54,11 +54,9 @@ class BookingsView extends StatelessWidget {
                           children: [
                             Container(
                               height: 400,
-                              decoration: const BoxDecoration(
-                                borderRadius: BorderRadius.all(
-                                  Radius.circular(10),
-                                ),
-                                image: DecorationImage(
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(15),
+                                image: const DecorationImage(
                                   image: AssetImage(
                                     'assets/splash.gif',
                                   ),
@@ -91,48 +89,54 @@ class BookingsView extends StatelessWidget {
                     const SliverToBoxAdapter(
                       child: SizedBox(height: 12),
                     ),
-                    const SliverToBoxAdapter(
-                      child: Text(
-                        'Upcoming Bookings',
-                        style: TextStyle(
-                          fontSize: 28,
-                          fontWeight: FontWeight.bold,
+                    if (state.upcomingBookings.isNotEmpty)
+                      const SliverToBoxAdapter(
+                        child: Text(
+                          'Upcoming Bookings',
+                          style: TextStyle(
+                            fontSize: 28,
+                            fontWeight: FontWeight.bold,
+                          ),
                         ),
                       ),
-                    ),
-                    BookingsList(
-                      bookings: state.upcomingBookings,
-                    ),
+                    if (state.upcomingBookings.isNotEmpty)
+                      BookingsList(
+                        bookings: state.upcomingBookings,
+                      ),
                     const SliverToBoxAdapter(
                       child: SizedBox(height: 12),
                     ),
-                    const SliverToBoxAdapter(
-                      child: Text(
-                        'Past Bookings',
-                        style: TextStyle(
-                          fontSize: 28,
-                          fontWeight: FontWeight.bold,
+                    if (state.pastBookings.isNotEmpty)
+                      const SliverToBoxAdapter(
+                        child: Text(
+                          'Past Bookings',
+                          style: TextStyle(
+                            fontSize: 28,
+                            fontWeight: FontWeight.bold,
+                          ),
                         ),
                       ),
-                    ),
-                    BookingsList(
-                      bookings: state.pastBookings,
-                    ),
+                    if (state.pastBookings.isNotEmpty)
+                      BookingsList(
+                        bookings: state.pastBookings,
+                      ),
                     const SliverToBoxAdapter(
                       child: SizedBox(height: 12),
                     ),
-                    const SliverToBoxAdapter(
-                      child: Text(
-                        'Canceled Bookings',
-                        style: TextStyle(
-                          fontSize: 28,
-                          fontWeight: FontWeight.bold,
+                    if (state.canceledBookings.isNotEmpty)
+                      const SliverToBoxAdapter(
+                        child: Text(
+                          'Canceled Bookings',
+                          style: TextStyle(
+                            fontSize: 28,
+                            fontWeight: FontWeight.bold,
+                          ),
                         ),
                       ),
-                    ),
-                    BookingsList(
-                      bookings: state.canceledBookings,
-                    ),
+                    if (state.canceledBookings.isNotEmpty)
+                      BookingsList(
+                        bookings: state.canceledBookings,
+                      ),
                   ],
                 ),
               ),
