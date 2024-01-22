@@ -54,9 +54,7 @@ class _ShellViewState extends State<ShellView> {
                     index: state.selectedTab,
                     children: [
                       const OpportunityFeedView(),
-                      DiscoverView(
-                        searchFocusNode: searchFocusNode,
-                      ),
+                      DiscoverView(),
                       const BookingsView(),
                       const MessagingChannelListView(),
                       ProfileView(
@@ -67,7 +65,6 @@ class _ShellViewState extends State<ShellView> {
                   ),
                   bottomNavigationBar: BottomToolbar(
                     user: currentUser,
-                    searchFocusNode: searchFocusNode,
                   ),
                 );
               },
