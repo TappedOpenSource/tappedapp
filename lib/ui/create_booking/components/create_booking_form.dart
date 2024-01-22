@@ -239,13 +239,14 @@ class _CreateBookingFormState extends State<CreateBookingForm> {
                 ),
               ),
               const SizedBox(height: 4),
-              const Text(
-                'powered by stripe',
-                style: TextStyle(
-                  fontSize: 12,
-                  color: CupertinoColors.inactiveGray,
+              if (state.totalCost > 0)
+                const Text(
+                  'powered by stripe',
+                  style: TextStyle(
+                    fontSize: 12,
+                    color: CupertinoColors.inactiveGray,
+                  ),
                 ),
-              ),
             ],
           ),
         );

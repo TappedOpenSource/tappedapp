@@ -1,7 +1,5 @@
 import 'package:flutter/cupertino.dart';
-import 'package:intheloopapp/domains/models/opportunity.dart';
 import 'package:intheloopapp/domains/models/user_model.dart';
-import 'package:intheloopapp/ui/profile/components/opportunities_list.dart';
 import 'package:intheloopapp/ui/search/components/venue_card.dart';
 import 'package:intheloopapp/ui/user_card.dart';
 import 'package:intheloopapp/utils/bloc_utils.dart';
@@ -61,32 +59,7 @@ class DiscoverView extends StatelessWidget {
     );
   }
 
-  Widget _opSlider(List<Opportunity> opportunities) {
-    if (opportunities.isEmpty) {
-      return const Center(
-        child: Text('None rn'),
-      );
-    }
-    return OpportunitiesList(opportunities: opportunities);
 
-    // return SizedBox(
-    //   height: 250,
-    //   child: ScrollSnapList(
-    //     onItemFocus: (int index) {},
-    //     // selectedItemAnchor: SelectedItemAnchor.START,
-    //     itemSize: cardWidth + 16,
-    //     itemBuilder: (context, index) {
-    //       final op = opportunities[index];
-    //       return Padding(
-    //         padding: const EdgeInsets.symmetric(horizontal: 8),
-    //         child: OpportunityCard(opportunity: op),
-    //       );
-    //     },
-    //     itemCount: opportunities.length,
-    //     // key: sslKey,
-    //   ),
-    // );
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -95,32 +68,7 @@ class DiscoverView extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const Padding(
-            padding: EdgeInsets.symmetric(
-              vertical: 16,
-              horizontal: 8,
-            ),
-            child: Text(
-              'Featured Opportunities',
-              style: TextStyle(
-                fontSize: 28,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-          ),
-          FutureBuilder<List<Opportunity>>(
-            future: database.getFeaturedOpportunities(),
-            builder: (context, snapshot) {
-              if (!snapshot.hasData) {
-                return const Center(
-                  child: CupertinoActivityIndicator(),
-                );
-              }
 
-              final opportunities = snapshot.data!;
-              return _opSlider(opportunities);
-            },
-          ),
           const Padding(
             padding: EdgeInsets.symmetric(
               vertical: 16,

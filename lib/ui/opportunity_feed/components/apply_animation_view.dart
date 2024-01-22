@@ -30,7 +30,7 @@ class ApplyAnimationView extends StatelessWidget {
                     ),
                   ),
                 Some() => const Text(
-                    "adding your info to the top of the promoter's list as a premium user",
+                    "adding your application to the top of the promoter's list as a premium user",
                     textAlign: TextAlign.center,
                     style: TextStyle(
                       fontSize: 22,

@@ -260,13 +260,13 @@ class ProfileView extends StatelessWidget {
           child: SizedBox(height: 12),
         ),
         const SliverToBoxAdapter(
-          child: ReviewsSliver(),
+          child: BookingsSliver(),
         ),
         const SliverToBoxAdapter(
           child: SizedBox(height: 12),
         ),
         const SliverToBoxAdapter(
-          child: BookingsSliver(),
+          child: ReviewsSliver(),
         ),
         const SliverToBoxAdapter(
           child: SizedBox(height: 18),
