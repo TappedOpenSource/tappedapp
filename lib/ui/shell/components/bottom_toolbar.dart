@@ -7,19 +7,17 @@ import 'package:intheloopapp/domains/models/booking.dart';
 import 'package:intheloopapp/domains/models/option.dart';
 import 'package:intheloopapp/domains/models/user_model.dart';
 import 'package:intheloopapp/domains/navigation_bloc/navigation_bloc.dart';
+import 'package:intheloopapp/domains/navigation_bloc/tapped_route.dart';
 import 'package:intheloopapp/ui/user_avatar.dart';
 import 'package:stream_chat_flutter/stream_chat_flutter.dart';
 
 class BottomToolbar extends StatelessWidget {
   BottomToolbar({
     required this.user,
-    required this.searchFocusNode,
     super.key,
   });
 
   final UserModel user;
-  final FocusNode searchFocusNode;
-
   final cupertinoTabController = CupertinoTabController();
 
   @override
@@ -49,7 +47,9 @@ class BottomToolbar extends StatelessWidget {
               icon: GestureDetector(
                 onDoubleTap: () {
                   context.changeTab(selectedTab: 1);
-                  searchFocusNode.requestFocus();
+                  context.push(
+                    const SearchPage(),
+                  );
                 },
                 child: const Icon(CupertinoIcons.search),
               ),

@@ -16,21 +16,11 @@ const defaultMapboxToken =
     'pk.eyJ1Ijoiam9uYXlsb3I4OSIsImEiOiJjbHJvNGdsemswNjl3MnFtdHNieXEyaWphIn0.gwc31X7uTzjxeDm6vcGzCg';
 const mapboxStyle = 'mapbox/dark-v11';
 
-class DiscoverView extends StatefulWidget {
-  DiscoverView({
-    FocusNode? searchFocusNode,
+class DiscoverView extends StatelessWidget {
+  const DiscoverView({
     super.key,
-  }) : searchFocusNode = searchFocusNode ?? FocusNode();
+  });
 
-  final FocusNode searchFocusNode;
-
-  @override
-  // ignore: library_private_types_in_public_api
-  _DiscoverViewState createState() => _DiscoverViewState();
-}
-
-class _DiscoverViewState extends State<DiscoverView>
-    with TickerProviderStateMixin {
   @override
   Widget build(BuildContext context) {
     final defaultLoc = Location.rva();
@@ -122,11 +112,8 @@ class _DiscoverViewState extends State<DiscoverView>
                             icon: const Icon(Icons.search),
                           ),
                           onTap: () {
-                            widget.searchFocusNode.requestFocus();
                             context.push(
-                              SearchPage(
-                                searchFocusNode: widget.searchFocusNode,
-                              ),
+                              SearchPage(),
                             );
                           },
                         ),
@@ -137,7 +124,6 @@ class _DiscoverViewState extends State<DiscoverView>
               );
             },
           ),
-          // body: const ByUsernameResultsList(),
           bottomSheet: DraggableScrollableSheet(
             expand: false,
             maxChildSize: 0.9,

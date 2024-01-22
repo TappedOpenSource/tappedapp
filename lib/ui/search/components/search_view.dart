@@ -5,12 +5,14 @@ import 'package:intheloopapp/ui/search/components/cancel_icon.dart';
 import 'package:intheloopapp/ui/search/components/tapped_search_bar.dart';
 
 class SearchView extends StatefulWidget {
-  const SearchView({
-    required this.searchFocusNode,
+  SearchView({
+    FocusNode? searchFocusNode,
     super.key,
-  });
+  }) {
+    searchFocusNode ??= FocusNode();
+  }
 
-  final FocusNode searchFocusNode;
+  late final FocusNode searchFocusNode;
 
   @override
   // ignore: library_private_types_in_public_api
@@ -45,6 +47,7 @@ class _SearchViewState extends State<SearchView> {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+    widget.searchFocusNode.requestFocus();
     return Scaffold(
       backgroundColor: theme.colorScheme.background,
       appBar: AppBar(

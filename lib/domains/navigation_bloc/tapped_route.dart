@@ -397,7 +397,7 @@ final class AdminPage extends TappedRoute {
 
 final class SearchPage extends TappedRoute {
   SearchPage({
-    required this.searchFocusNode,
+    this.searchFocusNode,
   }) : super(
           routeName: '/search',
           view: SearchView(
@@ -405,5 +405,5 @@ final class SearchPage extends TappedRoute {
           ),
         );
 
-  final FocusNode searchFocusNode;
+  final FocusNode? searchFocusNode;
 }
