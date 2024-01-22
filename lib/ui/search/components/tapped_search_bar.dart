@@ -21,28 +21,31 @@ class TappedSearchBar extends StatelessWidget {
     final theme = Theme.of(context);
     return BlocBuilder<SearchBloc, SearchState>(
       builder: (context, state) {
-        return SearchBar(
-          controller: searchController,
-          focusNode: searchFocusNode,
-          hintText: 'Search...',
-          leading: IconButton(
-            onPressed: () {},
-            icon: const Icon(Icons.search),
-          ),
-          trailing: [
-            IconButton(
-              onPressed: () {
-                context.push(
-                  AdvancedSearchPage(),
-                );
-              },
-              icon: const Icon(CupertinoIcons.doc_text_search),
-              color: theme.colorScheme.onSurface,
+        return Hero(
+          tag: 'searchBar',
+          child: SearchBar(
+            controller: searchController,
+            focusNode: searchFocusNode,
+            hintText: 'Search...',
+            leading: IconButton(
+              onPressed: () {},
+              icon: const Icon(Icons.search),
             ),
-          ],
-          onChanged: (input) {
-            context.search.add(Search(query: input));
-          },
+            trailing: [
+              IconButton(
+                onPressed: () {
+                  context.push(
+                    AdvancedSearchPage(),
+                  );
+                },
+                icon: const Icon(CupertinoIcons.doc_text_search),
+                color: theme.colorScheme.onSurface,
+              ),
+            ],
+            onChanged: (input) {
+              context.search.add(Search(query: input));
+            },
+          ),
         );
       },
     );

@@ -31,7 +31,8 @@ import 'package:intheloopapp/ui/paywall/paywall_view.dart';
 import 'package:intheloopapp/ui/profile/components/service_selection_view.dart';
 import 'package:intheloopapp/ui/profile/profile_view.dart';
 import 'package:intheloopapp/ui/reviews/user_reviews_feed.dart';
-import 'package:intheloopapp/ui/search/search_view.dart';
+import 'package:intheloopapp/ui/search/components/search_view.dart';
+import 'package:intheloopapp/ui/search/discover_view.dart';
 import 'package:intheloopapp/ui/services/service_view.dart';
 import 'package:intheloopapp/ui/settings/settings_view.dart';
 import 'package:intheloopapp/utils/hero_image.dart';
@@ -147,11 +148,11 @@ final class BookingsPage extends TappedRoute {
   final String userId;
 }
 
-final class SearchPage extends TappedRoute {
-  SearchPage()
+final class DiscoveryPage extends TappedRoute {
+  DiscoveryPage()
       : super(
-          routeName: '/search',
-          view: SearchView(),
+          routeName: '/discovery',
+          view: DiscoverView(),
         );
 }
 
@@ -392,4 +393,17 @@ final class AdminPage extends TappedRoute {
           routeName: '/admin',
           view: const AdminView(),
         );
+}
+
+final class SearchPage extends TappedRoute {
+  SearchPage({
+    required this.searchFocusNode,
+  }) : super(
+          routeName: '/search',
+          view: SearchView(
+            searchFocusNode: searchFocusNode,
+          ),
+        );
+
+  final FocusNode searchFocusNode;
 }
