@@ -446,7 +446,9 @@ class DraggableHeader extends StatelessWidget {
       controller: scrollController,
       child: Container(
         decoration: BoxDecoration(
-          borderRadius: const BorderRadius.vertical(top: Radius.circular(12)),
+          borderRadius: const BorderRadius.vertical(
+            top: Radius.circular(12),
+          ),
           color: Colors.white.withOpacity(0.1),
         ),
         child: Center(
