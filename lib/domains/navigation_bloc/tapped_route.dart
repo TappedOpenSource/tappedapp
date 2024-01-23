@@ -401,7 +401,7 @@ final class SearchPage extends TappedRoute {
   }) : super(
           routeName: '/search',
           view: SearchView(
-            searchFocusNode: searchFocusNode,
+            focusNode: searchFocusNode,
           ),
         );
 

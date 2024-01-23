@@ -7,7 +7,9 @@ import 'package:intheloopapp/domains/navigation_bloc/navigation_bloc.dart';
 import 'package:intheloopapp/domains/navigation_bloc/tapped_route.dart';
 import 'package:intheloopapp/ui/search/components/venue_card.dart';
 import 'package:intheloopapp/ui/themes.dart';
+import 'package:intheloopapp/ui/user_avatar.dart';
 import 'package:intheloopapp/utils/bloc_utils.dart';
+import 'package:intheloopapp/utils/debouncer.dart';
 import 'package:latlong2/latlong.dart';
 import 'package:scroll_snap_list/scroll_snap_list.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -17,9 +19,22 @@ const defaultMapboxToken =
 const mapboxStyle = 'mapbox/dark-v11';
 
 class DiscoverView extends StatelessWidget {
-  const DiscoverView({
+  DiscoverView({
     super.key,
   });
+
+  final _debouncer = Debouncer(
+    const Duration(milliseconds: 300),
+    executionInterval: const Duration(milliseconds: 750),
+  );
+
+  void onChange(LatLngBounds? bounds) {
+    _debouncer.run(
+      () async {
+        // updateVisibleImages(bounds);
+      },
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -39,6 +54,9 @@ class DiscoverView extends StatelessWidget {
                       minZoom: 10,
                       maxZoom: 18,
                       initialCenter: LatLng(defaultLoc.lat, defaultLoc.lng),
+                      onPositionChanged: (position, hasGesture) {
+                        onChange(position.bounds);
+                      },
                     ),
                     children: [
                       TileLayer(
@@ -53,6 +71,11 @@ class DiscoverView extends StatelessWidget {
                         options: MarkerClusterLayerOptions(
                           maxClusterRadius: 40,
                           size: Size(40, 40),
+                          polygonOptions: PolygonOptions(
+                            borderColor: tappedAccent,
+                            color: tappedAccent.withOpacity(0.5),
+                            borderStrokeWidth: 3,
+                          ),
                           markers: [
                             ...rvaVenues.map((venue) {
                               final loc = venue.location.unwrapOr(defaultLoc);
@@ -60,23 +83,30 @@ class DiscoverView extends StatelessWidget {
                                 width: 80,
                                 height: 80,
                                 point: LatLng(loc.lat, loc.lng),
-                                child: Container(
-                                  child: Icon(
-                                    Icons.location_on,
-                                    color: tappedAccent,
+                                child: GestureDetector(
+                                  onTap: () => context.push(
+                                    ProfilePage(
+                                      userId: venue.id,
+                                      user: Some(venue),
+                                    ),
+                                  ),
+                                  child: UserAvatar(
+                                    imageUrl: venue.profilePicture.asNullable(),
+                                    radius: 20,
                                   ),
                                 ),
                               );
                             }),
                           ],
-                          polygonOptions: PolygonOptions(
-                            borderColor: tappedAccent,
-                            color: tappedAccent.withOpacity(0.5),
-                            borderStrokeWidth: 3,
-                          ),
                           builder: (context, markers) {
+                            final index = markers.first.key
+                                .toString()
+                                .replaceAll(RegExp('[^0-9]'), '');
+                            final clusterKey =
+                                'map-badge-$index-len-${markers.length}';
+
                             return FloatingActionButton(
-                              heroTag: 'mapMarkerCluster-${markers.length}',
+                              heroTag: clusterKey,
                               onPressed: null,
                               child: Text(markers.length.toString()),
                             );
