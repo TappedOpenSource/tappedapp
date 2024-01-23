@@ -260,157 +260,155 @@ class DiscoverView extends StatelessWidget {
             expand: false,
             maxChildSize: 0.9,
             builder: (ctx, scrollController) => SizedBox(
-              child: SingleChildScrollView(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    DraggableHeader(
-                      scrollController: scrollController,
-                      bottomSheetDraggableAreaHeight: 32,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  DraggableHeader(
+                    scrollController: scrollController,
+                    bottomSheetDraggableAreaHeight: 32,
+                  ),
+                  const Text(
+                    'Top Richmond Venues',
+                    style: TextStyle(
+                      fontSize: 28,
+                      fontWeight: FontWeight.bold,
                     ),
-                    const Text(
-                      'Top Richmond Venues',
+                  ),
+                  _venueSlider(rvaVenues),
+                  const Padding(
+                    padding: EdgeInsets.symmetric(
+                      vertical: 16,
+                      horizontal: 8,
+                    ),
+                    child: Text(
+                      'Top Bookers',
                       style: TextStyle(
                         fontSize: 28,
                         fontWeight: FontWeight.bold,
                       ),
                     ),
-                    _venueSlider(rvaVenues),
-                    const Padding(
-                      padding: EdgeInsets.symmetric(
-                        vertical: 16,
-                        horizontal: 8,
-                      ),
-                      child: Text(
-                        'Top Bookers',
-                        style: TextStyle(
-                          fontSize: 28,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                    ),
-                    FutureBuilder(
-                      future: database.getBookerLeaders(),
-                      builder: (context, snapshot) {
-                        if (!snapshot.hasData) {
-                          return const Center(
-                            child: CupertinoActivityIndicator(),
-                          );
-                        }
+                  ),
+                  FutureBuilder(
+                    future: database.getBookerLeaders(),
+                    builder: (context, snapshot) {
+                      if (!snapshot.hasData) {
+                        return const Center(
+                          child: CupertinoActivityIndicator(),
+                        );
+                      }
 
-                        final bookerLeaders = snapshot.data ?? [];
-                        return _userSlider(bookerLeaders);
-                      },
+                      final bookerLeaders = snapshot.data ?? [];
+                      return _userSlider(bookerLeaders);
+                    },
+                  ),
+                  const Padding(
+                    padding: EdgeInsets.symmetric(
+                      vertical: 16,
+                      horizontal: 8,
                     ),
-                    const Padding(
-                      padding: EdgeInsets.symmetric(
-                        vertical: 16,
-                        horizontal: 8,
-                      ),
-                      child: Text(
-                        'Top DC Venues',
-                        style: TextStyle(
-                          fontSize: 28,
-                          fontWeight: FontWeight.bold,
-                        ),
+                    child: Text(
+                      'Top DC Venues',
+                      style: TextStyle(
+                        fontSize: 28,
+                        fontWeight: FontWeight.bold,
                       ),
                     ),
-                    FutureBuilder(
-                      future: database.getDCVenues(),
-                      builder: (context, snapshot) {
-                        if (!snapshot.hasData) {
-                          return const Center(
-                            child: CupertinoActivityIndicator(),
-                          );
-                        }
+                  ),
+                  FutureBuilder(
+                    future: database.getDCVenues(),
+                    builder: (context, snapshot) {
+                      if (!snapshot.hasData) {
+                        return const Center(
+                          child: CupertinoActivityIndicator(),
+                        );
+                      }
 
-                        final dcVenues = snapshot.data ?? [];
-                        return _venueSlider(dcVenues);
-                      },
+                      final dcVenues = snapshot.data ?? [];
+                      return _venueSlider(dcVenues);
+                    },
+                  ),
+                  const Padding(
+                    padding: EdgeInsets.symmetric(
+                      vertical: 16,
+                      horizontal: 8,
                     ),
-                    const Padding(
-                      padding: EdgeInsets.symmetric(
-                        vertical: 16,
-                        horizontal: 8,
-                      ),
-                      child: Text(
-                        'Top NoVa Venues',
-                        style: TextStyle(
-                          fontSize: 28,
-                          fontWeight: FontWeight.bold,
-                        ),
+                    child: Text(
+                      'Top NoVa Venues',
+                      style: TextStyle(
+                        fontSize: 28,
+                        fontWeight: FontWeight.bold,
                       ),
                     ),
-                    FutureBuilder(
-                      future: database.getNovaVenues(),
-                      builder: (context, snapshot) {
-                        if (!snapshot.hasData) {
-                          return const Center(
-                            child: CupertinoActivityIndicator(),
-                          );
-                        }
+                  ),
+                  FutureBuilder(
+                    future: database.getNovaVenues(),
+                    builder: (context, snapshot) {
+                      if (!snapshot.hasData) {
+                        return const Center(
+                          child: CupertinoActivityIndicator(),
+                        );
+                      }
 
-                        final novaVenues = snapshot.data ?? [];
-                        return _venueSlider(novaVenues);
-                      },
+                      final novaVenues = snapshot.data ?? [];
+                      return _venueSlider(novaVenues);
+                    },
+                  ),
+                  const Padding(
+                    padding: EdgeInsets.symmetric(
+                      vertical: 16,
+                      horizontal: 8,
                     ),
-                    const Padding(
-                      padding: EdgeInsets.symmetric(
-                        vertical: 16,
-                        horizontal: 8,
-                      ),
-                      child: Text(
-                        'Top Maryland Venues',
-                        style: TextStyle(
-                          fontSize: 28,
-                          fontWeight: FontWeight.bold,
-                        ),
+                    child: Text(
+                      'Top Maryland Venues',
+                      style: TextStyle(
+                        fontSize: 28,
+                        fontWeight: FontWeight.bold,
                       ),
                     ),
-                    FutureBuilder(
-                      future: database.getMarylandVenues(),
-                      builder: (context, snapshot) {
-                        if (!snapshot.hasData) {
-                          return const Center(
-                            child: CupertinoActivityIndicator(),
-                          );
-                        }
+                  ),
+                  FutureBuilder(
+                    future: database.getMarylandVenues(),
+                    builder: (context, snapshot) {
+                      if (!snapshot.hasData) {
+                        return const Center(
+                          child: CupertinoActivityIndicator(),
+                        );
+                      }
 
-                        final marylandVenues = snapshot.data ?? [];
-                        return _venueSlider(marylandVenues);
-                      },
+                      final marylandVenues = snapshot.data ?? [];
+                      return _venueSlider(marylandVenues);
+                    },
+                  ),
+                  const Padding(
+                    padding: EdgeInsets.symmetric(
+                      vertical: 16,
+                      horizontal: 8,
                     ),
-                    const Padding(
-                      padding: EdgeInsets.symmetric(
-                        vertical: 16,
-                        horizontal: 8,
-                      ),
-                      child: Text(
-                        'Top Performers',
-                        style: TextStyle(
-                          fontSize: 28,
-                          fontWeight: FontWeight.bold,
-                        ),
+                    child: Text(
+                      'Top Performers',
+                      style: TextStyle(
+                        fontSize: 28,
+                        fontWeight: FontWeight.bold,
                       ),
                     ),
-                    FutureBuilder(
-                      future: database.getBookingLeaders(),
-                      builder: (context, snapshot) {
-                        if (!snapshot.hasData) {
-                          return const Center(
-                            child: CupertinoActivityIndicator(),
-                          );
-                        }
+                  ),
+                  FutureBuilder(
+                    future: database.getBookingLeaders(),
+                    builder: (context, snapshot) {
+                      if (!snapshot.hasData) {
+                        return const Center(
+                          child: CupertinoActivityIndicator(),
+                        );
+                      }
 
-                        final bookingLeaders = snapshot.data ?? [];
-                        return _userSlider(bookingLeaders);
-                      },
-                    ),
-                    const SizedBox(
-                      height: 100,
-                    ),
-                  ],
-                ),
+                      final bookingLeaders = snapshot.data ?? [];
+                      return _userSlider(bookingLeaders);
+                    },
+                  ),
+                  const SizedBox(
+                    height: 100,
+                  ),
+                ],
               ),
             ),
           ),
@@ -422,10 +420,10 @@ class DiscoverView extends StatelessWidget {
 
 class DraggableHeader extends StatelessWidget {
   const DraggableHeader({
-    Key? key,
     required this.scrollController,
     required this.bottomSheetDraggableAreaHeight,
-  }) : super(key: key);
+    super.key,
+  });
   static const indicatorHeight = 4.0;
   final ScrollController scrollController;
   final double bottomSheetDraggableAreaHeight;
