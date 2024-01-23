@@ -53,6 +53,9 @@ class DeepLinkBloc extends Bloc<DeepLinkEvent, DeepLinkState> {
             OpportunityPage(
               opportunityId: opportunityId,
               opportunity: opportunity,
+              onDislike: nav.pop,
+              onDismiss: nav.pop,
+              onApply: nav.pop,
             ),
           );
         case SettingsDeepLink():
