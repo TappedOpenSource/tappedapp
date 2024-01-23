@@ -25,6 +25,7 @@ class _SearchViewState extends State<SearchView> {
   void initState() {
     super.initState();
     _searchController = TextEditingController();
+    _searchFocusNode.requestFocus();
   }
 
   @override
@@ -34,11 +35,12 @@ class _SearchViewState extends State<SearchView> {
   }
 
   late final TextEditingController _searchController;
+  FocusNode get _searchFocusNode => widget.searchFocusNode;
 
   List<Widget> _buildActions() {
     return [
       CancelIcon(
-        focusNode: widget.searchFocusNode,
+        focusNode: _searchFocusNode,
         searchController: _searchController,
       ),
     ];
@@ -47,7 +49,6 @@ class _SearchViewState extends State<SearchView> {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    widget.searchFocusNode.requestFocus();
     return Scaffold(
       backgroundColor: theme.colorScheme.background,
       appBar: AppBar(
@@ -55,23 +56,12 @@ class _SearchViewState extends State<SearchView> {
         elevation: 0.5,
         backgroundColor: Colors.transparent,
         title: TappedSearchBar(
-          searchFocusNode: widget.searchFocusNode,
+          searchFocusNode: _searchFocusNode,
           searchController: _searchController,
         ),
         actions: _buildActions(),
       ),
       body: const ByUsernameResultsList(),
     );
-    // final database = context.database;
-    // return SingleChildScrollView(
-    //   child: Column(
-    //     crossAxisAlignment: CrossAxisAlignment.start,
-    //     children: [
-    //
-
-
-    //     ],
-    //   ),
-    // );
   }
 }
