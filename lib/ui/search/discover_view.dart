@@ -7,6 +7,7 @@ import 'package:intheloopapp/domains/models/option.dart';
 import 'package:intheloopapp/domains/models/user_model.dart';
 import 'package:intheloopapp/domains/navigation_bloc/navigation_bloc.dart';
 import 'package:intheloopapp/domains/navigation_bloc/tapped_route.dart';
+import 'package:intheloopapp/ui/profile/components/notification_icon_button.dart';
 import 'package:intheloopapp/ui/search/components/venue_card.dart';
 import 'package:intheloopapp/ui/themes.dart';
 import 'package:intheloopapp/ui/user_avatar.dart';
@@ -235,18 +236,23 @@ class DiscoverView extends StatelessWidget {
                       padding: const EdgeInsets.symmetric(
                         horizontal: 16,
                       ),
-                      child: Hero(
-                        tag: 'searchBar',
-                        child: SearchBar(
-                          hintText: 'Search...',
-                          leading: IconButton(
-                            onPressed: () {},
-                            icon: const Icon(Icons.search),
+                      child: Row(
+                        children: [
+                          Expanded(
+                            child: Hero(
+                              tag: 'searchBar',
+                              child: SearchBar(
+                                hintText: 'Find Gigs...',
+                                leading: IconButton(
+                                  onPressed: () {},
+                                  icon: const Icon(Icons.search),
+                                ),
+                                onTap: () {},
+                              ),
+                            ),
                           ),
-                          onTap: () => context.push(
-                            SearchPage(),
-                          ),
-                        ),
+                          const NotificationIconButton(),
+                        ],
                       ),
                     ),
                   ),

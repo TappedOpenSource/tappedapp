@@ -33,7 +33,6 @@ dependencies:
   firebase_core: 2.24.2
   firebase_core_platform_interface: 5.0.0
   firebase_crashlytics: 3.4.9
-  firebase_dynamic_links: 5.4.8
   firebase_in_app_messaging: 0.7.4+8
   firebase_messaging: 14.7.10
   firebase_performance: 0.9.3+8

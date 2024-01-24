@@ -80,20 +80,6 @@ class VenueInfo extends Equatable {
       type: type ?? this.type,
     );
   }
-
-  // toMap
-  Map<String, dynamic> toMap() {
-    return {
-      'capacity': capacity.asNullable(),
-      'idealArtistProfile': idealArtistProfile.asNullable(),
-      'productionInfo': productionInfo.asNullable(),
-      'frontOfHouse': frontOfHouse.asNullable(),
-      'monitors': monitors.asNullable(),
-      'microphones': microphones.asNullable(),
-      'lights': lights.asNullable(),
-      'type': type,
-    };
-  }
 }
 
 @JsonEnum()

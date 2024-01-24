@@ -20,12 +20,14 @@ class SearchView extends StatefulWidget {
 }
 
 class _SearchViewState extends State<SearchView> {
-
   @override
   void initState() {
     super.initState();
     _searchController = TextEditingController();
-    _searchFocusNode.requestFocus();
+
+    if (!_searchFocusNode.hasFocus) {
+      _searchFocusNode.requestFocus();
+    }
   }
 
   @override
@@ -35,6 +37,7 @@ class _SearchViewState extends State<SearchView> {
   }
 
   late final TextEditingController _searchController;
+
   FocusNode get _searchFocusNode => widget.searchFocusNode;
 
   List<Widget> _buildActions() {
