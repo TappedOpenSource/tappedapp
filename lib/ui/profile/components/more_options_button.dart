@@ -1,11 +1,12 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:intheloopapp/data/deep_link_repository.dart';
 import 'package:intheloopapp/domains/models/user_model.dart';
 import 'package:intheloopapp/domains/navigation_bloc/navigation_bloc.dart';
 import 'package:intheloopapp/ui/profile/profile_cubit.dart';
 import 'package:intheloopapp/ui/themes.dart';
+import 'package:intheloopapp/utils/admin_builder.dart';
 import 'package:intheloopapp/utils/app_logger.dart';
 import 'package:intheloopapp/utils/bloc_utils.dart';
 import 'package:share_plus/share_plus.dart';
@@ -14,10 +15,11 @@ class MoreOptionsButton extends StatelessWidget {
   const MoreOptionsButton({super.key});
 
   void _showActionSheet(
-    BuildContext context,
-    UserModel user,
-    UserModel currentUser,
-  ) {
+    BuildContext context, {
+    required UserModel user,
+    required UserModel currentUser,
+    required bool isAdmin,
+  }) {
     final database = context.database;
     final nav = context.nav;
     final scaffoldMessenger = ScaffoldMessenger.of(context);
@@ -47,6 +49,24 @@ class MoreOptionsButton extends StatelessWidget {
             },
             child: const Text('share profile'),
           ),
+          if (isAdmin)
+            CupertinoActionSheetAction(
+              onPressed: () {
+                // Copy to clipboard
+                Clipboard.setData(
+                  ClipboardData(text: user.id),
+                ).then((value) {
+                  scaffoldMessenger.showSnackBar(
+                    const SnackBar(
+                      behavior: SnackBarBehavior.floating,
+                      backgroundColor: tappedAccent,
+                      content: Text('id copied to clipboard'),
+                    ),
+                  );
+                });
+              },
+              child: Text('userId ${user.id}'),
+            ),
           if (user.id != currentUser.id)
             CupertinoActionSheetAction(
               onPressed: () {
@@ -98,16 +118,21 @@ class MoreOptionsButton extends StatelessWidget {
     final theme = Theme.of(context);
     return BlocBuilder<ProfileCubit, ProfileState>(
       builder: (context, state) {
-        return IconButton(
-          onPressed: () => _showActionSheet(
-            context,
-            state.visitedUser,
-            state.currentUser,
-          ),
-          icon: Icon(
-            CupertinoIcons.ellipsis,
-            color: theme.colorScheme.onSurface,
-          ),
+        return AdminBuilder(
+          builder: (context, isAdmin) {
+            return IconButton(
+              onPressed: () => _showActionSheet(
+                context,
+                user: state.visitedUser,
+                currentUser: state.currentUser,
+                isAdmin: isAdmin,
+              ),
+              icon: Icon(
+                CupertinoIcons.ellipsis,
+                color: theme.colorScheme.onSurface,
+              ),
+            );
+          },
         );
       },
     );

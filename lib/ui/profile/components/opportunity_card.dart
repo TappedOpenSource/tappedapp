@@ -13,7 +13,6 @@ import 'package:intheloopapp/utils/geohash.dart';
 import 'package:intheloopapp/utils/hero_image.dart';
 import 'package:intheloopapp/utils/opportunity_image.dart';
 import 'package:intl/intl.dart';
-import 'package:skeletons/skeletons.dart';
 import 'package:uuid/uuid.dart';
 
 class OpportunityCard extends StatelessWidget {
@@ -28,7 +27,7 @@ class OpportunityCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final cardWidth = MediaQuery.of(context).size.width - 42;
+    final cardWidth = MediaQuery.of(context).size.width - 64;
     final database = context.database;
     final places = context.places;
     return CurrentUserBuilder(

@@ -12,6 +12,10 @@ class MessagingChannelListView extends StatelessWidget {
       extendBodyBehindAppBar: true,
       appBar: AppBar(
         title: const TappedSearchBar(),
+        elevation: 0,
+        backgroundColor: Colors.transparent,
+        shadowColor: Colors.transparent,
+        scrolledUnderElevation: 0,
       ),
       body: const ChannelListView(),
     );

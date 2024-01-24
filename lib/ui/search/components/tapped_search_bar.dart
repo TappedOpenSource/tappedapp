@@ -99,6 +99,7 @@ class _TappedSearchBarState extends State<TappedSearchBar> {
                 child: LogoWave(),
               );
             }
+
             return state.searchResults.isEmpty
                 ? const Center(child: Text('No users found'))
                 : ListView.builder(
