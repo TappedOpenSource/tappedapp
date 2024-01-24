@@ -276,8 +276,13 @@ class DiscoverView extends StatelessWidget {
             minChildSize: 0.1,
             snap: true,
             snapSizes: const [0.1, 0.2, 0.5, 0.9],
-            builder: (ctx, scrollController) => ColoredBox(
-              color: Theme.of(context).colorScheme.background,
+            builder: (ctx, scrollController) => DecoratedBox(
+              decoration: BoxDecoration(
+                borderRadius: const BorderRadius.vertical(
+                  top: Radius.circular(12),
+                ),
+                color: Theme.of(context).colorScheme.background,
+              ),
               child: Column(
                 children: [
                   DraggableHeader(
