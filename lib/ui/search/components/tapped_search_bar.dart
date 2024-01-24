@@ -1,31 +1,73 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:intheloopapp/domains/models/option.dart';
+import 'package:intheloopapp/domains/models/user_model.dart';
 import 'package:intheloopapp/domains/navigation_bloc/navigation_bloc.dart';
 import 'package:intheloopapp/domains/navigation_bloc/tapped_route.dart';
 import 'package:intheloopapp/domains/search_bloc/search_bloc.dart';
+import 'package:intheloopapp/ui/loading/logo_wave.dart';
+import 'package:intheloopapp/ui/user_tile.dart';
+import 'package:intheloopapp/utils/app_logger.dart';
 import 'package:intheloopapp/utils/bloc_utils.dart';
 
-class TappedSearchBar extends StatelessWidget {
+class TappedSearchBar extends StatefulWidget {
   const TappedSearchBar({
-    required this.searchFocusNode,
-    required this.searchController,
+    this.focusNode,
+    this.controller,
+    this.onChanged,
+    this.onTap,
     super.key,
   });
 
-  final FocusNode searchFocusNode;
-  final TextEditingController searchController;
+  final FocusNode? focusNode;
+  final SearchController? controller;
+  final void Function(String)? onChanged;
+  final void Function()? onTap;
+
+  @override
+  State<TappedSearchBar> createState() => _TappedSearchBarState();
+}
+
+class _TappedSearchBarState extends State<TappedSearchBar> {
+  late final FocusNode _searchFocusNode;
+  late final SearchController _searchController;
+  List<UserModel> _searchResults = [];
+  bool _loading = false;
+
+  void search() {
+    final query = _searchController.text;
+    context.search.add(Search(query: query));
+    widget.onChanged?.call(query);
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _searchController = widget.controller ?? SearchController();
+    _searchFocusNode = widget.focusNode ?? FocusNode();
+
+    _searchController.addListener(search);
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    _searchFocusNode.removeListener(search);
+    _searchController.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    return BlocBuilder<SearchBloc, SearchState>(
-      builder: (context, state) {
+    return SearchAnchor(
+      searchController: _searchController,
+      builder: (context, searchController) {
         return Hero(
           tag: 'searchBar',
           child: SearchBar(
             controller: searchController,
-            focusNode: searchFocusNode,
+            focusNode: _searchFocusNode,
             hintText: 'Search...',
             leading: IconButton(
               onPressed: () {},
@@ -42,9 +84,41 @@ class TappedSearchBar extends StatelessWidget {
                 color: theme.colorScheme.onSurface,
               ),
             ],
-            onChanged: (input) {
-              context.search.add(Search(query: input));
+            onTap: () {
+              searchController.openView();
+              widget.onTap?.call();
             },
+          ),
+        );
+      },
+      viewBuilder: (suggestions) {
+        return BlocBuilder<SearchBloc, SearchState>(
+          builder: (context, state) {
+            if (state.loading) {
+              return const Center(
+                child: LogoWave(),
+              );
+            }
+            return state.searchResults.isEmpty
+                ? const Center(child: Text('No users found'))
+                : ListView.builder(
+                    itemCount: state.searchResults.length,
+                    itemBuilder: (context, index) {
+                      final user = state.searchResults[index];
+                      return UserTile(
+                        userId: user.id,
+                        user: Some(user),
+                      );
+                    },
+                  );
+          },
+        );
+      },
+      suggestionsBuilder: (context, searchController) {
+        return _searchResults.map(
+          (user) => UserTile(
+            userId: user.id,
+            user: Some(user),
           ),
         );
       },

@@ -45,13 +45,13 @@ class BottomToolbar extends StatelessWidget {
             ),
             BottomNavigationBarItem(
               icon: GestureDetector(
-                onDoubleTap: () {
-                  context
-                    ..changeTab(selectedTab: 1)
-                    ..push(
-                      SearchPage(),
-                    );
-                },
+                // onDoubleTap: () {
+                //   context
+                //     ..changeTab(selectedTab: 1)
+                //     ..push(
+                //       SearchPage(),
+                //     );
+                // },
                 child: const Icon(CupertinoIcons.search),
               ),
             ),

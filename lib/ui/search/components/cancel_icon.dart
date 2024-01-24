@@ -8,11 +8,13 @@ class CancelIcon extends StatefulWidget {
   const CancelIcon({
     required this.focusNode,
     required this.searchController,
+    this.onTap,
     super.key,
   });
 
   final FocusNode focusNode;
   final TextEditingController searchController;
+  final void Function()? onTap;
 
   @override
   State<CancelIcon> createState() => _CancelIconState();
@@ -54,6 +56,7 @@ class _CancelIconState extends State<CancelIcon> {
             widget.focusNode.unfocus();
             widget.searchController.clear();
             context.search.add(ClearSearch());
+            widget.onTap?.call();
           },
         );
       },

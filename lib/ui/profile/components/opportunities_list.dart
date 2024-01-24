@@ -13,22 +13,24 @@ class OpportunitiesList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final sortedOpportunities = opportunities
+      ..sort((a, b) => a.startTime.compareTo(b.startTime));
     return Column(
       children: [
         SizedBox(
           height: 300,
           child: ScrollSnapList(
             onItemFocus: (index) {},
-            itemSize: MediaQuery.of(context).size.width - 40,
-            itemCount: opportunities.length,
+            itemSize: MediaQuery.of(context).size.width - (42 - 16 * 2),
+            itemCount: sortedOpportunities.length,
             itemBuilder: (context, index) {
 
-              final opportunity = opportunities[index];
+              final opportunity = sortedOpportunities[index];
               return Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 8),
+                padding: const EdgeInsets.symmetric(horizontal: 16),
                 child: OpportunityCard(
                   opportunity: opportunity,
-                  onOpportunityDeleted: () => opportunities.removeAt(index),
+                  onOpportunityDeleted: () => sortedOpportunities.removeAt(index),
                 ),
               );
             },

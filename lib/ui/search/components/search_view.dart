@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:intheloopapp/domains/navigation_bloc/navigation_bloc.dart';
 import 'package:intheloopapp/ui/search/components/by_username_results_list.dart';
 import 'package:intheloopapp/ui/search/components/cancel_icon.dart';
 import 'package:intheloopapp/ui/search/components/tapped_search_bar.dart';
@@ -45,6 +46,7 @@ class _SearchViewState extends State<SearchView> {
       CancelIcon(
         focusNode: _searchFocusNode,
         searchController: _searchController,
+        onTap: context.pop,
       ),
     ];
   }
@@ -58,10 +60,7 @@ class _SearchViewState extends State<SearchView> {
         centerTitle: true,
         elevation: 0.5,
         backgroundColor: Colors.transparent,
-        title: TappedSearchBar(
-          searchFocusNode: _searchFocusNode,
-          searchController: _searchController,
-        ),
+        title: const TappedSearchBar(),
         actions: _buildActions(),
       ),
       body: const ByUsernameResultsList(),

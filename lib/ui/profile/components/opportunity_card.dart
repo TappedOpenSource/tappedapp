@@ -28,7 +28,7 @@ class OpportunityCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final cardWidth = MediaQuery.of(context).size.width - 56;
+    final cardWidth = MediaQuery.of(context).size.width - 42;
     final database = context.database;
     final places = context.places;
     return CurrentUserBuilder(

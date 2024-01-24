@@ -219,7 +219,7 @@ class OpportunityView extends StatelessWidget {
                       }
 
                       final place = snapshot.data!;
-                      final formattedAddress = formattedFullAddress(
+                      final formattedAddress = getAddressComponent(
                         place.addressComponents,
                       );
                       return GestureDetector(

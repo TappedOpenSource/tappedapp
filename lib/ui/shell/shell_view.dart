@@ -56,7 +56,7 @@ class _ShellViewState extends State<ShellView> {
                       const OpportunityFeedView(),
                       DiscoverView(),
                       const BookingsView(),
-                      const MessagingChannelListView(),
+                      MessagingChannelListView(),
                       ProfileView(
                         visitedUserId: currentUser.id,
                         visitedUser: Some(currentUser),

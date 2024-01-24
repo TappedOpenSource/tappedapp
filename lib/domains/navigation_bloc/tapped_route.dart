@@ -284,7 +284,7 @@ final class MessagingChannelListPage extends TappedRoute {
   MessagingChannelListPage()
       : super(
           routeName: '/messaging_channel_list',
-          view: const MessagingChannelListView(),
+          view: MessagingChannelListView(),
         );
 }
 

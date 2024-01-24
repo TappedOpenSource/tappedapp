@@ -9,6 +9,7 @@ import 'package:intheloopapp/data/search_repository.dart';
 import 'package:intheloopapp/domains/models/genre.dart';
 import 'package:intheloopapp/domains/models/option.dart';
 import 'package:intheloopapp/domains/models/user_model.dart';
+import 'package:intheloopapp/utils/app_logger.dart';
 
 part 'search_event.dart';
 part 'search_state.dart';
