@@ -239,15 +239,24 @@ class DiscoverView extends StatelessWidget {
                       child: Row(
                         children: [
                           Expanded(
-                            child: Hero(
-                              tag: 'searchBar',
-                              child: SearchBar(
-                                hintText: 'Find Gigs...',
-                                leading: IconButton(
-                                  onPressed: () {},
-                                  icon: const Icon(Icons.search),
+                            child: InkWell(
+                              onTap: () => context.push(
+                                GigSearchPage(),
+                              ),
+                              child: Card(
+                                child: Row(
+                                  children: [
+                                    IconButton(
+                                      onPressed: () => context.push(
+                                        GigSearchPage(),
+                                      ),
+                                      icon: const Icon(Icons.search),
+                                    ),
+                                    const Expanded(
+                                      child: Text('Find Gigs...'),
+                                    ),
+                                  ],
                                 ),
-                                onTap: () {},
                               ),
                             ),
                           ),

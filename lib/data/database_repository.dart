@@ -9,6 +9,8 @@ import 'package:intheloopapp/domains/models/service.dart';
 import 'package:intheloopapp/domains/models/user_model.dart';
 
 abstract class DatabaseRepository {
+  Future<String> publishLatestAppVersion(String currentUserId);
+
   // User related stuff
   Future<bool> userEmailExists(String email);
   Future<void> createUser(UserModel user);

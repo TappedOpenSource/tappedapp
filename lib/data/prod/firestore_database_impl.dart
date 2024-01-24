@@ -19,6 +19,7 @@ import 'package:intheloopapp/utils/app_logger.dart';
 import 'package:intheloopapp/utils/default_value.dart';
 import 'package:intheloopapp/utils/geohash.dart';
 import 'package:json_annotation/json_annotation.dart';
+import 'package:package_info_plus/package_info_plus.dart';
 import 'package:rxdart/rxdart.dart';
 
 // final _storage = FirebaseStorage.instance.ref();
@@ -64,6 +65,25 @@ class FirestoreDatabaseImpl extends DatabaseRepository {
     final fileName = segments.join('/');
 
     return fileName;
+  }
+
+  @override
+  Future<String> publishLatestAppVersion(String currentUserId) async {
+    try {
+      final packageInfo = await PackageInfo.fromPlatform();
+      final version = packageInfo.version;
+      final buildNumber = packageInfo.buildNumber;
+      final latestAppVersion = '$version+$buildNumber';
+
+      await _usersRef.doc(currentUserId).update({
+        'latestAppVersion': latestAppVersion,
+      });
+
+      return latestAppVersion;
+    } catch (e, s) {
+      logger.error('publishLatestAppVersion', error: e, stackTrace: s);
+      rethrow;
+    }
   }
 
   // true if username available, false otherwise

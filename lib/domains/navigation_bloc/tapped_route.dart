@@ -18,6 +18,7 @@ import 'package:intheloopapp/ui/create_booking/booking_confirmation_view.dart';
 import 'package:intheloopapp/ui/create_booking/create_booking_view.dart';
 import 'package:intheloopapp/ui/create_service/create_service_view.dart';
 import 'package:intheloopapp/ui/forms/location_form/location_form_view.dart';
+import 'package:intheloopapp/ui/gig_search/gig_search_view.dart';
 import 'package:intheloopapp/ui/login/forgot_password_view.dart';
 import 'package:intheloopapp/ui/login/login_view.dart';
 import 'package:intheloopapp/ui/login/signup_view.dart';
@@ -305,8 +306,7 @@ final class ServicePage extends TappedRoute {
 }
 
 final class VideoCallPage extends TappedRoute {
-  VideoCallPage(
-      // {
+  VideoCallPage(// {
       // required this.call,
       // }
       )
@@ -318,7 +318,7 @@ final class VideoCallPage extends TappedRoute {
               ),
         );
 
-  // final Call call;
+// final Call call;
 }
 
 final class InterestedUsersPage extends TappedRoute {
@@ -406,4 +406,12 @@ final class SearchPage extends TappedRoute {
         );
 
   final FocusNode? searchFocusNode;
+}
+
+final class GigSearchPage extends TappedRoute {
+  GigSearchPage()
+      : super(
+          routeName: '/gig_search',
+          view: const GigSearchView(),
+        );
 }

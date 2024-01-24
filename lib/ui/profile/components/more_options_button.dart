@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:intheloopapp/domains/models/option.dart';
 import 'package:intheloopapp/domains/models/user_model.dart';
 import 'package:intheloopapp/domains/navigation_bloc/navigation_bloc.dart';
 import 'package:intheloopapp/ui/profile/profile_cubit.dart';
@@ -49,6 +50,25 @@ class MoreOptionsButton extends StatelessWidget {
             },
             child: const Text('share profile'),
           ),
+          if (isAdmin && user.id != currentUser.id)
+            CupertinoActionSheetAction(
+              onPressed: () {
+                // Copy to clipboard
+                Clipboard.setData(
+                  ClipboardData(text: user.latestAppVersion.unwrapOr('')),
+                ).then((value) {
+                  Navigator.pop(context);
+                  scaffoldMessenger.showSnackBar(
+                    const SnackBar(
+                      behavior: SnackBarBehavior.floating,
+                      backgroundColor: tappedAccent,
+                      content: Text('latest app version copied to clipboard'),
+                    ),
+                  );
+                });
+              },
+              child: Text('latest app version ${user.latestAppVersion}'),
+            ),
           if (isAdmin)
             CupertinoActionSheetAction(
               onPressed: () {
@@ -56,6 +76,7 @@ class MoreOptionsButton extends StatelessWidget {
                 Clipboard.setData(
                   ClipboardData(text: user.id),
                 ).then((value) {
+                  Navigator.pop(context);
                   scaffoldMessenger.showSnackBar(
                     const SnackBar(
                       behavior: SnackBarBehavior.floating,

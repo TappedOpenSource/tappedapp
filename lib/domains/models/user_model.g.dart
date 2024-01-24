@@ -47,6 +47,8 @@ UserModel _$UserModelFromJson(Map<String, dynamic> json) => UserModel(
           json['stripeConnectedAccountId'], (value) => value as String),
       stripeCustomerId: Option<String>.fromJson(
           json['stripeCustomerId'], (value) => value as String),
+      latestAppVersion: Option<String>.fromJson(
+          json['latestAppVersion'], (value) => value as String),
     );
 
 Map<String, dynamic> _$UserModelToJson(UserModel instance) => <String, dynamic>{
@@ -81,6 +83,9 @@ Map<String, dynamic> _$UserModelToJson(UserModel instance) => <String, dynamic>{
         (value) => value,
       ),
       'stripeCustomerId': instance.stripeCustomerId.toJson(
+        (value) => value,
+      ),
+      'latestAppVersion': instance.latestAppVersion.toJson(
         (value) => value,
       ),
     };

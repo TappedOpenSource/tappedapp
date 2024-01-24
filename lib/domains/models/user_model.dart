@@ -37,6 +37,7 @@ class UserModel extends Equatable {
     required this.deleted,
     required this.stripeConnectedAccountId,
     required this.stripeCustomerId,
+    required this.latestAppVersion,
   });
 
   factory UserModel.empty() => UserModel(
@@ -59,6 +60,7 @@ class UserModel extends Equatable {
         deleted: false,
         stripeConnectedAccountId: const None<String>(),
         stripeCustomerId: const None<String>(),
+        latestAppVersion: const None<String>(),
       );
 
   factory UserModel.fromJson(Map<String, dynamic> json) =>
@@ -127,6 +129,8 @@ class UserModel extends Equatable {
   final Option<String> stripeConnectedAccountId;
   final Option<String> stripeCustomerId;
 
+  final Option<String> latestAppVersion;
+
   Option<double> get overallRating {
     final performerRating = performerInfo.map((e) => e.rating).unwrapOr(const None());
     final bookerRating = bookerInfo.map((e) => e.rating).unwrapOr(const None());
@@ -167,6 +171,7 @@ class UserModel extends Equatable {
         pushNotifications,
         stripeConnectedAccountId,
         stripeCustomerId,
+        latestAppVersion,
       ];
 
   bool get isEmpty => this == UserModel.empty();
@@ -194,6 +199,7 @@ class UserModel extends Equatable {
     PushNotifications? pushNotifications,
     Option<String>? stripeCustomerId,
     Option<String>? stripeConnectedAccountId,
+    Option<String>? latestAppVersion,
   }) {
     return UserModel(
       id: id ?? this.id,
@@ -216,6 +222,7 @@ class UserModel extends Equatable {
       stripeConnectedAccountId:
           stripeConnectedAccountId ?? this.stripeConnectedAccountId,
       stripeCustomerId: stripeCustomerId ?? this.stripeCustomerId,
+      latestAppVersion: latestAppVersion ?? this.latestAppVersion,
     );
   }
 }
