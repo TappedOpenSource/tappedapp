@@ -18,16 +18,19 @@ class FeedbackButton extends StatelessWidget {
       builder: (context, currentUser) {
         return CupertinoButton(
           onPressed: () {
-            BetterFeedback.of(context).show((UserFeedback feedback) async {
+            BetterFeedback.of(context).show((UserFeedback feedback) {
               try {
                 logger
                     .debug('feedback: ${feedback.text} and ${feedback.extra}');
 
-                final imageUrl = await storage.uploadFeedbackScreenshot(
+                storage
+                    .uploadFeedbackScreenshot(
                   currentUser.id,
                   feedback.screenshot,
-                );
-                await database.sendFeedback(currentUser.id, feedback, imageUrl);
+                )
+                    .then((imageUrl) {
+                  database.sendFeedback(currentUser.id, feedback, imageUrl);
+                });
 
                 scaffoldMessenger.showSnackBar(
                   const SnackBar(

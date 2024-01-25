@@ -253,7 +253,7 @@ class DiscoverView extends StatelessWidget {
                                       icon: const Icon(Icons.search),
                                     ),
                                     const Expanded(
-                                      child: Text('show time...'),
+                                      child: Text('get booked...'),
                                     ),
                                   ],
                                 ),

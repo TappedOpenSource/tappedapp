@@ -270,7 +270,9 @@ class CreateOpportunityForm extends StatelessWidget {
                     context.pop();
                   });
                 },
-                child: const Text('full send'),
+                child: state.loading
+                    ? const CupertinoActivityIndicator()
+                    : const Text('full send'),
               ),
             ],
           ),

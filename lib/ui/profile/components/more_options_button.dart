@@ -30,26 +30,6 @@ class MoreOptionsButton extends StatelessWidget {
         title: Text(user.displayName),
         // message: Text(user.username.username),
         actions: <CupertinoActionSheetAction>[
-          CupertinoActionSheetAction(
-            onPressed: () {
-              Share.share('https://tapped.ai/${user.username}')
-                  .onError((error, stackTrace) {
-                logger.error(
-                  'Error sharing profile',
-                  error: error,
-                  stackTrace: stackTrace,
-                );
-                scaffoldMessenger.showSnackBar(
-                  const SnackBar(
-                    behavior: SnackBarBehavior.floating,
-                    backgroundColor: Colors.red,
-                    content: Text('Error sharing profile'),
-                  ),
-                );
-              });
-            },
-            child: const Text('share profile'),
-          ),
           if (isAdmin && user.id != currentUser.id)
             CupertinoActionSheetAction(
               onPressed: () {
@@ -67,7 +47,8 @@ class MoreOptionsButton extends StatelessWidget {
                   );
                 });
               },
-              child: Text('latest app version ${user.latestAppVersion}'),
+              child: Text(
+                  'latest app version ${user.latestAppVersion.unwrapOr('unknown')}'),
             ),
           if (isAdmin)
             CupertinoActionSheetAction(
@@ -88,6 +69,26 @@ class MoreOptionsButton extends StatelessWidget {
               },
               child: Text('userId ${user.id}'),
             ),
+          CupertinoActionSheetAction(
+            onPressed: () {
+              Share.share('https://tapped.ai/${user.username}')
+                  .onError((error, stackTrace) {
+                logger.error(
+                  'Error sharing profile',
+                  error: error,
+                  stackTrace: stackTrace,
+                );
+                scaffoldMessenger.showSnackBar(
+                  const SnackBar(
+                    behavior: SnackBarBehavior.floating,
+                    backgroundColor: Colors.red,
+                    content: Text('Error sharing profile'),
+                  ),
+                );
+              });
+            },
+            child: const Text('share profile'),
+          ),
           if (user.id != currentUser.id)
             CupertinoActionSheetAction(
               onPressed: () {
