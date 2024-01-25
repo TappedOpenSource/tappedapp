@@ -241,14 +241,14 @@ class DiscoverView extends StatelessWidget {
                           Expanded(
                             child: InkWell(
                               onTap: () => context.push(
-                                GigSearchPage(),
+                                GigSearchInitPage(),
                               ),
                               child: Card(
                                 child: Row(
                                   children: [
                                     IconButton(
                                       onPressed: () => context.push(
-                                        GigSearchPage(),
+                                        GigSearchInitPage(),
                                       ),
                                       icon: const Icon(Icons.search),
                                     ),
@@ -271,11 +271,11 @@ class DiscoverView extends StatelessWidget {
           ),
           bottomSheet: DraggableScrollableSheet(
             expand: false,
-            initialChildSize: 0.2,
+            initialChildSize: 0.1,
             maxChildSize: 0.9,
             minChildSize: 0.1,
             snap: true,
-            snapSizes: const [0.1, 0.2, 0.5, 0.9],
+            snapSizes: const [0.1, 0.5, 0.9],
             builder: (ctx, scrollController) => DecoratedBox(
               decoration: BoxDecoration(
                 borderRadius: const BorderRadius.vertical(

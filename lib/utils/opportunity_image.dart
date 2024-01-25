@@ -17,7 +17,7 @@ Future<ImageProvider> getImageForLocation(
   final photoReference = place?.photoMetadata;
   if (photoReference == null) {
     return const AssetImage(
-      'assets/default_avatar.png',
+      'assets/performance_placeholder.png',
     );
   }
 
@@ -34,7 +34,7 @@ Future<ImageProvider> getImageForLocation(
 
   if (image.isNone) {
     return const AssetImage(
-      'assets/default_avatar.png',
+      'assets/performance_placeholder.png',
     );
   }
 

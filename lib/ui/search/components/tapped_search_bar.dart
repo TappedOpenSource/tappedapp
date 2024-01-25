@@ -68,7 +68,7 @@ class _TappedSearchBarState extends State<TappedSearchBar> {
           child: SearchBar(
             controller: searchController,
             focusNode: _searchFocusNode,
-            hintText: 'Search...',
+            hintText: 'Search Performers...',
             leading: IconButton(
               onPressed: () {},
               icon: const Icon(Icons.search),

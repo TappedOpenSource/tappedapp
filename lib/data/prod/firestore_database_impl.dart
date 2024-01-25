@@ -493,7 +493,7 @@ class FirestoreDatabaseImpl extends DatabaseRepository {
   @override
   Future<List<Activity>> getActivities(
     String userId, {
-    int limit = 30,
+    int limit = 20,
     String? lastActivityId,
   }) async {
     if (lastActivityId != null) {
@@ -551,7 +551,7 @@ class FirestoreDatabaseImpl extends DatabaseRepository {
   @override
   Stream<Activity> activitiesObserver(
     String userId, {
-    int limit = 30,
+    int limit = 20,
   }) async* {
     final activitiesSnapshotObserver = _activitiesRef
         .orderBy('timestamp', descending: true)

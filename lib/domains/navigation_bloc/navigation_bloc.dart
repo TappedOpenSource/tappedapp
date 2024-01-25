@@ -55,6 +55,10 @@ extension RoutingHelpers on NavigationBloc {
   void pop() {
     add(const Pop());
   }
+
+  void popUntilHome() {
+    navigationKey.currentState?.popUntil((route) => route.isFirst);
+  }
 }
 
 extension Routing on BuildContext {
@@ -72,5 +76,9 @@ extension Routing on BuildContext {
 
   void pop() {
     read<NavigationBloc>().add(const Pop());
+  }
+
+  void popUntilHome() {
+    read<NavigationBloc>().popUntilHome();
   }
 }
