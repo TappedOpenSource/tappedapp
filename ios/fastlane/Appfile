@@ -1,0 +1,9 @@
+app_identifier("com.intheloopstudio") # The bundle identifier of your app
+apple_id("jonaylor89@protonmail.com") # Your Apple Developer Portal username
+app_store_connect_api_key_path("/Users/johannes/Repos/keys/fastlane.p8") # Path to your App Store Connect API Key JSON file
+
+itc_team_id("123000637") # App Store Connect Team ID
+team_id("9HNXYM86C6") # Developer Portal Team ID
+
+# For more information about the Appfile, see:
+#     https://docs.fastlane.tools/advanced/#appfile

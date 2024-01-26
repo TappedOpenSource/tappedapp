@@ -1,0 +1,13 @@
+Our app revolutionizes the music scene by simplifying the booking process, empowering musicians to find the perfect venues, and helping venues discover diverse talent.
+
+**For Musicians:** Explore a world of opportunities as you browse through a curated list of venues eager to host your unique sound. Create a compelling profile, showcase your music, and effortlessly apply to gigs that match your style. With Tapped, your next big break is just a tap away. 
+
+**For Venues:** Discover a vibrant community of talented musicians ready to elevate your venue's atmosphere. Tapped streamlines the booking process, allowing you to easily review artist profiles, listen to their music, and make informed decisions. Say goodbye to the hassle of finding the perfect act – it's now at your fingertips.
+
+ Key Features: 
+- **Smart Matching:** Our intelligent algorithm connects musicians with venues based on compatibility.
+ - **Effortless Booking:** Simplify the entire booking process from application to confirmation. 
+- **Profile Power:** Create compelling profiles with music samples, ensuring the spotlight is on your talent.
+ - **Community Hub:** Join a thriving community of musicians and venues, fostering collaboration and growth.
+ Whether you're a musician seeking the next stage or a venue searching for the perfect act, Tapped is your dedicated platform for making musical connections. 
+Join us in reshaping the future of independent music – because every great performance begins with a tap.
