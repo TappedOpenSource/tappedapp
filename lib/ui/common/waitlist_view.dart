@@ -123,7 +123,7 @@ class _WaitlistViewState extends State<WaitlistView> {
                                 // apply for the waitlist
                                 await database
                                     .joinPremiumWaitlist(currentUser.id);
-                                nav.pop();
+                                nav.popUntilHome();
                                 setState(() {
                                   _loading = false;
                                 });

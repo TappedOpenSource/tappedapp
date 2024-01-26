@@ -335,13 +335,7 @@ final class InterestedUsersPage extends TappedRoute {
   final Opportunity opportunity;
 }
 
-final class WaitlistPage extends TappedRoute {
-  WaitlistPage()
-      : super(
-          routeName: '/waitlist',
-          view: const WaitlistView(),
-        );
-}
+
 
 final class OpportunityPage extends TappedRoute {
   OpportunityPage({

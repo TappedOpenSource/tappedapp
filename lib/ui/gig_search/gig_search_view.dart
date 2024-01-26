@@ -4,6 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:group_radio_button/group_radio_button.dart';
 import 'package:intheloopapp/domains/models/option.dart';
 import 'package:intheloopapp/ui/common/tapped_app_bar.dart';
+import 'package:intheloopapp/ui/gig_search/components/city_selection.dart';
 import 'package:intheloopapp/ui/gig_search/gig_search_cubit.dart';
 import 'package:intheloopapp/ui/settings/components/genre_selection.dart';
 import 'package:intheloopapp/ui/user_tile.dart';
@@ -41,7 +42,11 @@ class GigSearchView extends StatelessWidget {
                         fontSize: 20,
                       ),
                     ),
-                    Text('richmond, dc, nyc, etc'),
+                    CitySelection(
+                      onConfirm: (_) {},
+                      initialValue: [],
+                    ),
+                    const SizedBox(height: 20),
                     const Text(
                       'genres',
                       style: TextStyle(
@@ -55,6 +60,7 @@ class GigSearchView extends StatelessWidget {
                           .unwrapOr([]),
                       onConfirm: (_) {},
                     ),
+                    const SizedBox(height: 20),
                     const Text(
                       'when',
                       style: TextStyle(
@@ -78,6 +84,7 @@ class GigSearchView extends StatelessWidget {
                         ),
                       ],
                     ),
+                    const SizedBox(height: 20),
                     const Text(
                       'who',
                       style: TextStyle(

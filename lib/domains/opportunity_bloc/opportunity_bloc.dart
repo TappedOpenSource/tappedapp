@@ -62,7 +62,7 @@ class OpportunityBloc extends Bloc<OpportunityEvent, OpportunityState> {
             'opportunity_id': op.id,
           },
         );
-        nav.push(WaitlistPage());
+        nav.push(PaywallPage());
         return;
       }
 

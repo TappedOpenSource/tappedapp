@@ -50,7 +50,7 @@ dependencies:
   flutter_native_splash: ^2.3.9
   flutter_slidable: 3.0.1
   flutter_spinkit: 5.2.0
-  flutter_stripe: ^10.0.0
+  flutter_stripe: 10.0.0
   flutter_svg: 2.0.9
   font_awesome_flutter: 10.6.0
   formz: 0.6.1
