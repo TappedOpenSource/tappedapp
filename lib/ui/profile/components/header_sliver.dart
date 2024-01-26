@@ -39,7 +39,7 @@ class HeaderSliver extends StatelessWidget {
                 ],
               ),
               const SizedBox(height: 12),
-              if (!isCurrentUser)
+              if (!isCurrentUser && !state.visitedUser.unclaimed)
                 const Row(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
@@ -47,8 +47,8 @@ class HeaderSliver extends StatelessWidget {
                       child: MessageButton(),
                     ),
                   ],
-                )
-              else
+                ),
+              if (isCurrentUser)
                 const Row(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [

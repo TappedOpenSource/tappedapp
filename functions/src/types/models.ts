@@ -97,6 +97,7 @@ export type PushNotifications = {
 export type UserModel = {
     id: string;
     email: string;
+    unclaimed: boolean;
     timestamp: Timestamp;
     username: string;
     artistName: string;

@@ -131,7 +131,7 @@ class PaywallView extends StatelessWidget {
                               context.popUntilHome();
                             },
                             child: const Text(
-                              'Restore',
+                              'Cancel',
                               style: TextStyle(
                                 color: Colors.grey,
                               ),

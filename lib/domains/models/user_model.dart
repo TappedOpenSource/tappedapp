@@ -20,6 +20,7 @@ class UserModel extends Equatable {
   const UserModel({
     required this.id,
     required this.email,
+    required this.unclaimed,
     required this.timestamp,
     required this.username,
     required this.artistName,
@@ -43,6 +44,7 @@ class UserModel extends Equatable {
   factory UserModel.empty() => UserModel(
         id: const Uuid().v4(),
         email: '',
+        unclaimed: false,
         timestamp: DateTime.now(),
         username: Username.fromString('anonymous'),
         artistName: '',
@@ -81,6 +83,9 @@ class UserModel extends Equatable {
 
   @JsonKey(defaultValue: '')
   final String email;
+
+  @JsonKey(defaultValue: false)
+  final bool unclaimed;
 
   @JsonKey(
     defaultValue: DateTime.now,
@@ -154,6 +159,7 @@ class UserModel extends Equatable {
   List<Object?> get props => [
         id,
         email,
+        unclaimed,
         timestamp,
         username,
         artistName,
@@ -182,6 +188,7 @@ class UserModel extends Equatable {
   UserModel copyWith({
     String? id,
     String? email,
+    bool? unclaimed,
     DateTime? timestamp,
     Username? username,
     String? artistName,
@@ -204,6 +211,7 @@ class UserModel extends Equatable {
     return UserModel(
       id: id ?? this.id,
       email: email ?? this.email,
+      unclaimed: unclaimed ?? this.unclaimed,
       timestamp: timestamp ?? this.timestamp,
       username: username ?? this.username,
       artistName: artistName ?? this.artistName,
