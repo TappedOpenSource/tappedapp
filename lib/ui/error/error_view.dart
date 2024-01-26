@@ -36,7 +36,7 @@ class ErrorView extends StatelessWidget {
             ),
             const Text("if that doesn't work"),
             const Text('send an email to support@tapped.ai'),
-            const Text('or DM us on instagram @tapped.app'),
+            const Text('or DM us on instagram @tappedai'),
           ],
         ),
       ),

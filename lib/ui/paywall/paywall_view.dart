@@ -35,10 +35,6 @@ class PaywallView extends StatelessWidget {
       body: FutureBuilder(
         future: Purchases.getOfferings(),
         builder: (context, snapshot) {
-          if (!Platform.isAndroid) {
-            return const WaitlistView();
-          }
-
           if (snapshot.hasError) {
             logger.error(snapshot.error.toString());
             return const ErrorView();

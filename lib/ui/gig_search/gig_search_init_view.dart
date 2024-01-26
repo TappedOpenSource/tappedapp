@@ -17,68 +17,69 @@ class GigSearchInitView extends StatelessWidget {
           backgroundColor: theme.colorScheme.background,
           appBar: AppBar(),
           body: SafeArea(
-              child: Padding(
-            padding: const EdgeInsets.symmetric(
-              horizontal: 20,
-              vertical: 12,
-            ),
-            child: Column(
-              children: [
-                const Spacer(),
-                const Text(
-                  'explanation of what this is',
-                  textAlign: TextAlign.center,
-                  style: TextStyle(
-                    fontWeight: FontWeight.w700,
-                    fontSize: 20,
+            child: Padding(
+              padding: const EdgeInsets.symmetric(
+                horizontal: 20,
+                vertical: 12,
+              ),
+              child: Column(
+                children: [
+                  const Spacer(),
+                  const Text(
+                    'explanation of what this is',
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                      fontWeight: FontWeight.w700,
+                      fontSize: 20,
+                    ),
                   ),
-                ),
-                const Text(
-                  'this is experimental',
-                  textAlign: TextAlign.center,
-                  style: TextStyle(
-                    color: Colors.grey,
+                  const Text(
+                    'this is experimental',
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                      color: Colors.grey,
+                    ),
                   ),
-                ),
-                const Spacer(),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Expanded(
-                      child: CupertinoButton.filled(
-                        onPressed: switch (claim) {
-                          None() => () => context.push(
-                                PaywallPage(),
+                  const Spacer(),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Expanded(
+                        child: CupertinoButton.filled(
+                          onPressed: switch (claim) {
+                            None() => () => context.push(
+                                  PaywallPage(),
+                                ),
+                            Some(:final value) => () => context.push(
+                                  GigSearchPage(),
+                                ),
+                          },
+                          borderRadius: BorderRadius.circular(15),
+                          child: const Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Text(
+                                "let's do it",
+                                style: TextStyle(
+                                  fontWeight: FontWeight.w700,
+                                  color: Colors.white,
+                                ),
                               ),
-                          Some(:final value) => () => context.push(
-                                GigSearchPage(),
-                              ),
-                        },
-                        borderRadius: BorderRadius.circular(15),
-                        child: const Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Text(
-                              "let's do it",
-                              style: TextStyle(
-                                fontWeight: FontWeight.w700,
+                              SizedBox(width: 8),
+                              Icon(
+                                CupertinoIcons.arrow_right,
                                 color: Colors.white,
                               ),
-                            ),
-                            SizedBox(width: 8),
-                            Icon(
-                              CupertinoIcons.arrow_right,
-                              color: Colors.white,
-                            ),
-                          ],
+                            ],
+                          ),
                         ),
                       ),
-                    ),
-                  ],
-                ),
-              ],
+                    ],
+                  ),
+                ],
+              ),
             ),
-          )),
+          ),
         );
       },
     );

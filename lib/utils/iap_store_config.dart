@@ -23,7 +23,6 @@ class IapStoreConfig {
   }
 
   static bool isForAppleStore() => instance.store == Store.appStore;
-
   static bool isForGooglePlay() => instance.store == Store.playStore;
 }
 
