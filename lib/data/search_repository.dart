@@ -11,4 +11,13 @@ abstract class SearchRepository {
     double? lng,
     int radius = 50000,
   });
+  // Future<List<UserModel>> queryVenues(
+  //   String input, {
+  //   List<String>? labels,
+  //   List<String>? genres,
+  //   List<String>? occupations,
+  //   double? lat,
+  //   double? lng,
+  //   int radius = 50000,
+  // });
 }
