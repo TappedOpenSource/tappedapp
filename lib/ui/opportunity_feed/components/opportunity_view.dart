@@ -172,13 +172,16 @@ class OpportunityView extends StatelessWidget {
                           false => CupertinoButton(
                               onPressed: () {
                                 HapticFeedback.mediumImpact();
+                                final quota = opBloc.state.opQuota;
                                 opBloc.add(
                                   ApplyForOpportunity(
                                     opportunity: op,
                                     userComment: '',
                                   ),
                                 );
-                                onApply?.call();
+                                if (quota > 0) {
+                                  onApply?.call();
+                                }
                               },
                               color:
                                   theme.colorScheme.onSurface.withOpacity(0.1),

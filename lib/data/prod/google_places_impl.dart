@@ -75,6 +75,7 @@ class GooglePlacesImpl implements PlacesRepository {
   }
 
   @override
+  @cached
   Future<List<AutocompletePrediction>> searchPlace(String query) async {
     try {
       final predictions = await _places.findAutocompletePredictions(query);
