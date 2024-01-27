@@ -10,6 +10,7 @@ import 'package:intheloopapp/domains/navigation_bloc/tapped_route.dart';
 import 'package:intheloopapp/domains/onboarding_bloc/onboarding_bloc.dart';
 import 'package:intheloopapp/ui/conditional_parent_widget.dart';
 import 'package:intheloopapp/utils/admin_builder.dart';
+import 'package:intheloopapp/utils/app_logger.dart';
 import 'package:intheloopapp/utils/bloc_utils.dart';
 import 'package:intheloopapp/utils/current_user_builder.dart';
 import 'package:intheloopapp/utils/geohash.dart';
@@ -34,23 +35,24 @@ class OpportunityCard extends StatefulWidget {
 
 class _OpportunityCardState extends State<OpportunityCard> {
   bool _isApplied = false;
-
   Opportunity get _opportunity => widget.opportunity;
 
   @override
-  Future<void> initState() async {
+  void initState() {
     super.initState();
     final state = context.onboarding.state;
     final currentUser =
         state is Onboarded ? Some(state.currentUser) : const None<UserModel>();
     if (currentUser is Some) {
-      final isApplied = await context.database.isUserAppliedForOpportunity(
+      logger.info('ahhhhhhhhhhhhhhhh');
+      context.database.isUserAppliedForOpportunity(
         opportunityId: _opportunity.id,
         userId: currentUser.unwrap.id,
-      );
-
-      setState(() {
-        _isApplied = isApplied;
+      ).then((isApplied) {
+        logger.info('megaaaaaaaaaaa ahhhhhhh');
+        setState(() {
+          _isApplied = isApplied;
+        });
       });
     }
   }
@@ -137,11 +139,7 @@ class _OpportunityCardState extends State<OpportunityCard> {
                       conditionalBuilder: ({
                         required Widget child,
                       }) =>
-                          CardBanner(
-                        text: 'Applied',
-                        color: Colors.green.withOpacity(0.5),
-                        child: child,
-                      ),
+                          child,
                       child: Container(
                         width: cardWidth,
                         height: 230,
@@ -160,89 +158,99 @@ class _OpportunityCardState extends State<OpportunityCard> {
                       'op-image-${widget.opportunity.id}-$uuid';
                   final heroTitleTag =
                       'op-title-${widget.opportunity.id}-$uuid';
-                  return SizedBox(
-                    width: cardWidth,
-                    height: 300,
-                    child: InkWell(
-                      onTap: () => context.push(
-                        OpportunityPage(
-                          opportunityId: widget.opportunity.id,
-                          opportunity: Some(widget.opportunity),
-                          heroImage: HeroImage(
-                            imageProvider: provider,
-                            heroTag: heroImageTag,
+                  return ConditionalParentWidget(
+                    condition: _isApplied,
+                    conditionalBuilder: ({
+                      required Widget child,
+                    }) => CardBanner(
+                      text: 'Applied',
+                      color: Colors.green.withOpacity(0.8),
+                      child: child,
+                    ),
+                    child: SizedBox(
+                      width: cardWidth,
+                      height: 300,
+                      child: InkWell(
+                        onTap: () => context.push(
+                          OpportunityPage(
+                            opportunityId: widget.opportunity.id,
+                            opportunity: Some(widget.opportunity),
+                            heroImage: HeroImage(
+                              imageProvider: provider,
+                              heroTag: heroImageTag,
+                            ),
+                            titleHeroTag: heroTitleTag,
+                            onApply: () {
+                              setState(() {
+                                _isApplied = true;
+                              });
+                              context.pop();
+                            },
+                            onDislike: () {
+                              setState(() {
+                                _isApplied = false;
+                              });
+                              context.pop();
+                            },
+                            onDismiss: () => context.pop(),
                           ),
-                          titleHeroTag: heroTitleTag,
-                          onApply: () {
-                            setState(() {
-                              _isApplied = true;
-                            });
-                            context.pop();
-                          },
-                          onDislike: () {
-                            setState(() {
-                              _isApplied = false;
-                            });
-                            context.pop();
-                          },
-                          onDismiss: () => context.pop(),
                         ),
-                      ),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Hero(
-                            tag: heroImageTag,
-                            child: Container(
-                              width: cardWidth,
-                              height: 200,
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(12),
-                                image: DecorationImage(
-                                  image: provider,
-                                  fit: BoxFit.cover,
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Hero(
+                              tag: heroImageTag,
+                              child: Container(
+                                width: cardWidth,
+                                height: 200,
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(12),
+                                  image: DecorationImage(
+                                    image: provider,
+                                    fit: BoxFit.cover,
+                                  ),
                                 ),
                               ),
                             ),
-                          ),
-                          Hero(
-                            tag: heroTitleTag,
-                            child: Text(
-                              widget.opportunity.title,
-                              style: const TextStyle(
-                                overflow: TextOverflow.ellipsis,
-                                fontSize: 16,
-                                fontWeight: FontWeight.w900,
+                            Hero(
+                              tag: heroTitleTag,
+                              child: Text(
+                                widget.opportunity.title,
+                                style: const TextStyle(
+                                  overflow: TextOverflow.ellipsis,
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.w900,
+                                ),
                               ),
                             ),
-                          ),
-                          FutureBuilder(
-                            future: places.getPlaceById(
-                                widget.opportunity.location.placeId),
-                            builder: (context, snapshot) {
-                              final place = snapshot.data;
-                              return switch (place) {
-                                null => const SizedBox.shrink(),
-                                _ => Text(
-                                    getAddressComponent(
-                                      place.addressComponents,
+                            FutureBuilder(
+                              future: places.getPlaceById(
+                                  widget.opportunity.location.placeId,),
+                              builder: (context, snapshot) {
+                                final place = snapshot.data;
+                                return switch (place) {
+                                  null => const SizedBox.shrink(),
+                                  _ => Text(
+                                      getAddressComponent(
+                                        place.addressComponents,
+                                      ),
+                                      style: const TextStyle(
+                                        overflow: TextOverflow.ellipsis,
+                                        fontSize: 14,
+                                      ),
                                     ),
-                                    style: const TextStyle(
-                                      overflow: TextOverflow.ellipsis,
-                                      fontSize: 14,
-                                    ),
-                                  ),
-                              };
-                            },
-                          ),
-                          Text(
-                            DateFormat(
-                              'MM/dd/yyyy',
-                            ).format(
-                              widget.opportunity.startTime,
+                                };
+                              },
                             ),
-                          ),
-                        ],
+                            Text(
+                              DateFormat(
+                                'MM/dd/yyyy',
+                              ).format(
+                                widget.opportunity.startTime,
+                              ),
+                            ),
+                          ],
+                        ),
                       ),
                     ),
                   );
