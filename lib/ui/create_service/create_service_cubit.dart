@@ -2,7 +2,7 @@ import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:formz/formz.dart';
 import 'package:intheloopapp/data/database_repository.dart';
-import 'package:intheloopapp/domains/models/option.dart';
+import 'package:fpdart/fpdart.dart';
 import 'package:intheloopapp/domains/models/service.dart';
 import 'package:intheloopapp/domains/navigation_bloc/navigation_bloc.dart';
 import 'package:intheloopapp/ui/create_service/components/service_description.dart';

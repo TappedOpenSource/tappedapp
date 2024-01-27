@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:intheloopapp/domains/models/option.dart';
+import 'package:fpdart/fpdart.dart';
 import 'package:intheloopapp/domains/models/review.dart';
 import 'package:intheloopapp/domains/models/user_model.dart';
 import 'package:intheloopapp/ui/user_tile.dart';
@@ -33,7 +33,7 @@ class ReviewTile extends StatelessWidget {
                   children: [
                     UserTile(
                       userId: value.id,
-                      user: Some(value),
+                      user: Option.of(value),
                     ),
                     Padding(
                       padding: const EdgeInsets.only(

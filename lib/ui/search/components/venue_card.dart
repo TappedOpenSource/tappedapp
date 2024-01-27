@@ -1,6 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:intheloopapp/domains/models/option.dart';
+import 'package:fpdart/fpdart.dart';
 import 'package:intheloopapp/domains/models/user_model.dart';
 import 'package:intheloopapp/domains/models/venue_info.dart';
 import 'package:intheloopapp/domains/navigation_bloc/navigation_bloc.dart';
@@ -24,10 +24,10 @@ class VenueCard extends StatelessWidget {
     if (venue.deleted) return const SizedBox.shrink();
 
     final database = context.database;
-    final imageUrl = venue.profilePicture.asNullable();
+    final imageUrl = venue.profilePicture.toNullable();
 
     final venueType =
-        venue.venueInfo.map((e) => e.type).unwrapOr(VenueType.other);
+        venue.venueInfo.map((e) => e.type).getOrElse(() => VenueType.other);
     return FutureBuilder(
       future: database.isVerified(venue.id),
       builder: (context, snapshot) {
@@ -50,7 +50,7 @@ class VenueCard extends StatelessWidget {
                 onTap: () => context.push(
                   ProfilePage(
                     userId: venue.id,
-                    user: Some(venue),
+                    user: Option.of(venue),
                     heroImage: HeroImage(
                       imageProvider: provider,
                       heroTag: heroImageTag,

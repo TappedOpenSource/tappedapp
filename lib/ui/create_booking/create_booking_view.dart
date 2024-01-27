@@ -4,7 +4,7 @@ import 'package:intheloopapp/data/database_repository.dart';
 import 'package:intheloopapp/data/payment_repository.dart';
 import 'package:intheloopapp/data/remote_config_repository.dart';
 import 'package:intheloopapp/data/stream_repository.dart';
-import 'package:intheloopapp/domains/models/option.dart';
+import 'package:fpdart/fpdart.dart';
 import 'package:intheloopapp/domains/models/service.dart';
 import 'package:intheloopapp/domains/models/user_model.dart';
 import 'package:intheloopapp/ui/create_booking/components/create_booking_form.dart';
@@ -87,7 +87,7 @@ class CreateBookingView extends StatelessWidget {
                             None() => SkeletonListTile(),
                             Some(:final value) => UserTile(
                                 userId: value.id,
-                                user: Some(value),
+                                user:Option.of(value),
                               ),
                           };
                         },

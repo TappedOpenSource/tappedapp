@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:intheloopapp/data/places_repository.dart';
 import 'package:intheloopapp/domains/models/opportunity.dart';
-import 'package:intheloopapp/domains/models/option.dart';
+import 'package:fpdart/fpdart.dart';
 import 'package:intheloopapp/domains/navigation_bloc/navigation_bloc.dart';
 import 'package:intheloopapp/domains/navigation_bloc/tapped_route.dart';
 import 'package:intheloopapp/domains/opportunity_bloc/opportunity_bloc.dart';

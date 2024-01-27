@@ -8,7 +8,7 @@ import 'package:intheloopapp/data/places_repository.dart';
 import 'package:intheloopapp/data/storage_repository.dart';
 import 'package:intheloopapp/domains/models/location.dart';
 import 'package:intheloopapp/domains/models/opportunity.dart';
-import 'package:intheloopapp/domains/models/option.dart';
+import 'package:fpdart/fpdart.dart';
 import 'package:intheloopapp/ui/create_booking/components/end_time.dart';
 import 'package:intheloopapp/ui/create_booking/components/start_time.dart';
 import 'package:intheloopapp/utils/app_logger.dart';
@@ -35,7 +35,7 @@ class CreateOpportunityCubit extends Cubit<CreateOpportunityState> {
       if (imageFile != null) {
         emit(
           state.copyWith(
-            pickedPhoto: Some(File(imageFile.path)),
+            pickedPhoto:Option.of(File(imageFile.path)),
           ),
         );
       }
@@ -154,7 +154,7 @@ class CreateOpportunityCubit extends Cubit<CreateOpportunityState> {
         flierUrl: Option.fromNullable(flierUrl),
         location: location,
         timestamp: DateTime.now(),
-        touched: const None<OpportunityInteraction>(),
+        touched: const None(),
         title: state.title,
         description: state.description,
         isPaid: state.isPaid,

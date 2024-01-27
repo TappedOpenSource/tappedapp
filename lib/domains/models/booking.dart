@@ -1,7 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:enum_to_string/enum_to_string.dart';
 import 'package:equatable/equatable.dart';
-import 'package:intheloopapp/domains/models/option.dart';
+import 'package:fpdart/fpdart.dart';
 import 'package:intheloopapp/utils/default_value.dart';
 import 'package:uuid/uuid.dart';
 
@@ -105,17 +105,17 @@ class Booking extends Equatable {
   Map<String, dynamic> toMap() {
     return {
       'id': id,
-      'serviceId': serviceId.asNullable(),
+      'serviceId': serviceId.toNullable(),
       'name': name,
       'note': note,
       'requesterId': requesterId,
       'requesteeId': requesteeId,
       'rate': rate,
       'status': EnumToString.convertToString(status),
-      'placeId': placeId.asNullable(),
-      'geohash': geohash.asNullable(),
-      'lat': lat.asNullable(),
-      'lng': lng.asNullable(),
+      'placeId': placeId.toNullable(),
+      'geohash': geohash.toNullable(),
+      'lat': lat.toNullable(),
+      'lng': lng.toNullable(),
       'timestamp': Timestamp.fromDate(timestamp),
       'startTime': Timestamp.fromDate(startTime),
       'endTime': Timestamp.fromDate(endTime),

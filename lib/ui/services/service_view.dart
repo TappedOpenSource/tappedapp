@@ -1,6 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:intheloopapp/domains/models/option.dart';
+import 'package:fpdart/fpdart.dart';
 import 'package:intheloopapp/domains/models/service.dart';
 import 'package:intheloopapp/domains/models/user_model.dart';
 import 'package:intheloopapp/domains/navigation_bloc/navigation_bloc.dart';
@@ -33,7 +33,7 @@ class ServiceView extends StatelessWidget {
             ..push(
               CreateServicePage(
                 onSubmit: (Service service) {},
-                service: Some(service),
+                service: Option.of(service),
               ),
             );
         },
@@ -144,7 +144,7 @@ class ServiceView extends StatelessWidget {
                                 width: double.infinity,
                                 child: RequestToBookButton(
                                   userId: service.userId,
-                                  service: Some(service),
+                                  service: Option.of(service),
                                   stripeConnectedAccountId:
                                       value.stripeConnectedAccountId,
                                 ),

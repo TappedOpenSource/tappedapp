@@ -1,7 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:intheloopapp/data/database_repository.dart';
-import 'package:intheloopapp/domains/models/option.dart';
+import 'package:fpdart/fpdart.dart' hide State;
 import 'package:intheloopapp/domains/models/user_model.dart';
 import 'package:intheloopapp/domains/navigation_bloc/navigation_bloc.dart';
 import 'package:intheloopapp/domains/navigation_bloc/tapped_route.dart';
@@ -87,8 +87,8 @@ class _UserTileState extends State<UserTile> {
             return ListTile(
               leading: UserAvatar(
                 radius: 25,
-                pushUser: Some(user),
-                imageUrl: user.profilePicture.asNullable(),
+                pushUser: Option.of(user),
+                imageUrl: user.profilePicture.toNullable(),
                 verified: verified,
               ),
               title: RichText(
@@ -110,7 +110,7 @@ class _UserTileState extends State<UserTile> {
               onTap: () => context.push(
                 ProfilePage(
                   userId: user.id,
-                  user: Some(
+                  user: Option.of(
                     user,
                   ),
                 ),

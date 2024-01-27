@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:intheloopapp/domains/models/option.dart';
+import 'package:fpdart/fpdart.dart';
 import 'package:intheloopapp/domains/navigation_bloc/navigation_bloc.dart';
 import 'package:intheloopapp/domains/navigation_bloc/tapped_route.dart';
 import 'package:intheloopapp/ui/profile/profile_cubit.dart';
@@ -13,8 +13,8 @@ class ReviewCount extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocBuilder<ProfileCubit, ProfileState>(
       builder: (context, state) {
-        final performerReviews = state.visitedUser.performerInfo.asNullable()?.reviewCount ?? 0;
-        final bookerReviews = state.visitedUser.bookerInfo.asNullable()?.reviewCount ?? 0;
+        final performerReviews = state.visitedUser.performerInfo.toNullable()?.reviewCount ?? 0;
+        final bookerReviews = state.visitedUser.bookerInfo.toNullable()?.reviewCount ?? 0;
         final allReviewCount = performerReviews + bookerReviews;
         return GestureDetector(
           onTap: () {

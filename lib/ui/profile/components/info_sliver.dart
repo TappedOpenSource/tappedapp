@@ -1,7 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:intheloopapp/domains/models/option.dart';
+import 'package:fpdart/fpdart.dart';
 import 'package:intheloopapp/ui/profile/components/badges_chip.dart';
 import 'package:intheloopapp/ui/profile/components/epk_button.dart';
 import 'package:intheloopapp/ui/profile/components/location_chip.dart';
@@ -23,7 +23,7 @@ class InfoSliver extends StatelessWidget {
     return BlocBuilder<ProfileCubit, ProfileState>(
       builder: (context, state) {
         final occupations = state.visitedUser.occupations;
-        final performerInfo = state.visitedUser.performerInfo.asNullable();
+        final performerInfo = state.visitedUser.performerInfo.toNullable();
         final genres = performerInfo?.genres ?? [];
         final label = performerInfo?.label ?? 'None';
         final pressKitUrl = performerInfo?.pressKitUrl ?? const None();

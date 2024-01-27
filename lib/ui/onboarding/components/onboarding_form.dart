@@ -57,8 +57,8 @@ class OnboardingForm extends StatelessWidget {
                   ),
                   const SizedBox(height: 20),
                   // LocationTextField(
-                  //   initialPlaceId: state.placeId.asNullable(),
-                  //   initialPlace: state.place.asNullable(),
+                  //   initialPlaceId: state.placeId.toNullable(),
+                  //   initialPlace: state.place.toNullable(),
                   //   onChanged: (place, placeId) => context
                   //       .read<OnboardingFlowCubit>()
                   //       .locationChange(place, placeId),

@@ -3,7 +3,7 @@ import 'package:card_banner/card_banner.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:intheloopapp/domains/models/opportunity.dart';
-import 'package:intheloopapp/domains/models/option.dart';
+import 'package:fpdart/fpdart.dart' hide State;
 import 'package:intheloopapp/domains/models/user_model.dart';
 import 'package:intheloopapp/domains/navigation_bloc/navigation_bloc.dart';
 import 'package:intheloopapp/domains/navigation_bloc/tapped_route.dart';
@@ -35,6 +35,7 @@ class OpportunityCard extends StatefulWidget {
 
 class _OpportunityCardState extends State<OpportunityCard> {
   bool _isApplied = false;
+
   Opportunity get _opportunity => widget.opportunity;
 
   @override
@@ -42,19 +43,19 @@ class _OpportunityCardState extends State<OpportunityCard> {
     super.initState();
     final state = context.onboarding.state;
     final currentUser =
-        state is Onboarded ? Some(state.currentUser) : const None<UserModel>();
-    if (currentUser is Some) {
-      logger.info('ahhhhhhhhhhhhhhhh');
-      context.database.isUserAppliedForOpportunity(
+        state is Onboarded ? Option.of(state.currentUser) : const None();
+    currentUser.map((t) {
+      context.database
+          .isUserAppliedForOpportunity(
         opportunityId: _opportunity.id,
-        userId: currentUser.unwrap.id,
-      ).then((isApplied) {
-        logger.info('megaaaaaaaaaaa ahhhhhhh');
+        userId: t.id,
+      )
+          .then((isApplied) {
         setState(() {
           _isApplied = isApplied;
         });
       });
-    }
+    });
   }
 
   @override
@@ -162,7 +163,8 @@ class _OpportunityCardState extends State<OpportunityCard> {
                     condition: _isApplied,
                     conditionalBuilder: ({
                       required Widget child,
-                    }) => CardBanner(
+                    }) =>
+                        CardBanner(
                       text: 'Applied',
                       color: Colors.green.withOpacity(0.8),
                       child: child,
@@ -174,7 +176,7 @@ class _OpportunityCardState extends State<OpportunityCard> {
                         onTap: () => context.push(
                           OpportunityPage(
                             opportunityId: widget.opportunity.id,
-                            opportunity: Some(widget.opportunity),
+                            opportunity: Option.of(widget.opportunity),
                             heroImage: HeroImage(
                               imageProvider: provider,
                               heroTag: heroImageTag,
@@ -225,7 +227,8 @@ class _OpportunityCardState extends State<OpportunityCard> {
                             ),
                             FutureBuilder(
                               future: places.getPlaceById(
-                                  widget.opportunity.location.placeId,),
+                                widget.opportunity.location.placeId,
+                              ),
                               builder: (context, snapshot) {
                                 final place = snapshot.data;
                                 return switch (place) {

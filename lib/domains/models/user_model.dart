@@ -1,10 +1,10 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:equatable/equatable.dart';
+import 'package:fpdart/fpdart.dart';
 import 'package:intheloopapp/data/prod/firestore_database_impl.dart';
 import 'package:intheloopapp/domains/models/booker_info.dart';
 import 'package:intheloopapp/domains/models/email_notifications.dart';
 import 'package:intheloopapp/domains/models/location.dart';
-import 'package:intheloopapp/domains/models/option.dart';
 import 'package:intheloopapp/domains/models/performer_info.dart';
 import 'package:intheloopapp/domains/models/push_notifications.dart';
 import 'package:intheloopapp/domains/models/social_following.dart';
@@ -15,7 +15,7 @@ import 'package:uuid/uuid.dart';
 
 part 'user_model.g.dart';
 
-@JsonSerializable()
+@JsonSerializable(explicitToJson: true)
 class UserModel extends Equatable {
   const UserModel({
     required this.id,
@@ -50,19 +50,19 @@ class UserModel extends Equatable {
         artistName: '',
         bio: '',
         occupations: const [],
-        profilePicture: const None<String>(),
-        location: const None<Location>(),
+        profilePicture: const None(),
+        location: const None(),
         badgesCount: 0,
-        performerInfo: const None<PerformerInfo>(),
-        bookerInfo: const None<BookerInfo>(),
-        venueInfo: const None<VenueInfo>(),
+        performerInfo: const None(),
+        bookerInfo: const None(),
+        venueInfo: const None(),
         socialFollowing: SocialFollowing.empty(),
         emailNotifications: EmailNotifications.empty(),
         pushNotifications: PushNotifications.empty(),
         deleted: false,
-        stripeConnectedAccountId: const None<String>(),
-        stripeCustomerId: const None<String>(),
-        latestAppVersion: const None<String>(),
+        stripeConnectedAccountId: const None(),
+        stripeCustomerId: const None(),
+        latestAppVersion: const None(),
       );
 
   factory UserModel.fromJson(Map<String, dynamic> json) =>
@@ -137,19 +137,23 @@ class UserModel extends Equatable {
   final Option<String> latestAppVersion;
 
   Option<double> get overallRating {
-    final performerRating = performerInfo.map((e) => e.rating).unwrapOr(const None());
-    final bookerRating = bookerInfo.map((e) => e.rating).unwrapOr(const None());
+    final performerRating = performerInfo.map((e) => e.rating).getOrElse(
+          () => const None(),
+        );
+    final bookerRating = bookerInfo.map((e) => e.rating).getOrElse(
+          () => const None(),
+        );
 
     return switch ((performerRating, bookerRating)) {
       (None(), None()) => const None(),
-      (Some(:final value), None()) => Some(value),
-      (None(), Some(:final value)) => Some(value),
+      (Some(:final value), None()) => Option.of(value),
+      (None(), Some(:final value)) => Option.of(value),
       (Some(), Some()) => () {
           final overallRating =
-              (performerRating.unwrap + bookerRating.unwrap) / 2;
+              (performerRating.toNullable()! + bookerRating.toNullable()!) / 2;
 
-          return Some(overallRating);
-        }()
+          return Option.of(overallRating);
+        }(),
     };
   }
 
@@ -181,6 +185,7 @@ class UserModel extends Equatable {
       ];
 
   bool get isEmpty => this == UserModel.empty();
+
   bool get isNotEmpty => this != UserModel.empty();
 
   Map<String, dynamic> toJson() => _$UserModelToJson(this);

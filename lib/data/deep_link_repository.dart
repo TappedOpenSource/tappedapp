@@ -1,5 +1,5 @@
 import 'package:intheloopapp/domains/models/opportunity.dart';
-import 'package:intheloopapp/domains/models/option.dart';
+import 'package:fpdart/fpdart.dart';
 import 'package:intheloopapp/domains/models/user_model.dart';
 
 abstract class DeepLinkRepository {

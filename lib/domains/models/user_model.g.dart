@@ -65,22 +65,22 @@ Map<String, dynamic> _$UserModelToJson(UserModel instance) => <String, dynamic>{
         (value) => value,
       ),
       'location': instance.location.toJson(
-        (value) => value,
+        (value) => value.toJson(),
       ),
       'badgesCount': instance.badgesCount,
       'performerInfo': instance.performerInfo.toJson(
-        (value) => value,
+        (value) => value.toJson(),
       ),
       'venueInfo': instance.venueInfo.toJson(
-        (value) => value,
+        (value) => value.toJson(),
       ),
       'bookerInfo': instance.bookerInfo.toJson(
-        (value) => value,
+        (value) => value.toJson(),
       ),
-      'emailNotifications': instance.emailNotifications,
-      'pushNotifications': instance.pushNotifications,
+      'emailNotifications': instance.emailNotifications.toJson(),
+      'pushNotifications': instance.pushNotifications.toJson(),
       'deleted': instance.deleted,
-      'socialFollowing': instance.socialFollowing,
+      'socialFollowing': instance.socialFollowing.toJson(),
       'stripeConnectedAccountId': instance.stripeConnectedAccountId.toJson(
         (value) => value,
       ),

@@ -1,4 +1,4 @@
-import 'package:intheloopapp/domains/models/option.dart';
+import 'package:fpdart/fpdart.dart';
 import 'package:intheloopapp/domains/models/payment_user.dart';
 
 abstract class PaymentRepository {

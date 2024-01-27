@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:intheloopapp/domains/models/option.dart';
+import 'package:fpdart/fpdart.dart';
 import 'package:intheloopapp/ui/loading/logo_wave.dart';
 import 'package:intheloopapp/utils/custom_claim_builder.dart';
 

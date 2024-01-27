@@ -9,7 +9,7 @@ import 'package:image_picker/image_picker.dart';
 import 'package:intheloopapp/data/database_repository.dart';
 import 'package:intheloopapp/data/storage_repository.dart';
 import 'package:intheloopapp/domains/authentication_bloc/authentication_bloc.dart';
-import 'package:intheloopapp/domains/models/option.dart';
+import 'package:fpdart/fpdart.dart';
 import 'package:intheloopapp/domains/models/user_model.dart';
 import 'package:intheloopapp/domains/models/username.dart';
 import 'package:intheloopapp/domains/navigation_bloc/navigation_bloc.dart';
@@ -57,7 +57,7 @@ class OnboardingFlowCubit extends Cubit<OnboardingFlowState> {
   //   emit(
   //     state.copyWith(
   //       place: Option.fromNullable(place),
-  //       placeId: Some(placeId),
+  //       placeId: Option.of(placeId),
   //     ),
   //   );
   // }
@@ -82,7 +82,7 @@ class OnboardingFlowCubit extends Cubit<OnboardingFlowState> {
       if (imageFile != null) {
         emit(
           state.copyWith(
-            pickedPhoto: Some(File(imageFile.path)),
+            pickedPhoto: Option.of(File(imageFile.path)),
           ),
         );
       }
@@ -117,13 +117,13 @@ class OnboardingFlowCubit extends Cubit<OnboardingFlowState> {
               currentAuthUser.uid,
               value,
             );
-            return Some(url);
+            return Option.of(url);
           }(),
-        None() => Future.value(const None<String>()),
+        None() => Future.value(const None()),
       };
 
-      // final lat = state.place.asNullable()?.latLng?.lat;
-      // final lng = state.place.asNullable()?.latLng?.lng;
+      // final lat = state.place.toNullable()?.latLng?.lat;
+      // final lng = state.place.toNullable()?.latLng?.lng;
       // final geohash = (lat != null && lng != null)
       //     ? geocodeEncode(lat: lat, lng: lng)
       //     : null;

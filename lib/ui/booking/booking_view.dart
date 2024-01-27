@@ -4,7 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intheloopapp/data/database_repository.dart';
 import 'package:intheloopapp/data/places_repository.dart';
 import 'package:intheloopapp/domains/models/booking.dart';
-import 'package:intheloopapp/domains/models/option.dart';
+import 'package:fpdart/fpdart.dart';
 import 'package:intheloopapp/domains/models/service.dart';
 import 'package:intheloopapp/domains/models/user_model.dart';
 import 'package:intheloopapp/domains/navigation_bloc/navigation_bloc.dart';
@@ -48,7 +48,7 @@ class BookingView extends StatelessWidget {
   Widget build(BuildContext context) {
     final database = RepositoryProvider.of<DatabaseRepository>(context);
     final navigationBloc = context.nav;
-    final validService = booking.serviceId.isSome;
+    final validService = booking.serviceId.isSome();
     return CurrentUserBuilder(
       builder: (context, currentUser) {
         return Scaffold(
@@ -89,7 +89,7 @@ class BookingView extends StatelessWidget {
                         None() => SkeletonListTile(),
                         Some(:final value) => UserTile(
                             userId: value.id,
-                            user: Some(value),
+                            user: Option.of(value),
                             showFollowButton: false,
                           ),
                       };
@@ -118,7 +118,7 @@ class BookingView extends StatelessWidget {
                         None() => SkeletonListTile(),
                         Some(:final value) => UserTile(
                             userId: value.id,
-                            user: Some(value),
+                            user: Option.of(value),
                             showFollowButton: false,
                           ),
                       };
@@ -147,7 +147,7 @@ class BookingView extends StatelessWidget {
                     future: validService
                         ? database.getServiceById(
                             booking.requesteeId,
-                            booking.serviceId.unwrap,
+                            booking.serviceId.toNullable()!,
                           )
                         : null,
                     builder: (context, snapshot) {
@@ -203,7 +203,7 @@ class BookingView extends StatelessWidget {
                 SliverToBoxAdapter(
                   child: FutureBuilder<PlaceData?>(
                     future: context.places.getPlaceById(
-                      booking.placeId.unwrapOr(''),
+                      booking.placeId.getOrElse(() => ''),
                     ),
                     builder: (context, snapshot) {
                       final place = snapshot.data;

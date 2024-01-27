@@ -1,6 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:enum_to_string/enum_to_string.dart';
-import 'package:intheloopapp/domains/models/option.dart';
+import 'package:fpdart/fpdart.dart';
 import 'package:intheloopapp/utils/app_logger.dart';
 import 'package:intheloopapp/utils/default_value.dart';
 
@@ -97,7 +97,7 @@ final class BookerReview extends Review {
       'id': id,
       'bookerId': bookerId,
       'performerId': performerId,
-      'bookingId': bookingId.asNullable(),
+      'bookingId': bookingId.toNullable(),
       'timestamp': timestamp,
       'overallRating': overallRating,
       'overallReview': overallReview,
@@ -142,7 +142,7 @@ final class PerformerReview extends Review {
       'id': id,
       'bookerId': bookerId,
       'performerId': performerId,
-      'bookingId': bookingId.asNullable(),
+      'bookingId': bookingId.toNullable(),
       'timestamp': timestamp,
       'overallRating': overallRating,
       'overallReview': overallReview,

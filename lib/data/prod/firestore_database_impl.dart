@@ -9,7 +9,7 @@ import 'package:intheloopapp/domains/models/activity.dart';
 import 'package:intheloopapp/domains/models/badge.dart';
 import 'package:intheloopapp/domains/models/booking.dart';
 import 'package:intheloopapp/domains/models/opportunity.dart';
-import 'package:intheloopapp/domains/models/option.dart';
+import 'package:fpdart/fpdart.dart';
 import 'package:intheloopapp/domains/models/review.dart';
 import 'package:intheloopapp/domains/models/service.dart';
 import 'package:intheloopapp/domains/models/user_model.dart';
@@ -182,7 +182,7 @@ class FirestoreDatabaseImpl extends DatabaseRepository {
         await _usersRef.where('username', isEqualTo: username).get();
 
     if (userSnapshots.docs.isNotEmpty) {
-      return Some(UserModel.fromDoc(userSnapshots.docs.first));
+      return Option.of(UserModel.fromDoc(userSnapshots.docs.first));
     }
 
     return const None();
@@ -199,7 +199,7 @@ class FirestoreDatabaseImpl extends DatabaseRepository {
 
     try {
       final user = UserModel.fromDoc(userSnapshot);
-      return Some(user);
+      return Option.of(user);
     } catch (e, s) {
       logger.error(
         'getUserById',
@@ -331,7 +331,7 @@ class FirestoreDatabaseImpl extends DatabaseRepository {
       ),
     );
 
-    return leaders.whereType<Some<UserModel>>().map((e) => e.unwrap).toList();
+    return leaders.whereType<Some<UserModel>>().map((e) => e.toNullable()).toList();
   }
 
   @override
@@ -350,7 +350,7 @@ class FirestoreDatabaseImpl extends DatabaseRepository {
       ),
     );
 
-    return leaders.whereType<Some<UserModel>>().map((e) => e.unwrap).toList();
+    return leaders.whereType<Some<UserModel>>().map((e) => e.toNullable()).toList();
   }
 
   @override
@@ -370,7 +370,7 @@ class FirestoreDatabaseImpl extends DatabaseRepository {
       ),
     );
 
-    return leaders.whereType<Some<UserModel>>().map((e) => e.unwrap).toList();
+    return leaders.whereType<Some<UserModel>>().map((e) => e.toNullable()).toList();
   }
 
   @override
@@ -390,7 +390,7 @@ class FirestoreDatabaseImpl extends DatabaseRepository {
       ),
     );
 
-    return leaders.whereType<Some<UserModel>>().map((e) => e.unwrap).toList();
+    return leaders.whereType<Some<UserModel>>().map((e) => e.toNullable()).toList();
   }
 
   @override
@@ -411,7 +411,10 @@ class FirestoreDatabaseImpl extends DatabaseRepository {
         ),
       );
 
-      return leaders.whereType<Some<UserModel>>().map((e) => e.unwrap).toList();
+      return leaders
+          .whereType<Some<UserModel>>()
+          .map((e) => e.toNullable())
+          .toList();
     } catch (e, s) {
       logger.error('getBookingLeaders', error: e, stackTrace: s);
       return [];
@@ -436,7 +439,7 @@ class FirestoreDatabaseImpl extends DatabaseRepository {
         ),
       );
 
-      return leaders.whereType<Some<UserModel>>().map((e) => e.unwrap).toList();
+      return leaders.whereType<Some<UserModel>>().map((e) => e.toNullable()).toList();
     } catch (e, s) {
       logger.error('getBookerLeaders', error: e, stackTrace: s);
       return [];
@@ -459,7 +462,7 @@ class FirestoreDatabaseImpl extends DatabaseRepository {
       ),
     );
 
-    return ops.whereType<Some<Opportunity>>().map((e) => e.unwrap).toList();
+    return ops.whereType<Some<Opportunity>>().map((e) => e.toNullable()).toList();
   }
 
   @override
@@ -477,6 +480,7 @@ class FirestoreDatabaseImpl extends DatabaseRepository {
       await _usersRef.doc(user.id).update(user.toJson());
     } catch (e, s) {
       logger.error('updateUserData', error: e, stackTrace: s);
+      rethrow;
     }
   }
 
@@ -740,7 +744,7 @@ class FirestoreDatabaseImpl extends DatabaseRepository {
       final bookingSnapshot = await _bookingsRef.doc(bookRequestId).get();
       final bookingRequest = Booking.fromDoc(bookingSnapshot);
 
-      return Some(bookingRequest);
+      return Option.of(bookingRequest);
     } catch (e, s) {
       logger.error(
         'Error getting booking by id',
@@ -1044,7 +1048,7 @@ class FirestoreDatabaseImpl extends DatabaseRepository {
 
       final service = Service.fromDoc(serviceSnapshot);
 
-      return Some(service);
+      return Option.of(service);
     } catch (e, s) {
       logger.error(
         'getServiceById - $userId - $serviceId',
@@ -1111,7 +1115,7 @@ class FirestoreDatabaseImpl extends DatabaseRepository {
 
       final opportunity = Opportunity.fromDoc(opportunitySnapshot);
 
-      return Some(opportunity);
+      return Option.of(opportunity);
     } catch (e, s) {
       logger.error('getOpportunityById', error: e, stackTrace: s);
       rethrow;
@@ -1206,8 +1210,6 @@ class FirestoreDatabaseImpl extends DatabaseRepository {
       return [];
     }
   }
-
-
 
   @override
   @Cached(where: _asyncShouldCache)
@@ -1612,7 +1614,7 @@ class FirestoreDatabaseImpl extends DatabaseRepository {
           .doc(reviewId)
           .get();
       return reviewSnapshot.exists
-          ? Some(BookerReview.fromDoc(reviewSnapshot))
+          ? Option.of(BookerReview.fromDoc(reviewSnapshot))
           : const None();
     } catch (e, s) {
       logger.error(
@@ -1728,7 +1730,7 @@ class FirestoreDatabaseImpl extends DatabaseRepository {
           .doc(reviewId)
           .get();
       return reviewSnapshot.exists
-          ? Some(PerformerReview.fromDoc(reviewSnapshot))
+          ? Option.of(PerformerReview.fromDoc(reviewSnapshot))
           : const None();
     } catch (e, s) {
       logger.error(

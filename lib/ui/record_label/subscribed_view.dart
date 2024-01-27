@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:intheloopapp/domains/models/option.dart';
+import 'package:fpdart/fpdart.dart';
 import 'package:intheloopapp/ui/record_label/components/claim_chip.dart';
 import 'package:intheloopapp/utils/current_user_builder.dart';
 import 'package:intheloopapp/utils/custom_claim_builder.dart';

@@ -1,7 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:intheloopapp/domains/models/option.dart';
+import 'package:fpdart/fpdart.dart' hide State;
 import 'package:intheloopapp/domains/models/user_model.dart';
 import 'package:intheloopapp/domains/navigation_bloc/navigation_bloc.dart';
 import 'package:intheloopapp/domains/navigation_bloc/tapped_route.dart';
@@ -108,7 +108,7 @@ class _TappedSearchBarState extends State<TappedSearchBar> {
                       final user = state.searchResults[index];
                       return UserTile(
                         userId: user.id,
-                        user: Some(user),
+                        user: Option.of(user),
                       );
                     },
                   );
@@ -119,7 +119,7 @@ class _TappedSearchBarState extends State<TappedSearchBar> {
         return _searchResults.map(
           (user) => UserTile(
             userId: user.id,
-            user: Some(user),
+            user: Option.of(user),
           ),
         );
       },

@@ -1,5 +1,5 @@
 import 'package:equatable/equatable.dart';
-import 'package:intheloopapp/domains/models/option.dart';
+import 'package:fpdart/fpdart.dart';
 import 'package:json_annotation/json_annotation.dart';
 
 part 'venue_info.g.dart';
@@ -19,13 +19,13 @@ class VenueInfo extends Equatable {
 
   // empty
   factory VenueInfo.empty() => const VenueInfo(
-        capacity: None<int>(),
-        idealArtistProfile: None<String>(),
-        productionInfo: None<String>(),
-        frontOfHouse: None<String>(),
-        monitors: None<String>(),
-        microphones: None<String>(),
-        lights: None<String>(),
+        capacity: None(),
+        idealArtistProfile: None(),
+        productionInfo: None(),
+        frontOfHouse: None(),
+        monitors: None(),
+        microphones: None(),
+        lights: None(),
         type: VenueType.other,
       );
 
@@ -105,5 +105,5 @@ class OptionalVenueInfoConverter
   Option<VenueInfo> fromJson(VenueInfo? value) => Option.fromNullable(value);
 
   @override
-  VenueInfo? toJson(Option<VenueInfo> value) => value.asNullable();
+  VenueInfo? toJson(Option<VenueInfo> value) => value.toNullable();
 }

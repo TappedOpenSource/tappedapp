@@ -5,7 +5,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intheloopapp/data/database_repository.dart';
 import 'package:intheloopapp/data/places_repository.dart';
-import 'package:intheloopapp/domains/models/option.dart';
+import 'package:fpdart/fpdart.dart';
 import 'package:intheloopapp/domains/models/user_model.dart';
 import 'package:intheloopapp/domains/onboarding_bloc/onboarding_bloc.dart';
 import 'package:intheloopapp/ui/conditional_parent_widget.dart';
@@ -197,7 +197,7 @@ class ProfileView extends StatelessWidget {
               children: [
                 CustomClaimBuilder(
                   builder: (context, claim) {
-                    final hasClaim = claim.isSome;
+                    final hasClaim = claim.isSome();
                     final showClaim =
                         hasClaim && currentUser.id == visitedUser.id;
                     return Text.rich(
@@ -241,7 +241,7 @@ class ProfileView extends StatelessWidget {
                 ),
               ],
             ),
-            background: _profileImage(visitedUser.profilePicture.asNullable()),
+            background: _profileImage(visitedUser.profilePicture.toNullable()),
           ),
         ),
         const SliverToBoxAdapter(
@@ -345,7 +345,7 @@ class ProfileView extends StatelessWidget {
               overflow: TextOverflow.fade,
               maxLines: 2,
             ),
-            background: _profileImage(visitedUser.profilePicture.asNullable()),
+            background: _profileImage(visitedUser.profilePicture.toNullable()),
           ),
         ),
         SliverToBoxAdapter(

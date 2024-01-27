@@ -3,7 +3,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:equatable/equatable.dart';
 import 'package:intheloopapp/utils/default_value.dart';
 import 'package:json_annotation/json_annotation.dart';
-import 'package:intheloopapp/domains/models/option.dart';
+import 'package:fpdart/fpdart.dart';
 
 part 'social_following.g.dart';
 
@@ -52,12 +52,12 @@ class SocialFollowing extends Equatable {
 
   // empty
   factory SocialFollowing.empty() => const SocialFollowing(
-    youtubeChannelId: None<String>(),
-    tiktokHandle: None<String>(),
+    youtubeChannelId: None(),
+    tiktokHandle: None(),
     tiktokFollowers: 0,
-    instagramHandle: None<String>(),
+    instagramHandle: None(),
     instagramFollowers: 0,
-    twitterHandle: None<String>(),
+    twitterHandle: None(),
     twitterFollowers: 0,
   );
 
@@ -110,12 +110,12 @@ class SocialFollowing extends Equatable {
   // toMap
   Map<String, dynamic> toMap() {
     return {
-      'youtubeChannelId': youtubeChannelId.asNullable(),
-      'tiktokHandle': tiktokHandle.asNullable(),
+      'youtubeChannelId': youtubeChannelId.toNullable(),
+      'tiktokHandle': tiktokHandle.toNullable(),
       'tiktokFollowers': tiktokFollowers,
-      'instagramHandle': instagramHandle.asNullable(),
+      'instagramHandle': instagramHandle.toNullable(),
       'instagramFollowers': instagramFollowers,
-      'twitterHandle': twitterHandle.asNullable(),
+      'twitterHandle': twitterHandle.toNullable(),
       'twitterFollowers': twitterFollowers,
     };
   }

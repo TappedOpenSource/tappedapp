@@ -1,6 +1,6 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
-import 'package:intheloopapp/domains/models/option.dart';
+import 'package:fpdart/fpdart.dart';
 import 'package:intheloopapp/domains/navigation_bloc/navigation_bloc.dart';
 import 'package:intheloopapp/domains/navigation_bloc/tapped_route.dart';
 import 'package:intheloopapp/utils/bloc_utils.dart';
@@ -138,13 +138,13 @@ class Linkify extends StatelessWidget {
                   final user = await database.getUserByUsername(
                     username,
                   );
-                  if (user.isNone) {
+                  if (user.isNone()) {
                     throw Exception('User not found');
                   }
 
                   nav.push(
                     ProfilePage(
-                      userId: user.unwrap.id,
+                      userId: user.toNullable()!.id,
                       user: user,
                     ),
                   );

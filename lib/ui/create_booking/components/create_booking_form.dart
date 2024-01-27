@@ -2,7 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_stripe/flutter_stripe.dart';
-import 'package:intheloopapp/domains/models/option.dart';
+import 'package:fpdart/fpdart.dart' hide State;
 import 'package:intheloopapp/domains/models/service.dart';
 import 'package:intheloopapp/domains/navigation_bloc/navigation_bloc.dart';
 import 'package:intheloopapp/domains/navigation_bloc/tapped_route.dart';
@@ -61,8 +61,8 @@ class _CreateBookingFormState extends State<CreateBookingForm> {
                 controller: bookingNameController,
               ),
               LocationTextField(
-                initialPlaceId: state.placeId.asNullable(),
-                initialPlace: state.place.asNullable(),
+                initialPlaceId: state.placeId.toNullable(),
+                initialPlace: state.place.toNullable(),
                 onChanged: (place, placeId) {
                   context.read<CreateBookingCubit>().updatePlace(
                         place: Option.fromNullable(place),

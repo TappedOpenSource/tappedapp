@@ -1,7 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:intheloopapp/domains/models/badge.dart' as badge_model;
-import 'package:intheloopapp/domains/models/option.dart';
+import 'package:fpdart/fpdart.dart';
 import 'package:intheloopapp/domains/models/user_model.dart';
 import 'package:intheloopapp/ui/user_tile.dart';
 
@@ -66,7 +66,7 @@ class BadgeView extends StatelessWidget {
               ),
               UserTile(
                 userId: badge.creatorId,
-                user: const None<UserModel>(),
+                user: const None(),
               ),
             ],
           ),

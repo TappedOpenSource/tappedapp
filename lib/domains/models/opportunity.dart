@@ -2,7 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:equatable/equatable.dart';
 import 'package:intheloopapp/data/prod/firestore_database_impl.dart';
 import 'package:intheloopapp/domains/models/location.dart';
-import 'package:intheloopapp/domains/models/option.dart';
+import 'package:fpdart/fpdart.dart';
 import 'package:json_annotation/json_annotation.dart';
 
 part 'opportunity.g.dart';

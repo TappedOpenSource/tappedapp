@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intheloopapp/data/stream_repository.dart';
-import 'package:intheloopapp/domains/models/option.dart';
+import 'package:fpdart/fpdart.dart';
 import 'package:intheloopapp/domains/models/user_model.dart';
 import 'package:intheloopapp/domains/navigation_bloc/navigation_bloc.dart';
 import 'package:intheloopapp/domains/navigation_bloc/tapped_route.dart';
@@ -19,8 +19,8 @@ class UserTile extends StatelessWidget {
 
     return ListTile(
       leading: UserAvatar(
-        pushUser: Some(user),
-        imageUrl: user.profilePicture.asNullable(),
+        pushUser: Option.of(user),
+        imageUrl: user.profilePicture.toNullable(),
         radius: 20,
       ),
       title: Text(user.username.toString()),

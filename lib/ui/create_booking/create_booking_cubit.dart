@@ -7,7 +7,7 @@ import 'package:intheloopapp/data/payment_repository.dart';
 import 'package:intheloopapp/data/places_repository.dart';
 import 'package:intheloopapp/data/stream_repository.dart';
 import 'package:intheloopapp/domains/models/booking.dart';
-import 'package:intheloopapp/domains/models/option.dart';
+import 'package:fpdart/fpdart.dart';
 import 'package:intheloopapp/domains/models/service.dart';
 import 'package:intheloopapp/domains/models/user_model.dart';
 import 'package:intheloopapp/domains/navigation_bloc/navigation_bloc.dart';
@@ -94,7 +94,7 @@ class CreateBookingCubit extends Cubit<CreateBookingState> {
       throw Exception('Form is not valid');
     }
 
-    final nullablePlace = state.place.asNullable();
+    final nullablePlace = state.place.toNullable();
 
     final lat = nullablePlace?.lat;
     final lng = nullablePlace?.lng;
@@ -103,7 +103,7 @@ class CreateBookingCubit extends Cubit<CreateBookingState> {
     final booking = Booking(
       name: state.name.value,
       note: state.note.value,
-      serviceId: Some(state.service.id),
+      serviceId: Option.of(state.service.id),
       requesterId: state.currentUserId,
       requesteeId: state.service.userId,
       rate: state.service.rate,
@@ -126,9 +126,9 @@ class CreateBookingCubit extends Cubit<CreateBookingState> {
           throw Exception('requesteeStripeConnectedAccountId is None');
         }
 
-        final stripeAccountId = requesteeStripeConnectedAccountId.unwrap;
+        final stripeAccountId = requesteeStripeConnectedAccountId.toNullable()!;
         final intent = await payments.initPaymentSheet(
-          payerCustomerId: currentUser.stripeCustomerId.asNullable(),
+          payerCustomerId: currentUser.stripeCustomerId.toNullable(),
           customerEmail: currentUser.email,
           payeeConnectedAccountId: stripeAccountId,
           amount: total,
@@ -138,7 +138,7 @@ class CreateBookingCubit extends Cubit<CreateBookingState> {
           onboardingBloc.add(
             UpdateOnboardedUser(
               user: currentUser.copyWith(
-                stripeCustomerId: Some(intent.customer),
+                stripeCustomerId: Option.of(intent.customer),
               ),
             ),
           );

@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intheloopapp/data/prod/firestore_database_impl.dart';
 import 'package:intheloopapp/ui/settings/settings_cubit.dart';
 import 'package:intheloopapp/ui/themes.dart';
+import 'package:intheloopapp/utils/app_logger.dart';
 
 class SaveButton extends StatelessWidget {
   const SaveButton({super.key});
@@ -12,15 +13,28 @@ class SaveButton extends StatelessWidget {
     return BlocBuilder<SettingsCubit, SettingsState>(
       builder: (context, state) {
         return GestureDetector(
-          onTap: () {
+          onTap: () async {
+            final messenger = ScaffoldMessenger.of(context);
             try {
-              context.read<SettingsCubit>().saveProfile();
+              await context.read<SettingsCubit>().saveProfile();
             } on HandleAlreadyExistsException {
-              ScaffoldMessenger.of(context).showSnackBar(
+              messenger.showSnackBar(
                 const SnackBar(
                   behavior: SnackBarBehavior.floating,
                   content: Text(
                     'Username already exists',
+                    style: TextStyle(color: Colors.white),
+                  ),
+                  backgroundColor: Colors.red,
+                ),
+              );
+            } catch (e, s) {
+              logger.error('error saving profile', error: e, stackTrace: s);
+              messenger.showSnackBar(
+                const SnackBar(
+                  behavior: SnackBarBehavior.floating,
+                  content: Text(
+                    'Error saving profile',
                     style: TextStyle(color: Colors.white),
                   ),
                   backgroundColor: Colors.red,

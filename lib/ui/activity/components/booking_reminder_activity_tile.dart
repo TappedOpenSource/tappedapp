@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intheloopapp/domains/activity_bloc/activity_bloc.dart';
 import 'package:intheloopapp/domains/models/activity.dart';
-import 'package:intheloopapp/domains/models/option.dart';
+import 'package:fpdart/fpdart.dart';
 import 'package:intheloopapp/domains/models/user_model.dart';
 import 'package:intheloopapp/domains/navigation_bloc/navigation_bloc.dart';
 import 'package:intheloopapp/domains/navigation_bloc/tapped_route.dart';
@@ -23,17 +23,16 @@ class BookingReminderActivityTile extends StatelessWidget {
 
     final database = context.database;
     final booking = await database.getBookingById(activity.bookingId);
-    if (booking.isNone) {
-      return;
-    }
 
-    nav.add(
-      Push(
-        BookingPage(
-          booking: booking.unwrap,
+    booking.map((t) {
+      nav.add(
+        Push(
+          BookingPage(
+            booking: t,
+          ),
         ),
-      ),
-    );
+      );
+    });
   }
 
   @override
@@ -81,7 +80,7 @@ class BookingReminderActivityTile extends StatelessWidget {
                               leading: UserAvatar(
                                 radius: 20,
                                 pushUser: user,
-                                imageUrl: value.profilePicture.asNullable(),
+                                imageUrl: value.profilePicture.toNullable(),
                                 verified: isVerified,
                               ),
                               trailing: Text(

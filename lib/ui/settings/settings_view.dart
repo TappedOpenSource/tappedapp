@@ -27,7 +27,7 @@ class SettingsView extends StatelessWidget {
             authenticationBloc: context.authentication,
             onboardingBloc: context.onboarding,
             authRepository: context.auth,
-            databaseRepository: context.database,
+            database: context.database,
             storageRepository: context.storage,
             navigationBloc: context.nav,
             places: context.places,

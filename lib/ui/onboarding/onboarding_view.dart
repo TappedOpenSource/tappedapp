@@ -2,7 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intheloopapp/domains/authentication_bloc/authentication_bloc.dart';
-import 'package:intheloopapp/domains/models/option.dart';
+import 'package:fpdart/fpdart.dart';
 import 'package:intheloopapp/ui/error/error_view.dart';
 import 'package:intheloopapp/ui/onboarding/components/onboarding_form.dart';
 import 'package:intheloopapp/ui/onboarding/onboarding_flow_cubit.dart';
@@ -21,9 +21,9 @@ class OnboardingView extends StatelessWidget {
         }
 
         final user = switch (state) {
-          Authenticated(:final currentAuthUser) => Some(currentAuthUser),
-          Unauthenticated() => const None<User>(),
-          Uninitialized() => const None<User>(),
+          Authenticated(:final currentAuthUser) => Option.of(currentAuthUser),
+          Unauthenticated() => const None(),
+          Uninitialized() => const None(),
         };
 
         return switch (user) {

@@ -3,7 +3,7 @@ import 'package:intheloopapp/data/places_repository.dart';
 import 'package:intheloopapp/domains/models/badge.dart' as badge_model;
 import 'package:intheloopapp/domains/models/booking.dart';
 import 'package:intheloopapp/domains/models/opportunity.dart';
-import 'package:intheloopapp/domains/models/option.dart';
+import 'package:fpdart/fpdart.dart';
 import 'package:intheloopapp/domains/models/service.dart';
 import 'package:intheloopapp/domains/models/user_model.dart';
 import 'package:intheloopapp/ui/activity/activity_view.dart';

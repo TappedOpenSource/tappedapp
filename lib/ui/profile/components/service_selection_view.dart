@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:intheloopapp/domains/models/option.dart';
+import 'package:fpdart/fpdart.dart';
 import 'package:intheloopapp/domains/models/service.dart';
 import 'package:intheloopapp/domains/navigation_bloc/navigation_bloc.dart';
 import 'package:intheloopapp/domains/navigation_bloc/tapped_route.dart';
@@ -30,7 +30,7 @@ class ServiceSelectionView extends StatelessWidget {
       (Some(:final value), _) => () => context.push(
             CreateBookingPage(
               service: service,
-              requesteeStripeConnectedAccountId: Some(value),
+              requesteeStripeConnectedAccountId: Option.of(value),
             ),
           ),
     };

@@ -13,12 +13,13 @@ import 'package:intheloopapp/data/storage_repository.dart';
 import 'package:intheloopapp/domains/authentication_bloc/authentication_bloc.dart';
 import 'package:intheloopapp/domains/models/genre.dart';
 import 'package:intheloopapp/domains/models/location.dart';
-import 'package:intheloopapp/domains/models/option.dart';
+import 'package:fpdart/fpdart.dart';
 import 'package:intheloopapp/domains/models/performer_info.dart';
 import 'package:intheloopapp/domains/models/user_model.dart';
 import 'package:intheloopapp/domains/models/username.dart';
 import 'package:intheloopapp/domains/navigation_bloc/navigation_bloc.dart';
 import 'package:intheloopapp/domains/onboarding_bloc/onboarding_bloc.dart';
+import 'package:intheloopapp/utils/app_logger.dart';
 
 part 'settings_state.dart';
 
@@ -28,7 +29,7 @@ class SettingsCubit extends Cubit<SettingsState> {
     required this.authenticationBloc,
     required this.onboardingBloc,
     required this.authRepository,
-    required this.databaseRepository,
+    required this.database,
     required this.storageRepository,
     required this.places,
     required this.currentUser,
@@ -39,7 +40,7 @@ class SettingsCubit extends Cubit<SettingsState> {
   final AuthenticationBloc authenticationBloc;
   final OnboardingBloc onboardingBloc;
   final AuthRepository authRepository;
-  final DatabaseRepository databaseRepository;
+  final DatabaseRepository database;
   final StorageRepository storageRepository;
   final PlacesRepository places;
 
@@ -49,21 +50,21 @@ class SettingsCubit extends Cubit<SettingsState> {
         username: currentUser.username.toString(),
         artistName: currentUser.artistName,
         bio: currentUser.bio,
-        genres: currentUser.performerInfo.asNullable()?.genres,
-        label: currentUser.performerInfo.asNullable()?.label,
+        genres: currentUser.performerInfo.toNullable()?.genres,
+        label: currentUser.performerInfo.toNullable()?.label,
         occupations: currentUser.occupations,
         tiktokFollowers: currentUser.socialFollowing.tiktokFollowers,
-        tiktokHandle: currentUser.socialFollowing.tiktokHandle.asNullable(),
+        tiktokHandle: currentUser.socialFollowing.tiktokHandle.toNullable(),
         twitterFollowers: currentUser.socialFollowing.twitterFollowers,
-        twitterHandle: currentUser.socialFollowing.twitterHandle.asNullable(),
+        twitterHandle: currentUser.socialFollowing.twitterHandle.toNullable(),
         instagramFollowers: currentUser.socialFollowing.instagramFollowers,
         instagramHandle:
-            currentUser.socialFollowing.instagramHandle.asNullable(),
+            currentUser.socialFollowing.instagramHandle.toNullable(),
         youtubeChannelId:
-            currentUser.socialFollowing.youtubeChannelId.asNullable(),
-        placeId: currentUser.location.asNullable()?.placeId,
+            currentUser.socialFollowing.youtubeChannelId.toNullable(),
+        placeId: currentUser.location.toNullable()?.placeId,
         spotifyId:
-            currentUser.performerInfo.asNullable()?.spotifyId.asNullable(),
+            currentUser.performerInfo.toNullable()?.spotifyId.toNullable(),
         pushNotificationsDirectMessages:
             currentUser.pushNotifications.directMessages,
       ),
@@ -179,87 +180,94 @@ class SettingsCubit extends Cubit<SettingsState> {
       return;
     }
 
-    if (state.formKey.currentState!.validate() && !state.status.isInProgress) {
-      emit(state.copyWith(status: FormzSubmissionStatus.inProgress));
+    try {
+      if (state.formKey.currentState!.validate() &&
+          !state.status.isInProgress) {
+        emit(state.copyWith(status: FormzSubmissionStatus.inProgress));
 
-      final available = await databaseRepository.checkUsernameAvailability(
-        state.username,
-        currentUser.id,
-      );
+        final available = await database.checkUsernameAvailability(
+          state.username,
+          currentUser.id,
+        );
 
-      if (!available) {
-        throw HandleAlreadyExistsException('Username already exists');
-      }
+        if (!available) {
+          throw HandleAlreadyExistsException('Username already exists');
+        }
 
-      final profilePictureUrl = state.profileImage != null
-          ? Some(
-              await storageRepository.uploadProfilePicture(
-                currentUser.id,
-                state.profileImage!,
+        final profilePictureUrl = state.profileImage != null
+            ? Option.of(
+                await storageRepository.uploadProfilePicture(
+                  currentUser.id,
+                  state.profileImage!,
+                ),
+              )
+            : currentUser.profilePicture;
+
+        final optionalPlace = Option.fromNullable(state.place);
+        final location = switch (optionalPlace) {
+          None() => const None(),
+          Some(:final value) => Option.of(
+              Location(
+                placeId: value.placeId,
+                geohash: value.geohash,
+                lat: value.lat,
+                lng: value.lng,
               ),
-            )
-          : currentUser.profilePicture;
-
-      final optionalPlace = Option.fromNullable(state.place);
-      final location = switch (optionalPlace) {
-        None() => const None<Location>(),
-        Some(:final value) => Some<Location>(
-            Location(
-              placeId: value.placeId,
-              geohash: value.geohash,
-              lat: value.lat,
-              lng: value.lng,
             ),
-          ),
-      };
+        };
 
-      final newPerformerInfo = switch (currentUser.performerInfo) {
-        None() => PerformerInfo(
-            genres: state.genres,
-            label: state.label ?? 'None',
-            spotifyId: Option.fromNullable(state.spotifyId),
-            rating: const None(),
-            reviewCount: 0,
-            pressKitUrl: const None<String>(),
-          ),
-        Some(:final value) => value.copyWith(
-            genres: state.genres,
-            label: state.label,
-            spotifyId: Option.fromNullable(state.spotifyId),
-          ),
-      };
+        final newPerformerInfo = switch (currentUser.performerInfo) {
+          None() => PerformerInfo(
+              genres: state.genres,
+              label: state.label ?? 'None',
+              spotifyId: Option.fromNullable(state.spotifyId),
+              rating: const None(),
+              reviewCount: 0,
+              pressKitUrl: const None(),
+            ),
+          Some(:final value) => value.copyWith(
+              genres: state.genres,
+              label: state.label,
+              spotifyId: Option.fromNullable(state.spotifyId),
+            ),
+        };
 
-      final user = currentUser.copyWith(
-        username: Username.fromString(state.username),
-        artistName: state.artistName,
-        bio: state.bio,
-        performerInfo: Some(newPerformerInfo),
-        socialFollowing: currentUser.socialFollowing.copyWith(
-          twitterHandle: Option.fromNullable(state.twitterHandle),
-          twitterFollowers: state.twitterFollowers,
-          instagramHandle: Option.fromNullable(state.instagramHandle),
-          instagramFollowers: state.instagramFollowers,
-          tiktokHandle: Option.fromNullable(state.tiktokHandle),
-          tiktokFollowers: state.tiktokFollowers,
-          youtubeChannelId: Option.fromNullable(state.youtubeChannelId),
-        ),
-        pushNotifications: currentUser.pushNotifications.copyWith(
-          directMessages: state.pushNotificationsDirectMessages,
-        ),
-        emailNotifications: currentUser.emailNotifications.copyWith(
-          appReleases: state.emailNotificationsAppReleases,
-        ),
-        occupations: state.occupations,
-        location: location,
-        profilePicture: profilePictureUrl,
-        // stripeConnectedAccountId: state.stripeConnectedAccountId,
-      );
+        final user = currentUser.copyWith(
+          username: Username.fromString(state.username),
+          artistName: state.artistName,
+          bio: state.bio,
+          performerInfo: Option.of(newPerformerInfo),
+          socialFollowing: currentUser.socialFollowing.copyWith(
+            twitterHandle: Option.fromNullable(state.twitterHandle),
+            twitterFollowers: state.twitterFollowers,
+            instagramHandle: Option.fromNullable(state.instagramHandle),
+            instagramFollowers: state.instagramFollowers,
+            tiktokHandle: Option.fromNullable(state.tiktokHandle),
+            tiktokFollowers: state.tiktokFollowers,
+            youtubeChannelId: Option.fromNullable(state.youtubeChannelId),
+          ),
+          pushNotifications: currentUser.pushNotifications.copyWith(
+            directMessages: state.pushNotificationsDirectMessages,
+          ),
+          emailNotifications: currentUser.emailNotifications.copyWith(
+            appReleases: state.emailNotificationsAppReleases,
+          ),
+          occupations: state.occupations,
+          location: location,
+          profilePicture: profilePictureUrl,
+          // stripeConnectedAccountId: state.stripeConnectedAccountId,
+        );
 
-      onboardingBloc.add(UpdateOnboardedUser(user: user));
-      emit(state.copyWith(status: FormzSubmissionStatus.success));
-      navigationBloc.pop();
-    } else {
-      // print('invalid');
+        await database.updateUserData(user);
+        onboardingBloc.add(UpdateOnboardedUser(user: user));
+        emit(state.copyWith(status: FormzSubmissionStatus.success));
+        navigationBloc.pop();
+      } else {
+        // print('invalid');
+      }
+    } catch (e) {
+      emit(state.copyWith(status: FormzSubmissionStatus.failure));
+      rethrow;
     }
   }
 

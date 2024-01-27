@@ -2,7 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:group_radio_button/group_radio_button.dart';
-import 'package:intheloopapp/domains/models/option.dart';
+import 'package:fpdart/fpdart.dart';
 import 'package:intheloopapp/ui/common/tapped_app_bar.dart';
 import 'package:intheloopapp/ui/gig_search/components/city_selection.dart';
 import 'package:intheloopapp/ui/gig_search/gig_search_cubit.dart';
@@ -57,7 +57,7 @@ class GigSearchView extends StatelessWidget {
                     GenreSelection(
                       initialValue: currentUser.performerInfo
                           .map((info) => info.genres)
-                          .unwrapOr([]),
+                          .getOrElse(() => []),
                       onConfirm: (_) {},
                     ),
                     const SizedBox(height: 20),
@@ -94,7 +94,7 @@ class GigSearchView extends StatelessWidget {
                     ),
                     UserTile(
                       userId: currentUser.id,
-                      user: Some(currentUser),
+                      user:Option.of(currentUser),
                     ),
                     const Spacer(),
                     Row(

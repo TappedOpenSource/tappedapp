@@ -1,7 +1,7 @@
 import 'package:badges/badges.dart' as badges;
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:intheloopapp/domains/models/option.dart';
+import 'package:fpdart/fpdart.dart';
 import 'package:intheloopapp/domains/models/service.dart';
 import 'package:intheloopapp/domains/navigation_bloc/navigation_bloc.dart';
 import 'package:intheloopapp/domains/navigation_bloc/tapped_route.dart';
@@ -49,7 +49,7 @@ class ServicesList extends StatelessWidget {
                         context.push(
                           CreateServicePage(
                             onSubmit: context.read<ProfileCubit>().onServiceEdited,
-                            service: Some(service),
+                            service: Option.of(service),
                           ),
                         );
                       } catch (e) {

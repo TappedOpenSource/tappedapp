@@ -1,6 +1,6 @@
 import 'package:equatable/equatable.dart';
 import 'package:intheloopapp/domains/models/genre.dart';
-import 'package:intheloopapp/domains/models/option.dart';
+import 'package:fpdart/fpdart.dart';
 import 'package:intheloopapp/utils/deserialize.dart';
 import 'package:json_annotation/json_annotation.dart';
 
@@ -50,12 +50,12 @@ class PerformerInfo extends Equatable {
 
   // empty
   factory PerformerInfo.empty() => const PerformerInfo(
-    pressKitUrl: None<String>(),
+    pressKitUrl: None(),
     genres: [],
-    rating: None<double>(),
+    rating: None(),
     reviewCount: 0,
     label: 'None',
-    spotifyId: None<String>(),
+    spotifyId: None(),
   );
 
   // fromJson
@@ -87,12 +87,12 @@ class PerformerInfo extends Equatable {
   // toMap
   Map<String, dynamic> toMap() {
     return {
-      'pressKitUrl': pressKitUrl.asNullable(),
+      'pressKitUrl': pressKitUrl.toNullable(),
       'genres': genres.map((e) => e.name).toList(),
-      'rating': rating.asNullable(),
+      'rating': rating.toNullable(),
       'reviewCount': reviewCount,
       'label': label,
-      'spotifyId': spotifyId.asNullable(),
+      'spotifyId': spotifyId.toNullable(),
     };
   }
 }
@@ -104,5 +104,5 @@ class OptionalPerformerInfoConverter implements JsonConverter<Option<PerformerIn
   Option<PerformerInfo> fromJson(PerformerInfo? value) => Option.fromNullable(value);
 
   @override
-  PerformerInfo? toJson(Option<PerformerInfo> option) => option.asNullable();
+  PerformerInfo? toJson(Option<PerformerInfo> option) => option.toNullable();
 }

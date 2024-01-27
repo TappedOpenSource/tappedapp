@@ -1,7 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:intheloopapp/domains/models/option.dart';
+import 'package:fpdart/fpdart.dart';
 import 'package:intheloopapp/ui/loading/logo_wave.dart';
 import 'package:intheloopapp/ui/opportunity_feed/components/apply_animation_view.dart';
 import 'package:intheloopapp/ui/opportunity_feed/components/opportunity_view.dart';
@@ -52,7 +52,7 @@ class OpportunityFeed extends StatelessWidget {
         final curOp = state.opportunities[state.curOp];
         return OpportunityView(
           opportunityId: curOp.id,
-          opportunity: Some(curOp),
+          opportunity:Option.of(curOp),
           showAppBar: false,
           onDislike: () =>
               context.read<OpportunityFeedCubit>().dislikeOpportunity(),

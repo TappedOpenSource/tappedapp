@@ -3,11 +3,11 @@ buildscript {
 
     repositories {
         google()
-        jcenter()
+        mavenCentral()
     }
 
     dependencies {
-        classpath 'com.android.tools.build:gradle:8.2.0'
+        classpath 'com.android.tools.build:gradle:8.2.2'
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
         classpath 'com.google.gms:google-services:4.4.0'
         classpath 'com.google.firebase:perf-plugin:1.4.2'
@@ -29,7 +29,6 @@ subprojects {
         // check if android block is available
 
         if (it.hasProperty('android')) {
-
             if (it.android.namespace == null) {
                 def manifest = new XmlSlurper().parse(file(it.android.sourceSets.main.manifest.srcFile))
                 def packageName = manifest.@package.text()

@@ -3,7 +3,7 @@ import 'dart:async';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:intheloopapp/data/deep_link_repository.dart';
-import 'package:intheloopapp/domains/models/option.dart';
+import 'package:fpdart/fpdart.dart';
 import 'package:intheloopapp/domains/models/user_model.dart';
 import 'package:intheloopapp/utils/app_logger.dart';
 import 'package:uni_links/uni_links.dart';
@@ -86,7 +86,7 @@ class UniLinkImpl extends DeepLinkRepository {
         final user = UserModel.fromDoc(userRef.docs.first);
         return ShareProfileDeepLink(
           userId: user.id,
-          user: Some(user),
+          user:Option.of(user),
         );
       case 'opportunity':
         if (segments.length < 2) {
@@ -135,7 +135,7 @@ class UniLinkImpl extends DeepLinkRepository {
         final user = UserModel.fromDoc(userRef.docs.first);
         return ShareProfileDeepLink(
           userId: user.id,
-          user: Some(user),
+          user:Option.of(user),
         );
     }
   }

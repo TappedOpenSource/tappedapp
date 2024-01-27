@@ -1,6 +1,6 @@
 import 'package:equatable/equatable.dart';
 import 'package:json_annotation/json_annotation.dart';
-import 'package:intheloopapp/domains/models/option.dart';
+import 'package:fpdart/fpdart.dart';
 
 part 'location.g.dart';
 
@@ -73,5 +73,5 @@ class OptionalLocationConverter
   Option<Location> fromJson(Location? json) => Option.fromNullable(json);
 
   @override
-  Location? toJson(Option<Location> object) => object.asNullable();
+  Location? toJson(Option<Location> object) => object.toNullable();
 }

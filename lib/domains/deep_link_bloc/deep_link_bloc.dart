@@ -4,7 +4,7 @@ import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:intheloopapp/data/database_repository.dart';
 import 'package:intheloopapp/data/deep_link_repository.dart';
-import 'package:intheloopapp/domains/models/option.dart';
+import 'package:fpdart/fpdart.dart';
 import 'package:intheloopapp/domains/navigation_bloc/navigation_bloc.dart';
 import 'package:intheloopapp/domains/navigation_bloc/tapped_route.dart';
 import 'package:intheloopapp/domains/onboarding_bloc/onboarding_bloc.dart';
@@ -68,7 +68,7 @@ class DeepLinkBloc extends Bloc<DeepLinkEvent, DeepLinkState> {
 
           final currentUser =
               (onboardingBloc.state as Onboarded).currentUser.copyWith(
-                    stripeConnectedAccountId: Some(id),
+                    stripeConnectedAccountId:Option.of(id),
                   );
 
           onboardingBloc.add(

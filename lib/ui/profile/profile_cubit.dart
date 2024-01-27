@@ -9,7 +9,7 @@ import 'package:intheloopapp/data/places_repository.dart';
 import 'package:intheloopapp/domains/models/badge.dart' as badge;
 import 'package:intheloopapp/domains/models/booking.dart';
 import 'package:intheloopapp/domains/models/opportunity.dart';
-import 'package:intheloopapp/domains/models/option.dart';
+import 'package:fpdart/fpdart.dart';
 import 'package:intheloopapp/domains/models/review.dart';
 import 'package:intheloopapp/domains/models/service.dart';
 import 'package:intheloopapp/domains/models/user_model.dart';
@@ -69,7 +69,7 @@ class ProfileCubit extends Cubit<ProfileState> {
       if (newUserData == null) {
         final refreshedVisitedUser =
             await database.getUserById(state.visitedUser.id);
-        emit(state.copyWith(visitedUser: refreshedVisitedUser.asNullable()));
+        emit(state.copyWith(visitedUser: refreshedVisitedUser.toNullable()));
       } else {
         emit(state.copyWith(visitedUser: newUserData));
       }
@@ -98,28 +98,28 @@ class ProfileCubit extends Cubit<ProfileState> {
       );
 
       final latestRequesteeBooking = bookingsRequestee.isNotEmpty
-          ? Some(bookingsRequestee.first)
-          : const None<Booking>();
+          ? Option.of(bookingsRequestee.first)
+          : const None();
 
       final latestRequesterBooking = bookingsRequester.isNotEmpty
-          ? Some(bookingsRequester.first)
-          : const None<Booking>();
+          ? Option.of(bookingsRequester.first)
+          : const None();
 
       final _ = switch ((latestRequesteeBooking, latestRequesterBooking)) {
         (None(), None()) => emit(state.copyWith(latestBooking: const None())),
         (Some(:final value), None()) =>
-          emit(state.copyWith(latestBooking: Some(value))),
+          emit(state.copyWith(latestBooking: Option.of(value))),
         (None(), Some(:final value)) => emit(
             state.copyWith(
-              latestBooking: Some(value),
+              latestBooking: Option.of(value),
             ),
           ),
         (Some(), Some()) => () {
             final latest = _getLatestBooking(
-              latestRequesteeBooking.unwrap,
-              latestRequesterBooking.unwrap,
+              latestRequesteeBooking.toNullable()!,
+              latestRequesterBooking.toNullable()!,
             );
-            emit(state.copyWith(latestBooking: Some(latest)));
+            emit(state.copyWith(latestBooking: Option.of(latest)));
           }(),
       };
     } catch (e, s) {
@@ -153,28 +153,28 @@ class ProfileCubit extends Cubit<ProfileState> {
       );
 
       final latestPerformerReview = performerReviews.isNotEmpty
-          ? Some(performerReviews.first)
-          : const None<PerformerReview>();
+          ? Option.of(performerReviews.first)
+          : const None();
 
       final latestBookerReview = bookerReviews.isNotEmpty
-          ? Some(bookerReviews.first)
-          : const None<BookerReview>();
+          ? Option.of(bookerReviews.first)
+          : const None();
 
       final _ = switch ((latestPerformerReview, latestBookerReview)) {
         (None(), None()) => emit(state.copyWith(latestReview: const None())),
         (Some(:final value), None()) =>
-          emit(state.copyWith(latestReview: Some(value))),
+          emit(state.copyWith(latestReview: Option.of(value))),
         (None(), Some(:final value)) => emit(
             state.copyWith(
-              latestReview: Some(value),
+              latestReview: Option.of(value),
             ),
           ),
         (Some(), Some()) => () {
             final latest = _getLatestReview(
-              latestPerformerReview.unwrap,
-              latestBookerReview.unwrap,
+              latestPerformerReview.toNullable()!,
+              latestBookerReview.toNullable()!,
             );
-            emit(state.copyWith(latestReview: Some(latest)));
+            emit(state.copyWith(latestReview: Option.of(latest)));
           }(),
       };
     } catch (e, s) {

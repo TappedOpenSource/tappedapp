@@ -1,7 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:intheloopapp/data/database_repository.dart';
-import 'package:intheloopapp/domains/models/option.dart';
+import 'package:fpdart/fpdart.dart';
 import 'package:intheloopapp/domains/models/user_model.dart';
 import 'package:intheloopapp/domains/navigation_bloc/navigation_bloc.dart';
 import 'package:intheloopapp/domains/navigation_bloc/tapped_route.dart';
@@ -23,7 +23,7 @@ class UserCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final database = context.database;
-    final imageUrl = user.profilePicture.asNullable();
+    final imageUrl = user.profilePicture.toNullable();
     if (user.deleted) return const SizedBox.shrink();
 
     final audienceText = '${NumberFormat.compactCurrency(
@@ -62,7 +62,7 @@ class UserCard extends StatelessWidget {
                     onTap: () => context.push(
                       ProfilePage(
                         userId: user.id,
-                        user: Some(user),
+                        user: Option.of(user),
                         heroImage: HeroImage(
                           imageProvider: provider,
                           heroTag: heroImageTag,
@@ -85,7 +85,7 @@ class UserCard extends StatelessWidget {
                             ),
                             // leading: UserAvatar(
                             //   radius: 25,
-                            //   pushUser: Some(widget.user),
+                            //   pushUser: Option.of(widget.user),
                             //   imageUrl: widget.user.profilePicture,
                             //   verified: verified,
                             // ),

@@ -2,7 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:intheloopapp/domains/models/option.dart';
+import 'package:fpdart/fpdart.dart';
 import 'package:intheloopapp/domains/models/user_model.dart';
 import 'package:intheloopapp/domains/navigation_bloc/navigation_bloc.dart';
 import 'package:intheloopapp/ui/profile/profile_cubit.dart';
@@ -30,12 +30,12 @@ class MoreOptionsButton extends StatelessWidget {
         title: Text(user.displayName),
         // message: Text(user.username.username),
         actions: <CupertinoActionSheetAction>[
-          if (isAdmin && user.id != currentUser.id)
+          if (isAdmin && user.id != currentUser.id && !user.unclaimed)
             CupertinoActionSheetAction(
               onPressed: () {
                 // Copy to clipboard
                 Clipboard.setData(
-                  ClipboardData(text: user.latestAppVersion.unwrapOr('')),
+                  ClipboardData(text: user.latestAppVersion.getOrElse(() => '')),
                 ).then((value) {
                   Navigator.pop(context);
                   scaffoldMessenger.showSnackBar(
@@ -48,7 +48,8 @@ class MoreOptionsButton extends StatelessWidget {
                 });
               },
               child: Text(
-                  'latest app version ${user.latestAppVersion.unwrapOr('unknown')}'),
+                'latest app version ${user.latestAppVersion.getOrElse(() => 'unknown')}',
+              ),
             ),
           if (isAdmin)
             CupertinoActionSheetAction(

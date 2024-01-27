@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intheloopapp/domains/bookings_bloc/bookings_bloc.dart';
 import 'package:intheloopapp/domains/models/booking.dart';
-import 'package:intheloopapp/domains/models/option.dart';
+import 'package:fpdart/fpdart.dart';
 import 'package:intheloopapp/domains/models/user_model.dart';
 import 'package:intheloopapp/domains/navigation_bloc/navigation_bloc.dart';
 import 'package:intheloopapp/domains/navigation_bloc/tapped_route.dart';
@@ -114,7 +114,7 @@ class BottomToolbar extends StatelessWidget {
                 ),
                 child: UserAvatar(
                   radius: 45,
-                  imageUrl: user.profilePicture.asNullable(),
+                  imageUrl: user.profilePicture.toNullable(),
                 ),
               ),
               icon: Container(
@@ -127,7 +127,7 @@ class BottomToolbar extends StatelessWidget {
                 ),
                 child: UserAvatar(
                   radius: 45,
-                  imageUrl: user.profilePicture.asNullable(),
+                  imageUrl: user.profilePicture.toNullable(),
                 ),
               ),
             ),

@@ -7,7 +7,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_google_places_sdk/flutter_google_places_sdk.dart';
 import 'package:intheloopapp/data/places_repository.dart';
-import 'package:intheloopapp/domains/models/option.dart';
+import 'package:fpdart/fpdart.dart';
 import 'package:intheloopapp/utils/app_logger.dart';
 import 'package:intheloopapp/utils/default_value.dart';
 
@@ -52,7 +52,7 @@ class GooglePlacesImpl implements PlacesRepository {
         lng: data['lng'] as double,
         photoMetadata: data['photoMetadata'] == null
             ? const None()
-            : Some(
+            : Option.of(
                 PhotoMetadata(
                   height: data['photoMetadata']['heightPx'] as int,
                   width: data['photoMetadata']['widthPx'] as int,
@@ -107,7 +107,7 @@ class GooglePlacesImpl implements PlacesRepository {
       final photoUri = data.getOrElse<String?>('photoUri', null);
       if (photoUri == null) return const None();
 
-      return Some(
+      return Option.of(
         Image(
           image: CachedNetworkImageProvider(
             photoUri,

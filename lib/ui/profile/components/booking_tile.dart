@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:intheloopapp/domains/models/booking.dart';
-import 'package:intheloopapp/domains/models/option.dart';
+import 'package:fpdart/fpdart.dart';
 import 'package:intheloopapp/domains/models/service.dart';
 import 'package:intheloopapp/domains/models/user_model.dart';
 import 'package:intheloopapp/utils/bloc_utils.dart';
@@ -37,7 +37,7 @@ class BookingTile extends StatelessWidget {
             database.getUserById(booking.requesteeId),
             () async {
               return switch (booking.serviceId) {
-                None() => const None<Service>(),
+                None() => const None(),
                 Some(:final value) => database.getServiceById(
                     booking.requesteeId,
                     value,

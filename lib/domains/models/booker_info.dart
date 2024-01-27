@@ -1,7 +1,7 @@
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:equatable/equatable.dart';
-import 'package:intheloopapp/domains/models/option.dart';
+import 'package:fpdart/fpdart.dart';
 import 'package:intheloopapp/utils/default_value.dart';
 import 'package:intheloopapp/utils/deserialize.dart';
 import 'package:json_annotation/json_annotation.dart';
@@ -31,7 +31,7 @@ class BookerInfo extends Equatable {
 
   // empty
   factory BookerInfo.empty() => const BookerInfo(
-    rating: None<double>(),
+    rating: None(),
     reviewCount: 0,
   );
 
@@ -56,7 +56,7 @@ class BookerInfo extends Equatable {
   // toMap
   Map<String, dynamic> toMap() {
     return {
-      'rating': rating.asNullable(),
+      'rating': rating.toNullable(),
       'reviewCount': reviewCount,
     };
   }
@@ -69,6 +69,6 @@ class OptionalBookerInfoConverter implements JsonConverter<Option<BookerInfo>, B
   Option<BookerInfo> fromJson(BookerInfo? value) => Option.fromNullable(value);
 
   @override
-  BookerInfo? toJson(Option<BookerInfo> object) => object.asNullable();
+  BookerInfo? toJson(Option<BookerInfo> object) => object.toNullable();
 
 }

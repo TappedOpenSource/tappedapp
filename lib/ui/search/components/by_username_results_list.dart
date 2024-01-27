@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:intheloopapp/domains/models/option.dart';
+import 'package:fpdart/fpdart.dart';
 import 'package:intheloopapp/domains/search_bloc/search_bloc.dart';
 import 'package:intheloopapp/ui/loading/logo_wave.dart';
 import 'package:intheloopapp/ui/search/components/search_view.dart';
@@ -27,7 +27,7 @@ class ByUsernameResultsList extends StatelessWidget {
                   final user = state.searchResults[index];
                   return UserTile(
                     userId: user.id,
-                    user: Some(user),
+                    user: Option.of(user),
                   );
                 },
               );

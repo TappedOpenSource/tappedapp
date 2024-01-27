@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:intheloopapp/domains/models/option.dart';
+import 'package:fpdart/fpdart.dart';
 import 'package:intheloopapp/domains/navigation_bloc/navigation_bloc.dart';
 import 'package:intheloopapp/ui/bookings/bookings_view.dart';
 import 'package:intheloopapp/ui/messaging/messaging_view.dart';
@@ -23,7 +23,7 @@ class ShellView extends StatelessWidget {
       builder: (context, currentUser) {
         return CustomClaimBuilder(
           builder: (context, claim) {
-            final hasClaim = claim.isSome;
+            final hasClaim = claim.isSome();
             context
                 .read<PremiumThemeCubit>()
                 .updateTheme(isPremiumMode: hasClaim);
@@ -40,7 +40,7 @@ class ShellView extends StatelessWidget {
                       MessagingChannelListView(),
                       ProfileView(
                         visitedUserId: currentUser.id,
-                        visitedUser: Some(currentUser),
+                        visitedUser: Option.of(currentUser),
                       ),
                     ],
                   ),

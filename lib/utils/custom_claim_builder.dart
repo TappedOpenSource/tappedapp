@@ -1,5 +1,5 @@
 import 'package:flutter/cupertino.dart';
-import 'package:intheloopapp/domains/models/option.dart';
+import 'package:fpdart/fpdart.dart';
 import 'package:intheloopapp/utils/bloc_utils.dart';
 
 class CustomClaimBuilder extends StatelessWidget {

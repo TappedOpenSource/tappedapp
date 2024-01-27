@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intheloopapp/data/database_repository.dart';
-import 'package:intheloopapp/domains/models/option.dart';
+import 'package:fpdart/fpdart.dart';
 import 'package:intheloopapp/domains/models/user_model.dart';
 import 'package:stream_chat_flutter/stream_chat_flutter.dart';
 
@@ -53,7 +53,7 @@ class ChannelName extends StatelessWidget {
           members.map((member) async {
             final user =
                 await databaseRepository.getUserById(member.userId ?? '');
-            return user.asNullable() ?? UserModel.empty();
+            return user.toNullable() ?? UserModel.empty();
           }),
         ),
         builder: (context, snapshot) {
