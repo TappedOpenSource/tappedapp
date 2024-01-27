@@ -1,4 +1,5 @@
 import 'package:badges/badges.dart' as badges;
+import 'package:card_banner/card_banner.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:intheloopapp/domains/models/opportunity.dart';
@@ -131,14 +132,25 @@ class _OpportunityCardState extends State<OpportunityCard> {
                 future: getOpImage(context, widget.opportunity),
                 builder: (context, snapshot) {
                   if (!snapshot.hasData) {
-                    return Container(
-                      width: cardWidth,
-                      height: 230,
-                      decoration: BoxDecoration(
-                        color: Colors.grey.withOpacity(0.1),
-                        borderRadius: BorderRadius.circular(12),
+                    return ConditionalParentWidget(
+                      condition: _isApplied,
+                      conditionalBuilder: ({
+                        required Widget child,
+                      }) =>
+                          CardBanner(
+                        text: 'Applied',
+                        color: Colors.green.withOpacity(0.5),
+                        child: child,
                       ),
-                      child: const CupertinoActivityIndicator(),
+                      child: Container(
+                        width: cardWidth,
+                        height: 230,
+                        decoration: BoxDecoration(
+                          color: Colors.grey.withOpacity(0.1),
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                        child: const CupertinoActivityIndicator(),
+                      ),
                     );
                   }
 

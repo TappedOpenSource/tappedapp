@@ -26,6 +26,7 @@ class OpportunityView extends StatelessWidget {
   const OpportunityView({
     required this.opportunityId,
     required this.opportunity,
+    this.isApplied,
     this.onApply,
     this.onDislike,
     this.onDismiss,
@@ -38,6 +39,7 @@ class OpportunityView extends StatelessWidget {
 
   final String opportunityId;
   final Option<Opportunity> opportunity;
+  final bool? isApplied;
   final bool showDislikeButton;
   final bool showAppBar;
   final HeroImage? heroImage;
@@ -178,8 +180,8 @@ class OpportunityView extends StatelessWidget {
                                 );
                                 onApply?.call();
                               },
-                              color: theme.colorScheme.onSurface
-                                  .withOpacity(0.1),
+                              color:
+                                  theme.colorScheme.onSurface.withOpacity(0.1),
                               padding: const EdgeInsets.all(12),
                               child: const Text(
                                 'Apply',
@@ -192,8 +194,8 @@ class OpportunityView extends StatelessWidget {
                             ),
                           true => CupertinoButton(
                               onPressed: null,
-                              color: theme.colorScheme.onSurface
-                                  .withOpacity(0.1),
+                              color:
+                                  theme.colorScheme.onSurface.withOpacity(0.1),
                               padding: const EdgeInsets.all(12),
                               child: const Text(
                                 'Apply',
@@ -229,8 +231,8 @@ class OpportunityView extends StatelessWidget {
                           children: [
                             Icon(
                               CupertinoIcons.location_circle_fill,
-                              color: theme.colorScheme.onSurface
-                                  .withOpacity(0.5),
+                              color:
+                                  theme.colorScheme.onSurface.withOpacity(0.5),
                             ),
                             const SizedBox(width: 8),
                             Text(
@@ -347,10 +349,12 @@ class OpportunityView extends StatelessWidget {
     return CurrentUserBuilder(
       builder: (context, currentUser) {
         return FutureBuilder(
-          future: database.isUserAppliedForOpportunity(
-            opportunityId: opportunityId,
-            userId: currentUser.id,
-          ),
+          future: isApplied == null
+              ? database.isUserAppliedForOpportunity(
+                  opportunityId: opportunityId,
+                  userId: currentUser.id,
+                )
+              : Future<bool>.value(isApplied),
           builder: (context, snapshot) {
             final isApplied = snapshot.data;
             return switch (opportunity) {
