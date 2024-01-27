@@ -1,5 +1,3 @@
-import 'dart:async';
-
 import 'package:cached_annotation/cached_annotation.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:enum_to_string/enum_to_string.dart';
@@ -18,7 +16,6 @@ import 'package:intheloopapp/domains/models/user_model.dart';
 import 'package:intheloopapp/utils/app_logger.dart';
 import 'package:intheloopapp/utils/default_value.dart';
 import 'package:intheloopapp/utils/geohash.dart';
-import 'package:json_annotation/json_annotation.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:rxdart/rxdart.dart';
 
@@ -55,6 +52,10 @@ const blockeeSubcollection = 'blockedByUsers';
 
 const bookerReviewsSubcollection = 'bookerReviews';
 const performerReviewsSubcollection = 'performerReviews';
+
+Future<bool> _asyncShouldCache(bool candidate) async {
+  return candidate;
+}
 
 /// Database implementation using Firebase's FirestoreDB
 class FirestoreDatabaseImpl extends DatabaseRepository {
@@ -173,6 +174,7 @@ class FirestoreDatabaseImpl extends DatabaseRepository {
   }
 
   @override
+  @Cached(ttl: 60) // 1 minute
   Future<Option<UserModel>> getUserByUsername(String? username) async {
     if (username == null) return const None();
 
@@ -187,28 +189,9 @@ class FirestoreDatabaseImpl extends DatabaseRepository {
   }
 
   @override
-  Future<Option<UserModel>> getUserById(
-    String userId, {
-    bool ignoreCache = true,
-  }) async {
-    DocumentSnapshot<Map<String, dynamic>>? userSnapshot;
-    if (!ignoreCache) {
-      try {
-        userSnapshot = await _usersRef.doc(userId).get(
-              const GetOptions(source: Source.cache),
-            );
-      } on FirebaseException {
-        userSnapshot = await _usersRef.doc(userId).get();
-      } catch (e, s) {
-        logger.error(
-          'getUserById',
-          error: e,
-          stackTrace: s,
-        );
-      }
-    }
-
-    userSnapshot ??= await _usersRef.doc(userId).get();
+  @Cached(ttl: 120) // 2 minute
+  Future<Option<UserModel>> getUserById(String userId) async {
+    final userSnapshot = await _usersRef.doc(userId).get();
 
     if (!userSnapshot.exists) {
       return const None();
@@ -332,6 +315,7 @@ class FirestoreDatabaseImpl extends DatabaseRepository {
   }
 
   @override
+  @cached
   Future<List<UserModel>> getRichmondVenues() async {
     final leadersSnapshot = await _leadersRef.doc('leaders').get();
 
@@ -351,6 +335,7 @@ class FirestoreDatabaseImpl extends DatabaseRepository {
   }
 
   @override
+  @cached
   Future<List<UserModel>> getDCVenues() async {
     final leadersSnapshot = await _leadersRef.doc('leaders').get();
 
@@ -369,6 +354,7 @@ class FirestoreDatabaseImpl extends DatabaseRepository {
   }
 
   @override
+  @cached
   Future<List<UserModel>> getNovaVenues() async {
     final leadersSnapshot = await _leadersRef.doc('leaders').get();
 
@@ -388,6 +374,7 @@ class FirestoreDatabaseImpl extends DatabaseRepository {
   }
 
   @override
+  @cached
   Future<List<UserModel>> getMarylandVenues() async {
     final leadersSnapshot = await _leadersRef.doc('leaders').get();
 
@@ -407,6 +394,7 @@ class FirestoreDatabaseImpl extends DatabaseRepository {
   }
 
   @override
+  @cached
   Future<List<UserModel>> getBookingLeaders() async {
     try {
       final leadersSnapshot = await _leadersRef.doc('leaders').get();
@@ -431,6 +419,7 @@ class FirestoreDatabaseImpl extends DatabaseRepository {
   }
 
   @override
+  @cached
   Future<List<UserModel>> getBookerLeaders() async {
     try {
       final leadersSnapshot = await _leadersRef.doc('leaders').get();
@@ -455,6 +444,7 @@ class FirestoreDatabaseImpl extends DatabaseRepository {
   }
 
   @override
+  @Cached(ttl: 300) // 5 minutes
   Future<List<Opportunity>> getFeaturedOpportunities() async {
     final leadersSnapshot = await _leadersRef.doc('leaders').get();
     final leadingOps =
@@ -624,22 +614,14 @@ class FirestoreDatabaseImpl extends DatabaseRepository {
   }
 
   @override
-  Future<bool> isVerified(
-    String userId, {
-    bool ignoreCache = true,
-  }) async {
-    final options = ignoreCache
-        ? const GetOptions(source: Source.server)
-        : const GetOptions(source: Source.cache);
-
+  @Cached(where: _asyncShouldCache)
+  Future<bool> isVerified(String userId) async {
     try {
       final verifiedBadgeSentDoc = await _badgesSentRef
           .doc(userId)
           .collection('badges')
           .doc(verifiedBadgeId)
-          .get(
-            options,
-          );
+          .get();
 
       final isVerified = verifiedBadgeSentDoc.exists;
 
@@ -750,6 +732,7 @@ class FirestoreDatabaseImpl extends DatabaseRepository {
   }
 
   @override
+  @cached
   Future<Option<Booking>> getBookingById(
     String bookRequestId,
   ) async {
@@ -769,6 +752,7 @@ class FirestoreDatabaseImpl extends DatabaseRepository {
   }
 
   @override
+  @Cached(ttl: 60) // 1 minute
   Future<List<Booking>> getBookingsByRequesterRequestee(
     String requesterId,
     String requesteeId, {
@@ -809,6 +793,7 @@ class FirestoreDatabaseImpl extends DatabaseRepository {
   }
 
   @override
+  @Cached(ttl: 60) // 1 minute
   Future<List<Booking>> getBookingsByRequester(
     String userId, {
     int limit = 20,
@@ -896,6 +881,7 @@ class FirestoreDatabaseImpl extends DatabaseRepository {
   }
 
   @override
+  @Cached(ttl: 60) // 1 minute
   Future<List<Booking>> getBookingsByRequestee(
     String userId, {
     int limit = 20,
@@ -1111,7 +1097,10 @@ class FirestoreDatabaseImpl extends DatabaseRepository {
   }
 
   @override
-  Future<Option<Opportunity>> getOpportunityById(String opportunityId) async {
+  @cached
+  Future<Option<Opportunity>> getOpportunityById(
+    String opportunityId,
+  ) async {
     try {
       final opportunitySnapshot =
           await _opportunitiesRef.doc(opportunityId).get();
@@ -1166,6 +1155,7 @@ class FirestoreDatabaseImpl extends DatabaseRepository {
   }
 
   @override
+  @Cached(ttl: 300) // 5 minutes
   Future<List<Opportunity>> getOpportunitiesByUserId(
     String userId, {
     int limit = 20,
@@ -1217,7 +1207,10 @@ class FirestoreDatabaseImpl extends DatabaseRepository {
     }
   }
 
+
+
   @override
+  @Cached(where: _asyncShouldCache)
   Future<bool> isUserAppliedForOpportunity({
     required String userId,
     required String opportunityId,
@@ -1322,6 +1315,7 @@ class FirestoreDatabaseImpl extends DatabaseRepository {
   }
 
   @override
+  @Cached(ttl: 60) // 1 minute
   Future<List<Opportunity>> getOpportunityFeedByUserId(
     String userId, {
     int limit = 20,
@@ -1606,6 +1600,7 @@ class FirestoreDatabaseImpl extends DatabaseRepository {
   }
 
   @override
+  @cached
   Future<Option<BookerReview>> getBookerReviewById({
     required String revieweeId,
     required String reviewId,
@@ -1630,6 +1625,7 @@ class FirestoreDatabaseImpl extends DatabaseRepository {
   }
 
   @override
+  @cached
   Future<List<BookerReview>> getBookerReviewsByBookerId(
     String bookerId, {
     int limit = 20,
@@ -1720,6 +1716,7 @@ class FirestoreDatabaseImpl extends DatabaseRepository {
   }
 
   @override
+  @cached
   Future<Option<PerformerReview>> getPerformerReviewById({
     required String revieweeId,
     required String reviewId,
@@ -1744,6 +1741,7 @@ class FirestoreDatabaseImpl extends DatabaseRepository {
   }
 
   @override
+  @cached
   Future<List<PerformerReview>> getPerformerReviewsByPerformerId(
     String performerId, {
     int limit = 20,
@@ -1833,6 +1831,7 @@ class FirestoreDatabaseImpl extends DatabaseRepository {
   }
 
   @override
+  @Cached(where: _asyncShouldCache)
   Future<bool> isOnPremiumWailist(String userId) async {
     try {
       final docSnap = await _premiumWailistRef.doc(userId).get();

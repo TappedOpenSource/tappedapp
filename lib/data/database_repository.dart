@@ -15,10 +15,7 @@ abstract class DatabaseRepository {
   Future<bool> userEmailExists(String email);
   Future<void> createUser(UserModel user);
   Future<Option<UserModel>> getUserByUsername(String? username);
-  Future<Option<UserModel>> getUserById(
-    String userId, {
-    bool ignoreCache = false,
-  });
+  Future<Option<UserModel>> getUserById(String userId);
   Future<List<UserModel>> searchUsersByLocation({
     required double lat,
     required double lng,
