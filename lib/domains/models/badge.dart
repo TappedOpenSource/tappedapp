@@ -6,6 +6,7 @@ part 'badge.freezed.dart';
 part 'badge.g.dart';
 
 @freezed
+@deprecated
 class Badge with _$Badge {
   const factory Badge({
     required String id,

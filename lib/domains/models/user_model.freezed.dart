@@ -79,6 +79,10 @@ abstract class $UserModelCopyWith<$Res> {
       Option<String> stripeConnectedAccountId,
       Option<String> stripeCustomerId,
       Option<String> latestAppVersion});
+
+  $SocialFollowingCopyWith<$Res> get socialFollowing;
+  $EmailNotificationsCopyWith<$Res> get emailNotifications;
+  $PushNotificationsCopyWith<$Res> get pushNotifications;
 }
 
 /// @nodoc
@@ -203,6 +207,31 @@ class _$UserModelCopyWithImpl<$Res, $Val extends UserModel>
               as Option<String>,
     ) as $Val);
   }
+
+  @override
+  @pragma('vm:prefer-inline')
+  $SocialFollowingCopyWith<$Res> get socialFollowing {
+    return $SocialFollowingCopyWith<$Res>(_value.socialFollowing, (value) {
+      return _then(_value.copyWith(socialFollowing: value) as $Val);
+    });
+  }
+
+  @override
+  @pragma('vm:prefer-inline')
+  $EmailNotificationsCopyWith<$Res> get emailNotifications {
+    return $EmailNotificationsCopyWith<$Res>(_value.emailNotifications,
+        (value) {
+      return _then(_value.copyWith(emailNotifications: value) as $Val);
+    });
+  }
+
+  @override
+  @pragma('vm:prefer-inline')
+  $PushNotificationsCopyWith<$Res> get pushNotifications {
+    return $PushNotificationsCopyWith<$Res>(_value.pushNotifications, (value) {
+      return _then(_value.copyWith(pushNotifications: value) as $Val);
+    });
+  }
 }
 
 /// @nodoc
@@ -235,6 +264,13 @@ abstract class _$$UserModelImplCopyWith<$Res>
       Option<String> stripeConnectedAccountId,
       Option<String> stripeCustomerId,
       Option<String> latestAppVersion});
+
+  @override
+  $SocialFollowingCopyWith<$Res> get socialFollowing;
+  @override
+  $EmailNotificationsCopyWith<$Res> get emailNotifications;
+  @override
+  $PushNotificationsCopyWith<$Res> get pushNotifications;
 }
 
 /// @nodoc

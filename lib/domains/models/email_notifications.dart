@@ -1,16 +1,18 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:intheloopapp/utils/default_value.dart';
 import 'package:json_annotation/json_annotation.dart';
 
+part 'email_notifications.freezed.dart';
 part 'email_notifications.g.dart';
 
-@JsonSerializable()
-class EmailNotifications {
-  const EmailNotifications({
-    required this.appReleases,
-    required this.tappedUpdates,
-    required this.bookingRequests,
-  });
+@freezed
+class EmailNotifications with _$EmailNotifications  {
+  const factory EmailNotifications({
+    @Default(true) bool appReleases,
+    @Default(true) bool tappedUpdates,
+    @Default(true) bool bookingRequests,
+  }) = _EmailNotifications;
 
   // fromJson
   factory EmailNotifications.fromJson(Map<String, dynamic> json) =>
@@ -18,16 +20,12 @@ class EmailNotifications {
 
   // fromDoc
   factory EmailNotifications.fromDoc(DocumentSnapshot<Map<String, dynamic>> doc) {
-    return EmailNotifications(
-      appReleases: doc.getOrElse<bool>('appReleases', true),
-      tappedUpdates: doc.getOrElse<bool>('tappedUpdates', true),
-      bookingRequests: doc.getOrElse<bool>('bookingRequests', true),
-    );
+    final data = doc.data();
+    if (data == null) {
+      throw Exception('Document does not exist!');
+    }
+    return EmailNotifications.fromJson(data);
   }
-
-  final bool appReleases;
-  final bool tappedUpdates;
-  final bool bookingRequests;
 
   // empty
   static const empty = EmailNotifications(
@@ -35,30 +33,5 @@ class EmailNotifications {
     tappedUpdates: true,
     bookingRequests: true,
   );
-
-  // toJson
-  Map<String, dynamic> toJson() => _$EmailNotificationsToJson(this);
-
-  // copyWith
-  EmailNotifications copyWith({
-    bool? appReleases,
-    bool? tappedUpdates,
-    bool? bookingRequests,
-  }) {
-    return EmailNotifications(
-      appReleases: appReleases ?? this.appReleases,
-      tappedUpdates: tappedUpdates ?? this.tappedUpdates,
-      bookingRequests: bookingRequests ?? this.bookingRequests,
-    );
-  }
-
-  // toMap
-  Map<String, dynamic> toMap() {
-    return {
-      'appReleases': appReleases,
-      'tappedUpdates': tappedUpdates,
-      'bookingRequests': bookingRequests,
-    };
-  }
 }
 

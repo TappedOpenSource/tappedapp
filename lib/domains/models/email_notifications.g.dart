@@ -6,14 +6,16 @@ part of 'email_notifications.dart';
 // JsonSerializableGenerator
 // **************************************************************************
 
-EmailNotifications _$EmailNotificationsFromJson(Map<String, dynamic> json) =>
-    EmailNotifications(
-      appReleases: json['appReleases'] as bool,
-      tappedUpdates: json['tappedUpdates'] as bool,
-      bookingRequests: json['bookingRequests'] as bool,
+_$EmailNotificationsImpl _$$EmailNotificationsImplFromJson(
+        Map<String, dynamic> json) =>
+    _$EmailNotificationsImpl(
+      appReleases: json['appReleases'] as bool? ?? true,
+      tappedUpdates: json['tappedUpdates'] as bool? ?? true,
+      bookingRequests: json['bookingRequests'] as bool? ?? true,
     );
 
-Map<String, dynamic> _$EmailNotificationsToJson(EmailNotifications instance) =>
+Map<String, dynamic> _$$EmailNotificationsImplToJson(
+        _$EmailNotificationsImpl instance) =>
     <String, dynamic>{
       'appReleases': instance.appReleases,
       'tappedUpdates': instance.tappedUpdates,

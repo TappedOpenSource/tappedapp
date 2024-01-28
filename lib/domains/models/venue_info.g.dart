@@ -6,25 +6,42 @@ part of 'venue_info.dart';
 // JsonSerializableGenerator
 // **************************************************************************
 
-VenueInfo _$VenueInfoFromJson(Map<String, dynamic> json) => VenueInfo(
-      capacity: Option<int>.fromJson(json['capacity'], (value) => value as int),
-      idealArtistProfile: Option<String>.fromJson(
-          json['idealArtistProfile'], (value) => value as String),
-      productionInfo: Option<String>.fromJson(
-          json['productionInfo'], (value) => value as String),
-      frontOfHouse: Option<String>.fromJson(
-          json['frontOfHouse'], (value) => value as String),
-      monitors:
-          Option<String>.fromJson(json['monitors'], (value) => value as String),
-      microphones: Option<String>.fromJson(
-          json['microphones'], (value) => value as String),
-      lights:
-          Option<String>.fromJson(json['lights'], (value) => value as String),
-      type: $enumDecodeNullable(_$VenueTypeEnumMap, json['type']) ??
-          VenueType.other,
+_$VenueInfoImpl _$$VenueInfoImplFromJson(Map<String, dynamic> json) =>
+    _$VenueInfoImpl(
+      capacity: json['capacity'] == null
+          ? const None()
+          : Option<int>.fromJson(json['capacity'], (value) => value as int),
+      idealArtistProfile: json['idealArtistProfile'] == null
+          ? const None()
+          : Option<String>.fromJson(
+              json['idealArtistProfile'], (value) => value as String),
+      productionInfo: json['productionInfo'] == null
+          ? const None()
+          : Option<String>.fromJson(
+              json['productionInfo'], (value) => value as String),
+      frontOfHouse: json['frontOfHouse'] == null
+          ? const None()
+          : Option<String>.fromJson(
+              json['frontOfHouse'], (value) => value as String),
+      monitors: json['monitors'] == null
+          ? const None()
+          : Option<String>.fromJson(
+              json['monitors'], (value) => value as String),
+      microphones: json['microphones'] == null
+          ? const None()
+          : Option<String>.fromJson(
+              json['microphones'], (value) => value as String),
+      lights: json['lights'] == null
+          ? const None()
+          : Option<String>.fromJson(json['lights'], (value) => value as String),
+      type: json['type'] == null
+          ? const Option.of(VenueType.other)
+          : Option<VenueType>.fromJson(
+              json['type'], (value) => $enumDecode(_$VenueTypeEnumMap, value)),
     );
 
-Map<String, dynamic> _$VenueInfoToJson(VenueInfo instance) => <String, dynamic>{
+Map<String, dynamic> _$$VenueInfoImplToJson(_$VenueInfoImpl instance) =>
+    <String, dynamic>{
       'capacity': instance.capacity.toJson(
         (value) => value,
       ),
@@ -46,7 +63,9 @@ Map<String, dynamic> _$VenueInfoToJson(VenueInfo instance) => <String, dynamic>{
       'lights': instance.lights.toJson(
         (value) => value,
       ),
-      'type': _$VenueTypeEnumMap[instance.type]!,
+      'type': instance.type.toJson(
+        (value) => _$VenueTypeEnumMap[value]!,
+      ),
     };
 
 const _$VenueTypeEnumMap = {

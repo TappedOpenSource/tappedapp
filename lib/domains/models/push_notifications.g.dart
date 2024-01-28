@@ -6,15 +6,17 @@ part of 'push_notifications.dart';
 // JsonSerializableGenerator
 // **************************************************************************
 
-PushNotifications _$PushNotificationsFromJson(Map<String, dynamic> json) =>
-    PushNotifications(
-      appReleases: json['appReleases'] as bool,
-      tappedUpdates: json['tappedUpdates'] as bool,
-      bookingRequests: json['bookingRequests'] as bool,
-      directMessages: json['directMessages'] as bool,
+_$PushNotificationsImpl _$$PushNotificationsImplFromJson(
+        Map<String, dynamic> json) =>
+    _$PushNotificationsImpl(
+      appReleases: json['appReleases'] as bool? ?? true,
+      tappedUpdates: json['tappedUpdates'] as bool? ?? true,
+      bookingRequests: json['bookingRequests'] as bool? ?? true,
+      directMessages: json['directMessages'] as bool? ?? true,
     );
 
-Map<String, dynamic> _$PushNotificationsToJson(PushNotifications instance) =>
+Map<String, dynamic> _$$PushNotificationsImplToJson(
+        _$PushNotificationsImpl instance) =>
     <String, dynamic>{
       'appReleases': instance.appReleases,
       'tappedUpdates': instance.tappedUpdates,

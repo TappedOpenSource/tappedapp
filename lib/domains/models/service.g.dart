@@ -6,19 +6,21 @@ part of 'service.dart';
 // JsonSerializableGenerator
 // **************************************************************************
 
-Service _$ServiceFromJson(Map<String, dynamic> json) => Service(
+_$ServiceImpl _$$ServiceImplFromJson(Map<String, dynamic> json) =>
+    _$ServiceImpl(
       id: json['id'] as String,
       userId: json['userId'] as String,
       title: json['title'] as String? ?? '',
       description: json['description'] as String? ?? '',
       rate: json['rate'] as int? ?? 0,
       rateType: $enumDecodeNullable(_$RateTypeEnumMap, json['rateType']) ??
-          RateType.hourly,
+          RateType.fixed,
       count: json['count'] as int? ?? 0,
       deleted: json['deleted'] as bool? ?? false,
     );
 
-Map<String, dynamic> _$ServiceToJson(Service instance) => <String, dynamic>{
+Map<String, dynamic> _$$ServiceImplToJson(_$ServiceImpl instance) =>
+    <String, dynamic>{
       'id': instance.id,
       'userId': instance.userId,
       'title': instance.title,

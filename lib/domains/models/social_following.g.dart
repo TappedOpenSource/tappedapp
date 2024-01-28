@@ -6,22 +6,32 @@ part of 'social_following.dart';
 // JsonSerializableGenerator
 // **************************************************************************
 
-SocialFollowing _$SocialFollowingFromJson(Map<String, dynamic> json) =>
-    SocialFollowing(
-      youtubeChannelId: Option<String>.fromJson(
-          json['youtubeChannelId'], (value) => value as String),
-      tiktokHandle: Option<String>.fromJson(
-          json['tiktokHandle'], (value) => value as String),
-      tiktokFollowers: json['tiktokFollowers'] as int,
-      instagramHandle: Option<String>.fromJson(
-          json['instagramHandle'], (value) => value as String),
-      instagramFollowers: json['instagramFollowers'] as int,
-      twitterHandle: Option<String>.fromJson(
-          json['twitterHandle'], (value) => value as String),
-      twitterFollowers: json['twitterFollowers'] as int,
+_$SocialFollowingImpl _$$SocialFollowingImplFromJson(
+        Map<String, dynamic> json) =>
+    _$SocialFollowingImpl(
+      youtubeChannelId: json['youtubeChannelId'] == null
+          ? const None()
+          : Option<String>.fromJson(
+              json['youtubeChannelId'], (value) => value as String),
+      tiktokHandle: json['tiktokHandle'] == null
+          ? const None()
+          : Option<String>.fromJson(
+              json['tiktokHandle'], (value) => value as String),
+      tiktokFollowers: json['tiktokFollowers'] as int? ?? 0,
+      instagramHandle: json['instagramHandle'] == null
+          ? const None()
+          : Option<String>.fromJson(
+              json['instagramHandle'], (value) => value as String),
+      instagramFollowers: json['instagramFollowers'] as int? ?? 0,
+      twitterHandle: json['twitterHandle'] == null
+          ? const None()
+          : Option<String>.fromJson(
+              json['twitterHandle'], (value) => value as String),
+      twitterFollowers: json['twitterFollowers'] as int? ?? 0,
     );
 
-Map<String, dynamic> _$SocialFollowingToJson(SocialFollowing instance) =>
+Map<String, dynamic> _$$SocialFollowingImplToJson(
+        _$SocialFollowingImpl instance) =>
     <String, dynamic>{
       'youtubeChannelId': instance.youtubeChannelId.toJson(
         (value) => value,

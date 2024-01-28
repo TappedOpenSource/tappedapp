@@ -6,12 +6,16 @@ part of 'booker_info.dart';
 // JsonSerializableGenerator
 // **************************************************************************
 
-BookerInfo _$BookerInfoFromJson(Map<String, dynamic> json) => BookerInfo(
-      rating: optionalDoubleFromJson(json['rating']),
+_$BookerInfoImpl _$$BookerInfoImplFromJson(Map<String, dynamic> json) =>
+    _$BookerInfoImpl(
+      rating: json['rating'] == null
+          ? const None()
+          : Option<double>.fromJson(
+              json['rating'], (value) => (value as num).toDouble()),
       reviewCount: json['reviewCount'] as int? ?? 0,
     );
 
-Map<String, dynamic> _$BookerInfoToJson(BookerInfo instance) =>
+Map<String, dynamic> _$$BookerInfoImplToJson(_$BookerInfoImpl instance) =>
     <String, dynamic>{
       'rating': instance.rating.toJson(
         (value) => value,

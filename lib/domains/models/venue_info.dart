@@ -1,85 +1,29 @@
-import 'package:equatable/equatable.dart';
 import 'package:fpdart/fpdart.dart';
+import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:json_annotation/json_annotation.dart';
 
+part 'venue_info.freezed.dart';
 part 'venue_info.g.dart';
 
-@JsonSerializable()
-class VenueInfo extends Equatable {
-  const VenueInfo({
-    required this.capacity,
-    required this.idealArtistProfile,
-    required this.productionInfo,
-    required this.frontOfHouse,
-    required this.monitors,
-    required this.microphones,
-    required this.lights,
-    required this.type,
-  });
+@freezed
+class VenueInfo with _$VenueInfo {
+  const factory VenueInfo({
+    @Default(None()) Option<int> capacity,
+    @Default(None()) Option<String> idealArtistProfile,
+    @Default(None()) Option<String> productionInfo,
+    @Default(None()) Option<String> frontOfHouse,
+    @Default(None()) Option<String> monitors,
+    @Default(None()) Option<String> microphones,
+    @Default(None()) Option<String> lights,
+    @Default(Option.of(VenueType.other)) Option<VenueType> type,
+  }) = _VenueInfo;
 
   // empty
-  factory VenueInfo.empty() => const VenueInfo(
-        capacity: None(),
-        idealArtistProfile: None(),
-        productionInfo: None(),
-        frontOfHouse: None(),
-        monitors: None(),
-        microphones: None(),
-        lights: None(),
-        type: VenueType.other,
-      );
+  static const empty = VenueInfo();
 
   // fromJson
   factory VenueInfo.fromJson(Map<String, dynamic> json) =>
       _$VenueInfoFromJson(json);
-
-  final Option<int> capacity;
-  final Option<String> idealArtistProfile;
-  final Option<String> productionInfo;
-  final Option<String> frontOfHouse;
-  final Option<String> monitors;
-  final Option<String> microphones;
-  final Option<String> lights;
-
-  @JsonKey(defaultValue: VenueType.other)
-  final VenueType type;
-
-  @override
-  List<Object?> get props => [
-        capacity,
-        productionInfo,
-        frontOfHouse,
-        monitors,
-        microphones,
-        lights,
-        type,
-      ];
-
-  // toJson
-  Map<String, dynamic> toJson() => _$VenueInfoToJson(this);
-
-  // copyWith
-  VenueInfo copyWith({
-    Option<int>? capacity,
-    Option<String>? idealArtistProfile,
-    Option<String>? productionInfo,
-    Option<String>? frontOfHouse,
-    Option<String>? monitors,
-    Option<String>? microphones,
-    Option<String>? lights,
-    VenueType? type,
-  }) {
-    return VenueInfo(
-      capacity: capacity ?? this.capacity,
-      idealArtistProfile: idealArtistProfile ?? this.idealArtistProfile,
-      productionInfo: productionInfo ?? this.productionInfo,
-      frontOfHouse: frontOfHouse ?? this.frontOfHouse,
-      monitors: monitors ?? this.monitors,
-      microphones: microphones ?? this.microphones,
-      lights: lights ?? this.lights,
-      type: type ?? this.type,
-    );
-  }
 }
 
 @JsonEnum()

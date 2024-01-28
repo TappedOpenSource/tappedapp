@@ -1,22 +1,24 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:equatable/equatable.dart';
+import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:uuid/uuid.dart';
 
+part 'service.freezed.dart';
 part 'service.g.dart';
 
-@JsonSerializable()
-class Service extends Equatable {
-  const Service({
-    required this.id,
-    required this.userId,
-    required this.title,
-    required this.description,
-    required this.rate,
-    required this.rateType,
-    required this.count,
-    required this.deleted,
-  });
+@freezed
+class Service with _$Service {
+  const factory Service({
+    required String id,
+    required String userId,
+    @Default('') String title,
+    @Default('') String description,
+    @Default(0) int rate,
+    @Default(RateType.fixed) RateType rateType,
+    @Default(0) int count,
+    @Default(false) bool deleted,
+  }) = _Service;
 
   factory Service.fromJson(Map<String, dynamic> json) =>
       _$ServiceFromJson(json);
@@ -28,74 +30,6 @@ class Service extends Equatable {
     }
 
     return Service.fromJson(data);
-  }
-
-  factory Service.empty() => Service(
-        id: const Uuid().v4(),
-        userId: '',
-        title: '',
-        description: '',
-        rate: 0,
-        rateType: RateType.hourly,
-        count: 0,
-        deleted: false,
-      );
-
-  final String id;
-  final String userId;
-
-  @JsonKey(defaultValue: '')
-  final String title;
-
-  @JsonKey(defaultValue: '')
-  final String description;
-
-  @JsonKey(defaultValue: 0)
-  final int rate;
-
-  @JsonKey(defaultValue: RateType.hourly)
-  final RateType rateType;
-
-  @JsonKey(defaultValue: 0)
-  final int count;
-
-  @JsonKey(defaultValue: false)
-  final bool deleted;
-
-  Map<String, dynamic> toJson() => _$ServiceToJson(this);
-
-  @override
-  List<Object> get props => [
-        id,
-        userId,
-        title,
-        description,
-        rate,
-        rateType,
-        count,
-        deleted,
-      ];
-
-  Service copyWith({
-    String? id,
-    String? userId,
-    String? title,
-    String? description,
-    int? rate,
-    RateType? rateType,
-    int? count,
-    bool? deleted,
-  }) {
-    return Service(
-      id: id ?? this.id,
-      userId: userId ?? this.userId,
-      title: title ?? this.title,
-      description: description ?? this.description,
-      rate: rate ?? this.rate,
-      rateType: rateType ?? this.rateType,
-      count: count ?? this.count,
-      deleted: deleted ?? this.deleted,
-    );
   }
 }
 
