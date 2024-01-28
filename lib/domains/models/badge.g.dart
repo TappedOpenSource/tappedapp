@@ -12,7 +12,8 @@ _$BadgeImpl _$$BadgeImplFromJson(Map<String, dynamic> json) => _$BadgeImpl(
       imageUrl: json['imageUrl'] as String,
       name: json['name'] as String,
       description: json['description'] as String,
-      timestamp: DateTime.parse(json['timestamp'] as String),
+      timestamp:
+          const DateTimeConverter().fromJson(json['timestamp'] as Timestamp),
     );
 
 Map<String, dynamic> _$$BadgeImplToJson(_$BadgeImpl instance) =>
@@ -22,5 +23,5 @@ Map<String, dynamic> _$$BadgeImplToJson(_$BadgeImpl instance) =>
       'imageUrl': instance.imageUrl,
       'name': instance.name,
       'description': instance.description,
-      'timestamp': instance.timestamp.toIso8601String(),
+      'timestamp': const DateTimeConverter().toJson(instance.timestamp),
     };

@@ -29,34 +29,34 @@ class GigSearchInitView extends StatelessWidget {
                     '🚀 Find Gigs: Discover perfect venues for your unique sound.',
                     textAlign: TextAlign.center,
                     style: TextStyle(
-                      fontWeight: FontWeight.w700,
-                      fontSize: 20,
+                      fontSize: 16,
                     ),
                   ),
+                  const SizedBox(height: 12),
                   const Text(
                     "✉️ Hassle-Free Bookings: Submit with a tap; we'll handle the rest.",
                     textAlign: TextAlign.center,
                     style: TextStyle(
-                      fontWeight: FontWeight.w700,
-                      fontSize: 20,
+                      fontSize: 16,
                     ),
                   ),
+                  const SizedBox(height: 12),
                   const Text(
                     '📆 Manage Gigs: Keep all your performances organized in one place.',
                     textAlign: TextAlign.center,
                     style: TextStyle(
-                      fontWeight: FontWeight.w700,
-                      fontSize: 20,
+                      fontSize: 16,
                     ),
                   ),
+                  const SizedBox(height: 12),
                   const Text(
                     '📣 Automated Outreach: We connect you with venues, so you focus on the music.',
                     textAlign: TextAlign.center,
                     style: TextStyle(
-                      fontWeight: FontWeight.w700,
-                      fontSize: 20,
+                      fontSize: 16,
                     ),
                   ),
+                  const SizedBox(height: 12),
                   const Text(
                     'this is experimental',
                     textAlign: TextAlign.center,

@@ -25,6 +25,7 @@ mixin _$Badge {
   String get imageUrl => throw _privateConstructorUsedError;
   String get name => throw _privateConstructorUsedError;
   String get description => throw _privateConstructorUsedError;
+  @DateTimeConverter()
   DateTime get timestamp => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
@@ -43,7 +44,7 @@ abstract class $BadgeCopyWith<$Res> {
       String imageUrl,
       String name,
       String description,
-      DateTime timestamp});
+      @DateTimeConverter() DateTime timestamp});
 }
 
 /// @nodoc
@@ -108,7 +109,7 @@ abstract class _$$BadgeImplCopyWith<$Res> implements $BadgeCopyWith<$Res> {
       String imageUrl,
       String name,
       String description,
-      DateTime timestamp});
+      @DateTimeConverter() DateTime timestamp});
 }
 
 /// @nodoc
@@ -167,7 +168,7 @@ class _$BadgeImpl implements _Badge {
       required this.imageUrl,
       required this.name,
       required this.description,
-      required this.timestamp});
+      @DateTimeConverter() required this.timestamp});
 
   factory _$BadgeImpl.fromJson(Map<String, dynamic> json) =>
       _$$BadgeImplFromJson(json);
@@ -183,6 +184,7 @@ class _$BadgeImpl implements _Badge {
   @override
   final String description;
   @override
+  @DateTimeConverter()
   final DateTime timestamp;
 
   @override
@@ -233,7 +235,7 @@ abstract class _Badge implements Badge {
       required final String imageUrl,
       required final String name,
       required final String description,
-      required final DateTime timestamp}) = _$BadgeImpl;
+      @DateTimeConverter() required final DateTime timestamp}) = _$BadgeImpl;
 
   factory _Badge.fromJson(Map<String, dynamic> json) = _$BadgeImpl.fromJson;
 
@@ -248,6 +250,7 @@ abstract class _Badge implements Badge {
   @override
   String get description;
   @override
+  @DateTimeConverter()
   DateTime get timestamp;
   @override
   @JsonKey(ignore: true)
