@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
+import 'package:intheloopapp/data/prod/firestore_database_impl.dart';
 
 part 'badge.freezed.dart';
 part 'badge.g.dart';
@@ -12,7 +13,7 @@ class Badge with _$Badge {
     required String imageUrl,
     required String name,
     required String description,
-    required DateTime timestamp,
+    @DateTimeConverter() required DateTime timestamp,
   }) = _Badge;
 
   factory Badge.fromJson(Map<String, dynamic> json) => _$BadgeFromJson(json);

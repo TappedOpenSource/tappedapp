@@ -13,12 +13,11 @@ import 'package:intheloopapp/domains/models/venue_info.dart';
 import 'package:uuid/uuid.dart';
 
 part 'user_model.freezed.dart';
-
 part 'user_model.g.dart';
 
 @freezed
-@JsonSerializable(explicitToJson: true)
 class UserModel with _$UserModel {
+  @JsonSerializable(explicitToJson: true)
   const factory UserModel({
     required String id,
     @OptionalDateTimeConverter() required Option<DateTime> timestamp,

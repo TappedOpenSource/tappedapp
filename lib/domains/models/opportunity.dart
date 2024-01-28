@@ -5,7 +5,6 @@ import 'package:intheloopapp/data/prod/firestore_database_impl.dart';
 import 'package:intheloopapp/domains/models/location.dart';
 
 part 'opportunity.freezed.dart';
-
 part 'opportunity.g.dart';
 
 @freezed
