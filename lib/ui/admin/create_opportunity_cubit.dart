@@ -2,13 +2,13 @@ import 'dart:io';
 
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:fpdart/fpdart.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:intheloopapp/data/database_repository.dart';
 import 'package:intheloopapp/data/places_repository.dart';
 import 'package:intheloopapp/data/storage_repository.dart';
 import 'package:intheloopapp/domains/models/location.dart';
 import 'package:intheloopapp/domains/models/opportunity.dart';
-import 'package:fpdart/fpdart.dart';
 import 'package:intheloopapp/ui/create_booking/components/end_time.dart';
 import 'package:intheloopapp/ui/create_booking/components/start_time.dart';
 import 'package:intheloopapp/utils/app_logger.dart';
@@ -154,13 +154,11 @@ class CreateOpportunityCubit extends Cubit<CreateOpportunityState> {
         flierUrl: Option.fromNullable(flierUrl),
         location: location,
         timestamp: DateTime.now(),
-        touched: const None(),
         title: state.title,
         description: state.description,
         isPaid: state.isPaid,
         startTime: state.startTime.value,
         endTime: state.endTime.value,
-        deleted: false,
       );
 
       logger.debug('op: $op');

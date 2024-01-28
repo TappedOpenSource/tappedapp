@@ -1,14 +1,13 @@
 
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:equatable/equatable.dart';
+import 'package:fpdart/fpdart.dart';
 import 'package:intheloopapp/utils/default_value.dart';
 import 'package:json_annotation/json_annotation.dart';
-import 'package:fpdart/fpdart.dart';
 
 part 'social_following.g.dart';
 
 @JsonSerializable()
-class SocialFollowing extends Equatable {
+class SocialFollowing {
   const SocialFollowing({
     required this.youtubeChannelId,
     required this.tiktokHandle,
@@ -18,48 +17,6 @@ class SocialFollowing extends Equatable {
     required this.twitterHandle,
     required this.twitterFollowers,
   });
-
-  // @OptionalStringConverter()
-  final Option<String> youtubeChannelId;
-
-  // @OptionalStringConverter()
-  final Option<String> tiktokHandle;
-  final int tiktokFollowers;
-
-  // @OptionalStringConverter()
-  final Option<String> instagramHandle;
-  final int instagramFollowers;
-
-  // @OptionalStringConverter()
-  final Option<String> twitterHandle;
-  final int twitterFollowers;
-
-  int get audienceSize =>
-      tiktokFollowers +
-          instagramFollowers +
-          twitterFollowers;
-
-  @override
-  List<Object?> get props => [
-    youtubeChannelId,
-    tiktokHandle,
-    tiktokFollowers,
-    instagramHandle,
-    instagramFollowers,
-    twitterHandle,
-    twitterFollowers,
-  ];
-
-  // empty
-  factory SocialFollowing.empty() => const SocialFollowing(
-    youtubeChannelId: None(),
-    tiktokHandle: None(),
-    tiktokFollowers: 0,
-    instagramHandle: None(),
-    instagramFollowers: 0,
-    twitterHandle: None(),
-    twitterFollowers: 0,
-  );
 
   // fromJson
   factory SocialFollowing.fromJson(Map<String, dynamic> json) =>
@@ -82,6 +39,37 @@ class SocialFollowing extends Equatable {
       twitterFollowers: doc.getOrElse<int>('twitterFollowers', 0),
     );
   }
+
+  // @OptionalStringConverter()
+  final Option<String> youtubeChannelId;
+
+  // @OptionalStringConverter()
+  final Option<String> tiktokHandle;
+  final int tiktokFollowers;
+
+  // @OptionalStringConverter()
+  final Option<String> instagramHandle;
+  final int instagramFollowers;
+
+  // @OptionalStringConverter()
+  final Option<String> twitterHandle;
+  final int twitterFollowers;
+
+  int get audienceSize =>
+      tiktokFollowers +
+          instagramFollowers +
+          twitterFollowers;
+
+  // empty
+  static const empty = SocialFollowing(
+    youtubeChannelId: None(),
+    tiktokHandle: None(),
+    tiktokFollowers: 0,
+    instagramHandle: None(),
+    instagramFollowers: 0,
+    twitterHandle: None(),
+    twitterFollowers: 0,
+  );
 
   // toJson
   Map<String, dynamic> toJson() => _$SocialFollowingToJson(this);

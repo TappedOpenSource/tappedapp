@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:fpdart/fpdart.dart';
 import 'package:intheloopapp/data/places_repository.dart';
 import 'package:intheloopapp/domains/models/badge.dart' as badge_model;
 import 'package:intheloopapp/domains/models/booking.dart';
 import 'package:intheloopapp/domains/models/opportunity.dart';
-import 'package:fpdart/fpdart.dart';
 import 'package:intheloopapp/domains/models/service.dart';
 import 'package:intheloopapp/domains/models/user_model.dart';
 import 'package:intheloopapp/ui/activity/activity_view.dart';
@@ -13,7 +13,6 @@ import 'package:intheloopapp/ui/badge/badge_view.dart';
 import 'package:intheloopapp/ui/badge/badges_view.dart';
 import 'package:intheloopapp/ui/booking/booking_view.dart';
 import 'package:intheloopapp/ui/bookings/user_bookings_feed.dart';
-import 'package:intheloopapp/ui/common/waitlist_view.dart';
 import 'package:intheloopapp/ui/create_booking/booking_confirmation_view.dart';
 import 'package:intheloopapp/ui/create_booking/create_booking_view.dart';
 import 'package:intheloopapp/ui/create_service/create_service_view.dart';
@@ -286,7 +285,7 @@ final class MessagingChannelListPage extends TappedRoute {
   MessagingChannelListPage()
       : super(
           routeName: '/messaging_channel_list',
-          view: MessagingChannelListView(),
+          view: const MessagingChannelListView(),
         );
 }
 

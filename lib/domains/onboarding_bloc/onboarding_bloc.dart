@@ -1,7 +1,7 @@
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
-import 'package:intheloopapp/data/database_repository.dart';
 import 'package:fpdart/fpdart.dart';
+import 'package:intheloopapp/data/database_repository.dart';
 import 'package:intheloopapp/domains/models/user_model.dart';
 import 'package:intheloopapp/utils/app_logger.dart';
 

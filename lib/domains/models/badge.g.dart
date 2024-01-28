@@ -6,22 +6,21 @@ part of 'badge.dart';
 // JsonSerializableGenerator
 // **************************************************************************
 
-Badge _$BadgeFromJson(Map<String, dynamic> json) => Badge(
+_$BadgeImpl _$$BadgeImplFromJson(Map<String, dynamic> json) => _$BadgeImpl(
       id: json['id'] as String,
       creatorId: json['creatorId'] as String,
       imageUrl: json['imageUrl'] as String,
-      name: json['name'] as String? ?? '',
-      description: json['description'] as String? ?? '',
-      timestamp: json['timestamp'] == null
-          ? DateTime.now()
-          : timestampToDateTime(json['timestamp'] as Timestamp),
+      name: json['name'] as String,
+      description: json['description'] as String,
+      timestamp: DateTime.parse(json['timestamp'] as String),
     );
 
-Map<String, dynamic> _$BadgeToJson(Badge instance) => <String, dynamic>{
+Map<String, dynamic> _$$BadgeImplToJson(_$BadgeImpl instance) =>
+    <String, dynamic>{
       'id': instance.id,
       'creatorId': instance.creatorId,
       'imageUrl': instance.imageUrl,
       'name': instance.name,
       'description': instance.description,
-      'timestamp': dateTimeToTimestamp(instance.timestamp),
+      'timestamp': instance.timestamp.toIso8601String(),
     };

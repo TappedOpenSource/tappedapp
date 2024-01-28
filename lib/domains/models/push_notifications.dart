@@ -1,13 +1,12 @@
 
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:equatable/equatable.dart';
 import 'package:intheloopapp/utils/default_value.dart';
 import 'package:json_annotation/json_annotation.dart';
 
 part 'push_notifications.g.dart';
 
 @JsonSerializable()
-class PushNotifications extends Equatable {
+class PushNotifications {
   const PushNotifications({
     required this.appReleases,
     required this.tappedUpdates,
@@ -15,30 +14,32 @@ class PushNotifications extends Equatable {
     required this.directMessages,
   });
 
+  // fromJson
+  factory PushNotifications.fromJson(Map<String, dynamic> json) =>
+      _$PushNotificationsFromJson(json);
+
+  // fromDoc
+  factory PushNotifications.fromDoc(DocumentSnapshot<Map<String, dynamic>> doc) {
+    return PushNotifications(
+      appReleases: doc.getOrElse<bool>('appReleases', true),
+      tappedUpdates: doc.getOrElse<bool>('tappedUpdates', true),
+      bookingRequests: doc.getOrElse<bool>('bookingRequests', true),
+      directMessages: doc.getOrElse<bool>('directMessages', true),
+    );
+  }
+
   final bool appReleases;
   final bool tappedUpdates;
   final bool bookingRequests;
   final bool directMessages;
 
-  @override
-  List<Object?> get props => [
-    appReleases,
-    tappedUpdates,
-    bookingRequests,
-    directMessages,
-  ];
-
   // empty
-  factory PushNotifications.empty() => const PushNotifications(
+  static const empty = PushNotifications(
     appReleases: true,
     tappedUpdates: true,
     bookingRequests: true,
     directMessages: true,
   );
-
-  // fromJson
-  factory PushNotifications.fromJson(Map<String, dynamic> json) =>
-      _$PushNotificationsFromJson(json);
 
   // toJson
   Map<String, dynamic> toJson() => _$PushNotificationsToJson(this);
@@ -48,23 +49,13 @@ class PushNotifications extends Equatable {
     bool? appReleases,
     bool? tappedUpdates,
     bool? bookingRequests,
-    bool? directMessages,j
+    bool? directMessages,j,
   }) {
     return PushNotifications(
       appReleases: appReleases ?? this.appReleases,
       tappedUpdates: tappedUpdates ?? this.tappedUpdates,
       bookingRequests: bookingRequests ?? this.bookingRequests,
       directMessages: directMessages ?? this.directMessages,
-    );
-  }
-
-  // fromDoc
-  factory PushNotifications.fromDoc(DocumentSnapshot<Map<String, dynamic>> doc) {
-    return PushNotifications(
-      appReleases: doc.getOrElse<bool>('appReleases', true),
-      tappedUpdates: doc.getOrElse<bool>('tappedUpdates', true),
-      bookingRequests: doc.getOrElse<bool>('bookingRequests', true),
-      directMessages: doc.getOrElse<bool>('directMessages', true),
     );
   }
 

@@ -3,7 +3,7 @@ import 'package:intheloopapp/ui/messaging/channel_list_view.dart';
 import 'package:intheloopapp/ui/search/components/tapped_search_bar.dart';
 
 class MessagingChannelListView extends StatelessWidget {
-  MessagingChannelListView({super.key});
+  const MessagingChannelListView({super.key});
 
   @override
   Widget build(BuildContext context) {

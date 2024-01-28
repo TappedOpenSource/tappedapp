@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fpdart/fpdart.dart';
-import 'package:intheloopapp/domains/models/performer_info.dart';
+import 'package:intheloopapp/domains/models/user_model.dart';
 import 'package:intheloopapp/ui/profile/profile_cubit.dart';
 
 class StarRating extends StatelessWidget {

@@ -5,11 +5,11 @@ import 'package:equatable/equatable.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:formz/formz.dart';
+import 'package:fpdart/fpdart.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:intheloopapp/data/database_repository.dart';
 import 'package:intheloopapp/data/storage_repository.dart';
 import 'package:intheloopapp/domains/authentication_bloc/authentication_bloc.dart';
-import 'package:fpdart/fpdart.dart';
 import 'package:intheloopapp/domains/models/user_model.dart';
 import 'package:intheloopapp/domains/models/username.dart';
 import 'package:intheloopapp/domains/navigation_bloc/navigation_bloc.dart';
@@ -131,7 +131,7 @@ class OnboardingFlowCubit extends Cubit<OnboardingFlowState> {
       final emptyUser = UserModel.empty();
       final currentUser = emptyUser.copyWith(
         id: currentAuthUser.uid,
-        email: currentAuthUser.email,
+        email: currentAuthUser.email ?? '',
         username: Username.fromString(state.username.value),
         artistName: currentAuthUser.displayName ?? state.username.value,
         profilePicture: profilePictureUrl,

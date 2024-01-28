@@ -1,7 +1,7 @@
 part of 'profile_cubit.dart';
 
 class ProfileState extends Equatable {
-  ProfileState({
+  const ProfileState({
     required this.currentUser,
     required this.visitedUser,
     this.isFollowing = false,

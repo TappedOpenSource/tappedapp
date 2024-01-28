@@ -6,8 +6,8 @@ import 'package:cloud_functions/cloud_functions.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_google_places_sdk/flutter_google_places_sdk.dart';
-import 'package:intheloopapp/data/places_repository.dart';
 import 'package:fpdart/fpdart.dart';
+import 'package:intheloopapp/data/places_repository.dart';
 import 'package:intheloopapp/utils/app_logger.dart';
 import 'package:intheloopapp/utils/default_value.dart';
 

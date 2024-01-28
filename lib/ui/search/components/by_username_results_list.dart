@@ -3,7 +3,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fpdart/fpdart.dart';
 import 'package:intheloopapp/domains/search_bloc/search_bloc.dart';
 import 'package:intheloopapp/ui/loading/logo_wave.dart';
-import 'package:intheloopapp/ui/search/components/search_view.dart';
 import 'package:intheloopapp/ui/user_tile.dart';
 
 class ByUsernameResultsList extends StatelessWidget {

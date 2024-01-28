@@ -1,15 +1,12 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:group_radio_button/group_radio_button.dart';
 import 'package:fpdart/fpdart.dart';
-import 'package:intheloopapp/ui/common/tapped_app_bar.dart';
 import 'package:intheloopapp/ui/gig_search/components/city_selection.dart';
 import 'package:intheloopapp/ui/gig_search/gig_search_cubit.dart';
 import 'package:intheloopapp/ui/settings/components/genre_selection.dart';
 import 'package:intheloopapp/ui/user_tile.dart';
 import 'package:intheloopapp/utils/current_user_builder.dart';
-import 'package:skeletons/skeletons.dart';
 
 class GigSearchView extends StatelessWidget {
   const GigSearchView({
@@ -44,7 +41,7 @@ class GigSearchView extends StatelessWidget {
                     ),
                     CitySelection(
                       onConfirm: (_) {},
-                      initialValue: [],
+                      initialValue: const [],
                     ),
                     const SizedBox(height: 20),
                     const Text(
@@ -68,17 +65,17 @@ class GigSearchView extends StatelessWidget {
                         fontSize: 20,
                       ),
                     ),
-                    Row(
+                    const Row(
                       children: [
                         Card(
                           child: Padding(
-                            padding: const EdgeInsets.all(8.0),
+                            padding: EdgeInsets.all(8),
                             child: Text('date'),
                           ),
                         ),
                         Card(
                           child: Padding(
-                            padding: const EdgeInsets.all(8.0),
+                            padding: EdgeInsets.all(8),
                             child: Text('flexible'),
                           ),
                         ),

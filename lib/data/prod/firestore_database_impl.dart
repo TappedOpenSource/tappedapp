@@ -3,13 +3,14 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:enum_to_string/enum_to_string.dart';
 import 'package:feedback/feedback.dart';
 import 'package:firebase_analytics/firebase_analytics.dart';
+import 'package:fpdart/fpdart.dart';
+import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:georange/georange.dart';
 import 'package:intheloopapp/data/database_repository.dart';
 import 'package:intheloopapp/domains/models/activity.dart';
 import 'package:intheloopapp/domains/models/badge.dart';
 import 'package:intheloopapp/domains/models/booking.dart';
 import 'package:intheloopapp/domains/models/opportunity.dart';
-import 'package:fpdart/fpdart.dart';
 import 'package:intheloopapp/domains/models/review.dart';
 import 'package:intheloopapp/domains/models/service.dart';
 import 'package:intheloopapp/domains/models/user_model.dart';
@@ -1907,10 +1908,34 @@ class HandleAlreadyExistsException implements Exception {
   String cause;
 }
 
-DateTime timestampToDateTime(Timestamp json) {
-  return json.toDate();
+class DateTimeConverter implements JsonConverter<DateTime, Timestamp> {
+  const DateTimeConverter();
+
+  @override
+  DateTime fromJson(Timestamp json) {
+    return json.toDate();
+  }
+
+  @override
+  Timestamp toJson(DateTime object) {
+    return Timestamp.fromDate(object);
+  }
 }
 
-Timestamp dateTimeToTimestamp(DateTime object) {
-  return Timestamp.fromDate(object);
+class OptionalDateTimeConverter
+    implements JsonConverter<Option<DateTime>, Timestamp> {
+  const OptionalDateTimeConverter();
+
+  @override
+  Option<DateTime> fromJson(Timestamp json) {
+    return Option.of(json.toDate());
+  }
+
+  @override
+  Timestamp toJson(Option<DateTime> object) {
+    return object.fold(
+      Timestamp.now,
+      Timestamp.fromDate,
+    );
+  }
 }

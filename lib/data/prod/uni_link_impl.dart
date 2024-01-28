@@ -2,8 +2,8 @@ import 'dart:async';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_analytics/firebase_analytics.dart';
-import 'package:intheloopapp/data/deep_link_repository.dart';
 import 'package:fpdart/fpdart.dart';
+import 'package:intheloopapp/data/deep_link_repository.dart';
 import 'package:intheloopapp/domains/models/user_model.dart';
 import 'package:intheloopapp/utils/app_logger.dart';
 import 'package:uni_links/uni_links.dart';

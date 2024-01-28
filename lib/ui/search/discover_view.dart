@@ -2,8 +2,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:flutter_map_marker_cluster/flutter_map_marker_cluster.dart';
-import 'package:intheloopapp/domains/models/location.dart';
 import 'package:fpdart/fpdart.dart';
+import 'package:intheloopapp/domains/models/location.dart';
 import 'package:intheloopapp/domains/models/user_model.dart';
 import 'package:intheloopapp/domains/navigation_bloc/navigation_bloc.dart';
 import 'package:intheloopapp/domains/navigation_bloc/tapped_route.dart';
@@ -109,7 +109,7 @@ class DiscoverView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final defaultLoc = Location.rva();
+    const defaultLoc = Location.rva;
     final database = context.database;
     final mapController = MapController();
     return FutureBuilder(

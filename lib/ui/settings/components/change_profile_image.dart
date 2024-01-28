@@ -3,7 +3,6 @@ import 'dart:io';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:fpdart/fpdart.dart';
 import 'package:intheloopapp/ui/settings/settings_cubit.dart';
 import 'package:intheloopapp/utils/current_user_builder.dart';
 

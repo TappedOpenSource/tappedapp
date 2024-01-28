@@ -1,28 +1,29 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:equatable/equatable.dart';
+import 'package:fpdart/fpdart.dart';
+import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:intheloopapp/data/prod/firestore_database_impl.dart';
 import 'package:intheloopapp/domains/models/location.dart';
-import 'package:fpdart/fpdart.dart';
-import 'package:json_annotation/json_annotation.dart';
+
+part 'opportunity.freezed.dart';
 
 part 'opportunity.g.dart';
 
-@JsonSerializable()
-class Opportunity extends Equatable {
-  const Opportunity({
-    required this.id,
-    required this.userId,
-    required this.title,
-    required this.description,
-    required this.flierUrl,
-    required this.location,
-    required this.timestamp,
-    required this.startTime,
-    required this.endTime,
-    required this.isPaid,
-    required this.touched,
-    required this.deleted,
-  });
+@freezed
+class Opportunity with _$Opportunity {
+  const factory Opportunity({
+    required String id,
+    required String userId,
+    @DateTimeConverter() required DateTime timestamp,
+    @DateTimeConverter() required DateTime startTime,
+    @DateTimeConverter() required DateTime endTime,
+    @Default('') String title,
+    @Default('') String description,
+    @Default(None()) Option<String> flierUrl,
+    @Default(Location.rva) Location location,
+    @Default(false) bool isPaid,
+    @Default(None()) Option<OpportunityInteraction> touched,
+    @Default(false) bool deleted,
+  }) = _Opportunity;
 
   factory Opportunity.fromJson(Map<String, dynamic> json) =>
       _$OpportunityFromJson(json);
@@ -34,97 +35,6 @@ class Opportunity extends Equatable {
     }
 
     return Opportunity.fromJson(data);
-  }
-
-  final String id;
-  final String userId;
-
-  @JsonKey(defaultValue: '')
-  final String title;
-
-  @JsonKey(defaultValue: '')
-  final String description;
-
-  final Option<String> flierUrl;
-
-  @JsonKey(defaultValue: Location.rva)
-  final Location location;
-
-  @JsonKey(
-    defaultValue: DateTime.now,
-    fromJson: timestampToDateTime,
-    toJson: dateTimeToTimestamp,
-  )
-  final DateTime timestamp;
-
-  @JsonKey(
-    defaultValue: DateTime.now,
-    fromJson: timestampToDateTime,
-    toJson: dateTimeToTimestamp,
-  )
-  final DateTime startTime;
-
-  @JsonKey(
-    defaultValue: DateTime.now,
-    fromJson: timestampToDateTime,
-    toJson: dateTimeToTimestamp,
-  )
-  final DateTime endTime;
-
-  @JsonKey(defaultValue: false)
-  final bool isPaid;
-
-  final Option<OpportunityInteraction> touched;
-
-  @JsonKey(defaultValue: false)
-  final bool deleted;
-
-  @override
-  List<Object?> get props => [
-        id,
-        userId,
-        title,
-        description,
-        flierUrl,
-        location,
-        timestamp,
-        startTime,
-        endTime,
-        isPaid,
-        touched,
-        deleted,
-      ];
-
-  Map<String, dynamic> toJson() => _$OpportunityToJson(this);
-
-  Opportunity copyWith({
-    String? id,
-    String? userId,
-    String? title,
-    String? description,
-    Option<String>? flierUrl,
-    Location? location,
-    DateTime? timestamp,
-    DateTime? startTime,
-    DateTime? endTime,
-    bool? isPaid,
-    Option<OpportunityInteraction>? touched,
-    bool? deleted,
-  }) {
-    return Opportunity(
-      id: id ?? this.id,
-      userId: userId ?? this.userId,
-      title: title ?? this.title,
-      description: description ?? this.description,
-      flierUrl: flierUrl ?? this.flierUrl,
-      location: location ?? this.location,
-      timestamp: timestamp ?? this.timestamp,
-      startTime: startTime ?? this.startTime,
-      endTime: endTime ?? this.endTime,
-      isPaid: isPaid ?? this.isPaid,
-      touched: touched ?? this.touched,
-      deleted: deleted ?? this.deleted,
-    );
   }
 }
 

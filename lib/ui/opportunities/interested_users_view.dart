@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:intheloopapp/domains/models/opportunity.dart';
 import 'package:fpdart/fpdart.dart';
+import 'package:intheloopapp/domains/models/opportunity.dart';
 import 'package:intheloopapp/domains/models/user_model.dart';
 import 'package:intheloopapp/ui/loading/loading_view.dart';
 import 'package:intheloopapp/ui/themes.dart';

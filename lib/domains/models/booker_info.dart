@@ -1,8 +1,6 @@
 
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:equatable/equatable.dart';
 import 'package:fpdart/fpdart.dart';
-import 'package:intheloopapp/utils/default_value.dart';
 import 'package:intheloopapp/utils/deserialize.dart';
 import 'package:json_annotation/json_annotation.dart';
 
@@ -14,6 +12,16 @@ class BookerInfo extends Equatable {
     required this.rating,
     required this.reviewCount,
   });
+
+  // empty
+  factory BookerInfo.empty() => const BookerInfo(
+    rating: None(),
+    reviewCount: 0,
+  );
+
+  // fromJson
+  factory BookerInfo.fromJson(Map<String, dynamic> json) =>
+      _$BookerInfoFromJson(json);
 
   @JsonKey(
     fromJson: optionalDoubleFromJson,
@@ -28,16 +36,6 @@ class BookerInfo extends Equatable {
     rating,
     reviewCount,
   ];
-
-  // empty
-  factory BookerInfo.empty() => const BookerInfo(
-    rating: None(),
-    reviewCount: 0,
-  );
-
-  // fromJson
-  factory BookerInfo.fromJson(Map<String, dynamic> json) =>
-      _$BookerInfoFromJson(json);
 
   // toJson
   Map<String, dynamic> toJson() => _$BookerInfoToJson(this);

@@ -1,6 +1,6 @@
 import 'package:equatable/equatable.dart';
-import 'package:intheloopapp/domains/models/genre.dart';
 import 'package:fpdart/fpdart.dart';
+import 'package:intheloopapp/domains/models/genre.dart';
 import 'package:intheloopapp/utils/deserialize.dart';
 import 'package:json_annotation/json_annotation.dart';
 
@@ -16,6 +16,20 @@ class PerformerInfo extends Equatable {
     required this.label,
     required this.spotifyId,
   });
+
+  // empty
+  factory PerformerInfo.empty() => const PerformerInfo(
+    pressKitUrl: None(),
+    genres: [],
+    rating: None(),
+    reviewCount: 0,
+    label: 'None',
+    spotifyId: None(),
+  );
+
+  // fromJson
+  factory PerformerInfo.fromJson(Map<String, dynamic> json) =>
+      _$PerformerInfoFromJson(json);
 
   // @OptionalStringConverter()
   final Option<String> pressKitUrl;
@@ -47,20 +61,6 @@ class PerformerInfo extends Equatable {
     label,
     spotifyId,
   ];
-
-  // empty
-  factory PerformerInfo.empty() => const PerformerInfo(
-    pressKitUrl: None(),
-    genres: [],
-    rating: None(),
-    reviewCount: 0,
-    label: 'None',
-    spotifyId: None(),
-  );
-
-  // fromJson
-  factory PerformerInfo.fromJson(Map<String, dynamic> json) =>
-      _$PerformerInfoFromJson(json);
 
   // copyWith
   PerformerInfo copyWith({

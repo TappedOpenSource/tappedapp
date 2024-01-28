@@ -37,7 +37,7 @@ class ShellView extends StatelessWidget {
                       DiscoverView(),
                       // PaywallView(),
                       const BookingsView(),
-                      MessagingChannelListView(),
+                      const MessagingChannelListView(),
                       ProfileView(
                         visitedUserId: currentUser.id,
                         visitedUser: Option.of(currentUser),

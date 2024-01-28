@@ -24,6 +24,7 @@ extension BlocUtils on BuildContext {
   RemoteConfigRepository get remoteConfig => read<RemoteConfigRepository>();
   StreamRepository get stream => read<StreamRepository>();
   NotificationRepository get notifications => read<NotificationRepository>();
+  RemoteConfigRepository get remote => read<RemoteConfigRepository>();
 
   NavigationBloc get nav => read<NavigationBloc>();
   AuthenticationBloc get authentication => read<AuthenticationBloc>();

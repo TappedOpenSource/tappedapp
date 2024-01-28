@@ -8,7 +8,6 @@ import 'package:intheloopapp/domains/navigation_bloc/tapped_route.dart';
 import 'package:intheloopapp/domains/search_bloc/search_bloc.dart';
 import 'package:intheloopapp/ui/loading/logo_wave.dart';
 import 'package:intheloopapp/ui/user_tile.dart';
-import 'package:intheloopapp/utils/app_logger.dart';
 import 'package:intheloopapp/utils/bloc_utils.dart';
 
 class TappedSearchBar extends StatefulWidget {
@@ -32,8 +31,8 @@ class TappedSearchBar extends StatefulWidget {
 class _TappedSearchBarState extends State<TappedSearchBar> {
   late final FocusNode _searchFocusNode;
   late final SearchController _searchController;
-  List<UserModel> _searchResults = [];
-  bool _loading = false;
+  final List<UserModel> _searchResults = [];
+  final bool _loading = false;
 
   void search() {
     final query = _searchController.text;

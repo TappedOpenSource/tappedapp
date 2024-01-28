@@ -2,15 +2,11 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fpdart/fpdart.dart';
-import 'package:intheloopapp/ui/profile/components/badges_chip.dart';
-import 'package:intheloopapp/ui/profile/components/epk_button.dart';
-import 'package:intheloopapp/ui/profile/components/location_chip.dart';
 import 'package:intheloopapp/ui/profile/components/more_options_button.dart';
 import 'package:intheloopapp/ui/profile/components/social_media_icons.dart';
 import 'package:intheloopapp/ui/profile/profile_cubit.dart';
 import 'package:intheloopapp/ui/themes.dart';
 import 'package:intheloopapp/utils/geohash.dart';
-import 'package:intheloopapp/utils/linkify.dart';
 import 'package:readmore/readmore.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -161,7 +157,6 @@ class InfoSliver extends StatelessWidget {
                 ),
                 child: ReadMoreText(
                   bio,
-                  trimLines: 2,
                   colorClickableText: tappedAccent,
                   trimMode: TrimMode.Line,
                   trimCollapsedText: ' show more',

@@ -3,13 +3,13 @@ import 'dart:async';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:fpdart/fpdart.dart';
 import 'package:hydrated_bloc/hydrated_bloc.dart';
 import 'package:intheloopapp/data/database_repository.dart';
 import 'package:intheloopapp/data/places_repository.dart';
 import 'package:intheloopapp/domains/models/badge.dart' as badge;
 import 'package:intheloopapp/domains/models/booking.dart';
 import 'package:intheloopapp/domains/models/opportunity.dart';
-import 'package:fpdart/fpdart.dart';
 import 'package:intheloopapp/domains/models/review.dart';
 import 'package:intheloopapp/domains/models/service.dart';
 import 'package:intheloopapp/domains/models/user_model.dart';
@@ -329,7 +329,7 @@ class ProfileCubit extends Cubit<ProfileState> {
     try {
       logger.debug('initPlace ${state.visitedUser}');
       final place = await switch (visitedUser.location) {
-        None() => Future.value(null),
+        None() => Future<PlaceData?>.value(),
         Some(:final value) => (() async {
           return await places.getPlaceById(value.placeId);
         })(),

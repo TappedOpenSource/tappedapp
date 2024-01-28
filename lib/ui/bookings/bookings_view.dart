@@ -61,8 +61,8 @@ class BookingsView extends StatelessWidget {
               child: SafeArea(
                 child: CustomScrollView(
                   slivers: [
-                    SliverToBoxAdapter(
-                      child: const Padding(
+                    const SliverToBoxAdapter(
+                      child: Padding(
                         padding: EdgeInsets.symmetric(
                           vertical: 16,
                           horizontal: 8,
