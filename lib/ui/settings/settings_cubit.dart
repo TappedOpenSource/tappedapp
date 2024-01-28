@@ -238,11 +238,11 @@ class SettingsCubit extends Cubit<SettingsState> {
           performerInfo: Option.of(newPerformerInfo),
           socialFollowing: currentUser.socialFollowing.copyWith(
             twitterHandle: Option.fromNullable(state.twitterHandle),
-            twitterFollowers: state.twitterFollowers,
+            twitterFollowers: state.twitterFollowers ?? 0,
             instagramHandle: Option.fromNullable(state.instagramHandle),
-            instagramFollowers: state.instagramFollowers,
+            instagramFollowers: state.instagramFollowers ?? 0,
             tiktokHandle: Option.fromNullable(state.tiktokHandle),
-            tiktokFollowers: state.tiktokFollowers,
+            tiktokFollowers: state.tiktokFollowers ?? 0,
             youtubeChannelId: Option.fromNullable(state.youtubeChannelId),
           ),
           pushNotifications: currentUser.pushNotifications.copyWith(

@@ -15,7 +15,7 @@ class VenueInfo with _$VenueInfo {
     @Default(None()) Option<String> monitors,
     @Default(None()) Option<String> microphones,
     @Default(None()) Option<String> lights,
-    @Default(Option.of(VenueType.other)) Option<VenueType> type,
+    @Default(VenueType.other) VenueType type,
   }) = _VenueInfo;
 
   // empty

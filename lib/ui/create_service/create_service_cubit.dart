@@ -7,6 +7,7 @@ import 'package:intheloopapp/domains/models/service.dart';
 import 'package:intheloopapp/domains/navigation_bloc/navigation_bloc.dart';
 import 'package:intheloopapp/ui/create_service/components/service_description.dart';
 import 'package:intheloopapp/ui/create_service/components/service_title.dart';
+import 'package:uuid/uuid.dart';
 
 part 'create_service_state.dart';
 
@@ -100,7 +101,8 @@ class CreateServiceCubit extends Cubit<CreateServiceState> {
 
       emit(state.copyWith(status: FormzSubmissionStatus.inProgress));
 
-      final service = Service.empty().copyWith(
+      final service = Service(
+        id: const Uuid().v4(),
         userId: currentUserId,
         title: state.title.value,
         description: state.description.value,

@@ -27,7 +27,7 @@ mixin _$VenueInfo {
   Option<String> get monitors => throw _privateConstructorUsedError;
   Option<String> get microphones => throw _privateConstructorUsedError;
   Option<String> get lights => throw _privateConstructorUsedError;
-  Option<VenueType> get type => throw _privateConstructorUsedError;
+  VenueType get type => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
@@ -48,7 +48,7 @@ abstract class $VenueInfoCopyWith<$Res> {
       Option<String> monitors,
       Option<String> microphones,
       Option<String> lights,
-      Option<VenueType> type});
+      VenueType type});
 }
 
 /// @nodoc
@@ -105,7 +105,7 @@ class _$VenueInfoCopyWithImpl<$Res, $Val extends VenueInfo>
       type: null == type
           ? _value.type
           : type // ignore: cast_nullable_to_non_nullable
-              as Option<VenueType>,
+              as VenueType,
     ) as $Val);
   }
 }
@@ -126,7 +126,7 @@ abstract class _$$VenueInfoImplCopyWith<$Res>
       Option<String> monitors,
       Option<String> microphones,
       Option<String> lights,
-      Option<VenueType> type});
+      VenueType type});
 }
 
 /// @nodoc
@@ -181,7 +181,7 @@ class __$$VenueInfoImplCopyWithImpl<$Res>
       type: null == type
           ? _value.type
           : type // ignore: cast_nullable_to_non_nullable
-              as Option<VenueType>,
+              as VenueType,
     ));
   }
 }
@@ -197,7 +197,7 @@ class _$VenueInfoImpl implements _VenueInfo {
       this.monitors = const None(),
       this.microphones = const None(),
       this.lights = const None(),
-      this.type = const Option.of(VenueType.other)});
+      this.type = VenueType.other});
 
   factory _$VenueInfoImpl.fromJson(Map<String, dynamic> json) =>
       _$$VenueInfoImplFromJson(json);
@@ -225,7 +225,7 @@ class _$VenueInfoImpl implements _VenueInfo {
   final Option<String> lights;
   @override
   @JsonKey()
-  final Option<VenueType> type;
+  final VenueType type;
 
   @override
   String toString() {
@@ -281,7 +281,7 @@ abstract class _VenueInfo implements VenueInfo {
       final Option<String> monitors,
       final Option<String> microphones,
       final Option<String> lights,
-      final Option<VenueType> type}) = _$VenueInfoImpl;
+      final VenueType type}) = _$VenueInfoImpl;
 
   factory _VenueInfo.fromJson(Map<String, dynamic> json) =
       _$VenueInfoImpl.fromJson;
@@ -301,7 +301,7 @@ abstract class _VenueInfo implements VenueInfo {
   @override
   Option<String> get lights;
   @override
-  Option<VenueType> get type;
+  VenueType get type;
   @override
   @JsonKey(ignore: true)
   _$$VenueInfoImplCopyWith<_$VenueInfoImpl> get copyWith =>

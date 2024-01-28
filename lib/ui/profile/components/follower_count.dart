@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:intheloopapp/domains/models/social_following.dart';
 import 'package:intheloopapp/ui/profile/profile_cubit.dart';
 import 'package:intl/intl.dart';
 
