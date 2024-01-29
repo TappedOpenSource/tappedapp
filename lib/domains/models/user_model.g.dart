@@ -10,7 +10,7 @@ _$UserModelImpl _$$UserModelImplFromJson(Map<String, dynamic> json) =>
     _$UserModelImpl(
       id: json['id'] as String,
       timestamp: const OptionalDateTimeConverter()
-          .fromJson(json['timestamp'] as Timestamp),
+          .fromJson(json['timestamp'] as Timestamp?),
       username: const UsernameConverter().fromJson(json['username'] as String),
       email: json['email'] as String? ?? '',
       unclaimed: json['unclaimed'] as bool? ?? false,

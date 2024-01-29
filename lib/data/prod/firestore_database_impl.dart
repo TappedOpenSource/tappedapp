@@ -1923,16 +1923,16 @@ class DateTimeConverter implements JsonConverter<DateTime, Timestamp> {
 }
 
 class OptionalDateTimeConverter
-    implements JsonConverter<Option<DateTime>, Timestamp> {
+    implements JsonConverter<Option<DateTime>, Timestamp?> {
   const OptionalDateTimeConverter();
 
   @override
-  Option<DateTime> fromJson(Timestamp json) {
-    return Option.of(json.toDate());
+  Option<DateTime> fromJson(Timestamp? json) {
+    return Option.fromNullable(json?.toDate());
   }
 
   @override
-  Timestamp toJson(Option<DateTime> object) {
+  Timestamp? toJson(Option<DateTime> object) {
     return object.fold(
       Timestamp.now,
       Timestamp.fromDate,

@@ -81,6 +81,10 @@ export const createDefaultServicesOnUserCreated = onDocumentCreated(
       throw new HttpsError("failed-precondition", "user does not exist");
     }
 
+    if (user.unclaimed) {
+      return;
+    }
+
     _createDefaultServices(user);
   });
 
