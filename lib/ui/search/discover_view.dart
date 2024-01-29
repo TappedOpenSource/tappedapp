@@ -462,6 +462,7 @@ class DraggableHeader extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
     return SingleChildScrollView(
       physics: const ClampingScrollPhysics(),
       controller: scrollController,
@@ -470,7 +471,7 @@ class DraggableHeader extends StatelessWidget {
           borderRadius: const BorderRadius.vertical(
             top: Radius.circular(12),
           ),
-          color: Colors.white.withOpacity(0.1),
+          color: theme.colorScheme.onSurface.withOpacity(0.1),
         ),
         child: Center(
           child: Padding(
@@ -481,9 +482,9 @@ class DraggableHeader extends StatelessWidget {
             child: Container(
               height: indicatorHeight,
               width: 72,
-              decoration: const BoxDecoration(
-                borderRadius: BorderRadius.all(Radius.circular(2)),
-                color: Colors.white,
+              decoration: BoxDecoration(
+                borderRadius: const BorderRadius.all(Radius.circular(2)),
+                color: theme.colorScheme.onSurface,
               ),
             ),
           ),
