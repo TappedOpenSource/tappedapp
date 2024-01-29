@@ -2,164 +2,54 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:enum_to_string/enum_to_string.dart';
 import 'package:equatable/equatable.dart';
 import 'package:fpdart/fpdart.dart';
+import 'package:freezed_annotation/freezed_annotation.dart';
+import 'package:intheloopapp/data/prod/firestore_database_impl.dart';
 import 'package:intheloopapp/utils/default_value.dart';
 import 'package:uuid/uuid.dart';
 
-class Booking extends Equatable {
-  Booking({
-    required this.serviceId,
-    required this.name,
-    required this.note,
-    required this.requesterId,
-    required this.requesteeId,
-    required this.status,
-    required this.rate,
-    required this.placeId,
-    required this.geohash,
-    required this.lat,
-    required this.lng,
-    required this.startTime,
-    required this.endTime,
-    required this.timestamp,
-    String? id,
-  }) {
-    this.id = id ?? const Uuid().v4();
-  }
+part 'booking.freezed.dart';
+
+part 'booking.g.dart';
+
+@freezed
+class Booking with _$Booking {
+  const factory Booking({
+    required String id,
+    required String name,
+    required String note,
+    required String requesterId,
+    required String requesteeId,
+    required BookingStatus status,
+    required int rate,
+    @DateTimeConverter() required DateTime startTime,
+    @DateTimeConverter() required DateTime endTime,
+    @DateTimeConverter() required DateTime timestamp,
+    @Default(None()) Option<String> serviceId,
+    @Default(None()) Option<String> placeId,
+    @Default(None()) Option<String> geohash,
+    @Default(None()) Option<double> lat,
+    @Default(None()) Option<double> lng,
+  }) = _Booking;
+
+  factory Booking.fromJson(Map<String, dynamic> json) =>
+      _$BookingFromJson(json);
 
   factory Booking.fromDoc(DocumentSnapshot<Map<String, dynamic>> doc) {
-    final tmpTimestamp =
-        doc.getOrElse('timestamp', Timestamp.now()) ;
-    final tmpStartTime =
-        doc.getOrElse('startTime', Timestamp.now()) ;
-    final tmpEndTime = doc.getOrElse('endTime', Timestamp.now()) ;
-    return Booking(
-      id: doc.id,
-      serviceId: Option.fromNullable(
-        doc.getOrElse<String?>('serviceId', null),
-      ),
-      name: doc.getOrElse('name', '') ,
-      note: doc.getOrElse('note', '') ,
-      requesterId: doc.getOrElse('requesterId', '') ,
-      requesteeId: doc.getOrElse('requesteeId', '') ,
-      rate: doc.getOrElse('rate', 0) ,
-      status: EnumToString.fromString(
-            BookingStatus.values,
-            doc.getOrElse('status', '') ,
-          ) ??
-          BookingStatus.pending,
-      placeId: Option.fromNullable(
-        doc.getOrElse<String?>('placeId', null),
-      ),
-      geohash: Option.fromNullable(
-        doc.getOrElse<String?>('geohash', null),
-      ),
-      lat: Option.fromNullable(
-        doc.getOrElse<double?>('lat', null),
-      ),
-      lng: Option.fromNullable(
-        doc.getOrElse<double?>('lng', null),
-      ),
-      startTime: tmpStartTime.toDate(),
-      endTime: tmpEndTime.toDate(),
-      timestamp: tmpTimestamp.toDate(),
-    );
+    final data = doc.data();
+    if (data == null) {
+      throw Exception('Document does not exist!');
+    }
+
+    data['id'] = doc.id;
+    return Booking.fromJson(data);
   }
+}
 
-  late final String id;
-  final Option<String> serviceId;
-  final String name;
-  final String note;
-  final String requesterId;
-  final String requesteeId;
-  final BookingStatus status;
-  final int rate;
-
-  final Option<String> placeId;
-  final Option<String> geohash;
-  final Option<double> lat;
-  final Option<double> lng;
-
-  final DateTime startTime;
-  final DateTime endTime;
-  final DateTime timestamp;
-
-  @override
-  List<Object?> get props => [
-        id,
-        serviceId,
-        name,
-        note,
-        requesterId,
-        requesteeId,
-        status,
-        rate,
-        placeId,
-        geohash,
-        lat,
-        lng,
-        startTime,
-        endTime,
-        timestamp,
-      ];
-
-  Map<String, dynamic> toMap() {
-    return {
-      'id': id,
-      'serviceId': serviceId.toNullable(),
-      'name': name,
-      'note': note,
-      'requesterId': requesterId,
-      'requesteeId': requesteeId,
-      'rate': rate,
-      'status': EnumToString.convertToString(status),
-      'placeId': placeId.toNullable(),
-      'geohash': geohash.toNullable(),
-      'lat': lat.toNullable(),
-      'lng': lng.toNullable(),
-      'timestamp': Timestamp.fromDate(timestamp),
-      'startTime': Timestamp.fromDate(startTime),
-      'endTime': Timestamp.fromDate(endTime),
-    };
-  }
-
-  Booking copyWith({
-    String? id,
-    Option<String>? serviceId,
-    String? name,
-    String? note,
-    String? requesterId,
-    String? requesteeId,
-    int? rate,
-    Option<String>? placeId,
-    Option<String>? geohash,
-    Option<double>? lat,
-    Option<double>? lng,
-    DateTime? startTime,
-    DateTime? endTime,
-    DateTime? timestamp,
-    BookingStatus? status,
-  }) {
-    return Booking(
-      id: id ?? this.id,
-      serviceId: serviceId ?? this.serviceId,
-      name: name ?? this.name,
-      note: note ?? this.note,
-      rate: rate ?? this.rate,
-      requesterId: requesterId ?? this.requesterId,
-      requesteeId: requesteeId ?? this.requesteeId,
-      placeId: placeId ?? this.placeId,
-      geohash: geohash ?? this.geohash,
-      lat: lat ?? this.lat,
-      lng: lng ?? this.lng,
-      startTime: startTime ?? this.startTime,
-      endTime: endTime ?? this.endTime,
-      timestamp: timestamp ?? this.timestamp,
-      status: status ?? this.status,
-    );
-  }
-
+extension BookingHelpers on Booking {
   bool get isPending => status == BookingStatus.pending;
+
   bool get isConfirmed => status == BookingStatus.confirmed;
+
   bool get isCanceled => status == BookingStatus.canceled;
 
   bool get isExpired => DateTime.now().isAfter(endTime);
@@ -169,6 +59,7 @@ class Booking extends Equatable {
   int get totalCost => ((rate / 60) * duration.inMinutes).toInt();
 }
 
+@JsonEnum()
 enum BookingStatus {
   pending,
   confirmed,

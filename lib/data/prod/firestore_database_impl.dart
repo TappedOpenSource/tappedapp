@@ -733,7 +733,7 @@ class FirestoreDatabaseImpl extends DatabaseRepository {
         'booking_id': booking.id,
       },
     );
-    await _bookingsRef.doc(booking.id).set(booking.toMap());
+    await _bookingsRef.doc(booking.id).set(booking.toJson());
   }
 
   @override
@@ -982,7 +982,7 @@ class FirestoreDatabaseImpl extends DatabaseRepository {
           'status': EnumToString.convertToString(booking.status),
         },
       );
-      await _bookingsRef.doc(booking.id).set(booking.toMap());
+      await _bookingsRef.doc(booking.id).set(booking.toJson());
     } catch (e, s) {
       logger.error(
         'error updating booking',

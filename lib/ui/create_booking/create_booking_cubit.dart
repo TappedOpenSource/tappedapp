@@ -101,6 +101,7 @@ class CreateBookingCubit extends Cubit<CreateBookingState> {
     final geohash = nullablePlace?.geohash;
 
     final booking = Booking(
+      id: const Uuid().v4(),
       name: state.name.value,
       note: state.note.value,
       serviceId: Option.of(state.service.id),
