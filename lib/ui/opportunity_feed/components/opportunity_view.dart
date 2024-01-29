@@ -184,13 +184,13 @@ class OpportunityView extends StatelessWidget {
                                 }
                               },
                               color:
-                                  theme.colorScheme.onSurface.withOpacity(0.1),
+                                  Colors.green.withOpacity(0.8),
                               padding: const EdgeInsets.all(12),
                               child: const Text(
                                 'Apply',
                                 style: TextStyle(
                                   fontSize: 17,
-                                  color: Colors.green,
+                                  color: Colors.white,
                                   fontWeight: FontWeight.bold,
                                 ),
                               ),
@@ -318,7 +318,7 @@ class OpportunityView extends StatelessWidget {
               onPressed: null,
               child: CupertinoActivityIndicator(),
             ),
-          false => FloatingActionButton(
+          false => FloatingActionButton.extended(
               onPressed: () {
                 opBloc.add(
                   DislikeOpportunity(
@@ -328,15 +328,16 @@ class OpportunityView extends StatelessWidget {
                 onDislike?.call();
               },
               backgroundColor: Colors.red,
-              child: const Icon(
-                CupertinoIcons.xmark,
+              icon: const Icon(
+                Icons.cancel,
               ),
+              label: const Text('Not Interested'),
             ),
           true => FloatingActionButton.extended(
               onPressed: () {
                 onDismiss?.call();
               },
-              label: const Text('already applied (click to dismiss)'),
+              label: const Text('Already Applied (click to dismiss)'),
               icon: const Icon(
                 CupertinoIcons.xmark,
               ),
