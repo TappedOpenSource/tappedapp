@@ -10,7 +10,7 @@ import 'package:intheloopapp/ui/profile/profile_view.dart';
 import 'package:intheloopapp/ui/search/discover_view.dart';
 import 'package:intheloopapp/ui/shell/components/bottom_toolbar.dart';
 import 'package:intheloopapp/utils/current_user_builder.dart';
-import 'package:intheloopapp/utils/custom_claim_builder.dart';
+import 'package:intheloopapp/utils/premium_builder.dart';
 
 class ShellView extends StatelessWidget {
   const ShellView({
@@ -21,7 +21,7 @@ class ShellView extends StatelessWidget {
   Widget build(BuildContext context) {
     return CurrentUserBuilder(
       builder: (context, currentUser) {
-        return CustomClaimBuilder(
+        return PremiumBuilder(
           builder: (context, claim) {
             final hasClaim = claim.isSome();
             context

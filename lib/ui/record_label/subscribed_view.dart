@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:fpdart/fpdart.dart';
 import 'package:intheloopapp/ui/record_label/components/claim_chip.dart';
 import 'package:intheloopapp/utils/current_user_builder.dart';
-import 'package:intheloopapp/utils/custom_claim_builder.dart';
+import 'package:intheloopapp/utils/premium_builder.dart';
 
 class SubscribedView extends StatelessWidget {
   const SubscribedView({
@@ -12,7 +12,7 @@ class SubscribedView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    return CustomClaimBuilder(
+    return PremiumBuilder(
       builder: (context, claim) {
         return switch (claim) {
           None() => const SizedBox.shrink(),

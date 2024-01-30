@@ -35,7 +35,6 @@ String _sha256ofString(String input) {
 }
 
 class FirebaseAuthImpl extends AuthRepository {
-
   @override
   Stream<User?> get authStateChanges => _auth.authStateChanges();
 
@@ -86,6 +85,26 @@ class FirebaseAuthImpl extends AuthRepository {
     }
 
     return const None();
+  }
+
+  @override
+  Future<List<CustomClaim>> getCustomClaims() async {
+    final user = _auth.currentUser;
+    if (user != null) {
+      final idTokenResult = await user.getIdTokenResult();
+      final claims = idTokenResult.claims;
+      final isPremium = (claims?['stripeRole'] as String?) != null;
+      final isAdmin = (claims?['admin'] as bool?) ?? false;
+      final isBooker = (claims?['booker'] as bool?) ?? false;
+
+      return [
+        if (isPremium) CustomClaim.premium,
+        if (isAdmin) CustomClaim.admin,
+        if (isBooker) CustomClaim.booker,
+      ];
+    }
+
+    return [];
   }
 
   @override

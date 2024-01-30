@@ -2,8 +2,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:fpdart/fpdart.dart';
 import 'package:intheloopapp/utils/bloc_utils.dart';
 
-class CustomClaimBuilder extends StatelessWidget {
-  const CustomClaimBuilder({
+class PremiumBuilder extends StatelessWidget {
+  const PremiumBuilder({
     required this.builder,
     super.key,
   });

@@ -9,6 +9,7 @@ abstract class AuthRepository {
   Future<User?> getAuthUser();
   Future<bool> getAdminClaim();
   Future<Option<String>> getStripeClaim();
+  Future<List<CustomClaim>> getCustomClaims();
   Future<Option<SignInPayload>> signInWithCredentials(
     String email,
     String password,
@@ -40,4 +41,10 @@ class SignInPayload {
   final String uid;
   final String displayName;
   final String email;
+}
+
+enum CustomClaim {
+  admin,
+  booker,
+  premium,
 }

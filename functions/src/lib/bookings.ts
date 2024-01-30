@@ -16,22 +16,44 @@ import { getFoundersDeviceTokens } from "./utils";
 import { createActivity } from "./activities";
 import { FieldValue } from "firebase-admin/firestore";
 
-const _updateOverallRating = async ({
+const _updatePerformerRating = async ({
   userId,
-  currOverallRating,
+  currRating,
   reviewCount,
   newRating,
 }: {
   userId: string;
-  currOverallRating: number;
+  currRating: number;
   reviewCount: number;
   newRating: number;
 }) => {
-  const overallRating = (currOverallRating * (reviewCount - 1) + newRating) / (reviewCount);
+  const overallRating = (currRating * (reviewCount - 1) + newRating) / (reviewCount);
 
-  await usersRef.doc(userId).update({
-    overallRating: overallRating,
-  });
+  await usersRef.doc(userId).set({
+    performerInfo: {
+      rating: overallRating,
+    },
+  }, { merge: true });
+};
+
+const _updateBookerRating = async ({
+  userId,
+  currRating,
+  reviewCount,
+  newRating,
+}: {
+  userId: string;
+  currRating: number;
+  reviewCount: number;
+  newRating: number;
+}) => {
+  const overallRating = (currRating * (reviewCount - 1) + newRating) / (reviewCount);
+
+  await usersRef.doc(userId).set({
+    bookerInfo: {
+      rating: overallRating,
+    },
+  }, { merge: true });
 };
 
 export const addActivityOnBooking = functions.firestore
@@ -152,17 +174,19 @@ export const incrementReviewCountOnBookerReview = functions
     const userId = context.params.userId;
     const userRef = usersRef.doc(userId);
 
-    await userRef.update({
-      reviewCount: FieldValue.increment(1),
-    });
+    await userRef.set({
+      bookerInfo: {
+        reviewCount: FieldValue.increment(1),
+      },
+    }, { merge: true });
 
-    const currOverallRating = (await userRef.get()).data()?.overallRating || 0;
-    const reviewCount = (await userRef.get()).data()?.reviewCount || 0;
+    const currRating = (await userRef.get()).data()?.bookingInfo?.rating || 0;
+    const reviewCount = (await userRef.get()).data()?.bookingInfo?.rating || 0;
     const newRating = data.data()?.overallRating || 0;
 
-    _updateOverallRating({
+    _updateBookerRating({
       userId,
-      currOverallRating,
+      currRating,
       reviewCount,
       newRating,
     });
@@ -175,17 +199,19 @@ export const incrementReviewCountOnPerformerReview = functions
     const userId = context.params.userId;
     const userRef = usersRef.doc(userId);
 
-    await userRef.update({
-      reviewCount: FieldValue.increment(1),
-    });
+    await userRef.set({
+      performerInfo: {
+        reviewCount: FieldValue.increment(1),
+      },
+    }, { merge: true });
 
-    const currOverallRating = (await userRef.get()).data()?.overallRating || 0;
-    const reviewCount = (await userRef.get()).data()?.reviewCount || 0;
+    const currRating = (await userRef.get()).data()?.performerInfo?.rating || 0;
+    const reviewCount = (await userRef.get()).data()?.performInfo?.reviewCount || 0;
     const newRating = data.data()?.overallRating || 0;
 
-    _updateOverallRating({
+    _updatePerformerRating({
       userId,
-      currOverallRating,
+      currRating,
       reviewCount,
       newRating,
     });
