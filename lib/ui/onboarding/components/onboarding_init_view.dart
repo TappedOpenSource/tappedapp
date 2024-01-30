@@ -1,0 +1,57 @@
+import 'package:flutter/material.dart';
+import 'package:intheloopapp/domains/authentication_bloc/authentication_bloc.dart';
+import 'package:intheloopapp/utils/bloc_utils.dart';
+
+class OnboardingInitView extends StatelessWidget {
+  const OnboardingInitView({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: [
+        const SizedBox(height: 25),
+        Container(
+          height: MediaQuery.of(context).size.height / 2.5,
+          width: double.infinity,
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(25),
+            image: const DecorationImage(
+              fit: BoxFit.cover,
+              image: AssetImage('assets/splash.gif'),
+            ),
+          ),
+        ),
+        const SizedBox(height: 25),
+        const Text(
+          "let's get you set up...",
+          style: TextStyle(
+            fontSize: 30,
+            fontFamily: 'Rubik One',
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+        const Text(
+          'this info will help get you booked',
+          style: TextStyle(
+            fontSize: 18,
+            fontWeight: FontWeight.w300,
+            color: Colors.grey,
+          ),
+        ),
+        const Spacer(),
+        TextButton(
+          onPressed: () {
+            context.authentication.add(LoggedOut());
+          },
+          child: const Text(
+            'sign into a different account?',
+            style: TextStyle(
+              fontSize: 12,
+              fontWeight: FontWeight.w300,
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+}

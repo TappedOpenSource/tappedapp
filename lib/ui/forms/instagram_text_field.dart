@@ -23,7 +23,7 @@ class InstagramTextField extends StatelessWidget {
       decoration: const InputDecoration(
         prefixIcon: Icon(FontAwesomeIcons.instagram),
         prefixText: '@ ',
-        labelText: 'Instagram',
+        labelText: 'instagram handle',
       ),
       onChanged: (input) {
         input = input.trim().toLowerCase();

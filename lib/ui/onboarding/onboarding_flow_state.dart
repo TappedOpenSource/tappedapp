@@ -4,14 +4,13 @@ class OnboardingFlowState extends Equatable with FormzMixin {
   OnboardingFlowState({
     required this.currentUserId,
     this.username = const UsernameInput.pure(),
-    // this.artistName = const ArtistNameInput.pure(),
-    // this.bio = const BioInput.pure(),
+    this.tiktokHandle = '',
+    this.tiktokFollowers = 0,
+    this.instagramHandle = '',
+    this.instagramFollowers = 0,
     this.eula = false,
-    // this.placeId = const None(),
-    // this.musicianType = const [],
     this.pickedPhoto = const None(),
     this.status = FormzSubmissionStatus.initial,
-    // this.place = const None(),
     ImagePicker? picker,
     GlobalKey<FormState>? formKey,
   }) {
@@ -21,26 +20,26 @@ class OnboardingFlowState extends Equatable with FormzMixin {
 
   final String currentUserId;
   final UsernameInput username;
-  // final ArtistNameInput artistName;
-  // final BioInput bio;
+  final String tiktokHandle;
+  final int tiktokFollowers;
+  final String instagramHandle;
+  final int instagramFollowers;
   final bool eula;
-  // final Option<String> placeId;
   final Option<File> pickedPhoto;
 
   final FormzSubmissionStatus status;
   late final ImagePicker picker;
   late final GlobalKey<FormState> formKey;
-  // late final Option<Place> place;
 
   @override
   List<Object?> get props => [
         currentUserId,
         username,
-        // artistName,
+        tiktokHandle,
+        tiktokFollowers,
+        instagramHandle,
+        instagramFollowers,
         eula,
-        // placeId,
-        // place,
-        // bio,
         pickedPhoto,
         status,
         formKey,
@@ -48,23 +47,22 @@ class OnboardingFlowState extends Equatable with FormzMixin {
 
   OnboardingFlowState copyWith({
     UsernameInput? username,
-    // ArtistNameInput? artistName,
-    // BioInput? bio,
+    String? tiktokHandle,
+    int? tiktokFollowers,
+    String? instagramHandle,
+    int? instagramFollowers,
     bool? eula,
-    // Option<String>? placeId,
-    // Option<Place>? place,
     Option<File>? pickedPhoto,
     FormzSubmissionStatus? status,
   }) {
     return OnboardingFlowState(
       currentUserId: currentUserId,
       username: username ?? this.username,
-      // artistName: artistName ?? this.artistName,
-      // placeId: placeId ?? this.placeId,
-      // place: place ?? this.place,
-      // bio: bio ?? this.bio,
+      tiktokHandle: tiktokHandle ?? this.tiktokHandle,
+      tiktokFollowers: tiktokFollowers ?? this.tiktokFollowers,
+      instagramHandle: instagramHandle ?? this.instagramHandle,
+      instagramFollowers: instagramFollowers ?? this.instagramFollowers,
       eula: eula ?? this.eula,
-      // musicianType: musicianType ?? this.musicianType,
       pickedPhoto: pickedPhoto ?? this.pickedPhoto,
       status: status ?? this.status,
       picker: picker,
@@ -75,7 +73,5 @@ class OnboardingFlowState extends Equatable with FormzMixin {
   @override
   List<FormzInput<String, Object>> get inputs => [
     username,
-    // artistName,
-    // bio,
   ];
 }

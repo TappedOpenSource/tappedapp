@@ -37,19 +37,7 @@ class OnboardingView extends StatelessWidget {
                 databaseRepository: context.database,
               ),
               // ..initFollowRecommendations(),
-              child: Scaffold(
-                backgroundColor: Theme.of(context).colorScheme.background,
-                // appBar: const TappedAppBar(
-                //   title: 'Onboarding',
-                // ),
-                // floatingActionButton: const ControlButtons(),
-                body: Container(
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 30,
-                  ),
-                  child: const OnboardingForm(),
-                ),
-              ),
+              child: const OnboardingForm(),
             ),
         };
       },

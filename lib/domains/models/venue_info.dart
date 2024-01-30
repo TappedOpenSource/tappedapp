@@ -1,6 +1,5 @@
 import 'package:fpdart/fpdart.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
-import 'package:json_annotation/json_annotation.dart';
 
 part 'venue_info.freezed.dart';
 part 'venue_info.g.dart';
@@ -8,6 +7,7 @@ part 'venue_info.g.dart';
 @freezed
 class VenueInfo with _$VenueInfo {
   const factory VenueInfo({
+    @Default(None()) Option<String> bookingEmail,
     @Default(None()) Option<int> capacity,
     @Default(None()) Option<String> idealArtistProfile,
     @Default(None()) Option<String> productionInfo,
@@ -18,12 +18,12 @@ class VenueInfo with _$VenueInfo {
     @Default(VenueType.other) VenueType type,
   }) = _VenueInfo;
 
-  // empty
-  static const empty = VenueInfo();
-
   // fromJson
   factory VenueInfo.fromJson(Map<String, dynamic> json) =>
       _$VenueInfoFromJson(json);
+
+  // empty
+  static const empty = VenueInfo();
 }
 
 @JsonEnum()
@@ -39,15 +39,4 @@ enum VenueType {
   artGallery,
   studio,
   other,
-}
-
-class OptionalVenueInfoConverter
-    implements JsonConverter<Option<VenueInfo>, VenueInfo?> {
-  const OptionalVenueInfoConverter();
-
-  @override
-  Option<VenueInfo> fromJson(VenueInfo? value) => Option.fromNullable(value);
-
-  @override
-  VenueInfo? toJson(Option<VenueInfo> value) => value.toNullable();
 }

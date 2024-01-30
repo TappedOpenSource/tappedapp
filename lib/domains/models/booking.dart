@@ -1,11 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:enum_to_string/enum_to_string.dart';
-import 'package:equatable/equatable.dart';
 import 'package:fpdart/fpdart.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:intheloopapp/data/prod/firestore_database_impl.dart';
-import 'package:intheloopapp/utils/default_value.dart';
-import 'package:uuid/uuid.dart';
 
 part 'booking.freezed.dart';
 
@@ -20,10 +16,10 @@ class Booking with _$Booking {
     required String requesterId,
     required String requesteeId,
     required BookingStatus status,
-    required int rate,
     @DateTimeConverter() required DateTime startTime,
     @DateTimeConverter() required DateTime endTime,
     @DateTimeConverter() required DateTime timestamp,
+    @Default(0) int rate,
     @Default(None()) Option<String> serviceId,
     @Default(None()) Option<String> placeId,
     @Default(None()) Option<String> geohash,

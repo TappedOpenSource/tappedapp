@@ -14,7 +14,12 @@ _$BookingImpl _$$BookingImplFromJson(Map<String, dynamic> json) =>
       requesterId: json['requesterId'] as String,
       requesteeId: json['requesteeId'] as String,
       status: $enumDecode(_$BookingStatusEnumMap, json['status']),
-      rate: json['rate'] as int,
+      startTime:
+          const DateTimeConverter().fromJson(json['startTime'] as Timestamp),
+      endTime: const DateTimeConverter().fromJson(json['endTime'] as Timestamp),
+      timestamp:
+          const DateTimeConverter().fromJson(json['timestamp'] as Timestamp),
+      rate: json['rate'] as int? ?? 0,
       serviceId: json['serviceId'] == null
           ? const None()
           : Option<String>.fromJson(
@@ -35,11 +40,6 @@ _$BookingImpl _$$BookingImplFromJson(Map<String, dynamic> json) =>
           ? const None()
           : Option<double>.fromJson(
               json['lng'], (value) => (value as num).toDouble()),
-      startTime:
-          const DateTimeConverter().fromJson(json['startTime'] as Timestamp),
-      endTime: const DateTimeConverter().fromJson(json['endTime'] as Timestamp),
-      timestamp:
-          const DateTimeConverter().fromJson(json['timestamp'] as Timestamp),
     );
 
 Map<String, dynamic> _$$BookingImplToJson(_$BookingImpl instance) =>
@@ -50,6 +50,9 @@ Map<String, dynamic> _$$BookingImplToJson(_$BookingImpl instance) =>
       'requesterId': instance.requesterId,
       'requesteeId': instance.requesteeId,
       'status': _$BookingStatusEnumMap[instance.status]!,
+      'startTime': const DateTimeConverter().toJson(instance.startTime),
+      'endTime': const DateTimeConverter().toJson(instance.endTime),
+      'timestamp': const DateTimeConverter().toJson(instance.timestamp),
       'rate': instance.rate,
       'serviceId': instance.serviceId.toJson(
         (value) => value,
@@ -66,9 +69,6 @@ Map<String, dynamic> _$$BookingImplToJson(_$BookingImpl instance) =>
       'lng': instance.lng.toJson(
         (value) => value,
       ),
-      'startTime': const DateTimeConverter().toJson(instance.startTime),
-      'endTime': const DateTimeConverter().toJson(instance.endTime),
-      'timestamp': const DateTimeConverter().toJson(instance.timestamp),
     };
 
 const _$BookingStatusEnumMap = {

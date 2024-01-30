@@ -1,4 +1,6 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:intheloopapp/ui/themes.dart';
 
 class TappedForm extends StatefulWidget {
   const TappedForm({
@@ -42,69 +44,88 @@ class _TappedFormState extends State<TappedForm> {
     return Scaffold(
       backgroundColor: theme.colorScheme.background,
       body: SafeArea(
-        child: Column(
-          children: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: widget.questions.map((e) {
-                return SizedBox(
-                  width: segmentWidth,
-                  height: 4,
-                  child: Container(
-                    decoration: BoxDecoration(
-                      color: widget.questions.indexOf(e) <= _index
-                          ? theme.colorScheme.primary
-                          : theme.colorScheme.primary.withOpacity(0.5),
-                      borderRadius: BorderRadius.circular(10),
+        child: Padding(
+          padding: const EdgeInsets.symmetric(
+            horizontal: 16,
+            vertical: 12,
+          ),
+          child: Column(
+            children: [
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: widget.questions.map((e) {
+                  return SizedBox(
+                    width: segmentWidth,
+                    height: 4,
+                    child: Container(
+                      decoration: BoxDecoration(
+                        color: widget.questions.indexOf(e) <= _index
+                            ? theme.colorScheme.primary
+                            : theme.colorScheme.primary.withOpacity(0.5),
+                        borderRadius: BorderRadius.circular(10),
+                      ),
                     ),
-                  ),
-                );
-              }).toList(),
-            ),
-            Expanded(
-              child: Center(
-                child: _currQuestion,
+                  );
+                }).toList(),
               ),
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                if (_index != 0)
-                  FilledButton(
-                    onPressed: () {
-                      setState(() {
-                        _index--;
-                      });
-                      widget.onPrevious?.call();
-                    },
-                    child: const Text(
-                      'back',
+              Expanded(
+                child: Center(
+                  child: _currQuestion,
+                ),
+              ),
+              const SizedBox(height: 16),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  if (_index != 0)
+                    CupertinoButton(
+                      onPressed: () {
+                        setState(() {
+                          _index--;
+                        });
+                        widget.onPrevious?.call();
+                      },
+                      child: const Text(
+                        'back',
+                      ),
+                    )
+                  else
+                    const SizedBox.shrink(),
+                  if (_index != numQuestions - 1 && _isValid)
+                    CupertinoButton(
+                      onPressed: () {
+                        setState(() {
+                          _index++;
+                        });
+                        widget.onNext?.call();
+                      },
+                      borderRadius: BorderRadius.circular(12),
+                      color: tappedAccent,
+                      child: const Text(
+                        'next',
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontWeight: FontWeight.w700,
+                        ),
+                      ),
                     ),
-                  )
-                else
-                  const SizedBox.shrink(),
-                if (_index != numQuestions - 1 && _isValid)
-                  FilledButton(
-                    onPressed: () {
-                      setState(() {
-                        _index++;
-                      });
-                      widget.onNext?.call();
-                    },
-                    child: const Text(
-                      'next',
+                  if (_index == numQuestions - 1 && _isValid)
+                    CupertinoButton(
+                      onPressed: widget.onSubmit?.call,
+                      borderRadius: BorderRadius.circular(12),
+                      color: tappedAccent,
+                      child: const Text(
+                        'finish',
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontWeight: FontWeight.w700,
+                        ),
+                      ),
                     ),
-                  ),
-                if (_index == numQuestions - 1 && _isValid)
-                  FilledButton(
-                    onPressed: widget.onSubmit?.call,
-                    child: const Text(
-                      'submit',
-                    ),
-                  ),
-              ],
-            ),
-          ],
+                ],
+              ),
+            ],
+          ),
         ),
       ),
     );

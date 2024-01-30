@@ -20,6 +20,7 @@ VenueInfo _$VenueInfoFromJson(Map<String, dynamic> json) {
 
 /// @nodoc
 mixin _$VenueInfo {
+  Option<String> get bookingEmail => throw _privateConstructorUsedError;
   Option<int> get capacity => throw _privateConstructorUsedError;
   Option<String> get idealArtistProfile => throw _privateConstructorUsedError;
   Option<String> get productionInfo => throw _privateConstructorUsedError;
@@ -41,7 +42,8 @@ abstract class $VenueInfoCopyWith<$Res> {
       _$VenueInfoCopyWithImpl<$Res, VenueInfo>;
   @useResult
   $Res call(
-      {Option<int> capacity,
+      {Option<String> bookingEmail,
+      Option<int> capacity,
       Option<String> idealArtistProfile,
       Option<String> productionInfo,
       Option<String> frontOfHouse,
@@ -64,6 +66,7 @@ class _$VenueInfoCopyWithImpl<$Res, $Val extends VenueInfo>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
+    Object? bookingEmail = null,
     Object? capacity = null,
     Object? idealArtistProfile = null,
     Object? productionInfo = null,
@@ -74,6 +77,10 @@ class _$VenueInfoCopyWithImpl<$Res, $Val extends VenueInfo>
     Object? type = null,
   }) {
     return _then(_value.copyWith(
+      bookingEmail: null == bookingEmail
+          ? _value.bookingEmail
+          : bookingEmail // ignore: cast_nullable_to_non_nullable
+              as Option<String>,
       capacity: null == capacity
           ? _value.capacity
           : capacity // ignore: cast_nullable_to_non_nullable
@@ -119,7 +126,8 @@ abstract class _$$VenueInfoImplCopyWith<$Res>
   @override
   @useResult
   $Res call(
-      {Option<int> capacity,
+      {Option<String> bookingEmail,
+      Option<int> capacity,
       Option<String> idealArtistProfile,
       Option<String> productionInfo,
       Option<String> frontOfHouse,
@@ -140,6 +148,7 @@ class __$$VenueInfoImplCopyWithImpl<$Res>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
+    Object? bookingEmail = null,
     Object? capacity = null,
     Object? idealArtistProfile = null,
     Object? productionInfo = null,
@@ -150,6 +159,10 @@ class __$$VenueInfoImplCopyWithImpl<$Res>
     Object? type = null,
   }) {
     return _then(_$VenueInfoImpl(
+      bookingEmail: null == bookingEmail
+          ? _value.bookingEmail
+          : bookingEmail // ignore: cast_nullable_to_non_nullable
+              as Option<String>,
       capacity: null == capacity
           ? _value.capacity
           : capacity // ignore: cast_nullable_to_non_nullable
@@ -190,7 +203,8 @@ class __$$VenueInfoImplCopyWithImpl<$Res>
 @JsonSerializable()
 class _$VenueInfoImpl implements _VenueInfo {
   const _$VenueInfoImpl(
-      {this.capacity = const None(),
+      {this.bookingEmail = const None(),
+      this.capacity = const None(),
       this.idealArtistProfile = const None(),
       this.productionInfo = const None(),
       this.frontOfHouse = const None(),
@@ -202,6 +216,9 @@ class _$VenueInfoImpl implements _VenueInfo {
   factory _$VenueInfoImpl.fromJson(Map<String, dynamic> json) =>
       _$$VenueInfoImplFromJson(json);
 
+  @override
+  @JsonKey()
+  final Option<String> bookingEmail;
   @override
   @JsonKey()
   final Option<int> capacity;
@@ -229,7 +246,7 @@ class _$VenueInfoImpl implements _VenueInfo {
 
   @override
   String toString() {
-    return 'VenueInfo(capacity: $capacity, idealArtistProfile: $idealArtistProfile, productionInfo: $productionInfo, frontOfHouse: $frontOfHouse, monitors: $monitors, microphones: $microphones, lights: $lights, type: $type)';
+    return 'VenueInfo(bookingEmail: $bookingEmail, capacity: $capacity, idealArtistProfile: $idealArtistProfile, productionInfo: $productionInfo, frontOfHouse: $frontOfHouse, monitors: $monitors, microphones: $microphones, lights: $lights, type: $type)';
   }
 
   @override
@@ -237,6 +254,8 @@ class _$VenueInfoImpl implements _VenueInfo {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$VenueInfoImpl &&
+            (identical(other.bookingEmail, bookingEmail) ||
+                other.bookingEmail == bookingEmail) &&
             (identical(other.capacity, capacity) ||
                 other.capacity == capacity) &&
             (identical(other.idealArtistProfile, idealArtistProfile) ||
@@ -255,8 +274,17 @@ class _$VenueInfoImpl implements _VenueInfo {
 
   @JsonKey(ignore: true)
   @override
-  int get hashCode => Object.hash(runtimeType, capacity, idealArtistProfile,
-      productionInfo, frontOfHouse, monitors, microphones, lights, type);
+  int get hashCode => Object.hash(
+      runtimeType,
+      bookingEmail,
+      capacity,
+      idealArtistProfile,
+      productionInfo,
+      frontOfHouse,
+      monitors,
+      microphones,
+      lights,
+      type);
 
   @JsonKey(ignore: true)
   @override
@@ -274,7 +302,8 @@ class _$VenueInfoImpl implements _VenueInfo {
 
 abstract class _VenueInfo implements VenueInfo {
   const factory _VenueInfo(
-      {final Option<int> capacity,
+      {final Option<String> bookingEmail,
+      final Option<int> capacity,
       final Option<String> idealArtistProfile,
       final Option<String> productionInfo,
       final Option<String> frontOfHouse,
@@ -286,6 +315,8 @@ abstract class _VenueInfo implements VenueInfo {
   factory _VenueInfo.fromJson(Map<String, dynamic> json) =
       _$VenueInfoImpl.fromJson;
 
+  @override
+  Option<String> get bookingEmail;
   @override
   Option<int> get capacity;
   @override

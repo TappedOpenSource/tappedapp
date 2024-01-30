@@ -23,7 +23,7 @@ class TikTokTextField extends StatelessWidget {
       decoration: const InputDecoration(
         prefixIcon: Icon(FontAwesomeIcons.tiktok),
         prefixText: '@ ',
-        labelText: 'TikTok',
+        labelText: 'tiktok handle',
       ),
       onChanged: (input) {
         input = input.trim().toLowerCase();

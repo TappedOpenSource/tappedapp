@@ -8,6 +8,10 @@ part of 'venue_info.dart';
 
 _$VenueInfoImpl _$$VenueInfoImplFromJson(Map<String, dynamic> json) =>
     _$VenueInfoImpl(
+      bookingEmail: json['bookingEmail'] == null
+          ? const None()
+          : Option<String>.fromJson(
+              json['bookingEmail'], (value) => value as String),
       capacity: json['capacity'] == null
           ? const None()
           : Option<int>.fromJson(json['capacity'], (value) => value as int),
@@ -40,6 +44,9 @@ _$VenueInfoImpl _$$VenueInfoImplFromJson(Map<String, dynamic> json) =>
 
 Map<String, dynamic> _$$VenueInfoImplToJson(_$VenueInfoImpl instance) =>
     <String, dynamic>{
+      'bookingEmail': instance.bookingEmail.toJson(
+        (value) => value,
+      ),
       'capacity': instance.capacity.toJson(
         (value) => value,
       ),

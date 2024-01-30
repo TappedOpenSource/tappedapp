@@ -17,6 +17,8 @@ import 'package:intheloopapp/domains/onboarding_bloc/onboarding_bloc.dart';
 import 'package:intheloopapp/ui/onboarding/username_input.dart';
 import 'package:intheloopapp/utils/app_logger.dart';
 
+import 'package:intheloopapp/domains/models/social_following.dart';
+
 part 'onboarding_flow_state.dart';
 
 class OnboardingFlowCubit extends Cubit<OnboardingFlowState> {
@@ -48,19 +50,30 @@ class OnboardingFlowCubit extends Cubit<OnboardingFlowState> {
           username: UsernameInput.dirty(value: input),
         ),
       );
-  // void aristNameChange(String input) => emit(
-  //       state.copyWith(
-  //         artistName: ArtistNameInput.dirty(value: input),
-  //       ),
-  //     );
-  // void locationChange(Place? place, String placeId) {
-  //   emit(
-  //     state.copyWith(
-  //       place: Option.fromNullable(place),
-  //       placeId: Option.of(placeId),
-  //     ),
-  //   );
-  // }
+
+  void tiktokHandleChange(String input) => emit(
+        state.copyWith(
+          tiktokHandle: input,
+        ),
+      );
+
+  void tiktokFollowersChange(int input) => emit(
+        state.copyWith(
+          tiktokFollowers: input,
+        ),
+      );
+
+  void instagramHandleChange(String input) => emit(
+        state.copyWith(
+          instagramHandle: input,
+        ),
+      );
+
+  void instagramFollowersChange(int input) => emit(
+        state.copyWith(
+          instagramFollowers: input,
+        ),
+      );
 
   // ignore: avoid_positional_boolean_parameters
   void eulaChange(bool input) => emit(
@@ -68,12 +81,6 @@ class OnboardingFlowCubit extends Cubit<OnboardingFlowState> {
           eula: input,
         ),
       );
-
-  // void bioChange(String input) => emit(
-  //       state.copyWith(
-  //         bio: BioInput.dirty(value: input),
-  //       ),
-  //     );
 
   Future<void> handleImageFromGallery() async {
     try {
@@ -122,12 +129,12 @@ class OnboardingFlowCubit extends Cubit<OnboardingFlowState> {
         None() => Future.value(const None()),
       };
 
-      // final lat = state.place.toNullable()?.latLng?.lat;
-      // final lng = state.place.toNullable()?.latLng?.lng;
-      // final geohash = (lat != null && lng != null)
-      //     ? geocodeEncode(lat: lat, lng: lng)
-      //     : null;
-
+      final tiktokHandle = state.tiktokHandle.isNotEmpty
+          ? Option.of(state.tiktokHandle)
+          : const None();
+      final instagramHandle = state.instagramHandle.isNotEmpty
+          ? Option.of(state.instagramHandle)
+          : const None();
       final emptyUser = UserModel.empty();
       final currentUser = emptyUser.copyWith(
         id: currentAuthUser.uid,
@@ -135,11 +142,12 @@ class OnboardingFlowCubit extends Cubit<OnboardingFlowState> {
         username: Username.fromString(state.username.value),
         artistName: currentAuthUser.displayName ?? state.username.value,
         profilePicture: profilePictureUrl,
-        // bio: state.bio.value,
-        // placeId: state.placeId,
-        // geohash: Option.fromNullable(geohash),
-        // lat: Option.fromNullable(lat),
-        // lng: Option.fromNullable(lng),
+        socialFollowing: SocialFollowing(
+          tiktokHandle: tiktokHandle,
+          tiktokFollowers: state.tiktokFollowers,
+          instagramHandle: instagramHandle,
+          instagramFollowers: state.instagramFollowers,
+        ),
       );
 
       await databaseRepository.createUser(currentUser);
