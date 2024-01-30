@@ -2,6 +2,7 @@
 import { StreamChat } from "stream-chat";
 import * as functions from "firebase-functions";
 import { streamKey, streamSecret } from "./firebase";
+import type { UserModel } from "../types/models";
 
 const _introMessage = async (
   streamClient: StreamChat,
@@ -42,7 +43,7 @@ export const createStreamUserOnUserCreated = functions
       streamSecret.value(),
     );
 
-    const user = snapshot.data();
+    const user = snapshot.data() as UserModel;
     await streamClient.upsertUser({
       id: user.id,
       name: user.artistName,
@@ -51,8 +52,9 @@ export const createStreamUserOnUserCreated = functions
       image: user.profilePicture,
     });
 
-    // intro msg from me
-    await _introMessage(streamClient, userId);
+    if (!user.unclaimed) {
+      await _introMessage(streamClient, userId);
+    }
   });
 
 export const updateStreamUserOnUserUpdate = functions
