@@ -4,7 +4,6 @@ import 'package:fpdart/fpdart.dart';
 import 'package:intheloopapp/domains/navigation_bloc/navigation_bloc.dart';
 import 'package:intheloopapp/ui/bookings/bookings_view.dart';
 import 'package:intheloopapp/ui/messaging/messaging_view.dart';
-import 'package:intheloopapp/ui/onboarding/onboarding_view.dart';
 import 'package:intheloopapp/ui/opportunity_feed/opportunity_feed_view.dart';
 import 'package:intheloopapp/ui/premium_theme_cubit.dart';
 import 'package:intheloopapp/ui/profile/profile_view.dart';
@@ -20,8 +19,6 @@ class ShellView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return OnboardingView();
-
     return CurrentUserBuilder(
       builder: (context, currentUser) {
         return CustomClaimBuilder(
