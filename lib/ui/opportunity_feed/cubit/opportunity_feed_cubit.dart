@@ -36,6 +36,10 @@ class OpportunityFeedCubit extends Cubit<OpportunityFeedState> {
         loading: false,
       ),
     );
+
+    if (state.opportunities.isEmpty) {
+      await analytics.logEvent(name: 'opportunities_exhausted');
+    }
   }
 
   Future<void> fetchMoreOpportunities() async {
@@ -67,6 +71,11 @@ class OpportunityFeedCubit extends Cubit<OpportunityFeedState> {
 
     if (state.curOp >= state.opportunities.length - 1) {
       await fetchMoreOpportunities();
+    }
+
+    if (state.opportunities.isEmpty ||
+        state.curOp >= state.opportunities.length) {
+      await analytics.logEvent(name: 'opportunities_exhausted');
     }
   }
 
