@@ -35,7 +35,7 @@ class OnboardingCompleteView extends StatelessWidget {
               ),
             ),
             const Text(
-              'you can start start applying for performance opportunities now!',
+              'you can start start applying for performance opportunities now! \n\nyou can also edit your profile at any time by going to your settings.',
               textAlign: TextAlign.center,
               style: TextStyle(
                 fontSize: 14,
