@@ -32,6 +32,7 @@ export * from "./lib/search";
 export * from "./lib/calendar";
 export * from "./lib/places";
 export * from "./lib/user_feedback";
+export * from "./lib/dm_webhook";
 
 const _deleteUser = async (data: { id: string }) => {
   // Checking attribute.
@@ -185,8 +186,8 @@ export const onUserDeleted = functions.auth
 
 //     try {
 //       const event = stripe.webhooks.constructEvent(
-//         req.rawBody, 
-//         sig, 
+//         req.rawBody,
+//         sig,
 //         stripeTestEndpointSecret.value(),
 //       );
 

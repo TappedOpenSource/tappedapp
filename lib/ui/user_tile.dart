@@ -40,6 +40,8 @@ class _UserTileState extends State<UserTile> {
     final widgetSubtitle = widget.subtitle;
     if (widgetSubtitle != null) return widgetSubtitle;
 
+    if (user.socialFollowing.audienceSize == 0) return const SizedBox.shrink();
+
     return Text('${NumberFormat.compactCurrency(
       decimalDigits: 0,
       symbol: '',

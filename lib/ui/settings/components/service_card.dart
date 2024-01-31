@@ -15,6 +15,7 @@ class ServiceCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
     return InkWell(
       onTap: () => context.push(
         ServicePage(
@@ -23,6 +24,7 @@ class ServiceCard extends StatelessWidget {
         ),
       ),
       child: Card(
+        color: theme.colorScheme.onSurface.withOpacity(0.1),
         child: Container(
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(10),
@@ -49,16 +51,6 @@ class ServiceCard extends StatelessWidget {
                     // color: Colors.blue,
                   ),
                 ),
-                // Text(
-                //   service.description,
-                //   textAlign: TextAlign.center,
-                //   maxLines: 2,
-                //   overflow: TextOverflow.ellipsis,
-                //   style: const TextStyle(
-                //     color: Colors.blue,
-                //     fontSize: 10,
-                //   ),
-                // ),
                 Text(
                   // ignore: lines_longer_than_80_chars
                   '\$${(service.rate / 100).toStringAsFixed(2)}${service.rateType == RateType.hourly ? '/hr' : ''}',
