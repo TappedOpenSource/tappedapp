@@ -37,11 +37,13 @@ class BottomToolbar extends StatelessWidget {
           currentIndex: state.selectedTab,
           items: [
             const BottomNavigationBarItem(
+              label: 'Gigs',
               icon: Icon(
-                CupertinoIcons.waveform_path,
+                CupertinoIcons.music_mic,
               ),
             ),
             BottomNavigationBarItem(
+              label: 'Map',
               icon: GestureDetector(
                 // onDoubleTap: () {
                 //   context
@@ -50,10 +52,11 @@ class BottomToolbar extends StatelessWidget {
                 //       SearchPage(),
                 //     );
                 // },
-                child: const Icon(CupertinoIcons.search),
+                child: const Icon(CupertinoIcons.map),
               ),
             ),
             BottomNavigationBarItem(
+              label: 'Bookings',
               icon: BlocBuilder<BookingsBloc, BookingsState>(
                 builder: (context, state) {
                   final pendingBookings = state.bookings.where((booking) {
@@ -74,6 +77,7 @@ class BottomToolbar extends StatelessWidget {
               ),
             ),
             BottomNavigationBarItem(
+              label: 'Messages',
               icon: StreamBuilder<int?>(
                 stream: streamClient
                     .on()

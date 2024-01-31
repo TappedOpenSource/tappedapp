@@ -11,6 +11,7 @@ import 'package:intheloopapp/domains/onboarding_bloc/onboarding_bloc.dart';
 import 'package:intheloopapp/ui/conditional_parent_widget.dart';
 import 'package:intheloopapp/ui/error/error_view.dart';
 import 'package:intheloopapp/ui/loading/loading_view.dart';
+import 'package:intheloopapp/ui/profile/components/bio_sliver.dart';
 import 'package:intheloopapp/ui/profile/components/bookings_sliver.dart';
 import 'package:intheloopapp/ui/profile/components/header_sliver.dart';
 import 'package:intheloopapp/ui/profile/components/info_sliver.dart';
@@ -279,6 +280,9 @@ class ProfileView extends StatelessWidget {
         ),
         const SliverToBoxAdapter(
           child: SizedBox(height: 12),
+        ),
+        const SliverToBoxAdapter(
+          child: BioSliver(),
         ),
         const SliverToBoxAdapter(
           child: SizedBox(

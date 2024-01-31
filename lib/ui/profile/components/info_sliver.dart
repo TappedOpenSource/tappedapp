@@ -23,7 +23,6 @@ class InfoSliver extends StatelessWidget {
         final genres = performerInfo?.genres ?? [];
         final label = performerInfo?.label ?? 'None';
         final pressKitUrl = performerInfo?.pressKitUrl ?? const None();
-        final bio = state.visitedUser.bio;
         final currPlace = state.place;
         return Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -149,25 +148,6 @@ class InfoSliver extends StatelessWidget {
                 ),
               ],
             ),
-            if (bio.isNotEmpty)
-              Padding(
-                padding: const EdgeInsets.symmetric(
-                  vertical: 8,
-                  horizontal: 16,
-                ),
-                child: ReadMoreText(
-                  bio,
-                  colorClickableText: tappedAccent,
-                  trimMode: TrimMode.Line,
-                  trimCollapsedText: ' show more',
-                  trimExpandedText: ' show less',
-                  style: const TextStyle(
-                    fontSize: 16,
-                    fontWeight: FontWeight.normal,
-                    // color: Color(0xFF757575),
-                  ),
-                ),
-              ),
             const SocialMediaIcons(),
           ],
         );
