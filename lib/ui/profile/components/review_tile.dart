@@ -21,6 +21,7 @@ class ReviewTile extends StatelessWidget {
       PerformerReview(:final bookerId) => bookerId,
       BookerReview(:final performerId) => performerId,
     };
+    final theme = Theme.of(context);
     return FutureBuilder<Option<UserModel>>(
       future: database.getUserById(reviewerId),
       builder: (context, snapshot) {
@@ -29,6 +30,7 @@ class ReviewTile extends StatelessWidget {
           None() => SkeletonListTile(),
           Some(:final value) => () {
               return Card(
+                color: theme.colorScheme.onSurface.withOpacity(0.1),
                 child: Column(
                   children: [
                     UserTile(

@@ -8,14 +8,17 @@ class EditServiceButton extends StatelessWidget {
   const EditServiceButton({
     required this.onEdited,
     required this.service,
+    this.label = 'Save',
     super.key,
   });
 
+  final String label;
   final void Function(Service) onEdited;
   final Service service;
 
   @override
   Widget build(BuildContext context) {
+    final onSurfaceColor = Theme.of(context).colorScheme.onSurface;
     return BlocBuilder<CreateServiceCubit, CreateServiceState>(
       builder: (context, state) {
         return CupertinoButton.filled(
@@ -35,7 +38,15 @@ class EditServiceButton extends StatelessWidget {
               );
             }
           },
-          child: const Text('Edit'),
+          borderRadius: BorderRadius.circular(15),
+          child: Text(
+            label,
+
+            style: TextStyle(
+              color: onSurfaceColor,
+              fontWeight: FontWeight.w700,
+            ),
+          ),
         );
       },
     );

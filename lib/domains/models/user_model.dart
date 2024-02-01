@@ -1,6 +1,8 @@
+import 'package:cached_annotation/cached_annotation.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:fpdart/fpdart.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
+import 'package:intheloopapp/data/payment_repository.dart';
 import 'package:intheloopapp/data/prod/firestore_database_impl.dart';
 import 'package:intheloopapp/domains/models/booker_info.dart';
 import 'package:intheloopapp/domains/models/email_notifications.dart';
@@ -13,6 +15,7 @@ import 'package:intheloopapp/domains/models/venue_info.dart';
 import 'package:uuid/uuid.dart';
 
 part 'user_model.freezed.dart';
+
 part 'user_model.g.dart';
 
 @freezed
@@ -90,4 +93,22 @@ extension UserHelpers on UserModel {
   bool get isEmpty => this == UserModel.empty();
 
   bool get isNotEmpty => this != UserModel.empty();
+
+  @Cached(where: _asyncShouldCache)
+  Future<bool> hasValidConnectedAccount(PaymentRepository payments) async {
+    return stripeConnectedAccountId.fold(
+      () => false,
+      (stripeAccountId) async {
+        final paymentUser = await payments.getAccountById(stripeAccountId);
+        return paymentUser.fold(
+          () => false,
+          (value) => value.payoutsEnabled,
+        );
+      },
+    );
+  }
+}
+
+Future<bool> _asyncShouldCache(bool candidate) async {
+  return candidate;
 }

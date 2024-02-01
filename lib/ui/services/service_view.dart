@@ -143,10 +143,8 @@ class ServiceView extends StatelessWidget {
                               return SizedBox(
                                 width: double.infinity,
                                 child: RequestToBookButton(
-                                  userId: service.userId,
+                                  user: value,
                                   service: Option.of(service),
-                                  stripeConnectedAccountId:
-                                      value.stripeConnectedAccountId,
                                 ),
                               );
                             }(),
