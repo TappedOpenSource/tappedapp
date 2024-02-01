@@ -16,30 +16,34 @@ class ServicesSliver extends StatelessWidget {
           return const SizedBox.shrink();
         }
 
-        return Column(
-          children: [
-            const Padding(
-              padding: EdgeInsets.symmetric(
-                vertical: 8,
-                horizontal: 16,
-              ),
-              child: Row(
-                children: [
-                  Text(
-                    'Services',
-                    style: TextStyle(
-                      fontSize: 24,
-                      fontWeight: FontWeight.bold,
+        return Padding(
+          padding: const EdgeInsets.symmetric(
+            horizontal: 20,
+          ),
+          child: Column(
+            children: [
+              const Padding(
+                padding: EdgeInsets.symmetric(
+                  vertical: 8,
+                ),
+                child: Row(
+                  children: [
+                    Text(
+                      'Services',
+                      style: TextStyle(
+                        fontSize: 24,
+                        fontWeight: FontWeight.bold,
+                      ),
                     ),
-                  ),
-                ],
+                  ],
+                ),
               ),
-            ),
-            ServicesList(
-              services: state.services,
-              isCurrentUser: state.currentUser.id == state.visitedUser.id,
-            ),
-          ],
+              ServicesList(
+                services: state.services,
+                isCurrentUser: state.currentUser.id == state.visitedUser.id,
+              ),
+            ],
+          ),
         );
       },
     );

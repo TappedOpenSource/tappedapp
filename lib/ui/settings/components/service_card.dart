@@ -24,6 +24,7 @@ class ServiceCard extends StatelessWidget {
         ),
       ),
       child: Card(
+        elevation: 0,
         color: theme.colorScheme.onSurface.withOpacity(0.1),
         child: Container(
           decoration: BoxDecoration(

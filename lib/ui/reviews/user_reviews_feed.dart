@@ -151,13 +151,17 @@ class _UserReviewsFeedState extends State<UserReviewsFeed> {
   }
 
   Widget _buildUserReviewFeed(UserModel user) => switch (_reviewsStatus) {
-        ReviewsStatus.initial => const Text('Waiting for New Reviews...'),
+        ReviewsStatus.initial => const Center(
+            child: Text('Waiting for New Reviews...'),
+          ),
         ReviewsStatus.failure => const Center(
             child: Text('failed to fetch reviews'),
           ),
         ReviewsStatus.success => () {
             if (_userReviews.isEmpty || user.deleted) {
-              return const Text('No reviews yet...');
+              return const Center(
+                child: Text('No reviews yet...'),
+              );
             }
 
             return CustomScrollView(

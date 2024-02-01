@@ -103,10 +103,6 @@ class OnboardingFlowCubit extends Cubit<OnboardingFlowState> {
       return;
     }
 
-    if (!state.formKey.currentState!.validate()) {
-      return;
-    }
-
     if (state.isNotValid) {
       return;
     }

@@ -17,55 +17,60 @@ class ReviewsSliver extends StatelessWidget {
         return switch (state.latestReview) {
           None() => const SizedBox.shrink(),
           Some(:final value) => () {
-              return Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.symmetric(
-                      vertical: 8,
-                      horizontal: 16,
-                    ),
-                    child: GestureDetector(
-                      onTap: () {
-                        context.push(
-                          ReviewsPage(
-                            userId: state.visitedUser.id,
-                          ),
-                        );
-                      },
-                      child: const Row(
-                        children: [
-                          Text(
-                            'Reviews',
-                            style: TextStyle(
-                              fontSize: 24,
-                              fontWeight: FontWeight.bold,
+              return Padding(
+                padding: const EdgeInsets.symmetric(
+                  vertical: 12,
+                  horizontal: 20,
+                ),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.symmetric(
+                        vertical: 12,
+                      ),
+                      child: GestureDetector(
+                        onTap: () {
+                          context.push(
+                            ReviewsPage(
+                              userId: state.visitedUser.id,
                             ),
-                          ),
-                          SizedBox(
-                            width: 8,
-                          ),
-                          Text(
-                            'see all',
-                            style: TextStyle(
-                              fontSize: 12,
-                              fontWeight: FontWeight.w300,
+                          );
+                        },
+                        child: const Row(
+                          children: [
+                            Text(
+                              'Reviews',
+                              style: TextStyle(
+                                fontSize: 24,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                            SizedBox(
+                              width: 8,
+                            ),
+                            Text(
+                              'see all',
+                              style: TextStyle(
+                                fontSize: 12,
+                                fontWeight: FontWeight.w300,
+                                color: tappedAccent,
+                              ),
+                            ),
+                            Icon(
+                              Icons.arrow_outward_rounded,
+                              size: 16,
                               color: tappedAccent,
                             ),
-                          ),
-                          Icon(
-                            Icons.arrow_outward_rounded,
-                            size: 16,
-                            color: tappedAccent,
-                          ),
-                        ],
+                          ],
+                        ),
                       ),
                     ),
-                  ),
-                  ReviewTile(
-                    review: value,
-                  ),
-                ],
+                    ReviewTile(
+                      review: value,
+                    ),
+                  ],
+                ),
               );
             }(),
         };

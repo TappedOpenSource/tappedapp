@@ -106,6 +106,7 @@ class BottomToolbar extends StatelessWidget {
               ),
             ),
             BottomNavigationBarItem(
+              label: 'Profile',
               activeIcon: Container(
                 height: 35,
                 width: 35,

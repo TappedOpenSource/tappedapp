@@ -17,54 +17,58 @@ class BookingsSliver extends StatelessWidget {
         return switch (state.latestBooking) {
           None() => const SizedBox.shrink(),
           Some(:final value) => () {
-              return Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.symmetric(
-                      vertical: 8,
-                      horizontal: 16,
-                    ),
-                    child: GestureDetector(
-                      onTap: () {
-                        context.push(
-                          BookingsPage(userId: state.visitedUser.id),
-                        );
-                      },
-                      child: const Row(
-                        children: [
-                          Text(
-                            'Booking History',
-                            style: TextStyle(
-                              fontSize: 24,
-                              fontWeight: FontWeight.bold,
+              return Padding(
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 20,
+                ),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.symmetric(
+                        vertical: 8,
+                      ),
+                      child: GestureDetector(
+                        onTap: () {
+                          context.push(
+                            BookingsPage(userId: state.visitedUser.id),
+                          );
+                        },
+                        child: const Row(
+                          children: [
+                            Text(
+                              'Booking History',
+                              style: TextStyle(
+                                fontSize: 24,
+                                fontWeight: FontWeight.bold,
+                              ),
                             ),
-                          ),
-                          SizedBox(
-                            width: 8,
-                          ),
-                          Text(
-                            'see all',
-                            style: TextStyle(
-                              fontSize: 12,
-                              fontWeight: FontWeight.w300,
+                            SizedBox(
+                              width: 8,
+                            ),
+                            Text(
+                              'see all',
+                              style: TextStyle(
+                                fontSize: 12,
+                                fontWeight: FontWeight.w300,
+                                color: tappedAccent,
+                              ),
+                            ),
+                            Icon(
+                              Icons.arrow_outward_rounded,
+                              size: 16,
                               color: tappedAccent,
                             ),
-                          ),
-                          Icon(
-                            Icons.arrow_outward_rounded,
-                            size: 16,
-                            color: tappedAccent,
-                          ),
-                        ],
+                          ],
+                        ),
                       ),
                     ),
-                  ),
-                  BookingTile(
-                    visitedUser: state.visitedUser,
-                    booking: value,
-                  ),
-                ],
+                    BookingTile(
+                      visitedUser: state.visitedUser,
+                      booking: value,
+                    ),
+                  ],
+                ),
               );
             }(),
         };

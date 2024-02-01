@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:flutter_map_marker_cluster/flutter_map_marker_cluster.dart';
 import 'package:fpdart/fpdart.dart';
@@ -7,6 +8,7 @@ import 'package:intheloopapp/domains/models/location.dart';
 import 'package:intheloopapp/domains/models/user_model.dart';
 import 'package:intheloopapp/domains/navigation_bloc/navigation_bloc.dart';
 import 'package:intheloopapp/domains/navigation_bloc/tapped_route.dart';
+import 'package:intheloopapp/ui/app_theme_cubit.dart';
 import 'package:intheloopapp/ui/profile/components/notification_icon_button.dart';
 import 'package:intheloopapp/ui/search/components/venue_card.dart';
 import 'package:intheloopapp/ui/themes.dart';
@@ -20,7 +22,8 @@ import 'package:url_launcher/url_launcher.dart';
 
 const defaultMapboxToken =
     'pk.eyJ1Ijoiam9uYXlsb3I4OSIsImEiOiJjbHJvNGdsemswNjl3MnFtdHNieXEyaWphIn0.gwc31X7uTzjxeDm6vcGzCg';
-const mapboxStyle = 'mapbox/dark-v11';
+const mapboxDarkStyle = 'mapbox/dark-v11';
+const mapboxLightStyle = 'mapbox/light-v10';
 
 class DiscoverView extends StatelessWidget {
   DiscoverView({
@@ -132,12 +135,18 @@ class DiscoverView extends StatelessWidget {
                       },
                     ),
                     children: [
-                      TileLayer(
-                        urlTemplate:
-                            'https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token={accessToken}',
-                        additionalOptions: const {
-                          'accessToken': defaultMapboxToken,
-                          'id': mapboxStyle,
+                      BlocBuilder<AppThemeCubit, bool>(
+                        builder: (context, isDark) {
+                          final theme =
+                              isDark ? mapboxDarkStyle : mapboxLightStyle;
+                          return TileLayer(
+                            urlTemplate:
+                                'https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token={accessToken}',
+                            additionalOptions: {
+                              'accessToken': defaultMapboxToken,
+                              'id': theme,
+                            },
+                          );
                         },
                       ),
                       MarkerClusterLayerWidget(
@@ -151,7 +160,8 @@ class DiscoverView extends StatelessWidget {
                           ),
                           markers: [
                             ...rvaVenues.map((venue) {
-                              final loc = venue.location.getOrElse(() => defaultLoc);
+                              final loc =
+                                  venue.location.getOrElse(() => defaultLoc);
                               return Marker(
                                 width: 80,
                                 height: 80,

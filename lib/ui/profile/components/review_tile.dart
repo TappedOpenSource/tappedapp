@@ -30,6 +30,7 @@ class ReviewTile extends StatelessWidget {
           None() => SkeletonListTile(),
           Some(:final value) => () {
               return Card(
+                elevation: 0,
                 color: theme.colorScheme.onSurface.withOpacity(0.1),
                 child: Column(
                   children: [
