@@ -73,15 +73,7 @@ class HeaderSliver extends StatelessWidget {
                     final isAdmin = claims.contains(CustomClaim.admin);
                     final isBooker = claims.contains(CustomClaim.booker);
                     return switch (isAdmin || isBooker) {
-                      false => const Padding(
-                          padding: EdgeInsets.symmetric(
-                            vertical: 8,
-                          ),
-                          child: SizedBox(
-                            width: double.infinity,
-                            child: FeedbackButton(),
-                          ),
-                        ),
+                      false => const SizedBox.shrink(),
                       true => Padding(
                           padding: const EdgeInsets.symmetric(
                             vertical: 8,

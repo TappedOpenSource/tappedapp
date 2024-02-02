@@ -54,7 +54,7 @@ class DeleteAccountButton extends StatelessWidget {
                               .reauthWithCredentials,
                         ),
                         const SizedBox(height: 20),
-                        Row(
+                        Column(
                           mainAxisAlignment: MainAxisAlignment.spaceAround,
                           children: [
                             GoogleLoginButton(
