@@ -3,39 +3,48 @@
 import {
   onRequest,
 } from "firebase-functions/v2/https"
-import { SENDGRID_API_KEY } from "./firebase";
-import sgMail from "@sendgrid/mail";
+import { POSTMARK_SERVER_ID } from "./firebase";
+// import sgMail from "@sendgrid/mail";
+import { error, info } from "firebase-functions/logger";
+import * as postmark from "postmark";
 
 export const sendGridWebhook = onRequest(
-  { secrets: [ SENDGRID_API_KEY ] },
+  { secrets: [ POSTMARK_SERVER_ID ] },
   async (req, res) => {
     try {
+      const body = req.body;
+      info({ content: body });
 
-      const body = req.body as Buffer;
-      const json = JSON.parse(body.toString("utf-8"));
-      console.log({ content: json });
+      const client = new postmark.ServerClient(POSTMARK_SERVER_ID.value());
 
-      // sendgrid pong
-      sgMail.setApiKey(SENDGRID_API_KEY.value());
+      const subject = body.Subject;
+      const messageId = body.Headers.find((h: { Name: string; Value: string }) => h.Name === "Message-ID")?.Value;
+    
+      if (!subject || !messageId) {
+        res.status(400).send("bad request");
+        return;
+      }
 
-      const bodyString = body.toString("utf-8");
-
-      const msg = {
-        to: "johannes@tapped.ai",
-        from: "johannes@booking.tapped.ai",
-        subject: "Pong",
-        text: "and easy to do anywhere, even with Node.js " + bodyString,
-        html: "<strong>and easy to do anywhere, even with Node.js</strong> " + bodyString,
-      };
-
-      const mailRes = await sgMail.send(msg);
-      mailRes.forEach((response) => {
-        console.log(response);
+      const blah = await client.sendEmail({
+        "From": "johannes@tapped.ai",
+        // "To": "ebe63b4b00c9dded9244d7882acad5e9@inbound.postmarkapp.com",
+        "To": "johannes@tapped.ai",
+        "Headers": [
+          {
+            "Name": "Message-ID",
+            "Value": messageId,
+          }
+        ],
+        "Subject": subject,
+        "HtmlBody": "<strong>Hello</strong> dear Postmark user.",
+        "TextBody": "Hello from Postmark!",
+        "MessageStream": "outbound"
       });
+      console.log({ blah });
 
       res.status(200).send("ok");
     } catch (e) {
-      console.error(e);
+      error(e);
       res.status(500).send("error");
     }
   });

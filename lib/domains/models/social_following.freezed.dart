@@ -27,6 +27,8 @@ mixin _$SocialFollowing {
   int get instagramFollowers => throw _privateConstructorUsedError;
   Option<String> get twitterHandle => throw _privateConstructorUsedError;
   int get twitterFollowers => throw _privateConstructorUsedError;
+  Option<String> get facebookHandle => throw _privateConstructorUsedError;
+  int get facebookFollowers => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
@@ -47,7 +49,9 @@ abstract class $SocialFollowingCopyWith<$Res> {
       Option<String> instagramHandle,
       int instagramFollowers,
       Option<String> twitterHandle,
-      int twitterFollowers});
+      int twitterFollowers,
+      Option<String> facebookHandle,
+      int facebookFollowers});
 }
 
 /// @nodoc
@@ -70,6 +74,8 @@ class _$SocialFollowingCopyWithImpl<$Res, $Val extends SocialFollowing>
     Object? instagramFollowers = null,
     Object? twitterHandle = null,
     Object? twitterFollowers = null,
+    Object? facebookHandle = null,
+    Object? facebookFollowers = null,
   }) {
     return _then(_value.copyWith(
       youtubeChannelId: null == youtubeChannelId
@@ -100,6 +106,14 @@ class _$SocialFollowingCopyWithImpl<$Res, $Val extends SocialFollowing>
           ? _value.twitterFollowers
           : twitterFollowers // ignore: cast_nullable_to_non_nullable
               as int,
+      facebookHandle: null == facebookHandle
+          ? _value.facebookHandle
+          : facebookHandle // ignore: cast_nullable_to_non_nullable
+              as Option<String>,
+      facebookFollowers: null == facebookFollowers
+          ? _value.facebookFollowers
+          : facebookFollowers // ignore: cast_nullable_to_non_nullable
+              as int,
     ) as $Val);
   }
 }
@@ -119,7 +133,9 @@ abstract class _$$SocialFollowingImplCopyWith<$Res>
       Option<String> instagramHandle,
       int instagramFollowers,
       Option<String> twitterHandle,
-      int twitterFollowers});
+      int twitterFollowers,
+      Option<String> facebookHandle,
+      int facebookFollowers});
 }
 
 /// @nodoc
@@ -140,6 +156,8 @@ class __$$SocialFollowingImplCopyWithImpl<$Res>
     Object? instagramFollowers = null,
     Object? twitterHandle = null,
     Object? twitterFollowers = null,
+    Object? facebookHandle = null,
+    Object? facebookFollowers = null,
   }) {
     return _then(_$SocialFollowingImpl(
       youtubeChannelId: null == youtubeChannelId
@@ -170,6 +188,14 @@ class __$$SocialFollowingImplCopyWithImpl<$Res>
           ? _value.twitterFollowers
           : twitterFollowers // ignore: cast_nullable_to_non_nullable
               as int,
+      facebookHandle: null == facebookHandle
+          ? _value.facebookHandle
+          : facebookHandle // ignore: cast_nullable_to_non_nullable
+              as Option<String>,
+      facebookFollowers: null == facebookFollowers
+          ? _value.facebookFollowers
+          : facebookFollowers // ignore: cast_nullable_to_non_nullable
+              as int,
     ));
   }
 }
@@ -184,7 +210,9 @@ class _$SocialFollowingImpl implements _SocialFollowing {
       this.instagramHandle = const None(),
       this.instagramFollowers = 0,
       this.twitterHandle = const None(),
-      this.twitterFollowers = 0});
+      this.twitterFollowers = 0,
+      this.facebookHandle = const None(),
+      this.facebookFollowers = 0});
 
   factory _$SocialFollowingImpl.fromJson(Map<String, dynamic> json) =>
       _$$SocialFollowingImplFromJson(json);
@@ -210,10 +238,16 @@ class _$SocialFollowingImpl implements _SocialFollowing {
   @override
   @JsonKey()
   final int twitterFollowers;
+  @override
+  @JsonKey()
+  final Option<String> facebookHandle;
+  @override
+  @JsonKey()
+  final int facebookFollowers;
 
   @override
   String toString() {
-    return 'SocialFollowing(youtubeChannelId: $youtubeChannelId, tiktokHandle: $tiktokHandle, tiktokFollowers: $tiktokFollowers, instagramHandle: $instagramHandle, instagramFollowers: $instagramFollowers, twitterHandle: $twitterHandle, twitterFollowers: $twitterFollowers)';
+    return 'SocialFollowing(youtubeChannelId: $youtubeChannelId, tiktokHandle: $tiktokHandle, tiktokFollowers: $tiktokFollowers, instagramHandle: $instagramHandle, instagramFollowers: $instagramFollowers, twitterHandle: $twitterHandle, twitterFollowers: $twitterFollowers, facebookHandle: $facebookHandle, facebookFollowers: $facebookFollowers)';
   }
 
   @override
@@ -234,7 +268,11 @@ class _$SocialFollowingImpl implements _SocialFollowing {
             (identical(other.twitterHandle, twitterHandle) ||
                 other.twitterHandle == twitterHandle) &&
             (identical(other.twitterFollowers, twitterFollowers) ||
-                other.twitterFollowers == twitterFollowers));
+                other.twitterFollowers == twitterFollowers) &&
+            (identical(other.facebookHandle, facebookHandle) ||
+                other.facebookHandle == facebookHandle) &&
+            (identical(other.facebookFollowers, facebookFollowers) ||
+                other.facebookFollowers == facebookFollowers));
   }
 
   @JsonKey(ignore: true)
@@ -247,7 +285,9 @@ class _$SocialFollowingImpl implements _SocialFollowing {
       instagramHandle,
       instagramFollowers,
       twitterHandle,
-      twitterFollowers);
+      twitterFollowers,
+      facebookHandle,
+      facebookFollowers);
 
   @JsonKey(ignore: true)
   @override
@@ -272,7 +312,9 @@ abstract class _SocialFollowing implements SocialFollowing {
       final Option<String> instagramHandle,
       final int instagramFollowers,
       final Option<String> twitterHandle,
-      final int twitterFollowers}) = _$SocialFollowingImpl;
+      final int twitterFollowers,
+      final Option<String> facebookHandle,
+      final int facebookFollowers}) = _$SocialFollowingImpl;
 
   factory _SocialFollowing.fromJson(Map<String, dynamic> json) =
       _$SocialFollowingImpl.fromJson;
@@ -291,6 +333,10 @@ abstract class _SocialFollowing implements SocialFollowing {
   Option<String> get twitterHandle;
   @override
   int get twitterFollowers;
+  @override
+  Option<String> get facebookHandle;
+  @override
+  int get facebookFollowers;
   @override
   @JsonKey(ignore: true)
   _$$SocialFollowingImplCopyWith<_$SocialFollowingImpl> get copyWith =>

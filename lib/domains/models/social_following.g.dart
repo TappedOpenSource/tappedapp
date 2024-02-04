@@ -28,6 +28,11 @@ _$SocialFollowingImpl _$$SocialFollowingImplFromJson(
           : Option<String>.fromJson(
               json['twitterHandle'], (value) => value as String),
       twitterFollowers: json['twitterFollowers'] as int? ?? 0,
+      facebookHandle: json['facebookHandle'] == null
+          ? const None()
+          : Option<String>.fromJson(
+              json['facebookHandle'], (value) => value as String),
+      facebookFollowers: json['facebookFollowers'] as int? ?? 0,
     );
 
 Map<String, dynamic> _$$SocialFollowingImplToJson(
@@ -48,4 +53,8 @@ Map<String, dynamic> _$$SocialFollowingImplToJson(
         (value) => value,
       ),
       'twitterFollowers': instance.twitterFollowers,
+      'facebookHandle': instance.facebookHandle.toJson(
+        (value) => value,
+      ),
+      'facebookFollowers': instance.facebookFollowers,
     };

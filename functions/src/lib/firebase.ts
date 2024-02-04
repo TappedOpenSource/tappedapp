@@ -80,6 +80,7 @@ export const LEAP_WEBHOOK_SECRET = defineSecret("LEAP_WEBHOOK_SECRET");
 export const RESEND_API_KEY = defineSecret("RESEND_API_KEY");
 export const GOOGLE_PLACES_API_KEY = defineSecret("GOOGLE_PLACES_API_KEY");
 export const SENDGRID_API_KEY = defineSecret("SENDGRID_API_KEY");
+export const POSTMARK_SERVER_ID = defineSecret("POSTMARK_SERVER_ID");
 
 export const starterCreditsTestPriceId = "price_1OE2ptDYybu1wznEqHNMGZax";
 export const basicCreditsTestPriceId = "price_1OE2rrDYybu1wznEqv4mmjoK";

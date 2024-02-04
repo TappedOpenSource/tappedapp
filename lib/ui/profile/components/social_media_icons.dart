@@ -41,6 +41,24 @@ class SocialMediaIcons extends StatelessWidget {
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: [
+              switch (socialFollowing.facebookHandle) {
+                None() => null,
+                Some(:final value) => _socialMediaIcon(
+                  color: Colors.blue.shade900,
+                  icon: Icon(
+                    FontAwesomeIcons.facebook,
+                    color: Colors.blue[900],
+                  ),
+                  onTap: () {
+                    launchUrl(
+                      Uri(
+                        scheme: 'https',
+                        path: 'facebook.com/$value',
+                      ),
+                    );
+                  },
+                ),
+              },
               switch (socialFollowing.twitterHandle) {
                 None() => null,
                 Some(:final value) => _socialMediaIcon(

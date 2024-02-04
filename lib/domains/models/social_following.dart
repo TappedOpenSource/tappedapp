@@ -16,6 +16,8 @@ class SocialFollowing with _$SocialFollowing {
     @Default(0) int instagramFollowers,
     @Default(None()) Option<String> twitterHandle,
     @Default(0) int twitterFollowers,
+    @Default(None()) Option<String> facebookHandle,
+    @Default(0) int facebookFollowers,
   }) = _SocialFollowing;
 
   // fromJson
@@ -39,5 +41,5 @@ class SocialFollowing with _$SocialFollowing {
 
 extension SocialFollowingHelper on SocialFollowing {
   int get audienceSize =>
-      tiktokFollowers + instagramFollowers + twitterFollowers;
+      tiktokFollowers + instagramFollowers + twitterFollowers + facebookFollowers;
 }
