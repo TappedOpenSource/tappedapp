@@ -11,14 +11,14 @@ part 'booking.g.dart';
 class Booking with _$Booking {
   const factory Booking({
     required String id,
-    required String name,
-    required String note,
     required String requesterId,
     required String requesteeId,
     required BookingStatus status,
     @DateTimeConverter() required DateTime startTime,
     @DateTimeConverter() required DateTime endTime,
     @DateTimeConverter() required DateTime timestamp,
+    @Default('') String name,
+    @Default('') String note,
     @Default(0) int rate,
     @Default(None()) Option<String> serviceId,
     @Default(None()) Option<String> placeId,

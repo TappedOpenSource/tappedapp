@@ -19,6 +19,7 @@ import 'package:intheloopapp/utils/debouncer.dart';
 import 'package:latlong2/latlong.dart';
 import 'package:scroll_snap_list/scroll_snap_list.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:uuid/uuid.dart';
 
 const defaultMapboxToken =
     'pk.eyJ1Ijoiam9uYXlsb3I4OSIsImEiOiJjbHJvNGdsemswNjl3MnFtdHNieXEyaWphIn0.gwc31X7uTzjxeDm6vcGzCg';
@@ -182,9 +183,10 @@ class DiscoverView extends StatelessWidget {
                             }),
                           ],
                           builder: (context, markers) {
+                            final randomNumber = randomInt(100, 999).toString();
                             final index = markers.first.key
                                 .toString()
-                                .replaceAll(RegExp('[^0-9]'), '');
+                                .replaceAll(RegExp('[^0-9]'), randomNumber);
                             final clusterKey =
                                 'map-badge-$index-len-${markers.length}';
 

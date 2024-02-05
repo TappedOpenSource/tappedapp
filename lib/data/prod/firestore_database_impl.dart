@@ -26,7 +26,6 @@ final _analytics = FirebaseAnalytics.instance;
 
 final _usersRef = _firestore.collection('users');
 final _activitiesRef = _firestore.collection('activities');
-final _commentsRef = _firestore.collection('comments');
 final _badgesRef = _firestore.collection('badges');
 final _badgesSentRef = _firestore.collection('badgesSent');
 final _bookingsRef = _firestore.collection('bookings');
@@ -332,7 +331,10 @@ class FirestoreDatabaseImpl extends DatabaseRepository {
       ),
     );
 
-    return leaders.whereType<Some<UserModel>>().map((e) => e.toNullable()).toList();
+    return leaders
+        .whereType<Some<UserModel>>()
+        .map((e) => e.toNullable())
+        .toList();
   }
 
   @override
@@ -351,7 +353,10 @@ class FirestoreDatabaseImpl extends DatabaseRepository {
       ),
     );
 
-    return leaders.whereType<Some<UserModel>>().map((e) => e.toNullable()).toList();
+    return leaders
+        .whereType<Some<UserModel>>()
+        .map((e) => e.toNullable())
+        .toList();
   }
 
   @override
@@ -371,7 +376,10 @@ class FirestoreDatabaseImpl extends DatabaseRepository {
       ),
     );
 
-    return leaders.whereType<Some<UserModel>>().map((e) => e.toNullable()).toList();
+    return leaders
+        .whereType<Some<UserModel>>()
+        .map((e) => e.toNullable())
+        .toList();
   }
 
   @override
@@ -391,7 +399,10 @@ class FirestoreDatabaseImpl extends DatabaseRepository {
       ),
     );
 
-    return leaders.whereType<Some<UserModel>>().map((e) => e.toNullable()).toList();
+    return leaders
+        .whereType<Some<UserModel>>()
+        .map((e) => e.toNullable())
+        .toList();
   }
 
   @override
@@ -440,7 +451,10 @@ class FirestoreDatabaseImpl extends DatabaseRepository {
         ),
       );
 
-      return leaders.whereType<Some<UserModel>>().map((e) => e.toNullable()).toList();
+      return leaders
+          .whereType<Some<UserModel>>()
+          .map((e) => e.toNullable())
+          .toList();
     } catch (e, s) {
       logger.error('getBookerLeaders', error: e, stackTrace: s);
       return [];
@@ -463,7 +477,10 @@ class FirestoreDatabaseImpl extends DatabaseRepository {
       ),
     );
 
-    return ops.whereType<Some<Opportunity>>().map((e) => e.toNullable()).toList();
+    return ops
+        .whereType<Some<Opportunity>>()
+        .map((e) => e.toNullable())
+        .toList();
   }
 
   @override
@@ -1900,6 +1917,13 @@ class FirestoreDatabaseImpl extends DatabaseRepository {
       rethrow;
     }
   }
+
+  @override
+  Future<void> contactVenue({
+    required UserModel currentUser,
+    required UserModel venue,
+    required String bookingEmail,
+  }) async {}
 }
 
 class HandleAlreadyExistsException implements Exception {
@@ -1938,4 +1962,5 @@ class OptionalDateTimeConverter
       Timestamp.fromDate,
     );
   }
+
 }

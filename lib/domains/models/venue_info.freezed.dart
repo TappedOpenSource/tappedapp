@@ -22,7 +22,8 @@ VenueInfo _$VenueInfoFromJson(Map<String, dynamic> json) {
 mixin _$VenueInfo {
   Option<String> get bookingEmail => throw _privateConstructorUsedError;
   Option<int> get capacity => throw _privateConstructorUsedError;
-  Option<String> get idealArtistProfile => throw _privateConstructorUsedError;
+  Option<String> get idealPerformerProfile =>
+      throw _privateConstructorUsedError;
   Option<String> get productionInfo => throw _privateConstructorUsedError;
   Option<String> get frontOfHouse => throw _privateConstructorUsedError;
   Option<String> get monitors => throw _privateConstructorUsedError;
@@ -44,7 +45,7 @@ abstract class $VenueInfoCopyWith<$Res> {
   $Res call(
       {Option<String> bookingEmail,
       Option<int> capacity,
-      Option<String> idealArtistProfile,
+      Option<String> idealPerformerProfile,
       Option<String> productionInfo,
       Option<String> frontOfHouse,
       Option<String> monitors,
@@ -68,7 +69,7 @@ class _$VenueInfoCopyWithImpl<$Res, $Val extends VenueInfo>
   $Res call({
     Object? bookingEmail = null,
     Object? capacity = null,
-    Object? idealArtistProfile = null,
+    Object? idealPerformerProfile = null,
     Object? productionInfo = null,
     Object? frontOfHouse = null,
     Object? monitors = null,
@@ -85,9 +86,9 @@ class _$VenueInfoCopyWithImpl<$Res, $Val extends VenueInfo>
           ? _value.capacity
           : capacity // ignore: cast_nullable_to_non_nullable
               as Option<int>,
-      idealArtistProfile: null == idealArtistProfile
-          ? _value.idealArtistProfile
-          : idealArtistProfile // ignore: cast_nullable_to_non_nullable
+      idealPerformerProfile: null == idealPerformerProfile
+          ? _value.idealPerformerProfile
+          : idealPerformerProfile // ignore: cast_nullable_to_non_nullable
               as Option<String>,
       productionInfo: null == productionInfo
           ? _value.productionInfo
@@ -128,7 +129,7 @@ abstract class _$$VenueInfoImplCopyWith<$Res>
   $Res call(
       {Option<String> bookingEmail,
       Option<int> capacity,
-      Option<String> idealArtistProfile,
+      Option<String> idealPerformerProfile,
       Option<String> productionInfo,
       Option<String> frontOfHouse,
       Option<String> monitors,
@@ -150,7 +151,7 @@ class __$$VenueInfoImplCopyWithImpl<$Res>
   $Res call({
     Object? bookingEmail = null,
     Object? capacity = null,
-    Object? idealArtistProfile = null,
+    Object? idealPerformerProfile = null,
     Object? productionInfo = null,
     Object? frontOfHouse = null,
     Object? monitors = null,
@@ -167,9 +168,9 @@ class __$$VenueInfoImplCopyWithImpl<$Res>
           ? _value.capacity
           : capacity // ignore: cast_nullable_to_non_nullable
               as Option<int>,
-      idealArtistProfile: null == idealArtistProfile
-          ? _value.idealArtistProfile
-          : idealArtistProfile // ignore: cast_nullable_to_non_nullable
+      idealPerformerProfile: null == idealPerformerProfile
+          ? _value.idealPerformerProfile
+          : idealPerformerProfile // ignore: cast_nullable_to_non_nullable
               as Option<String>,
       productionInfo: null == productionInfo
           ? _value.productionInfo
@@ -205,7 +206,7 @@ class _$VenueInfoImpl implements _VenueInfo {
   const _$VenueInfoImpl(
       {this.bookingEmail = const None(),
       this.capacity = const None(),
-      this.idealArtistProfile = const None(),
+      this.idealPerformerProfile = const None(),
       this.productionInfo = const None(),
       this.frontOfHouse = const None(),
       this.monitors = const None(),
@@ -224,7 +225,7 @@ class _$VenueInfoImpl implements _VenueInfo {
   final Option<int> capacity;
   @override
   @JsonKey()
-  final Option<String> idealArtistProfile;
+  final Option<String> idealPerformerProfile;
   @override
   @JsonKey()
   final Option<String> productionInfo;
@@ -246,7 +247,7 @@ class _$VenueInfoImpl implements _VenueInfo {
 
   @override
   String toString() {
-    return 'VenueInfo(bookingEmail: $bookingEmail, capacity: $capacity, idealArtistProfile: $idealArtistProfile, productionInfo: $productionInfo, frontOfHouse: $frontOfHouse, monitors: $monitors, microphones: $microphones, lights: $lights, type: $type)';
+    return 'VenueInfo(bookingEmail: $bookingEmail, capacity: $capacity, idealPerformerProfile: $idealPerformerProfile, productionInfo: $productionInfo, frontOfHouse: $frontOfHouse, monitors: $monitors, microphones: $microphones, lights: $lights, type: $type)';
   }
 
   @override
@@ -258,8 +259,8 @@ class _$VenueInfoImpl implements _VenueInfo {
                 other.bookingEmail == bookingEmail) &&
             (identical(other.capacity, capacity) ||
                 other.capacity == capacity) &&
-            (identical(other.idealArtistProfile, idealArtistProfile) ||
-                other.idealArtistProfile == idealArtistProfile) &&
+            (identical(other.idealPerformerProfile, idealPerformerProfile) ||
+                other.idealPerformerProfile == idealPerformerProfile) &&
             (identical(other.productionInfo, productionInfo) ||
                 other.productionInfo == productionInfo) &&
             (identical(other.frontOfHouse, frontOfHouse) ||
@@ -278,7 +279,7 @@ class _$VenueInfoImpl implements _VenueInfo {
       runtimeType,
       bookingEmail,
       capacity,
-      idealArtistProfile,
+      idealPerformerProfile,
       productionInfo,
       frontOfHouse,
       monitors,
@@ -304,7 +305,7 @@ abstract class _VenueInfo implements VenueInfo {
   const factory _VenueInfo(
       {final Option<String> bookingEmail,
       final Option<int> capacity,
-      final Option<String> idealArtistProfile,
+      final Option<String> idealPerformerProfile,
       final Option<String> productionInfo,
       final Option<String> frontOfHouse,
       final Option<String> monitors,
@@ -320,7 +321,7 @@ abstract class _VenueInfo implements VenueInfo {
   @override
   Option<int> get capacity;
   @override
-  Option<String> get idealArtistProfile;
+  Option<String> get idealPerformerProfile;
   @override
   Option<String> get productionInfo;
   @override

@@ -15,10 +15,10 @@ _$VenueInfoImpl _$$VenueInfoImplFromJson(Map<String, dynamic> json) =>
       capacity: json['capacity'] == null
           ? const None()
           : Option<int>.fromJson(json['capacity'], (value) => value as int),
-      idealArtistProfile: json['idealArtistProfile'] == null
+      idealPerformerProfile: json['idealPerformerProfile'] == null
           ? const None()
           : Option<String>.fromJson(
-              json['idealArtistProfile'], (value) => value as String),
+              json['idealPerformerProfile'], (value) => value as String),
       productionInfo: json['productionInfo'] == null
           ? const None()
           : Option<String>.fromJson(
@@ -50,7 +50,7 @@ Map<String, dynamic> _$$VenueInfoImplToJson(_$VenueInfoImpl instance) =>
       'capacity': instance.capacity.toJson(
         (value) => value,
       ),
-      'idealArtistProfile': instance.idealArtistProfile.toJson(
+      'idealPerformerProfile': instance.idealPerformerProfile.toJson(
         (value) => value,
       ),
       'productionInfo': instance.productionInfo.toJson(

@@ -14,8 +14,11 @@ import 'package:intheloopapp/ui/profile/components/review_count.dart';
 import 'package:intheloopapp/ui/profile/components/settings_button.dart';
 import 'package:intheloopapp/ui/profile/components/star_rating.dart';
 import 'package:intheloopapp/ui/profile/profile_cubit.dart';
+import 'package:intheloopapp/ui/themes.dart';
 import 'package:intheloopapp/utils/admin_builder.dart';
+import 'package:intheloopapp/utils/app_logger.dart';
 import 'package:intheloopapp/utils/custom_claims_builder.dart';
+import 'package:intheloopapp/utils/premium_builder.dart';
 
 class HeaderSliver extends StatelessWidget {
   const HeaderSliver({super.key});
@@ -30,13 +33,16 @@ class HeaderSliver extends StatelessWidget {
       child: BlocBuilder<ProfileCubit, ProfileState>(
         builder: (context, state) {
           final isCurrentUser = state.currentUser.id == state.visitedUser.id;
+          final bookingEmail =
+              state.visitedUser.venueInfo.flatMap((t) => t.bookingEmail);
           return Column(
             children: [
               const SizedBox(height: 18),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children: [
-                  if (state.visitedUser.socialFollowing.audienceSize > 0 || isCurrentUser)
+                  if (state.visitedUser.socialFollowing.audienceSize > 0 ||
+                      isCurrentUser)
                     const FollowerCount(),
                   const ReviewCount(),
                   const StarRating(),
@@ -52,6 +58,41 @@ class HeaderSliver extends StatelessWidget {
                     ),
                   ],
                 ),
+              if (state.visitedUser.unclaimed)
+                switch (bookingEmail) {
+                  None() => const SizedBox.shrink(),
+                  Some(:final value) => CustomClaimsBuilder(
+                      builder: (context, claims) {
+                        final isPremium = claims.contains(CustomClaim.premium);
+                        return SizedBox(
+                          width: double.infinity,
+                          child: CupertinoButton(
+                            onPressed: () {
+                              if (!isPremium) {
+                                context.push(PaywallPage());
+                                return;
+                              }
+
+                              context.push(
+                                RequestToPerformPage(
+                                  bookingEmail: value,
+                                  venue: state.visitedUser,
+                                ),
+                              );
+                            },
+                            color: theme.colorScheme.primary,
+                            child: const Text(
+                              'Request to Perform',
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                          ),
+                        );
+                      },
+                    ),
+                },
               if (isCurrentUser)
                 const Row(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,

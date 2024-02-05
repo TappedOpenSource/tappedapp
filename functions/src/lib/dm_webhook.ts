@@ -27,8 +27,7 @@ export const sendGridWebhook = onRequest(
 
       const blah = await client.sendEmail({
         "From": "johannes@tapped.ai",
-        // "To": "ebe63b4b00c9dded9244d7882acad5e9@inbound.postmarkapp.com",
-        "To": "johannes@tapped.ai",
+        "To": "ebe63b4b00c9dded9244d7882acad5e9@inbound.postmarkapp.com",
         "Headers": [
           {
             "Name": "Message-ID",
