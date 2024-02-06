@@ -47,6 +47,5 @@ final List<String> occupations = [
   'Merchandise Coordinator',
   'Talent Scout',
   'Record Label Executive',
-  'Venue',
   'Other',
 ];

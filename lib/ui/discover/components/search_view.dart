@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:intheloopapp/domains/navigation_bloc/navigation_bloc.dart';
-import 'package:intheloopapp/ui/search/components/by_username_results_list.dart';
-import 'package:intheloopapp/ui/search/components/cancel_icon.dart';
-import 'package:intheloopapp/ui/search/components/tapped_search_bar.dart';
+import 'package:intheloopapp/ui/discover/components/by_username_results_list.dart';
+import 'package:intheloopapp/ui/discover/components/cancel_icon.dart';
+import 'package:intheloopapp/ui/discover/components/tapped_search_bar.dart';
 
 class SearchView extends StatefulWidget {
   SearchView({

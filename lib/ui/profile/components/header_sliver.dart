@@ -14,11 +14,8 @@ import 'package:intheloopapp/ui/profile/components/review_count.dart';
 import 'package:intheloopapp/ui/profile/components/settings_button.dart';
 import 'package:intheloopapp/ui/profile/components/star_rating.dart';
 import 'package:intheloopapp/ui/profile/profile_cubit.dart';
-import 'package:intheloopapp/ui/themes.dart';
-import 'package:intheloopapp/utils/admin_builder.dart';
-import 'package:intheloopapp/utils/app_logger.dart';
 import 'package:intheloopapp/utils/custom_claims_builder.dart';
-import 'package:intheloopapp/utils/premium_builder.dart';
+import 'package:intl/intl.dart';
 
 class HeaderSliver extends StatelessWidget {
   const HeaderSliver({super.key});
@@ -32,6 +29,9 @@ class HeaderSliver extends StatelessWidget {
       ),
       child: BlocBuilder<ProfileCubit, ProfileState>(
         builder: (context, state) {
+          final capacity = state.visitedUser.venueInfo
+              .flatMap((t) => t.capacity)
+              .getOrElse(() => 0);
           final isCurrentUser = state.currentUser.id == state.visitedUser.id;
           final bookingEmail =
               state.visitedUser.venueInfo.flatMap((t) => t.bookingEmail);
@@ -41,6 +41,23 @@ class HeaderSliver extends StatelessWidget {
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children: [
+                  if (capacity > 0)
+                    Column(
+                      children: [
+                        Text(
+                          NumberFormat.compactCurrency(
+                            decimalDigits: 0,
+                            symbol: '',
+                          ).format(capacity),
+                          style: const TextStyle(
+                            fontSize: 24,
+                          ),
+                        ),
+                        const Text(
+                          'Capacity',
+                        ),
+                      ],
+                    ),
                   if (state.visitedUser.socialFollowing.audienceSize > 0 ||
                       isCurrentUser)
                     const FollowerCount(),

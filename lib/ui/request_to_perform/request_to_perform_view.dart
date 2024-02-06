@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:fpdart/fpdart.dart';
 import 'package:intheloopapp/domains/models/user_model.dart';
 import 'package:intheloopapp/domains/navigation_bloc/navigation_bloc.dart';
+import 'package:intheloopapp/ui/common/social_following_menu.dart';
+import 'package:intheloopapp/ui/request_to_perform/components/past_bookings_slider.dart';
 import 'package:intheloopapp/ui/user_tile.dart';
 
 class RequestToPerformView extends StatelessWidget {
@@ -22,9 +24,10 @@ class RequestToPerformView extends StatelessWidget {
       backgroundColor: theme.colorScheme.background,
       body: SafeArea(
         child: Padding(
-          padding: const EdgeInsets.symmetric(
-            vertical: 16,
-            horizontal: 16,
+          padding: const EdgeInsets.only(
+            bottom: 16,
+            left: 16,
+            right: 16,
           ),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -44,13 +47,16 @@ class RequestToPerformView extends StatelessWidget {
                 style: const TextStyle(
                   letterSpacing: 0,
                 ),
-                maxLength: 1024,
-                minLines: 12,
+                maxLength: 512,
+                minLines: 6,
                 initialValue: '',
                 validator: (value) =>
                     value!.isEmpty ? 'message cannot be empty' : null,
                 onChanged: (input) {},
               ),
+              const SocialFollowingMenu(),
+              const SizedBox(height: 12),
+              const PastBookingsSlider(),
               const Spacer(),
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,

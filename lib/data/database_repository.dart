@@ -254,7 +254,7 @@ abstract class DatabaseRepository {
   Future<bool> isOnPremiumWailist(String userId);
 
   Future<void> sendFeedback(
-      String userId, UserFeedback feedback, String imageUrl);
+      String userId, UserFeedback feedback, String imageUrl,);
 
   Future<void> contactVenue({
     required UserModel currentUser,

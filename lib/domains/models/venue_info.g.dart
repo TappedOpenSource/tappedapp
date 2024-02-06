@@ -19,6 +19,10 @@ _$VenueInfoImpl _$$VenueInfoImplFromJson(Map<String, dynamic> json) =>
           ? const None()
           : Option<String>.fromJson(
               json['idealPerformerProfile'], (value) => value as String),
+      venuePhotos: (json['venuePhotos'] as List<dynamic>?)
+              ?.map((e) => e as String)
+              .toList() ??
+          const [],
       productionInfo: json['productionInfo'] == null
           ? const None()
           : Option<String>.fromJson(
@@ -53,6 +57,7 @@ Map<String, dynamic> _$$VenueInfoImplToJson(_$VenueInfoImpl instance) =>
       'idealPerformerProfile': instance.idealPerformerProfile.toJson(
         (value) => value,
       ),
+      'venuePhotos': instance.venuePhotos,
       'productionInfo': instance.productionInfo.toJson(
         (value) => value,
       ),

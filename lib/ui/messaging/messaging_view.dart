@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:intheloopapp/ui/discover/components/tapped_search_bar.dart';
 import 'package:intheloopapp/ui/messaging/channel_list_view.dart';
-import 'package:intheloopapp/ui/search/components/tapped_search_bar.dart';
 
 class MessagingChannelListView extends StatelessWidget {
   const MessagingChannelListView({super.key});

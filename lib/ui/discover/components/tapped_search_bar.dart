@@ -32,7 +32,6 @@ class _TappedSearchBarState extends State<TappedSearchBar> {
   late final FocusNode _searchFocusNode;
   late final SearchController _searchController;
   final List<UserModel> _searchResults = [];
-  final bool _loading = false;
 
   void search() {
     final query = _searchController.text;

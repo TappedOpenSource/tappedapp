@@ -142,8 +142,7 @@ class ProfileCubit extends Cubit<ProfileState> {
     final trace = logger.createTrace('getLatestReview');
     await trace.start();
     try {
-      final performerReviews =
-          await database.getPerformerReviewsByPerformerId(
+      final performerReviews = await database.getPerformerReviewsByPerformerId(
         visitedUser.id,
         limit: 1,
       );
@@ -212,13 +211,9 @@ class ProfileCubit extends Cubit<ProfileState> {
         limit: 5,
       );
 
-      logger.debug('initOpportunities ${opportunities.length}');
-
-      emit(
-        state.copyWith(
-          opportunities:
-              opportunities.where((element) => !element.deleted).toList(),
-        ),
+      state.copyWith(
+        opportunities:
+            opportunities.where((element) => !element.deleted).toList(),
       );
     } catch (e, s) {
       logger.error(
@@ -279,9 +274,6 @@ class ProfileCubit extends Cubit<ProfileState> {
     final trace = logger.createTrace('initBadges');
     await trace.start();
     try {
-      logger.debug(
-        'initBadges ${state.visitedUser}',
-      );
       await badgeListener?.cancel();
       if (clearBadges) {
         emit(
@@ -294,8 +286,7 @@ class ProfileCubit extends Cubit<ProfileState> {
       }
 
       final badgesAvailable =
-          (await database.getUserBadges(visitedUser.id, limit: 1))
-              .isNotEmpty;
+          (await database.getUserBadges(visitedUser.id, limit: 1)).isNotEmpty;
       if (!badgesAvailable) {
         emit(state.copyWith(badgeStatus: BadgesStatus.success));
       }
@@ -303,7 +294,6 @@ class ProfileCubit extends Cubit<ProfileState> {
       badgeListener = database
           .userBadgesObserver(visitedUser.id)
           .listen((badge.Badge event) {
-        logger.debug('badge { ${event.id} : ${event.name} }');
         try {
           emit(
             state.copyWith(
@@ -327,12 +317,11 @@ class ProfileCubit extends Cubit<ProfileState> {
     final trace = logger.createTrace('initPlace');
     await trace.start();
     try {
-      logger.debug('initPlace ${state.visitedUser}');
       final place = await switch (visitedUser.location) {
         None() => Future<PlaceData?>.value(),
         Some(:final value) => (() async {
-          return await places.getPlaceById(value.placeId);
-        })(),
+            return await places.getPlaceById(value.placeId);
+          })(),
       };
       emit(state.copyWith(place: place));
     } catch (e, s) {
@@ -362,7 +351,8 @@ class ProfileCubit extends Cubit<ProfileState> {
           : emit(
               state.copyWith(
                 opportunityStatus: OpportunitiesStatus.success,
-                opportunities: List.of(state.opportunities)..addAll(opportunities),
+                opportunities: List.of(state.opportunities)
+                  ..addAll(opportunities),
                 hasReachedMaxOpportunities: false,
               ),
             );

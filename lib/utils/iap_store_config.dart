@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:flutter/foundation.dart';
 import 'package:purchases_flutter/purchases_flutter.dart';
 
 
@@ -27,6 +28,8 @@ class IapStoreConfig {
 }
 
 Future<void> configureIapSdk() async {
+  if (kIsWeb) return;
+
   if (Platform.isIOS || Platform.isMacOS) {
     IapStoreConfig(
       store: Store.appStore,
