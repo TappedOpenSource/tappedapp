@@ -50,12 +50,11 @@ class DiscoverView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     const defaultLoc = Location.rva;
-    final database = context.database;
     final mapController = MapController();
     return BlocProvider<DiscoverCubit>(
       create: (context) => DiscoverCubit(
         search: context.read<SearchRepository>(),
-      ),
+      )..initHits(defaultLoc),
       child: Scaffold(
         body: LayoutBuilder(
           builder: (context, contains) {

@@ -1,4 +1,5 @@
 import 'package:algolia/algolia.dart';
+import 'package:cached_annotation/cached_annotation.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:intheloopapp/data/search_repository.dart';
@@ -20,6 +21,7 @@ class AlgoliaSearchImpl extends SearchRepository {
 
   final Algolia algolia;
 
+  @cached
   Future<UserModel> _getUser(String userId) async {
     final userSnapshot = await usersRef.doc(userId).get();
     final user = UserModel.fromDoc(userSnapshot);
@@ -28,6 +30,7 @@ class AlgoliaSearchImpl extends SearchRepository {
   }
 
   @override
+  @Cached(ttl: 300) // 5 minutes
   Future<List<UserModel>> queryUsers(
     String input, {
     List<String>? labels,

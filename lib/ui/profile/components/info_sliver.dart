@@ -22,6 +22,8 @@ class InfoSliver extends StatelessWidget {
         final label = performerInfo?.label ?? 'None';
         final pressKitUrl = performerInfo?.pressKitUrl ?? const None();
         final currPlace = state.place;
+        final idealPerformerProfile =
+            state.visitedUser.venueInfo.flatMap((t) => t.idealPerformerProfile);
         return Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -48,6 +50,19 @@ class InfoSliver extends StatelessWidget {
                     ),
                   ),
                 ),
+                if (currPlace != null)
+                  CupertinoListTile(
+                    leading: Icon(
+                      CupertinoIcons.location,
+                      color: theme.colorScheme.onSurface,
+                    ),
+                    title: Text(
+                      getAddressComponent(currPlace.addressComponents),
+                      style: TextStyle(
+                        color: theme.colorScheme.onSurface,
+                      ),
+                    ),
+                  ),
                 switch (state.visitedUser.venueInfo) {
                   None() => const SizedBox.shrink(),
                   Some(:final value) => switch (value.capacity) {
@@ -122,19 +137,55 @@ class InfoSliver extends StatelessWidget {
                       },
                     ),
                 },
-                if (currPlace != null)
-                  CupertinoListTile(
-                    leading: Icon(
-                      CupertinoIcons.location,
-                      color: theme.colorScheme.onSurface,
-                    ),
-                    title: Text(
-                      getAddressComponent(currPlace.addressComponents),
-                      style: TextStyle(
-                        color: theme.colorScheme.onSurface,
+                switch (idealPerformerProfile) {
+                  None() => const SizedBox.shrink(),
+                  Some(:final value) => CupertinoListTile(
+                      title: Text(
+                        'Ideal Performer Profile',
+                        style: TextStyle(
+                          color: theme.colorScheme.onSurface,
+                        ),
                       ),
+                      trailing: const Icon(CupertinoIcons.chevron_forward),
+                      onTap: () {
+                        showModalBottomSheet<void>(
+                          context: context,
+                          builder: (context) {
+                            return SafeArea(
+                              child: Padding(
+                                padding: const EdgeInsets.symmetric(
+                                  vertical: 16,
+                                  horizontal: 20,
+                                ),
+                                child: SingleChildScrollView(
+                                  child: Column(
+                                    children: [
+                                      Text(
+                                        'what kind of performers do they normally book?',
+                                        style: TextStyle(
+                                          color: theme.colorScheme.onSurface,
+                                          fontSize: 24,
+                                          fontWeight: FontWeight.bold,
+                                        ),
+                                      ),
+                                      const SizedBox(height: 12),
+                                      Text(
+                                        value,
+                                        style: TextStyle(
+                                          color: theme.colorScheme.onSurface,
+                                          fontSize: 16,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ),
+                            );
+                          },
+                        );
+                      },
                     ),
-                  ),
+                },
                 CupertinoListTile(
                   title: Text(
                     'More Options',

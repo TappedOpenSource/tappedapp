@@ -2,6 +2,7 @@ import 'package:bloc/bloc.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:intheloopapp/data/search_repository.dart';
+import 'package:intheloopapp/domains/models/location.dart';
 import 'package:intheloopapp/domains/models/user_model.dart';
 import 'package:intheloopapp/utils/debouncer.dart';
 
@@ -20,6 +21,17 @@ class DiscoverCubit extends Cubit<DiscoverState> {
     const Duration(milliseconds: 150),
     executionInterval: const Duration(milliseconds: 500),
   );
+
+  Future<void> initHits(Location defaultLoc) async {
+    final users = await search.queryUsers(
+      '',
+      occupations: ['Venue', 'venue'],
+      lat: defaultLoc.lat,
+      lng: defaultLoc.lng,
+    );
+
+    emit(state.copyWith(hits: users));
+  }
 
   void onBoundsChange(LatLngBounds? bounds) {
     if (bounds == null) return;
