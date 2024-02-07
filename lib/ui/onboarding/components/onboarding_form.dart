@@ -52,11 +52,7 @@ class OnboardingForm extends StatelessWidget {
             ),
             (
               const OnboardingProfilePictureView(),
-              () => context
-                  .read<OnboardingFlowCubit>()
-                  .state
-                  .pickedPhoto
-                  .isSome(),
+              () =>  true,
             ),
             (
               const OnboardingSocialMediaView(),
