@@ -27,9 +27,10 @@ class RequestToPerformView extends StatefulWidget {
 class _RequestToPerformViewState extends State<RequestToPerformView> {
   String _note = '';
   List<Booking> _latestBookings = [];
-  UserModel get _venue => widget.venue;
-  String get _bookingEmail => widget.bookingEmail;
 
+  UserModel get _venue => widget.venue;
+
+  String get _bookingEmail => widget.bookingEmail;
 
   @override
   void initState() {
@@ -47,10 +48,8 @@ class _RequestToPerformViewState extends State<RequestToPerformView> {
           backgroundColor: theme.colorScheme.background,
           body: SafeArea(
             child: Padding(
-              padding: const EdgeInsets.only(
-                bottom: 16,
-                left: 16,
-                right: 16,
+              padding: const EdgeInsets.symmetric(
+                horizontal: 16,
               ),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -61,17 +60,21 @@ class _RequestToPerformViewState extends State<RequestToPerformView> {
                     user: Option.of(widget.venue),
                   ),
                   const SizedBox(height: 12),
+                  Divider(
+                    color: theme.colorScheme.onSurface.withOpacity(0.5),
+                  ),
+                  const SizedBox(height: 12),
                   TextFormField(
                     keyboardType: TextInputType.multiline,
                     maxLines: null,
                     decoration: const InputDecoration.collapsed(
-                      hintText: 'What should the venue know about you?',
+                      hintText: 'What else should the venue know about you?',
                     ),
                     style: const TextStyle(
                       letterSpacing: 0,
                     ),
                     maxLength: 512,
-                    minLines: 6,
+                    minLines: 8,
                     initialValue: _note,
                     validator: (value) =>
                         value!.isEmpty ? 'message cannot be empty' : null,
@@ -81,9 +84,65 @@ class _RequestToPerformViewState extends State<RequestToPerformView> {
                       });
                     },
                   ),
-                  const SocialFollowingMenu(),
-                  const SizedBox(height: 12),
-                  const PastBookingsSlider(),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      CupertinoButton(
+                        onPressed: () {
+                          showModalBottomSheet(
+                            context: context,
+                            builder: (context) {
+                              return Padding(
+                                padding: const EdgeInsets.symmetric(
+                                  horizontal: 16,
+                                  vertical: 12,
+                                ),
+                                child: SingleChildScrollView(
+                                  child: Column(
+                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    children: [
+                                      const SizedBox(height: 12),
+                                      Text(
+                                        currentUser.displayName,
+                                        style: const TextStyle(
+                                          fontSize: 24,
+                                          fontWeight: FontWeight.bold,
+                                        ),
+                                      ),
+                                      const SizedBox(height: 12),
+                                      const Text(
+                                        'Socials',
+                                        style: TextStyle(
+                                          fontSize: 16,
+                                          fontWeight: FontWeight.bold,
+                                        ),
+                                      ),
+                                      SocialFollowingMenu(
+                                        user: currentUser,
+                                      ),
+                                      const SizedBox(height: 12),
+                                      const Text(
+                                        'Booking History',
+                                        style: TextStyle(
+                                          fontSize: 16,
+                                          fontWeight: FontWeight.bold,
+                                        ),
+                                      ),
+                                      PastBookingsSlider(
+                                        user: currentUser,
+                                      ),
+                                      const SizedBox(height: 12),
+                                    ],
+                                  ),
+                                ),
+                              );
+                            },
+                          );
+                        },
+                        child: const Text('what info are we sending?'),
+                      ),
+                    ],
+                  ),
                   const Spacer(),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,

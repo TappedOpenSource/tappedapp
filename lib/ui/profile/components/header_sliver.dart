@@ -10,6 +10,7 @@ import 'package:intheloopapp/ui/profile/components/feedback_button.dart';
 import 'package:intheloopapp/ui/profile/components/follower_count.dart';
 import 'package:intheloopapp/ui/profile/components/message_button.dart';
 import 'package:intheloopapp/ui/profile/components/request_to_book.dart';
+import 'package:intheloopapp/ui/profile/components/request_to_perform.dart';
 import 'package:intheloopapp/ui/profile/components/review_count.dart';
 import 'package:intheloopapp/ui/profile/components/settings_button.dart';
 import 'package:intheloopapp/ui/profile/components/star_rating.dart';
@@ -29,8 +30,6 @@ class HeaderSliver extends StatelessWidget {
       child: BlocBuilder<ProfileCubit, ProfileState>(
         builder: (context, state) {
           final isCurrentUser = state.currentUser.id == state.visitedUser.id;
-          final bookingEmail =
-              state.visitedUser.venueInfo.flatMap((t) => t.bookingEmail);
           return Column(
             children: [
               const SizedBox(height: 18),
@@ -55,40 +54,9 @@ class HeaderSliver extends StatelessWidget {
                   ],
                 ),
               if (state.visitedUser.unclaimed)
-                switch (bookingEmail) {
-                  None() => const SizedBox.shrink(),
-                  Some(:final value) => CustomClaimsBuilder(
-                      builder: (context, claims) {
-                        final isPremium = claims.contains(CustomClaim.premium);
-                        return SizedBox(
-                          width: double.infinity,
-                          child: CupertinoButton(
-                            onPressed: () {
-                              if (!isPremium) {
-                                context.push(PaywallPage());
-                                return;
-                              }
-
-                              context.push(
-                                RequestToPerformPage(
-                                  bookingEmail: value,
-                                  venue: state.visitedUser,
-                                ),
-                              );
-                            },
-                            color: theme.colorScheme.primary,
-                            child: const Text(
-                              'Request to Perform',
-                              style: TextStyle(
-                                color: Colors.white,
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                          ),
-                        );
-                      },
-                    ),
-                },
+                RequestToPerform(
+                  venue: state.visitedUser,
+                ),
               if (isCurrentUser)
                 const Row(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
