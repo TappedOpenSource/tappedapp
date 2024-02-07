@@ -1947,6 +1947,21 @@ class FirestoreDatabaseImpl extends DatabaseRepository {
       'timestamp': Timestamp.now(),
     });
   }
+
+  @override
+  @Cached(where: _asyncShouldCache)
+  Future<bool> hasUserSentContactRequest({
+    required UserModel user,
+    required UserModel venue,
+  }) async {
+    final contactRequestSnapshot = await _contactVenuesRef
+        .doc(user.id)
+        .collection('venuesContacted')
+        .doc(venue.id)
+        .get();
+
+    return contactRequestSnapshot.exists;
+  }
 }
 
 class HandleAlreadyExistsException implements Exception {
