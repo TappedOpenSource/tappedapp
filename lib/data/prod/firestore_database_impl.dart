@@ -1927,6 +1927,16 @@ class FirestoreDatabaseImpl extends DatabaseRepository {
     required String note,
     required String bookingEmail,
   }) async {
+    await _analytics.logEvent(
+      name: 'contact_venue',
+      parameters: {
+        'user_id': currentUser.id,
+        'venue_id': venue.id,
+        'booking_email': bookingEmail,
+        'note': note,
+        'latest_booking_count': lastestBookings.length,
+      },
+    );
     await _contactVenuesRef
         .doc(currentUser.id)
         .collection('venuesContacted')
