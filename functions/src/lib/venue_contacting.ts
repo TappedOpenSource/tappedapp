@@ -5,35 +5,67 @@ import {
 } from "firebase-functions/v2/https"
 import { POSTMARK_SERVER_ID, fcm } from "./firebase";
 // import sgMail from "@sendgrid/mail";
-import { error, info } from "firebase-functions/logger";
+import { debug, error, info } from "firebase-functions/logger";
 import * as postmark from "postmark";
 import { getFoundersDeviceTokens } from "./utils";
 import { onDocumentCreated } from "firebase-functions/v2/firestore";
 import { UserModel } from "../types/models";
 
+function createEmailMessageId() {
+  const currentTime = Date.now().toString(36);
+  const randomPart = Math.floor(Math.random() * Number.MAX_SAFE_INTEGER).toString(36);
+  const messageId = `<${currentTime}.${randomPart}@tapped.ai>`;
+
+  return messageId;
+}
+
 export const notifyFoundersOnVenueContact = onDocumentCreated(
-  { document: "venueContacts/{userId}/venuesContacted/{venueId}" },
+  {
+    document: "venueContacts/{userId}/venuesContacted/{venueId}",
+    secrets: [ POSTMARK_SERVER_ID ],
+  },
   async (event) => {
     const snapshot = event.data;
     const documentData = snapshot?.data();
 
     const user = documentData?.user as UserModel | undefined;
+    const username = user?.username;
     const venue = documentData?.venue as UserModel | undefined;
     const bookingEmail = documentData?.bookingEmail;
 
     const devices = await getFoundersDeviceTokens();
     const payload = {
       notification: {
-        title: `${user?.artistName} wants to contact a ${venue?.artistName} \uD83D\uDE43`,
+        title: `${username} wants to contact a ${venue?.artistName} \uD83D\uDE43`,
         body: `they used the email ${bookingEmail}`,
       }
     };
 
     fcm.sendToDevice(devices, payload);
+
+
+    const client = new postmark.ServerClient("308b52d5-d41b-4494-bc85-442bf4382f73");
+
+    const messageId = createEmailMessageId();
+    const res = await client.sendEmail({
+      "Headers": [
+        {
+          "Name": "Message-ID",
+          "Value": messageId,
+        }
+      ],
+      "From": `${username}@booking.tapped.ai`,
+      "To": "johannes@tapped.ai",
+      "Subject": "Booking Inquiry",
+      "HtmlBody": "this is a <strong>test</strong> email from Tapped",
+      "TextBody": "this is a test email from Tapped",
+      "MessageStream": "outbound"
+    });
+    debug({ res });
   }
 );
 
-export const sendGridWebhook = onRequest(
+export const inboundEmailWebhook = onRequest(
   { secrets: [ POSTMARK_SERVER_ID ] },
   async (req, res) => {
     try {
@@ -60,11 +92,11 @@ export const sendGridWebhook = onRequest(
           }
         ],
         "Subject": subject,
-        "HtmlBody": "<strong>Hello</strong> dear Postmark user.",
-        "TextBody": "Hello from Postmark!",
+        "HtmlBody": "this is an <strong>automated</strong> response that's mocking a user DMing",
+        "TextBody": "this is an automated response that's mocking a user DMing",
         "MessageStream": "outbound"
       });
-      console.log({ blah });
+      debug({ blah });
 
       res.status(200).send("ok");
     } catch (e) {
