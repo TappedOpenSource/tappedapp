@@ -32,7 +32,7 @@ export * from "./lib/search";
 export * from "./lib/calendar";
 export * from "./lib/places";
 export * from "./lib/user_feedback";
-export * from "./lib/dm_webhook";
+export * from "./lib/venue_contacting";
 
 const _deleteUser = async (data: { id: string }) => {
   // Checking attribute.
