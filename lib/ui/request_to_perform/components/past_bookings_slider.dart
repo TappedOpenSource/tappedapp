@@ -5,6 +5,10 @@ class PastBookingsSlider extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const Placeholder();
+    return Container(
+      height: 100,
+      width: double.infinity,
+      color: Colors.red,
+    );
   }
 }

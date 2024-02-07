@@ -40,6 +40,7 @@ final _opportunityFeedsRef = _firestore.collection('opportunityFeeds');
 final _creditsRef = _firestore.collection('credits');
 final _premiumWailistRef = _firestore.collection('premiumWaitlist');
 final _userFeedbackRef = _firestore.collection('userFeedback');
+final _contactVenuesRef = _firestore.collection('contactVenues');
 
 const verifiedBadgeId = '0aa46576-1fbe-4312-8b69-e2fef3269083';
 
@@ -1921,9 +1922,23 @@ class FirestoreDatabaseImpl extends DatabaseRepository {
   @override
   Future<void> contactVenue({
     required UserModel currentUser,
+    required List<Booking> lastestBookings,
     required UserModel venue,
+    required String note,
     required String bookingEmail,
-  }) async {}
+  }) async {
+    await _contactVenuesRef
+        .doc(currentUser.id)
+        .collection('venuesContacted')
+        .doc(venue.id)
+        .set({
+      'user': currentUser.toJson(),
+      'venue': venue.toJson(),
+      'bookingEmail': bookingEmail,
+      'note': note,
+      'timestamp': Timestamp.now(),
+    });
+  }
 }
 
 class HandleAlreadyExistsException implements Exception {
@@ -1962,5 +1977,4 @@ class OptionalDateTimeConverter
       Timestamp.fromDate,
     );
   }
-
 }
