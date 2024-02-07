@@ -1922,7 +1922,6 @@ class FirestoreDatabaseImpl extends DatabaseRepository {
   @override
   Future<void> contactVenue({
     required UserModel currentUser,
-    required List<Booking> lastestBookings,
     required UserModel venue,
     required String note,
     required String bookingEmail,
@@ -1934,7 +1933,6 @@ class FirestoreDatabaseImpl extends DatabaseRepository {
         'venue_id': venue.id,
         'booking_email': bookingEmail,
         'note': note,
-        'latest_booking_count': lastestBookings.length,
       },
     );
     await _contactVenuesRef

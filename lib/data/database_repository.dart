@@ -261,7 +261,6 @@ abstract class DatabaseRepository {
 
   Future<void> contactVenue({
     required UserModel currentUser,
-    required List<Booking> lastestBookings,
     required UserModel venue,
     required String note,
     required String bookingEmail,

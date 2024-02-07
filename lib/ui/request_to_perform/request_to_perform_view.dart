@@ -26,16 +26,12 @@ class RequestToPerformView extends StatefulWidget {
 
 class _RequestToPerformViewState extends State<RequestToPerformView> {
   String _note = '';
-  List<Booking> _latestBookings = [];
-
   UserModel get _venue => widget.venue;
-
   String get _bookingEmail => widget.bookingEmail;
 
   @override
   void initState() {
     super.initState();
-    _latestBookings = [];
   }
 
   @override
@@ -150,9 +146,20 @@ class _RequestToPerformViewState extends State<RequestToPerformView> {
                       Expanded(
                         child: CupertinoButton.filled(
                           onPressed: () {
+                            if (_note.isEmpty) {
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                const SnackBar(
+                                  backgroundColor: Colors.red,
+                                  content: Text(
+                                    'Message cannot be empty',
+                                  ),
+                                ),
+                              );
+                              return;
+                            }
+
                             database.contactVenue(
                               currentUser: currentUser,
-                              lastestBookings: _latestBookings,
                               venue: _venue,
                               note: _note,
                               bookingEmail: _bookingEmail,

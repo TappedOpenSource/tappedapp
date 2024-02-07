@@ -44,7 +44,7 @@ export const notifyFoundersOnVenueContact = onDocumentCreated(
     fcm.sendToDevice(devices, payload);
 
 
-    const client = new postmark.ServerClient("308b52d5-d41b-4494-bc85-442bf4382f73");
+    const client = new postmark.ServerClient(POSTMARK_SERVER_ID.value());
 
     const messageId = createEmailMessageId();
     const res = await client.sendEmail({
