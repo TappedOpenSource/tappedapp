@@ -1,5 +1,5 @@
 name: intheloopapp
-version: 1.2.68+81
+version: 1.2.69+82
 publish_to: none
 description: Mobile app for Tapped.
 environment: 
@@ -70,6 +70,7 @@ dependencies:
   just_audio: 0.9.36
   like_button: 2.0.5
   linkify: 5.0.0
+  location: ^5.0.3
   logging: 1.2.0
   maps_launcher: 2.2.0
   modal_bottom_sheet:

@@ -1,9 +1,8 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:intheloopapp/data/search_repository.dart';
-import 'package:intheloopapp/domains/models/location.dart';
 import 'package:intheloopapp/domains/navigation_bloc/navigation_bloc.dart';
 import 'package:intheloopapp/domains/navigation_bloc/tapped_route.dart';
 import 'package:intheloopapp/ui/app_theme_cubit.dart';
@@ -11,7 +10,6 @@ import 'package:intheloopapp/ui/discover/components/cluster_layer.dart';
 import 'package:intheloopapp/ui/discover/components/draggable_sheet.dart';
 import 'package:intheloopapp/ui/discover/discover_cubit.dart';
 import 'package:intheloopapp/ui/profile/components/notification_icon_button.dart';
-import 'package:intheloopapp/utils/bloc_utils.dart';
 import 'package:latlong2/latlong.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -25,8 +23,7 @@ class DiscoverView extends StatelessWidget {
     super.key,
   });
 
-  Widget _buildMapButton(
-    BuildContext context, {
+  Widget _buildMapButton(BuildContext context, {
     required String heroTag,
     required IconData icon,
     required VoidCallback onPressed,
@@ -47,92 +44,122 @@ class DiscoverView extends StatelessWidget {
     );
   }
 
+  Widget _buildMap(BuildContext context, MapController mapController) {
+    return BlocBuilder<DiscoverCubit, DiscoverState>(
+      builder: (context, state) {
+        return FlutterMap(
+          mapController: mapController,
+          options: MapOptions(
+            // minZoom: 10,
+            maxZoom: 18,
+            initialCenter: LatLng(state.defaultLat, state.defaultLng),
+            onPositionChanged: (position, hasGesture) {
+              context.read<DiscoverCubit>().onBoundsChange(
+                position.bounds,
+              );
+            },
+          ),
+          children: [
+            BlocBuilder<AppThemeCubit, bool>(
+              builder: (context, isDark) {
+                final theme =
+                isDark ? mapboxDarkStyle : mapboxLightStyle;
+                return TileLayer(
+                  urlTemplate:
+                  'https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token={accessToken}',
+                  additionalOptions: {
+                    'accessToken': defaultMapboxToken,
+                    'id': theme,
+                  },
+                );
+              },
+            ),
+            const ClusterLayer(),
+            RichAttributionWidget(
+              animationConfig: const ScaleRAWA(),
+              // Or `FadeRAWA` as is default
+              showFlutterMapAttribution: false,
+              attributions: [
+                TextSourceAttribution(
+                  'OpenStreetMap contributors',
+                  onTap: () =>
+                      launchUrl(
+                        Uri.parse('https://openstreetmap.org/copyright'),
+                      ),
+                ),
+              ],
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  Widget _buildControlButtons(BuildContext context,
+      MapController mapController) {
+    return BlocBuilder<DiscoverCubit, DiscoverState>(
+      builder: (context, state) {
+        return Positioned(
+          bottom: 100 + 10,
+          right: 10,
+          child: Column(
+            children: [
+              _buildMapButton(
+                context,
+                icon: CupertinoIcons.location,
+                onPressed: () {
+                  mapController.move(
+                    LatLng(state.defaultLat, state.defaultLng),
+                    13,
+                  );
+                },
+                heroTag: 'seek-home',
+              ),
+              _buildMapButton(
+                context,
+                icon: Icons.add,
+                onPressed: () {
+                  mapController.move(
+                    mapController.camera.center,
+                    mapController.camera.zoom + 1,
+                  );
+                },
+                heroTag: 'zoom-in',
+              ),
+              _buildMapButton(
+                context,
+                icon: Icons.remove,
+                onPressed: () {
+                  mapController.move(
+                    mapController.camera.center,
+                    mapController.camera.zoom - 1,
+                  );
+                },
+                heroTag: 'zoom-out',
+              ),
+            ],
+          ),
+        );
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
-    const defaultLoc = Location.rva;
     final mapController = MapController();
     return BlocProvider<DiscoverCubit>(
-      create: (context) => DiscoverCubit(
+      create: (context) =>
+      DiscoverCubit(
         search: context.read<SearchRepository>(),
-      )..initHits(defaultLoc),
+      )
+        ..initLocation(),
       child: Scaffold(
         body: LayoutBuilder(
           builder: (context, contains) {
             return Stack(
               children: [
-                FlutterMap(
-                  mapController: mapController,
-                  options: MapOptions(
-                    // minZoom: 10,
-                    maxZoom: 18,
-                    initialCenter: LatLng(defaultLoc.lat, defaultLoc.lng),
-                    onPositionChanged: (position, hasGesture) {
-                      context.read<DiscoverCubit>().onBoundsChange(
-                            position.bounds,
-                          );
-                    },
-                  ),
-                  children: [
-                    BlocBuilder<AppThemeCubit, bool>(
-                      builder: (context, isDark) {
-                        final theme =
-                            isDark ? mapboxDarkStyle : mapboxLightStyle;
-                        return TileLayer(
-                          urlTemplate:
-                              'https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token={accessToken}',
-                          additionalOptions: {
-                            'accessToken': defaultMapboxToken,
-                            'id': theme,
-                          },
-                        );
-                      },
-                    ),
-                    const ClusterLayer(),
-                    RichAttributionWidget(
-                      animationConfig: const ScaleRAWA(),
-                      // Or `FadeRAWA` as is default
-                      showFlutterMapAttribution: false,
-                      attributions: [
-                        TextSourceAttribution(
-                          'OpenStreetMap contributors',
-                          onTap: () => launchUrl(
-                            Uri.parse('https://openstreetmap.org/copyright'),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ],
-                ),
-                Positioned(
-                  bottom: 100 + 10,
-                  right: 10,
-                  child: Column(
-                    children: [
-                      _buildMapButton(
-                        context,
-                        icon: Icons.add,
-                        onPressed: () {
-                          mapController.move(
-                            mapController.camera.center,
-                            mapController.camera.zoom + 1,
-                          );
-                        },
-                        heroTag: 'zoom-in',
-                      ),
-                      _buildMapButton(
-                        context,
-                        icon: Icons.remove,
-                        onPressed: () {
-                          mapController.move(
-                            mapController.camera.center,
-                            mapController.camera.zoom - 1,
-                          );
-                        },
-                        heroTag: 'zoom-out',
-                      ),
-                    ],
-                  ),
-                ),
+                _buildMap(context, mapController),
+                _buildControlButtons(context, mapController),
                 SafeArea(
                   child: Padding(
                     padding: const EdgeInsets.symmetric(
@@ -142,16 +169,18 @@ class DiscoverView extends StatelessWidget {
                       children: [
                         Expanded(
                           child: InkWell(
-                            onTap: () => context.push(
-                              GigSearchInitPage(),
-                            ),
+                            onTap: () =>
+                                context.push(
+                                  GigSearchInitPage(),
+                                ),
                             child: Card(
                               child: Row(
                                 children: [
                                   IconButton(
-                                    onPressed: () => context.push(
-                                      GigSearchInitPage(),
-                                    ),
+                                    onPressed: () =>
+                                        context.push(
+                                          GigSearchInitPage(),
+                                        ),
                                     icon: const Icon(Icons.search),
                                   ),
                                   const Expanded(

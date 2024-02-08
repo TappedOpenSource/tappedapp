@@ -2,9 +2,12 @@ import 'package:bloc/bloc.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:intheloopapp/data/search_repository.dart';
-import 'package:intheloopapp/domains/models/location.dart';
+
+import 'package:intheloopapp/domains/models/location.dart' as loc;
 import 'package:intheloopapp/domains/models/user_model.dart';
+import 'package:intheloopapp/utils/app_logger.dart';
 import 'package:intheloopapp/utils/debouncer.dart';
+import 'package:location/location.dart';
 
 part 'discover_state.dart';
 
@@ -22,15 +25,69 @@ class DiscoverCubit extends Cubit<DiscoverState> {
     executionInterval: const Duration(milliseconds: 500),
   );
 
-  Future<void> initHits(Location defaultLoc) async {
+  Future<(double, double)> _getDefaultLocation() async {
+    try {
+      final location = Location();
+
+      var serviceEnabled = await location.serviceEnabled();
+      if (!serviceEnabled) {
+        serviceEnabled = await location.requestService();
+        if (!serviceEnabled) {
+          return (loc.Location.rva.lat, loc.Location.rva.lng);
+        }
+      }
+
+      var permissionGranted = await location.hasPermission();
+      if (permissionGranted == PermissionStatus.denied) {
+        permissionGranted = await location.requestPermission();
+        if (permissionGranted != PermissionStatus.granted) {
+          return (loc.Location.rva.lat, loc.Location.rva.lng);
+        }
+      }
+
+      final locationData = await Future.any([
+        location.getLocation(),
+        Future.delayed(const Duration(seconds: 1), location.getLocation),
+        Future.delayed(const Duration(seconds: 3), () => null),
+      ]);
+
+      return (
+        locationData?.latitude ?? loc.Location.rva.lat,
+        locationData?.longitude ?? loc.Location.rva.lng,
+      );
+    } catch (e, s) {
+      logger.error('Error getting location', error: e, stackTrace: s);
+      return (loc.Location.rva.lat, loc.Location.rva.lng);
+    }
+  }
+
+  Future<void> initLocation() async {
+    final (lat, lng) = await _getDefaultLocation();
+    final hits = await getHits(
+      lat: lat,
+      lng: lng,
+    );
+    emit(
+      state.copyWith(
+        hits: hits,
+        defaultLat: lat,
+        defaultLng: lng,
+      ),
+    );
+  }
+
+  Future<List<UserModel>> getHits({
+    required double lat,
+    required double lng,
+  }) async {
     final users = await search.queryUsers(
       '',
       occupations: ['Venue', 'venue'],
-      lat: defaultLoc.lat,
-      lng: defaultLoc.lng,
+      lat: lat,
+      lng: lng,
     );
 
-    emit(state.copyWith(hits: users));
+    return users;
   }
 
   void onBoundsChange(LatLngBounds? bounds) {

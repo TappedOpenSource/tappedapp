@@ -56,4 +56,5 @@ const _$GenreEnumMap = {
   Genre.indie: 'indie',
   Genre.folk: 'folk',
   Genre.alternative: 'alternative',
+  Genre.other: 'other',
 };

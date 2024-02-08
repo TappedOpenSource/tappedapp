@@ -50,6 +50,8 @@
 	</array>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
+	<key>NSLocationWhenInUseUsageDescription</key>
+	<string>Allow users to search on the map</string>
 	<key>NSAppleMusicUsageDescription</key>
 	<string>To play the audio from user uploaded loops</string>
 	<key>NSCameraUsageDescription</key>

@@ -17,6 +17,8 @@ final _privateConstructorUsedError = UnsupportedError(
 /// @nodoc
 mixin _$DiscoverState {
   List<UserModel> get hits => throw _privateConstructorUsedError;
+  double get defaultLat => throw _privateConstructorUsedError;
+  double get defaultLng => throw _privateConstructorUsedError;
 
   @JsonKey(ignore: true)
   $DiscoverStateCopyWith<DiscoverState> get copyWith =>
@@ -29,7 +31,7 @@ abstract class $DiscoverStateCopyWith<$Res> {
           DiscoverState value, $Res Function(DiscoverState) then) =
       _$DiscoverStateCopyWithImpl<$Res, DiscoverState>;
   @useResult
-  $Res call({List<UserModel> hits});
+  $Res call({List<UserModel> hits, double defaultLat, double defaultLng});
 }
 
 /// @nodoc
@@ -46,12 +48,22 @@ class _$DiscoverStateCopyWithImpl<$Res, $Val extends DiscoverState>
   @override
   $Res call({
     Object? hits = null,
+    Object? defaultLat = null,
+    Object? defaultLng = null,
   }) {
     return _then(_value.copyWith(
       hits: null == hits
           ? _value.hits
           : hits // ignore: cast_nullable_to_non_nullable
               as List<UserModel>,
+      defaultLat: null == defaultLat
+          ? _value.defaultLat
+          : defaultLat // ignore: cast_nullable_to_non_nullable
+              as double,
+      defaultLng: null == defaultLng
+          ? _value.defaultLng
+          : defaultLng // ignore: cast_nullable_to_non_nullable
+              as double,
     ) as $Val);
   }
 }
@@ -64,7 +76,7 @@ abstract class _$$DiscoverStateImplCopyWith<$Res>
       __$$DiscoverStateImplCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call({List<UserModel> hits});
+  $Res call({List<UserModel> hits, double defaultLat, double defaultLng});
 }
 
 /// @nodoc
@@ -79,12 +91,22 @@ class __$$DiscoverStateImplCopyWithImpl<$Res>
   @override
   $Res call({
     Object? hits = null,
+    Object? defaultLat = null,
+    Object? defaultLng = null,
   }) {
     return _then(_$DiscoverStateImpl(
       hits: null == hits
           ? _value._hits
           : hits // ignore: cast_nullable_to_non_nullable
               as List<UserModel>,
+      defaultLat: null == defaultLat
+          ? _value.defaultLat
+          : defaultLat // ignore: cast_nullable_to_non_nullable
+              as double,
+      defaultLng: null == defaultLng
+          ? _value.defaultLng
+          : defaultLng // ignore: cast_nullable_to_non_nullable
+              as double,
     ));
   }
 }
@@ -92,7 +114,10 @@ class __$$DiscoverStateImplCopyWithImpl<$Res>
 /// @nodoc
 
 class _$DiscoverStateImpl implements _DiscoverState {
-  const _$DiscoverStateImpl({final List<UserModel> hits = const []})
+  const _$DiscoverStateImpl(
+      {final List<UserModel> hits = const [],
+      this.defaultLat = 37.5407246,
+      this.defaultLng = -77.4360481})
       : _hits = hits;
 
   final List<UserModel> _hits;
@@ -105,8 +130,15 @@ class _$DiscoverStateImpl implements _DiscoverState {
   }
 
   @override
+  @JsonKey()
+  final double defaultLat;
+  @override
+  @JsonKey()
+  final double defaultLng;
+
+  @override
   String toString() {
-    return 'DiscoverState(hits: $hits)';
+    return 'DiscoverState(hits: $hits, defaultLat: $defaultLat, defaultLng: $defaultLng)';
   }
 
   @override
@@ -114,12 +146,16 @@ class _$DiscoverStateImpl implements _DiscoverState {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$DiscoverStateImpl &&
-            const DeepCollectionEquality().equals(other._hits, _hits));
+            const DeepCollectionEquality().equals(other._hits, _hits) &&
+            (identical(other.defaultLat, defaultLat) ||
+                other.defaultLat == defaultLat) &&
+            (identical(other.defaultLng, defaultLng) ||
+                other.defaultLng == defaultLng));
   }
 
   @override
-  int get hashCode =>
-      Object.hash(runtimeType, const DeepCollectionEquality().hash(_hits));
+  int get hashCode => Object.hash(runtimeType,
+      const DeepCollectionEquality().hash(_hits), defaultLat, defaultLng);
 
   @JsonKey(ignore: true)
   @override
@@ -129,11 +165,17 @@ class _$DiscoverStateImpl implements _DiscoverState {
 }
 
 abstract class _DiscoverState implements DiscoverState {
-  const factory _DiscoverState({final List<UserModel> hits}) =
-      _$DiscoverStateImpl;
+  const factory _DiscoverState(
+      {final List<UserModel> hits,
+      final double defaultLat,
+      final double defaultLng}) = _$DiscoverStateImpl;
 
   @override
   List<UserModel> get hits;
+  @override
+  double get defaultLat;
+  @override
+  double get defaultLng;
   @override
   @JsonKey(ignore: true)
   _$$DiscoverStateImplCopyWith<_$DiscoverStateImpl> get copyWith =>
