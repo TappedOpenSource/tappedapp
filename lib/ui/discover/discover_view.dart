@@ -23,7 +23,8 @@ class DiscoverView extends StatelessWidget {
     super.key,
   });
 
-  Widget _buildMapButton(BuildContext context, {
+  Widget _buildMapButton(
+    BuildContext context, {
     required String heroTag,
     required IconData icon,
     required VoidCallback onPressed,
@@ -44,7 +45,10 @@ class DiscoverView extends StatelessWidget {
     );
   }
 
-  Widget _buildMap(BuildContext context, MapController mapController) {
+  Widget _buildMap(
+    BuildContext context,
+    MapController mapController,
+  ) {
     return BlocBuilder<DiscoverCubit, DiscoverState>(
       builder: (context, state) {
         return FlutterMap(
@@ -52,21 +56,20 @@ class DiscoverView extends StatelessWidget {
           options: MapOptions(
             // minZoom: 10,
             maxZoom: 18,
-            initialCenter: LatLng(state.defaultLat, state.defaultLng),
+            initialCenter: LatLng(state.userLat, state.userLng),
             onPositionChanged: (position, hasGesture) {
               context.read<DiscoverCubit>().onBoundsChange(
-                position.bounds,
-              );
+                    position.bounds,
+                  );
             },
           ),
           children: [
             BlocBuilder<AppThemeCubit, bool>(
               builder: (context, isDark) {
-                final theme =
-                isDark ? mapboxDarkStyle : mapboxLightStyle;
+                final theme = isDark ? mapboxDarkStyle : mapboxLightStyle;
                 return TileLayer(
                   urlTemplate:
-                  'https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token={accessToken}',
+                      'https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token={accessToken}',
                   additionalOptions: {
                     'accessToken': defaultMapboxToken,
                     'id': theme,
@@ -82,10 +85,9 @@ class DiscoverView extends StatelessWidget {
               attributions: [
                 TextSourceAttribution(
                   'OpenStreetMap contributors',
-                  onTap: () =>
-                      launchUrl(
-                        Uri.parse('https://openstreetmap.org/copyright'),
-                      ),
+                  onTap: () => launchUrl(
+                    Uri.parse('https://openstreetmap.org/copyright'),
+                  ),
                 ),
               ],
             ),
@@ -95,8 +97,10 @@ class DiscoverView extends StatelessWidget {
     );
   }
 
-  Widget _buildControlButtons(BuildContext context,
-      MapController mapController) {
+  Widget _buildControlButtons(
+    BuildContext context,
+    MapController mapController,
+  ) {
     return BlocBuilder<DiscoverCubit, DiscoverState>(
       builder: (context, state) {
         return Positioned(
@@ -109,7 +113,7 @@ class DiscoverView extends StatelessWidget {
                 icon: CupertinoIcons.location,
                 onPressed: () {
                   mapController.move(
-                    LatLng(state.defaultLat, state.defaultLng),
+                    LatLng(state.userLat, state.userLng),
                     13,
                   );
                 },
@@ -148,11 +152,9 @@ class DiscoverView extends StatelessWidget {
   Widget build(BuildContext context) {
     final mapController = MapController();
     return BlocProvider<DiscoverCubit>(
-      create: (context) =>
-      DiscoverCubit(
+      create: (context) => DiscoverCubit(
         search: context.read<SearchRepository>(),
-      )
-        ..initLocation(),
+      )..initLocation(),
       child: Scaffold(
         body: LayoutBuilder(
           builder: (context, contains) {
@@ -169,18 +171,16 @@ class DiscoverView extends StatelessWidget {
                       children: [
                         Expanded(
                           child: InkWell(
-                            onTap: () =>
-                                context.push(
-                                  GigSearchInitPage(),
-                                ),
+                            onTap: () => context.push(
+                              GigSearchInitPage(),
+                            ),
                             child: Card(
                               child: Row(
                                 children: [
                                   IconButton(
-                                    onPressed: () =>
-                                        context.push(
-                                          GigSearchInitPage(),
-                                        ),
+                                    onPressed: () => context.push(
+                                      GigSearchInitPage(),
+                                    ),
                                     icon: const Icon(Icons.search),
                                   ),
                                   const Expanded(

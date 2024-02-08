@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:bloc/bloc.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
@@ -19,16 +21,21 @@ class DiscoverCubit extends Cubit<DiscoverState> {
   }) : super(const DiscoverState());
 
   final SearchRepository search;
+  StreamSubscription<LocationData>? locationStream;
+
+  @override
+  Future<void> close() {
+    locationStream?.cancel();
+    return super.close();
+  }
 
   final _debouncer = Debouncer(
     const Duration(milliseconds: 150),
     executionInterval: const Duration(milliseconds: 500),
   );
 
-  Future<(double, double)> _getDefaultLocation() async {
+  Future<(double, double)> _getDefaultLocation(Location location) async {
     try {
-      final location = Location();
-
       var serviceEnabled = await location.serviceEnabled();
       if (!serviceEnabled) {
         serviceEnabled = await location.requestService();
@@ -44,6 +51,20 @@ class DiscoverCubit extends Cubit<DiscoverState> {
           return (loc.Location.rva.lat, loc.Location.rva.lng);
         }
       }
+
+      locationStream = location.onLocationChanged.listen((event) {
+        logger.info('yeeeeeeeeeeeeeeeeeeeeerp');
+        final lat = event.latitude;
+        final lng = event.longitude;
+        if (lat == null || lng == null) return;
+
+        emit(
+          state.copyWith(
+            userLat: lat,
+            userLng: lng,
+          ),
+        );
+      });
 
       final locationData = await Future.any([
         location.getLocation(),
@@ -62,7 +83,8 @@ class DiscoverCubit extends Cubit<DiscoverState> {
   }
 
   Future<void> initLocation() async {
-    final (lat, lng) = await _getDefaultLocation();
+    final location = Location();
+    final (lat, lng) = await _getDefaultLocation(location);
     final hits = await getHits(
       lat: lat,
       lng: lng,
@@ -70,8 +92,8 @@ class DiscoverCubit extends Cubit<DiscoverState> {
     emit(
       state.copyWith(
         hits: hits,
-        defaultLat: lat,
-        defaultLng: lng,
+        userLat: lat,
+        userLng: lng,
       ),
     );
   }
