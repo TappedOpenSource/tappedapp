@@ -2,10 +2,14 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fpdart/fpdart.dart';
+import 'package:intheloopapp/data/auth_repository.dart';
+import 'package:intheloopapp/domains/navigation_bloc/navigation_bloc.dart';
+import 'package:intheloopapp/domains/navigation_bloc/tapped_route.dart';
 import 'package:intheloopapp/ui/profile/components/more_options_button.dart';
 import 'package:intheloopapp/ui/profile/components/social_media_icons.dart';
 import 'package:intheloopapp/ui/profile/profile_cubit.dart';
 import 'package:intheloopapp/utils/admin_builder.dart';
+import 'package:intheloopapp/utils/custom_claims_builder.dart';
 import 'package:intheloopapp/utils/geohash.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -28,8 +32,10 @@ class InfoSliver extends StatelessWidget {
         final bookingEmail = state.visitedUser.venueInfo
             .flatMap((t) => t.bookingEmail)
             .toNullable();
-        return AdminBuilder(
-          builder: (context, isAdmin) {
+        return CustomClaimsBuilder(
+          builder: (context, claims) {
+            final isAdmin = claims.contains(CustomClaim.admin);
+            final isPremium = claims.contains(CustomClaim.premium);
             return Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -166,6 +172,11 @@ class InfoSliver extends StatelessWidget {
                           ),
                           trailing: const Icon(CupertinoIcons.chevron_forward),
                           onTap: () {
+                            if (!isPremium) {
+                              context.push(PaywallPage());
+                              return;
+                            }
+
                             showModalBottomSheet<void>(
                               context: context,
                               builder: (context) {
@@ -181,7 +192,8 @@ class InfoSliver extends StatelessWidget {
                                           Text(
                                             'what kind of performers do they normally book?',
                                             style: TextStyle(
-                                              color: theme.colorScheme.onSurface,
+                                              color:
+                                                  theme.colorScheme.onSurface,
                                               fontSize: 24,
                                               fontWeight: FontWeight.bold,
                                             ),
@@ -190,7 +202,8 @@ class InfoSliver extends StatelessWidget {
                                           Text(
                                             value,
                                             style: TextStyle(
-                                              color: theme.colorScheme.onSurface,
+                                              color:
+                                                  theme.colorScheme.onSurface,
                                               fontSize: 16,
                                             ),
                                           ),

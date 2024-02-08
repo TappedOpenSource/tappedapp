@@ -58,8 +58,14 @@ class RequestToPerform extends StatelessWidget {
       width: double.infinity,
       child: CupertinoButton(
         onPressed: null,
-        color: theme.colorScheme.onSurface.withOpacity(0.1),
-        child: const CupertinoActivityIndicator(),
+        color: Colors.green.withOpacity(0.1),
+        child: Text(
+          'request sent',
+          style: TextStyle(
+            color: theme.colorScheme.onSurface,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
       ),
     );
   }

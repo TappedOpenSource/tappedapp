@@ -10,6 +10,7 @@ import 'package:intheloopapp/data/database_repository.dart';
 import 'package:intheloopapp/domains/models/activity.dart';
 import 'package:intheloopapp/domains/models/badge.dart';
 import 'package:intheloopapp/domains/models/booking.dart';
+import 'package:intheloopapp/domains/models/contact_venue_request.dart';
 import 'package:intheloopapp/domains/models/opportunity.dart';
 import 'package:intheloopapp/domains/models/review.dart';
 import 'package:intheloopapp/domains/models/service.dart';
@@ -1941,17 +1942,21 @@ class FirestoreDatabaseImpl extends DatabaseRepository {
         'note': note,
       },
     );
+
+    final contactVenueRequest = ContactVenueRequest(
+      venue: venue,
+      user: currentUser,
+      bookingEmail: bookingEmail,
+      allEmails: [bookingEmail],
+      note: note,
+      timestamp: DateTime.now(),
+    );
+
     await _contactVenuesRef
         .doc(currentUser.id)
         .collection('venuesContacted')
         .doc(venue.id)
-        .set({
-      'user': currentUser.toJson(),
-      'venue': venue.toJson(),
-      'bookingEmail': bookingEmail,
-      'note': note,
-      'timestamp': Timestamp.now(),
-    });
+        .set(contactVenueRequest.toJson());
   }
 
   @override
