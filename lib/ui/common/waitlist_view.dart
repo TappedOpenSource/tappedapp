@@ -143,6 +143,7 @@ class _WaitlistViewState extends State<WaitlistView> {
             ),
           ),
         ),
+        const SizedBox(height: 18),
       ],
     );
   }
@@ -265,6 +266,7 @@ class _WaitlistViewState extends State<WaitlistView> {
             ),
           ],
         ),
+        const SizedBox(height: 12),
       ],
     );
   }
@@ -293,8 +295,8 @@ class _WaitlistViewState extends State<WaitlistView> {
                 null => const Center(
                     child: CupertinoActivityIndicator(),
                   ),
-                false => _buildAlreadySignedUp(context),
-                true => _buildWaitlist(context, currentUser: currentUser),
+                false => _buildWaitlist(context, currentUser: currentUser),
+                true => _buildAlreadySignedUp(context),
               };
             },
           ),
