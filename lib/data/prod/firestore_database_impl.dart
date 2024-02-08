@@ -794,6 +794,7 @@ class FirestoreDatabaseImpl extends DatabaseRepository {
               'requesteeId',
               isEqualTo: requesteeId,
             )
+            .orderBy('startTime')
             .get();
       }
 
@@ -807,6 +808,7 @@ class FirestoreDatabaseImpl extends DatabaseRepository {
             isEqualTo: requesteeId,
           )
           .where('status', isEqualTo: EnumToString.convertToString(status))
+          .orderBy('startTime')
           .get();
     })();
 
@@ -831,6 +833,7 @@ class FirestoreDatabaseImpl extends DatabaseRepository {
                 'requesterId',
                 isEqualTo: userId,
               )
+              .orderBy('startTime')
               .get();
         }
 
@@ -840,6 +843,7 @@ class FirestoreDatabaseImpl extends DatabaseRepository {
               isEqualTo: userId,
             )
             .where('status', isEqualTo: EnumToString.convertToString(status))
+            .orderBy('startTime')
             .get();
       })();
 
@@ -867,7 +871,7 @@ class FirestoreDatabaseImpl extends DatabaseRepository {
       if (status == null) {
         return _bookingsRef
             .where('requesterId', isEqualTo: userId)
-            .orderBy('timestamp', descending: true)
+            .orderBy('startTime', descending: true)
             .limit(limit)
             .snapshots();
       }
@@ -875,7 +879,7 @@ class FirestoreDatabaseImpl extends DatabaseRepository {
       return _bookingsRef
           .where('requesterId', isEqualTo: userId)
           .where('status', isEqualTo: EnumToString.convertToString(status))
-          .orderBy('timestamp', descending: true)
+          .orderBy('startTime', descending: true)
           .limit(limit)
           .snapshots();
     })();
@@ -919,6 +923,7 @@ class FirestoreDatabaseImpl extends DatabaseRepository {
                 'requesteeId',
                 isEqualTo: userId,
               )
+              .orderBy('startTime', descending: true)
               .get();
         }
 
@@ -928,6 +933,7 @@ class FirestoreDatabaseImpl extends DatabaseRepository {
               isEqualTo: userId,
             )
             .where('status', isEqualTo: EnumToString.convertToString(status))
+            .orderBy('startTime', descending: true)
             .get();
       })();
 
@@ -955,7 +961,7 @@ class FirestoreDatabaseImpl extends DatabaseRepository {
       if (status == null) {
         return _bookingsRef
             .where('requesteeId', isEqualTo: userId)
-            .orderBy('timestamp', descending: true)
+            .orderBy('startTime', descending: true)
             .limit(limit)
             .snapshots();
       }
@@ -963,7 +969,7 @@ class FirestoreDatabaseImpl extends DatabaseRepository {
       return _bookingsRef
           .where('requesteeId', isEqualTo: userId)
           .where('status', isEqualTo: EnumToString.convertToString(status))
-          .orderBy('timestamp', descending: true)
+          .orderBy('startTime', descending: true)
           .limit(limit)
           .snapshots();
     })();

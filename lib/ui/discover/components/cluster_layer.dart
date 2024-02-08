@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_map/flutter_map.dart';
@@ -55,10 +57,11 @@ class ClusterLayer extends StatelessWidget {
               }),
             ],
             builder: (context, markers) {
-              final randomNumber = randomInt(100, 999).toString();
+              // random int
+              final random = Random().nextInt(999).toString();
               final index = markers.first.key
                   .toString()
-                  .replaceAll(RegExp('[^0-9]'), randomNumber);
+                  .replaceAll(RegExp('[^0-9]'), random);
               final clusterKey =
                   'map-badge-$index-len-${markers.length}';
 
