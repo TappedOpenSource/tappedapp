@@ -37,6 +37,8 @@ enum Genre {
   indie,
   @JsonValue('folk')
   folk,
+  @JsonValue('alternative')
+  alternative,
   @JsonValue('other')
   other,
 }

@@ -25,11 +25,11 @@ class ClusterLayer extends StatelessWidget {
           options: MarkerClusterLayerOptions(
             maxClusterRadius: 40,
             size: const Size(40, 40),
-            polygonOptions: PolygonOptions(
-              borderColor: tappedAccent,
-              color: tappedAccent.withOpacity(0.5),
-              borderStrokeWidth: 3,
-            ),
+            // polygonOptions: PolygonOptions(
+            //   borderColor: tappedAccent,
+            //   color: tappedAccent.withOpacity(0.5),
+            //   borderStrokeWidth: 3,
+            // ),
             markers: [
               ...state.hits.map((venue) {
                 final loc =
