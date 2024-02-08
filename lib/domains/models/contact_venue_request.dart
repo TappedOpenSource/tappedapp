@@ -16,6 +16,7 @@ class ContactVenueRequest with _$ContactVenueRequest {
     required String note,
     @DateTimeConverter() required DateTime timestamp,
     @Default(None()) Option<String> messageId,
+    @Default(None()) Option<String> subject,
     @Default([]) List<String> allEmails,
   }) = _ContactVenueRequest;
 

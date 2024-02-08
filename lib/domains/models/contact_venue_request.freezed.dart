@@ -27,6 +27,7 @@ mixin _$ContactVenueRequest {
   @DateTimeConverter()
   DateTime get timestamp => throw _privateConstructorUsedError;
   Option<String> get messageId => throw _privateConstructorUsedError;
+  Option<String> get subject => throw _privateConstructorUsedError;
   List<String> get allEmails => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
@@ -48,6 +49,7 @@ abstract class $ContactVenueRequestCopyWith<$Res> {
       String note,
       @DateTimeConverter() DateTime timestamp,
       Option<String> messageId,
+      Option<String> subject,
       List<String> allEmails});
 
   $UserModelCopyWith<$Res> get venue;
@@ -73,6 +75,7 @@ class _$ContactVenueRequestCopyWithImpl<$Res, $Val extends ContactVenueRequest>
     Object? note = null,
     Object? timestamp = null,
     Object? messageId = null,
+    Object? subject = null,
     Object? allEmails = null,
   }) {
     return _then(_value.copyWith(
@@ -99,6 +102,10 @@ class _$ContactVenueRequestCopyWithImpl<$Res, $Val extends ContactVenueRequest>
       messageId: null == messageId
           ? _value.messageId
           : messageId // ignore: cast_nullable_to_non_nullable
+              as Option<String>,
+      subject: null == subject
+          ? _value.subject
+          : subject // ignore: cast_nullable_to_non_nullable
               as Option<String>,
       allEmails: null == allEmails
           ? _value.allEmails
@@ -139,6 +146,7 @@ abstract class _$$ContactVenueRequestImplCopyWith<$Res>
       String note,
       @DateTimeConverter() DateTime timestamp,
       Option<String> messageId,
+      Option<String> subject,
       List<String> allEmails});
 
   @override
@@ -164,6 +172,7 @@ class __$$ContactVenueRequestImplCopyWithImpl<$Res>
     Object? note = null,
     Object? timestamp = null,
     Object? messageId = null,
+    Object? subject = null,
     Object? allEmails = null,
   }) {
     return _then(_$ContactVenueRequestImpl(
@@ -191,6 +200,10 @@ class __$$ContactVenueRequestImplCopyWithImpl<$Res>
           ? _value.messageId
           : messageId // ignore: cast_nullable_to_non_nullable
               as Option<String>,
+      subject: null == subject
+          ? _value.subject
+          : subject // ignore: cast_nullable_to_non_nullable
+              as Option<String>,
       allEmails: null == allEmails
           ? _value._allEmails
           : allEmails // ignore: cast_nullable_to_non_nullable
@@ -209,6 +222,7 @@ class _$ContactVenueRequestImpl implements _ContactVenueRequest {
       required this.note,
       @DateTimeConverter() required this.timestamp,
       this.messageId = const None(),
+      this.subject = const None(),
       final List<String> allEmails = const []})
       : _allEmails = allEmails;
 
@@ -229,6 +243,9 @@ class _$ContactVenueRequestImpl implements _ContactVenueRequest {
   @override
   @JsonKey()
   final Option<String> messageId;
+  @override
+  @JsonKey()
+  final Option<String> subject;
   final List<String> _allEmails;
   @override
   @JsonKey()
@@ -240,7 +257,7 @@ class _$ContactVenueRequestImpl implements _ContactVenueRequest {
 
   @override
   String toString() {
-    return 'ContactVenueRequest(venue: $venue, user: $user, bookingEmail: $bookingEmail, note: $note, timestamp: $timestamp, messageId: $messageId, allEmails: $allEmails)';
+    return 'ContactVenueRequest(venue: $venue, user: $user, bookingEmail: $bookingEmail, note: $note, timestamp: $timestamp, messageId: $messageId, subject: $subject, allEmails: $allEmails)';
   }
 
   @override
@@ -257,14 +274,23 @@ class _$ContactVenueRequestImpl implements _ContactVenueRequest {
                 other.timestamp == timestamp) &&
             (identical(other.messageId, messageId) ||
                 other.messageId == messageId) &&
+            (identical(other.subject, subject) || other.subject == subject) &&
             const DeepCollectionEquality()
                 .equals(other._allEmails, _allEmails));
   }
 
   @JsonKey(ignore: true)
   @override
-  int get hashCode => Object.hash(runtimeType, venue, user, bookingEmail, note,
-      timestamp, messageId, const DeepCollectionEquality().hash(_allEmails));
+  int get hashCode => Object.hash(
+      runtimeType,
+      venue,
+      user,
+      bookingEmail,
+      note,
+      timestamp,
+      messageId,
+      subject,
+      const DeepCollectionEquality().hash(_allEmails));
 
   @JsonKey(ignore: true)
   @override
@@ -289,6 +315,7 @@ abstract class _ContactVenueRequest implements ContactVenueRequest {
       required final String note,
       @DateTimeConverter() required final DateTime timestamp,
       final Option<String> messageId,
+      final Option<String> subject,
       final List<String> allEmails}) = _$ContactVenueRequestImpl;
 
   factory _ContactVenueRequest.fromJson(Map<String, dynamic> json) =
@@ -307,6 +334,8 @@ abstract class _ContactVenueRequest implements ContactVenueRequest {
   DateTime get timestamp;
   @override
   Option<String> get messageId;
+  @override
+  Option<String> get subject;
   @override
   List<String> get allEmails;
   @override

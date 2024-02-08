@@ -19,6 +19,10 @@ _$ContactVenueRequestImpl _$$ContactVenueRequestImplFromJson(
           ? const None()
           : Option<String>.fromJson(
               json['messageId'], (value) => value as String),
+      subject: json['subject'] == null
+          ? const None()
+          : Option<String>.fromJson(
+              json['subject'], (value) => value as String),
       allEmails: (json['allEmails'] as List<dynamic>?)
               ?.map((e) => e as String)
               .toList() ??
@@ -34,6 +38,9 @@ Map<String, dynamic> _$$ContactVenueRequestImplToJson(
       'note': instance.note,
       'timestamp': const DateTimeConverter().toJson(instance.timestamp),
       'messageId': instance.messageId.toJson(
+        (value) => value,
+      ),
+      'subject': instance.subject.toJson(
         (value) => value,
       ),
       'allEmails': instance.allEmails,

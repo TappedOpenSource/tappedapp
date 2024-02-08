@@ -20,30 +20,87 @@ function createEmailMessageId() {
   return messageId;
 }
 
-async function sendStreamInitialReply({ userId, venueId, message }: {
+async function sendStreamMessageFromEmail({ streamClient, userId, venueId, message }: {
+  streamClient: StreamChat
   userId: string;
   venueId: string;
   message: string;
 }) { 
   // create DM channel between both parties
+  const token = await streamClient.createToken(venueId);
+  await streamClient.connectUser({
+    id: venueId,
+  }, token);
 
-  // send initial message
+  // join channel
+  const channel = streamClient.channel("messaging", {
+    members: [ userId, venueId ],
+  });
+  await channel.create();
 
-  // send Venue's reply
+  // post msg
+  await channel.sendMessage({ 
+    text: message,
+  });
 
-  // MAKE SURE THIS DOESN'T TRIGGER THE WEBHOOK OTHERWISE LOOP
+  // disconnectUser
+  await streamClient.disconnectUser();
 }
 
-async function sendVenueEmailResponse({ user, venue, message }: {
+async function sendEmailFromStreamMessage({ emailClient, user, venue, message }: {
+  emailClient: postmark.ServerClient,
   user: User;
   venue: User;
   message: string;
 }) {
   // get venue contact info (i.e. messageId)
+  const contactRequestSnap = await venueContactsRef
+    .doc(user.id)
+    .collection("venuesContacted")
+    .doc(venue.id)
+    .get();
+
+  const contactRequestData = contactRequestSnap.data();
+  const messageId = contactRequestData?.messageId;
+  const subject = contactRequestData?.subject ?? "Booking Inquiry";
+  const allEmails = contactRequestData?.allEmails ?? [];
+
+  if (!messageId) {
+    error("no messageId found");
+    throw new Error("no messageId found");
+  }
+
+  if (allEmails.length === 0) {
+    error("no emails for this contact request found");
+    throw new Error("no emails for this contact request found");
+  }
 
   // add msg to emails collection
+  const username = user.username;
+  if (username === undefined) {
+    error("no username found");
+    throw new Error("no username found");
+  }
+
+  const emailObj = {
+    "From": `${username}@booking.tapped.ai`,
+    "To": allEmails,
+    "Headers": [
+      {
+        "Name": "Message-ID",
+        "Value": messageId,
+      }
+    ],
+    "Subject": subject,
+    "HtmlBody": message,
+    "TextBody": message,
+    "MessageStream": "outbound"
+  };
+
 
   // send email to venue
+  const emailRes = await emailClient.sendEmail(emailObj);
+  debug({ emailRes });
 
   return;
 }
@@ -83,6 +140,7 @@ export const notifyFoundersOnVenueContact = onDocumentCreated(
     fcm.sendToDevice(devices, payload);
     const client = new postmark.ServerClient(POSTMARK_SERVER_ID.value());
     const messageId = createEmailMessageId();
+    const subject = "Booking Inquiry";
 
     const emailObj = {
       "Headers": [
@@ -93,7 +151,7 @@ export const notifyFoundersOnVenueContact = onDocumentCreated(
       ],
       "From": `${username}@booking.tapped.ai`,
       "To": "johannes@tapped.ai",
-      "Subject": "Booking Inquiry",
+      "Subject": subject,
       "HtmlBody": "this is a <strong>test</strong> email from Tapped",
       "TextBody": "this is a test email from Tapped",
       "MessageStream": "outbound"
@@ -105,6 +163,7 @@ export const notifyFoundersOnVenueContact = onDocumentCreated(
       .collection("venuesContacted")
       .doc(venueId)
       .update({
+        subject,
         messageId,
       });
 
@@ -123,7 +182,7 @@ export const notifyFoundersOnVenueContact = onDocumentCreated(
 );
 
 export const inboundEmailWebhook = onRequest(
-  { secrets: [ POSTMARK_SERVER_ID ] },
+  { secrets: [ POSTMARK_SERVER_ID, streamKey, streamSecret ] },
   async (req, res) => {
     try {
       const body = req.body;
@@ -179,7 +238,9 @@ export const inboundEmailWebhook = onRequest(
           allEmails: newAllEmails,
         });
 
-      await sendStreamInitialReply({
+      const streamChat = new StreamChat(streamKey.value(), streamSecret.value());
+      await sendStreamMessageFromEmail({
+        streamClient: streamChat,
         userId,
         venueId,
         message: body.TextBody,
@@ -280,10 +341,12 @@ export const streamBeforeMessageWebhook = onRequest(
     info({ venueContactData });
 
     // add to the thread if everything is golden
-    await sendVenueEmailResponse({
+    const emailClient = new postmark.ServerClient(POSTMARK_SERVER_ID.value());
+    await sendEmailFromStreamMessage({
       user: senderUser,
       venue: receiverUser,
       message: msg,
+      emailClient,
     });
 
     info({ content: req.body });
