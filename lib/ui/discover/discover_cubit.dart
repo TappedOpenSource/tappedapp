@@ -3,13 +3,12 @@ import 'dart:async';
 import 'package:bloc/bloc.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:intheloopapp/data/search_repository.dart';
 
-import 'package:intheloopapp/domains/models/location.dart' as loc;
+import 'package:intheloopapp/domains/models/location.dart';
 import 'package:intheloopapp/domains/models/user_model.dart';
-import 'package:intheloopapp/utils/app_logger.dart';
 import 'package:intheloopapp/utils/debouncer.dart';
-import 'package:location/location.dart';
 
 part 'discover_state.dart';
 
@@ -21,70 +20,58 @@ class DiscoverCubit extends Cubit<DiscoverState> {
   }) : super(const DiscoverState());
 
   final SearchRepository search;
-  StreamSubscription<LocationData>? locationStream;
-
-  @override
-  Future<void> close() {
-    locationStream?.cancel();
-    return super.close();
-  }
 
   final _debouncer = Debouncer(
     const Duration(milliseconds: 150),
     executionInterval: const Duration(milliseconds: 500),
   );
 
-  Future<(double, double)> _getDefaultLocation(Location location) async {
+  Future<(double, double)> _determinePosition() async {
     try {
-      var serviceEnabled = await location.serviceEnabled();
-      if (!serviceEnabled) {
-        serviceEnabled = await location.requestService();
-        if (!serviceEnabled) {
-          return (loc.Location.rva.lat, loc.Location.rva.lng);
-        }
+
+    bool serviceEnabled;
+    LocationPermission permission;
+
+    // Test if location services are enabled.
+    serviceEnabled = await Geolocator.isLocationServiceEnabled();
+    if (!serviceEnabled) {
+      // Location services are not enabled don't continue
+      // accessing the position and request users of the
+      // App to enable the location services.
+      return Future.error('Location services are disabled.');
+    }
+
+    permission = await Geolocator.checkPermission();
+    if (permission == LocationPermission.denied) {
+      permission = await Geolocator.requestPermission();
+      if (permission == LocationPermission.denied) {
+        // Permissions are denied, next time you could try
+        // requesting permissions again (this is also where
+        // Android's shouldShowRequestPermissionRationale
+        // returned true. According to Android guidelines
+        // your App should show an explanatory UI now.
+        return Future.error('Location permissions are denied');
       }
+    }
 
-      var permissionGranted = await location.hasPermission();
-      if (permissionGranted == PermissionStatus.denied) {
-        permissionGranted = await location.requestPermission();
-        if (permissionGranted != PermissionStatus.granted) {
-          return (loc.Location.rva.lat, loc.Location.rva.lng);
-        }
-      }
-
-      locationStream = location.onLocationChanged.listen((event) {
-        logger.info('yeeeeeeeeeeeeeeeeeeeeerp');
-        final lat = event.latitude;
-        final lng = event.longitude;
-        if (lat == null || lng == null) return;
-
-        emit(
-          state.copyWith(
-            userLat: lat,
-            userLng: lng,
-          ),
-        );
-      });
-
-      final locationData = await Future.any([
-        location.getLocation(),
-        Future.delayed(const Duration(seconds: 1), location.getLocation),
-        Future.delayed(const Duration(seconds: 3), () => null),
-      ]);
-
-      return (
-        locationData?.latitude ?? loc.Location.rva.lat,
-        locationData?.longitude ?? loc.Location.rva.lng,
+    if (permission == LocationPermission.deniedForever) {
+      // Permissions are denied forever, handle appropriately.
+      return Future.error(
+        'Location permissions are permanently denied, we cannot request permissions.',
       );
-    } catch (e, s) {
-      logger.error('Error getting location', error: e, stackTrace: s);
-      return (loc.Location.rva.lat, loc.Location.rva.lng);
+    }
+
+    // When we reach here, permissions are granted and we can
+    // continue accessing the position of the device.
+    final position = await Geolocator.getCurrentPosition();
+    return (position.latitude, position.longitude);
+    } catch (e) {
+      return (Location.rva.lat, Location.rva.lng);
     }
   }
 
   Future<void> initLocation() async {
-    final location = Location();
-    final (lat, lng) = await _getDefaultLocation(location);
+    final (lat, lng) = await _determinePosition();
     final hits = await getHits(
       lat: lat,
       lng: lng,
