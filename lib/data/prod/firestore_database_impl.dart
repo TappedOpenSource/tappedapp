@@ -1953,6 +1953,8 @@ class FirestoreDatabaseImpl extends DatabaseRepository {
         timestamp: DateTime.now(),
       );
 
+      logger.info('contactVenueRequest $contactVenueRequest');
+
       await _contactVenuesRef
           .doc(currentUser.id)
           .collection('venuesContacted')

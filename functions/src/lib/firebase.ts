@@ -51,7 +51,7 @@ export const opportunitiesRef = db.collection("opportunities");
 export const opportunityFeedsRef = db.collection("opportunityFeeds");
 
 export const googlePlacesCacheRef = db.collection("googlePlacesCache");
-export const venueContactsRef = db.collection("venueContacts");
+export const contactVenuesRef = db.collection("contactVenues");
 
 // const loopLikesSubcollection = "loopLikes";
 // const loopCommentsSubcollection = "loopComments";

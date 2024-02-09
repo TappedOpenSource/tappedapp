@@ -15,10 +15,14 @@ _$ContactVenueRequestImpl _$$ContactVenueRequestImplFromJson(
       note: json['note'] as String,
       timestamp:
           const DateTimeConverter().fromJson(json['timestamp'] as Timestamp),
-      messageId: json['messageId'] == null
+      originalMessageId: json['originalMessageId'] == null
           ? const None()
           : Option<String>.fromJson(
-              json['messageId'], (value) => value as String),
+              json['originalMessageId'], (value) => value as String),
+      latestMessageId: json['latestMessageId'] == null
+          ? const None()
+          : Option<String>.fromJson(
+              json['latestMessageId'], (value) => value as String),
       subject: json['subject'] == null
           ? const None()
           : Option<String>.fromJson(
@@ -32,12 +36,15 @@ _$ContactVenueRequestImpl _$$ContactVenueRequestImplFromJson(
 Map<String, dynamic> _$$ContactVenueRequestImplToJson(
         _$ContactVenueRequestImpl instance) =>
     <String, dynamic>{
-      'venue': instance.venue,
-      'user': instance.user,
+      'venue': instance.venue.toJson(),
+      'user': instance.user.toJson(),
       'bookingEmail': instance.bookingEmail,
       'note': instance.note,
       'timestamp': const DateTimeConverter().toJson(instance.timestamp),
-      'messageId': instance.messageId.toJson(
+      'originalMessageId': instance.originalMessageId.toJson(
+        (value) => value,
+      ),
+      'latestMessageId': instance.latestMessageId.toJson(
         (value) => value,
       ),
       'subject': instance.subject.toJson(

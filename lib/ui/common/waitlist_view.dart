@@ -130,6 +130,7 @@ class _WaitlistViewState extends State<WaitlistView> {
                       context.pop();
                     },
                     color: theme.colorScheme.primary,
+                    borderRadius: BorderRadius.circular(15),
                     child: const Text(
                       'okay',
                       style: TextStyle(
@@ -237,6 +238,7 @@ class _WaitlistViewState extends State<WaitlistView> {
                       });
                     },
                     color: theme.colorScheme.primary,
+                    borderRadius: BorderRadius.circular(15),
                     child: const Text(
                       'join waitlist',
                       style: TextStyle(

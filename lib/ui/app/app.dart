@@ -2,6 +2,7 @@ import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:intheloopapp/domains/activity_bloc/activity_bloc.dart';
 import 'package:intheloopapp/domains/authentication_bloc/authentication_bloc.dart';
 import 'package:intheloopapp/domains/bookings_bloc/bookings_bloc.dart';
@@ -96,18 +97,20 @@ class App extends StatelessWidget {
                   theme: appTheme,
                   navigatorObservers: <NavigatorObserver>[_observer],
                   navigatorKey: navigatorKey,
-                  builder: (context, widget) {
-                    try {
-                      return StreamChat(
-                        client: streamClient,
-                        streamChatThemeData: streamTheme,
-                        child: widget,
-                      );
-                    } catch (e, s) {
-                      FirebaseCrashlytics.instance.recordError(e, s);
-                      return widget ?? Container();
-                    }
-                  },
+                  builder: EasyLoading.init(
+                    builder: (context, widget) {
+                      try {
+                        return StreamChat(
+                          client: streamClient,
+                          streamChatThemeData: streamTheme,
+                          child: widget,
+                        );
+                      } catch (e, s) {
+                        FirebaseCrashlytics.instance.recordError(e, s);
+                        return widget ?? Container();
+                      }
+                    },
+                  ),
                   home: BlocBuilder<DownForMaintenanceBloc,
                       DownForMaintenanceState>(
                     builder: (context, downState) {

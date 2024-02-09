@@ -31,6 +31,7 @@ import 'package:intheloopapp/ui/opportunity_feed/components/opportunity_view.dar
 import 'package:intheloopapp/ui/paywall/paywall_view.dart';
 import 'package:intheloopapp/ui/profile/components/service_selection_view.dart';
 import 'package:intheloopapp/ui/profile/profile_view.dart';
+import 'package:intheloopapp/ui/request_to_perform/request_to_perform_confirmation_view.dart';
 import 'package:intheloopapp/ui/request_to_perform/request_to_perform_view.dart';
 import 'package:intheloopapp/ui/reviews/user_reviews_feed.dart';
 import 'package:intheloopapp/ui/discover/components/search_view.dart';
@@ -335,8 +336,6 @@ final class InterestedUsersPage extends TappedRoute {
   final Opportunity opportunity;
 }
 
-
-
 final class OpportunityPage extends TappedRoute {
   OpportunityPage({
     required this.opportunityId,
@@ -433,4 +432,12 @@ final class RequestToPerformPage extends TappedRoute {
 
   final String bookingEmail;
   final UserModel venue;
+}
+
+final class RequestToPerformConfirmationPage extends TappedRoute {
+  RequestToPerformConfirmationPage()
+      : super(
+          routeName: '/request_to_perform_confirmation',
+          view: RequestToPerformConfirmationView(),
+        );
 }

@@ -3,11 +3,18 @@
 import {
   onRequest,
 } from "firebase-functions/v2/https"
-import { POSTMARK_SERVER_ID, fcm, streamKey, streamSecret, usersRef, venueContactsRef, } from "./firebase";
+import { 
+  POSTMARK_SERVER_ID, 
+  // fcm, 
+  streamKey, 
+  streamSecret, 
+  usersRef, 
+  contactVenuesRef,
+} from "./firebase";
 // import sgMail from "@sendgrid/mail";
 import { debug, error, info } from "firebase-functions/logger";
 import * as postmark from "postmark";
-import { getFoundersDeviceTokens } from "./utils";
+// import { getFoundersDeviceTokens } from "./utils";
 import { onDocumentCreated } from "firebase-functions/v2/firestore";
 import { UserModel } from "../types/models";
 import { StreamChat, User } from "stream-chat";
@@ -54,20 +61,20 @@ async function sendEmailFromStreamMessage({ emailClient, user, venue, message }:
   message: string;
 }) {
   // get venue contact info (i.e. messageId)
-  const contactRequestSnap = await venueContactsRef
+  const contactRequestSnap = await contactVenuesRef
     .doc(user.id)
     .collection("venuesContacted")
     .doc(venue.id)
     .get();
 
   const contactRequestData = contactRequestSnap.data();
-  const messageId = contactRequestData?.messageId;
+  const latestMessageId = contactRequestData?.latestMessageId;
   const subject = contactRequestData?.subject ?? "Booking Inquiry";
   const allEmails = contactRequestData?.allEmails ?? [];
 
-  if (!messageId) {
-    error("no messageId found");
-    throw new Error("no messageId found");
+  if (!latestMessageId) {
+    error("no latest messageId found");
+    throw new Error("no latest messageId found");
   }
 
   if (allEmails.length === 0) {
@@ -82,13 +89,23 @@ async function sendEmailFromStreamMessage({ emailClient, user, venue, message }:
     throw new Error("no username found");
   }
 
+  const messageId = createEmailMessageId();
+
   const emailObj = {
     "From": `${username}@booking.tapped.ai`,
-    "To": allEmails,
+    "To": allEmails.join(","),
     "Headers": [
       {
         "Name": "Message-ID",
         "Value": messageId,
+      },
+      {
+        "Name": "References",
+        "Value": latestMessageId,
+      },
+      {
+        "Name": "In-Reply-To",
+        "Value": latestMessageId,
       }
     ],
     "Subject": subject,
@@ -97,6 +114,22 @@ async function sendEmailFromStreamMessage({ emailClient, user, venue, message }:
     "MessageStream": "outbound"
   };
 
+  await contactVenuesRef
+    .doc(user.id)
+    .collection("venuesContacted")
+    .doc(venue.id)
+    .update({
+      latestMessageId: messageId,
+    });
+
+
+  // add email to emails collection
+  await contactVenuesRef
+    .doc(user.id)
+    .collection("venuesContacted")
+    .doc(venue.id)
+    .collection("emailsSent")
+    .add(emailObj);
 
   // send email to venue
   const emailRes = await emailClient.sendEmail(emailObj);
@@ -107,7 +140,7 @@ async function sendEmailFromStreamMessage({ emailClient, user, venue, message }:
 
 export const notifyFoundersOnVenueContact = onDocumentCreated(
   {
-    document: "venueContacts/{userId}/venuesContacted/{venueId}",
+    document: "contactVenues/{userId}/venuesContacted/{venueId}",
     secrets: [ POSTMARK_SERVER_ID ],
   },
   async (event) => {
@@ -116,28 +149,21 @@ export const notifyFoundersOnVenueContact = onDocumentCreated(
 
     const user = documentData?.user as UserModel | undefined;
     const username = user?.username;
-    const venue = documentData?.venue as UserModel | undefined;
-    const bookingEmail = documentData?.bookingEmail;
+    // const venue = documentData?.venue as UserModel | undefined;
+    // const bookingEmail = documentData?.bookingEmail;
 
-    const userId = user?.id;
-    if (!userId) {
-      return;
-    }
+    const userId = event.params.userId;
+    const venueId = event.params.venueId;
 
-    const venueId = venue?.id;
-    if (!venueId) {
-      return;
-    }
+    // const devices = await getFoundersDeviceTokens();
+    // const payload = {
+    //   notification: {
+    //     title: `${username} wants to contact ${venue?.artistName} \uD83D\uDE43`,
+    //     body: `they used the email ${bookingEmail}`,
+    //   }
+    // };
 
-    const devices = await getFoundersDeviceTokens();
-    const payload = {
-      notification: {
-        title: `${username} wants to contact a ${venue?.artistName} \uD83D\uDE43`,
-        body: `they used the email ${bookingEmail}`,
-      }
-    };
-
-    fcm.sendToDevice(devices, payload);
+    // fcm.sendToDevice(devices, payload);
     const client = new postmark.ServerClient(POSTMARK_SERVER_ID.value());
     const messageId = createEmailMessageId();
     const subject = "Booking Inquiry";
@@ -158,20 +184,21 @@ export const notifyFoundersOnVenueContact = onDocumentCreated(
     }
 
     // add msg id to initial request
-    await venueContactsRef
+    await contactVenuesRef
       .doc(userId)
       .collection("venuesContacted")
       .doc(venueId)
       .update({
         subject,
-        messageId,
+        originalMessageId: messageId,
+        latestMessageId: messageId,
       });
 
     // add email to emails collection
-    await venueContactsRef
-      .doc(user.id)
+    await contactVenuesRef
+      .doc(userId)
       .collection("venuesContacted")
-      .doc(venue.id)
+      .doc(venueId)
       .collection("emailsSent")
       .add(emailObj);
 
@@ -186,14 +213,16 @@ export const inboundEmailWebhook = onRequest(
   async (req, res) => {
     try {
       const body = req.body;
-      info({ content: body });
 
       const subject = body.Subject;
       const to = body.To;
       const from = body.From;
-      const messageId = body.Headers.find((h: { Name: string; Value: string }) => h.Name === "Message-ID")?.Value;
+      const referenceMessageId = body.Headers.find((h: { Name: string; Value: string }) => h.Name === "References")?.Value;
+      const replyToMessageId = body.Headers.find((h: { Name: string; Value: string }) => h.Name === "In-Reply-To")?.Value;
+      const latestMessageId = body.Headers.find((h: { Name: string; Value: string }) => h.Name === "Message-ID")?.Value; 
 
-      if (!subject || !messageId) {
+      if (!subject || !referenceMessageId) {
+        error("no subject or messageId found")
         res.status(400).send("bad request");
         return;
       }
@@ -209,9 +238,10 @@ export const inboundEmailWebhook = onRequest(
 
       const userId = userSnap.docs[0].id;
 
-      const venueContactsSnap = await venueContactsRef.doc(userId).collection("venuesContacted").where("messageId", "==", messageId).limit(1).get();
+      const venueContactsSnap = await contactVenuesRef.doc(userId).collection("venuesContacted").where("latestMessageId", "==", replyToMessageId).limit(1).get();
       if (venueContactsSnap.empty) {
-        error(`no venue contact found for this user and messageId (${userId},${messageId})`);
+        error(`no venue contact found for this user and messageId (${userId},${referenceMessageId})`);
+        error({ body });
         res.status(400).send("bad request");
         return;
       }
@@ -222,29 +252,30 @@ export const inboundEmailWebhook = onRequest(
       const venueId = venueContactsSnap.docs[0].id;
 
       // add email to emails collection
-      await venueContactsRef
+      await contactVenuesRef
         .doc(userId)
         .collection("venuesContacted")
         .doc(venueId)
         .collection("emailsSent")
         .add(body);
 
-      // add email to all emails
-      await venueContactsRef
-        .doc(userId)
-        .collection("venuesContacted")
-        .doc(venueId)
-        .update({
-          allEmails: newAllEmails,
-        });
-
+      const messageContent = body.StrippedTextReply ?? body.TextBody;
+ 
       const streamChat = new StreamChat(streamKey.value(), streamSecret.value());
       await sendStreamMessageFromEmail({
         streamClient: streamChat,
         userId,
         venueId,
-        message: body.TextBody,
+        message: messageContent,
       });
+      await contactVenuesRef
+        .doc(userId)
+        .collection("venuesContacted")
+        .doc(venueId)
+        .update({
+          allEmails: newAllEmails,
+          latestMessageId,
+        });
 
       res.status(200).send("ok");
     } catch (e) {
@@ -254,7 +285,7 @@ export const inboundEmailWebhook = onRequest(
   });
 
 export const streamBeforeMessageWebhook = onRequest(
-  { secrets: [ streamKey, streamSecret ] },
+  { secrets: [ streamKey, streamSecret, POSTMARK_SERVER_ID ] },
   async (req, res) => {
     const client = new StreamChat(
       streamKey.value(), 
@@ -283,18 +314,19 @@ export const streamBeforeMessageWebhook = onRequest(
         user: User;
       }[] | undefined;
     };
+    info({ json });
 
     // get sender
     const senderUser: User | undefined = json.user;
-    console.log({ senderUser });
+    // debug({ senderUser });
 
     // get receiver
     const receiverUser: User | undefined = json.members?.find((m: { user: User }) => m.user.username !== senderUser?.username)?.user;
-    console.log({ receiverUser });
+    // debug({ receiverUser });
 
     // get message 
     const msg = json.message?.text;
-    console.log({ msg });
+    // debug({ msg });
 
     if (!senderUser || !receiverUser || !msg) {
       res.status(400).send("bad request");
@@ -318,27 +350,27 @@ export const streamBeforeMessageWebhook = onRequest(
 
     // is a venue or Venue
     if (!occupations.includes("venue") && !occupations.includes("Venue")) {
-      info("user is not a venue");
+      error("user is not a venue");
       res.status(200).send("ok");
       return;
     }
 
     // check if ongoing venue contact thread going on
-    const venueContactSnap = await venueContactsRef
-      .doc(receiverData.id)
+    const venueContactSnap = await contactVenuesRef
+      .doc(senderUser.id)
       .collection("venuesContacted")
       .doc(receiverUser.id)
       .get();
 
 
     if (!venueContactSnap.exists) {
-      info("no ongoing venue contact");
+      error("no ongoing venue contact");
       res.status(200).send("ok");
       return;
     }
 
-    const venueContactData = venueContactSnap.data();
-    info({ venueContactData });
+    // const venueContactData = venueContactSnap.data();
+    // info({ venueContactData });
 
     // add to the thread if everything is golden
     const emailClient = new postmark.ServerClient(POSTMARK_SERVER_ID.value());
@@ -349,5 +381,5 @@ export const streamBeforeMessageWebhook = onRequest(
       emailClient,
     });
 
-    info({ content: req.body });
+    res.status(200).send("ok");
   });
