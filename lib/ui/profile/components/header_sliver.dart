@@ -53,7 +53,7 @@ class HeaderSliver extends StatelessWidget {
                     ),
                   ],
                 ),
-              if (state.visitedUser.unclaimed)
+              if (!isCurrentUser && state.visitedUser.unclaimed)
                 RequestToPerform(
                   venue: state.visitedUser,
                 ),

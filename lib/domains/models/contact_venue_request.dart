@@ -1,4 +1,4 @@
-
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:fpdart/fpdart.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:intheloopapp/data/prod/firestore_database_impl.dart';
@@ -20,5 +20,6 @@ class ContactVenueRequest with _$ContactVenueRequest {
     @Default([]) List<String> allEmails,
   }) = _ContactVenueRequest;
 
-  factory ContactVenueRequest.fromJson(Map<String, dynamic> json) => _$ContactVenueRequestFromJson(json);
+  factory ContactVenueRequest.fromJson(Map<String, dynamic> json) =>
+      _$ContactVenueRequestFromJson(json);
 }

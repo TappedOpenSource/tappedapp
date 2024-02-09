@@ -142,7 +142,8 @@ class AlgoliaSearchImpl extends SearchRepository {
           p2Lat: neLatitude,
           p2Lng: neLongitude,
         ),
-      ]);
+      ])
+      .setHitsPerPage(100);
       final snap = await query.getObjects();
 
       await _analytics.logSearch(searchTerm: input);
