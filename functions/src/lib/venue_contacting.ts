@@ -228,11 +228,10 @@ export const inboundEmailWebhook = onRequest(
       }
 
       const username = to.split("@")[0];
-
       const userSnap = await usersRef.where("username", "==", username).limit(1).get();
       if (userSnap.empty) {
-        error(`no user found for this username (${username})`);
-        res.status(400).send("bad request");
+        debug(`no user found for this username (${username})`);
+        res.status(200).send("ok");
         return;
       }
 
@@ -240,9 +239,9 @@ export const inboundEmailWebhook = onRequest(
 
       const venueContactsSnap = await contactVenuesRef.doc(userId).collection("venuesContacted").where("latestMessageId", "==", replyToMessageId).limit(1).get();
       if (venueContactsSnap.empty) {
-        error(`no venue contact found for this user and messageId (${userId},${referenceMessageId})`);
-        error({ body });
-        res.status(400).send("bad request");
+        debug(`no venue contact found for this user and messageId (${userId},${referenceMessageId})`);
+        debug({ body });
+        res.status(200).send("ok");
         return;
       }
       const venueContactData = venueContactsSnap.docs[0].data();
