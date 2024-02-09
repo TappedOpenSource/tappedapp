@@ -64,7 +64,7 @@ class _TappedSearchBarState extends State<TappedSearchBar> {
         return Hero(
           tag: 'searchBar',
           child: SearchBar(
-            elevation: const MaterialStatePropertyAll(0),
+            // elevation: const MaterialStatePropertyAll(0),
             controller: searchController,
             focusNode: _searchFocusNode,
             hintText: 'Search Performers...',

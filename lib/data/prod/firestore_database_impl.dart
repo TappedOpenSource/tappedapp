@@ -1933,30 +1933,39 @@ class FirestoreDatabaseImpl extends DatabaseRepository {
     required String note,
     required String bookingEmail,
   }) async {
-    await _analytics.logEvent(
-      name: 'contact_venue',
-      parameters: {
-        'user_id': currentUser.id,
-        'venue_id': venue.id,
-        'booking_email': bookingEmail,
-        'note': note,
-      },
-    );
+    try {
+      await _analytics.logEvent(
+        name: 'contact_venue',
+        parameters: {
+          'user_id': currentUser.id,
+          'venue_id': venue.id,
+          'booking_email': bookingEmail,
+          'note': note,
+        },
+      );
 
-    final contactVenueRequest = ContactVenueRequest(
-      venue: venue,
-      user: currentUser,
-      bookingEmail: bookingEmail,
-      allEmails: [bookingEmail],
-      note: note,
-      timestamp: DateTime.now(),
-    );
+      final contactVenueRequest = ContactVenueRequest(
+        venue: venue,
+        user: currentUser,
+        bookingEmail: bookingEmail,
+        allEmails: [bookingEmail],
+        note: note,
+        timestamp: DateTime.now(),
+      );
 
-    await _contactVenuesRef
-        .doc(currentUser.id)
-        .collection('venuesContacted')
-        .doc(venue.id)
-        .set(contactVenueRequest.toJson());
+      await _contactVenuesRef
+          .doc(currentUser.id)
+          .collection('venuesContacted')
+          .doc(venue.id)
+          .set(contactVenueRequest.toJson());
+    } catch (e, s) {
+      logger.error(
+        "can't contact venue",
+        error: e,
+        stackTrace: s,
+      );
+      rethrow;
+    }
   }
 
   @override
@@ -1965,13 +1974,22 @@ class FirestoreDatabaseImpl extends DatabaseRepository {
     required UserModel user,
     required UserModel venue,
   }) async {
-    final contactRequestSnapshot = await _contactVenuesRef
-        .doc(user.id)
-        .collection('venuesContacted')
-        .doc(venue.id)
-        .get();
+    try {
+      final contactRequestSnapshot = await _contactVenuesRef
+          .doc(user.id)
+          .collection('venuesContacted')
+          .doc(venue.id)
+          .get();
 
-    return contactRequestSnapshot.exists;
+      return contactRequestSnapshot.exists;
+    } catch (e, s) {
+      logger.error(
+        "can't check if user has sent contact request",
+        error: e,
+        stackTrace: s,
+      );
+      return false;
+    }
   }
 }
 
