@@ -11,6 +11,7 @@ abstract class SearchRepository {
     double? lng,
     int radius = 50000,
   });
+
   // Future<List<UserModel>> queryVenues(
   //   String input, {
   //   List<String>? labels,
@@ -20,4 +21,14 @@ abstract class SearchRepository {
   //   double? lng,
   //   int radius = 50000,
   // });
+  Future<List<UserModel>> queryUsersInBoundingBox(
+    String input, {
+    List<String>? labels,
+    List<String>? genres,
+    List<String>? occupations,
+    required double swLatitude,
+    required double swLongitude,
+    required double neLatitude,
+    required double neLongitude,
+  });
 }

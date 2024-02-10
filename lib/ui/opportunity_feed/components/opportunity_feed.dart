@@ -2,10 +2,13 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fpdart/fpdart.dart';
+import 'package:intheloopapp/domains/navigation_bloc/navigation_bloc.dart';
+import 'package:intheloopapp/domains/navigation_bloc/tapped_route.dart';
 import 'package:intheloopapp/ui/loading/logo_wave.dart';
 import 'package:intheloopapp/ui/opportunity_feed/components/apply_animation_view.dart';
 import 'package:intheloopapp/ui/opportunity_feed/components/opportunity_view.dart';
 import 'package:intheloopapp/ui/opportunity_feed/cubit/opportunity_feed_cubit.dart';
+import 'package:intheloopapp/ui/themes.dart';
 
 class OpportunityFeed extends StatelessWidget {
   const OpportunityFeed({super.key});
@@ -29,30 +32,49 @@ class OpportunityFeed extends StatelessWidget {
 
         if (state.opportunities.isEmpty ||
             state.curOp >= state.opportunities.length) {
-          return const Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              SizedBox(width: double.infinity),
-              LogoWave(
-                height: 100,
-                width: 100,
-              ),
-              Text(
-                "you've gone thru all the opportunities in your area!",
-                textAlign: TextAlign.center,
-                style: TextStyle(
-                  fontSize: 22,
-                  fontWeight: FontWeight.bold,
+          return Padding(
+            padding: const EdgeInsets.symmetric(
+              horizontal: 20,
+            ),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                const SizedBox(width: double.infinity),
+                const LogoWave(
+                  height: 100,
+                  width: 100,
                 ),
-              ),
-            ],
+                const Text(
+                  "you've gone thru all the opportunities in your area!",
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                    fontSize: 22,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                const SizedBox(height: 20),
+                CupertinoButton(
+                  onPressed: () {
+                    context.push(PaywallPage());
+                  },
+                  color: tappedAccent,
+                  child: const Text(
+                    'want more?',
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ),
+              ],
+            ),
           );
         }
 
         final curOp = state.opportunities[state.curOp];
         return OpportunityView(
           opportunityId: curOp.id,
-          opportunity:Option.of(curOp),
+          opportunity: Option.of(curOp),
           showAppBar: false,
           onDislike: () =>
               context.read<OpportunityFeedCubit>().dislikeOpportunity(),

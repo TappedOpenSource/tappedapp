@@ -50,6 +50,8 @@
 	</array>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
+	<key>NSLocationWhenInUseUsageDescription</key>
+	<string>To allow users to search for bookings and venues in their area</string>
 	<key>NSAppleMusicUsageDescription</key>
 	<string>To play the audio from user uploaded loops</string>
 	<key>NSCameraUsageDescription</key>

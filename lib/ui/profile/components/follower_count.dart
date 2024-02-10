@@ -14,7 +14,12 @@ class FollowerCount extends StatelessWidget {
     return BlocBuilder<ProfileCubit, ProfileState>(
       builder: (context, state) {
         return GestureDetector(
-          onTap: () => context.push(SettingsPage()),
+          onTap: () {
+            if (state.currentUser.id == state.visitedUser.id) {
+              context.push(SettingsPage());
+              return;
+            }
+          },
           child: Column(
             children: [
               Text(

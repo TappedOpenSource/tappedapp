@@ -10,6 +10,7 @@ import 'package:intheloopapp/data/database_repository.dart';
 import 'package:intheloopapp/domains/models/activity.dart';
 import 'package:intheloopapp/domains/models/badge.dart';
 import 'package:intheloopapp/domains/models/booking.dart';
+import 'package:intheloopapp/domains/models/contact_venue_request.dart';
 import 'package:intheloopapp/domains/models/opportunity.dart';
 import 'package:intheloopapp/domains/models/review.dart';
 import 'package:intheloopapp/domains/models/service.dart';
@@ -26,7 +27,6 @@ final _analytics = FirebaseAnalytics.instance;
 
 final _usersRef = _firestore.collection('users');
 final _activitiesRef = _firestore.collection('activities');
-final _commentsRef = _firestore.collection('comments');
 final _badgesRef = _firestore.collection('badges');
 final _badgesSentRef = _firestore.collection('badgesSent');
 final _bookingsRef = _firestore.collection('bookings');
@@ -41,6 +41,7 @@ final _opportunityFeedsRef = _firestore.collection('opportunityFeeds');
 final _creditsRef = _firestore.collection('credits');
 final _premiumWailistRef = _firestore.collection('premiumWaitlist');
 final _userFeedbackRef = _firestore.collection('userFeedback');
+final _contactVenuesRef = _firestore.collection('contactVenues');
 
 const verifiedBadgeId = '0aa46576-1fbe-4312-8b69-e2fef3269083';
 
@@ -332,7 +333,10 @@ class FirestoreDatabaseImpl extends DatabaseRepository {
       ),
     );
 
-    return leaders.whereType<Some<UserModel>>().map((e) => e.toNullable()).toList();
+    return leaders
+        .whereType<Some<UserModel>>()
+        .map((e) => e.toNullable())
+        .toList();
   }
 
   @override
@@ -351,7 +355,10 @@ class FirestoreDatabaseImpl extends DatabaseRepository {
       ),
     );
 
-    return leaders.whereType<Some<UserModel>>().map((e) => e.toNullable()).toList();
+    return leaders
+        .whereType<Some<UserModel>>()
+        .map((e) => e.toNullable())
+        .toList();
   }
 
   @override
@@ -371,7 +378,10 @@ class FirestoreDatabaseImpl extends DatabaseRepository {
       ),
     );
 
-    return leaders.whereType<Some<UserModel>>().map((e) => e.toNullable()).toList();
+    return leaders
+        .whereType<Some<UserModel>>()
+        .map((e) => e.toNullable())
+        .toList();
   }
 
   @override
@@ -391,7 +401,10 @@ class FirestoreDatabaseImpl extends DatabaseRepository {
       ),
     );
 
-    return leaders.whereType<Some<UserModel>>().map((e) => e.toNullable()).toList();
+    return leaders
+        .whereType<Some<UserModel>>()
+        .map((e) => e.toNullable())
+        .toList();
   }
 
   @override
@@ -440,7 +453,10 @@ class FirestoreDatabaseImpl extends DatabaseRepository {
         ),
       );
 
-      return leaders.whereType<Some<UserModel>>().map((e) => e.toNullable()).toList();
+      return leaders
+          .whereType<Some<UserModel>>()
+          .map((e) => e.toNullable())
+          .toList();
     } catch (e, s) {
       logger.error('getBookerLeaders', error: e, stackTrace: s);
       return [];
@@ -463,7 +479,10 @@ class FirestoreDatabaseImpl extends DatabaseRepository {
       ),
     );
 
-    return ops.whereType<Some<Opportunity>>().map((e) => e.toNullable()).toList();
+    return ops
+        .whereType<Some<Opportunity>>()
+        .map((e) => e.toNullable())
+        .toList();
   }
 
   @override
@@ -776,6 +795,7 @@ class FirestoreDatabaseImpl extends DatabaseRepository {
               'requesteeId',
               isEqualTo: requesteeId,
             )
+            .orderBy('startTime')
             .get();
       }
 
@@ -789,6 +809,7 @@ class FirestoreDatabaseImpl extends DatabaseRepository {
             isEqualTo: requesteeId,
           )
           .where('status', isEqualTo: EnumToString.convertToString(status))
+          .orderBy('startTime')
           .get();
     })();
 
@@ -813,6 +834,8 @@ class FirestoreDatabaseImpl extends DatabaseRepository {
                 'requesterId',
                 isEqualTo: userId,
               )
+              .orderBy('startTime')
+              .limit(limit)
               .get();
         }
 
@@ -822,6 +845,8 @@ class FirestoreDatabaseImpl extends DatabaseRepository {
               isEqualTo: userId,
             )
             .where('status', isEqualTo: EnumToString.convertToString(status))
+            .orderBy('startTime')
+            .limit(limit)
             .get();
       })();
 
@@ -849,7 +874,7 @@ class FirestoreDatabaseImpl extends DatabaseRepository {
       if (status == null) {
         return _bookingsRef
             .where('requesterId', isEqualTo: userId)
-            .orderBy('timestamp', descending: true)
+            .orderBy('startTime', descending: true)
             .limit(limit)
             .snapshots();
       }
@@ -857,7 +882,7 @@ class FirestoreDatabaseImpl extends DatabaseRepository {
       return _bookingsRef
           .where('requesterId', isEqualTo: userId)
           .where('status', isEqualTo: EnumToString.convertToString(status))
-          .orderBy('timestamp', descending: true)
+          .orderBy('startTime', descending: true)
           .limit(limit)
           .snapshots();
     })();
@@ -901,6 +926,8 @@ class FirestoreDatabaseImpl extends DatabaseRepository {
                 'requesteeId',
                 isEqualTo: userId,
               )
+              .orderBy('startTime', descending: true)
+              .limit(limit)
               .get();
         }
 
@@ -910,6 +937,8 @@ class FirestoreDatabaseImpl extends DatabaseRepository {
               isEqualTo: userId,
             )
             .where('status', isEqualTo: EnumToString.convertToString(status))
+            .orderBy('startTime', descending: true)
+            .limit(limit)
             .get();
       })();
 
@@ -937,7 +966,7 @@ class FirestoreDatabaseImpl extends DatabaseRepository {
       if (status == null) {
         return _bookingsRef
             .where('requesteeId', isEqualTo: userId)
-            .orderBy('timestamp', descending: true)
+            .orderBy('startTime', descending: true)
             .limit(limit)
             .snapshots();
       }
@@ -945,7 +974,7 @@ class FirestoreDatabaseImpl extends DatabaseRepository {
       return _bookingsRef
           .where('requesteeId', isEqualTo: userId)
           .where('status', isEqualTo: EnumToString.convertToString(status))
-          .orderBy('timestamp', descending: true)
+          .orderBy('startTime', descending: true)
           .limit(limit)
           .snapshots();
     })();
@@ -1898,6 +1927,74 @@ class FirestoreDatabaseImpl extends DatabaseRepository {
         stackTrace: s,
       );
       rethrow;
+    }
+  }
+
+  @override
+  Future<void> contactVenue({
+    required UserModel currentUser,
+    required UserModel venue,
+    required String note,
+    required String bookingEmail,
+  }) async {
+    try {
+      await _analytics.logEvent(
+        name: 'contact_venue',
+        parameters: {
+          'user_id': currentUser.id,
+          'venue_id': venue.id,
+          'booking_email': bookingEmail,
+          'note': note,
+        },
+      );
+
+      final contactVenueRequest = ContactVenueRequest(
+        venue: venue,
+        user: currentUser,
+        bookingEmail: bookingEmail,
+        allEmails: [bookingEmail],
+        note: note,
+        timestamp: DateTime.now(),
+      );
+
+      logger.info('contactVenueRequest $contactVenueRequest');
+
+      await _contactVenuesRef
+          .doc(currentUser.id)
+          .collection('venuesContacted')
+          .doc(venue.id)
+          .set(contactVenueRequest.toJson());
+    } catch (e, s) {
+      logger.error(
+        "can't contact venue",
+        error: e,
+        stackTrace: s,
+      );
+      rethrow;
+    }
+  }
+
+  @override
+  @Cached(where: _asyncShouldCache)
+  Future<bool> hasUserSentContactRequest({
+    required UserModel user,
+    required UserModel venue,
+  }) async {
+    try {
+      final contactRequestSnapshot = await _contactVenuesRef
+          .doc(user.id)
+          .collection('venuesContacted')
+          .doc(venue.id)
+          .get();
+
+      return contactRequestSnapshot.exists;
+    } catch (e, s) {
+      logger.error(
+        "can't check if user has sent contact request",
+        error: e,
+        stackTrace: s,
+      );
+      return false;
     }
   }
 }

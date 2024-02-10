@@ -22,6 +22,7 @@ class ServicesSliver extends StatelessWidget {
           ),
           child: Column(
             children: [
+              const SizedBox(height: 12),
               const Padding(
                 padding: EdgeInsets.symmetric(
                   vertical: 8,
@@ -42,6 +43,7 @@ class ServicesSliver extends StatelessWidget {
                 services: state.services,
                 isCurrentUser: state.currentUser.id == state.visitedUser.id,
               ),
+              const SizedBox(height: 12),
             ],
           ),
         );

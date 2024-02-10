@@ -30,27 +30,36 @@ class MoreOptionsButton extends StatelessWidget {
         title: Text(user.displayName),
         // message: Text(user.username.username),
         actions: <CupertinoActionSheetAction>[
-          if (isAdmin && user.id != currentUser.id && !user.unclaimed)
-            CupertinoActionSheetAction(
-              onPressed: () {
-                // Copy to clipboard
-                Clipboard.setData(
-                  ClipboardData(text: user.latestAppVersion.getOrElse(() => '')),
-                ).then((value) {
-                  Navigator.pop(context);
-                  scaffoldMessenger.showSnackBar(
-                    const SnackBar(
-                      behavior: SnackBarBehavior.floating,
-                      backgroundColor: tappedAccent,
-                      content: Text('latest app version copied to clipboard'),
-                    ),
-                  );
-                });
-              },
-              child: Text(
-                'latest app version ${user.latestAppVersion.getOrElse(() => 'unknown')}',
-              ),
-            ),
+          if (isAdmin && user.id != currentUser.id)
+            switch (user.unclaimed) {
+              true => CupertinoActionSheetAction(
+                  onPressed: () {},
+                  child: const Text('unclaimed account'),
+                ),
+              false => CupertinoActionSheetAction(
+                  onPressed: () {
+                    // Copy to clipboard
+                    Clipboard.setData(
+                      ClipboardData(
+                        text: user.latestAppVersion.getOrElse(() => ''),
+                      ),
+                    ).then((value) {
+                      Navigator.pop(context);
+                      scaffoldMessenger.showSnackBar(
+                        const SnackBar(
+                          behavior: SnackBarBehavior.floating,
+                          backgroundColor: tappedAccent,
+                          content:
+                              Text('latest app version copied to clipboard'),
+                        ),
+                      );
+                    });
+                  },
+                  child: Text(
+                    'latest app version ${user.latestAppVersion.getOrElse(() => 'unknown')}',
+                  ),
+                ),
+            },
           if (isAdmin)
             CupertinoActionSheetAction(
               onPressed: () {

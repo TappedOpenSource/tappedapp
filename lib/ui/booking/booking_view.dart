@@ -51,6 +51,8 @@ class BookingView extends StatelessWidget {
     final validService = booking.serviceId.isSome();
     return CurrentUserBuilder(
       builder: (context, currentUser) {
+        final isCurrentUserInvolved = currentUser.id == booking.requesterId ||
+            currentUser.id == booking.requesteeId;
         return Scaffold(
           backgroundColor: Theme.of(context).colorScheme.background,
           appBar: AppBar(
@@ -137,60 +139,60 @@ class BookingView extends StatelessWidget {
                         fontWeight: FontWeight.bold,
                       ),
                     ),
-                  )
-                else
-                  const SliverToBoxAdapter(
-                    child: SizedBox.shrink(),
                   ),
-                SliverToBoxAdapter(
-                  child: FutureBuilder<Option<Service>>(
-                    future: validService
-                        ? database.getServiceById(
-                            booking.requesteeId,
-                            booking.serviceId.toNullable()!,
-                          )
-                        : null,
-                    builder: (context, snapshot) {
-                      final service = snapshot.data;
-                      return switch (service) {
-                        null => SkeletonListTile(),
-                        None() => SkeletonListTile(),
-                        Some(:final value) => ListTile(
-                            leading: const Icon(Icons.work),
-                            title: Text(value.title),
-                            subtitle: Text(value.description),
-                            trailing: Text(
-                              // ignore: lines_longer_than_80_chars
-                              '\$${(value.rate / 100).toStringAsFixed(2)}${value.rateType == RateType.hourly ? '/hr' : ''}',
-                              style: const TextStyle(
-                                color: Colors.green,
+                if (validService)
+                  SliverToBoxAdapter(
+                    child: FutureBuilder<Option<Service>>(
+                      future: validService
+                          ? database.getServiceById(
+                              booking.requesteeId,
+                              booking.serviceId.toNullable()!,
+                            )
+                          : null,
+                      builder: (context, snapshot) {
+                        final service = snapshot.data;
+                        return switch (service) {
+                          null => SkeletonListTile(),
+                          None() => SkeletonListTile(),
+                          Some(:final value) => ListTile(
+                              leading: const Icon(Icons.work),
+                              title: Text(value.title),
+                              subtitle: Text(value.description),
+                              trailing: Text(
+                                // ignore: lines_longer_than_80_chars
+                                '\$${(value.rate / 100).toStringAsFixed(2)}${value.rateType == RateType.hourly ? '/hr' : ''}',
+                                style: const TextStyle(
+                                  color: Colors.green,
+                                ),
                               ),
                             ),
-                          ),
-                      };
-                    },
-                  ),
-                ),
-                const SliverToBoxAdapter(
-                  child: SizedBox(height: 20),
-                ),
-                const SliverToBoxAdapter(
-                  child: Text(
-                    'Artist Rate Paid',
-                    style: TextStyle(
-                      fontSize: 28,
-                      fontWeight: FontWeight.bold,
+                        };
+                      },
                     ),
                   ),
-                ),
-                SliverToBoxAdapter(
-                  child: Text(
-                    '\$${(booking.rate / 100).toStringAsFixed(2)} / hour',
-                  ),
-                ),
                 const SliverToBoxAdapter(
                   child: SizedBox(height: 20),
                 ),
+                if (isCurrentUserInvolved)
+                  const SliverToBoxAdapter(
+                    child: Text(
+                      'Artist Rate Paid',
+                      style: TextStyle(
+                        fontSize: 28,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ),
+                if (isCurrentUserInvolved)
+                  SliverToBoxAdapter(
+                    child: Text(
+                      '\$${(booking.rate / 100).toStringAsFixed(2)} / hour',
+                    ),
+                  ),
+                if (isCurrentUserInvolved)
+                  const SliverToBoxAdapter(
+                    child: SizedBox(height: 20),
+                  ),
                 const SliverToBoxAdapter(
                   child: Text(
                     'Location',
@@ -320,7 +322,9 @@ class BookingView extends StatelessWidget {
                     ),
                   ),
                 ),
-                if (!booking.isExpired && !booking.isCanceled)
+                if (isCurrentUserInvolved &&
+                    !booking.isExpired &&
+                    !booking.isCanceled)
                   SliverToBoxAdapter(
                     child: CupertinoButton(
                       onPressed: () async {
@@ -338,10 +342,6 @@ class BookingView extends StatelessWidget {
                         ),
                       ),
                     ),
-                  )
-                else
-                  const SliverToBoxAdapter(
-                    child: SizedBox.shrink(),
                   ),
                 const SliverToBoxAdapter(
                   child: SizedBox(height: 20),

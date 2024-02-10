@@ -31,9 +31,11 @@ import 'package:intheloopapp/ui/opportunity_feed/components/opportunity_view.dar
 import 'package:intheloopapp/ui/paywall/paywall_view.dart';
 import 'package:intheloopapp/ui/profile/components/service_selection_view.dart';
 import 'package:intheloopapp/ui/profile/profile_view.dart';
+import 'package:intheloopapp/ui/request_to_perform/request_to_perform_confirmation_view.dart';
+import 'package:intheloopapp/ui/request_to_perform/request_to_perform_view.dart';
 import 'package:intheloopapp/ui/reviews/user_reviews_feed.dart';
-import 'package:intheloopapp/ui/search/components/search_view.dart';
-import 'package:intheloopapp/ui/search/discover_view.dart';
+import 'package:intheloopapp/ui/discover/components/search_view.dart';
+import 'package:intheloopapp/ui/discover/discover_view.dart';
 import 'package:intheloopapp/ui/services/service_view.dart';
 import 'package:intheloopapp/ui/settings/settings_view.dart';
 import 'package:intheloopapp/utils/hero_image.dart';
@@ -334,8 +336,6 @@ final class InterestedUsersPage extends TappedRoute {
   final Opportunity opportunity;
 }
 
-
-
 final class OpportunityPage extends TappedRoute {
   OpportunityPage({
     required this.opportunityId,
@@ -415,5 +415,29 @@ final class GigSearchInitPage extends TappedRoute {
       : super(
           routeName: '/gig_search_init',
           view: const GigSearchInitView(),
+        );
+}
+
+final class RequestToPerformPage extends TappedRoute {
+  RequestToPerformPage({
+    required this.bookingEmail,
+    required this.venue,
+  }) : super(
+          routeName: '/request_to_perform',
+          view: RequestToPerformView(
+            bookingEmail: bookingEmail,
+            venue: venue,
+          ),
+        );
+
+  final String bookingEmail;
+  final UserModel venue;
+}
+
+final class RequestToPerformConfirmationPage extends TappedRoute {
+  RequestToPerformConfirmationPage()
+      : super(
+          routeName: '/request_to_perform_confirmation',
+          view: RequestToPerformConfirmationView(),
         );
 }

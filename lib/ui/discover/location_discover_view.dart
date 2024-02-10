@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_google_places_sdk/flutter_google_places_sdk.dart';
-import 'package:intheloopapp/ui/search/components/location_card.dart';
+import 'package:intheloopapp/ui/discover/components/location_card.dart';
 
 class LocationDiscoverView extends StatelessWidget {
   const LocationDiscoverView({super.key});

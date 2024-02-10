@@ -10,11 +10,11 @@ import 'package:intheloopapp/ui/profile/components/feedback_button.dart';
 import 'package:intheloopapp/ui/profile/components/follower_count.dart';
 import 'package:intheloopapp/ui/profile/components/message_button.dart';
 import 'package:intheloopapp/ui/profile/components/request_to_book.dart';
+import 'package:intheloopapp/ui/profile/components/request_to_perform.dart';
 import 'package:intheloopapp/ui/profile/components/review_count.dart';
 import 'package:intheloopapp/ui/profile/components/settings_button.dart';
 import 'package:intheloopapp/ui/profile/components/star_rating.dart';
 import 'package:intheloopapp/ui/profile/profile_cubit.dart';
-import 'package:intheloopapp/utils/admin_builder.dart';
 import 'package:intheloopapp/utils/custom_claims_builder.dart';
 
 class HeaderSliver extends StatelessWidget {
@@ -36,7 +36,8 @@ class HeaderSliver extends StatelessWidget {
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children: [
-                  if (state.visitedUser.socialFollowing.audienceSize > 0 || isCurrentUser)
+                  if (state.visitedUser.socialFollowing.audienceSize > 0 ||
+                      isCurrentUser)
                     const FollowerCount(),
                   const ReviewCount(),
                   const StarRating(),
@@ -51,6 +52,10 @@ class HeaderSliver extends StatelessWidget {
                       child: MessageButton(),
                     ),
                   ],
+                ),
+              if (!isCurrentUser && state.visitedUser.unclaimed)
+                RequestToPerform(
+                  venue: state.visitedUser,
                 ),
               if (isCurrentUser)
                 const Row(

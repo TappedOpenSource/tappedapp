@@ -26,6 +26,7 @@ class UserModel with _$UserModel {
     @OptionalDateTimeConverter() required Option<DateTime> timestamp,
     @UsernameConverter() required Username username,
     @Default('') String email,
+    @Default(None()) Option<String> phoneNumber,
     @Default(false) bool unclaimed,
     @Default('') String artistName,
     @Default(None()) Option<String> profilePicture,

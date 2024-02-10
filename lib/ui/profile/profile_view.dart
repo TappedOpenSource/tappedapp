@@ -20,8 +20,8 @@ import 'package:intheloopapp/ui/profile/components/reviews_sliver.dart';
 import 'package:intheloopapp/ui/profile/components/services_sliver.dart';
 import 'package:intheloopapp/ui/profile/profile_cubit.dart';
 import 'package:intheloopapp/ui/themes.dart';
-import 'package:intheloopapp/utils/premium_builder.dart';
 import 'package:intheloopapp/utils/hero_image.dart';
+import 'package:intheloopapp/utils/premium_builder.dart';
 
 class ProfileView extends StatelessWidget {
   ProfileView({
@@ -105,7 +105,7 @@ class ProfileView extends StatelessWidget {
           currentUser: currentUser,
           visitedUser: visitedUser,
         )
-          ..getLatestBooking()
+          ..getLatestBookings()
           ..getLatestReview()
           // ..initBadges()
           ..initServices()
@@ -172,7 +172,7 @@ class ProfileView extends StatelessWidget {
             await Future.wait([
               HapticFeedback.mediumImpact(),
               // cubit.getLatestOpportunity(),
-              cubit.getLatestBooking(),
+              cubit.getLatestBookings(),
               cubit.getLatestReview(),
               // cubit.initBadges(),
               cubit.initServices(),
@@ -270,16 +270,7 @@ class ProfileView extends StatelessWidget {
           child: ReviewsSliver(),
         ),
         const SliverToBoxAdapter(
-          child: SizedBox(height: 18),
-        ),
-        const SliverToBoxAdapter(
-          child: SizedBox(height: 18),
-        ),
-        const SliverToBoxAdapter(
           child: ServicesSliver(),
-        ),
-        const SliverToBoxAdapter(
-          child: SizedBox(height: 12),
         ),
         const SliverToBoxAdapter(
           child: BioSliver(),
@@ -306,8 +297,7 @@ class ProfileView extends StatelessWidget {
           onStretchTrigger: () async {
             final cubit = context.read<ProfileCubit>();
             await Future.wait([
-              cubit.getLatestBooking(),
-              // cubit.initBadges(),
+              cubit.getLatestBookings(),
               cubit.initServices(),
               cubit.refetchVisitedUser(),
               cubit.loadIsVerified(visitedUser.id),
