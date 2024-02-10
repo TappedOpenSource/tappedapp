@@ -82,46 +82,30 @@ class ProfileCubit extends Cubit<ProfileState> {
     }
   }
 
-  Future<void> getLatestBooking() async {
+  Future<void> getLatestBookings() async {
     final trace = logger.createTrace('getLatestBooking');
     await trace.start();
     try {
       final bookingsRequestee = await database.getBookingsByRequestee(
         visitedUser.id,
-        limit: 1,
+        limit: 5,
         status: BookingStatus.confirmed,
       );
       final bookingsRequester = await database.getBookingsByRequester(
         visitedUser.id,
-        limit: 1,
+        limit: 5,
         status: BookingStatus.confirmed,
       );
 
-      final latestRequesteeBooking = bookingsRequestee.isNotEmpty
-          ? Option.of(bookingsRequestee.first)
-          : const None();
-
-      final latestRequesterBooking = bookingsRequester.isNotEmpty
-          ? Option.of(bookingsRequester.first)
-          : const None();
-
-      final _ = switch ((latestRequesteeBooking, latestRequesterBooking)) {
-        (None(), None()) => emit(state.copyWith(latestBooking: const None())),
-        (Some(:final value), None()) =>
-          emit(state.copyWith(latestBooking: Option.of(value))),
-        (None(), Some(:final value)) => emit(
-            state.copyWith(
-              latestBooking: Option.of(value),
+      emit(
+        state.copyWith(
+          latestBookings: bookingsRequestee
+            ..addAll(bookingsRequester)
+            ..sort(
+              (a, b) => b.startTime.compareTo(a.startTime),
             ),
-          ),
-        (Some(), Some()) => () {
-            final latest = _getLatestBooking(
-              latestRequesteeBooking.toNullable()!,
-              latestRequesterBooking.toNullable()!,
-            );
-            emit(state.copyWith(latestBooking: Option.of(latest)));
-          }(),
-      };
+        ),
+      );
     } catch (e, s) {
       logger.error(
         'fetchMoreBookings error',
@@ -270,57 +254,14 @@ class ProfileCubit extends Cubit<ProfileState> {
     }
   }
 
-  Future<void> initBadges({bool clearBadges = true}) async {
-    final trace = logger.createTrace('initBadges');
-    await trace.start();
-    try {
-      await badgeListener?.cancel();
-      if (clearBadges) {
-        emit(
-          state.copyWith(
-            badgeStatus: BadgesStatus.initial,
-            userBadges: [],
-            hasReachedMaxBadges: false,
-          ),
-        );
-      }
-
-      final badgesAvailable =
-          (await database.getUserBadges(visitedUser.id, limit: 1)).isNotEmpty;
-      if (!badgesAvailable) {
-        emit(state.copyWith(badgeStatus: BadgesStatus.success));
-      }
-
-      badgeListener = database
-          .userBadgesObserver(visitedUser.id)
-          .listen((badge.Badge event) {
-        try {
-          emit(
-            state.copyWith(
-              badgeStatus: BadgesStatus.success,
-              userBadges: List.of(state.userBadges)..add(event),
-              hasReachedMaxBadges: state.userBadges.length < 10,
-            ),
-          );
-        } catch (e, s) {
-          logger.error('initBadges error', error: e, stackTrace: s);
-        }
-      });
-    } catch (e, s) {
-      logger.error('initBadges error', error: e, stackTrace: s);
-    } finally {
-      await trace.stop();
-    }
-  }
-
   Future<void> initPlace() async {
     final trace = logger.createTrace('initPlace');
     await trace.start();
     try {
       final place = await switch (visitedUser.location) {
         None() => Future<PlaceData?>.value(),
-        Some(:final value) => (() async {
-            return await places.getPlaceById(value.placeId);
+        Some(:final value) => (() {
+            return places.getPlaceById(value.placeId);
           })(),
       };
       emit(state.copyWith(place: place));
@@ -363,42 +304,6 @@ class ProfileCubit extends Cubit<ProfileState> {
         stackTrace: s,
       );
       emit(state.copyWith(opportunityStatus: OpportunitiesStatus.failure));
-    } finally {
-      await trace.stop();
-    }
-  }
-
-  Future<void> fetchMoreBadges() async {
-    if (state.hasReachedMaxBadges) return;
-
-    final trace = logger.createTrace('fetchMoreBadges');
-    await trace.start();
-    try {
-      if (state.badgeStatus == BadgesStatus.initial) {
-        await initBadges();
-      }
-
-      final badges = await database.getUserBadges(
-        visitedUser.id,
-        limit: 10,
-        lastBadgeId: state.userBadges.last.id,
-      );
-      badges.isEmpty
-          ? emit(state.copyWith(hasReachedMaxBadges: true))
-          : emit(
-              state.copyWith(
-                badgeStatus: BadgesStatus.success,
-                userBadges: List.of(state.userBadges)..addAll(badges),
-                hasReachedMaxBadges: false,
-              ),
-            );
-    } catch (e, s) {
-      logger.error(
-        'fetchMoreBadges error',
-        error: e,
-        stackTrace: s,
-      );
-      // emit(state.copyWith(badgeStatus: BadgesStatus.failure));
     } finally {
       await trace.stop();
     }

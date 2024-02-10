@@ -835,6 +835,7 @@ class FirestoreDatabaseImpl extends DatabaseRepository {
                 isEqualTo: userId,
               )
               .orderBy('startTime')
+              .limit(limit)
               .get();
         }
 
@@ -845,6 +846,7 @@ class FirestoreDatabaseImpl extends DatabaseRepository {
             )
             .where('status', isEqualTo: EnumToString.convertToString(status))
             .orderBy('startTime')
+            .limit(limit)
             .get();
       })();
 
@@ -925,6 +927,7 @@ class FirestoreDatabaseImpl extends DatabaseRepository {
                 isEqualTo: userId,
               )
               .orderBy('startTime', descending: true)
+              .limit(limit)
               .get();
         }
 
@@ -935,6 +938,7 @@ class FirestoreDatabaseImpl extends DatabaseRepository {
             )
             .where('status', isEqualTo: EnumToString.convertToString(status))
             .orderBy('startTime', descending: true)
+            .limit(limit)
             .get();
       })();
 

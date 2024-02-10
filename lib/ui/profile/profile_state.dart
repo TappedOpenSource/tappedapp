@@ -7,14 +7,11 @@ class ProfileState extends Equatable {
     this.isFollowing = false,
     this.isBlocked = false,
     this.isVerified = false,
-    this.latestBooking = const None(),
+    this.latestBookings = const [],
     this.latestReview = const None(),
-    this.userBadges = const [],
     this.services = const [],
     this.opportunities = const [],
-    this.hasReachedMaxBadges = false,
     this.hasReachedMaxOpportunities = false,
-    this.badgeStatus = BadgesStatus.initial,
     this.opportunityStatus = OpportunitiesStatus.initial,
     this.isCollapsed = false,
     this.didAddFeedback = false,
@@ -24,15 +21,12 @@ class ProfileState extends Equatable {
   final bool isFollowing;
   final bool isBlocked;
   final bool isVerified;
-  final List<badge.Badge> userBadges;
   final List<Service> services;
   final List<Opportunity> opportunities;
 
-  final Option<Booking> latestBooking;
+  final List<Booking> latestBookings;
   final Option<Review> latestReview;
 
-  final bool hasReachedMaxBadges;
-  final BadgesStatus badgeStatus;
   final bool hasReachedMaxOpportunities;
   final OpportunitiesStatus opportunityStatus;
   final UserModel visitedUser;
@@ -47,11 +41,8 @@ class ProfileState extends Equatable {
         isFollowing,
         isBlocked,
         isVerified,
-        latestBooking,
+        latestBookings,
         latestReview,
-        userBadges,
-        hasReachedMaxBadges,
-        badgeStatus,
         hasReachedMaxOpportunities,
         opportunityStatus,
         services,
@@ -65,11 +56,8 @@ class ProfileState extends Equatable {
     bool? isFollowing,
     bool? isBlocked,
     bool? isVerified,
-    Option<Booking>? latestBooking,
+    List<Booking>? latestBookings,
     Option<Review>? latestReview,
-    List<badge.Badge>? userBadges,
-    bool? hasReachedMaxBadges,
-    BadgesStatus? badgeStatus,
     bool? hasReachedMaxOpportunities,
     OpportunitiesStatus? opportunityStatus,
     List<Service>? services,
@@ -84,11 +72,8 @@ class ProfileState extends Equatable {
       isFollowing: isFollowing ?? this.isFollowing,
       isBlocked: isBlocked ?? this.isBlocked,
       isVerified: isVerified ?? this.isVerified,
-      latestBooking: latestBooking ?? this.latestBooking,
+      latestBookings: latestBookings ?? this.latestBookings,
       latestReview: latestReview ?? this.latestReview,
-      userBadges: userBadges ?? this.userBadges,
-      hasReachedMaxBadges: hasReachedMaxBadges ?? this.hasReachedMaxBadges,
-      badgeStatus: badgeStatus ?? this.badgeStatus,
       hasReachedMaxOpportunities: hasReachedMaxOpportunities ?? this.hasReachedMaxOpportunities,
       opportunityStatus: opportunityStatus ?? this.opportunityStatus,
       services: services ?? this.services,
@@ -100,12 +85,6 @@ class ProfileState extends Equatable {
       didAddFeedback: didAddFeedback ?? this.didAddFeedback,
     );
   }
-}
-
-enum BadgesStatus {
-  initial,
-  success,
-  failure,
 }
 
 enum OpportunitiesStatus {
