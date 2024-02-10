@@ -31,6 +31,7 @@ import { Timestamp } from "firebase-admin/firestore";
 import { labelApplied } from "../email_templates/label_applied";
 import { labelApproved } from "../email_templates/label_approved";
 import { premiumWaitlist } from "../email_templates/premium_waitlist";
+import { venueContacted } from "../email_templates/venue_contacted";
 
 export const sendWelcomeEmailOnUserCreated = functions.auth
   .user()
@@ -430,5 +431,41 @@ export const sendEmailOnPremiumWaitlist = onDocumentCreated(
       to: [ email ],
       subject: "you're on the waitlist!",
       html: `<div style="white-space: pre;">${premiumWaitlist}</div>`,
+    });
+  });
+
+export const sendEmailOnVenueContacting = onDocumentCreated(
+  { 
+    document: "contactVenues/{userId}/venuesContaced/{venueId}",
+    secrets: [ RESEND_API_KEY ],
+  },
+  async (event) => {
+    const snapshot = event.data;
+    const document = snapshot?.data();
+
+    if (document === undefined) {
+      return;
+    }
+
+    const userSnap = await usersRef.doc(document.id).get();
+    if (!userSnap.exists) {
+      error(`user does not exist ${document}`)
+      return;
+    }
+    
+    const user = userSnap.data() as UserModel;
+    const email = user.email;
+
+    if (email === undefined || email === null || email === "") {
+      throw new Error(`${document?.id} does not have an email`);
+    }
+
+    const resend = new Resend(RESEND_API_KEY.value());
+
+    await resend.emails.send({
+      from: "no-reply@tapped.ai",
+      to: [ email ],
+      subject: "performance request sent!",
+      html: `<div style="white-space: pre;">${venueContacted}</div>`,
     });
   });

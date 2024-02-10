@@ -8,6 +8,27 @@ import 'package:intheloopapp/utils/premium_builder.dart';
 class GigSearchInitView extends StatelessWidget {
   const GigSearchInitView({super.key});
 
+  Widget _buildItem({
+    required IconData icon,
+    required String label,
+  }) {
+    return Row(
+      children: [
+        Icon(
+          icon,
+          color: Colors.white,
+        ),
+        const SizedBox(width: 12),
+        Text(
+          label,
+          style: const TextStyle(
+            fontSize: 16,
+          ),
+        ),
+      ],
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
@@ -23,42 +44,38 @@ class GigSearchInitView extends StatelessWidget {
                 vertical: 12,
               ),
               child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  const Spacer(),
                   const Text(
-                    '🚀 Find Gigs: Discover perfect venues for your unique sound.',
-                    textAlign: TextAlign.center,
+                    'Find the Right Venues for Your Sound!',
                     style: TextStyle(
-                      fontSize: 16,
+                      fontSize: 32,
+                      fontWeight: FontWeight.w700,
                     ),
                   ),
-                  const SizedBox(height: 12),
-                  const Text(
-                    "✉️ Hassle-Free Bookings: Submit with a tap; we'll handle the rest.",
-                    textAlign: TextAlign.center,
-                    style: TextStyle(
-                      fontSize: 16,
-                    ),
+                  const SizedBox(height: 36),
+                  _buildItem(
+                    icon: CupertinoIcons.search,
+                    label: 'Discover ideal stages effortlessly.',
                   ),
-                  const SizedBox(height: 12),
-                  const Text(
-                    '📆 Manage Gigs: Keep all your performances organized in one place.',
-                    textAlign: TextAlign.center,
-                    style: TextStyle(
-                      fontSize: 16,
-                    ),
+                  const SizedBox(height: 24),
+                  _buildItem(
+                    icon: CupertinoIcons.star,
+                    label: 'Connect with diverse venues.',
                   ),
-                  const SizedBox(height: 12),
-                  const Text(
-                    '📣 Automated Outreach: We connect you with venues, so you focus on the music.',
-                    textAlign: TextAlign.center,
-                    style: TextStyle(
-                      fontSize: 16,
-                    ),
+                  const SizedBox(height: 24),
+                  _buildItem(
+                    icon: CupertinoIcons.bell,
+                    label: 'Get notified when new gigs are available.',
                   ),
-                  const SizedBox(height: 12),
+                  const SizedBox(height: 24),
+                  _buildItem(
+                    icon: CupertinoIcons.arrow_up,
+                    label: 'Elevate your music career!',
+                  ),
+                  const SizedBox(height: 24),
                   const Text(
-                    'this is experimental',
+                    '(this is experimental)',
                     textAlign: TextAlign.center,
                     style: TextStyle(
                       color: Colors.grey,

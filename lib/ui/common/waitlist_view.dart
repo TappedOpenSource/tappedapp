@@ -127,7 +127,7 @@ class _WaitlistViewState extends State<WaitlistView> {
                   child: CupertinoButton(
                     onPressed: () {
                       _confettiController.play();
-                      context.pop();
+                      context.popUntilHome();
                     },
                     color: theme.colorScheme.primary,
                     borderRadius: BorderRadius.circular(15),
