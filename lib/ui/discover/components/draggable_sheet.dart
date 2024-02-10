@@ -38,6 +38,7 @@ class DraggableSheet extends StatelessWidget {
                 Expanded(
                   child: SingleChildScrollView(
                     controller: scrollController,
+                    physics: const ClampingScrollPhysics(),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [

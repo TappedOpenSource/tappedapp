@@ -19,11 +19,10 @@ class DraggableHeader extends StatelessWidget {
       physics: const ClampingScrollPhysics(),
       controller: scrollController,
       child: Container(
-        decoration: BoxDecoration(
-          borderRadius: const BorderRadius.vertical(
+        decoration: const BoxDecoration(
+          borderRadius: BorderRadius.vertical(
             top: Radius.circular(12),
           ),
-          color: theme.colorScheme.onSurface.withOpacity(0.1),
         ),
         child: Center(
           child: Padding(
@@ -36,7 +35,7 @@ class DraggableHeader extends StatelessWidget {
               width: 72,
               decoration: BoxDecoration(
                 borderRadius: const BorderRadius.all(Radius.circular(2)),
-                color: theme.colorScheme.onSurface,
+                color: theme.colorScheme.onSurface.withOpacity(0.3),
               ),
             ),
           ),

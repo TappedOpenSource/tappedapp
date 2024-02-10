@@ -28,7 +28,7 @@ class InfoSliver extends StatelessWidget {
         final pressKitUrl = performerInfo?.pressKitUrl ?? const None();
         final currPlace = state.place;
         final idealPerformerProfile =
-            state.visitedUser.venueInfo.flatMap((t) => t.idealPerformerProfile);
+        state.visitedUser.venueInfo.flatMap((t) => t.idealPerformerProfile);
         final bookingEmail = state.visitedUser.venueInfo
             .flatMap((t) => t.bookingEmail)
             .toNullable();
@@ -74,6 +74,22 @@ class InfoSliver extends StatelessWidget {
                           ),
                         ),
                       ),
+                    if (isAdmin)
+                      switch(state.visitedUser.phoneNumber) {
+                        None() => const SizedBox.shrink(),
+                        Some(:final value) =>
+                            CupertinoListTile(
+                              leading: const Icon(
+                                CupertinoIcons.phone,
+                              ),
+                              title: Text(
+                                value,
+                                style: TextStyle(
+                                  color: theme.colorScheme.onSurface,
+                                ),
+                              ),
+                            ),
+                      },
                     if (currPlace != null)
                       CupertinoListTile(
                         leading: Icon(
@@ -86,12 +102,15 @@ class InfoSliver extends StatelessWidget {
                             color: theme.colorScheme.onSurface,
                           ),
                         ),
-                      ),
+                      )
+                    ,
                     switch (state.visitedUser.venueInfo) {
                       None() => const SizedBox.shrink(),
-                      Some(:final value) => switch (value.capacity) {
-                          None() => const SizedBox.shrink(),
-                          Some(:final value) => CupertinoListTile(
+                      Some(:final value) =>
+                      switch (value.capacity) {
+                        None() => const SizedBox.shrink(),
+                        Some(:final value) =>
+                            CupertinoListTile(
                               leading: const Icon(
                                 CupertinoIcons.person_2_alt,
                               ),
@@ -102,7 +121,7 @@ class InfoSliver extends StatelessWidget {
                                 ),
                               ),
                             ),
-                        },
+                      },
                     },
                     if (occupations.isNotEmpty)
                       CupertinoListTile(
@@ -148,74 +167,78 @@ class InfoSliver extends StatelessWidget {
                       ),
                     switch (pressKitUrl) {
                       None() => const SizedBox.shrink(),
-                      Some(:final value) => CupertinoListTile.notched(
-                          title: Text(
-                            'EPK',
-                            style: TextStyle(
-                              color: theme.colorScheme.onSurface,
+                      Some(:final value) =>
+                          CupertinoListTile.notched(
+                            title: Text(
+                              'EPK',
+                              style: TextStyle(
+                                color: theme.colorScheme.onSurface,
+                              ),
                             ),
+                            trailing: const Icon(
+                                CupertinoIcons.chevron_forward),
+                            onTap: () async {
+                              await launchUrl(Uri.parse(value));
+                            },
                           ),
-                          trailing: const Icon(CupertinoIcons.chevron_forward),
-                          onTap: () async {
-                            await launchUrl(Uri.parse(value));
-                          },
-                        ),
                     },
                     switch (idealPerformerProfile) {
                       None() => const SizedBox.shrink(),
-                      Some(:final value) => CupertinoListTile(
-                          title: Text(
-                            'Ideal Performer Profile',
-                            style: TextStyle(
-                              color: theme.colorScheme.onSurface,
+                      Some(:final value) =>
+                          CupertinoListTile(
+                            title: Text(
+                              'Ideal Performer Profile',
+                              style: TextStyle(
+                                color: theme.colorScheme.onSurface,
+                              ),
                             ),
-                          ),
-                          trailing: const Icon(CupertinoIcons.chevron_forward),
-                          onTap: () {
-                            if (!isPremium) {
-                              context.push(PaywallPage());
-                              return;
-                            }
+                            trailing: const Icon(
+                                CupertinoIcons.chevron_forward),
+                            onTap: () {
+                              if (!isPremium) {
+                                context.push(PaywallPage());
+                                return;
+                              }
 
-                            showModalBottomSheet<void>(
-                              context: context,
-                              builder: (context) {
-                                return SafeArea(
-                                  child: Padding(
-                                    padding: const EdgeInsets.symmetric(
-                                      vertical: 16,
-                                      horizontal: 20,
-                                    ),
-                                    child: SingleChildScrollView(
-                                      child: Column(
-                                        children: [
-                                          Text(
-                                            'what kind of performers do they normally book?',
-                                            style: TextStyle(
-                                              color:
-                                                  theme.colorScheme.onSurface,
-                                              fontSize: 24,
-                                              fontWeight: FontWeight.bold,
+                              showModalBottomSheet<void>(
+                                context: context,
+                                builder: (context) {
+                                  return SafeArea(
+                                    child: Padding(
+                                      padding: const EdgeInsets.symmetric(
+                                        vertical: 16,
+                                        horizontal: 20,
+                                      ),
+                                      child: SingleChildScrollView(
+                                        child: Column(
+                                          children: [
+                                            Text(
+                                              'what kind of performers do they normally book?',
+                                              style: TextStyle(
+                                                color:
+                                                theme.colorScheme.onSurface,
+                                                fontSize: 24,
+                                                fontWeight: FontWeight.bold,
+                                              ),
                                             ),
-                                          ),
-                                          const SizedBox(height: 12),
-                                          Text(
-                                            value,
-                                            style: TextStyle(
-                                              color:
-                                                  theme.colorScheme.onSurface,
-                                              fontSize: 16,
+                                            const SizedBox(height: 12),
+                                            Text(
+                                              value,
+                                              style: TextStyle(
+                                                color:
+                                                theme.colorScheme.onSurface,
+                                                fontSize: 16,
+                                              ),
                                             ),
-                                          ),
-                                        ],
+                                          ],
+                                        ),
                                       ),
                                     ),
-                                  ),
-                                );
-                              },
-                            );
-                          },
-                        ),
+                                  );
+                                },
+                              );
+                            },
+                          ),
                     },
                     CupertinoListTile(
                       title: Text(
@@ -233,7 +256,10 @@ class InfoSliver extends StatelessWidget {
             );
           },
         );
-      },
+      }
+
+      ,
+
     );
   }
 }
