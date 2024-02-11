@@ -7,6 +7,7 @@ import 'package:intheloopapp/domains/models/opportunity.dart';
 import 'package:intheloopapp/domains/models/service.dart';
 import 'package:intheloopapp/domains/models/user_model.dart';
 import 'package:intheloopapp/ui/activity/activity_view.dart';
+import 'package:intheloopapp/ui/add_past_booking/add_past_booking_view.dart';
 import 'package:intheloopapp/ui/admin/admin_view.dart';
 import 'package:intheloopapp/ui/advanced_search/advanced_search_view.dart';
 import 'package:intheloopapp/ui/badge/badge_view.dart';
@@ -438,6 +439,14 @@ final class RequestToPerformConfirmationPage extends TappedRoute {
   RequestToPerformConfirmationPage()
       : super(
           routeName: '/request_to_perform_confirmation',
-          view: RequestToPerformConfirmationView(),
+          view: const RequestToPerformConfirmationView(),
+        );
+}
+
+final class AddPastBookingPage extends TappedRoute {
+  AddPastBookingPage()
+      : super(
+          routeName: '/add_past_booking',
+          view: const AddPastBookingView(),
         );
 }

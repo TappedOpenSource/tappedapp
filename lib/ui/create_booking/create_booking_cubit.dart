@@ -105,7 +105,7 @@ class CreateBookingCubit extends Cubit<CreateBookingState> {
       name: state.name.value,
       note: state.note.value,
       serviceId: Option.of(state.service.id),
-      requesterId: state.currentUserId,
+      requesterId: Option.of(state.currentUserId),
       requesteeId: state.service.userId,
       rate: state.service.rate,
       status: BookingStatus.pending,

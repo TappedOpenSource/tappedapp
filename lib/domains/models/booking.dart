@@ -11,8 +11,8 @@ part 'booking.g.dart';
 class Booking with _$Booking {
   const factory Booking({
     required String id,
-    required String requesterId,
     required String requesteeId,
+    @Default(None()) Option<String> requesterId,
     required BookingStatus status,
     @DateTimeConverter() required DateTime startTime,
     @DateTimeConverter() required DateTime endTime,
@@ -21,6 +21,7 @@ class Booking with _$Booking {
     @Default('') String note,
     @Default(0) int rate,
     @Default(None()) Option<String> serviceId,
+    @Default(false) bool addedByUser,
     @Default(None()) Option<String> placeId,
     @Default(None()) Option<String> geohash,
     @Default(None()) Option<double> lat,

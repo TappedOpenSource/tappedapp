@@ -21,8 +21,8 @@ Booking _$BookingFromJson(Map<String, dynamic> json) {
 /// @nodoc
 mixin _$Booking {
   String get id => throw _privateConstructorUsedError;
-  String get requesterId => throw _privateConstructorUsedError;
   String get requesteeId => throw _privateConstructorUsedError;
+  Option<String> get requesterId => throw _privateConstructorUsedError;
   BookingStatus get status => throw _privateConstructorUsedError;
   @DateTimeConverter()
   DateTime get startTime => throw _privateConstructorUsedError;
@@ -34,6 +34,7 @@ mixin _$Booking {
   String get note => throw _privateConstructorUsedError;
   int get rate => throw _privateConstructorUsedError;
   Option<String> get serviceId => throw _privateConstructorUsedError;
+  bool get addedByUser => throw _privateConstructorUsedError;
   Option<String> get placeId => throw _privateConstructorUsedError;
   Option<String> get geohash => throw _privateConstructorUsedError;
   Option<double> get lat => throw _privateConstructorUsedError;
@@ -51,8 +52,8 @@ abstract class $BookingCopyWith<$Res> {
   @useResult
   $Res call(
       {String id,
-      String requesterId,
       String requesteeId,
+      Option<String> requesterId,
       BookingStatus status,
       @DateTimeConverter() DateTime startTime,
       @DateTimeConverter() DateTime endTime,
@@ -61,6 +62,7 @@ abstract class $BookingCopyWith<$Res> {
       String note,
       int rate,
       Option<String> serviceId,
+      bool addedByUser,
       Option<String> placeId,
       Option<String> geohash,
       Option<double> lat,
@@ -81,8 +83,8 @@ class _$BookingCopyWithImpl<$Res, $Val extends Booking>
   @override
   $Res call({
     Object? id = null,
-    Object? requesterId = null,
     Object? requesteeId = null,
+    Object? requesterId = null,
     Object? status = null,
     Object? startTime = null,
     Object? endTime = null,
@@ -91,6 +93,7 @@ class _$BookingCopyWithImpl<$Res, $Val extends Booking>
     Object? note = null,
     Object? rate = null,
     Object? serviceId = null,
+    Object? addedByUser = null,
     Object? placeId = null,
     Object? geohash = null,
     Object? lat = null,
@@ -101,14 +104,14 @@ class _$BookingCopyWithImpl<$Res, $Val extends Booking>
           ? _value.id
           : id // ignore: cast_nullable_to_non_nullable
               as String,
-      requesterId: null == requesterId
-          ? _value.requesterId
-          : requesterId // ignore: cast_nullable_to_non_nullable
-              as String,
       requesteeId: null == requesteeId
           ? _value.requesteeId
           : requesteeId // ignore: cast_nullable_to_non_nullable
               as String,
+      requesterId: null == requesterId
+          ? _value.requesterId
+          : requesterId // ignore: cast_nullable_to_non_nullable
+              as Option<String>,
       status: null == status
           ? _value.status
           : status // ignore: cast_nullable_to_non_nullable
@@ -141,6 +144,10 @@ class _$BookingCopyWithImpl<$Res, $Val extends Booking>
           ? _value.serviceId
           : serviceId // ignore: cast_nullable_to_non_nullable
               as Option<String>,
+      addedByUser: null == addedByUser
+          ? _value.addedByUser
+          : addedByUser // ignore: cast_nullable_to_non_nullable
+              as bool,
       placeId: null == placeId
           ? _value.placeId
           : placeId // ignore: cast_nullable_to_non_nullable
@@ -170,8 +177,8 @@ abstract class _$$BookingImplCopyWith<$Res> implements $BookingCopyWith<$Res> {
   @useResult
   $Res call(
       {String id,
-      String requesterId,
       String requesteeId,
+      Option<String> requesterId,
       BookingStatus status,
       @DateTimeConverter() DateTime startTime,
       @DateTimeConverter() DateTime endTime,
@@ -180,6 +187,7 @@ abstract class _$$BookingImplCopyWith<$Res> implements $BookingCopyWith<$Res> {
       String note,
       int rate,
       Option<String> serviceId,
+      bool addedByUser,
       Option<String> placeId,
       Option<String> geohash,
       Option<double> lat,
@@ -198,8 +206,8 @@ class __$$BookingImplCopyWithImpl<$Res>
   @override
   $Res call({
     Object? id = null,
-    Object? requesterId = null,
     Object? requesteeId = null,
+    Object? requesterId = null,
     Object? status = null,
     Object? startTime = null,
     Object? endTime = null,
@@ -208,6 +216,7 @@ class __$$BookingImplCopyWithImpl<$Res>
     Object? note = null,
     Object? rate = null,
     Object? serviceId = null,
+    Object? addedByUser = null,
     Object? placeId = null,
     Object? geohash = null,
     Object? lat = null,
@@ -218,14 +227,14 @@ class __$$BookingImplCopyWithImpl<$Res>
           ? _value.id
           : id // ignore: cast_nullable_to_non_nullable
               as String,
-      requesterId: null == requesterId
-          ? _value.requesterId
-          : requesterId // ignore: cast_nullable_to_non_nullable
-              as String,
       requesteeId: null == requesteeId
           ? _value.requesteeId
           : requesteeId // ignore: cast_nullable_to_non_nullable
               as String,
+      requesterId: null == requesterId
+          ? _value.requesterId
+          : requesterId // ignore: cast_nullable_to_non_nullable
+              as Option<String>,
       status: null == status
           ? _value.status
           : status // ignore: cast_nullable_to_non_nullable
@@ -258,6 +267,10 @@ class __$$BookingImplCopyWithImpl<$Res>
           ? _value.serviceId
           : serviceId // ignore: cast_nullable_to_non_nullable
               as Option<String>,
+      addedByUser: null == addedByUser
+          ? _value.addedByUser
+          : addedByUser // ignore: cast_nullable_to_non_nullable
+              as bool,
       placeId: null == placeId
           ? _value.placeId
           : placeId // ignore: cast_nullable_to_non_nullable
@@ -283,8 +296,8 @@ class __$$BookingImplCopyWithImpl<$Res>
 class _$BookingImpl implements _Booking {
   const _$BookingImpl(
       {required this.id,
-      required this.requesterId,
       required this.requesteeId,
+      this.requesterId = const None(),
       required this.status,
       @DateTimeConverter() required this.startTime,
       @DateTimeConverter() required this.endTime,
@@ -293,6 +306,7 @@ class _$BookingImpl implements _Booking {
       this.note = '',
       this.rate = 0,
       this.serviceId = const None(),
+      this.addedByUser = false,
       this.placeId = const None(),
       this.geohash = const None(),
       this.lat = const None(),
@@ -304,9 +318,10 @@ class _$BookingImpl implements _Booking {
   @override
   final String id;
   @override
-  final String requesterId;
-  @override
   final String requesteeId;
+  @override
+  @JsonKey()
+  final Option<String> requesterId;
   @override
   final BookingStatus status;
   @override
@@ -332,6 +347,9 @@ class _$BookingImpl implements _Booking {
   final Option<String> serviceId;
   @override
   @JsonKey()
+  final bool addedByUser;
+  @override
+  @JsonKey()
   final Option<String> placeId;
   @override
   @JsonKey()
@@ -345,7 +363,7 @@ class _$BookingImpl implements _Booking {
 
   @override
   String toString() {
-    return 'Booking(id: $id, requesterId: $requesterId, requesteeId: $requesteeId, status: $status, startTime: $startTime, endTime: $endTime, timestamp: $timestamp, name: $name, note: $note, rate: $rate, serviceId: $serviceId, placeId: $placeId, geohash: $geohash, lat: $lat, lng: $lng)';
+    return 'Booking(id: $id, requesteeId: $requesteeId, requesterId: $requesterId, status: $status, startTime: $startTime, endTime: $endTime, timestamp: $timestamp, name: $name, note: $note, rate: $rate, serviceId: $serviceId, addedByUser: $addedByUser, placeId: $placeId, geohash: $geohash, lat: $lat, lng: $lng)';
   }
 
   @override
@@ -354,10 +372,10 @@ class _$BookingImpl implements _Booking {
         (other.runtimeType == runtimeType &&
             other is _$BookingImpl &&
             (identical(other.id, id) || other.id == id) &&
-            (identical(other.requesterId, requesterId) ||
-                other.requesterId == requesterId) &&
             (identical(other.requesteeId, requesteeId) ||
                 other.requesteeId == requesteeId) &&
+            (identical(other.requesterId, requesterId) ||
+                other.requesterId == requesterId) &&
             (identical(other.status, status) || other.status == status) &&
             (identical(other.startTime, startTime) ||
                 other.startTime == startTime) &&
@@ -369,6 +387,8 @@ class _$BookingImpl implements _Booking {
             (identical(other.rate, rate) || other.rate == rate) &&
             (identical(other.serviceId, serviceId) ||
                 other.serviceId == serviceId) &&
+            (identical(other.addedByUser, addedByUser) ||
+                other.addedByUser == addedByUser) &&
             (identical(other.placeId, placeId) || other.placeId == placeId) &&
             (identical(other.geohash, geohash) || other.geohash == geohash) &&
             (identical(other.lat, lat) || other.lat == lat) &&
@@ -380,8 +400,8 @@ class _$BookingImpl implements _Booking {
   int get hashCode => Object.hash(
       runtimeType,
       id,
-      requesterId,
       requesteeId,
+      requesterId,
       status,
       startTime,
       endTime,
@@ -390,6 +410,7 @@ class _$BookingImpl implements _Booking {
       note,
       rate,
       serviceId,
+      addedByUser,
       placeId,
       geohash,
       lat,
@@ -412,8 +433,8 @@ class _$BookingImpl implements _Booking {
 abstract class _Booking implements Booking {
   const factory _Booking(
       {required final String id,
-      required final String requesterId,
       required final String requesteeId,
+      final Option<String> requesterId,
       required final BookingStatus status,
       @DateTimeConverter() required final DateTime startTime,
       @DateTimeConverter() required final DateTime endTime,
@@ -422,6 +443,7 @@ abstract class _Booking implements Booking {
       final String note,
       final int rate,
       final Option<String> serviceId,
+      final bool addedByUser,
       final Option<String> placeId,
       final Option<String> geohash,
       final Option<double> lat,
@@ -432,9 +454,9 @@ abstract class _Booking implements Booking {
   @override
   String get id;
   @override
-  String get requesterId;
-  @override
   String get requesteeId;
+  @override
+  Option<String> get requesterId;
   @override
   BookingStatus get status;
   @override
@@ -454,6 +476,8 @@ abstract class _Booking implements Booking {
   int get rate;
   @override
   Option<String> get serviceId;
+  @override
+  bool get addedByUser;
   @override
   Option<String> get placeId;
   @override

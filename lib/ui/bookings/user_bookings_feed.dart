@@ -6,9 +6,11 @@ import 'package:intheloopapp/data/database_repository.dart';
 import 'package:intheloopapp/domains/models/booking.dart';
 import 'package:intheloopapp/domains/models/user_model.dart';
 import 'package:intheloopapp/domains/navigation_bloc/navigation_bloc.dart';
+import 'package:intheloopapp/domains/navigation_bloc/tapped_route.dart';
 import 'package:intheloopapp/ui/profile/components/booking_tile.dart';
 import 'package:intheloopapp/utils/app_logger.dart';
 import 'package:intheloopapp/utils/bloc_utils.dart';
+import 'package:intheloopapp/utils/current_user_builder.dart';
 import 'package:rxdart/rxdart.dart';
 
 class UserBookingsFeed extends StatefulWidget {
@@ -218,19 +220,33 @@ class _UserBookingsFeedState extends State<UserBookingsFeed> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Theme.of(context).colorScheme.background,
-      body: FutureBuilder<Option<UserModel>>(
-        future: _databaseRepository.getUserById(_userId),
-        builder: (context, snapshot) {
-          final user = snapshot.data;
-          return switch (user) {
-            null => const Center(child: CircularProgressIndicator()),
-            None() => const Center(child: Text('User not found')),
-            Some(:final value) => _buildUserBookingFeed(value),
-          };
-        },
-      ),
+    return CurrentUserBuilder(
+      builder: (context, currentUser) {
+        final isCurrentUser = currentUser.id == _userId;
+        return Scaffold(
+          backgroundColor: Theme.of(context).colorScheme.background,
+          floatingActionButton: isCurrentUser
+              ? FloatingActionButton.extended(
+                  onPressed: () => context.push(
+                    AddPastBookingPage(),
+                  ),
+                  icon: const Icon(Icons.add),
+                  label: const Text('Add Booking'),
+                )
+              : null,
+          body: FutureBuilder<Option<UserModel>>(
+            future: _databaseRepository.getUserById(_userId),
+            builder: (context, snapshot) {
+              final user = snapshot.data;
+              return switch (user) {
+                null => const Center(child: CircularProgressIndicator()),
+                None() => const Center(child: Text('User not found')),
+                Some(:final value) => _buildUserBookingFeed(value),
+              };
+            },
+          ),
+        );
+      },
     );
   }
 }

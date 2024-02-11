@@ -72,32 +72,37 @@ class BookingView extends StatelessWidget {
             padding: const EdgeInsets.symmetric(horizontal: 24),
             child: CustomScrollView(
               slivers: [
-                const SliverToBoxAdapter(
-                  child: Text(
-                    'Booker',
-                    style: TextStyle(
-                      fontSize: 28,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                ),
-                SliverToBoxAdapter(
-                  child: FutureBuilder<Option<UserModel>>(
-                    future: database.getUserById(booking.requesterId),
-                    builder: (context, snapshot) {
-                      final requester = snapshot.data;
-                      return switch (requester) {
-                        null => SkeletonListTile(),
-                        None() => SkeletonListTile(),
-                        Some(:final value) => UserTile(
-                            userId: value.id,
-                            user: Option.of(value),
-                            showFollowButton: false,
+                ...switch (booking.requesterId) {
+                  None() => [],
+                  Some(:final value) => [
+                      const SliverToBoxAdapter(
+                        child: Text(
+                          'Booker',
+                          style: TextStyle(
+                            fontSize: 28,
+                            fontWeight: FontWeight.bold,
                           ),
-                      };
-                    },
-                  ),
-                ),
+                        ),
+                      ),
+                      SliverToBoxAdapter(
+                        child: FutureBuilder<Option<UserModel>>(
+                          future: database.getUserById(value),
+                          builder: (context, snapshot) {
+                            final requester = snapshot.data;
+                            return switch (requester) {
+                              null => SkeletonListTile(),
+                              None() => SkeletonListTile(),
+                              Some(:final value) => UserTile(
+                                  userId: value.id,
+                                  user: Option.of(value),
+                                  showFollowButton: false,
+                                ),
+                            };
+                          },
+                        ),
+                      ),
+                    ],
+                },
                 const SliverToBoxAdapter(
                   child: SizedBox(height: 20),
                 ),

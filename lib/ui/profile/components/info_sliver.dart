@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:fpdart/fpdart.dart';
 import 'package:intheloopapp/data/auth_repository.dart';
 import 'package:intheloopapp/domains/navigation_bloc/navigation_bloc.dart';
@@ -9,7 +10,6 @@ import 'package:intheloopapp/domains/navigation_bloc/tapped_route.dart';
 import 'package:intheloopapp/ui/profile/components/more_options_button.dart';
 import 'package:intheloopapp/ui/profile/components/social_media_icons.dart';
 import 'package:intheloopapp/ui/profile/profile_cubit.dart';
-import 'package:intheloopapp/utils/admin_builder.dart';
 import 'package:intheloopapp/utils/custom_claims_builder.dart';
 import 'package:intheloopapp/utils/geohash.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -63,53 +63,6 @@ class InfoSliver extends StatelessWidget {
                         ),
                       ),
                     ),
-                    if (isAdmin && bookingEmail != null)
-                      GestureDetector(
-                        onTap: () async {
-                          await Clipboard.setData(
-                            ClipboardData(text: bookingEmail),
-                          );
-                          final snackBar = SnackBar(
-                            content: Text('Email copied to clipboard'),
-                          );
-                          ScaffoldMessenger.of(context).showSnackBar(snackBar);
-                        },
-                        child: CupertinoListTile(
-                          leading: const Icon(
-                            CupertinoIcons.mail,
-                          ),
-                          title: Text(
-                            bookingEmail,
-                            style: TextStyle(
-                              color: theme.colorScheme.onSurface,
-                            ),
-                          ),
-                        ),
-                      ),
-                    if (isAdmin)
-                      switch (state.visitedUser.phoneNumber) {
-                        None() => const SizedBox.shrink(),
-                        Some(:final value) => GestureDetector(
-                            onTap: () async {
-                              final uri = Uri(
-                                scheme: 'tel',
-                                path: value,
-                              );
-                              await launchUrl(uri);
-                            },
-                            child: CupertinoListTile(
-                              leading: const Icon(
-                                CupertinoIcons.phone,
-                              ),
-                              title: Text(
-                                value,
-                                style: TextStyle(
-                                  color: theme.colorScheme.onSurface,
-                                ),
-                              ),
-                            ),
-                          ),
-                      },
                     if (currPlace != null)
                       CupertinoListTile(
                         leading: Icon(
@@ -170,6 +123,58 @@ class InfoSliver extends StatelessWidget {
                           ),
                         ),
                       ),
+                    if (isAdmin && bookingEmail != null)
+                      GestureDetector(
+                        onTap: () async {
+                          await Clipboard.setData(
+                            ClipboardData(text: bookingEmail),
+                          );
+                          await EasyLoading.showSuccess(
+                            'Copied Email',
+                            duration: const Duration(milliseconds: 500),
+                          );
+                        },
+                        child: CupertinoListTile(
+                          leading: const Icon(
+                            CupertinoIcons.mail,
+                          ),
+                          title: SingleChildScrollView(
+                            scrollDirection: Axis.horizontal,
+                            child: Text(
+                              bookingEmail,
+                              style: TextStyle(
+                                color: theme.colorScheme.onSurface,
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
+                    if (isAdmin)
+                      switch (state.visitedUser.phoneNumber) {
+                        None() => const SizedBox.shrink(),
+                        Some(:final value) => GestureDetector(
+                            onTap: () async {
+                              await Clipboard.setData(
+                                ClipboardData(text: value),
+                              );
+                              await EasyLoading.showSuccess(
+                                'Copied Phone',
+                                duration: const Duration(milliseconds: 500),
+                              );
+                            },
+                            child: CupertinoListTile(
+                              leading: const Icon(
+                                CupertinoIcons.phone,
+                              ),
+                              title: Text(
+                                value,
+                                style: TextStyle(
+                                  color: theme.colorScheme.onSurface,
+                                ),
+                              ),
+                            ),
+                          ),
+                      },
                     if (label != 'None')
                       CupertinoListTile(
                         leading: const Icon(

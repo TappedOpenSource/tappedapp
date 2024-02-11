@@ -87,9 +87,11 @@ class BookingContainer extends StatelessWidget {
         },
       );
 
-  Widget freeTile(DatabaseRepository database) =>
+  Widget freeTile(DatabaseRepository database, {
+    required String requesterId,
+  }) =>
       FutureBuilder<Option<UserModel>>(
-        future: database.getUserById(booking.requesterId),
+        future: database.getUserById(requesterId),
         builder: (context, snapshot) {
           final requester = snapshot.data;
 
@@ -174,19 +176,27 @@ class BookingContainer extends StatelessWidget {
     final databaseRepository =
         RepositoryProvider.of<DatabaseRepository>(context);
 
-    return CurrentUserBuilder(
-      errorWidget: const ListTile(
-        leading: UserAvatar(
-          radius: 25,
-        ),
-        title: Text('ERROR'),
-        subtitle: Text("something isn't working right :/"),
-      ),
-      builder: (context, currentUser) {
-        return currentUser.id == booking.requesterId
-            ? venueTile(databaseRepository)
-            : freeTile(databaseRepository);
-      },
-    );
+    return switch (booking.requesterId) {
+      None() => const SizedBox.shrink(),
+      Some(:final value) =>
+          CurrentUserBuilder(
+            errorWidget: const ListTile(
+              leading: UserAvatar(
+                radius: 25,
+              ),
+              title: Text('ERROR'),
+              subtitle: Text("something isn't working right :/"),
+            ),
+            builder: (context, currentUser) {
+              final isRequester = switch (booking.requesterId) {
+                None() => false,
+                Some(:final value) => currentUser.id == value,
+              };
+              return isRequester
+                  ? venueTile(databaseRepository)
+                  : freeTile(databaseRepository, requesterId: value);
+            },
+          ),
+    };
   }
 }

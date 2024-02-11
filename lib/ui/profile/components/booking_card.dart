@@ -21,53 +21,30 @@ class BookingCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final database = context.database;
-    final isRequester = visitedUser.id == booking.requesterId;
+    final isRequester = switch (booking.requesterId) {
+      None() => false,
+      Some(:final value) => visitedUser.id == value,
+    };
     final formatter = DateFormat.yMEd();
     final formatted = formatter.format(booking.startTime);
 
     return FutureBuilder(
-      future: () async {
-        final [
-          requester as Option<UserModel>,
-          requestee as Option<UserModel>,
-        ] = await Future.wait(
-          [
-            database.getUserById(booking.requesterId),
-            database.getUserById(booking.requesteeId),
-          ],
-        );
-
-        return (requester, requestee);
-      }(),
+      future: switch ((booking.requesterId, isRequester)) {
+        (None(), _) => database.getUserById(booking.requesteeId),
+        (Some(), true) => database.getUserById(booking.requesteeId),
+        (Some(:final value), false) => database.getUserById(value),
+      },
       builder: (context, snapshot) {
-        final (
-          Option<UserModel> requester,
-          Option<UserModel> requestee,
-        ) = snapshot.data ??
-            (
-              const None(),
-              const None(),
-            );
+        final user = snapshot.data ?? const None();
 
-        final imageProvider = switch (isRequester) {
-          true => requestee.flatMap((t) => t.profilePicture).map((t) {
-              if (t.isNotEmpty) {
-                return CachedNetworkImageProvider(t);
-              }
-              return AssetImage('assets/default_avatar.png') as ImageProvider;
-            }),
-          false => requester.flatMap((t) => t.profilePicture).map((t) {
-              if (t.isNotEmpty) {
-                return CachedNetworkImageProvider(t);
-              }
-              return AssetImage('assets/default_avatar.png') as ImageProvider;
-            }),
-        };
+        final imageProvider = user.flatMap((t) => t.profilePicture).map((t) {
+          if (t.isNotEmpty) {
+            return CachedNetworkImageProvider(t);
+          }
+          return AssetImage('assets/default_avatar.png') as ImageProvider;
+        });
 
-        final titleText = switch (isRequester) {
-          true => requestee.map((t) => t.displayName),
-          false => requester.map((t) => t.displayName),
-        };
+        final titleText = user.map((t) => t.displayName);
         return InkWell(
           onTap: () {
             context.push(
@@ -76,6 +53,7 @@ class BookingCard extends StatelessWidget {
               ),
             );
           },
+          borderRadius: BorderRadius.circular(15),
           child: SizedBox(
             width: 150,
             child: Column(

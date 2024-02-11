@@ -9,8 +9,11 @@ part of 'booking.dart';
 _$BookingImpl _$$BookingImplFromJson(Map<String, dynamic> json) =>
     _$BookingImpl(
       id: json['id'] as String,
-      requesterId: json['requesterId'] as String,
       requesteeId: json['requesteeId'] as String,
+      requesterId: json['requesterId'] == null
+          ? const None()
+          : Option<String>.fromJson(
+              json['requesterId'], (value) => value as String),
       status: $enumDecode(_$BookingStatusEnumMap, json['status']),
       startTime:
           const DateTimeConverter().fromJson(json['startTime'] as Timestamp),
@@ -24,6 +27,7 @@ _$BookingImpl _$$BookingImplFromJson(Map<String, dynamic> json) =>
           ? const None()
           : Option<String>.fromJson(
               json['serviceId'], (value) => value as String),
+      addedByUser: json['addedByUser'] as bool? ?? false,
       placeId: json['placeId'] == null
           ? const None()
           : Option<String>.fromJson(
@@ -45,8 +49,10 @@ _$BookingImpl _$$BookingImplFromJson(Map<String, dynamic> json) =>
 Map<String, dynamic> _$$BookingImplToJson(_$BookingImpl instance) =>
     <String, dynamic>{
       'id': instance.id,
-      'requesterId': instance.requesterId,
       'requesteeId': instance.requesteeId,
+      'requesterId': instance.requesterId.toJson(
+        (value) => value,
+      ),
       'status': _$BookingStatusEnumMap[instance.status]!,
       'startTime': const DateTimeConverter().toJson(instance.startTime),
       'endTime': const DateTimeConverter().toJson(instance.endTime),
@@ -57,6 +63,7 @@ Map<String, dynamic> _$$BookingImplToJson(_$BookingImpl instance) =>
       'serviceId': instance.serviceId.toJson(
         (value) => value,
       ),
+      'addedByUser': instance.addedByUser,
       'placeId': instance.placeId.toJson(
         (value) => value,
       ),
