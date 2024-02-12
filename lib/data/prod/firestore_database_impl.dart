@@ -1397,6 +1397,30 @@ class FirestoreDatabaseImpl extends DatabaseRepository {
   }
 
   @override
+  Future<List<Opportunity>> getAppliedOpportunitiesByUserId(
+    String userId, {
+    int limit = 20,
+    String? lastOpportunityId,
+  }) async {
+    final appliedOpportunitiesSnapshot = await _opportunityFeedsRef
+        .doc(userId)
+        .collection('opportunities')
+        .orderBy('startTime', descending: true)
+        .where('startTime', isGreaterThanOrEqualTo: Timestamp.now())
+        .where('touched', isEqualTo: 'like')
+        .limit(limit)
+        .get();
+
+    final opportunities = appliedOpportunitiesSnapshot.docs
+        .map(
+          Opportunity.fromDoc,
+        )
+        .toList();
+
+    return opportunities;
+  }
+
+  @override
   Future<int> getUserOpportunityQuota(String userId) async {
     final quotaSnap = await _creditsRef.doc(userId).get();
     final quota = quotaSnap.getOrElse('opportunityQuota', 0);
@@ -1995,6 +2019,32 @@ class FirestoreDatabaseImpl extends DatabaseRepository {
         stackTrace: s,
       );
       return false;
+    }
+  }
+
+  @override
+  Future<List<UserModel>> getContactedVenues(String userId) async {
+    try {
+      final contactVenuesSnapshot = await _contactVenuesRef
+          .doc(userId)
+          .collection('venuesContacted')
+          .get();
+
+      final contactedVenues = await Future.wait(
+        contactVenuesSnapshot.docs.map((doc) async {
+          final venueSnapshot = await _usersRef.doc(doc.id).get();
+          return UserModel.fromDoc(venueSnapshot);
+        }),
+      );
+
+      return contactedVenues;
+    } catch (e, s) {
+      logger.error(
+        "can't get contacted venues",
+        error: e,
+        stackTrace: s,
+      );
+      return [];
     }
   }
 }

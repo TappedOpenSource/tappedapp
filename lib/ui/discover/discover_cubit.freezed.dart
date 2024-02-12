@@ -19,6 +19,9 @@ mixin _$DiscoverState {
   List<UserModel> get hits => throw _privateConstructorUsedError;
   double get userLat => throw _privateConstructorUsedError;
   double get userLng => throw _privateConstructorUsedError;
+  List<UserModel> get contactedVenues => throw _privateConstructorUsedError;
+  List<Opportunity> get appliedOpportunities =>
+      throw _privateConstructorUsedError;
 
   @JsonKey(ignore: true)
   $DiscoverStateCopyWith<DiscoverState> get copyWith =>
@@ -31,7 +34,12 @@ abstract class $DiscoverStateCopyWith<$Res> {
           DiscoverState value, $Res Function(DiscoverState) then) =
       _$DiscoverStateCopyWithImpl<$Res, DiscoverState>;
   @useResult
-  $Res call({List<UserModel> hits, double userLat, double userLng});
+  $Res call(
+      {List<UserModel> hits,
+      double userLat,
+      double userLng,
+      List<UserModel> contactedVenues,
+      List<Opportunity> appliedOpportunities});
 }
 
 /// @nodoc
@@ -50,6 +58,8 @@ class _$DiscoverStateCopyWithImpl<$Res, $Val extends DiscoverState>
     Object? hits = null,
     Object? userLat = null,
     Object? userLng = null,
+    Object? contactedVenues = null,
+    Object? appliedOpportunities = null,
   }) {
     return _then(_value.copyWith(
       hits: null == hits
@@ -64,6 +74,14 @@ class _$DiscoverStateCopyWithImpl<$Res, $Val extends DiscoverState>
           ? _value.userLng
           : userLng // ignore: cast_nullable_to_non_nullable
               as double,
+      contactedVenues: null == contactedVenues
+          ? _value.contactedVenues
+          : contactedVenues // ignore: cast_nullable_to_non_nullable
+              as List<UserModel>,
+      appliedOpportunities: null == appliedOpportunities
+          ? _value.appliedOpportunities
+          : appliedOpportunities // ignore: cast_nullable_to_non_nullable
+              as List<Opportunity>,
     ) as $Val);
   }
 }
@@ -76,7 +94,12 @@ abstract class _$$DiscoverStateImplCopyWith<$Res>
       __$$DiscoverStateImplCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call({List<UserModel> hits, double userLat, double userLng});
+  $Res call(
+      {List<UserModel> hits,
+      double userLat,
+      double userLng,
+      List<UserModel> contactedVenues,
+      List<Opportunity> appliedOpportunities});
 }
 
 /// @nodoc
@@ -93,6 +116,8 @@ class __$$DiscoverStateImplCopyWithImpl<$Res>
     Object? hits = null,
     Object? userLat = null,
     Object? userLng = null,
+    Object? contactedVenues = null,
+    Object? appliedOpportunities = null,
   }) {
     return _then(_$DiscoverStateImpl(
       hits: null == hits
@@ -107,6 +132,14 @@ class __$$DiscoverStateImplCopyWithImpl<$Res>
           ? _value.userLng
           : userLng // ignore: cast_nullable_to_non_nullable
               as double,
+      contactedVenues: null == contactedVenues
+          ? _value._contactedVenues
+          : contactedVenues // ignore: cast_nullable_to_non_nullable
+              as List<UserModel>,
+      appliedOpportunities: null == appliedOpportunities
+          ? _value._appliedOpportunities
+          : appliedOpportunities // ignore: cast_nullable_to_non_nullable
+              as List<Opportunity>,
     ));
   }
 }
@@ -117,8 +150,12 @@ class _$DiscoverStateImpl implements _DiscoverState {
   const _$DiscoverStateImpl(
       {final List<UserModel> hits = const [],
       this.userLat = 37.5407246,
-      this.userLng = -77.4360481})
-      : _hits = hits;
+      this.userLng = -77.4360481,
+      final List<UserModel> contactedVenues = const [],
+      final List<Opportunity> appliedOpportunities = const []})
+      : _hits = hits,
+        _contactedVenues = contactedVenues,
+        _appliedOpportunities = appliedOpportunities;
 
   final List<UserModel> _hits;
   @override
@@ -135,10 +172,28 @@ class _$DiscoverStateImpl implements _DiscoverState {
   @override
   @JsonKey()
   final double userLng;
+  final List<UserModel> _contactedVenues;
+  @override
+  @JsonKey()
+  List<UserModel> get contactedVenues {
+    if (_contactedVenues is EqualUnmodifiableListView) return _contactedVenues;
+    // ignore: implicit_dynamic_type
+    return EqualUnmodifiableListView(_contactedVenues);
+  }
+
+  final List<Opportunity> _appliedOpportunities;
+  @override
+  @JsonKey()
+  List<Opportunity> get appliedOpportunities {
+    if (_appliedOpportunities is EqualUnmodifiableListView)
+      return _appliedOpportunities;
+    // ignore: implicit_dynamic_type
+    return EqualUnmodifiableListView(_appliedOpportunities);
+  }
 
   @override
   String toString() {
-    return 'DiscoverState(hits: $hits, userLat: $userLat, userLng: $userLng)';
+    return 'DiscoverState(hits: $hits, userLat: $userLat, userLng: $userLng, contactedVenues: $contactedVenues, appliedOpportunities: $appliedOpportunities)';
   }
 
   @override
@@ -148,12 +203,21 @@ class _$DiscoverStateImpl implements _DiscoverState {
             other is _$DiscoverStateImpl &&
             const DeepCollectionEquality().equals(other._hits, _hits) &&
             (identical(other.userLat, userLat) || other.userLat == userLat) &&
-            (identical(other.userLng, userLng) || other.userLng == userLng));
+            (identical(other.userLng, userLng) || other.userLng == userLng) &&
+            const DeepCollectionEquality()
+                .equals(other._contactedVenues, _contactedVenues) &&
+            const DeepCollectionEquality()
+                .equals(other._appliedOpportunities, _appliedOpportunities));
   }
 
   @override
-  int get hashCode => Object.hash(runtimeType,
-      const DeepCollectionEquality().hash(_hits), userLat, userLng);
+  int get hashCode => Object.hash(
+      runtimeType,
+      const DeepCollectionEquality().hash(_hits),
+      userLat,
+      userLng,
+      const DeepCollectionEquality().hash(_contactedVenues),
+      const DeepCollectionEquality().hash(_appliedOpportunities));
 
   @JsonKey(ignore: true)
   @override
@@ -166,7 +230,9 @@ abstract class _DiscoverState implements DiscoverState {
   const factory _DiscoverState(
       {final List<UserModel> hits,
       final double userLat,
-      final double userLng}) = _$DiscoverStateImpl;
+      final double userLng,
+      final List<UserModel> contactedVenues,
+      final List<Opportunity> appliedOpportunities}) = _$DiscoverStateImpl;
 
   @override
   List<UserModel> get hits;
@@ -174,6 +240,10 @@ abstract class _DiscoverState implements DiscoverState {
   double get userLat;
   @override
   double get userLng;
+  @override
+  List<UserModel> get contactedVenues;
+  @override
+  List<Opportunity> get appliedOpportunities;
   @override
   @JsonKey(ignore: true)
   _$$DiscoverStateImplCopyWith<_$DiscoverStateImpl> get copyWith =>

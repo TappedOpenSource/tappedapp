@@ -6,12 +6,14 @@ import 'package:flutter/services.dart';
 import 'package:fpdart/fpdart.dart';
 import 'package:intheloopapp/data/places_repository.dart';
 import 'package:intheloopapp/domains/models/opportunity.dart';
+import 'package:intheloopapp/domains/models/user_model.dart';
 import 'package:intheloopapp/domains/navigation_bloc/navigation_bloc.dart';
 import 'package:intheloopapp/domains/navigation_bloc/tapped_route.dart';
 import 'package:intheloopapp/domains/opportunity_bloc/opportunity_bloc.dart';
 import 'package:intheloopapp/ui/conditional_parent_widget.dart';
 import 'package:intheloopapp/ui/themes.dart';
 import 'package:intheloopapp/ui/user_tile.dart';
+import 'package:intheloopapp/utils/admin_builder.dart';
 import 'package:intheloopapp/utils/bloc_utils.dart';
 import 'package:intheloopapp/utils/current_user_builder.dart';
 import 'package:intheloopapp/utils/geohash.dart';
@@ -73,6 +75,7 @@ class OpportunityView extends StatelessWidget {
     BuildContext context, {
     required Opportunity op,
     required bool? isApplied,
+    required UserModel currentUser,
   }) {
     final hero = heroImage;
     final opBloc = context.opportunities;
@@ -183,8 +186,7 @@ class OpportunityView extends StatelessWidget {
                                   onApply?.call();
                                 }
                               },
-                              color:
-                                  Colors.green.withOpacity(0.8),
+                              color: Colors.green.withOpacity(0.8),
                               padding: const EdgeInsets.all(12),
                               child: const Text(
                                 'Apply',
@@ -211,6 +213,38 @@ class OpportunityView extends StatelessWidget {
                         },
                       ),
                     ],
+                  ),
+                  const SizedBox(height: 4),
+                  AdminBuilder(
+                    builder: (context, isAdmin) {
+                      return switch (op.userId == currentUser.id || isAdmin) {
+                        false => const SizedBox.shrink(),
+                        true => Row(
+                            children: [
+                              Expanded(
+                                child: CupertinoButton(
+                                  onPressed: () => context.push(
+                                    InterestedUsersPage(
+                                      opportunity: op,
+                                    ),
+                                  ),
+                                  color: theme.colorScheme.primary,
+                                  padding: const EdgeInsets.all(12),
+                                  // borderRadius: BorderRadius.circular(15),
+                                  child: const Text(
+                                    'See Applicants',
+                                    style: TextStyle(
+                                      fontSize: 17,
+                                      color: Colors.white,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                      };
+                    },
                   ),
                   const SizedBox(height: 12),
                   FutureBuilder<PlaceData?>(
@@ -303,14 +337,7 @@ class OpportunityView extends StatelessWidget {
     return CurrentUserBuilder(
       builder: (context, currentUser) {
         if (op.userId == currentUser.id) {
-          return FloatingActionButton.extended(
-            onPressed: () => context.push(
-              InterestedUsersPage(
-                opportunity: op,
-              ),
-            ),
-            label: const Text('see who applied'),
-          );
+          return const SizedBox.shrink();
         }
 
         return switch (isApplied) {
@@ -377,6 +404,7 @@ class OpportunityView extends StatelessWidget {
                           context,
                           op: value,
                           isApplied: isApplied,
+                          currentUser: currentUser,
                         ),
                     };
                   },
@@ -385,6 +413,7 @@ class OpportunityView extends StatelessWidget {
                   context,
                   op: value,
                   isApplied: isApplied,
+                  currentUser: currentUser,
                 ),
             };
           },

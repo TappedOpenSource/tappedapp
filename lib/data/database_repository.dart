@@ -174,6 +174,12 @@ abstract class DatabaseRepository {
     required String userId,
   });
 
+  Future<List<Opportunity>> getAppliedOpportunitiesByUserId(
+    String userId, {
+    int limit = 20,
+    String? lastOpportunityId,
+  });
+
   Future<int> getUserOpportunityQuota(String userId);
 
   Stream<int> getUserOpportunityQuotaObserver(String userId);
@@ -265,8 +271,11 @@ abstract class DatabaseRepository {
     required String note,
     required String bookingEmail,
   });
+
   Future<bool> hasUserSentContactRequest({
     required UserModel user,
     required UserModel venue,
   });
+
+  Future<List<UserModel>> getContactedVenues(String userId);
 }
