@@ -214,7 +214,7 @@ class OpportunityView extends StatelessWidget {
                       ),
                     ],
                   ),
-                  const SizedBox(height: 4),
+                  const SizedBox(height: 6),
                   AdminBuilder(
                     builder: (context, isAdmin) {
                       return switch (op.userId == currentUser.id || isAdmin) {

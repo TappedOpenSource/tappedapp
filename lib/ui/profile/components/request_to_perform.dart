@@ -60,7 +60,7 @@ class RequestToPerform extends StatelessWidget {
         onPressed: null,
         color: Colors.green.withOpacity(0.1),
         child: Text(
-          'request sent',
+          'performance request sent',
           style: TextStyle(
             color: theme.colorScheme.onSurface,
             fontWeight: FontWeight.bold,

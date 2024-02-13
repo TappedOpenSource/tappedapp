@@ -2,58 +2,166 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:fpdart/fpdart.dart';
 import 'package:intheloopapp/domains/bookings_bloc/bookings_bloc.dart';
+import 'package:intheloopapp/domains/models/booking.dart';
 import 'package:intheloopapp/domains/models/opportunity.dart';
+import 'package:intheloopapp/domains/navigation_bloc/navigation_bloc.dart';
+import 'package:intheloopapp/domains/navigation_bloc/tapped_route.dart';
 import 'package:intheloopapp/ui/bookings/components/bookings_list.dart';
-import 'package:intheloopapp/ui/discover/components/venue_slider.dart';
-import 'package:intheloopapp/ui/profile/components/opportunities_list.dart';
+import 'package:intheloopapp/ui/discover/components/venue_card.dart';
+import 'package:intheloopapp/ui/profile/components/opportunity_card.dart';
 import 'package:intheloopapp/utils/bloc_utils.dart';
 import 'package:intheloopapp/utils/current_user_builder.dart';
+import 'package:intheloopapp/utils/premium_builder.dart';
 
 class BookingsView extends StatelessWidget {
   const BookingsView({super.key});
 
-  Widget _opSlider(List<Opportunity> opportunities) {
-    if (opportunities.isEmpty) {
-      return const Center(
-        child: Text('None rn'),
-      );
-    }
-    return OpportunitiesList(opportunities: opportunities);
+  Widget _buildCanceledBookingsSheet(
+    BuildContext context, {
+    required List<Booking> canceledBookings,
+  }) {
+    return SizedBox(
+      width: double.infinity,
+      child: DraggableScrollableSheet(
+        expand: false,
+        maxChildSize: 0.9,
+        builder: (context, scrollController) {
+          return Column(
+            children: [
+              Expanded(
+                child: BookingsList(
+                  bookings: canceledBookings,
+                  scrollController: scrollController,
+                ),
+              ),
+            ],
+          );
+        },
+      ),
+    );
   }
 
-  List<Widget> _buildContactedVenueSlivers(
-    BuildContext context,
-    String currentUserId,
-  ) {
+  Widget _buildGigsAppliedSheet(
+    BuildContext context, {
+    required String currentUserId,
+  }) {
     final database = context.database;
-    return [
-      const Padding(
-        padding: EdgeInsets.symmetric(
-          vertical: 12,
+    return SizedBox(
+      width: double.infinity,
+      height: MediaQuery.of(context).size.height * 0.4,
+      child: FutureBuilder(
+        future: database.getAppliedOpportunitiesByUserId(
+          currentUserId,
         ),
-        child: Text(
-          'Venues Contacted',
-          style: TextStyle(
-            fontSize: 28,
-            fontWeight: FontWeight.bold,
-          ),
-        ),
+        builder: (context, snapshot) {
+          final ops = snapshot.data ?? [];
+
+          return switch (ops.isEmpty) {
+            true => const Center(
+                child: Text(
+                  'Nothing Yet',
+                  style: TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.w400,
+                  ),
+                ),
+              ),
+            false => SingleChildScrollView(
+                scrollDirection: Axis.horizontal,
+                child: Row(
+                  children: ops.map((e) {
+                    return Padding(
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 8,
+                      ),
+                      child: OpportunityCard(
+                        opportunity: e,
+                      ),
+                    );
+                  }).toList(),
+                ),
+              ),
+          };
+        },
       ),
-      FutureBuilder(
+    );
+  }
+
+  Widget _buildVenuesContactedSheet(
+    BuildContext context, {
+    required String currentUserId,
+  }) {
+    final database = context.database;
+    return SizedBox(
+      width: double.infinity,
+      height: MediaQuery.of(context).size.height * 0.35,
+      child: FutureBuilder(
         future: database.getContactedVenues(currentUserId),
         builder: (context, snapshot) {
           final venues = snapshot.data ?? [];
 
           return switch (venues.isEmpty) {
             true => const Center(
-                child: Text('None rn'),
+                child: Text(
+                  'Nothing Yet',
+                  style: TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.w400,
+                  ),
+                ),
               ),
-            false => VenueSlider(venues: venues),
+            false => SingleChildScrollView(
+                scrollDirection: Axis.horizontal,
+                child: Row(
+                  children: venues.map((e) {
+                    return Padding(
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 8,
+                      ),
+                      child: VenueCard(
+                        venue: e,
+                      ),
+                    );
+                  }).toList(),
+                ),
+              ),
           };
         },
       ),
-    ];
+    );
+  }
+
+  Widget _buildChip(
+    BuildContext context, {
+    required String label,
+    required VoidCallback onPressed,
+  }) {
+    final theme = Theme.of(context);
+    return InkWell(
+      onTap: onPressed,
+      borderRadius: BorderRadius.circular(24),
+      child: Card(
+        elevation: 2,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(24),
+        ),
+        color: theme.colorScheme.onSurface.withOpacity(0.1),
+        child: Padding(
+          padding: const EdgeInsets.symmetric(
+            vertical: 8,
+            horizontal: 24,
+          ),
+          child: Text(
+            label,
+            style: TextStyle(
+              color: theme.colorScheme.onSurface,
+            ),
+          ),
+        ),
+      ),
+    );
   }
 
   @override
@@ -73,117 +181,163 @@ class BookingsView extends StatelessWidget {
             body: BlocBuilder<BookingsBloc, BookingsState>(
               builder: (context, state) {
                 return SafeArea(
-                  child: Padding(
-                    padding: const EdgeInsets.symmetric(
-                      vertical: 8,
-                      horizontal: 20,
-                    ),
-                    child: CustomScrollView(
-                      slivers: [
-                        const SliverToBoxAdapter(
-                          child: Padding(
-                            padding: EdgeInsets.symmetric(
-                              vertical: 12,
+                  child: Column(
+                    children: [
+                      SingleChildScrollView(
+                        scrollDirection: Axis.horizontal,
+                        child: Row(
+                          children: [
+                            const SizedBox(width: 20),
+                            PremiumBuilder(
+                              builder: (context, isPremium) {
+                                return switch (isPremium) {
+                                  None() => _buildChip(
+                                      context,
+                                      label: 'premium',
+                                      onPressed: () => context.push(
+                                        PaywallPage(),
+                                      ),
+                                    ),
+                                  Some() => const SizedBox.shrink(),
+                                };
+                              },
                             ),
-                            child: Text(
-                              'Featured Opportunities',
-                              style: TextStyle(
-                                fontSize: 28,
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                          ),
-                        ),
-                        SliverToBoxAdapter(
-                          child: FutureBuilder<List<Opportunity>>(
-                            future: database.getFeaturedOpportunities(),
-                            builder: (context, snapshot) {
-                              if (!snapshot.hasData) {
-                                return const Center(
-                                  child: CupertinoActivityIndicator(),
+                            _buildChip(
+                              context,
+                              label: 'venues contacted',
+                              onPressed: () {
+                                showModalBottomSheet<void>(
+                                  context: context,
+                                  showDragHandle: true,
+                                  builder: (context) {
+                                    return _buildVenuesContactedSheet(
+                                      context,
+                                      currentUserId: currentUser.id,
+                                    );
+                                  },
                                 );
-                              }
-
-                              final opportunities = snapshot.data!;
-                              return _opSlider(opportunities);
-                            },
-                          ),
+                              },
+                            ),
+                            _buildChip(
+                              context,
+                              label: 'gigs applied',
+                              onPressed: () {
+                                showModalBottomSheet<void>(
+                                  context: context,
+                                  showDragHandle: true,
+                                  builder: (context) {
+                                    return _buildGigsAppliedSheet(
+                                      context,
+                                      currentUserId: currentUser.id,
+                                    );
+                                  },
+                                );
+                              },
+                            ),
+                            _buildChip(
+                              context,
+                              label: 'canceled bookings',
+                              onPressed: () {
+                                showModalBottomSheet<void>(
+                                  context: context,
+                                  showDragHandle: true,
+                                  builder: (context) {
+                                    return _buildCanceledBookingsSheet(
+                                      context,
+                                      canceledBookings: state.canceledBookings,
+                                    );
+                                  },
+                                );
+                              },
+                            ),
+                          ],
                         ),
-                        ..._buildContactedVenueSlivers(
-                          context,
-                          currentUser.id,
-                        ).map(
-                          (e) => SliverToBoxAdapter(
-                            child: e,
-                          ),
+                      ),
+                      const Spacer(),
+                      Padding(
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 20,
                         ),
-                        if (state.pendingBookings.isNotEmpty)
-                          const SliverToBoxAdapter(
-                            child: Text(
-                              'Booking Requests',
-                              style: TextStyle(
-                                fontSize: 28,
-                                fontWeight: FontWeight.bold,
+                        child: Container(
+                          height: MediaQuery.of(context).size.height * 0.75,
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(15),
+                            boxShadow: [
+                              BoxShadow(
+                                color: Colors.black.withOpacity(0.2),
+                                blurRadius: 10,
+                                spreadRadius: 5,
                               ),
+                            ],
+                            image: const DecorationImage(
+                              image: AssetImage('assets/edm_loop.gif'),
+                              fit: BoxFit.cover,
                             ),
                           ),
-                        if (state.pendingBookings.isNotEmpty)
-                          BookingsList(
-                            bookings: state.pendingBookings,
-                          ),
-                        const SliverToBoxAdapter(
-                          child: SizedBox(height: 12),
-                        ),
-                        if (state.upcomingBookings.isNotEmpty)
-                          const SliverToBoxAdapter(
-                            child: Text(
-                              'Upcoming Bookings',
-                              style: TextStyle(
-                                fontSize: 28,
-                                fontWeight: FontWeight.bold,
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Padding(
+                                padding: const EdgeInsets.symmetric(
+                                  horizontal: 6,
+                                  vertical: 12,
+                                ),
+                                child: Container(
+                                  padding: const EdgeInsets.symmetric(
+                                    vertical: 12,
+                                  ),
+                                  decoration: const BoxDecoration(
+                                    color: Colors.black,
+                                  ),
+                                  child: Column(
+                                    children: [
+                                      const Text(
+                                        "SEE WHAT'S ON",
+                                        textAlign: TextAlign.center,
+                                        style: TextStyle(
+                                          fontSize: 32,
+                                          fontFamily: 'Rubik One',
+                                          fontWeight: FontWeight.w900,
+                                          color: Colors.white,
+                                        ),
+                                      ),
+                                      const Text(
+                                        'looking for something to do? check out the latest gigs and events in your area!',
+                                        textAlign: TextAlign.center,
+                                        style: TextStyle(
+                                          fontSize: 16,
+                                          fontWeight: FontWeight.bold,
+                                          color: Colors.white,
+                                        ),
+                                      ),
+                                      const SizedBox(height: 20),
+                                      CupertinoButton(
+                                        color: Theme.of(context)
+                                            .colorScheme
+                                            .primary,
+                                        borderRadius: BorderRadius.circular(15),
+                                        child: const Text(
+                                          "let's go",
+                                          style: TextStyle(
+                                            color: Colors.white,
+                                            fontSize: 18,
+                                            fontWeight: FontWeight.bold,
+                                          ),
+                                        ),
+                                        onPressed: () => context.changeTab(
+                                          selectedTab: 0,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
                               ),
-                            ),
+                            ],
                           ),
-                        if (state.upcomingBookings.isNotEmpty)
-                          BookingsList(
-                            bookings: state.upcomingBookings,
-                          ),
-                        const SliverToBoxAdapter(
-                          child: SizedBox(height: 12),
                         ),
-                        if (state.pastBookings.isNotEmpty)
-                          const SliverToBoxAdapter(
-                            child: Text(
-                              'Past Bookings',
-                              style: TextStyle(
-                                fontSize: 28,
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                          ),
-                        if (state.pastBookings.isNotEmpty)
-                          BookingsList(
-                            bookings: state.pastBookings,
-                          ),
-                        const SliverToBoxAdapter(
-                          child: SizedBox(height: 12),
-                        ),
-                        if (state.canceledBookings.isNotEmpty)
-                          const SliverToBoxAdapter(
-                            child: Text(
-                              'Canceled Bookings',
-                              style: TextStyle(
-                                fontSize: 28,
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                          ),
-                        if (state.canceledBookings.isNotEmpty)
-                          BookingsList(
-                            bookings: state.canceledBookings,
-                          ),
-                      ],
-                    ),
+                      ),
+                      const Spacer(),
+                    ],
                   ),
                 );
               },

@@ -1,15 +1,26 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:intheloopapp/domains/models/opportunity.dart';
 import 'package:intheloopapp/ui/discover/components/draggable_header.dart';
 import 'package:intheloopapp/ui/discover/components/user_slider.dart';
 import 'package:intheloopapp/ui/discover/components/venue_slider.dart';
 import 'package:intheloopapp/ui/discover/discover_cubit.dart';
+import 'package:intheloopapp/ui/profile/components/opportunities_list.dart';
 import 'package:intheloopapp/utils/bloc_utils.dart';
 import 'package:intheloopapp/utils/current_user_builder.dart';
 
 class DraggableSheet extends StatelessWidget {
   const DraggableSheet({super.key});
+
+  Widget _opSlider(List<Opportunity> opportunities) {
+    if (opportunities.isEmpty) {
+      return const Center(
+        child: Text('None rn'),
+      );
+    }
+    return OpportunitiesList(opportunities: opportunities);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -45,7 +56,32 @@ class DraggableSheet extends StatelessWidget {
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
+                            Padding(
+                              padding: EdgeInsets.symmetric(
+                                vertical: 16,
+                                horizontal: 8,
+                              ),
+                              child: Text(
+                                'Featured Gigs',
+                                style: TextStyle(
+                                  fontSize: 28,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                            ),
+                            FutureBuilder<List<Opportunity>>(
+                              future: database.getFeaturedOpportunities(),
+                              builder: (context, snapshot) {
+                                if (!snapshot.hasData) {
+                                  return const Center(
+                                    child: CupertinoActivityIndicator(),
+                                  );
+                                }
 
+                                final opportunities = snapshot.data!;
+                                return _opSlider(opportunities);
+                              },
+                            ),
                             const Padding(
                               padding: EdgeInsets.symmetric(
                                 vertical: 16,
