@@ -3,7 +3,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:intheloopapp/domains/models/user_model.dart';
 import 'package:intheloopapp/domains/navigation_bloc/navigation_bloc.dart';
-import 'package:intheloopapp/ui/common/easter_egg_placeholder.dart';
 import 'package:intheloopapp/utils/bloc_utils.dart';
 import 'package:intheloopapp/utils/current_user_builder.dart';
 
@@ -185,7 +184,7 @@ class _WaitlistViewState extends State<WaitlistView> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 const Text(
-                  "get tapped premium",
+                  'get tapped premium',
                   style: TextStyle(
                     fontSize: 36,
                     fontWeight: FontWeight.bold,
@@ -256,9 +255,7 @@ class _WaitlistViewState extends State<WaitlistView> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             CupertinoButton(
-              onPressed: () {
-                nav.pop();
-              },
+              onPressed: nav.pop,
               child: const Text(
                 'not now',
                 style: TextStyle(

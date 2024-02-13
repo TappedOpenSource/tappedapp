@@ -113,8 +113,10 @@ class _UserBookingsFeedState extends State<UserBookingsFeed> {
           await _databaseRepository.getBookingsByRequester(
         _userId,
         limit: 10,
-        lastBookingRequestId:
-            _userBookings.where((e) => e.requesterId == _userId).last.id,
+        lastBookingRequestId: _userBookings
+            .where((e) => e.requesterId.getOrElse(() => '') == _userId)
+            .last
+            .id,
       );
 
       (bookingsRequestee.isEmpty && bookingsRequester.isEmpty)

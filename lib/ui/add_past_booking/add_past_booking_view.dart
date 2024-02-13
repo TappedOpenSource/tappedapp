@@ -9,7 +9,7 @@ class AddPastBookingView extends StatelessWidget {
     return Scaffold(
       backgroundColor: theme.colorScheme.background,
       appBar: AppBar(),
-      body: Column(
+      body: const Column(
         children: [
           Text('AddPastBookingView'),
           Text('name of the event'),

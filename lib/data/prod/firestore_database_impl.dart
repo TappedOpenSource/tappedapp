@@ -795,7 +795,7 @@ class FirestoreDatabaseImpl extends DatabaseRepository {
               'requesteeId',
               isEqualTo: requesteeId,
             )
-            .orderBy('startTime')
+            .orderBy('startTime', descending: true)
             .get();
       }
 
@@ -809,7 +809,7 @@ class FirestoreDatabaseImpl extends DatabaseRepository {
             isEqualTo: requesteeId,
           )
           .where('status', isEqualTo: EnumToString.convertToString(status))
-          .orderBy('startTime')
+          .orderBy('startTime', descending: true)
           .get();
     })();
 
@@ -834,7 +834,7 @@ class FirestoreDatabaseImpl extends DatabaseRepository {
                 'requesterId',
                 isEqualTo: userId,
               )
-              .orderBy('startTime')
+              .orderBy('startTime', descending: true)
               .limit(limit)
               .get();
         }
@@ -845,7 +845,7 @@ class FirestoreDatabaseImpl extends DatabaseRepository {
               isEqualTo: userId,
             )
             .where('status', isEqualTo: EnumToString.convertToString(status))
-            .orderBy('startTime')
+            .orderBy('startTime', descending: true)
             .limit(limit)
             .get();
       })();

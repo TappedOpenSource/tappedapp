@@ -21,7 +21,7 @@ class BookingTile extends StatelessWidget {
   Widget build(BuildContext context) {
     final database = context.database;
     return switch (booking.requesterId) {
-      None() => SizedBox.shrink(),
+      None() => const SizedBox.shrink(),
       Some(:final value) => FutureBuilder<
             (
               Option<UserModel>,

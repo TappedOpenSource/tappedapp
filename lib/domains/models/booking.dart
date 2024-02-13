@@ -12,11 +12,11 @@ class Booking with _$Booking {
   const factory Booking({
     required String id,
     required String requesteeId,
-    @Default(None()) Option<String> requesterId,
     required BookingStatus status,
     @DateTimeConverter() required DateTime startTime,
     @DateTimeConverter() required DateTime endTime,
     @DateTimeConverter() required DateTime timestamp,
+    @Default(None()) Option<String> requesterId,
     @Default('') String name,
     @Default('') String note,
     @Default(0) int rate,

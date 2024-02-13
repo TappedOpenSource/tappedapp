@@ -10,6 +10,7 @@ import {
   streamSecret, 
   usersRef, 
   contactVenuesRef,
+  orphanEmailsRef,
 } from "./firebase";
 // import sgMail from "@sendgrid/mail";
 import { debug, error, info } from "firebase-functions/logger";
@@ -147,10 +148,14 @@ export const notifyFoundersOnVenueContact = onDocumentCreated(
     const snapshot = event.data;
     const documentData = snapshot?.data();
 
+    const bookingEmail = documentData?.bookingEmail;
+    if (!bookingEmail) {
+      error("no bookingEmail found");
+      return;
+    }
+
     const user = documentData?.user as UserModel | undefined;
     const username = user?.username;
-    // const venue = documentData?.venue as UserModel | undefined;
-    // const bookingEmail = documentData?.bookingEmail;
 
     const userId = event.params.userId;
     const venueId = event.params.venueId;
@@ -176,7 +181,8 @@ export const notifyFoundersOnVenueContact = onDocumentCreated(
         }
       ],
       "From": `${username}@booking.tapped.ai`,
-      "To": "johannes@tapped.ai",
+      "To": bookingEmail,
+      "Cc": "johannes@tapped.ai,ilias@tapped.ai",
       "Subject": subject,
       "HtmlBody": "this is a <strong>test</strong> email from Tapped",
       "TextBody": "this is a test email from Tapped",
@@ -223,6 +229,10 @@ export const inboundEmailWebhook = onRequest(
 
       if (!subject || !referenceMessageId) {
         error("no subject or messageId found")
+        await orphanEmailsRef.add({
+          ...body,
+          error: "no subject or messageId found",
+        });
         res.status(400).send("bad request");
         return;
       }
@@ -231,6 +241,10 @@ export const inboundEmailWebhook = onRequest(
       const userSnap = await usersRef.where("username", "==", username).limit(1).get();
       if (userSnap.empty) {
         debug(`no user found for this username (${username})`);
+        await orphanEmailsRef.add({
+          ...body,
+          error: "no user found for this username",
+        });
         res.status(200).send("ok");
         return;
       }
@@ -240,7 +254,10 @@ export const inboundEmailWebhook = onRequest(
       const venueContactsSnap = await contactVenuesRef.doc(userId).collection("venuesContacted").where("latestMessageId", "==", replyToMessageId).limit(1).get();
       if (venueContactsSnap.empty) {
         debug(`no venue contact found for this user and messageId (${userId},${referenceMessageId})`);
-        debug({ body });
+        await orphanEmailsRef.add({
+          ...body,
+          error: "no venue contact found for this user and messageId",
+        });
         res.status(200).send("ok");
         return;
       }

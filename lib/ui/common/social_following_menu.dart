@@ -40,7 +40,7 @@ class SocialFollowingMenu extends StatelessWidget {
     return Card(
       color: theme.colorScheme.onSurface.withOpacity(0.1),
       child: Padding(
-        padding: const EdgeInsets.all(8.0),
+        padding: const EdgeInsets.all(8),
         child: Column(
           children: [
             if (facebookFollowers > 0)

@@ -23,12 +23,8 @@ abstract class SearchRepository {
   // });
   Future<List<UserModel>> queryUsersInBoundingBox(
     String input, {
-    List<String>? labels,
+    required double swLatitude, required double swLongitude, required double neLatitude, required double neLongitude, List<String>? labels,
     List<String>? genres,
     List<String>? occupations,
-    required double swLatitude,
-    required double swLongitude,
-    required double neLatitude,
-    required double neLongitude,
   });
 }

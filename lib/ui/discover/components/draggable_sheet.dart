@@ -32,7 +32,6 @@ class DraggableSheet extends StatelessWidget {
             return DraggableScrollableSheet(
               expand: false,
               initialChildSize: 0.1,
-              maxChildSize: 1,
               minChildSize: 0.1,
               snap: true,
               snapSizes: const [0.1, 0.5, 1],
@@ -56,7 +55,7 @@ class DraggableSheet extends StatelessWidget {
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Padding(
+                            const Padding(
                               padding: EdgeInsets.symmetric(
                                 vertical: 16,
                                 horizontal: 8,

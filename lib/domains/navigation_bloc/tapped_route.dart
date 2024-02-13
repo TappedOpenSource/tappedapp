@@ -17,6 +17,8 @@ import 'package:intheloopapp/ui/bookings/user_bookings_feed.dart';
 import 'package:intheloopapp/ui/create_booking/booking_confirmation_view.dart';
 import 'package:intheloopapp/ui/create_booking/create_booking_view.dart';
 import 'package:intheloopapp/ui/create_service/create_service_view.dart';
+import 'package:intheloopapp/ui/discover/components/search_view.dart';
+import 'package:intheloopapp/ui/discover/discover_view.dart';
 import 'package:intheloopapp/ui/forms/location_form/location_form_view.dart';
 import 'package:intheloopapp/ui/gig_search/gig_search_init_view.dart';
 import 'package:intheloopapp/ui/gig_search/gig_search_view.dart';
@@ -35,8 +37,6 @@ import 'package:intheloopapp/ui/profile/profile_view.dart';
 import 'package:intheloopapp/ui/request_to_perform/request_to_perform_confirmation_view.dart';
 import 'package:intheloopapp/ui/request_to_perform/request_to_perform_view.dart';
 import 'package:intheloopapp/ui/reviews/user_reviews_feed.dart';
-import 'package:intheloopapp/ui/discover/components/search_view.dart';
-import 'package:intheloopapp/ui/discover/discover_view.dart';
 import 'package:intheloopapp/ui/services/service_view.dart';
 import 'package:intheloopapp/ui/settings/settings_view.dart';
 import 'package:intheloopapp/utils/hero_image.dart';
@@ -156,7 +156,7 @@ final class DiscoveryPage extends TappedRoute {
   DiscoveryPage()
       : super(
           routeName: '/discovery',
-          view: DiscoverView(),
+          view: const DiscoverView(),
         );
 }
 
