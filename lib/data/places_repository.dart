@@ -4,7 +4,7 @@ import 'package:fpdart/fpdart.dart';
 
 abstract class PlacesRepository {
   Future<List<AutocompletePrediction>> searchPlace(String query);
-  Future<PlaceData?> getPlaceById(String placeId);
+  Future<Option<PlaceData>> getPlaceById(String placeId);
   Future<Option<Image>> getPhotoUrlFromReference(
     String placeId,
     PhotoMetadata metadata,

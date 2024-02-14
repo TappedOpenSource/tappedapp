@@ -1,5 +1,6 @@
 import 'package:fpdart/fpdart.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
+import 'package:intheloopapp/domains/models/genre.dart';
 
 part 'venue_info.freezed.dart';
 part 'venue_info.g.dart';
@@ -10,6 +11,7 @@ class VenueInfo with _$VenueInfo {
     @Default(None()) Option<String> bookingEmail,
     @Default(None()) Option<int> capacity,
     @Default(None()) Option<String> idealPerformerProfile,
+    @Default([]) List<Genre> genres,
     @Default([]) List<String> venuePhotos,
     @Default(None()) Option<String> productionInfo,
     @Default(None()) Option<String> frontOfHouse,

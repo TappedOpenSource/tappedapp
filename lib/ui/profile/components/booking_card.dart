@@ -5,6 +5,7 @@ import 'package:intheloopapp/domains/models/booking.dart';
 import 'package:intheloopapp/domains/models/user_model.dart';
 import 'package:intheloopapp/domains/navigation_bloc/navigation_bloc.dart';
 import 'package:intheloopapp/domains/navigation_bloc/tapped_route.dart';
+import 'package:intheloopapp/ui/booking/booking_view.dart';
 import 'package:intheloopapp/utils/bloc_utils.dart';
 import 'package:intl/intl.dart';
 
@@ -67,7 +68,8 @@ class BookingCard extends StatelessWidget {
                     borderRadius: BorderRadius.circular(15),
                     image: DecorationImage(
                       image: switch (imageProvider) {
-                        None() => const AssetImage('assets/default_avatar.png') as ImageProvider,
+                        None() => const AssetImage('assets/default_avatar.png')
+                            as ImageProvider,
                         Some(:final value) => value,
                       },
                       fit: BoxFit.cover,

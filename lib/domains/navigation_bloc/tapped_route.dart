@@ -213,8 +213,8 @@ final class LocationFormPage extends TappedRoute {
           ),
         );
 
-  final PlaceData? initialPlace;
-  final void Function(PlaceData?, String) onSelected;
+  final Option<PlaceData> initialPlace;
+  final void Function(Option<PlaceData>, String) onSelected;
 }
 
 final class ReviewsPage extends TappedRoute {

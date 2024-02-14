@@ -24,8 +24,8 @@ final _functions = FirebaseFunctions.instance;
 class GooglePlacesImpl implements PlacesRepository {
   @override
   @cached
-  Future<PlaceData?> getPlaceById(String placeId) async {
-    if (placeId.isEmpty) return null;
+  Future<Option<PlaceData>> getPlaceById(String placeId) async {
+    if (placeId.isEmpty) return const None();
 
     try {
       final callable = _functions.httpsCallable('getPlaceById');
@@ -63,14 +63,14 @@ class GooglePlacesImpl implements PlacesRepository {
               ),
       );
 
-      return place;
+      return Option.of(place);
     } catch (e, s) {
       logger.error(
         'Error fetching place by id: $placeId',
         error: e,
         stackTrace: s,
       );
-      return null;
+      return const None();
     }
   }
 

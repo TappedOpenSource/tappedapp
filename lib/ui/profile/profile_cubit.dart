@@ -33,7 +33,6 @@ class ProfileCubit extends Cubit<ProfileState> {
   final PlacesRepository places;
   final UserModel currentUser;
   final UserModel visitedUser;
-  StreamSubscription<badge.Badge>? badgeListener;
 
   bool onNotification(
     ScrollController scrollController,
@@ -195,9 +194,11 @@ class ProfileCubit extends Cubit<ProfileState> {
         limit: 5,
       );
 
-      state.copyWith(
-        opportunities:
-            opportunities.where((element) => !element.deleted).toList(),
+      emit(
+        state.copyWith(
+          opportunities: opportunities,
+          opportunityStatus: OpportunitiesStatus.success,
+        ),
       );
     } catch (e, s) {
       logger.error(
@@ -259,7 +260,7 @@ class ProfileCubit extends Cubit<ProfileState> {
     await trace.start();
     try {
       final place = await switch (visitedUser.location) {
-        None() => Future<PlaceData?>.value(),
+        None() => Future<Option<PlaceData>>.value(const None()),
         Some(:final value) => (() {
             return places.getPlaceById(value.placeId);
           })(),
@@ -368,7 +369,6 @@ class ProfileCubit extends Cubit<ProfileState> {
 
   @override
   Future<void> close() async {
-    await badgeListener?.cancel();
     await super.close();
   }
 }

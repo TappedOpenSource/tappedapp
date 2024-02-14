@@ -9,8 +9,8 @@ class SearchState extends Equatable {
     this.occupations = const [],
     this.genres = const [],
     this.labels = const [],
-    this.place,
-    this.placeId,
+    this.place = const None(),
+    this.placeId = const None(),
   });
 
   final List<UserModel> searchResults;
@@ -21,8 +21,8 @@ class SearchState extends Equatable {
   final List<Genre> genres;
   final List<String> labels;
 
-  final PlaceData? place;
-  final String? placeId;
+  final Option<PlaceData> place;
+  final Option<String> placeId;
 
   final bool loading;
 
@@ -30,8 +30,8 @@ class SearchState extends Equatable {
       occupations.isEmpty &&
       genres.isEmpty &&
       labels.isEmpty &&
-      place == null &&
-      placeId == null;
+      place.isNone() &&
+      placeId.isNone();
 
   @override
   List<Object?> get props => [
@@ -65,8 +65,8 @@ class SearchState extends Equatable {
       occupations: occupations ?? this.occupations,
       genres: genres ?? this.genres,
       labels: labels ?? this.labels,
-      place: place != null ? place.toNullable() : this.place,
-      placeId: placeId != null ? placeId.toNullable() : this.placeId,
+      place: place ?? this.place,
+      placeId: placeId ?? this.placeId,
       loading: loading ?? this.loading,
     );
   }

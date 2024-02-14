@@ -208,16 +208,19 @@ class BookingView extends StatelessWidget {
                   ),
                 ),
                 SliverToBoxAdapter(
-                  child: FutureBuilder<PlaceData?>(
+                  child: FutureBuilder<Option<PlaceData>>(
                     future: context.places.getPlaceById(
                       booking.placeId.getOrElse(() => ''),
                     ),
                     builder: (context, snapshot) {
                       final place = snapshot.data;
                       return Text(
-                        getAddressComponent(
-                          place?.addressComponents,
-                        ),
+                        place?.match(
+                          () => '',
+                          (place) => getAddressComponent(
+                            place.addressComponents,
+                          ),
+                        ) ?? '',
                         overflow: TextOverflow.ellipsis,
                         style: const TextStyle(
                           fontSize: 16,

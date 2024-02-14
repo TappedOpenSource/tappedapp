@@ -24,6 +24,7 @@ mixin _$VenueInfo {
   Option<int> get capacity => throw _privateConstructorUsedError;
   Option<String> get idealPerformerProfile =>
       throw _privateConstructorUsedError;
+  List<Genre> get genres => throw _privateConstructorUsedError;
   List<String> get venuePhotos => throw _privateConstructorUsedError;
   Option<String> get productionInfo => throw _privateConstructorUsedError;
   Option<String> get frontOfHouse => throw _privateConstructorUsedError;
@@ -47,6 +48,7 @@ abstract class $VenueInfoCopyWith<$Res> {
       {Option<String> bookingEmail,
       Option<int> capacity,
       Option<String> idealPerformerProfile,
+      List<Genre> genres,
       List<String> venuePhotos,
       Option<String> productionInfo,
       Option<String> frontOfHouse,
@@ -72,6 +74,7 @@ class _$VenueInfoCopyWithImpl<$Res, $Val extends VenueInfo>
     Object? bookingEmail = null,
     Object? capacity = null,
     Object? idealPerformerProfile = null,
+    Object? genres = null,
     Object? venuePhotos = null,
     Object? productionInfo = null,
     Object? frontOfHouse = null,
@@ -93,6 +96,10 @@ class _$VenueInfoCopyWithImpl<$Res, $Val extends VenueInfo>
           ? _value.idealPerformerProfile
           : idealPerformerProfile // ignore: cast_nullable_to_non_nullable
               as Option<String>,
+      genres: null == genres
+          ? _value.genres
+          : genres // ignore: cast_nullable_to_non_nullable
+              as List<Genre>,
       venuePhotos: null == venuePhotos
           ? _value.venuePhotos
           : venuePhotos // ignore: cast_nullable_to_non_nullable
@@ -137,6 +144,7 @@ abstract class _$$VenueInfoImplCopyWith<$Res>
       {Option<String> bookingEmail,
       Option<int> capacity,
       Option<String> idealPerformerProfile,
+      List<Genre> genres,
       List<String> venuePhotos,
       Option<String> productionInfo,
       Option<String> frontOfHouse,
@@ -160,6 +168,7 @@ class __$$VenueInfoImplCopyWithImpl<$Res>
     Object? bookingEmail = null,
     Object? capacity = null,
     Object? idealPerformerProfile = null,
+    Object? genres = null,
     Object? venuePhotos = null,
     Object? productionInfo = null,
     Object? frontOfHouse = null,
@@ -181,6 +190,10 @@ class __$$VenueInfoImplCopyWithImpl<$Res>
           ? _value.idealPerformerProfile
           : idealPerformerProfile // ignore: cast_nullable_to_non_nullable
               as Option<String>,
+      genres: null == genres
+          ? _value._genres
+          : genres // ignore: cast_nullable_to_non_nullable
+              as List<Genre>,
       venuePhotos: null == venuePhotos
           ? _value._venuePhotos
           : venuePhotos // ignore: cast_nullable_to_non_nullable
@@ -220,6 +233,7 @@ class _$VenueInfoImpl implements _VenueInfo {
       {this.bookingEmail = const None(),
       this.capacity = const None(),
       this.idealPerformerProfile = const None(),
+      final List<Genre> genres = const [],
       final List<String> venuePhotos = const [],
       this.productionInfo = const None(),
       this.frontOfHouse = const None(),
@@ -227,7 +241,8 @@ class _$VenueInfoImpl implements _VenueInfo {
       this.microphones = const None(),
       this.lights = const None(),
       this.type = VenueType.other})
-      : _venuePhotos = venuePhotos;
+      : _genres = genres,
+        _venuePhotos = venuePhotos;
 
   factory _$VenueInfoImpl.fromJson(Map<String, dynamic> json) =>
       _$$VenueInfoImplFromJson(json);
@@ -241,6 +256,15 @@ class _$VenueInfoImpl implements _VenueInfo {
   @override
   @JsonKey()
   final Option<String> idealPerformerProfile;
+  final List<Genre> _genres;
+  @override
+  @JsonKey()
+  List<Genre> get genres {
+    if (_genres is EqualUnmodifiableListView) return _genres;
+    // ignore: implicit_dynamic_type
+    return EqualUnmodifiableListView(_genres);
+  }
+
   final List<String> _venuePhotos;
   @override
   @JsonKey()
@@ -271,7 +295,7 @@ class _$VenueInfoImpl implements _VenueInfo {
 
   @override
   String toString() {
-    return 'VenueInfo(bookingEmail: $bookingEmail, capacity: $capacity, idealPerformerProfile: $idealPerformerProfile, venuePhotos: $venuePhotos, productionInfo: $productionInfo, frontOfHouse: $frontOfHouse, monitors: $monitors, microphones: $microphones, lights: $lights, type: $type)';
+    return 'VenueInfo(bookingEmail: $bookingEmail, capacity: $capacity, idealPerformerProfile: $idealPerformerProfile, genres: $genres, venuePhotos: $venuePhotos, productionInfo: $productionInfo, frontOfHouse: $frontOfHouse, monitors: $monitors, microphones: $microphones, lights: $lights, type: $type)';
   }
 
   @override
@@ -285,6 +309,7 @@ class _$VenueInfoImpl implements _VenueInfo {
                 other.capacity == capacity) &&
             (identical(other.idealPerformerProfile, idealPerformerProfile) ||
                 other.idealPerformerProfile == idealPerformerProfile) &&
+            const DeepCollectionEquality().equals(other._genres, _genres) &&
             const DeepCollectionEquality()
                 .equals(other._venuePhotos, _venuePhotos) &&
             (identical(other.productionInfo, productionInfo) ||
@@ -306,6 +331,7 @@ class _$VenueInfoImpl implements _VenueInfo {
       bookingEmail,
       capacity,
       idealPerformerProfile,
+      const DeepCollectionEquality().hash(_genres),
       const DeepCollectionEquality().hash(_venuePhotos),
       productionInfo,
       frontOfHouse,
@@ -333,6 +359,7 @@ abstract class _VenueInfo implements VenueInfo {
       {final Option<String> bookingEmail,
       final Option<int> capacity,
       final Option<String> idealPerformerProfile,
+      final List<Genre> genres,
       final List<String> venuePhotos,
       final Option<String> productionInfo,
       final Option<String> frontOfHouse,
@@ -350,6 +377,8 @@ abstract class _VenueInfo implements VenueInfo {
   Option<int> get capacity;
   @override
   Option<String> get idealPerformerProfile;
+  @override
+  List<Genre> get genres;
   @override
   List<String> get venuePhotos;
   @override

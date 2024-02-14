@@ -16,13 +16,7 @@ Future<ImageProvider> getImageForLocation(
     placeId,
   );
 
-  final photoReference = place?.photoMetadata;
-  if (photoReference == null) {
-    return const AssetImage(
-      'assets/performance_placeholder.png',
-    );
-  }
-
+  final photoReference = place.flatMap((e) => e.photoMetadata);
   final image = await switch (photoReference) {
     None() => Future.value(const None()),
     Some(:final value) => () async {

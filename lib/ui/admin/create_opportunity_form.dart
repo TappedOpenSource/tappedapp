@@ -132,7 +132,6 @@ class CreateOpportunityForm extends StatelessWidget {
                     .updateDescription(input),
               ),
               LocationTextField(
-                initialPlaceId: state.placeId,
                 initialPlace: state.placeData,
                 onChanged: cubit.onLocationChanged,
               ),

@@ -33,8 +33,8 @@ class SearchBloc extends Bloc<SearchEvent, SearchState> {
           occupations: event.occupations,
           genres: event.genres,
           labels: event.labels,
-          place: Option.fromNullable(event.place),
-          placeId: Option.fromNullable(event.placeId),
+          place: event.place,
+          placeId: event.placeId,
         ),
       );
       await _search(state.searchTerm, emit);
@@ -82,14 +82,14 @@ class SearchBloc extends Bloc<SearchEvent, SearchState> {
                 state.occupations.isNotEmpty ||
                 state.genres.isNotEmpty ||
                 state.labels.isNotEmpty ||
-                state.place != null ||
-                state.placeId != null) &&
+                state.place.isSome() ||
+                state.placeId.isSome()) &&
             input == state.searchTerm) {
           // input hasn't changed in the last 500 milliseconds..
           // you can start search
           // print('Now !!! search term : ${state.searchTerm}');
-          final lat = state.place?.lat;
-          final lng = state.place?.lng;
+          final lat = state.place.toNullable()?.lat;
+          final lng = state.place.toNullable()?.lng;
           final searchRes = await searchRepository.queryUsers(
             state.searchTerm,
             occupations:

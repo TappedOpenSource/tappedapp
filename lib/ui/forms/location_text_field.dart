@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:fpdart/fpdart.dart';
 import 'package:intheloopapp/data/places_repository.dart';
 import 'package:intheloopapp/domains/navigation_bloc/navigation_bloc.dart';
 import 'package:intheloopapp/domains/navigation_bloc/tapped_route.dart';
@@ -7,18 +8,16 @@ import 'package:intheloopapp/utils/geohash.dart';
 
 class LocationTextField extends StatelessWidget {
   const LocationTextField({
-    required this.initialPlaceId,
     required this.initialPlace,
     required this.onChanged,
     super.key,
   });
 
   final void Function(
-    PlaceData? placeData,
+    Option<PlaceData> placeData,
     String placeId,
   ) onChanged;
-  final PlaceData? initialPlace;
-  final String? initialPlaceId;
+  final Option<PlaceData> initialPlace;
 
   @override
   Widget build(BuildContext context) {
@@ -45,9 +44,10 @@ class LocationTextField extends StatelessWidget {
                   ),
                 ),
                 Text(
-                  initialPlace != null
-                      ? getAddressComponent(initialPlace?.addressComponents)
-                      : 'Tap to select a city',
+                  initialPlace.match(
+                    () => 'Tap to select a city',
+                    (t) => getAddressComponent(t.addressComponents),
+                  ),
                   overflow: TextOverflow.ellipsis,
                   style: const TextStyle(
                     color: tappedAccent,

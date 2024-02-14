@@ -47,13 +47,13 @@ class _ConnectBankButtonState extends State<ConnectBankButton> {
           });
 
           final place = await switch (currentUser.location) {
-            None() => Future<PlaceData?>.value(),
+            None() => Future<Option<PlaceData>>.value(const None()),
             Some(:final value) => (() async {
                 return await places.getPlaceById(value.placeId);
               })(),
           };
 
-          final addressComponents = place?.addressComponents ?? [];
+          final addressComponents = place.map((e) => e.addressComponents).getOrElse(() => []);
           final countryCode = addressComponents
               .where(
                 (element) => element.types.contains('country'),

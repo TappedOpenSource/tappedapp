@@ -7,8 +7,8 @@ class CreateOpportunityState extends Equatable {
     this.description = '',
     this.isPaid = false,
     this.pickedPhoto = const None(),
-    this.placeData,
-    this.placeId,
+    this.placeId = const None(),
+    this.placeData = const None(),
     ImagePicker? picker,
     StartTime? startTime,
     EndTime? endTime,
@@ -21,9 +21,9 @@ class CreateOpportunityState extends Equatable {
   final bool loading;
   final String title;
   final String description;
-  final PlaceData? placeData;
   final bool isPaid;
-  final String? placeId;
+  final Option<PlaceData> placeData;
+  final Option<String> placeId;
   late final StartTime startTime;
   late final EndTime endTime;
   late final ImagePicker picker;
@@ -63,8 +63,8 @@ class CreateOpportunityState extends Equatable {
     String? title,
     String? description,
     bool? isPaid,
-    PlaceData? placeData,
-    String? placeId,
+    Option<PlaceData>? placeData,
+    Option<String>? placeId,
     StartTime? startTime,
     EndTime? endTime,
     Option<File>? pickedPhoto,

@@ -107,7 +107,6 @@ class ProfileView extends StatelessWidget {
         )
           ..getLatestBookings()
           ..getLatestReview()
-          // ..initBadges()
           ..initServices()
           ..initOpportunities()
           ..loadIsBlocked()
@@ -171,10 +170,8 @@ class ProfileView extends StatelessWidget {
             final cubit = context.read<ProfileCubit>();
             await Future.wait([
               HapticFeedback.mediumImpact(),
-              // cubit.getLatestOpportunity(),
               cubit.getLatestBookings(),
               cubit.getLatestReview(),
-              // cubit.initBadges(),
               cubit.initServices(),
               cubit.initOpportunities(),
               cubit.refetchVisitedUser(),
@@ -299,6 +296,7 @@ class ProfileView extends StatelessWidget {
             await Future.wait([
               cubit.getLatestBookings(),
               cubit.initServices(),
+              cubit.initOpportunities(),
               cubit.refetchVisitedUser(),
               cubit.loadIsVerified(visitedUser.id),
             ]);

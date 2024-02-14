@@ -23,7 +23,7 @@ class SettingsState extends Equatable {
     this.emailNotificationsAppReleases = true,
     this.email = '',
     this.password = '',
-    this.place,
+    this.place = const None(),
     ImagePicker? picker,
     GlobalKey<FormState>? formKey,
   }) {
@@ -52,7 +52,7 @@ class SettingsState extends Equatable {
   final FormzSubmissionStatus status;
 
   final String? placeId;
-  late final PlaceData? place;
+  late final Option<PlaceData> place;
 
   late final ImagePicker picker;
   late final GlobalKey<FormState> formKey;
@@ -97,7 +97,7 @@ class SettingsState extends Equatable {
     List<String>? occupations,
     String? label,
     String? placeId,
-    PlaceData? place,
+    Option<PlaceData>? place,
     String? twitterHandle,
     int? twitterFollowers,
     String? instagramHandle,

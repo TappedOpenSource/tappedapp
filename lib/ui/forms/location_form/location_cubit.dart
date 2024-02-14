@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_google_places_sdk/flutter_google_places_sdk.dart';
+import 'package:fpdart/fpdart.dart';
 import 'package:intheloopapp/data/places_repository.dart';
 import 'package:intheloopapp/domains/navigation_bloc/navigation_bloc.dart';
 
@@ -17,7 +18,7 @@ class LocationCubit extends Cubit<LocationState> {
 
   final PlacesRepository places;
   final void Function(
-    PlaceData? placeData,
+    Option<PlaceData> placeData,
     String placeId,
   ) onSelected;
 

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:fpdart/fpdart.dart';
 import 'package:intheloopapp/data/places_repository.dart';
 import 'package:intheloopapp/ui/forms/location_form/location_cubit.dart';
 import 'package:intheloopapp/ui/forms/location_form/location_results.dart';
@@ -13,9 +14,9 @@ class LocationFormView extends StatelessWidget {
     super.key,
   });
 
-  final PlaceData? initialPlace;
+  final Option<PlaceData> initialPlace;
   final void Function(
-    PlaceData? placeData,
+    Option<PlaceData> placeData,
     String placeId,
   ) onSelected;
 

@@ -15,7 +15,7 @@ class ProfileState extends Equatable {
     this.opportunityStatus = OpportunitiesStatus.initial,
     this.isCollapsed = false,
     this.didAddFeedback = false,
-    this.place,
+    this.place = const None(),
   });
 
   final bool isFollowing;
@@ -31,7 +31,7 @@ class ProfileState extends Equatable {
   final OpportunitiesStatus opportunityStatus;
   final UserModel visitedUser;
   final UserModel currentUser;
-  final PlaceData? place;
+  final Option<PlaceData> place;
 
   final bool isCollapsed;
   final bool didAddFeedback;
@@ -64,7 +64,7 @@ class ProfileState extends Equatable {
     List<Opportunity>? opportunities,
     UserModel? currentUser,
     UserModel? visitedUser,
-    PlaceData? place,
+    Option<PlaceData>? place,
     bool? isCollapsed,
     bool? didAddFeedback,
   }) {

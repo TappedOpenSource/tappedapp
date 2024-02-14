@@ -19,6 +19,10 @@ _$VenueInfoImpl _$$VenueInfoImplFromJson(Map<String, dynamic> json) =>
           ? const None()
           : Option<String>.fromJson(
               json['idealPerformerProfile'], (value) => value as String),
+      genres: (json['genres'] as List<dynamic>?)
+              ?.map((e) => $enumDecode(_$GenreEnumMap, e))
+              .toList() ??
+          const [],
       venuePhotos: (json['venuePhotos'] as List<dynamic>?)
               ?.map((e) => e as String)
               .toList() ??
@@ -57,6 +61,7 @@ Map<String, dynamic> _$$VenueInfoImplToJson(_$VenueInfoImpl instance) =>
       'idealPerformerProfile': instance.idealPerformerProfile.toJson(
         (value) => value,
       ),
+      'genres': instance.genres.map((e) => _$GenreEnumMap[e]!).toList(),
       'venuePhotos': instance.venuePhotos,
       'productionInfo': instance.productionInfo.toJson(
         (value) => value,
@@ -75,6 +80,28 @@ Map<String, dynamic> _$$VenueInfoImplToJson(_$VenueInfoImpl instance) =>
       ),
       'type': _$VenueTypeEnumMap[instance.type]!,
     };
+
+const _$GenreEnumMap = {
+  Genre.pop: 'pop',
+  Genre.rock: 'rock',
+  Genre.hiphop: 'hiphop',
+  Genre.rnb: 'rnb',
+  Genre.country: 'country',
+  Genre.edm: 'edm',
+  Genre.jazz: 'jazz',
+  Genre.latin: 'latin',
+  Genre.classical: 'classical',
+  Genre.reggae: 'reggae',
+  Genre.blues: 'blues',
+  Genre.soul: 'soul',
+  Genre.funk: 'funk',
+  Genre.metal: 'metal',
+  Genre.punk: 'punk',
+  Genre.indie: 'indie',
+  Genre.folk: 'folk',
+  Genre.alternative: 'alternative',
+  Genre.other: 'other',
+};
 
 const _$VenueTypeEnumMap = {
   VenueType.concertHall: 'concertHall',

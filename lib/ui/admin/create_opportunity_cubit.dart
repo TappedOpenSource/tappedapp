@@ -91,13 +91,13 @@ class CreateOpportunityCubit extends Cubit<CreateOpportunityState> {
   }
 
   void onLocationChanged(
-    PlaceData? placeData,
+    Option<PlaceData> placeData,
     String placeId,
   ) {
     emit(
       state.copyWith(
         placeData: placeData,
-        placeId: placeId,
+        placeId: Option.of(placeId),
       ),
     );
   }
@@ -111,9 +111,6 @@ class CreateOpportunityCubit extends Cubit<CreateOpportunityState> {
     );
 
     try {
-      final thePlaceData = state.placeData;
-      final thePlaceId = state.placeId;
-
       // validate inputs
       if (state.title.isEmpty) {
         // toast with missing title
@@ -122,10 +119,6 @@ class CreateOpportunityCubit extends Cubit<CreateOpportunityState> {
 
       if (state.description.isEmpty) {
         throw Exception('missing description');
-      }
-
-      if (thePlaceData == null || thePlaceId == null) {
-        throw Exception('missing location');
       }
 
       final uuid = const Uuid().v4();
@@ -141,12 +134,15 @@ class CreateOpportunityCubit extends Cubit<CreateOpportunityState> {
           }(),
       };
 
-      final location = Location(
-        placeId: thePlaceId,
-        geohash: thePlaceData.geohash,
-        lat: thePlaceData.lat,
-        lng: thePlaceData.lng,
-      );
+      final location = switch (state.placeData) {
+        None() => throw Exception('missing location'),
+        Some(:final value) => Location(
+            placeId: value.placeId,
+            geohash: value.geohash,
+            lat: value.lat,
+            lng: value.lng,
+          ),
+      };
 
       final op = Opportunity(
         id: uuid,

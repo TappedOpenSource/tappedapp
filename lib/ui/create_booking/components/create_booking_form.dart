@@ -61,12 +61,11 @@ class _CreateBookingFormState extends State<CreateBookingForm> {
                 controller: bookingNameController,
               ),
               LocationTextField(
-                initialPlaceId: state.placeId.toNullable(),
-                initialPlace: state.place.toNullable(),
+                initialPlace: state.place,
                 onChanged: (place, placeId) {
                   context.read<CreateBookingCubit>().updatePlace(
-                        place: Option.fromNullable(place),
-                        placeId: Option.fromNullable(placeId),
+                        place: place,
+                        placeId: Option.of(placeId),
                       );
                 },
               ),

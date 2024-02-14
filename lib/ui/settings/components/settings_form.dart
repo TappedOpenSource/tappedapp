@@ -81,7 +81,6 @@ class SettingsForm extends StatelessWidget {
                 onChanged: (place, placeId) =>
                     context.read<SettingsCubit>().changePlace(place, placeId),
                 initialPlace: state.place,
-                initialPlaceId: state.placeId,
               ),
               TwitterTextField(
                 initialValue: state.twitterHandle,

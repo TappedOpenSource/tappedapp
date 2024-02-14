@@ -73,7 +73,7 @@ class SettingsCubit extends Cubit<SettingsState> {
   Future<void> initPlace() async {
     try {
       final place = switch (currentUser.location) {
-        None() => null,
+        None() => const None(),
         Some(:final value) => await places.getPlaceById(value.placeId),
       };
       emit(state.copyWith(place: place));
@@ -112,7 +112,7 @@ class SettingsCubit extends Cubit<SettingsState> {
   void changeYoutube(String value) =>
       emit(state.copyWith(youtubeChannelId: value));
 
-  void changePlace(PlaceData? place, String placeId) {
+  void changePlace(Option<PlaceData> place, String placeId) {
     emit(
       state.copyWith(
         place: place,
@@ -202,8 +202,7 @@ class SettingsCubit extends Cubit<SettingsState> {
               )
             : currentUser.profilePicture;
 
-        final optionalPlace = Option.fromNullable(state.place);
-        final location = switch (optionalPlace) {
+        final location = switch (state.place) {
           None() => const None(),
           Some(:final value) => Option.of(
               Location(

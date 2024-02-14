@@ -63,19 +63,20 @@ class InfoSliver extends StatelessWidget {
                         ),
                       ),
                     ),
-                    if (currPlace != null)
-                      CupertinoListTile(
-                        leading: Icon(
-                          CupertinoIcons.location,
-                          color: theme.colorScheme.onSurface,
-                        ),
-                        title: Text(
-                          getAddressComponent(currPlace.addressComponents),
-                          style: TextStyle(
-                            color: theme.colorScheme.onSurface,
+                    switch (currPlace) {
+                      None() => const SizedBox.shrink(),
+                      Some(:final value) => CupertinoListTile(
+                          leading: const Icon(
+                            CupertinoIcons.map,
+                          ),
+                          title: Text(
+                            getAddressComponent(value.addressComponents),
+                            style: TextStyle(
+                              color: theme.colorScheme.onSurface,
+                            ),
                           ),
                         ),
-                      ),
+                    },
                     switch (state.visitedUser.venueInfo) {
                       None() => const SizedBox.shrink(),
                       Some(:final value) => switch (value.capacity) {

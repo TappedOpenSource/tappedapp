@@ -9,6 +9,7 @@ import 'package:intheloopapp/domains/search_bloc/search_bloc.dart';
 import 'package:intheloopapp/ui/loading/logo_wave.dart';
 import 'package:intheloopapp/ui/user_tile.dart';
 import 'package:intheloopapp/utils/bloc_utils.dart';
+import 'package:intheloopapp/utils/custom_claims_builder.dart';
 
 class TappedSearchBar extends StatefulWidget {
   const TappedSearchBar({
@@ -73,14 +74,24 @@ class _TappedSearchBarState extends State<TappedSearchBar> {
               icon: const Icon(Icons.search),
             ),
             trailing: [
-              IconButton(
-                onPressed: () {
-                  context.push(
-                    AdvancedSearchPage(),
+              CustomClaimsBuilder(
+                builder: (context, claims) {
+                  final hasClaim = claims.isNotEmpty;
+                  return IconButton(
+                    onPressed: () {
+                      return switch (hasClaim) {
+                        true => context.push(
+                            AdvancedSearchPage(),
+                          ),
+                        false => context.push(
+                            PaywallPage(),
+                          ),
+                      };
+                    },
+                    icon: const Icon(CupertinoIcons.doc_text_search),
+                    color: theme.colorScheme.onSurface,
                   );
                 },
-                icon: const Icon(CupertinoIcons.doc_text_search),
-                color: theme.colorScheme.onSurface,
               ),
             ],
             onTap: () {

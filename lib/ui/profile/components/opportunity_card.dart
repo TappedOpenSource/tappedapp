@@ -15,6 +15,7 @@ import 'package:intheloopapp/utils/geohash.dart';
 import 'package:intheloopapp/utils/hero_image.dart';
 import 'package:intheloopapp/utils/opportunity_image.dart';
 import 'package:intl/intl.dart';
+import 'package:skeletons/skeletons.dart';
 import 'package:uuid/uuid.dart';
 
 class OpportunityCard extends StatefulWidget {
@@ -230,10 +231,11 @@ class _OpportunityCardState extends State<OpportunityCard> {
                               builder: (context, snapshot) {
                                 final place = snapshot.data;
                                 return switch (place) {
-                                  null => const SizedBox.shrink(),
-                                  _ => Text(
+                                  null => const SkeletonLine(),
+                                  None() => const SizedBox.shrink(),
+                                  Some(:final value) => Text(
                                       getAddressComponent(
-                                        place.addressComponents,
+                                        value.addressComponents,
                                       ),
                                       style: const TextStyle(
                                         overflow: TextOverflow.ellipsis,

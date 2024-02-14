@@ -247,40 +247,38 @@ class OpportunityView extends StatelessWidget {
                     },
                   ),
                   const SizedBox(height: 12),
-                  FutureBuilder<PlaceData?>(
+                  FutureBuilder<Option<PlaceData>>(
                     future: places.getPlaceById(
                       op.location.placeId,
                     ),
                     builder: (context, snapshot) {
-                      if (!snapshot.hasData) {
-                        return const CupertinoActivityIndicator();
-                      }
-
-                      final place = snapshot.data!;
-                      final formattedAddress = getAddressComponent(
-                        place.addressComponents,
-                      );
-                      return GestureDetector(
-                        onTap: () => MapsLauncher.launchQuery(
-                          formattedAddress,
-                        ),
-                        child: Row(
-                          children: [
-                            Icon(
-                              CupertinoIcons.location_circle_fill,
-                              color:
-                                  theme.colorScheme.onSurface.withOpacity(0.5),
+                      final placeData = snapshot.data;
+                      return switch(placeData) {
+                        null => const CupertinoActivityIndicator(),
+                        None() => const SizedBox.shrink(),
+                        Some(:final value) => GestureDetector(
+                            onTap: () => MapsLauncher.launchQuery(
+                              getAddressComponent(value.addressComponents),
                             ),
-                            const SizedBox(width: 8),
-                            Text(
-                              formattedAddress,
-                              style: const TextStyle(
-                                color: tappedAccent,
-                              ),
+                            child: Row(
+                              children: [
+                                Icon(
+                                  CupertinoIcons.location_circle_fill,
+                                  color: theme.colorScheme.onSurface.withOpacity(0.5),
+                                ),
+                                const SizedBox(width: 8),
+                                Text(
+                                  getAddressComponent(
+                                    value.addressComponents,
+                                  ),
+                                  style: const TextStyle(
+                                    color: tappedAccent,
+                                  ),
+                                ),
+                              ],
                             ),
-                          ],
-                        ),
-                      );
+                          ),
+                      };
                     },
                   ),
                   const SizedBox(height: 12),

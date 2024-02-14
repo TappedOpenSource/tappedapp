@@ -108,6 +108,10 @@ class _WaitlistViewState extends State<WaitlistView> {
                 _buildCheckItem(
                   text: 'contact info for thousands of venues',
                 ),
+                const SizedBox(height: 24),
+                _buildCheckItem(
+                  text: 'advanced search',
+                ),
               ],
             ),
           ),

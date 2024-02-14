@@ -1,129 +1,38 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:fpdart/fpdart.dart';
-import 'package:intheloopapp/ui/gig_search/components/city_selection.dart';
+import 'package:formz/formz.dart';
 import 'package:intheloopapp/ui/gig_search/gig_search_cubit.dart';
-import 'package:intheloopapp/ui/settings/components/genre_selection.dart';
-import 'package:intheloopapp/ui/user_tile.dart';
-import 'package:intheloopapp/utils/current_user_builder.dart';
+import 'package:intheloopapp/ui/gig_search/gig_search_form_view.dart';
+import 'package:intheloopapp/ui/gig_search/gig_search_results_view.dart';
 
 class GigSearchView extends StatelessWidget {
   const GigSearchView({
     super.key,
   });
 
+  Widget _viewSelector() {
+    return BlocBuilder<GigSearchCubit, GigSearchState>(
+      builder: (context, state) {
+        return switch (state.formStatus) {
+          FormzSubmissionStatus.initial => GigSearchFormView(),
+          FormzSubmissionStatus.inProgress => const Center(
+            child: CupertinoActivityIndicator(),
+          ),
+          FormzSubmissionStatus.success => GigSearchResultsView(),
+          FormzSubmissionStatus.failure => GigSearchFormView(),
+          FormzSubmissionStatus.canceled => GigSearchFormView(),
+        };
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     return BlocProvider<GigSearchCubit>(
       create: (context) => GigSearchCubit(),
-      child: Scaffold(
-        backgroundColor: theme.colorScheme.background,
-        appBar: AppBar(),
-        body: SafeArea(
-          child: Padding(
-            padding: const EdgeInsets.symmetric(
-              horizontal: 20,
-              vertical: 12,
-            ),
-            child: CurrentUserBuilder(
-              builder: (context, currentUser) {
-                return Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    const Text(
-                      'where',
-                      style: TextStyle(
-                        fontWeight: FontWeight.w700,
-                        fontSize: 20,
-                      ),
-                    ),
-                    CitySelection(
-                      onConfirm: (_) {},
-                      initialValue: const [],
-                    ),
-                    const SizedBox(height: 20),
-                    const Text(
-                      'genres',
-                      style: TextStyle(
-                        fontWeight: FontWeight.w700,
-                        fontSize: 20,
-                      ),
-                    ),
-                    GenreSelection(
-                      initialValue: currentUser.performerInfo
-                          .map((info) => info.genres)
-                          .getOrElse(() => []),
-                      onConfirm: (_) {},
-                    ),
-                    const SizedBox(height: 20),
-                    const Text(
-                      'when',
-                      style: TextStyle(
-                        fontWeight: FontWeight.w700,
-                        fontSize: 20,
-                      ),
-                    ),
-                    const Row(
-                      children: [
-                        Card(
-                          child: Padding(
-                            padding: EdgeInsets.all(8),
-                            child: Text('date'),
-                          ),
-                        ),
-                        Card(
-                          child: Padding(
-                            padding: EdgeInsets.all(8),
-                            child: Text('flexible'),
-                          ),
-                        ),
-                      ],
-                    ),
-                    const SizedBox(height: 20),
-                    const Text(
-                      'who',
-                      style: TextStyle(
-                        fontWeight: FontWeight.w700,
-                        fontSize: 20,
-                      ),
-                    ),
-                    UserTile(
-                      userId: currentUser.id,
-                      user:Option.of(currentUser),
-                    ),
-                    const Spacer(),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Expanded(
-                          child: CupertinoButton.filled(
-                            onPressed: () {
-                              Navigator.popUntil(
-                                context,
-                                (route) => route.isFirst,
-                              );
-                            },
-                            borderRadius: BorderRadius.circular(15),
-                            child: const Text(
-                              'submit',
-                              style: TextStyle(
-                                fontWeight: FontWeight.w700,
-                                color: Colors.white,
-                              ),
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ],
-                );
-              },
-            ),
-          ),
-        ),
-      ),
+      child: _viewSelector(),
     );
   }
 }
