@@ -134,4 +134,5 @@ flutter:
     - assets/
     - assets/cities/
     - assets/aesthetics/
+    - assets/layers/
   uses-material-design: true
