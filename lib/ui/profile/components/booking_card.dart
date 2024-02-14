@@ -41,7 +41,7 @@ class BookingCard extends StatelessWidget {
           if (t.isNotEmpty) {
             return CachedNetworkImageProvider(t);
           }
-          return const AssetImage('assets/default_avatar.png');
+          return const AssetImage('assets/default_avatar.png') as ImageProvider;
         });
 
         final titleText = user.map((t) => t.displayName);
@@ -67,7 +67,7 @@ class BookingCard extends StatelessWidget {
                     borderRadius: BorderRadius.circular(15),
                     image: DecorationImage(
                       image: switch (imageProvider) {
-                        None() => const AssetImage('assets/default_avatar.png'),
+                        None() => const AssetImage('assets/default_avatar.png') as ImageProvider,
                         Some(:final value) => value,
                       },
                       fit: BoxFit.cover,

@@ -1107,6 +1107,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "6.1.0"
+  flutter_map_heatmap:
+    dependency: "direct main"
+    description:
+      name: flutter_map_heatmap
+      sha256: "0544a980da9d29ec41bd27f507e46655306d0499dfb98379497f9360a139da39"
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.0.7"
   flutter_map_marker_cluster:
     dependency: "direct main"
     description:

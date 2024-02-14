@@ -2,14 +2,18 @@ import 'dart:async';
 
 import 'package:bloc/bloc.dart';
 import 'package:flutter_map/flutter_map.dart';
+import 'package:flutter_map_heatmap/flutter_map_heatmap.dart';
+import 'package:fpdart/fpdart.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:intheloopapp/data/search_repository.dart';
+import 'package:intheloopapp/domains/models/booking.dart';
 
 import 'package:intheloopapp/domains/models/location.dart';
 import 'package:intheloopapp/domains/models/opportunity.dart';
 import 'package:intheloopapp/domains/models/user_model.dart';
 import 'package:intheloopapp/utils/debouncer.dart';
+import 'package:latlong2/latlong.dart';
 
 part 'discover_state.dart';
 
@@ -78,47 +82,111 @@ class DiscoverCubit extends Cubit<DiscoverState> {
 
   Future<void> initLocation() async {
     final (lat, lng) = await _determinePosition();
-    final hits = await getHits(
+    final hits = await getVenues(
       lat: lat,
       lng: lng,
     );
     emit(
       state.copyWith(
-        hits: hits,
+        venueHits: hits,
         userLat: lat,
         userLng: lng,
       ),
     );
   }
 
-  Future<List<UserModel>> getHits({
-    required double lat,
-    required double lng,
+  Future<List<UserModel>> getVenues({
+    double? lat,
+    double? lng,
   }) async {
-    final users = await search.queryUsers(
+    final hits = await search.queryUsers(
       '',
       occupations: ['Venue', 'venue'],
       lat: lat,
       lng: lng,
     );
-
-    return users;
+    return hits;
   }
 
-  void onBoundsChange(LatLngBounds? bounds) {
+  Future<List<Booking>> getBookings({
+    double? lat,
+    double? lng,
+  }) async {
+    final hits = await search.queryBookings(
+      '',
+      lat: lat,
+      lng: lng,
+    );
+    return hits;
+  }
+
+  Future<List<Opportunity>> getOpportunities({
+    double? lat,
+    double? lng,
+  }) async {
+    final hits = await search.queryOpportunities(
+      '',
+      lat: lat,
+      lng: lng,
+    );
+    return hits;
+  }
+
+  void onMapOverlayChange(MapOverlay overlay) {
+    onBoundsChange(
+      state.bounds,
+      overlay: overlay,
+    );
+    emit(state.copyWith(mapOverlay: overlay));
+  }
+
+  void onBoundsChange(
+    LatLngBounds? bounds, {
+    MapOverlay? overlay,
+  }) {
     if (bounds == null) return;
 
+    final mapType = overlay ?? state.mapOverlay;
+
+    emit(
+      state.copyWith(
+        bounds: bounds,
+      ),
+    );
+
     _debouncer.run(
-      () async {
-        final hits = await search.queryUsersInBoundingBox(
-          '',
-          occupations: ['Venue', 'venue'],
-          swLatitude: bounds.southWest.latitude,
-          swLongitude: bounds.southWest.longitude,
-          neLatitude: bounds.northEast.latitude,
-          neLongitude: bounds.northEast.longitude,
-        );
-        emit(state.copyWith(hits: hits));
+      switch (mapType) {
+        MapOverlay.venues => () async {
+            final hits = await search.queryUsersInBoundingBox(
+              '',
+              occupations: ['Venue', 'venue'],
+              swLatitude: bounds.southWest.latitude,
+              swLongitude: bounds.southWest.longitude,
+              neLatitude: bounds.northEast.latitude,
+              neLongitude: bounds.northEast.longitude,
+            );
+            emit(state.copyWith(venueHits: hits));
+          },
+        MapOverlay.bookings => () async {
+            final hits = await search.queryBookingsInBoundingBox(
+              '',
+              swLatitude: bounds.southWest.latitude,
+              swLongitude: bounds.southWest.longitude,
+              neLatitude: bounds.northEast.latitude,
+              neLongitude: bounds.northEast.longitude,
+            );
+            emit(state.copyWith(bookingHits: hits));
+          },
+        MapOverlay.opportunities => () async {
+            final hits = await search.queryOpportunitiesInBoundingBox(
+              '',
+              swLatitude: bounds.southWest.latitude,
+              swLongitude: bounds.southWest.longitude,
+              neLatitude: bounds.northEast.latitude,
+              neLongitude: bounds.northEast.longitude,
+            );
+            emit(state.copyWith(opportunityHits: hits));
+          },
       },
     );
   }

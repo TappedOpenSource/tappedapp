@@ -10,16 +10,16 @@ _$BookingImpl _$$BookingImplFromJson(Map<String, dynamic> json) =>
     _$BookingImpl(
       id: json['id'] as String,
       requesteeId: json['requesteeId'] as String,
-      requesterId: json['requesterId'] == null
-          ? const None()
-          : Option<String>.fromJson(
-              json['requesterId'], (value) => value as String),
       status: $enumDecode(_$BookingStatusEnumMap, json['status']),
       startTime:
           const DateTimeConverter().fromJson(json['startTime'] as Timestamp),
       endTime: const DateTimeConverter().fromJson(json['endTime'] as Timestamp),
       timestamp:
           const DateTimeConverter().fromJson(json['timestamp'] as Timestamp),
+      requesterId: json['requesterId'] == null
+          ? const None()
+          : Option<String>.fromJson(
+              json['requesterId'], (value) => value as String),
       name: json['name'] as String? ?? '',
       note: json['note'] as String? ?? '',
       rate: json['rate'] as int? ?? 0,
@@ -50,13 +50,13 @@ Map<String, dynamic> _$$BookingImplToJson(_$BookingImpl instance) =>
     <String, dynamic>{
       'id': instance.id,
       'requesteeId': instance.requesteeId,
-      'requesterId': instance.requesterId.toJson(
-        (value) => value,
-      ),
       'status': _$BookingStatusEnumMap[instance.status]!,
       'startTime': const DateTimeConverter().toJson(instance.startTime),
       'endTime': const DateTimeConverter().toJson(instance.endTime),
       'timestamp': const DateTimeConverter().toJson(instance.timestamp),
+      'requesterId': instance.requesterId.toJson(
+        (value) => value,
+      ),
       'name': instance.name,
       'note': instance.note,
       'rate': instance.rate,

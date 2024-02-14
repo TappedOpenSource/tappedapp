@@ -13,13 +13,41 @@ import 'package:intheloopapp/utils/current_user_builder.dart';
 class DraggableSheet extends StatelessWidget {
   const DraggableSheet({super.key});
 
-  Widget _opSlider(List<Opportunity> opportunities) {
-    if (opportunities.isEmpty) {
-      return const Center(
-        child: Text('None rn'),
-      );
-    }
-    return OpportunitiesList(opportunities: opportunities);
+  Widget _buildMapOverlayButton(
+    BuildContext context,
+    MapOverlay currentOverlay,
+    MapOverlay overlay,
+    String label,
+  ) {
+    final theme = Theme.of(context);
+    final isSelected = currentOverlay == overlay;
+    return Expanded(
+      child: Padding(
+        padding: const EdgeInsets.all(8),
+        child: ElevatedButton(
+          onPressed: () {
+            context.read<DiscoverCubit>().onMapOverlayChange(
+                  overlay,
+                );
+          },
+          style: ButtonStyle(
+            backgroundColor: MaterialStateProperty.all(
+              isSelected
+                  ? theme.colorScheme.primary
+                  : theme.colorScheme.secondary,
+            ),
+          ),
+          child: Text(
+            label,
+            style: TextStyle(
+              color: isSelected
+                  ? theme.colorScheme.onPrimary
+                  : theme.colorScheme.onSecondary,
+            ),
+          ),
+        ),
+      ),
+    );
   }
 
   @override
@@ -61,25 +89,37 @@ class DraggableSheet extends StatelessWidget {
                                 horizontal: 8,
                               ),
                               child: Text(
-                                'Featured Gigs',
+                                'Map Views',
                                 style: TextStyle(
                                   fontSize: 28,
                                   fontWeight: FontWeight.bold,
                                 ),
                               ),
                             ),
-                            FutureBuilder<List<Opportunity>>(
-                              future: database.getFeaturedOpportunities(),
-                              builder: (context, snapshot) {
-                                if (!snapshot.hasData) {
-                                  return const Center(
-                                    child: CupertinoActivityIndicator(),
-                                  );
-                                }
-
-                                final opportunities = snapshot.data!;
-                                return _opSlider(opportunities);
-                              },
+                            SizedBox(
+                              height: 150,
+                              child: Row(
+                                children: [
+                                  _buildMapOverlayButton(
+                                    context,
+                                    state.mapOverlay,
+                                    MapOverlay.venues,
+                                    'Venues',
+                                  ),
+                                  _buildMapOverlayButton(
+                                    context,
+                                    state.mapOverlay,
+                                    MapOverlay.bookings,
+                                    'Bookings',
+                                  ),
+                                  _buildMapOverlayButton(
+                                    context,
+                                    state.mapOverlay,
+                                    MapOverlay.opportunities,
+                                    'Opportunities',
+                                  ),
+                                ],
+                              ),
                             ),
                             const Padding(
                               padding: EdgeInsets.symmetric(

@@ -2,11 +2,14 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_map/flutter_map.dart';
+import 'package:flutter_map_heatmap/flutter_map_heatmap.dart';
 import 'package:intheloopapp/data/search_repository.dart';
 import 'package:intheloopapp/domains/navigation_bloc/navigation_bloc.dart';
 import 'package:intheloopapp/domains/navigation_bloc/tapped_route.dart';
 import 'package:intheloopapp/ui/app_theme_cubit.dart';
-import 'package:intheloopapp/ui/discover/components/cluster_layer.dart';
+import 'package:intheloopapp/ui/discover/components/bookings_heatmap_layer.dart';
+import 'package:intheloopapp/ui/discover/components/opportunities_heatmap_layer.dart';
+import 'package:intheloopapp/ui/discover/components/venue_cluster_layer.dart';
 import 'package:intheloopapp/ui/discover/components/draggable_sheet.dart';
 import 'package:intheloopapp/ui/discover/discover_cubit.dart';
 import 'package:intheloopapp/ui/profile/components/notification_icon_button.dart';
@@ -77,7 +80,11 @@ class DiscoverView extends StatelessWidget {
                 );
               },
             ),
-            const ClusterLayer(),
+            switch (state.mapOverlay) {
+              MapOverlay.venues => const VenueClusterLayer(),
+              MapOverlay.bookings => BookingsHeatmapLayer(),
+              MapOverlay.opportunities => const OpportunitiesHeatmapLayer(),
+            },
             RichAttributionWidget(
               animationConfig: const ScaleRAWA(),
               // Or `FadeRAWA` as is default

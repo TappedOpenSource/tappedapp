@@ -11,8 +11,8 @@ import 'package:intheloopapp/ui/discover/discover_cubit.dart';
 import 'package:intheloopapp/ui/user_avatar.dart';
 import 'package:latlong2/latlong.dart';
 
-class ClusterLayer extends StatelessWidget {
-  const ClusterLayer({
+class VenueClusterLayer extends StatelessWidget {
+  const VenueClusterLayer({
     super.key,
   });
 
@@ -30,7 +30,7 @@ class ClusterLayer extends StatelessWidget {
             //   borderStrokeWidth: 3,
             // ),
             markers: [
-              ...state.hits.map((venue) {
+              ...state.venueHits.map((venue) {
                 return switch (venue.location) {
                   None() => null,
                   Some(:final value) => Marker(

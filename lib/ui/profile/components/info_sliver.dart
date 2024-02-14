@@ -125,10 +125,12 @@ class InfoSliver extends StatelessWidget {
                       ),
                     if (isAdmin && bookingEmail != null)
                       GestureDetector(
-                        onTap: () async {
+                        onLongPress: () async {
+
                           await Clipboard.setData(
                             ClipboardData(text: bookingEmail),
                           );
+                          await HapticFeedback.mediumImpact();
                           await EasyLoading.showSuccess(
                             'Copied Email',
                             duration: const Duration(milliseconds: 500),
@@ -157,6 +159,7 @@ class InfoSliver extends StatelessWidget {
                               await Clipboard.setData(
                                 ClipboardData(text: value),
                               );
+                              await HapticFeedback.mediumImpact();
                               await EasyLoading.showSuccess(
                                 'Copied Phone',
                                 duration: const Duration(milliseconds: 500),

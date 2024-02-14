@@ -3,12 +3,15 @@ import 'package:cached_annotation/cached_annotation.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:intheloopapp/data/search_repository.dart';
+import 'package:intheloopapp/domains/models/booking.dart';
+import 'package:intheloopapp/domains/models/opportunity.dart';
 import 'package:intheloopapp/domains/models/user_model.dart';
 
 final _analytics = FirebaseAnalytics.instance;
 final _fireStore = FirebaseFirestore.instance;
 final usersRef = _fireStore.collection('users');
-final loopsRef = _fireStore.collection('loops');
+final bookingsRef = _fireStore.collection('bookings');
+final opportunitiesRef = _fireStore.collection('opportunities');
 
 class AlgoliaSearchImpl extends SearchRepository {
   AlgoliaSearchImpl({
@@ -27,6 +30,22 @@ class AlgoliaSearchImpl extends SearchRepository {
     final user = UserModel.fromDoc(userSnapshot);
 
     return user;
+  }
+
+  @cached
+  Future<Booking> _getBooking(String bookingId) async {
+    final bookingSnapshot = await bookingsRef.doc(bookingId).get();
+    final booking = Booking.fromDoc(bookingSnapshot);
+
+    return booking;
+  }
+
+  @cached
+  Future<Opportunity> _getOpportunity(String opportunityId) async {
+    final opportunitySnapshot = await opportunitiesRef.doc(opportunityId).get();
+    final opportunity = Opportunity.fromDoc(opportunitySnapshot);
+
+    return opportunity;
   }
 
   @override
@@ -97,6 +116,88 @@ class AlgoliaSearchImpl extends SearchRepository {
   }
 
   @override
+  Future<List<Booking>> queryBookings(
+    String input, {
+    double? lat,
+    double? lng,
+    int radius = 50000,
+  }) async {
+    var results = <AlgoliaObjectSnapshot>[];
+
+    final formattedLocationFilter =
+        (lat != null && lng != null) ? '$lat, $lng' : null;
+
+    try {
+      var query = algolia.index('prod_bookings').query(input);
+
+      if (formattedLocationFilter != null) {
+        query = query.setAroundLatLng(formattedLocationFilter);
+      }
+
+      query = query.setAroundRadius(radius);
+
+      final snap = await query.getObjects();
+
+      await _analytics.logSearch(searchTerm: input);
+
+      results = snap.hits;
+    } on AlgoliaError {
+      // print(e.error);
+      rethrow;
+    }
+
+    final bookingResults = await Future.wait(
+      results.map((res) async {
+        final user = await _getBooking(res.objectID);
+        return user;
+      }),
+    );
+
+    return bookingResults;
+  }
+
+  @override
+  Future<List<Opportunity>> queryOpportunities(
+    String input, {
+    double? lat,
+    double? lng,
+    int radius = 50000,
+  }) async {
+    var results = <AlgoliaObjectSnapshot>[];
+
+    final formattedLocationFilter =
+        (lat != null && lng != null) ? '$lat, $lng' : null;
+
+    try {
+      var query = algolia.index('prod_opportunities').query(input);
+
+      if (formattedLocationFilter != null) {
+        query = query.setAroundLatLng(formattedLocationFilter);
+      }
+
+      query = query.setAroundRadius(radius);
+
+      final snap = await query.getObjects();
+
+      await _analytics.logSearch(searchTerm: input);
+
+      results = snap.hits;
+    } on AlgoliaError {
+      // print(e.error);
+      rethrow;
+    }
+
+    final opportunityResults = await Future.wait(
+      results.map((res) async {
+        final user = await _getOpportunity(res.objectID);
+        return user;
+      }),
+    );
+
+    return opportunityResults;
+  }
+
+  @override
   Future<List<UserModel>> queryUsersInBoundingBox(
     String input, {
     required double swLatitude,
@@ -142,8 +243,7 @@ class AlgoliaSearchImpl extends SearchRepository {
           p2Lat: neLatitude,
           p2Lng: neLongitude,
         ),
-      ])
-      .setHitsPerPage(100);
+      ]).setHitsPerPage(100);
       final snap = await query.getObjects();
 
       await _analytics.logSearch(searchTerm: input);
@@ -162,5 +262,87 @@ class AlgoliaSearchImpl extends SearchRepository {
     );
 
     return userResults;
+  }
+
+  @override
+  Future<List<Booking>> queryBookingsInBoundingBox(
+    String input, {
+    required double swLatitude,
+    required double swLongitude,
+    required double neLatitude,
+    required double neLongitude,
+  }) async {
+    var results = <AlgoliaObjectSnapshot>[];
+
+    try {
+      final query =
+          algolia.index('prod_bookings').query(input).setInsideBoundingBox([
+        BoundingBox(
+          p1Lat: swLatitude,
+          p1Lng: swLongitude,
+          p2Lat: neLatitude,
+          p2Lng: neLongitude,
+        ),
+      ]).setHitsPerPage(100);
+      final snap = await query.getObjects();
+
+      await _analytics.logSearch(searchTerm: input);
+
+      results = snap.hits;
+    } on AlgoliaError {
+      // print(e.error);
+      rethrow;
+    }
+
+    final bookingResults = await Future.wait(
+      results.map((res) async {
+        final user = await _getBooking(res.objectID);
+        return user;
+      }),
+    );
+
+    return bookingResults;
+  }
+
+  @override
+  Future<List<Opportunity>> queryOpportunitiesInBoundingBox(
+    String input, {
+    required double swLatitude,
+    required double swLongitude,
+    required double neLatitude,
+    required double neLongitude,
+  }) async {
+    var results = <AlgoliaObjectSnapshot>[];
+
+    try {
+      final query = algolia
+          .index('prod_opportunities')
+          .query(input)
+          .setInsideBoundingBox([
+        BoundingBox(
+          p1Lat: swLatitude,
+          p1Lng: swLongitude,
+          p2Lat: neLatitude,
+          p2Lng: neLongitude,
+        ),
+      ]).setHitsPerPage(100);
+      final snap = await query.getObjects();
+
+      await _analytics.logSearch(searchTerm: input);
+
+      results = snap.hits;
+    } on AlgoliaError {
+      // print(e.error);
+      rethrow;
+    }
+
+    final opportunityResults = await Future.wait(
+      results.map((res) async {
+        final user = await _getOpportunity(res.objectID);
+        return user;
+      }),
+    );
+
+    return opportunityResults;
   }
 }

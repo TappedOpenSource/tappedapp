@@ -16,12 +16,13 @@ final _privateConstructorUsedError = UnsupportedError(
 
 /// @nodoc
 mixin _$DiscoverState {
-  List<UserModel> get hits => throw _privateConstructorUsedError;
+  List<UserModel> get venueHits => throw _privateConstructorUsedError;
+  List<Booking> get bookingHits => throw _privateConstructorUsedError;
+  List<Opportunity> get opportunityHits => throw _privateConstructorUsedError;
+  MapOverlay get mapOverlay => throw _privateConstructorUsedError;
   double get userLat => throw _privateConstructorUsedError;
   double get userLng => throw _privateConstructorUsedError;
-  List<UserModel> get contactedVenues => throw _privateConstructorUsedError;
-  List<Opportunity> get appliedOpportunities =>
-      throw _privateConstructorUsedError;
+  LatLngBounds? get bounds => throw _privateConstructorUsedError;
 
   @JsonKey(ignore: true)
   $DiscoverStateCopyWith<DiscoverState> get copyWith =>
@@ -35,11 +36,13 @@ abstract class $DiscoverStateCopyWith<$Res> {
       _$DiscoverStateCopyWithImpl<$Res, DiscoverState>;
   @useResult
   $Res call(
-      {List<UserModel> hits,
+      {List<UserModel> venueHits,
+      List<Booking> bookingHits,
+      List<Opportunity> opportunityHits,
+      MapOverlay mapOverlay,
       double userLat,
       double userLng,
-      List<UserModel> contactedVenues,
-      List<Opportunity> appliedOpportunities});
+      LatLngBounds? bounds});
 }
 
 /// @nodoc
@@ -55,17 +58,31 @@ class _$DiscoverStateCopyWithImpl<$Res, $Val extends DiscoverState>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? hits = null,
+    Object? venueHits = null,
+    Object? bookingHits = null,
+    Object? opportunityHits = null,
+    Object? mapOverlay = null,
     Object? userLat = null,
     Object? userLng = null,
-    Object? contactedVenues = null,
-    Object? appliedOpportunities = null,
+    Object? bounds = freezed,
   }) {
     return _then(_value.copyWith(
-      hits: null == hits
-          ? _value.hits
-          : hits // ignore: cast_nullable_to_non_nullable
+      venueHits: null == venueHits
+          ? _value.venueHits
+          : venueHits // ignore: cast_nullable_to_non_nullable
               as List<UserModel>,
+      bookingHits: null == bookingHits
+          ? _value.bookingHits
+          : bookingHits // ignore: cast_nullable_to_non_nullable
+              as List<Booking>,
+      opportunityHits: null == opportunityHits
+          ? _value.opportunityHits
+          : opportunityHits // ignore: cast_nullable_to_non_nullable
+              as List<Opportunity>,
+      mapOverlay: null == mapOverlay
+          ? _value.mapOverlay
+          : mapOverlay // ignore: cast_nullable_to_non_nullable
+              as MapOverlay,
       userLat: null == userLat
           ? _value.userLat
           : userLat // ignore: cast_nullable_to_non_nullable
@@ -74,14 +91,10 @@ class _$DiscoverStateCopyWithImpl<$Res, $Val extends DiscoverState>
           ? _value.userLng
           : userLng // ignore: cast_nullable_to_non_nullable
               as double,
-      contactedVenues: null == contactedVenues
-          ? _value.contactedVenues
-          : contactedVenues // ignore: cast_nullable_to_non_nullable
-              as List<UserModel>,
-      appliedOpportunities: null == appliedOpportunities
-          ? _value.appliedOpportunities
-          : appliedOpportunities // ignore: cast_nullable_to_non_nullable
-              as List<Opportunity>,
+      bounds: freezed == bounds
+          ? _value.bounds
+          : bounds // ignore: cast_nullable_to_non_nullable
+              as LatLngBounds?,
     ) as $Val);
   }
 }
@@ -95,11 +108,13 @@ abstract class _$$DiscoverStateImplCopyWith<$Res>
   @override
   @useResult
   $Res call(
-      {List<UserModel> hits,
+      {List<UserModel> venueHits,
+      List<Booking> bookingHits,
+      List<Opportunity> opportunityHits,
+      MapOverlay mapOverlay,
       double userLat,
       double userLng,
-      List<UserModel> contactedVenues,
-      List<Opportunity> appliedOpportunities});
+      LatLngBounds? bounds});
 }
 
 /// @nodoc
@@ -113,17 +128,31 @@ class __$$DiscoverStateImplCopyWithImpl<$Res>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? hits = null,
+    Object? venueHits = null,
+    Object? bookingHits = null,
+    Object? opportunityHits = null,
+    Object? mapOverlay = null,
     Object? userLat = null,
     Object? userLng = null,
-    Object? contactedVenues = null,
-    Object? appliedOpportunities = null,
+    Object? bounds = freezed,
   }) {
     return _then(_$DiscoverStateImpl(
-      hits: null == hits
-          ? _value._hits
-          : hits // ignore: cast_nullable_to_non_nullable
+      venueHits: null == venueHits
+          ? _value._venueHits
+          : venueHits // ignore: cast_nullable_to_non_nullable
               as List<UserModel>,
+      bookingHits: null == bookingHits
+          ? _value._bookingHits
+          : bookingHits // ignore: cast_nullable_to_non_nullable
+              as List<Booking>,
+      opportunityHits: null == opportunityHits
+          ? _value._opportunityHits
+          : opportunityHits // ignore: cast_nullable_to_non_nullable
+              as List<Opportunity>,
+      mapOverlay: null == mapOverlay
+          ? _value.mapOverlay
+          : mapOverlay // ignore: cast_nullable_to_non_nullable
+              as MapOverlay,
       userLat: null == userLat
           ? _value.userLat
           : userLat // ignore: cast_nullable_to_non_nullable
@@ -132,14 +161,10 @@ class __$$DiscoverStateImplCopyWithImpl<$Res>
           ? _value.userLng
           : userLng // ignore: cast_nullable_to_non_nullable
               as double,
-      contactedVenues: null == contactedVenues
-          ? _value._contactedVenues
-          : contactedVenues // ignore: cast_nullable_to_non_nullable
-              as List<UserModel>,
-      appliedOpportunities: null == appliedOpportunities
-          ? _value._appliedOpportunities
-          : appliedOpportunities // ignore: cast_nullable_to_non_nullable
-              as List<Opportunity>,
+      bounds: freezed == bounds
+          ? _value.bounds
+          : bounds // ignore: cast_nullable_to_non_nullable
+              as LatLngBounds?,
     ));
   }
 }
@@ -148,52 +173,59 @@ class __$$DiscoverStateImplCopyWithImpl<$Res>
 
 class _$DiscoverStateImpl implements _DiscoverState {
   const _$DiscoverStateImpl(
-      {final List<UserModel> hits = const [],
+      {final List<UserModel> venueHits = const [],
+      final List<Booking> bookingHits = const [],
+      final List<Opportunity> opportunityHits = const [],
+      this.mapOverlay = MapOverlay.venues,
       this.userLat = 37.5407246,
       this.userLng = -77.4360481,
-      final List<UserModel> contactedVenues = const [],
-      final List<Opportunity> appliedOpportunities = const []})
-      : _hits = hits,
-        _contactedVenues = contactedVenues,
-        _appliedOpportunities = appliedOpportunities;
+      this.bounds})
+      : _venueHits = venueHits,
+        _bookingHits = bookingHits,
+        _opportunityHits = opportunityHits;
 
-  final List<UserModel> _hits;
+  final List<UserModel> _venueHits;
   @override
   @JsonKey()
-  List<UserModel> get hits {
-    if (_hits is EqualUnmodifiableListView) return _hits;
+  List<UserModel> get venueHits {
+    if (_venueHits is EqualUnmodifiableListView) return _venueHits;
     // ignore: implicit_dynamic_type
-    return EqualUnmodifiableListView(_hits);
+    return EqualUnmodifiableListView(_venueHits);
   }
 
+  final List<Booking> _bookingHits;
+  @override
+  @JsonKey()
+  List<Booking> get bookingHits {
+    if (_bookingHits is EqualUnmodifiableListView) return _bookingHits;
+    // ignore: implicit_dynamic_type
+    return EqualUnmodifiableListView(_bookingHits);
+  }
+
+  final List<Opportunity> _opportunityHits;
+  @override
+  @JsonKey()
+  List<Opportunity> get opportunityHits {
+    if (_opportunityHits is EqualUnmodifiableListView) return _opportunityHits;
+    // ignore: implicit_dynamic_type
+    return EqualUnmodifiableListView(_opportunityHits);
+  }
+
+  @override
+  @JsonKey()
+  final MapOverlay mapOverlay;
   @override
   @JsonKey()
   final double userLat;
   @override
   @JsonKey()
   final double userLng;
-  final List<UserModel> _contactedVenues;
   @override
-  @JsonKey()
-  List<UserModel> get contactedVenues {
-    if (_contactedVenues is EqualUnmodifiableListView) return _contactedVenues;
-    // ignore: implicit_dynamic_type
-    return EqualUnmodifiableListView(_contactedVenues);
-  }
-
-  final List<Opportunity> _appliedOpportunities;
-  @override
-  @JsonKey()
-  List<Opportunity> get appliedOpportunities {
-    if (_appliedOpportunities is EqualUnmodifiableListView)
-      return _appliedOpportunities;
-    // ignore: implicit_dynamic_type
-    return EqualUnmodifiableListView(_appliedOpportunities);
-  }
+  final LatLngBounds? bounds;
 
   @override
   String toString() {
-    return 'DiscoverState(hits: $hits, userLat: $userLat, userLng: $userLng, contactedVenues: $contactedVenues, appliedOpportunities: $appliedOpportunities)';
+    return 'DiscoverState(venueHits: $venueHits, bookingHits: $bookingHits, opportunityHits: $opportunityHits, mapOverlay: $mapOverlay, userLat: $userLat, userLng: $userLng, bounds: $bounds)';
   }
 
   @override
@@ -201,23 +233,29 @@ class _$DiscoverStateImpl implements _DiscoverState {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$DiscoverStateImpl &&
-            const DeepCollectionEquality().equals(other._hits, _hits) &&
+            const DeepCollectionEquality()
+                .equals(other._venueHits, _venueHits) &&
+            const DeepCollectionEquality()
+                .equals(other._bookingHits, _bookingHits) &&
+            const DeepCollectionEquality()
+                .equals(other._opportunityHits, _opportunityHits) &&
+            (identical(other.mapOverlay, mapOverlay) ||
+                other.mapOverlay == mapOverlay) &&
             (identical(other.userLat, userLat) || other.userLat == userLat) &&
             (identical(other.userLng, userLng) || other.userLng == userLng) &&
-            const DeepCollectionEquality()
-                .equals(other._contactedVenues, _contactedVenues) &&
-            const DeepCollectionEquality()
-                .equals(other._appliedOpportunities, _appliedOpportunities));
+            (identical(other.bounds, bounds) || other.bounds == bounds));
   }
 
   @override
   int get hashCode => Object.hash(
       runtimeType,
-      const DeepCollectionEquality().hash(_hits),
+      const DeepCollectionEquality().hash(_venueHits),
+      const DeepCollectionEquality().hash(_bookingHits),
+      const DeepCollectionEquality().hash(_opportunityHits),
+      mapOverlay,
       userLat,
       userLng,
-      const DeepCollectionEquality().hash(_contactedVenues),
-      const DeepCollectionEquality().hash(_appliedOpportunities));
+      bounds);
 
   @JsonKey(ignore: true)
   @override
@@ -228,22 +266,28 @@ class _$DiscoverStateImpl implements _DiscoverState {
 
 abstract class _DiscoverState implements DiscoverState {
   const factory _DiscoverState(
-      {final List<UserModel> hits,
+      {final List<UserModel> venueHits,
+      final List<Booking> bookingHits,
+      final List<Opportunity> opportunityHits,
+      final MapOverlay mapOverlay,
       final double userLat,
       final double userLng,
-      final List<UserModel> contactedVenues,
-      final List<Opportunity> appliedOpportunities}) = _$DiscoverStateImpl;
+      final LatLngBounds? bounds}) = _$DiscoverStateImpl;
 
   @override
-  List<UserModel> get hits;
+  List<UserModel> get venueHits;
+  @override
+  List<Booking> get bookingHits;
+  @override
+  List<Opportunity> get opportunityHits;
+  @override
+  MapOverlay get mapOverlay;
   @override
   double get userLat;
   @override
   double get userLng;
   @override
-  List<UserModel> get contactedVenues;
-  @override
-  List<Opportunity> get appliedOpportunities;
+  LatLngBounds? get bounds;
   @override
   @JsonKey(ignore: true)
   _$$DiscoverStateImplCopyWith<_$DiscoverStateImpl> get copyWith =>
