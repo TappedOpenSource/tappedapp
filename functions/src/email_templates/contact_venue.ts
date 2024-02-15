@@ -1,4 +1,4 @@
-import { SocialFollowing, UserModel } from "../types/models";
+import { SocialFollowing, UserModel, Option } from "../types/models";
 
 export const contactVenueTemplate = ({ performer, venue, note }: {
     performer: UserModel,
@@ -7,17 +7,21 @@ export const contactVenueTemplate = ({ performer, venue, note }: {
 }): { subject: string, html: string; text: string } => {
   console.log({ performer, venue });
   const username = performer.username;
+  const spotifyId = performer.performerInfo?.spotifyId;
   const displayName = performer.artistName || username;
   const subject = `Performance Inquery from ${displayName}`;
 
   const html = `
   <p>My name is ${performer.artistName},</p> 
 
-  <p>${note}</p>
+  <p>${note}. I was told to reach out to you guys to perform at a couple shows.</p>
   
-    ${formatSocialLinks(performer.socialFollowing)}
+    ${formatSocialLinks(performer.socialFollowing, spotifyId)}
 
+    <div style="margin-top: 20px;">
+      <h3>Past Bookings</h3>
     <p>You can check my past booking history on my here <a href="https://tapped.ai/${username}">https://tapped.ai/${username}</a></p>
+    </div>
   
   <p>If you require any additional information or wish to discuss this opportunity further please email me back and let me know.<p>
   
@@ -30,11 +34,11 @@ export const contactVenueTemplate = ({ performer, venue, note }: {
   const text = `
     My name is ${performer.artistName},
 
-    ${note}
+    ${note}. I was told to reach out to you guys to perform at a couple shows.
 
-    ${formatSocialLinksText(performer.socialFollowing)}
+    ${formatSocialLinksText(performer.socialFollowing, spotifyId)}
 
-    You can check my past booking history on my here https://tapped.ai/${username}
+    Past Bookings:  You can check my past booking history on my here https://tapped.ai/${username}
 
     If you require any additional information or wish to discuss this opportunity further please email me back and let me know.
 
@@ -51,18 +55,22 @@ export const contactVenueTemplate = ({ performer, venue, note }: {
   };
 }
 
-const formatSocialLinks = (socialFollowing: SocialFollowing): string => {
+const formatSocialLinks = (
+  socialFollowing: SocialFollowing, 
+  spotifyId: Option<string>,
+): string => {
   const { instagramHandle, facebookHandle, twitterHandle } = socialFollowing;
   const row = (label: string, link: string) => {
     if (!link) {
       return "";
     }
-    return `<a href="${link}">${label}</a>`;
+    return `${label}: <a href="${link}">${link}</a>`;
   }
 
   const instagram = instagramHandle ? row("Instagram", `https://instagram.com/${instagramHandle}`) : "";
   const facebook = facebookHandle ? row("Facebook", `https://facebook.com/${facebookHandle}`) : "";
   const twitter = twitterHandle ? row("Twitter", `https://twitter.com/${twitterHandle}`) : "";
+  const spotify = spotifyId ? row("Spotify", spotifyId) : "";
   //   const youtube = youtubeHandle ? row("Youtube", `https://youtube.com/${youtubeHandle}`) : "";
 
   const socialLinks = `
@@ -71,13 +79,17 @@ const formatSocialLinks = (socialFollowing: SocialFollowing): string => {
       ${instagram}
       ${facebook}
       ${twitter}
+      ${spotify}
     </div>
     `;
 
   return socialLinks;
 }
 
-const formatSocialLinksText = (socialFollowing: SocialFollowing): string => {
+const formatSocialLinksText = (
+  socialFollowing: SocialFollowing, 
+  spotifyId: Option<string>,
+): string => {
   const { instagramHandle, facebookHandle, twitterHandle } = socialFollowing;
   const row = (label: string, link: string) => {
     if (!link) {
@@ -89,6 +101,7 @@ const formatSocialLinksText = (socialFollowing: SocialFollowing): string => {
   const instagram = instagramHandle ? row("Instagram", `https://instagram.com/${instagramHandle}`) : "";
   const facebook = facebookHandle ? row("Facebook", `https://facebook.com/${facebookHandle}`) : "";
   const twitter = twitterHandle ? row("Twitter", `https://twitter.com/${twitterHandle}`) : "";
+  const spotify = spotifyId ? row("Spotify", spotifyId) : "";
   //   const youtube = youtubeHandle ? row("Youtube", `https://youtube.com/${youtubeHandle}`) : "";
 
   const socialLinks = `
@@ -96,6 +109,7 @@ const formatSocialLinksText = (socialFollowing: SocialFollowing): string => {
         ${instagram}
         ${facebook}
         ${twitter}
+        ${spotify}
         `;
 
   return socialLinks;

@@ -63,10 +63,10 @@ class AlgoliaSearchImpl extends SearchRepository {
 
     const formattedIsDeletedFilter = 'deleted:false';
     final formattedLabelFilter = labels != null
-        ? '(${labels.map((e) => "label:'$e'").join(' OR ')})'
+        ? '(${labels.map((e) => "performerInfo.label:'$e'").join(' OR ')})'
         : null;
     final formattedGenreFilter = genres != null
-        ? '(${genres.map((e) => "genres:'$e'").join(' OR ')})'
+        ? '(${genres.map((e) => "performerInfo.genres:'$e'").join(' OR ')})'
         : null;
     final formattedOccupationFilter = occupations != null
         ? '(${occupations.map((e) => "occupations:'$e'").join(' OR ')})'
@@ -212,10 +212,10 @@ class AlgoliaSearchImpl extends SearchRepository {
 
     const formattedIsDeletedFilter = 'deleted:false';
     final formattedLabelFilter = labels != null
-        ? '(${labels.map((e) => "label:'$e'").join(' OR ')})'
+        ? '(${labels.map((e) => "performerInfo.label:'$e'").join(' OR ')})'
         : null;
     final formattedGenreFilter = genres != null
-        ? '(${genres.map((e) => "genres:'$e'").join(' OR ')})'
+        ? '(${genres.map((e) => "performerInfo.genres:'$e'").join(' OR ')})'
         : null;
     final formattedOccupationFilter = occupations != null
         ? '(${occupations.map((e) => "occupations:'$e'").join(' OR ')})'
