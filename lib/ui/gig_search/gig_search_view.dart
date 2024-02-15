@@ -2,9 +2,13 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:formz/formz.dart';
+import 'package:fpdart/fpdart.dart';
+import 'package:intheloopapp/data/search_repository.dart';
 import 'package:intheloopapp/ui/gig_search/gig_search_cubit.dart';
 import 'package:intheloopapp/ui/gig_search/gig_search_form_view.dart';
 import 'package:intheloopapp/ui/gig_search/gig_search_results_view.dart';
+import 'package:intheloopapp/utils/bloc_utils.dart';
+import 'package:intheloopapp/utils/current_user_builder.dart';
 
 class GigSearchView extends StatelessWidget {
   const GigSearchView({
@@ -15,13 +19,13 @@ class GigSearchView extends StatelessWidget {
     return BlocBuilder<GigSearchCubit, GigSearchState>(
       builder: (context, state) {
         return switch (state.formStatus) {
-          FormzSubmissionStatus.initial => GigSearchFormView(),
+          FormzSubmissionStatus.initial => const GigSearchFormView(),
           FormzSubmissionStatus.inProgress => const Center(
             child: CupertinoActivityIndicator(),
           ),
-          FormzSubmissionStatus.success => GigSearchResultsView(),
-          FormzSubmissionStatus.failure => GigSearchFormView(),
-          FormzSubmissionStatus.canceled => GigSearchFormView(),
+          FormzSubmissionStatus.success => const GigSearchResultsView(),
+          FormzSubmissionStatus.failure => const GigSearchFormView(),
+          FormzSubmissionStatus.canceled => const GigSearchFormView(),
         };
       },
     );
@@ -29,10 +33,19 @@ class GigSearchView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-    return BlocProvider<GigSearchCubit>(
-      create: (context) => GigSearchCubit(),
-      child: _viewSelector(),
+    return CurrentUserBuilder(
+      builder: (context, currentUser) {
+        return BlocProvider<GigSearchCubit>(
+          create: (context) => GigSearchCubit(
+            search: context.read<SearchRepository>(),
+            initialGenres: currentUser.performerInfo
+                .map((info) => info.genres)
+                .getOrElse(() => []),
+            initialPlace: const None(),
+          ),
+          child: _viewSelector(),
+        );
+      },
     );
   }
 }

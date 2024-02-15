@@ -421,18 +421,15 @@ final class GigSearchInitPage extends TappedRoute {
 
 final class RequestToPerformPage extends TappedRoute {
   RequestToPerformPage({
-    required this.bookingEmail,
-    required this.venue,
+    required this.venues,
   }) : super(
           routeName: '/request_to_perform',
           view: RequestToPerformView(
-            bookingEmail: bookingEmail,
-            venue: venue,
+            venues: venues,
           ),
         );
 
-  final String bookingEmail;
-  final UserModel venue;
+  final List<UserModel> venues;
 }
 
 final class RequestToPerformConfirmationPage extends TappedRoute {

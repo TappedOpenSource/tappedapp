@@ -89,7 +89,7 @@ class _UserTileState extends State<UserTile> {
               leading: UserAvatar(
                 radius: 25,
                 pushUser: Option.of(user),
-                imageUrl: user.profilePicture.toNullable(),
+                imageUrl: user.profilePicture,
                 verified: verified,
               ),
               title: RichText(

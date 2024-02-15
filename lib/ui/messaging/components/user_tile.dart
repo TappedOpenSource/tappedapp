@@ -20,7 +20,7 @@ class UserTile extends StatelessWidget {
     return ListTile(
       leading: UserAvatar(
         pushUser: Option.of(user),
-        imageUrl: user.profilePicture.toNullable(),
+        imageUrl: user.profilePicture,
         radius: 20,
       ),
       title: Text(user.username.toString()),

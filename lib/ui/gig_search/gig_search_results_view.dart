@@ -1,6 +1,9 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fpdart/fpdart.dart';
+import 'package:intheloopapp/domains/navigation_bloc/navigation_bloc.dart';
+import 'package:intheloopapp/domains/navigation_bloc/tapped_route.dart';
 import 'package:intheloopapp/ui/gig_search/gig_search_cubit.dart';
 import 'package:intheloopapp/ui/user_tile.dart';
 
@@ -16,6 +19,19 @@ class GigSearchResultsView extends StatelessWidget {
       builder: (context, state) {
         return Scaffold(
           backgroundColor: theme.colorScheme.background,
+          floatingActionButton: state.selectedResults.isNotEmpty
+              ? FloatingActionButton.extended(
+                  onPressed: () {
+                    context.push(
+                      RequestToPerformPage(
+                        venues: state.selectedResults,
+                      ),
+                    );
+                  },
+                  label: const Text('Confirm'),
+                  icon: const Icon(Icons.check),
+                )
+              : null,
           appBar: AppBar(
             leading: IconButton(
               icon: const Icon(Icons.arrow_back),
@@ -24,6 +40,38 @@ class GigSearchResultsView extends StatelessWidget {
               },
             ),
             actions: [],
+            bottom: PreferredSize(
+              preferredSize: const Size.fromHeight(50),
+              child: Padding(
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 20,
+                  vertical: 12,
+                ),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Row(
+                      children: [
+                        Checkbox(
+                          value: state.allSelected,
+                          onChanged: (selected) {
+                            context.read<GigSearchCubit>().selectAll(
+                                  selected ?? false,
+                                );
+                          },
+                        ),
+                        const SizedBox(width: 4),
+                        const Text('Select All'),
+                      ],
+                    ),
+                    Text(
+                      'Found ${state.results.length} venues',
+                      style: theme.textTheme.subtitle1,
+                    ),
+                  ],
+                ),
+              ),
+            ),
           ),
           body: switch (state.results.isEmpty) {
             true => const Center(
@@ -32,10 +80,20 @@ class GigSearchResultsView extends StatelessWidget {
             false => ListView.builder(
                 itemCount: state.results.length,
                 itemBuilder: (context, index) {
-                  final venue = state.results[index];
+                  final selectableResult = state.results[index];
+                  final venue = selectableResult.user;
                   return UserTile(
                     userId: venue.id,
                     user: Option.of(venue),
+                    trailing: Checkbox(
+                      value: selectableResult.selected,
+                      onChanged: (selected) {
+                        context.read<GigSearchCubit>().updateSelected(
+                              venue.id,
+                              selected ?? false,
+                            );
+                      },
+                    ),
                   );
                 },
               ),

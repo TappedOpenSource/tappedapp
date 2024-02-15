@@ -9,6 +9,7 @@ dependencies:
   algolia: 1.1.2
   animations: 2.0.11
   audio_service: 0.18.12
+  avatar_stack: ^1.2.0
   badges: 3.1.2
   bloc: 8.1.2
   bloc_test: 9.1.5

@@ -4,7 +4,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fpdart/fpdart.dart';
 import 'package:intheloopapp/domains/models/genre.dart';
 import 'package:intheloopapp/ui/forms/location_text_field.dart';
-import 'package:intheloopapp/ui/gig_search/components/city_selection.dart';
 import 'package:intheloopapp/ui/gig_search/gig_search_cubit.dart';
 import 'package:intheloopapp/ui/settings/components/genre_selection.dart';
 import 'package:intheloopapp/ui/user_tile.dart';
@@ -54,7 +53,7 @@ class GigSearchFormView extends StatelessWidget {
                         ),
                       ),
                       LocationTextField(
-                        initialPlace: const None(),
+                        initialPlace: state.place,
                         onChanged: (placeData, _) {
                           context
                               .read<GigSearchCubit>()
@@ -70,9 +69,7 @@ class GigSearchFormView extends StatelessWidget {
                         ),
                       ),
                       GenreSelection(
-                        initialValue: currentUser.performerInfo
-                            .map((info) => info.genres)
-                            .getOrElse(() => []),
+                        initialValue: state.genres,
                         onConfirm: (genres) {
                           context
                               .read<GigSearchCubit>()
@@ -110,7 +107,22 @@ class GigSearchFormView extends StatelessWidget {
                           Expanded(
                             child: CupertinoButton.filled(
                               onPressed: () {
-                                context.read<GigSearchCubit>().searchVenues();
+                                context
+                                    .read<GigSearchCubit>()
+                                    .searchVenues()
+                                    .catchError((error) {
+                                  ScaffoldMessenger.of(context).showSnackBar(
+                                    SnackBar(
+                                      backgroundColor: Colors.redAccent,
+                                      shape: RoundedRectangleBorder(
+                                        borderRadius: BorderRadius.circular(15),
+                                      ),
+                                      content: Text(
+                                        error.toString(),
+                                      ),
+                                    ),
+                                  );
+                                });
                               },
                               borderRadius: BorderRadius.circular(15),
                               child: const Text(

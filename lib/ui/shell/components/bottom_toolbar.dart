@@ -117,7 +117,7 @@ class BottomToolbar extends StatelessWidget {
                 ),
                 child: UserAvatar(
                   radius: 45,
-                  imageUrl: user.profilePicture.toNullable(),
+                  imageUrl: user.profilePicture,
                 ),
               ),
               icon: Container(
@@ -130,7 +130,7 @@ class BottomToolbar extends StatelessWidget {
                 ),
                 child: UserAvatar(
                   radius: 45,
-                  imageUrl: user.profilePicture.toNullable(),
+                  imageUrl: user.profilePicture,
                 ),
               ),
             ),

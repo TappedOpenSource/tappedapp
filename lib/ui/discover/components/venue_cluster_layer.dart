@@ -46,7 +46,7 @@ class VenueClusterLayer extends StatelessWidget {
                             ),
                           ),
                       child: UserAvatar(
-                        imageUrl: venue.profilePicture.toNullable(),
+                        imageUrl: venue.profilePicture,
                         radius: 20,
                       ),
                     ),

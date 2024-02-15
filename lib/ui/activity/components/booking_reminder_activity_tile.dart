@@ -80,7 +80,7 @@ class BookingReminderActivityTile extends StatelessWidget {
                               leading: UserAvatar(
                                 radius: 20,
                                 pushUser: user,
-                                imageUrl: value.profilePicture.toNullable(),
+                                imageUrl: value.profilePicture,
                                 verified: isVerified,
                               ),
                               trailing: Text(

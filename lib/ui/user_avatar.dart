@@ -12,7 +12,7 @@ class UserAvatar extends StatelessWidget {
     super.key,
     this.pushId = const None(),
     this.pushUser = const None(),
-    this.imageUrl,
+    this.imageUrl = const None(),
     this.radius,
     this.minRadius,
     this.maxRadius,
@@ -21,7 +21,7 @@ class UserAvatar extends StatelessWidget {
 
   final Option<String> pushId;
   final Option<UserModel> pushUser;
-  final String? imageUrl;
+  final Option<String> imageUrl;
   final bool verified;
   final double? radius;
   final double? minRadius;
@@ -59,6 +59,7 @@ class UserAvatar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    const defaultImage = AssetImage('assets/default_avatar.png') as ImageProvider;
     return ConditionalParentWidget(
       condition: pushId.isSome(),
       conditionalBuilder: _pushProfile(context),
@@ -78,14 +79,20 @@ class UserAvatar extends StatelessWidget {
           radius: radius,
           minRadius: minRadius,
           maxRadius: maxRadius,
-          foregroundImage: (imageUrl == null || imageUrl!.isEmpty)
-              ? const AssetImage('assets/default_avatar.png') as ImageProvider
-              : CachedNetworkImageProvider(
-                  imageUrl!,
-                  errorListener: (object) {
-                    return;
-                  },
-                ),
+          foregroundImage: imageUrl.fold(
+            () => defaultImage,
+            (t) {
+              if (t.isEmpty) {
+                return defaultImage;
+              }
+              return CachedNetworkImageProvider(
+                t,
+                errorListener: (object) {
+                  return;
+                },
+              );
+            },
+          ),
           backgroundImage: const AssetImage('assets/default_avatar.png'),
         ),
       ),

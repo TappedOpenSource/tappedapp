@@ -51,7 +51,7 @@ class BookingContainer extends StatelessWidget {
                       leading: UserAvatar(
                         radius: 20,
                         pushUser: requestee,
-                        imageUrl: value.profilePicture.toNullable(),
+                        imageUrl: value.profilePicture,
                         verified: isVerified,
                       ),
                       title: Text(value.displayName),
@@ -111,7 +111,7 @@ class BookingContainer extends StatelessWidget {
                       leading: UserAvatar(
                         radius: 20,
                         pushUser: requester,
-                        imageUrl: value.profilePicture.toNullable(),
+                        imageUrl: value.profilePicture,
                         verified: isVerified,
                       ),
                       title: Text(value.displayName),

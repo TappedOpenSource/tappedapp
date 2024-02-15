@@ -17,7 +17,7 @@ class RequestToPerform extends StatelessWidget {
 
   final UserModel venue;
 
-  Widget _buildRequestButton(BuildContext context, {required String email}) {
+  Widget _buildRequestButton(BuildContext context) {
     final theme = Theme.of(context);
     return CustomClaimsBuilder(
       builder: (context, claims) {
@@ -33,8 +33,7 @@ class RequestToPerform extends StatelessWidget {
 
               context.push(
                 RequestToPerformPage(
-                  bookingEmail: email,
-                  venue: venue,
+                  venues: [venue],
                 ),
               );
             },
@@ -95,7 +94,7 @@ class RequestToPerform extends StatelessWidget {
                         child: const CupertinoActivityIndicator(),
                       ),
                     ),
-                  false => _buildRequestButton(context, email: value),
+                  false => _buildRequestButton(context),
                   true => _buildAlreadyRequested(context),
                 };
               },

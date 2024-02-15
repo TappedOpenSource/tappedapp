@@ -18,7 +18,13 @@ class RatingChip extends StatelessWidget {
       child: Container(
         width: 34,
         decoration: BoxDecoration(
-          color: tappedAccent,
+          color: switch (rating) {
+            >=5.0 => Colors.blue,
+            >=4.0 => Colors.green,
+            >=3.0 => Colors.yellow,
+            >=2.0 => Colors.orange,
+            _ => Colors.red,
+          },
           borderRadius: BorderRadius.circular(15),
         ),
         padding: const EdgeInsets.symmetric(
