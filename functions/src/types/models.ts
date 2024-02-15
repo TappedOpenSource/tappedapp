@@ -2,7 +2,7 @@
 import type { Timestamp } from "firebase-admin/firestore";
 import { firestore } from "firebase-admin";
 
-type Option<T> = T | null | undefined;
+export type Option<T> = T | null | undefined;
 
 export type OldUserModel = {
   id: string;
@@ -55,6 +55,8 @@ export type SocialFollowing = {
     instagramFollowers: number;
     twitterHandle?: Option<string>;
     twitterFollowers: number;
+    facebookHandle?: Option<string>;
+    facebookFollowers: number;
 }
 
 export type BookerInfo = {

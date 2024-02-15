@@ -10,7 +10,7 @@ import 'package:intheloopapp/domains/navigation_bloc/tapped_route.dart';
 import 'package:intheloopapp/ui/app_theme_cubit.dart';
 import 'package:intheloopapp/ui/discover/components/bookings_heatmap_layer.dart';
 import 'package:intheloopapp/ui/discover/components/opportunities_heatmap_layer.dart';
-import 'package:intheloopapp/ui/discover/components/venue_cluster_layer.dart';
+import 'package:intheloopapp/ui/discover/components/venue_marker_layer.dart';
 import 'package:intheloopapp/ui/discover/components/draggable_sheet.dart';
 import 'package:intheloopapp/ui/discover/discover_cubit.dart';
 import 'package:intheloopapp/ui/profile/components/notification_icon_button.dart';
@@ -83,7 +83,7 @@ class DiscoverView extends StatelessWidget {
               },
             ),
             switch (state.mapOverlay) {
-              MapOverlay.venues => const VenueClusterLayer(),
+              MapOverlay.venues => const VenueMarkerLayer(),
               MapOverlay.bookings => BookingsHeatmapLayer(),
               MapOverlay.opportunities => const OpportunitiesHeatmapLayer(),
             },

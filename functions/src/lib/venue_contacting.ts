@@ -3,12 +3,12 @@
 import {
   onRequest,
 } from "firebase-functions/v2/https"
-import { 
-  POSTMARK_SERVER_ID, 
+import {
+  POSTMARK_SERVER_ID,
   // fcm, 
-  streamKey, 
-  streamSecret, 
-  usersRef, 
+  streamKey,
+  streamSecret,
+  usersRef,
   contactVenuesRef,
   orphanEmailsRef,
 } from "./firebase";
@@ -19,6 +19,7 @@ import * as postmark from "postmark";
 import { onDocumentCreated } from "firebase-functions/v2/firestore";
 import { UserModel } from "../types/models";
 import { StreamChat, User } from "stream-chat";
+import { contactVenueTemplate } from "../email_templates/contact_venue";
 
 function createEmailMessageId() {
   const currentTime = Date.now().toString(36);
@@ -33,7 +34,7 @@ async function sendStreamMessageFromEmail({ streamClient, userId, venueId, messa
   userId: string;
   venueId: string;
   message: string;
-}) { 
+}) {
   // create DM channel between both parties
   const token = await streamClient.createToken(venueId);
   await streamClient.connectUser({
@@ -47,7 +48,7 @@ async function sendStreamMessageFromEmail({ streamClient, userId, venueId, messa
   await channel.create();
 
   // post msg
-  await channel.sendMessage({ 
+  await channel.sendMessage({
     text: message,
   });
 
@@ -154,9 +155,16 @@ export const notifyFoundersOnVenueContact = onDocumentCreated(
       return;
     }
 
-    const user = documentData?.user as UserModel | undefined;
-    const username = user?.username;
+    const note = documentData?.note ?? "";
 
+    const user = documentData?.user as UserModel | undefined;
+    if (user === undefined) {
+      error("no user found");
+      return;
+    }
+
+    const username = user.username;
+    const userEmail = user.email;
     const userId = event.params.userId;
     const venueId = event.params.venueId;
 
@@ -171,7 +179,18 @@ export const notifyFoundersOnVenueContact = onDocumentCreated(
     // fcm.sendToDevice(devices, payload);
     const client = new postmark.ServerClient(POSTMARK_SERVER_ID.value());
     const messageId = createEmailMessageId();
-    const subject = "Booking Inquiry";
+
+    const { subject, text, html } = contactVenueTemplate({
+      performer: user,
+      venue: documentData?.venue,
+      note,
+    });
+
+    const ccs = [
+      "johannes@tapped.ai", 
+      "ilias@tapped.ai", 
+      userEmail,
+    ].join(",");
 
     const emailObj = {
       "Headers": [
@@ -182,11 +201,12 @@ export const notifyFoundersOnVenueContact = onDocumentCreated(
       ],
       "From": `${username}@booking.tapped.ai`,
       "To": bookingEmail,
-      "Cc": "johannes@tapped.ai,ilias@tapped.ai",
+      "Cc": ccs,
       "Subject": subject,
-      "HtmlBody": "this is a <strong>test</strong> email from Tapped",
-      "TextBody": "this is a test email from Tapped",
-      "MessageStream": "outbound"
+      "HtmlBody": html,
+      "TextBody": text,
+      "MessageStream": "outbound",
+      "TrackOpens": true,
     }
 
     // add msg id to initial request
@@ -225,7 +245,7 @@ export const inboundEmailWebhook = onRequest(
       const from = body.From;
       const referenceMessageId = body.Headers.find((h: { Name: string; Value: string }) => h.Name === "References")?.Value;
       const replyToMessageId = body.Headers.find((h: { Name: string; Value: string }) => h.Name === "In-Reply-To")?.Value;
-      const latestMessageId = body.Headers.find((h: { Name: string; Value: string }) => h.Name === "Message-ID")?.Value; 
+      const latestMessageId = body.Headers.find((h: { Name: string; Value: string }) => h.Name === "Message-ID")?.Value;
 
       if (!subject || !referenceMessageId) {
         error("no subject or messageId found")
@@ -276,7 +296,7 @@ export const inboundEmailWebhook = onRequest(
         .add(body);
 
       const messageContent = body.StrippedTextReply ?? body.TextBody;
- 
+
       const streamChat = new StreamChat(streamKey.value(), streamSecret.value());
       await sendStreamMessageFromEmail({
         streamClient: streamChat,
@@ -304,7 +324,7 @@ export const streamBeforeMessageWebhook = onRequest(
   { secrets: [ streamKey, streamSecret, POSTMARK_SERVER_ID ] },
   async (req, res) => {
     const client = new StreamChat(
-      streamKey.value(), 
+      streamKey.value(),
       streamSecret.value(),
     );
 

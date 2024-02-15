@@ -27,7 +27,7 @@ const _updatePerformerRating = async ({
   reviewCount: number;
   newRating: number;
 }) => {
-  const overallRating = (currRating * (reviewCount - 1) + newRating) / (reviewCount);
+  const overallRating = (currRating * reviewCount + newRating) / (reviewCount + 1);
 
   await usersRef.doc(userId).set({
     performerInfo: {
@@ -47,7 +47,7 @@ const _updateBookerRating = async ({
   reviewCount: number;
   newRating: number;
 }) => {
-  const overallRating = (currRating * (reviewCount - 1) + newRating) / (reviewCount);
+  const overallRating = (currRating * reviewCount + newRating) / (reviewCount + 1);
 
   await usersRef.doc(userId).set({
     bookerInfo: {

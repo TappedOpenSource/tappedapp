@@ -12,6 +12,7 @@ import 'package:intheloopapp/ui/profile/components/social_media_icons.dart';
 import 'package:intheloopapp/ui/profile/profile_cubit.dart';
 import 'package:intheloopapp/utils/custom_claims_builder.dart';
 import 'package:intheloopapp/utils/geohash.dart';
+import 'package:maps_launcher/maps_launcher.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class InfoSliver extends StatelessWidget {
@@ -65,14 +66,19 @@ class InfoSliver extends StatelessWidget {
                     ),
                     switch (currPlace) {
                       None() => const SizedBox.shrink(),
-                      Some(:final value) => CupertinoListTile(
-                          leading: const Icon(
-                            CupertinoIcons.map,
+                      Some(:final value) => GestureDetector(
+                          onLongPress: () => MapsLauncher.launchQuery(
+                            value.shortFormattedAddress,
                           ),
-                          title: Text(
-                            getAddressComponent(value.addressComponents),
-                            style: TextStyle(
-                              color: theme.colorScheme.onSurface,
+                          child: CupertinoListTile(
+                            leading: const Icon(
+                              CupertinoIcons.map,
+                            ),
+                            title: Text(
+                              getAddressComponent(value.addressComponents),
+                              style: TextStyle(
+                                color: theme.colorScheme.onSurface,
+                              ),
                             ),
                           ),
                         ),
@@ -127,7 +133,6 @@ class InfoSliver extends StatelessWidget {
                     if (isAdmin && bookingEmail != null)
                       GestureDetector(
                         onLongPress: () async {
-
                           await Clipboard.setData(
                             ClipboardData(text: bookingEmail),
                           );
