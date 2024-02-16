@@ -7,6 +7,8 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:intheloopapp/data/database_repository.dart';
 import 'package:intheloopapp/data/places_repository.dart';
 import 'package:intheloopapp/domains/models/user_model.dart';
+import 'package:intheloopapp/domains/navigation_bloc/navigation_bloc.dart';
+import 'package:intheloopapp/domains/navigation_bloc/tapped_route.dart';
 import 'package:intheloopapp/domains/onboarding_bloc/onboarding_bloc.dart';
 import 'package:intheloopapp/ui/conditional_parent_widget.dart';
 import 'package:intheloopapp/ui/error/error_view.dart';
@@ -55,8 +57,9 @@ class ProfileView extends StatelessWidget {
           );
   }
 
-  Widget _profileImage(String? profilePicture) {
+  Widget _profileImage(BuildContext context, String? profilePicture) {
     final hero = heroImage;
+    final imageProvider = _getProfileImage(profilePicture);
     return ConditionalParentWidget(
       condition: hero != null,
       conditionalBuilder: ({required child}) {
@@ -65,29 +68,40 @@ class ProfileView extends StatelessWidget {
           child: child,
         );
       },
-      child: Stack(
-        children: [
-          Container(
-            decoration: BoxDecoration(
-              image: DecorationImage(
-                fit: BoxFit.cover,
-                image: _getProfileImage(profilePicture),
+      child: GestureDetector(
+        onTap: () => context.push(
+          ImagePage(
+            heroImage: heroImage ??
+                HeroImage(
+                  heroTag: titleHeroTag ?? visitedUserId,
+                  imageProvider: imageProvider,
+                ),
+          ),
+        ),
+        child: Stack(
+          children: [
+            Container(
+              decoration: BoxDecoration(
+                image: DecorationImage(
+                  fit: BoxFit.cover,
+                  image: imageProvider,
+                ),
               ),
             ),
-          ),
-          Container(
-            decoration: BoxDecoration(
-              gradient: LinearGradient(
-                begin: Alignment.topCenter,
-                end: Alignment.bottomCenter,
-                colors: [
-                  Colors.transparent,
-                  Colors.black.withOpacity(0.5),
-                ],
+            Container(
+              decoration: BoxDecoration(
+                gradient: LinearGradient(
+                  begin: Alignment.topCenter,
+                  end: Alignment.bottomCenter,
+                  colors: [
+                    Colors.transparent,
+                    Colors.black.withOpacity(0.5),
+                  ],
+                ),
               ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
@@ -239,7 +253,10 @@ class ProfileView extends StatelessWidget {
                 ),
               ],
             ),
-            background: _profileImage(visitedUser.profilePicture.toNullable()),
+            background: _profileImage(
+              context,
+              visitedUser.profilePicture.toNullable(),
+            ),
           ),
         ),
         const SliverToBoxAdapter(
@@ -337,7 +354,10 @@ class ProfileView extends StatelessWidget {
               overflow: TextOverflow.fade,
               maxLines: 2,
             ),
-            background: _profileImage(visitedUser.profilePicture.toNullable()),
+            background: _profileImage(
+              context,
+              visitedUser.profilePicture.toNullable(),
+            ),
           ),
         ),
         SliverToBoxAdapter(
