@@ -40,6 +40,7 @@ import 'package:intheloopapp/ui/reviews/user_reviews_feed.dart';
 import 'package:intheloopapp/ui/services/service_view.dart';
 import 'package:intheloopapp/ui/settings/settings_view.dart';
 import 'package:intheloopapp/utils/hero_image.dart';
+import 'package:photo_view/photo_view.dart';
 import 'package:stream_chat_flutter/stream_chat_flutter.dart';
 // import 'package:stream_video_flutter/stream_video_flutter.dart';
 
@@ -451,4 +452,21 @@ final class AddPastBookingPage extends TappedRoute {
           routeName: '/add_past_booking',
           view: const AddPastBookingView(),
         );
+}
+
+final class ImagePage extends TappedRoute {
+  ImagePage({
+    required this.heroImage,
+  }) : super(
+          routeName: '/image',
+          view: Scaffold(
+            appBar: AppBar(),
+            body: PhotoView(
+              imageProvider: heroImage.imageProvider,
+              heroAttributes: PhotoViewHeroAttributes(tag: heroImage.heroTag),
+            ),
+          ),
+        );
+
+  final HeroImage heroImage;
 }
