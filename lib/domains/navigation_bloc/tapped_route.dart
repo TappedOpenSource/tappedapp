@@ -120,12 +120,17 @@ final class CreateBookingPage extends TappedRoute {
 final class BookingPage extends TappedRoute {
   BookingPage({
     required this.booking,
+    this.flierImage = const None(),
   }) : super(
           routeName: '/booking/${booking.id}',
-          view: BookingView(booking: booking),
+          view: BookingView(
+            booking: booking,
+            flierImage: flierImage,
+          ),
         );
 
   final Booking booking;
+  final Option<HeroImage> flierImage;
 }
 
 final class BookingConfirmationPage extends TappedRoute {

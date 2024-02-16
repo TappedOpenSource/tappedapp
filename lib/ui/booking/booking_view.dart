@@ -1,7 +1,9 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fpdart/fpdart.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:intheloopapp/data/database_repository.dart';
 import 'package:intheloopapp/data/places_repository.dart';
 import 'package:intheloopapp/domains/models/booking.dart';
@@ -12,19 +14,26 @@ import 'package:intheloopapp/ui/user_tile.dart';
 import 'package:intheloopapp/utils/bloc_utils.dart';
 import 'package:intheloopapp/utils/current_user_builder.dart';
 import 'package:intheloopapp/utils/geohash.dart';
+import 'package:intheloopapp/utils/hero_image.dart';
 import 'package:intl/intl.dart';
 import 'package:skeletons/skeletons.dart';
 import 'package:timeago/timeago.dart' as timeago;
 
+const defaultProvider = AssetImage(
+  'assets/default_avatar.png',
+) as ImageProvider;
+
 class BookingView extends StatelessWidget {
   const BookingView({
     required this.booking,
+    this.flierImage = const None(),
     this.onConfirm,
     this.onDeny,
     super.key,
   });
 
   final Booking booking;
+  final Option<HeroImage> flierImage;
   final void Function(Booking)? onConfirm;
   final void Function(Booking)? onDeny;
 
@@ -53,25 +62,60 @@ class BookingView extends StatelessWidget {
       builder: (context, currentUser) {
         final isCurrentUserInvolved = currentUser.id == booking.requesterId ||
             currentUser.id == booking.requesteeId;
+
+        final ImageProvider<Object> imageProvider = flierImage.fold(
+          () => booking.flierUrl.fold(
+            () => defaultProvider,
+            (flierUrl) {
+              if (flierUrl.isNotEmpty) {
+                return CachedNetworkImageProvider(flierUrl);
+              }
+              return defaultProvider;
+            },
+          ),
+          (flier) => flier.imageProvider,
+        );
+
         return Scaffold(
           backgroundColor: Theme.of(context).colorScheme.background,
-          appBar: AppBar(
-            title: const Row(
-              children: [
-                Text(
-                  'Booking',
-                  style: TextStyle(
-                    fontSize: 32,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-              ],
-            ),
-          ),
           body: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 24),
+            padding: const EdgeInsets.symmetric(horizontal: 20),
             child: CustomScrollView(
               slivers: [
+                SliverAppBar(
+                  expandedHeight: 300,
+                  pinned: true,
+                  stretch: true,
+                  flexibleSpace: FlexibleSpaceBar(
+                    stretchModes: const [
+                      StretchMode.zoomBackground,
+                      StretchMode.fadeTitle,
+                    ],
+                    titlePadding: const EdgeInsets.symmetric(
+                      horizontal: 12,
+                      vertical: 6,
+                    ),
+                    centerTitle: false,
+                    title: Text(
+                      booking.name.getOrElse(() => ''),
+                      style: GoogleFonts.manrope(
+                        color: Colors.white,
+                        fontSize: 32,
+                        fontWeight: FontWeight.w900,
+                      ),
+                    ),
+                    background: Hero(
+                      tag: flierImage.fold(
+                        () => booking.id,
+                        (flier) => flier.heroTag,
+                      ),
+                      child: Image(
+                        image: imageProvider,
+                        fit: BoxFit.cover,
+                      ),
+                    ),
+                  ),
+                ),
                 ...switch (booking.requesterId) {
                   None() => [],
                   Some(:final value) => [
@@ -216,11 +260,12 @@ class BookingView extends StatelessWidget {
                       final place = snapshot.data;
                       return Text(
                         place?.match(
-                          () => '',
-                          (place) => getAddressComponent(
-                            place.addressComponents,
-                          ),
-                        ) ?? '',
+                              () => '',
+                              (place) => getAddressComponent(
+                                place.addressComponents,
+                              ),
+                            ) ??
+                            '',
                         overflow: TextOverflow.ellipsis,
                         style: const TextStyle(
                           fontSize: 16,

@@ -8,7 +8,9 @@ import 'package:intheloopapp/domains/navigation_bloc/tapped_route.dart';
 import 'package:intheloopapp/ui/booking/booking_view.dart';
 import 'package:intheloopapp/utils/app_logger.dart';
 import 'package:intheloopapp/utils/bloc_utils.dart';
+import 'package:intheloopapp/utils/hero_image.dart';
 import 'package:intl/intl.dart';
+import 'package:uuid/uuid.dart';
 
 class BookingCard extends StatelessWidget {
   const BookingCard({
@@ -53,6 +55,7 @@ class BookingCard extends StatelessWidget {
           ),
           CachedNetworkImageProvider.new,
         );
+        final heroTag = const Uuid().v4();
 
         final titleText = booking.name.fold(
           () => user.map((t) => t.displayName),
@@ -63,6 +66,12 @@ class BookingCard extends StatelessWidget {
             context.push(
               BookingPage(
                 booking: booking,
+                flierImage: Option.of(
+                  HeroImage(
+                    imageProvider: imageProvider,
+                    heroTag: heroTag,
+                  ),
+                ),
               ),
             );
           },
@@ -72,15 +81,18 @@ class BookingCard extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Container(
-                  height: 150,
-                  width: 150,
-                  decoration: BoxDecoration(
-                    color: Colors.grey,
-                    borderRadius: BorderRadius.circular(15),
-                    image: DecorationImage(
-                      image: imageProvider,
-                      fit: BoxFit.cover,
+                Hero(
+                  tag: heroTag,
+                  child: Container(
+                    height: 150,
+                    width: 150,
+                    decoration: BoxDecoration(
+                      color: Colors.grey,
+                      borderRadius: BorderRadius.circular(15),
+                      image: DecorationImage(
+                        image: imageProvider,
+                        fit: BoxFit.cover,
+                      ),
                     ),
                   ),
                 ),
