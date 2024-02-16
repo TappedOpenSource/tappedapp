@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:fpdart/fpdart.dart';
 import 'package:intheloopapp/domains/models/service.dart';
 import 'package:intheloopapp/domains/models/user_model.dart';
@@ -35,7 +36,10 @@ class RequestToBookButton extends StatelessWidget {
     required void Function() onPressed,
   }) {
     return CupertinoButton.filled(
-      onPressed: onPressed,
+      onPressed: () {
+        HapticFeedback.mediumImpact();
+        onPressed();
+      },
       child: const Text(
         'Request to Book',
         style: TextStyle(

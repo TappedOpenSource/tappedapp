@@ -1,5 +1,12 @@
+import 'dart:io';
+import 'dart:typed_data';
+
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:fpdart/fpdart.dart';
+import 'package:gallery_saver/gallery_saver.dart';
+import 'package:image_gallery_saver/image_gallery_saver.dart';
 import 'package:intheloopapp/data/places_repository.dart';
 import 'package:intheloopapp/domains/models/badge.dart' as badge_model;
 import 'package:intheloopapp/domains/models/booking.dart';
@@ -39,7 +46,11 @@ import 'package:intheloopapp/ui/request_to_perform/request_to_perform_view.dart'
 import 'package:intheloopapp/ui/reviews/user_reviews_feed.dart';
 import 'package:intheloopapp/ui/services/service_view.dart';
 import 'package:intheloopapp/ui/settings/settings_view.dart';
+import 'package:intheloopapp/utils/app_logger.dart';
 import 'package:intheloopapp/utils/hero_image.dart';
+import 'package:intheloopapp/utils/image_tool.dart';
+import 'package:mime/mime.dart';
+import 'package:path_provider/path_provider.dart';
 import 'package:photo_view/photo_view.dart';
 import 'package:stream_chat_flutter/stream_chat_flutter.dart';
 // import 'package:stream_video_flutter/stream_video_flutter.dart';
@@ -459,14 +470,97 @@ final class ImagePage extends TappedRoute {
     required this.heroImage,
   }) : super(
           routeName: '/image',
-          view: Scaffold(
-            appBar: AppBar(),
-            body: PhotoView(
-              imageProvider: heroImage.imageProvider,
-              heroAttributes: PhotoViewHeroAttributes(tag: heroImage.heroTag),
-            ),
+          view: Builder(
+            builder: (context) {
+              return Scaffold(
+                appBar: AppBar(
+                  // actions: [
+                  //   IconButton(
+                  //     onPressed: () {
+                  //       _saveImage(
+                  //         context,
+                  //         heroImage,
+                  //       );
+                  //     },
+                  //     icon: const Icon(Icons.download_rounded),
+                  //   ),
+                  // ],
+                ),
+                body: PhotoView(
+                  imageProvider: heroImage.imageProvider,
+                  heroAttributes:
+                      PhotoViewHeroAttributes(tag: heroImage.heroTag),
+                ),
+              );
+            },
           ),
         );
 
+  // static Future<void> _writeToFile(ByteData data, String path) {
+  //   final buffer = data.buffer;
+  //   return File(path).writeAsBytes(
+  //     buffer.asUint8List(
+  //       data.offsetInBytes,
+  //       data.lengthInBytes,
+  //     ),
+  //   );
+  // }
+  //
+  // static Future<void> _saveImage(
+  //   BuildContext context,
+  //   HeroImage heroImage,
+  // ) async {
+  //   String? message;
+  //   final scaffoldMessenger = ScaffoldMessenger.of(context);
+  //   final config = createLocalImageConfiguration(context);
+  //
+  //   await EasyLoading.show();
+  //   try {
+  //     final imageBytes = await heroImage.imageProvider.getBytes(
+  //       imageConfig: config,
+  //     );
+  //     if (imageBytes == null) {
+  //       throw Exception('Failed to get image bytes');
+  //     }
+  //
+  //     // save bytes to path
+  //     final uuid = const Uuid().v4();
+  //     final mime = lookupMimeType('', headerBytes: imageBytes) ?? 'image/png';
+  //     final extension = extensionFromMime(mime);
+  //     final tempDir = await getTemporaryDirectory();
+  //     final tempPath = tempDir.path;
+  //     final filePath = '$tempPath/$uuid.$extension';
+  //
+  //     await _writeToFile(imageBytes.buffer.asByteData(), filePath);
+  //
+  //     final result = await GallerySaver.saveImage(
+  //       filePath,
+  //       // imageBytes,
+  //       // quality: 100,
+  //     );
+  //     message = 'Image saved to $result';
+  //   } catch (e, s) {
+  //     logger.error(
+  //       'Failed to save image',
+  //       error: e,
+  //       stackTrace: s,
+  //     );
+  //     message = 'Failed to save image: $e';
+  //   } finally {
+  //     await EasyLoading.dismiss();
+  //   }
+  //
+  //   scaffoldMessenger.showSnackBar(
+  //     SnackBar(
+  //       shape: RoundedRectangleBorder(
+  //         borderRadius: BorderRadius.circular(8),
+  //       ),
+  //       content: Text(
+  //         message,
+  //       ),
+  //     ),
+  //   );
+  // }
+  //
   final HeroImage heroImage;
 }

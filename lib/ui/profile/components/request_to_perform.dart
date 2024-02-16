@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:fpdart/fpdart.dart';
 import 'package:intheloopapp/data/auth_repository.dart';
 import 'package:intheloopapp/domains/models/user_model.dart';
@@ -26,6 +27,7 @@ class RequestToPerform extends StatelessWidget {
           width: double.infinity,
           child: CupertinoButton(
             onPressed: () {
+              HapticFeedback.lightImpact();
               if (!isPremium) {
                 context.push(PaywallPage());
                 return;

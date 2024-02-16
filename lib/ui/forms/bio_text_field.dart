@@ -25,8 +25,8 @@ class BioTextField extends StatelessWidget {
           return "bio can't be empty";
         }
 
-        if (input.trim().length > 256) {
-          return 'bio must be less than 256 characters';
+        if (input.trim().length > 1024) {
+          return 'bio must be less than 1024 characters';
         }
 
         return null;

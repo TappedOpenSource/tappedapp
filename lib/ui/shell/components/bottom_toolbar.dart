@@ -1,6 +1,7 @@
 import 'package:badges/badges.dart' as badges;
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intheloopapp/domains/bookings_bloc/bookings_bloc.dart';
 import 'package:intheloopapp/domains/models/booking.dart';
@@ -27,6 +28,7 @@ class BottomToolbar extends StatelessWidget {
         return CupertinoTabBar(
           onTap: (index) {
             context.changeTab(selectedTab: index);
+            HapticFeedback.mediumImpact();
           },
           activeColor: theme.primaryColor,
           inactiveColor:

@@ -1,6 +1,7 @@
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:intheloopapp/domains/navigation_bloc/navigation_bloc.dart';
 import 'package:intheloopapp/ui/common/waitlist_view.dart';
 import 'package:intheloopapp/ui/error/error_view.dart';
@@ -115,6 +116,7 @@ class PaywallView extends StatelessWidget {
                                   Expanded(
                                     child: CupertinoButton.filled(
                                       onPressed: () {
+                                        HapticFeedback.lightImpact();
                                         final package = packages.first;
                                         Purchases.purchasePackage(package)
                                             .then((info) {
