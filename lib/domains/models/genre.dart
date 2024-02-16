@@ -9,6 +9,8 @@ enum Genre {
   rock,
   @JsonValue('hiphop')
   hiphop,
+  @JsonValue('rap')
+  rap,
   @JsonValue('rnb')
   rnb,
   @JsonValue('country')

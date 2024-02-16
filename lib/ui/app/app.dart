@@ -80,7 +80,8 @@ class App extends StatelessWidget {
         providers: blocs,
         child: BlocBuilder<PremiumThemeCubit, bool>(
           builder: (context, isPremium) {
-            final accentColor = isPremium ? Colors.purple : tappedAccent;
+            // final accentColor = isPremium ? Colors.purple : tappedAccent;
+            const accentColor = tappedAccent;
             return BlocBuilder<AppThemeCubit, bool>(
               builder: (context, isDark) {
                 final appTheme = isDark
