@@ -20,7 +20,9 @@ _$BookingImpl _$$BookingImplFromJson(Map<String, dynamic> json) =>
           ? const None()
           : Option<String>.fromJson(
               json['requesterId'], (value) => value as String),
-      name: json['name'] as String? ?? '',
+      name: json['name'] == null
+          ? const None()
+          : Option<String>.fromJson(json['name'], (value) => value as String),
       note: json['note'] as String? ?? '',
       rate: json['rate'] as int? ?? 0,
       serviceId: json['serviceId'] == null
@@ -44,6 +46,10 @@ _$BookingImpl _$$BookingImplFromJson(Map<String, dynamic> json) =>
           ? const None()
           : Option<double>.fromJson(
               json['lng'], (value) => (value as num).toDouble()),
+      flierUrl: json['flierUrl'] == null
+          ? const None()
+          : Option<String>.fromJson(
+              json['flierUrl'], (value) => value as String),
     );
 
 Map<String, dynamic> _$$BookingImplToJson(_$BookingImpl instance) =>
@@ -57,7 +63,9 @@ Map<String, dynamic> _$$BookingImplToJson(_$BookingImpl instance) =>
       'requesterId': instance.requesterId.toJson(
         (value) => value,
       ),
-      'name': instance.name,
+      'name': instance.name.toJson(
+        (value) => value,
+      ),
       'note': instance.note,
       'rate': instance.rate,
       'serviceId': instance.serviceId.toJson(
@@ -74,6 +82,9 @@ Map<String, dynamic> _$$BookingImplToJson(_$BookingImpl instance) =>
         (value) => value,
       ),
       'lng': instance.lng.toJson(
+        (value) => value,
+      ),
+      'flierUrl': instance.flierUrl.toJson(
         (value) => value,
       ),
     };

@@ -230,15 +230,28 @@ export const sendBookingRequestSentEmailOnBooking = functions
     const requesterSnapshot = await usersRef.doc(booking.requesterId).get();
     const requester = requesterSnapshot.data();
     const requesterEmail = requester?.email;
+    const unclaimed = requester?.unclaimed ?? false;
+    const addedByUser = requester?.addedByUser ?? false;
 
     if (requesterEmail === undefined || requesterEmail === null || requesterEmail === "") {
       throw new Error(`requester ${requester?.id} does not have an email`);
+    }
+
+    if (unclaimed === true) {
+      debug(`requester ${requester?.id} is unclaimed, skipping email`);
+      return;
+    }
+
+    if (addedByUser === true) {
+      debug(`requester ${requester?.id} was added by user, skipping email`);
+      return;
     }
 
     if (requesterEmail.endsWith("@tapped.ai")) {
       debug(`requester ${requester?.id} email ends with @tapped.ai, skipping email`);
       return;
     }
+
 
     if (booking.calendarEventId !== undefined) {
       debug(`booking ${booking.id} already has a calendar event, skipping email`);
@@ -261,6 +274,9 @@ export const sendBookingRequestReceivedEmailOnBooking = functions
     const requesteeSnapshot = await usersRef.doc(booking.requesteeId).get();
     const requestee = requesteeSnapshot.data();
     const requesteeEmail = requestee?.email;
+    const unclaimed = requestee?.unclaimed ?? false;
+    const addedByUser = requestee?.addedByUser ?? false;
+
 
     if (requesteeEmail === undefined || requesteeEmail === null || requesteeEmail === "") {
       throw new Error(`requestee ${requestee?.id} does not have an email`);
@@ -268,6 +284,16 @@ export const sendBookingRequestReceivedEmailOnBooking = functions
 
     if (requesteeEmail.endsWith("@tapped.ai")) {
       debug(`requestee ${requestee?.id} email ends with @tapped.ai, skipping email`);
+      return;
+    }
+
+    if (unclaimed === true) {
+      debug(`requestee ${requestee?.id} is unclaimed, skipping email`);
+      return;
+    }
+
+    if (addedByUser === true) {
+      debug(`requestee ${requestee?.id} was added by user, skipping email`);
       return;
     }
 

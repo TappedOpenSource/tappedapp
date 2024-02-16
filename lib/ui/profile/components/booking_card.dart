@@ -6,6 +6,7 @@ import 'package:intheloopapp/domains/models/user_model.dart';
 import 'package:intheloopapp/domains/navigation_bloc/navigation_bloc.dart';
 import 'package:intheloopapp/domains/navigation_bloc/tapped_route.dart';
 import 'package:intheloopapp/ui/booking/booking_view.dart';
+import 'package:intheloopapp/utils/app_logger.dart';
 import 'package:intheloopapp/utils/bloc_utils.dart';
 import 'package:intl/intl.dart';
 
@@ -37,15 +38,26 @@ class BookingCard extends StatelessWidget {
       },
       builder: (context, snapshot) {
         final user = snapshot.data ?? const None();
+        const defaultProvider = AssetImage(
+          'assets/default_avatar.png',
+        ) as ImageProvider;
+        final ImageProvider<Object> imageProvider = booking.flierUrl.fold(
+          () => user.flatMap((t) => t.profilePicture).fold(
+            () => defaultProvider,
+            (t) {
+              if (t.isNotEmpty) {
+                return CachedNetworkImageProvider(t);
+              }
+              return defaultProvider;
+            },
+          ),
+          CachedNetworkImageProvider.new,
+        );
 
-        final imageProvider = user.flatMap((t) => t.profilePicture).map((t) {
-          if (t.isNotEmpty) {
-            return CachedNetworkImageProvider(t);
-          }
-          return const AssetImage('assets/default_avatar.png') as ImageProvider;
-        });
-
-        final titleText = user.map((t) => t.displayName);
+        final titleText = booking.name.fold(
+          () => user.map((t) => t.displayName),
+          Option.of,
+        );
         return InkWell(
           onTap: () {
             context.push(
@@ -67,11 +79,7 @@ class BookingCard extends StatelessWidget {
                     color: Colors.grey,
                     borderRadius: BorderRadius.circular(15),
                     image: DecorationImage(
-                      image: switch (imageProvider) {
-                        None() => const AssetImage('assets/default_avatar.png')
-                            as ImageProvider,
-                        Some(:final value) => value,
-                      },
+                      image: imageProvider,
                       fit: BoxFit.cover,
                     ),
                   ),

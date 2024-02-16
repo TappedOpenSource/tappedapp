@@ -30,7 +30,7 @@ mixin _$Booking {
   @DateTimeConverter()
   DateTime get timestamp => throw _privateConstructorUsedError;
   Option<String> get requesterId => throw _privateConstructorUsedError;
-  String get name => throw _privateConstructorUsedError;
+  Option<String> get name => throw _privateConstructorUsedError;
   String get note => throw _privateConstructorUsedError;
   int get rate => throw _privateConstructorUsedError;
   Option<String> get serviceId => throw _privateConstructorUsedError;
@@ -39,6 +39,7 @@ mixin _$Booking {
   Option<String> get geohash => throw _privateConstructorUsedError;
   Option<double> get lat => throw _privateConstructorUsedError;
   Option<double> get lng => throw _privateConstructorUsedError;
+  Option<String> get flierUrl => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
@@ -58,7 +59,7 @@ abstract class $BookingCopyWith<$Res> {
       @DateTimeConverter() DateTime endTime,
       @DateTimeConverter() DateTime timestamp,
       Option<String> requesterId,
-      String name,
+      Option<String> name,
       String note,
       int rate,
       Option<String> serviceId,
@@ -66,7 +67,8 @@ abstract class $BookingCopyWith<$Res> {
       Option<String> placeId,
       Option<String> geohash,
       Option<double> lat,
-      Option<double> lng});
+      Option<double> lng,
+      Option<String> flierUrl});
 }
 
 /// @nodoc
@@ -98,6 +100,7 @@ class _$BookingCopyWithImpl<$Res, $Val extends Booking>
     Object? geohash = null,
     Object? lat = null,
     Object? lng = null,
+    Object? flierUrl = null,
   }) {
     return _then(_value.copyWith(
       id: null == id
@@ -131,7 +134,7 @@ class _$BookingCopyWithImpl<$Res, $Val extends Booking>
       name: null == name
           ? _value.name
           : name // ignore: cast_nullable_to_non_nullable
-              as String,
+              as Option<String>,
       note: null == note
           ? _value.note
           : note // ignore: cast_nullable_to_non_nullable
@@ -164,6 +167,10 @@ class _$BookingCopyWithImpl<$Res, $Val extends Booking>
           ? _value.lng
           : lng // ignore: cast_nullable_to_non_nullable
               as Option<double>,
+      flierUrl: null == flierUrl
+          ? _value.flierUrl
+          : flierUrl // ignore: cast_nullable_to_non_nullable
+              as Option<String>,
     ) as $Val);
   }
 }
@@ -183,7 +190,7 @@ abstract class _$$BookingImplCopyWith<$Res> implements $BookingCopyWith<$Res> {
       @DateTimeConverter() DateTime endTime,
       @DateTimeConverter() DateTime timestamp,
       Option<String> requesterId,
-      String name,
+      Option<String> name,
       String note,
       int rate,
       Option<String> serviceId,
@@ -191,7 +198,8 @@ abstract class _$$BookingImplCopyWith<$Res> implements $BookingCopyWith<$Res> {
       Option<String> placeId,
       Option<String> geohash,
       Option<double> lat,
-      Option<double> lng});
+      Option<double> lng,
+      Option<String> flierUrl});
 }
 
 /// @nodoc
@@ -221,6 +229,7 @@ class __$$BookingImplCopyWithImpl<$Res>
     Object? geohash = null,
     Object? lat = null,
     Object? lng = null,
+    Object? flierUrl = null,
   }) {
     return _then(_$BookingImpl(
       id: null == id
@@ -254,7 +263,7 @@ class __$$BookingImplCopyWithImpl<$Res>
       name: null == name
           ? _value.name
           : name // ignore: cast_nullable_to_non_nullable
-              as String,
+              as Option<String>,
       note: null == note
           ? _value.note
           : note // ignore: cast_nullable_to_non_nullable
@@ -287,6 +296,10 @@ class __$$BookingImplCopyWithImpl<$Res>
           ? _value.lng
           : lng // ignore: cast_nullable_to_non_nullable
               as Option<double>,
+      flierUrl: null == flierUrl
+          ? _value.flierUrl
+          : flierUrl // ignore: cast_nullable_to_non_nullable
+              as Option<String>,
     ));
   }
 }
@@ -302,7 +315,7 @@ class _$BookingImpl implements _Booking {
       @DateTimeConverter() required this.endTime,
       @DateTimeConverter() required this.timestamp,
       this.requesterId = const None(),
-      this.name = '',
+      this.name = const None(),
       this.note = '',
       this.rate = 0,
       this.serviceId = const None(),
@@ -310,7 +323,8 @@ class _$BookingImpl implements _Booking {
       this.placeId = const None(),
       this.geohash = const None(),
       this.lat = const None(),
-      this.lng = const None()});
+      this.lng = const None(),
+      this.flierUrl = const None()});
 
   factory _$BookingImpl.fromJson(Map<String, dynamic> json) =>
       _$$BookingImplFromJson(json);
@@ -335,7 +349,7 @@ class _$BookingImpl implements _Booking {
   final Option<String> requesterId;
   @override
   @JsonKey()
-  final String name;
+  final Option<String> name;
   @override
   @JsonKey()
   final String note;
@@ -360,10 +374,13 @@ class _$BookingImpl implements _Booking {
   @override
   @JsonKey()
   final Option<double> lng;
+  @override
+  @JsonKey()
+  final Option<String> flierUrl;
 
   @override
   String toString() {
-    return 'Booking(id: $id, requesteeId: $requesteeId, status: $status, startTime: $startTime, endTime: $endTime, timestamp: $timestamp, requesterId: $requesterId, name: $name, note: $note, rate: $rate, serviceId: $serviceId, addedByUser: $addedByUser, placeId: $placeId, geohash: $geohash, lat: $lat, lng: $lng)';
+    return 'Booking(id: $id, requesteeId: $requesteeId, status: $status, startTime: $startTime, endTime: $endTime, timestamp: $timestamp, requesterId: $requesterId, name: $name, note: $note, rate: $rate, serviceId: $serviceId, addedByUser: $addedByUser, placeId: $placeId, geohash: $geohash, lat: $lat, lng: $lng, flierUrl: $flierUrl)';
   }
 
   @override
@@ -392,7 +409,9 @@ class _$BookingImpl implements _Booking {
             (identical(other.placeId, placeId) || other.placeId == placeId) &&
             (identical(other.geohash, geohash) || other.geohash == geohash) &&
             (identical(other.lat, lat) || other.lat == lat) &&
-            (identical(other.lng, lng) || other.lng == lng));
+            (identical(other.lng, lng) || other.lng == lng) &&
+            (identical(other.flierUrl, flierUrl) ||
+                other.flierUrl == flierUrl));
   }
 
   @JsonKey(ignore: true)
@@ -414,7 +433,8 @@ class _$BookingImpl implements _Booking {
       placeId,
       geohash,
       lat,
-      lng);
+      lng,
+      flierUrl);
 
   @JsonKey(ignore: true)
   @override
@@ -439,7 +459,7 @@ abstract class _Booking implements Booking {
       @DateTimeConverter() required final DateTime endTime,
       @DateTimeConverter() required final DateTime timestamp,
       final Option<String> requesterId,
-      final String name,
+      final Option<String> name,
       final String note,
       final int rate,
       final Option<String> serviceId,
@@ -447,7 +467,8 @@ abstract class _Booking implements Booking {
       final Option<String> placeId,
       final Option<String> geohash,
       final Option<double> lat,
-      final Option<double> lng}) = _$BookingImpl;
+      final Option<double> lng,
+      final Option<String> flierUrl}) = _$BookingImpl;
 
   factory _Booking.fromJson(Map<String, dynamic> json) = _$BookingImpl.fromJson;
 
@@ -469,7 +490,7 @@ abstract class _Booking implements Booking {
   @override
   Option<String> get requesterId;
   @override
-  String get name;
+  Option<String> get name;
   @override
   String get note;
   @override
@@ -486,6 +507,8 @@ abstract class _Booking implements Booking {
   Option<double> get lat;
   @override
   Option<double> get lng;
+  @override
+  Option<String> get flierUrl;
   @override
   @JsonKey(ignore: true)
   _$$BookingImplCopyWith<_$BookingImpl> get copyWith =>

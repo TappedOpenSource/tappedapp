@@ -85,6 +85,7 @@ const _$GenreEnumMap = {
   Genre.pop: 'pop',
   Genre.rock: 'rock',
   Genre.hiphop: 'hiphop',
+  Genre.rap: 'rap',
   Genre.rnb: 'rnb',
   Genre.country: 'country',
   Genre.edm: 'edm',

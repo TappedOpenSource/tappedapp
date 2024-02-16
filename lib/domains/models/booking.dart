@@ -17,7 +17,7 @@ class Booking with _$Booking {
     @DateTimeConverter() required DateTime endTime,
     @DateTimeConverter() required DateTime timestamp,
     @Default(None()) Option<String> requesterId,
-    @Default('') String name,
+    @Default(None()) Option<String> name,
     @Default('') String note,
     @Default(0) int rate,
     @Default(None()) Option<String> serviceId,
@@ -26,6 +26,7 @@ class Booking with _$Booking {
     @Default(None()) Option<String> geohash,
     @Default(None()) Option<double> lat,
     @Default(None()) Option<double> lng,
+    @Default(None()) Option<String> flierUrl,
   }) = _Booking;
 
   factory Booking.fromJson(Map<String, dynamic> json) =>

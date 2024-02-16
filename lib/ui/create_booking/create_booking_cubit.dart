@@ -102,7 +102,7 @@ class CreateBookingCubit extends Cubit<CreateBookingState> {
 
     final booking = Booking(
       id: const Uuid().v4(),
-      name: state.name.value,
+      name: Option.of(state.name.value),
       note: state.note.value,
       serviceId: Option.of(state.service.id),
       requesterId: Option.of(state.currentUserId),
