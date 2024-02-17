@@ -115,5 +115,6 @@ const _$VenueTypeEnumMap = {
   VenueType.festival: 'festival',
   VenueType.artGallery: 'artGallery',
   VenueType.studio: 'studio',
+  VenueType.brewery: 'brewery',
   VenueType.other: 'other',
 };

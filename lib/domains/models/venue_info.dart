@@ -41,5 +41,6 @@ enum VenueType {
   festival,
   artGallery,
   studio,
+  brewery,
   other,
 }

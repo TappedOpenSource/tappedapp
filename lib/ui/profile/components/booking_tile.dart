@@ -5,6 +5,7 @@ import 'package:intheloopapp/domains/models/service.dart';
 import 'package:intheloopapp/domains/models/user_model.dart';
 import 'package:intheloopapp/utils/bloc_utils.dart';
 import 'package:intheloopapp/utils/linkify.dart';
+import 'package:skeletons/skeletons.dart';
 import 'package:timeago/timeago.dart' as timeago;
 
 class BookingTile extends StatelessWidget {
@@ -21,7 +22,48 @@ class BookingTile extends StatelessWidget {
   Widget build(BuildContext context) {
     final database = context.database;
     return switch (booking.requesterId) {
-      None() => const SizedBox.shrink(),
+      None() => FutureBuilder(
+          future: database.getUserById(booking.requesteeId),
+          builder: (context, snapshot) {
+            final requestee = snapshot.data;
+            return switch (requestee) {
+              null => SkeletonListTile(),
+              None() => const SizedBox.shrink(),
+              Some(:final value) => ListTile(
+                  leading: const Icon(Icons.book),
+                  title: RichText(
+                    text: TextSpan(
+                      children: [
+                        const TextSpan(
+                          text: 'Performer',
+                          style: const TextStyle(
+                            fontSize: 16,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                        const WidgetSpan(child: SizedBox(width: 8)),
+                        TextSpan(
+                          text: timeago.format(
+                            booking.startTime,
+                            allowFromNow: true,
+                          ),
+                          style: const TextStyle(
+                            fontSize: 12,
+                            fontWeight: FontWeight.w200,
+                            color: Colors.grey,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  subtitle: Linkify(
+                    text:
+                        '@${value.username}${booking.name.map((t) => ' - $t').getOrElse(() => '')}',
+                  ),
+                ),
+            };
+          },
+        ),
       Some(:final value) => FutureBuilder<
             (
               Option<UserModel>,
