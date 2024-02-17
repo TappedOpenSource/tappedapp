@@ -20,6 +20,7 @@ class OpportunitiesList extends StatelessWidget {
         SizedBox(
           height: 300,
           child: ScrollSnapList(
+            selectedItemAnchor: SelectedItemAnchor.START,
             onItemFocus: (index) {},
             itemSize: MediaQuery.of(context).size.width - (96 - 8 * 2),
             itemCount: sortedOpportunities.length,

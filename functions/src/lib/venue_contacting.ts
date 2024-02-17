@@ -164,7 +164,7 @@ export const notifyFoundersOnVenueContact = onDocumentCreated(
     }
 
     const username = user.username;
-    const userEmail = user.email;
+    // const userEmail = user.email;
     const userId = event.params.userId;
     const venueId = event.params.venueId;
 
@@ -189,7 +189,7 @@ export const notifyFoundersOnVenueContact = onDocumentCreated(
     const ccs = [
       "johannes@tapped.ai", 
       "ilias@tapped.ai", 
-      userEmail,
+      // userEmail,
     ].join(",");
 
     const emailObj = {

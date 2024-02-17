@@ -55,6 +55,7 @@ class DraggableSheet extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final database = context.database;
+    final theme = Theme.of(context);
     return CurrentUserBuilder(
       builder: (context, currentUser) {
         return BlocBuilder<DiscoverCubit, DiscoverState>(
@@ -74,10 +75,10 @@ class DraggableSheet extends StatelessWidget {
                 ),
                 child: Column(
                   children: [
-                    DraggableHeader(
-                      scrollController: scrollController,
-                      bottomSheetDraggableAreaHeight: 32,
-                    ),
+                    // DraggableHeader(
+                    //   scrollController: scrollController,
+                    //   bottomSheetDraggableAreaHeight: 32,
+                    // ),
                     Expanded(
                       child: SingleChildScrollView(
                         controller: scrollController,
@@ -85,6 +86,29 @@ class DraggableSheet extends StatelessWidget {
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
+                            Container(
+                              decoration: const BoxDecoration(
+                                borderRadius: BorderRadius.vertical(
+                                  top: Radius.circular(12),
+                                ),
+                              ),
+                              child: Center(
+                                child: Padding(
+                                  padding: EdgeInsets.symmetric(
+                                    vertical:
+                                    32 / 2 - 4 / 2,
+                                  ),
+                                  child: Container(
+                                    height: 4,
+                                    width: 72,
+                                    decoration: BoxDecoration(
+                                      borderRadius: const BorderRadius.all(Radius.circular(2)),
+                                      color: theme.colorScheme.onSurface.withOpacity(0.3),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ),
                             SizedBox(
                               height: 150,
                               child: Row(

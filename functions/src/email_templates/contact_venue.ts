@@ -12,9 +12,13 @@ export const contactVenueTemplate = ({ performer, venue, note }: {
   const subject = `Performance Inquery from ${displayName}`;
 
   const html = `
+  <p>Hey</p>
+
   <p>My name is ${performer.artistName},</p> 
 
-  <p>${note}. I was told to reach out to you guys to perform at a couple shows.</p>
+  <p>${note}</p>
+  
+  <p>I was told to reach out to you guys to perform at a couple shows.</p>
   
     ${formatSocialLinks(performer.socialFollowing, spotifyId)}
 
@@ -32,9 +36,12 @@ export const contactVenueTemplate = ({ performer, venue, note }: {
   `;
 
   const text = `
+    Hey, 
+
     My name is ${performer.artistName},
 
-    ${note}. I was told to reach out to you guys to perform at a couple shows.
+    ${note}
+    I  was told to reach out to you guys to perform at a couple shows.
 
     ${formatSocialLinksText(performer.socialFollowing, spotifyId)}
 
@@ -64,7 +71,7 @@ const formatSocialLinks = (
     if (!link) {
       return "";
     }
-    return `${label}: <a href="${link}">${link}</a>`;
+    return `<p>${label}: <a href="${link}">${link}</a></p>`;
   }
 
   const instagram = instagramHandle ? row("Instagram", `https://instagram.com/${instagramHandle}`) : "";
