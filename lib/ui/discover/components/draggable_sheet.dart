@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intheloopapp/ui/discover/components/draggable_header.dart';
+import 'package:intheloopapp/ui/discover/components/map_config_slider.dart';
 import 'package:intheloopapp/ui/discover/components/user_slider.dart';
 import 'package:intheloopapp/ui/discover/components/venue_slider.dart';
 import 'package:intheloopapp/ui/discover/discover_cubit.dart';
@@ -10,47 +11,6 @@ import 'package:intheloopapp/utils/current_user_builder.dart';
 
 class DraggableSheet extends StatelessWidget {
   const DraggableSheet({super.key});
-
-  Widget _buildMapOverlayButton(
-    BuildContext context, {
-    required MapOverlay currentOverlay,
-    required MapOverlay overlay,
-    required String label,
-    required ImageProvider image,
-  }) {
-    final theme = Theme.of(context);
-    final isSelected = currentOverlay == overlay;
-    return InkWell(
-      onTap: () => context.read<DiscoverCubit>().onMapOverlayChange(
-            overlay,
-          ),
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Container(
-            height: 75,
-            width: 75,
-            decoration: BoxDecoration(
-              image: DecorationImage(
-                image: image,
-                fit: BoxFit.cover,
-              ),
-              borderRadius: BorderRadius.circular(8),
-            ),
-          ),
-          const SizedBox(height: 2),
-          Text(
-            label,
-            style: TextStyle(
-              color: isSelected
-                  ? theme.colorScheme.onSurface
-                  : theme.colorScheme.onSurface.withOpacity(0.3),
-            ),
-          ),
-        ],
-      ),
-    );
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -109,42 +69,7 @@ class DraggableSheet extends StatelessWidget {
                                 ),
                               ),
                             ),
-                            SizedBox(
-                              height: 150,
-                              child: Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceEvenly,
-                                children: [
-                                  _buildMapOverlayButton(
-                                    context,
-                                    currentOverlay: state.mapOverlay,
-                                    overlay: MapOverlay.venues,
-                                    label: 'Venues',
-                                    image: AssetImage(
-                                      'assets/layers/venue_markers.png',
-                                    ) as ImageProvider,
-                                  ),
-                                  _buildMapOverlayButton(
-                                    context,
-                                    currentOverlay: state.mapOverlay,
-                                    overlay: MapOverlay.bookings,
-                                    label: 'Bookings',
-                                    image: AssetImage(
-                                      'assets/layers/booking_heatmap.png',
-                                    ) as ImageProvider,
-                                  ),
-                                  _buildMapOverlayButton(
-                                    context,
-                                    currentOverlay: state.mapOverlay,
-                                    overlay: MapOverlay.opportunities,
-                                    label: 'Opportunities',
-                                    image: AssetImage(
-                                      'assets/layers/op_heatmap.png',
-                                    ) as ImageProvider,
-                                  ),
-                                ],
-                              ),
-                            ),
+                            MapConfigSlider(),
                             const Padding(
                               padding: EdgeInsets.symmetric(
                                 vertical: 16,
