@@ -233,6 +233,8 @@ export const sendBookingRequestSentEmailOnBooking = functions
     const unclaimed = requester?.unclaimed ?? false;
     const addedByUser = requester?.addedByUser ?? false;
 
+    debug({ requesterEmail, unclaimed, addedByUser });
+
     if (requesterEmail === undefined || requesterEmail === null || requesterEmail === "") {
       throw new Error(`requester ${requester?.id} does not have an email`);
     }
@@ -277,6 +279,7 @@ export const sendBookingRequestReceivedEmailOnBooking = functions
     const unclaimed = requestee?.unclaimed ?? false;
     const addedByUser = requestee?.addedByUser ?? false;
 
+    debug({ requesteeEmail, unclaimed, addedByUser });
 
     if (requesteeEmail === undefined || requesteeEmail === null || requesteeEmail === "") {
       throw new Error(`requestee ${requestee?.id} does not have an email`);
@@ -325,19 +328,30 @@ export const sendBookingNotificationsOnBookingConfirmed = functions
     const requesteeSnapshot = await usersRef.doc(booking.requesteeId).get();
     const requestee = requesteeSnapshot.data();
     const requesteeEmail = requestee?.email;
+    const requesteeUnclaimed = requestee?.unclaimed ?? false;
 
     if (requesteeEmail === undefined || requesteeEmail === null || requesteeEmail === "") {
       throw new Error(`requestee ${requestee?.id} does not have an email`);
     }
 
+    if (requesteeUnclaimed === true) {
+      functions.logger.info(`requestee ${requestee?.id} is unclaimed, skipping email`);
+      return;
+    }
+
     const requesterSnapshot = await usersRef.doc(booking.requesterId).get();
     const requester = requesterSnapshot.data();
     const requesterEmail = requester?.email;
+    const requesterUnclaimed = requester?.unclaimed ?? false;
 
     if (requesterEmail === undefined || requesterEmail === null || requesterEmail === "") {
       throw new Error(`requester ${requester?.id} does not have an email`);
     }
 
+    if (requesterUnclaimed === true) {
+      functions.logger.info(`requester ${requester?.id} is unclaimed, skipping email`);
+      return;
+    }
 
     const ONE_HOUR_MS = 60 * 60 * 1000;
     const ONE_DAY_MS = 24 * ONE_HOUR_MS;
