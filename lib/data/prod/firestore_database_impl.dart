@@ -1962,6 +1962,16 @@ class FirestoreDatabaseImpl extends DatabaseRepository {
     required String bookingEmail,
   }) async {
     try {
+      // already contacted?
+      final hasSentContactRequest = await hasUserSentContactRequest(
+        user: currentUser,
+        venue: venue,
+      );
+
+      if (hasSentContactRequest) {
+        return;
+      }
+
       await _analytics.logEvent(
         name: 'contact_venue',
         parameters: {
