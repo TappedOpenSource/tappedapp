@@ -215,11 +215,11 @@ export const notifyFoundersOnVenueContact = onDocumentCreated(
       .doc(userId)
       .collection("venuesContacted")
       .doc(venueId)
-      .update({
+      .set({
         subject,
         originalMessageId: messageId,
         latestMessageId: messageId,
-      });
+      }, { merge: true });
 
     // add email to emails collection
     await contactVenuesRef
@@ -244,17 +244,17 @@ export const inboundEmailWebhook = onRequest(
       const subject = body.Subject;
       const to = body.To;
       const from = body.From;
-      const referenceMessageId = body.Headers.find((h: { Name: string; Value: string }) => h.Name === "References")?.Value;
+      const references = body.Headers.find((h: { Name: string; Value: string }) => h.Name === "References")?.Value;
       const replyToMessageId = body.Headers.find((h: { Name: string; Value: string }) => h.Name === "In-Reply-To")?.Value;
       const latestMessageId = body.Headers.find((h: { Name: string; Value: string }) => h.Name === "Message-ID")?.Value;
 
-      if (!subject || !referenceMessageId) {
-        error("no subject or messageId found")
+      if (!subject || !replyToMessageId) {
+        error("no subject or reply-to messageId found")
         await orphanEmailsRef.add({
           email: {
             ...body,
           },
-          error: "no subject or messageId found",
+          error: "no subject or reply-to messageId found",
         });
         res.status(400).send("bad request");
         return;
@@ -278,7 +278,7 @@ export const inboundEmailWebhook = onRequest(
 
       const venueContactsSnap = await contactVenuesRef.doc(userId).collection("venuesContacted").where("latestMessageId", "==", replyToMessageId).limit(1).get();
       if (venueContactsSnap.empty) {
-        debug(`no venue contact found for this user and messageId (${userId},${referenceMessageId})`);
+        debug(`no venue contact found for this user and messageId (${userId},${references})`);
         await orphanEmailsRef.add({
           email: {
             ...body,
