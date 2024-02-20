@@ -73,22 +73,22 @@ class OpportunityFeed extends StatelessWidget {
                             color: Colors.white,
                           ),
                         ),
-                        const SizedBox(height: 20),
-                        CupertinoButton(
-                          color: Theme.of(context).colorScheme.primary,
-                          borderRadius: BorderRadius.circular(15),
-                          child: const Text(
-                            'want more?',
-                            style: TextStyle(
-                              color: Colors.white,
-                              fontSize: 18,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                          onPressed: () => context.push(
-                            PaywallPage(),
-                          ),
-                        ),
+                        // const SizedBox(height: 20),
+                        // CupertinoButton(
+                        //   color: Theme.of(context).colorScheme.primary,
+                        //   borderRadius: BorderRadius.circular(15),
+                        //   child: const Text(
+                        //     'want more?',
+                        //     style: TextStyle(
+                        //       color: Colors.white,
+                        //       fontSize: 18,
+                        //       fontWeight: FontWeight.bold,
+                        //     ),
+                        //   ),
+                        //   onPressed: () => context.push(
+                        //     PaywallPage(),
+                        //   ),
+                        // ),
                       ],
                     ),
                   ),
