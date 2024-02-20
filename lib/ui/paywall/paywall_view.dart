@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:intheloopapp/domains/navigation_bloc/navigation_bloc.dart';
 import 'package:intheloopapp/ui/common/waitlist_view.dart';
 import 'package:intheloopapp/ui/error/error_view.dart';
@@ -47,6 +48,7 @@ class PaywallView extends StatelessWidget {
             );
           }
 
+          final scaffoldMessenger = ScaffoldMessenger.of(context);
           final offerings = snapshot.data!;
           final offering = offerings.current;
           final packages = offering?.availablePackages ?? [];
@@ -108,9 +110,30 @@ class PaywallView extends StatelessWidget {
                             child: CupertinoButton.filled(
                               onPressed: () {
                                 HapticFeedback.lightImpact();
+                                EasyLoading.show(status: 'loading...');
                                 final package = packages.first;
                                 Purchases.purchasePackage(package).then((info) {
                                   logger.info(info.toString());
+                                }).then((value) {
+                                  EasyLoading.dismiss();
+                                  context.pop();
+                                }).onError((error, stackTrace) {
+                                  EasyLoading.dismiss();
+                                  logger.error(error.toString());
+                                  scaffoldMessenger.showSnackBar(
+                                    SnackBar(
+                                      backgroundColor: Colors.red,
+                                      shape: RoundedRectangleBorder(
+                                        borderRadius: BorderRadius.circular(10),
+                                      ),
+                                      content: const Text(
+                                        'error purchasing package',
+                                        style: TextStyle(
+                                          color: Colors.white,
+                                        ),
+                                      ),
+                                    ),
+                                  );
                                 });
                               },
                               child: const Text(

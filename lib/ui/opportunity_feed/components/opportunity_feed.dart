@@ -52,9 +52,9 @@ class OpportunityFeed extends StatelessWidget {
                     decoration: const BoxDecoration(
                       color: Colors.black,
                     ),
-                    child: Column(
+                    child: const Column(
                       children: [
-                        const Text(
+                        Text(
                           "YOU'RE OUT",
                           textAlign: TextAlign.center,
                           style: TextStyle(
@@ -64,7 +64,7 @@ class OpportunityFeed extends StatelessWidget {
                             color: Colors.white,
                           ),
                         ),
-                        const Text(
+                        Text(
                           "you've gone thru all the opportunities in your area!",
                           textAlign: TextAlign.center,
                           style: TextStyle(
