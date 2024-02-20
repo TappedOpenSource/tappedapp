@@ -108,18 +108,17 @@ class PaywallView extends StatelessWidget {
                         children: [
                           Expanded(
                             child: CupertinoButton.filled(
-                              onPressed: () {
-                                HapticFeedback.lightImpact();
-                                EasyLoading.show(status: 'loading...');
-                                final package = packages.first;
-                                Purchases.purchasePackage(package).then((info) {
-                                  logger.info(info.toString());
-                                }).then((value) {
-                                  EasyLoading.dismiss();
-                                  context.pop();
-                                }).onError((error, stackTrace) {
-                                  EasyLoading.dismiss();
-                                  logger.error(error.toString());
+                              onPressed: () async {
+                                await HapticFeedback.lightImpact();
+                                await EasyLoading.show(status: 'loading...');
+                                try {
+                                  final package = packages.first;
+                                  final customerInfo =
+                                      await Purchases.purchasePackage(package);
+                                  logger.info(customerInfo.toString());
+                                } catch (error, s) {
+                                  logger.error('error purchasing package',
+                                      error: error, stackTrace: s);
                                   scaffoldMessenger.showSnackBar(
                                     SnackBar(
                                       backgroundColor: Colors.red,
@@ -134,7 +133,10 @@ class PaywallView extends StatelessWidget {
                                       ),
                                     ),
                                   );
-                                });
+                                }
+
+                                await EasyLoading.dismiss();
+                                context.pop();
                               },
                               child: const Text(
                                 'Purchase',
