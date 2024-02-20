@@ -5,7 +5,7 @@ import {
 } from "firebase-functions/v2/https"
 import {
   POSTMARK_SERVER_ID,
-  // fcm, 
+  fcm, 
   streamKey,
   streamSecret,
   usersRef,
@@ -20,6 +20,7 @@ import { onDocumentCreated } from "firebase-functions/v2/firestore";
 import { UserModel } from "../types/models";
 import { StreamChat, User } from "stream-chat";
 import { contactVenueTemplate } from "../email_templates/contact_venue";
+import { getFoundersDeviceTokens } from "./utils";
 
 function createEmailMessageId() {
   const currentTime = Date.now().toString(36);
@@ -250,7 +251,9 @@ export const inboundEmailWebhook = onRequest(
       if (!subject || !referenceMessageId) {
         error("no subject or messageId found")
         await orphanEmailsRef.add({
-          ...body,
+          email: {
+            ...body,
+          },
           error: "no subject or messageId found",
         });
         res.status(400).send("bad request");
@@ -262,7 +265,9 @@ export const inboundEmailWebhook = onRequest(
       if (userSnap.empty) {
         debug(`no user found for this username (${username})`);
         await orphanEmailsRef.add({
-          ...body,
+          email: {
+            ...body,
+          },
           error: "no user found for this username",
         });
         res.status(200).send("ok");
@@ -275,7 +280,9 @@ export const inboundEmailWebhook = onRequest(
       if (venueContactsSnap.empty) {
         debug(`no venue contact found for this user and messageId (${userId},${referenceMessageId})`);
         await orphanEmailsRef.add({
-          ...body,
+          email: {
+            ...body,
+          },
           error: "no venue contact found for this user and messageId",
         });
         res.status(200).send("ok");
@@ -304,6 +311,7 @@ export const inboundEmailWebhook = onRequest(
         venueId,
         message: messageContent,
       });
+
       await contactVenuesRef
         .doc(userId)
         .collection("venuesContacted")
@@ -312,6 +320,15 @@ export const inboundEmailWebhook = onRequest(
           allEmails: newAllEmails,
           latestMessageId,
         });
+
+      const foundsTokens = await getFoundersDeviceTokens();
+      const payload = {
+        notification: {
+          title: "NEW EMAIL!!!",
+          body: `New email from ${from} in response to ${username}`,
+        }
+      };
+      await fcm.sendToDevice(foundsTokens, payload);
 
       res.status(200).send("ok");
     } catch (e) {
@@ -418,4 +435,30 @@ export const streamBeforeMessageWebhook = onRequest(
     });
 
     res.status(200).send("ok");
+  });
+
+export const notifyFoundersOnOrphanEmail = onDocumentCreated(
+  {
+    document: "orphanEmails/{emailId}",
+  },
+  async (event) => {
+    const snapshot = event.data;
+    const documentData = snapshot?.data();
+
+    const error = documentData?.error;
+    if (!error) {
+      info("no email found");
+      return;
+    }
+
+    const foundersTokens = await getFoundersDeviceTokens();
+
+    const payload = {
+      notification: {
+        title: "Orphan Email",
+        body: `An email was not able to be processed: ${error}`,
+      }
+    };
+
+    fcm.sendToDevice(foundersTokens, payload);
   });

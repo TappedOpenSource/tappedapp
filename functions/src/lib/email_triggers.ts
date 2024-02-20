@@ -31,7 +31,7 @@ import { Timestamp } from "firebase-admin/firestore";
 import { labelApplied } from "../email_templates/label_applied";
 import { labelApproved } from "../email_templates/label_approved";
 import { premiumWaitlist } from "../email_templates/premium_waitlist";
-import { venueContacted } from "../email_templates/venue_contacted";
+// import { venueContacted } from "../email_templates/venue_contacted";
 
 export const sendWelcomeEmailOnUserCreated = functions.auth
   .user()

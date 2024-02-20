@@ -130,6 +130,7 @@ export type Badge = {
 export type Booking = {
   id: string;
   calendarEventId?: string;
+  addedByUser?: boolean;
   serviceId: string;
   name: string;
   note: string;

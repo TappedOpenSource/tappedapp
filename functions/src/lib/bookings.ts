@@ -15,6 +15,7 @@ import { Booking, BookingStatus } from "../types/models";
 import { getFoundersDeviceTokens } from "./utils";
 import { createActivity } from "./activities";
 import { FieldValue } from "firebase-admin/firestore";
+import { debug } from "firebase-functions/logger";
 
 const _updatePerformerRating = async ({
   userId,
@@ -64,6 +65,12 @@ export const addActivityOnBooking = functions.firestore
       throw new HttpsError("failed-precondition", `booking ${context.params.bookingId} does not exist`,);
     }
 
+    const addedByUser = booking.addedByUser ?? false;
+    if (addedByUser === true) {
+      debug("booking added by user, not creating activity");
+      return;
+    }
+
     createActivity({
       fromUserId: booking.requesterId,
       type: "bookingRequest",
@@ -109,6 +116,12 @@ export const notifyFoundersOnBookings = functions
     const booking = data.data() as Booking;
     if (booking === undefined) {
       throw new HttpsError("failed-precondition", `booking ${data.id} does not exist`,);
+    }
+
+    const addedByUser = booking.addedByUser ?? false;
+    if (addedByUser) {
+      debug("booking added by user, not sending notification");
+      return;
     }
 
     if (booking.serviceId === undefined) {

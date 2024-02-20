@@ -14,10 +14,8 @@ export const contactVenueTemplate = ({ performer, venue, note }: {
   const html = `
   <p>Hey</p>
 
-  <p>My name is ${performer.artistName},</p> 
-
+  <p>My name is ${performer.artistName} and I got recommended to reach out to you by Tapped Ai.</p> 
   <p>${note}</p>
-  
   <p>I was told to reach out to you guys to perform at a couple shows.</p>
   
     ${formatSocialLinks(performer.socialFollowing, spotifyId)}
@@ -38,10 +36,8 @@ export const contactVenueTemplate = ({ performer, venue, note }: {
   const text = `
     Hey, 
 
-    My name is ${performer.artistName},
-
+    My name is ${performer.artistName} and I got recommended to reach out to you by Tapped Ai. 
     ${note}
-    I  was told to reach out to you guys to perform at a couple shows.
 
     ${formatSocialLinksText(performer.socialFollowing, spotifyId)}
 
@@ -77,7 +73,7 @@ const formatSocialLinks = (
   const instagram = instagramHandle ? row("Instagram", `https://instagram.com/${instagramHandle}`) : "";
   const facebook = facebookHandle ? row("Facebook", `https://facebook.com/${facebookHandle}`) : "";
   const twitter = twitterHandle ? row("Twitter", `https://twitter.com/${twitterHandle}`) : "";
-  const spotify = spotifyId ? row("Spotify", spotifyId) : "";
+  const spotify = spotifyId ? row("Spotify", `https://open.spotify.com/artist/${spotifyId}`) : "";
   //   const youtube = youtubeHandle ? row("Youtube", `https://youtube.com/${youtubeHandle}`) : "";
 
   const socialLinks = `
