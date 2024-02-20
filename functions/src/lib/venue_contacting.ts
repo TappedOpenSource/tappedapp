@@ -1,50 +1,221 @@
-
 /* eslint-disable import/no-unresolved */
+import { onRequest } from "firebase-functions/v2/https";
 import {
-  onRequest,
-} from "firebase-functions/v2/https"
-import {
+  contactVenuesRef,
+  fcm,
+  orphanEmailsRef,
   POSTMARK_SERVER_ID,
-  fcm, 
   streamKey,
   streamSecret,
   usersRef,
-  contactVenuesRef,
-  orphanEmailsRef,
 } from "./firebase";
 // import sgMail from "@sendgrid/mail";
 import { debug, error, info } from "firebase-functions/logger";
 import * as postmark from "postmark";
 // import { getFoundersDeviceTokens } from "./utils";
 import { onDocumentCreated } from "firebase-functions/v2/firestore";
-import { UserModel } from "../types/models";
 import { StreamChat, User } from "stream-chat";
 import { contactVenueTemplate } from "../email_templates/contact_venue";
+import { UserModel, VenueContactRequest } from "../types/models";
 import { getFoundersDeviceTokens } from "./utils";
 
 function createEmailMessageId() {
   const currentTime = Date.now().toString(36);
-  const randomPart = Math.floor(Math.random() * Number.MAX_SAFE_INTEGER).toString(36);
+  const randomPart = Math.floor(
+    Math.random() * Number.MAX_SAFE_INTEGER,
+  ).toString(36);
   const messageId = `<${currentTime}.${randomPart}@tapped.ai>`;
 
   return messageId;
 }
 
-async function sendStreamMessageFromEmail({ streamClient, userId, venueId, message }: {
-  streamClient: StreamChat
+async function sendAsEmail({
+  venueContactData,
+  userId,
+  venue,
+}: {
+  venueContactData: VenueContactRequest;
+  userId: string;
+  venue: UserModel;
+}) {
+  const bookingEmail = venueContactData.bookingEmail;
+  if (!bookingEmail) {
+    error("no bookingEmail found");
+    return;
+  }
+
+  const note = venueContactData.note ?? "";
+
+  const user = venueContactData.user as UserModel | undefined;
+  if (user === undefined) {
+    error("no user found");
+    return;
+  }
+
+  const username = user.username;
+  // const userEmail = user.email;
+
+  // const devices = await getFoundersDeviceTokens();
+  // const payload = {
+  //   notification: {
+  //     title: `${username} wants to contact ${venue?.artistName} \uD83D\uDE43`,
+  //     body: `they used the email ${bookingEmail}`,
+  //   }
+  // };
+
+  // fcm.sendToDevice(devices, payload);
+  const client = new postmark.ServerClient(POSTMARK_SERVER_ID.value());
+  const messageId = createEmailMessageId();
+
+  const { subject, text, html } = contactVenueTemplate({
+    performer: user,
+    venue: venueContactData?.venue,
+    note,
+  });
+
+  const ccs = [
+    "johannes@tapped.ai",
+    "ilias@tapped.ai",
+    // userEmail,
+  ].join(",");
+
+  const emailObj = {
+    Headers: [
+      {
+        Name: "Message-ID",
+        Value: messageId,
+      },
+    ],
+    From: `${username}@booking.tapped.ai`,
+    To: bookingEmail,
+    Cc: ccs,
+    Subject: subject,
+    HtmlBody: html,
+    TextBody: text,
+    MessageStream: "outbound",
+    TrackOpens: true,
+  };
+
+  // add msg id to initial request
+  await contactVenuesRef
+    .doc(userId)
+    .collection("venuesContacted")
+    .doc(venue.id)
+    .set(
+      {
+        subject,
+        originalMessageId: messageId,
+        latestMessageId: messageId,
+      },
+      { merge: true },
+    );
+
+  // add email to emails collection
+  await contactVenuesRef
+    .doc(userId)
+    .collection("venuesContacted")
+    .doc(venue.id)
+    .collection("emailsSent")
+    .add(emailObj);
+
+  const res = await client.sendEmail(emailObj);
+  debug({ res });
+}
+
+async function sendAsDirectMessage({
+  streamClient,
+  venueId,
+  userId,
+  note,
+}: {
+  streamClient: StreamChat;
+  venueId: string;
+  userId: string;
+  note: string;
+}) {
+  // create DM channel between both parties
+  const token = streamClient.createToken(userId);
+  await streamClient.connectUser(
+    {
+      id: userId,
+    },
+    token,
+  );
+
+  // join channel
+  const channel = streamClient.channel("messaging", {
+    members: [userId, venueId],
+  });
+  await channel.create();
+
+  // post msg
+  const noteString = note !== "" ? ` - ${note}` : "";
+  await channel.sendMessage({
+    text: `hey! I was recommended to contact you about performing at your venue ${noteString}`,
+  });
+
+  // disconnectUser
+  await streamClient.disconnectUser();
+}
+
+async function dmAutoReply({
+  streamClient,
+  venueId,
+  userId,
+  autoReply,
+}: {
+  streamClient: StreamChat;
+  venueId: string;
+  userId: string;
+  autoReply: string;
+}) {
+  // create DM channel between both parties
+  const token = streamClient.createToken(venueId);
+  await streamClient.connectUser(
+    {
+      id: venueId,
+    },
+    token,
+  );
+
+  // join channel
+  const channel = streamClient.channel("messaging", {
+    members: [userId, venueId],
+  });
+  await channel.create();
+
+  // post msg
+  await channel.sendMessage({
+    text: autoReply,
+  });
+
+  // disconnectUser
+  await streamClient.disconnectUser();
+}
+
+async function sendStreamMessageFromEmail({
+  streamClient,
+  userId,
+  venueId,
+  message,
+}: {
+  streamClient: StreamChat;
   userId: string;
   venueId: string;
   message: string;
 }) {
   // create DM channel between both parties
-  const token = await streamClient.createToken(venueId);
-  await streamClient.connectUser({
-    id: venueId,
-  }, token);
+  const token = streamClient.createToken(venueId);
+  await streamClient.connectUser(
+    {
+      id: venueId,
+    },
+    token,
+  );
 
   // join channel
   const channel = streamClient.channel("messaging", {
-    members: [ userId, venueId ],
+    members: [userId, venueId],
   });
   await channel.create();
 
@@ -57,8 +228,13 @@ async function sendStreamMessageFromEmail({ streamClient, userId, venueId, messa
   await streamClient.disconnectUser();
 }
 
-async function sendEmailFromStreamMessage({ emailClient, user, venue, message }: {
-  emailClient: postmark.ServerClient,
+async function sendEmailFromStreamMessage({
+  emailClient,
+  user,
+  venue,
+  message,
+}: {
+  emailClient: postmark.ServerClient;
   user: User;
   venue: User;
   message: string;
@@ -95,26 +271,26 @@ async function sendEmailFromStreamMessage({ emailClient, user, venue, message }:
   const messageId = createEmailMessageId();
 
   const emailObj = {
-    "From": `${username}@booking.tapped.ai`,
-    "To": allEmails.join(","),
-    "Headers": [
+    From: `${username}@booking.tapped.ai`,
+    To: allEmails.join(","),
+    Headers: [
       {
-        "Name": "Message-ID",
-        "Value": messageId,
+        Name: "Message-ID",
+        Value: messageId,
       },
       {
-        "Name": "References",
-        "Value": latestMessageId,
+        Name: "References",
+        Value: latestMessageId,
       },
       {
-        "Name": "In-Reply-To",
-        "Value": latestMessageId,
-      }
+        Name: "In-Reply-To",
+        Value: latestMessageId,
+      },
     ],
-    "Subject": subject,
-    "HtmlBody": message,
-    "TextBody": message,
-    "MessageStream": "outbound"
+    Subject: subject,
+    HtmlBody: message,
+    TextBody: message,
+    MessageStream: "outbound",
   };
 
   await contactVenuesRef
@@ -124,7 +300,6 @@ async function sendEmailFromStreamMessage({ emailClient, user, venue, message }:
     .update({
       latestMessageId: messageId,
     });
-
 
   // add email to emails collection
   await contactVenuesRef
@@ -144,99 +319,67 @@ async function sendEmailFromStreamMessage({ emailClient, user, venue, message }:
 export const notifyFoundersOnVenueContact = onDocumentCreated(
   {
     document: "contactVenues/{userId}/venuesContacted/{venueId}",
-    secrets: [ POSTMARK_SERVER_ID ],
+    secrets: [POSTMARK_SERVER_ID, streamKey, streamSecret],
   },
   async (event) => {
     const snapshot = event.data;
-    const documentData = snapshot?.data();
-
-    const bookingEmail = documentData?.bookingEmail;
-    if (!bookingEmail) {
-      error("no bookingEmail found");
+    const venueContactData = snapshot?.data() as
+      | VenueContactRequest
+      | undefined;
+    if (venueContactData === undefined) {
+      error("no venueContactData found");
       return;
     }
 
-    const note = documentData?.note ?? "";
-
-    const user = documentData?.user as UserModel | undefined;
-    if (user === undefined) {
-      error("no user found");
-      return;
-    }
-
-    const username = user.username;
-    // const userEmail = user.email;
-    const userId = event.params.userId;
     const venueId = event.params.venueId;
+    const userId = event.params.userId;
 
-    // const devices = await getFoundersDeviceTokens();
-    // const payload = {
-    //   notification: {
-    //     title: `${username} wants to contact ${venue?.artistName} \uD83D\uDE43`,
-    //     body: `they used the email ${bookingEmail}`,
-    //   }
-    // };
+    const streamChat = new StreamChat(streamKey.value(), streamSecret.value());
 
-    // fcm.sendToDevice(devices, payload);
-    const client = new postmark.ServerClient(POSTMARK_SERVER_ID.value());
-    const messageId = createEmailMessageId();
-
-    const { subject, text, html } = contactVenueTemplate({
-      performer: user,
-      venue: documentData?.venue,
-      note,
-    });
-
-    const ccs = [
-      "johannes@tapped.ai", 
-      "ilias@tapped.ai", 
-      // userEmail,
-    ].join(",");
-
-    const emailObj = {
-      "Headers": [
-        {
-          "Name": "Message-ID",
-          "Value": messageId,
-        }
-      ],
-      "From": `${username}@booking.tapped.ai`,
-      "To": bookingEmail,
-      "Cc": ccs,
-      "Subject": subject,
-      "HtmlBody": html,
-      "TextBody": text,
-      "MessageStream": "outbound",
-      "TrackOpens": true,
+    // check if claimed or unclaimed
+    // if claimed, send message as DM, and return;
+    const venueSnap = await usersRef.doc(venueId).get();
+    const venueData = venueSnap.data() as UserModel | undefined;
+    if (venueData === undefined) {
+      error("no venueData found");
+      return;
     }
 
-    // add msg id to initial request
-    await contactVenuesRef
-      .doc(userId)
-      .collection("venuesContacted")
-      .doc(venueId)
-      .set({
-        subject,
-        originalMessageId: messageId,
-        latestMessageId: messageId,
-      }, { merge: true });
+    // if autoreply setup, send autoreply as DM;
+    const autoReply = venueData.venueInfo?.autoReply;
+    if (autoReply !== undefined && autoReply !== null) {
+      await dmAutoReply({
+        streamClient: streamChat,
+        venueId,
+        userId,
+        autoReply,
+      });
+      return;
+    }
 
-    // add email to emails collection
-    await contactVenuesRef
-      .doc(userId)
-      .collection("venuesContacted")
-      .doc(venueId)
-      .collection("emailsSent")
-      .add(emailObj);
+    const note = venueContactData.note ?? "";
 
+    const unclaimed = venueData.unclaimed;
+    if (!unclaimed) {
+      await sendAsDirectMessage({
+        streamClient: streamChat,
+        userId,
+        venueId,
+        note,
+      });
+      return;
+    }
 
-    const res = await client.sendEmail(emailObj);
-    debug({ res });
-  }
+    await sendAsEmail({
+      venueContactData,
+      userId,
+      venue: venueData,
+    });
+  },
 );
 
 export const inboundEmailWebhook = onRequest(
-  { secrets: [ POSTMARK_SERVER_ID, streamKey, streamSecret ] },
+  { secrets: [POSTMARK_SERVER_ID, streamKey, streamSecret] },
   async (req, res) => {
     try {
       const body = req.body;
@@ -244,12 +387,18 @@ export const inboundEmailWebhook = onRequest(
       const subject = body.Subject;
       const to = body.To;
       const from = body.From;
-      const references = body.Headers.find((h: { Name: string; Value: string }) => h.Name === "References")?.Value;
-      const replyToMessageId = body.Headers.find((h: { Name: string; Value: string }) => h.Name === "In-Reply-To")?.Value;
-      const latestMessageId = body.Headers.find((h: { Name: string; Value: string }) => h.Name === "Message-ID")?.Value;
+      const references = body.Headers.find(
+        (h: { Name: string; Value: string }) => h.Name === "References",
+      )?.Value;
+      const replyToMessageId = body.Headers.find(
+        (h: { Name: string; Value: string }) => h.Name === "In-Reply-To",
+      )?.Value;
+      const latestMessageId = body.Headers.find(
+        (h: { Name: string; Value: string }) => h.Name === "Message-ID",
+      )?.Value;
 
       if (!subject || !replyToMessageId) {
-        error("no subject or reply-to messageId found")
+        error("no subject or reply-to messageId found");
         await orphanEmailsRef.add({
           email: {
             ...body,
@@ -261,7 +410,10 @@ export const inboundEmailWebhook = onRequest(
       }
 
       const username = to.split("@")[0];
-      const userSnap = await usersRef.where("username", "==", username).limit(1).get();
+      const userSnap = await usersRef
+        .where("username", "==", username)
+        .limit(1)
+        .get();
       if (userSnap.empty) {
         debug(`no user found for this username (${username})`);
         await orphanEmailsRef.add({
@@ -276,9 +428,16 @@ export const inboundEmailWebhook = onRequest(
 
       const userId = userSnap.docs[0].id;
 
-      const venueContactsSnap = await contactVenuesRef.doc(userId).collection("venuesContacted").where("latestMessageId", "==", replyToMessageId).limit(1).get();
+      const venueContactsSnap = await contactVenuesRef
+        .doc(userId)
+        .collection("venuesContacted")
+        .where("latestMessageId", "==", replyToMessageId)
+        .limit(1)
+        .get();
       if (venueContactsSnap.empty) {
-        debug(`no venue contact found for this user and messageId (${userId},${references})`);
+        debug(
+          `no venue contact found for this user and messageId (${userId},${references})`,
+        );
         await orphanEmailsRef.add({
           email: {
             ...body,
@@ -290,7 +449,9 @@ export const inboundEmailWebhook = onRequest(
       }
       const venueContactData = venueContactsSnap.docs[0].data();
       const allEmails = venueContactData.allEmails ?? [];
-      const newAllEmails = allEmails.concat([ from ]).filter((e: string, i: number, a: string[]) => a.indexOf(e) === i);
+      const newAllEmails = allEmails
+        .concat([from])
+        .filter((e: string, i: number, a: string[]) => a.indexOf(e) === i);
 
       const venueId = venueContactsSnap.docs[0].id;
 
@@ -304,7 +465,10 @@ export const inboundEmailWebhook = onRequest(
 
       const messageContent = body.StrippedTextReply ?? body.TextBody;
 
-      const streamChat = new StreamChat(streamKey.value(), streamSecret.value());
+      const streamChat = new StreamChat(
+        streamKey.value(),
+        streamSecret.value(),
+      );
       await sendStreamMessageFromEmail({
         streamClient: streamChat,
         userId,
@@ -326,7 +490,7 @@ export const inboundEmailWebhook = onRequest(
         notification: {
           title: "NEW EMAIL!!!",
           body: `New email from ${from} in response to ${username}`,
-        }
+        },
       };
       await fcm.sendToDevice(foundsTokens, payload);
 
@@ -335,15 +499,13 @@ export const inboundEmailWebhook = onRequest(
       error(e);
       res.status(500).send("error");
     }
-  });
+  },
+);
 
 export const streamBeforeMessageWebhook = onRequest(
-  { secrets: [ streamKey, streamSecret, POSTMARK_SERVER_ID ] },
+  { secrets: [streamKey, streamSecret, POSTMARK_SERVER_ID] },
   async (req, res) => {
-    const client = new StreamChat(
-      streamKey.value(),
-      streamSecret.value(),
-    );
+    const client = new StreamChat(streamKey.value(), streamSecret.value());
 
     const sig = req.headers["x-signature"];
     if (!sig || typeof sig !== "string") {
@@ -359,13 +521,17 @@ export const streamBeforeMessageWebhook = onRequest(
 
     const json = req.body as {
       user: User | undefined;
-      message: {
-        text: string;
-      } | undefined;
-      members: {
-        user_id: string;
-        user: User;
-      }[] | undefined;
+      message:
+        | {
+            text: string;
+          }
+        | undefined;
+      members:
+        | {
+            user_id: string;
+            user: User;
+          }[]
+        | undefined;
     };
     info({ json });
 
@@ -374,10 +540,12 @@ export const streamBeforeMessageWebhook = onRequest(
     // debug({ senderUser });
 
     // get receiver
-    const receiverUser: User | undefined = json.members?.find((m: { user: User }) => m.user.username !== senderUser?.username)?.user;
+    const receiverUser: User | undefined = json.members?.find(
+      (m: { user: User }) => m.user.username !== senderUser?.username,
+    )?.user;
     // debug({ receiverUser });
 
-    // get message 
+    // get message
     const msg = json.message?.text;
     // debug({ msg });
 
@@ -415,7 +583,6 @@ export const streamBeforeMessageWebhook = onRequest(
       .doc(receiverUser.id)
       .get();
 
-
     if (!venueContactSnap.exists) {
       error("no ongoing venue contact");
       res.status(200).send("ok");
@@ -435,7 +602,8 @@ export const streamBeforeMessageWebhook = onRequest(
     });
 
     res.status(200).send("ok");
-  });
+  },
+);
 
 export const notifyFoundersOnOrphanEmail = onDocumentCreated(
   {
@@ -457,8 +625,9 @@ export const notifyFoundersOnOrphanEmail = onDocumentCreated(
       notification: {
         title: "Orphan Email",
         body: `An email was not able to be processed: ${error}`,
-      }
+      },
     };
 
     fcm.sendToDevice(foundersTokens, payload);
-  });
+  },
+);

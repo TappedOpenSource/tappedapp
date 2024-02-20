@@ -1,4 +1,3 @@
-
 import type { Timestamp } from "firebase-admin/firestore";
 import { firestore } from "firebase-admin";
 
@@ -41,83 +40,85 @@ export type OldUserModel = {
 };
 
 export type Location = {
-    placeId: string;
-    geohash: string;
-    lat: number;
-    lng: number;
+  placeId: string;
+  geohash: string;
+  lat: number;
+  lng: number;
 };
 
 export type SocialFollowing = {
-    youtubeChannelId?: Option<string>;
-    tiktokHandle?: Option<string>;
-    tiktokFollowers: number;
-    instagramHandle?: Option<string>;
-    instagramFollowers: number;
-    twitterHandle?: Option<string>;
-    twitterFollowers: number;
-    facebookHandle?: Option<string>;
-    facebookFollowers: number;
-}
+  youtubeChannelId?: Option<string>;
+  tiktokHandle?: Option<string>;
+  tiktokFollowers: number;
+  instagramHandle?: Option<string>;
+  instagramFollowers: number;
+  twitterHandle?: Option<string>;
+  twitterFollowers: number;
+  facebookHandle?: Option<string>;
+  facebookFollowers: number;
+};
 
 export type BookerInfo = {
-    rating?: Option<number>;
-    reviewCount: number;
-}
+  rating?: Option<number>;
+  reviewCount: number;
+};
 
 export type PerformerInfo = {
-    pressKitUrl?: Option<string>;
-    genres: string[];
-    rating?: Option<number>;
-    reviewCount: number;
-    label: string;
-    spotifyId?: Option<string>;
-}
+  pressKitUrl?: Option<string>;
+  genres: string[];
+  rating?: Option<number>;
+  reviewCount: number;
+  label: string;
+  spotifyId?: Option<string>;
+};
 
 export type VenueInfo = {
-    capacity?: Option<number>;
-    idealArtistProfile?: Option<string>;
-    productionInfo?: Option<string>;
-    frontOfHouse?: Option<string>;
-    monitors?: Option<string>;
-    microphones?: Option<string>;
-    lights?: Option<string>;
-}
+  bookingEmail?: Option<string>;
+  autoReply?: Option<string>;
+  capacity?: Option<number>;
+  idealArtistProfile?: Option<string>;
+  productionInfo?: Option<string>;
+  frontOfHouse?: Option<string>;
+  monitors?: Option<string>;
+  microphones?: Option<string>;
+  lights?: Option<string>;
+};
 
 export type EmailNotifications = {
-    appReleases: boolean;
-    tappedUpdates: boolean;
-    bookingRequests: boolean;
-}
+  appReleases: boolean;
+  tappedUpdates: boolean;
+  bookingRequests: boolean;
+};
 
 export type PushNotifications = {
-    appReleases: boolean;
-    tappedUpdates: boolean;
-    bookingRequests: boolean;
-    directMessages: boolean;
-}
+  appReleases: boolean;
+  tappedUpdates: boolean;
+  bookingRequests: boolean;
+  directMessages: boolean;
+};
 
 export type UserModel = {
-    id: string;
-    email: string;
-    unclaimed: boolean;
-    timestamp: Timestamp;
-    username: string;
-    artistName: string;
-    bio: string;
-    occupations: string[];
-    profilePicture?: Option<string>;
-    location?: Option<Location>;
-    badgesCount: number;
-    performerInfo?: Option<PerformerInfo>;
-    venueInfo?: Option<VenueInfo>;
-    bookerInfo?: Option<BookerInfo>;
-    emailNotifications: EmailNotifications;
-    pushNotifications: PushNotifications;
-    deleted: boolean;
-    socialFollowing: SocialFollowing;
-    stripeConnectedAccountId?: Option<string>;
-    stripeCustomerId?: Option<string>;
-}
+  id: string;
+  email: string;
+  unclaimed: boolean;
+  timestamp: Timestamp;
+  username: string;
+  artistName: string;
+  bio: string;
+  occupations: string[];
+  profilePicture?: Option<string>;
+  location?: Option<Location>;
+  badgesCount: number;
+  performerInfo?: Option<PerformerInfo>;
+  venueInfo?: Option<VenueInfo>;
+  bookerInfo?: Option<BookerInfo>;
+  emailNotifications: EmailNotifications;
+  pushNotifications: PushNotifications;
+  deleted: boolean;
+  socialFollowing: SocialFollowing;
+  stripeConnectedAccountId?: Option<string>;
+  stripeCustomerId?: Option<string>;
+};
 
 export type Badge = {
   id: string;
@@ -145,28 +146,62 @@ export type Booking = {
   geohash: string;
   lat: number;
   lng: number;
-}
+};
 
 export type Activity = {
   // id: string;
   toUserId: string;
   // timestamp: firestore.Timestamp;
   // markedRead: boolean;
-}
-export type UserToUserActivity = Activity & { fromUserId: string }
-export type FollowActivity = UserToUserActivity & { type: "follow", }
-export type LikeActivity = UserToUserActivity & { type: "like"; loopId: string }
-export type CommentActivity = UserToUserActivity & { type: "comment", rootId: string, commentId: string }
-export type BookingRequestActivity = UserToUserActivity & { type: "bookingRequest", bookingId: string }
-export type BookingUpdateActivity = UserToUserActivity & { type: "bookingUpdate", bookingId: string, status: BookingStatus }
-export type LoopMentionActivity = UserToUserActivity & { type: "loopMention", loopId: string }
-export type CommentMentionActivity = UserToUserActivity & { type: "commentMention", rootId: string, commentId: string; }
-export type CommentLikeActivity = UserToUserActivity & { type: "commentLike", rootId: string, commentId: string; }
-export type OpportunityInterest = UserToUserActivity & { type: "opportunityInterest", opportunityId: string; }
-export type BookingReminderActivity = UserToUserActivity & { type: "bookingReminder", bookingId: string; }
-export type SearchAppearanceActivity = Activity & { type: "searchAppearance", count: number; }
+};
+export type UserToUserActivity = Activity & { fromUserId: string };
+export type FollowActivity = UserToUserActivity & { type: "follow" };
+export type LikeActivity = UserToUserActivity & {
+  type: "like";
+  loopId: string;
+};
+export type CommentActivity = UserToUserActivity & {
+  type: "comment";
+  rootId: string;
+  commentId: string;
+};
+export type BookingRequestActivity = UserToUserActivity & {
+  type: "bookingRequest";
+  bookingId: string;
+};
+export type BookingUpdateActivity = UserToUserActivity & {
+  type: "bookingUpdate";
+  bookingId: string;
+  status: BookingStatus;
+};
+export type LoopMentionActivity = UserToUserActivity & {
+  type: "loopMention";
+  loopId: string;
+};
+export type CommentMentionActivity = UserToUserActivity & {
+  type: "commentMention";
+  rootId: string;
+  commentId: string;
+};
+export type CommentLikeActivity = UserToUserActivity & {
+  type: "commentLike";
+  rootId: string;
+  commentId: string;
+};
+export type OpportunityInterest = UserToUserActivity & {
+  type: "opportunityInterest";
+  opportunityId: string;
+};
+export type BookingReminderActivity = UserToUserActivity & {
+  type: "bookingReminder";
+  bookingId: string;
+};
+export type SearchAppearanceActivity = Activity & {
+  type: "searchAppearance";
+  count: number;
+};
 
-export type BookingStatus = "pending" | "confirmed" | "canceled"
+export type BookingStatus = "pending" | "confirmed" | "canceled";
 
 export type BookerReview = {
   id: string;
@@ -198,7 +233,7 @@ export type MarketingPlan = {
   content: string;
   prompt: string;
   timestamp: Timestamp;
-}
+};
 
 export type GuestMarketingPlan = {
   prompt?: string;
@@ -241,4 +276,16 @@ export type Opportunity = {
 
 export type OpportunityFeedItem = Opportunity & {
   userComment?: string | null;
+};
+
+export type VenueContactRequest = {
+  venue: UserModel;
+  user: UserModel;
+  bookingEmail: string;
+  note: string;
+  timestamp: Timestamp;
+  originalMessageId: Option<string>;
+  latestMessageId: Option<string>;
+  subject: Option<string>;
+  allEmails: string[];
 };

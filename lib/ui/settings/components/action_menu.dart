@@ -3,6 +3,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:intheloopapp/ui/settings/components/settings_button.dart';
 import 'package:intheloopapp/ui/settings/settings_cubit.dart';
+import 'package:intheloopapp/utils/app_logger.dart';
+import 'package:purchases_flutter/purchases_flutter.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class ActionMenu extends StatelessWidget {
@@ -23,6 +25,19 @@ class ActionMenu extends StatelessWidget {
       builder: (context, state) {
         return Column(
           children: [
+            const Divider(),
+            SettingsButton(
+              icon: const Icon(FontAwesomeIcons.comments),
+              label: 'Manage Subscription',
+              onTap: () async {
+                final customerInfo = await Purchases.getCustomerInfo();
+                final entitlements = customerInfo.entitlements.active;
+                final proEntitlement = entitlements['pro'];
+
+                logger.info('Pro Entitlement: $proEntitlement');
+                logger.info('Customer Info: $customerInfo');
+              },
+            ),
             const Divider(),
             SettingsButton(
               icon: const Icon(FontAwesomeIcons.comments),
