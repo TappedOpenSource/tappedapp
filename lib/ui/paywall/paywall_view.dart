@@ -1,4 +1,3 @@
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -32,156 +31,148 @@ class PaywallView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final remote = context.remote;
-    return FutureBuilder(
-      future: remote.getSubscriptionFeatureFlag(),
-      builder: (context, snapshot) {
-        final data = snapshot.data;
-        return switch (data) {
-          null => const LogoWave(),
-          false => const WaitlistView(),
-          true => Scaffold(
-              backgroundColor: theme.colorScheme.background,
-              body: FutureBuilder(
-                future: Purchases.getOfferings(),
-                builder: (context, snapshot) {
-                  if (snapshot.hasError) {
-                    logger.error(snapshot.error.toString());
-                    return const ErrorView();
-                  }
+    return Scaffold(
+      backgroundColor: theme.colorScheme.background,
+      body: FutureBuilder(
+        future: Purchases.getOfferings(),
+        builder: (context, snapshot) {
+          if (snapshot.hasError) {
+            logger.error(snapshot.error.toString());
+            return const ErrorView();
+          }
 
-                  if (!snapshot.hasData) {
-                    return const Center(
-                      child: CupertinoActivityIndicator(),
-                    );
-                  }
+          if (!snapshot.hasData) {
+            return const Center(
+              child: CupertinoActivityIndicator(),
+            );
+          }
 
-                  final offerings = snapshot.data!;
-                  final offering = offerings.current;
-                  final packages = offering?.availablePackages ?? [];
+          final offerings = snapshot.data!;
+          final offering = offerings.current;
+          final packages = offering?.availablePackages ?? [];
 
-                  return Column(
+          return Column(
+            children: [
+              Container(
+                width: double.infinity,
+                height: MediaQuery.of(context).size.height * 0.5,
+                decoration: const BoxDecoration(
+                  borderRadius: BorderRadius.only(
+                    bottomLeft: Radius.circular(50),
+                    bottomRight: Radius.circular(50),
+                  ),
+                  image: DecorationImage(
+                    fit: BoxFit.cover,
+                    image: AssetImage(
+                      'assets/splash.gif',
+                    ),
+                  ),
+                ),
+              ),
+              Expanded(
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 20,
+                    vertical: 12,
+                  ),
+                  child: Column(
                     children: [
-                      Container(
-                        width: double.infinity,
-                        height: MediaQuery.of(context).size.height * 0.5,
-                        decoration: const BoxDecoration(
-                          borderRadius: BorderRadius.only(
-                            bottomLeft: Radius.circular(50),
-                            bottomRight: Radius.circular(50),
-                          ),
-                          image: DecorationImage(
-                            fit: BoxFit.cover,
-                            image: AssetImage(
-                              'assets/splash.gif',
-                            ),
-                          ),
+                      const Text(
+                        'CREATE A WORLD TOUR FROM YOUR IPHONE',
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                          fontWeight: FontWeight.w900,
+                          fontSize: 28,
                         ),
                       ),
-                      Expanded(
-                        child: Padding(
-                          padding: const EdgeInsets.symmetric(
-                            horizontal: 20,
-                            vertical: 12,
-                          ),
-                          child: Column(
-                            children: [
-                              const Text(
-                                'CREATE A WORLD TOUR FROM YOUR IPHONE',
-                                textAlign: TextAlign.center,
+                      const Text(
+                        'get access to unlimited opportunities and apply to performa at hundreds of venues',
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                          color: Colors.white,
+                        ),
+                      ),
+                      const Spacer(),
+                      Text(
+                        'get full access for \$${packages.first.storeProduct.price} / ${packages.first.packageType.toString().split('.').last.toLowerCase()}',
+                        textAlign: TextAlign.center,
+                        style: const TextStyle(
+                          color: Colors.grey,
+                        ),
+                      ),
+                      const SizedBox(height: 2),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Expanded(
+                            child: CupertinoButton.filled(
+                              onPressed: () {
+                                HapticFeedback.lightImpact();
+                                final package = packages.first;
+                                Purchases.purchasePackage(package).then((info) {
+                                  logger.info(info.toString());
+                                });
+                              },
+                              child: const Text(
+                                'Purchase',
                                 style: TextStyle(
-                                  fontWeight: FontWeight.w900,
-                                  fontSize: 28,
-                                ),
-                              ),
-                              const Text(
-                                'get access to unlimited opportunities and apply to performa at hundreds of venues',
-                                textAlign: TextAlign.center,
-                                style: TextStyle(
+                                  fontWeight: FontWeight.w700,
                                   color: Colors.white,
                                 ),
                               ),
-                              const Spacer(),
-                              Text(
-                                'get full access for \$${packages.first.storeProduct.price} / ${packages.first.packageType.toString().split('.').last.toLowerCase()}',
-                                textAlign: TextAlign.center,
-                                style: const TextStyle(
-                                  color: Colors.grey,
-                                ),
-                              ),
-                              const SizedBox(height: 2),
-                              Row(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  Expanded(
-                                    child: CupertinoButton.filled(
-                                      onPressed: () {
-                                        HapticFeedback.lightImpact();
-                                        final package = packages.first;
-                                        Purchases.purchasePackage(package)
-                                            .then((info) {
-                                          logger.info(info.toString());
-                                        });
-                                      },
-                                      child: const Text(
-                                        'Purchase',
-                                        style: TextStyle(
-                                          fontWeight: FontWeight.w700,
-                                          color: Colors.white,
-                                        ),
-                                      ),
-                                    ),
-                                  ),
-                                ],
-                              ),
-                              const SizedBox(height: 2),
-                              Row(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  TextButton(
-                                    onPressed: () {
-                                      context.popUntilHome();
-                                    },
-                                    child: const Text(
-                                      'Cancel',
-                                      style: TextStyle(
-                                        color: Colors.grey,
-                                      ),
-                                    ),
-                                  ),
-                                  TextButton(
-                                    onPressed: () => launchURL(
-                                        context, 'https://tapped.ai/privacy',),
-                                    child: const Text(
-                                      'Privacy',
-                                      style: TextStyle(
-                                        color: Colors.grey,
-                                      ),
-                                    ),
-                                  ),
-                                  TextButton(
-                                    onPressed: () => launchURL(
-                                        context, 'https://tapped.ai/terms',),
-                                    child: const Text(
-                                      'Terms',
-                                      style: TextStyle(
-                                        color: Colors.grey,
-                                      ),
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ],
+                            ),
                           ),
-                        ),
+                        ],
+                      ),
+                      const SizedBox(height: 2),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          TextButton(
+                            onPressed: () {
+                              context.popUntilHome();
+                            },
+                            child: const Text(
+                              'Cancel',
+                              style: TextStyle(
+                                color: Colors.grey,
+                              ),
+                            ),
+                          ),
+                          TextButton(
+                            onPressed: () => launchURL(
+                              context,
+                              'https://tapped.ai/privacy',
+                            ),
+                            child: const Text(
+                              'Privacy',
+                              style: TextStyle(
+                                color: Colors.grey,
+                              ),
+                            ),
+                          ),
+                          TextButton(
+                            onPressed: () => launchURL(
+                              context,
+                              'https://tapped.ai/terms',
+                            ),
+                            child: const Text(
+                              'Terms',
+                              style: TextStyle(
+                                color: Colors.grey,
+                              ),
+                            ),
+                          ),
+                        ],
                       ),
                     ],
-                  );
-                },
+                  ),
+                ),
               ),
-            ),
-        };
-      },
+            ],
+          );
+        },
+      ),
     );
   }
 }

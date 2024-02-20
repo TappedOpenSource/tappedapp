@@ -18,9 +18,4 @@ class RemoteConfigImpl implements RemoteConfigRepository {
   Future<double> getBookingFee() async {
     return _remoteConfig.getDouble('booking_fee');
   }
-
-  @override
-  Future<bool> getSubscriptionFeatureFlag() async {
-    return _remoteConfig.getBool('subscriptions_feature_flag');
-  }
 }
