@@ -22,6 +22,7 @@ import 'package:intheloopapp/ui/profile/components/reviews_sliver.dart';
 import 'package:intheloopapp/ui/profile/components/services_sliver.dart';
 import 'package:intheloopapp/ui/profile/profile_cubit.dart';
 import 'package:intheloopapp/ui/themes.dart';
+import 'package:intheloopapp/utils/default_image.dart';
 import 'package:intheloopapp/utils/hero_image.dart';
 import 'package:intheloopapp/utils/premium_builder.dart';
 
@@ -49,9 +50,7 @@ class ProfileView extends StatelessWidget {
 
   ImageProvider _getProfileImage(String? profilePicture) {
     return (profilePicture == null)
-        ? const AssetImage(
-            'assets/default_avatar.png',
-          ) as ImageProvider
+        ? getDefaultImage(Option.of(visitedUserId))
         : CachedNetworkImageProvider(
             profilePicture,
           );

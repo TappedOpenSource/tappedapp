@@ -1209,6 +1209,7 @@ class FirestoreDatabaseImpl extends DatabaseRepository {
 
         final opportunitiesSnapshot = await _opportunitiesRef
             .where('userId', isEqualTo: userId)
+            .where('deleted', isEqualTo: false)
             .orderBy('timestamp', descending: true)
             .limit(limit)
             .startAfterDocument(documentSnapshot)
@@ -1222,6 +1223,7 @@ class FirestoreDatabaseImpl extends DatabaseRepository {
 
       final userOpportunitiesSnapshot = await _opportunitiesRef
           .where('userId', isEqualTo: userId)
+          .where('deleted', isEqualTo: false)
           .where('startTime', isGreaterThanOrEqualTo: Timestamp.now())
           .orderBy('startTime', descending: true)
           .limit(limit)

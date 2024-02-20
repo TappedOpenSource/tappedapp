@@ -9,6 +9,7 @@ part 'venue_info.g.dart';
 class VenueInfo with _$VenueInfo {
   const factory VenueInfo({
     @Default(None()) Option<String> bookingEmail,
+    @Default(None()) Option<String> autoReply,
     @Default(None()) Option<int> capacity,
     @Default(None()) Option<String> idealPerformerProfile,
     @Default([]) List<Genre> genres,
@@ -42,5 +43,6 @@ enum VenueType {
   artGallery,
   studio,
   brewery,
+  hotel,
   other,
 }

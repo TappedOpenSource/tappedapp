@@ -9,6 +9,7 @@ import 'package:intheloopapp/domains/navigation_bloc/navigation_bloc.dart';
 import 'package:intheloopapp/ui/admin/create_opportunity_cubit.dart';
 import 'package:intheloopapp/ui/common/form_item.dart';
 import 'package:intheloopapp/ui/forms/location_text_field.dart';
+import 'package:intheloopapp/utils/default_image.dart';
 
 class CreateOpportunityForm extends StatelessWidget {
   const CreateOpportunityForm({super.key});
@@ -45,9 +46,7 @@ class CreateOpportunityForm extends StatelessWidget {
       None() => switch (currentProfileImage) {
           Some(:final value) => CachedNetworkImageProvider(value),
           // ignore: unnecessary_cast
-          None() => const AssetImage(
-              'assets/default_avatar.png',
-            ) as ImageProvider,
+          None() => getDefaultImage(const None()),
         },
     };
   }

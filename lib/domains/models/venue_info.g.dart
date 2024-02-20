@@ -12,6 +12,10 @@ _$VenueInfoImpl _$$VenueInfoImplFromJson(Map<String, dynamic> json) =>
           ? const None()
           : Option<String>.fromJson(
               json['bookingEmail'], (value) => value as String),
+      autoReply: json['autoReply'] == null
+          ? const None()
+          : Option<String>.fromJson(
+              json['autoReply'], (value) => value as String),
       capacity: json['capacity'] == null
           ? const None()
           : Option<int>.fromJson(json['capacity'], (value) => value as int),
@@ -53,6 +57,9 @@ _$VenueInfoImpl _$$VenueInfoImplFromJson(Map<String, dynamic> json) =>
 Map<String, dynamic> _$$VenueInfoImplToJson(_$VenueInfoImpl instance) =>
     <String, dynamic>{
       'bookingEmail': instance.bookingEmail.toJson(
+        (value) => value,
+      ),
+      'autoReply': instance.autoReply.toJson(
         (value) => value,
       ),
       'capacity': instance.capacity.toJson(
@@ -116,5 +123,6 @@ const _$VenueTypeEnumMap = {
   VenueType.artGallery: 'artGallery',
   VenueType.studio: 'studio',
   VenueType.brewery: 'brewery',
+  VenueType.hotel: 'hotel',
   VenueType.other: 'other',
 };

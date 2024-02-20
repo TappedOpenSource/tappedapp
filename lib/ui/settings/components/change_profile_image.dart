@@ -3,8 +3,10 @@ import 'dart:io';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:fpdart/fpdart.dart';
 import 'package:intheloopapp/ui/settings/settings_cubit.dart';
 import 'package:intheloopapp/utils/current_user_builder.dart';
+import 'package:intheloopapp/utils/default_image.dart';
 
 class ChangeProfileImage extends StatelessWidget {
   const ChangeProfileImage({super.key});
@@ -14,11 +16,9 @@ class ChangeProfileImage extends StatelessWidget {
     String? currentProfileImage,
   ) {
     if (newProfileImage == null) {
-      if (currentProfileImage == null) {
-        return const AssetImage('assets/default_avatar.png');
-      } else {
-        return CachedNetworkImageProvider(currentProfileImage);
-      }
+      return currentProfileImage == null
+          ? getDefaultImage(const None())
+          : CachedNetworkImageProvider(currentProfileImage);
     } else {
       return FileImage(newProfileImage);
     }

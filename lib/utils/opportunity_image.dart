@@ -6,6 +6,7 @@ import 'package:fpdart/fpdart.dart';
 import 'package:intheloopapp/domains/models/location.dart';
 import 'package:intheloopapp/domains/models/opportunity.dart';
 import 'package:intheloopapp/utils/bloc_utils.dart';
+import 'package:intheloopapp/utils/default_image.dart';
 
 Future<ImageProvider> getImageForLocation(
   BuildContext context,
@@ -29,9 +30,7 @@ Future<ImageProvider> getImageForLocation(
   };
 
   return image.match(
-    () => const AssetImage(
-      'assets/performance_placeholder.png',
-    ),
+    () => defaultOpportunityImage,
     (t) => t.image,
   );
 }
@@ -40,9 +39,7 @@ Future<ImageProvider> getOpImage(BuildContext context, Opportunity op) async {
   return await op.flierUrl.match(
     () async {
       if (op.location == Location.rva) {
-        return const AssetImage(
-          'assets/performance_placeholder.png',
-        );
+        return defaultOpportunityImage;
       }
 
       final provider = await getImageForLocation(context, op.location.placeId);

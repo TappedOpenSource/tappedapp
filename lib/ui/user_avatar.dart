@@ -6,6 +6,7 @@ import 'package:intheloopapp/domains/models/user_model.dart';
 import 'package:intheloopapp/domains/navigation_bloc/navigation_bloc.dart';
 import 'package:intheloopapp/domains/navigation_bloc/tapped_route.dart';
 import 'package:intheloopapp/ui/conditional_parent_widget.dart';
+import 'package:intheloopapp/utils/default_image.dart';
 
 class UserAvatar extends StatelessWidget {
   const UserAvatar({
@@ -59,7 +60,6 @@ class UserAvatar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    const defaultImage = AssetImage('assets/default_avatar.png') as ImageProvider;
     return ConditionalParentWidget(
       condition: pushId.isSome(),
       conditionalBuilder: _pushProfile(context),
@@ -80,10 +80,10 @@ class UserAvatar extends StatelessWidget {
           minRadius: minRadius,
           maxRadius: maxRadius,
           foregroundImage: imageUrl.fold(
-            () => defaultImage,
+            () => getDefaultImage(pushId),
             (t) {
               if (t.isEmpty) {
-                return defaultImage;
+                return getDefaultImage(pushId);
               }
               return CachedNetworkImageProvider(
                 t,
@@ -93,7 +93,7 @@ class UserAvatar extends StatelessWidget {
               );
             },
           ),
-          backgroundImage: const AssetImage('assets/default_avatar.png'),
+          backgroundImage: getDefaultImage(pushId),
         ),
       ),
     );

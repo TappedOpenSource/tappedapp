@@ -5,9 +5,8 @@ import 'package:intheloopapp/domains/models/booking.dart';
 import 'package:intheloopapp/domains/models/user_model.dart';
 import 'package:intheloopapp/domains/navigation_bloc/navigation_bloc.dart';
 import 'package:intheloopapp/domains/navigation_bloc/tapped_route.dart';
-import 'package:intheloopapp/ui/booking/booking_view.dart';
-import 'package:intheloopapp/utils/app_logger.dart';
 import 'package:intheloopapp/utils/bloc_utils.dart';
+import 'package:intheloopapp/utils/default_image.dart';
 import 'package:intheloopapp/utils/hero_image.dart';
 import 'package:intl/intl.dart';
 import 'package:uuid/uuid.dart';
@@ -40,17 +39,14 @@ class BookingCard extends StatelessWidget {
       },
       builder: (context, snapshot) {
         final user = snapshot.data ?? const None();
-        const defaultProvider = AssetImage(
-          'assets/default_avatar.png',
-        ) as ImageProvider;
         final ImageProvider<Object> imageProvider = booking.flierUrl.fold(
           () => user.flatMap((t) => t.profilePicture).fold(
-            () => defaultProvider,
+            () => getDefaultImage(Option.of(booking.id)),
             (t) {
               if (t.isNotEmpty) {
                 return CachedNetworkImageProvider(t);
               }
-              return defaultProvider;
+              return getDefaultImage(Option.of(booking.id));
             },
           ),
           CachedNetworkImageProvider.new,

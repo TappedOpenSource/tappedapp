@@ -16,7 +16,15 @@ class ChannelPreview extends StatelessWidget {
     final lastMessage = channel.state?.messages.reversed
         .firstWhere((message) => !message.isDeleted);
 
-    final subtitle = lastMessage == null ? 'nothing yet' : lastMessage.text!;
+    const maxLength = 124;
+    final lastMessageText = lastMessage?.text ?? '';
+    final isLonger = lastMessageText.length > maxLength;
+    final messagePreview = isLonger
+        ? '${lastMessageText.substring(0, maxLength)}...'
+        : lastMessageText;
+    final subtitle = lastMessage == null
+        ? 'nothing yet'
+        : messagePreview;
     // final opacity = (channel.state?.unreadCount ?? 0) > 0 ? 1.0 : 0.5;
 
     return ListTile(

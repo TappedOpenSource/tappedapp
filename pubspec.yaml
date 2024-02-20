@@ -142,4 +142,5 @@ flutter:
     - assets/cities/
     - assets/aesthetics/
     - assets/layers/
+    - assets/default_images/
   uses-material-design: true

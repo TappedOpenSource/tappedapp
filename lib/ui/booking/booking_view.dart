@@ -16,15 +16,12 @@ import 'package:intheloopapp/ui/user_tile.dart';
 import 'package:intheloopapp/utils/admin_builder.dart';
 import 'package:intheloopapp/utils/bloc_utils.dart';
 import 'package:intheloopapp/utils/current_user_builder.dart';
+import 'package:intheloopapp/utils/default_image.dart';
 import 'package:intheloopapp/utils/geohash.dart';
 import 'package:intheloopapp/utils/hero_image.dart';
 import 'package:intl/intl.dart';
 import 'package:skeletons/skeletons.dart';
 import 'package:timeago/timeago.dart' as timeago;
-
-const defaultProvider = AssetImage(
-  'assets/default_avatar.png',
-) as ImageProvider;
 
 class BookingView extends StatelessWidget {
   const BookingView({
@@ -59,7 +56,6 @@ class BookingView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final database = RepositoryProvider.of<DatabaseRepository>(context);
-    final navigationBloc = context.nav;
     final validService = booking.serviceId.isSome();
     return CurrentUserBuilder(
       builder: (context, currentUser) {
@@ -71,12 +67,12 @@ class BookingView extends StatelessWidget {
 
         final ImageProvider<Object> imageProvider = flierImage.fold(
           () => booking.flierUrl.fold(
-            () => defaultProvider,
+            () => getDefaultImage(const None()),
             (flierUrl) {
               if (flierUrl.isNotEmpty) {
                 return CachedNetworkImageProvider(flierUrl);
               }
-              return defaultProvider;
+              return getDefaultImage(const None());
             },
           ),
           (flier) => flier.imageProvider,

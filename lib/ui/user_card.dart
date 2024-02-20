@@ -8,6 +8,7 @@ import 'package:intheloopapp/domains/navigation_bloc/tapped_route.dart';
 import 'package:intheloopapp/ui/user_avatar.dart';
 import 'package:intheloopapp/utils/bloc_utils.dart';
 import 'package:intheloopapp/utils/current_user_builder.dart';
+import 'package:intheloopapp/utils/default_image.dart';
 import 'package:intheloopapp/utils/hero_image.dart';
 import 'package:intl/intl.dart';
 import 'package:uuid/uuid.dart';
@@ -45,7 +46,7 @@ class UserCard extends StatelessWidget {
           builder: (context, snapshot) {
             final verified = snapshot.data ?? false;
             final provider = (imageUrl == null || imageUrl.isEmpty)
-                ? const AssetImage('assets/default_avatar.png') as ImageProvider
+                ? getDefaultImage(Option.of(user.id))
                 : CachedNetworkImageProvider(
                     imageUrl,
                   );
