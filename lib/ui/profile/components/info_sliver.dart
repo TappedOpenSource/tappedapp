@@ -5,6 +5,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:fpdart/fpdart.dart';
 import 'package:intheloopapp/data/auth_repository.dart';
+import 'package:intheloopapp/domains/models/venue_info.dart';
 import 'package:intheloopapp/domains/navigation_bloc/navigation_bloc.dart';
 import 'package:intheloopapp/domains/navigation_bloc/tapped_route.dart';
 import 'package:intheloopapp/ui/profile/components/more_options_button.dart';
@@ -28,6 +29,7 @@ class InfoSliver extends StatelessWidget {
         final performerInfo = state.visitedUser.performerInfo.toNullable();
         final genres = performerInfo?.genres ?? [];
         final label = performerInfo?.label ?? 'None';
+
         final pressKitUrl = performerInfo?.pressKitUrl ?? const None();
         final currPlace = state.place;
         final idealPerformerProfile =
@@ -81,6 +83,20 @@ class InfoSliver extends StatelessWidget {
                                   style: TextStyle(
                                     color: theme.colorScheme.onSurface,
                                   ),
+                                ),
+                              ),
+                            ),
+                        },
+                        switch (state.visitedUser.venueInfo) {
+                          None() => const SizedBox.shrink(),
+                          Some(:final value) => CupertinoListTile(
+                              leading: const Icon(
+                                CupertinoIcons.building_2_fill,
+                              ),
+                              title: Text(
+                                value.type.formattedName,
+                                style: TextStyle(
+                                  color: theme.colorScheme.onSurface,
                                 ),
                               ),
                             ),

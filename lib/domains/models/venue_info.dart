@@ -46,3 +46,23 @@ enum VenueType {
   hotel,
   other,
 }
+
+extension VenueTypeX on VenueType {
+  String get formattedName {
+    return switch (this) {
+      VenueType.concertHall => 'Concert Hall',
+      VenueType.bar => 'Bar',
+      VenueType.club => 'Club',
+      VenueType.restaurant => 'Restaurant',
+      VenueType.theater => 'Theater',
+      VenueType.arena => 'Arena',
+      VenueType.stadium => 'Stadium',
+      VenueType.festival => 'Festival',
+      VenueType.artGallery => 'Art Gallery',
+      VenueType.studio => 'Studio',
+      VenueType.brewery => 'Brewery',
+      VenueType.hotel => 'Hotel',
+      VenueType.other => 'Other',
+    };
+  }
+}
