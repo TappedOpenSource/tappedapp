@@ -8,17 +8,17 @@ class PremiumBuilder extends StatelessWidget {
     super.key,
   });
 
-  final Widget Function(BuildContext, Option<String>) builder;
+  final Widget Function(BuildContext, bool) builder;
 
   @override
   Widget build(BuildContext context) {
-    final auth = context.auth;
-    return FutureBuilder<Option<String>>(
-      future: auth.getStripeClaim(),
+    // final auth = context.auth;
+    return FutureBuilder<bool>(
+      future: Future.value(false),
       builder: (context, snapshot) {
         final claim = snapshot.data;
         return switch (claim) {
-          null => builder(context, const None()),
+          null => builder(context, false),
           _ => builder(context, claim),
         };
       },

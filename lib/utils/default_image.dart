@@ -11,7 +11,7 @@ const defaultImagesUris = [
 ];
 
 ImageProvider<Object> get defaultOpportunityImage =>
-    const AssetImage('/assets/default_images/performance_placeholder.png');
+    const AssetImage('assets/default_images/performance_placeholder.png');
 
 ImageProvider<Object> getDefaultImage(Option<String> id) {
   final defaultImagesLength = defaultImagesUris.length;

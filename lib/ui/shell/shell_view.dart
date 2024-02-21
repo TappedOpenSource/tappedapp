@@ -23,10 +23,9 @@ class ShellView extends StatelessWidget {
       builder: (context, currentUser) {
         return PremiumBuilder(
           builder: (context, claim) {
-            final hasClaim = claim.isSome();
             context
                 .read<PremiumThemeCubit>()
-                .updateTheme(isPremiumMode: hasClaim);
+                .updateTheme(isPremiumMode: claim);
             return BlocBuilder<NavigationBloc, NavigationState>(
               builder: (context, state) {
                 return Scaffold(

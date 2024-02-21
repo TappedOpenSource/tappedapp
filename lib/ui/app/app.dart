@@ -18,6 +18,7 @@ import 'package:intheloopapp/ui/shell/shell_view.dart';
 import 'package:intheloopapp/ui/splash/splash_view.dart';
 import 'package:intheloopapp/ui/themes.dart';
 import 'package:intheloopapp/utils/bloc_utils.dart';
+import 'package:intheloopapp/utils/iap_store_config.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:stream_chat_flutter/stream_chat_flutter.dart';
 
@@ -42,6 +43,7 @@ class App extends StatelessWidget {
     BuildContext context,
     String currentAuthUserId,
   ) {
+    configureIapSdk(currentAuthUserId);
     context.onboarding.add(
       OnboardingCheck(
         userId: currentAuthUserId,

@@ -22,14 +22,14 @@ class ApplyAnimationView extends StatelessWidget {
           PremiumBuilder(
             builder: (context, claim) {
               return switch (claim) {
-                None() => const Text(
+                false => const Text(
                     'we just received your application, thank you for applying',
                     textAlign: TextAlign.center,
                     style: TextStyle(
                       fontSize: 22,
                     ),
                   ),
-                Some() => const Text(
+                true => const Text(
                     "adding your application to the top of the promoter's list as a premium user",
                     textAlign: TextAlign.center,
                     style: TextStyle(

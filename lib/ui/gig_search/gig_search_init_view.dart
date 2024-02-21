@@ -88,10 +88,10 @@ class GigSearchInitView extends StatelessWidget {
                       Expanded(
                         child: CupertinoButton.filled(
                           onPressed: switch (claim) {
-                            None() => () => context.push(
+                            false => () => context.push(
                                   PaywallPage(),
                                 ),
-                            Some(:final value) => () => context.push(
+                            true => () => context.push(
                                   GigSearchPage(),
                                 ),
                           },

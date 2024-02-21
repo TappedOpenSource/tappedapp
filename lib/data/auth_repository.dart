@@ -8,7 +8,6 @@ abstract class AuthRepository {
   Future<String> getAuthUserId();
   Future<User?> getAuthUser();
   Future<bool> getAdminClaim();
-  Future<Option<String>> getStripeClaim();
   Future<List<CustomClaim>> getCustomClaims();
   Future<Option<SignInPayload>> signInWithCredentials(
     String email,
@@ -44,7 +43,7 @@ class SignInPayload {
 }
 
 enum CustomClaim {
+  premium,
   admin,
   booker,
-  premium,
 }

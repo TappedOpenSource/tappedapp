@@ -207,10 +207,9 @@ class ProfileView extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 PremiumBuilder(
-                  builder: (context, claim) {
-                    final hasClaim = claim.isSome();
+                  builder: (context, isPremium) {
                     final showClaim =
-                        hasClaim && currentUser.id == visitedUser.id;
+                        isPremium && currentUser.id == visitedUser.id;
                     return Text.rich(
                       TextSpan(
                         text: visitedUser.displayName,

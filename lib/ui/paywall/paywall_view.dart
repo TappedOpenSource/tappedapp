@@ -14,190 +14,255 @@ import 'package:stream_chat_flutter/stream_chat_flutter.dart';
 class PaywallView extends StatelessWidget {
   const PaywallView({super.key});
 
-  Widget _buildPackageCard(Package package) {
-    return Card(
-      child: Padding(
-        padding: const EdgeInsets.all(20),
-        child: Column(
-          children: [
-            Text(package.storeProduct.title),
-            Text(package.storeProduct.description),
-            Text(package.storeProduct.priceString),
-          ],
+  // Widget _buildPackageCard(Package package) {
+  //   return Card(
+  //     child: Padding(
+  //       padding: const EdgeInsets.all(20),
+  //       child: Column(
+  //         children: [
+  //           Text(package.storeProduct.title),
+  //           Text(package.storeProduct.description),
+  //           Text(package.storeProduct.priceString),
+  //         ],
+  //       ),
+  //     ),
+  //   );
+  // }
+
+  Widget _buildCheckItem({required String text}) {
+    return Row(
+      children: [
+        SizedBox(
+          height: 45,
+          width: 45,
+          child: Icon(
+            Icons.check_circle,
+            color: Colors.green.withOpacity(0.5),
+          ),
         ),
-      ),
+        Expanded(
+          child: Text(
+            text,
+            style: const TextStyle(
+              fontSize: 16,
+            ),
+          ),
+        ),
+      ],
     );
+  }
+
+  Future<void> _onPurchase(
+    BuildContext context, {
+    required List<Package> packages,
+  }) async {
+    final scaffoldMessenger = ScaffoldMessenger.of(context);
+    final nav = context.nav;
+
+    await HapticFeedback.lightImpact();
+    await EasyLoading.show(
+      status: 'loading...',
+      maskType: EasyLoadingMaskType.black,
+    );
+    try {
+      final package = packages.where((element) {
+        return element.packageType == PackageType.monthly;
+      }).first;
+      await Purchases.purchasePackage(
+        package,
+      );
+      // logger.info(customerInfo.toString());
+    } catch (error, s) {
+      logger.error('error purchasing package', error: error, stackTrace: s);
+      scaffoldMessenger.showSnackBar(
+        SnackBar(
+          backgroundColor: Colors.red,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(10),
+          ),
+          content: const Text(
+            'error purchasing package',
+            style: TextStyle(
+              color: Colors.white,
+            ),
+          ),
+        ),
+      );
+    }
+
+    await EasyLoading.dismiss();
+    nav.pop();
   }
 
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    return Scaffold(
-      backgroundColor: theme.colorScheme.background,
-      body: FutureBuilder(
-        future: Purchases.getOfferings(),
-        builder: (context, snapshot) {
-          if (snapshot.hasError) {
-            logger.error(snapshot.error.toString());
-            return const ErrorView();
-          }
+    return FutureBuilder(
+      future: Purchases.getCustomerInfo(),
+      builder: (context, snapshot) {
+        if (snapshot.hasError) {
+          logger.error(snapshot.error.toString());
+          return const ErrorView();
+        }
 
-          if (!snapshot.hasData) {
-            return const Center(
-              child: CupertinoActivityIndicator(),
-            );
-          }
+        final customerInfo = snapshot.data;
 
-          final scaffoldMessenger = ScaffoldMessenger.of(context);
-          final offerings = snapshot.data!;
-          final offering = offerings.current;
-          final packages = offering?.availablePackages ?? [];
+        return FutureBuilder(
+          future: Purchases.getOfferings(),
+          builder: (context, snapshot) {
+            if (snapshot.hasError) {
+              logger.error(snapshot.error.toString());
+              return const ErrorView();
+            }
 
-          return Column(
-            children: [
-              Container(
-                width: double.infinity,
-                height: MediaQuery.of(context).size.height * 0.5,
-                decoration: const BoxDecoration(
-                  borderRadius: BorderRadius.only(
-                    bottomLeft: Radius.circular(50),
-                    bottomRight: Radius.circular(50),
-                  ),
-                  image: DecorationImage(
-                    fit: BoxFit.cover,
-                    image: AssetImage(
-                      'assets/splash.gif',
+            final offerings = snapshot.data;
+
+            if (customerInfo == null || offerings == null) {
+              return const Center(
+                child: CupertinoActivityIndicator(),
+              );
+            }
+
+            final offering = offerings.current;
+            final packages = offering?.availablePackages ?? [];
+
+            logger.info('customer info $customerInfo');
+
+            return Scaffold(
+              backgroundColor: theme.colorScheme.background,
+              body: Column(
+                children: [
+                  Container(
+                    width: double.infinity,
+                    height: MediaQuery.of(context).size.height * 0.3,
+                    decoration: const BoxDecoration(
+                      borderRadius: BorderRadius.only(
+                        bottomLeft: Radius.circular(50),
+                        bottomRight: Radius.circular(50),
+                      ),
+                      image: DecorationImage(
+                        fit: BoxFit.cover,
+                        image: AssetImage(
+                          'assets/splash.gif',
+                        ),
+                      ),
                     ),
                   ),
-                ),
-              ),
-              Expanded(
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 20,
-                    vertical: 12,
-                  ),
-                  child: Column(
-                    children: [
-                      const Text(
-                        'CREATE A WORLD TOUR FROM YOUR IPHONE',
-                        textAlign: TextAlign.center,
-                        style: TextStyle(
-                          fontWeight: FontWeight.w900,
-                          fontSize: 28,
-                        ),
+                  Expanded(
+                    child: Padding(
+                      padding: const EdgeInsets.only(
+                        left: 20,
+                        right: 20,
+                        bottom: 20,
                       ),
-                      const Text(
-                        'get access to unlimited opportunities and apply to performa at hundreds of venues',
-                        textAlign: TextAlign.center,
-                        style: TextStyle(
-                          color: Colors.white,
-                        ),
-                      ),
-                      const Spacer(),
-                      Text(
-                        'get full access for \$${packages.first.storeProduct.price} / ${packages.first.packageType.toString().split('.').last.toLowerCase()}',
-                        textAlign: TextAlign.center,
-                        style: const TextStyle(
-                          color: Colors.grey,
-                        ),
-                      ),
-                      const SizedBox(height: 2),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
+                      child: Column(
                         children: [
-                          Expanded(
-                            child: CupertinoButton.filled(
-                              onPressed: () async {
-                                await HapticFeedback.lightImpact();
-                                await EasyLoading.show(status: 'loading...');
-                                try {
-                                  final package = packages.first;
-                                  final customerInfo =
-                                      await Purchases.purchasePackage(package);
-                                  logger.info(customerInfo.toString());
-                                } catch (error, s) {
-                                  logger.error('error purchasing package',
-                                      error: error, stackTrace: s);
-                                  scaffoldMessenger.showSnackBar(
-                                    SnackBar(
-                                      backgroundColor: Colors.red,
-                                      shape: RoundedRectangleBorder(
-                                        borderRadius: BorderRadius.circular(10),
-                                      ),
-                                      content: const Text(
-                                        'error purchasing package',
-                                        style: TextStyle(
-                                          color: Colors.white,
-                                        ),
-                                      ),
+                          const Text(
+                            'CREATE A WORLD TOUR FROM YOUR IPHONE',
+                            textAlign: TextAlign.center,
+                            style: TextStyle(
+                              fontWeight: FontWeight.w900,
+                              fontSize: 28,
+                            ),
+                          ),
+                          const SizedBox(height: 24),
+                          _buildCheckItem(
+                            text: 'unlimited gig opportunities',
+                          ),
+                          const SizedBox(height: 24),
+                          _buildCheckItem(
+                            text:
+                                'exclusive info on venues looking for performers',
+                          ),
+                          const SizedBox(height: 24),
+                          _buildCheckItem(
+                            text: 'contact info for thousands of venues',
+                          ),
+                          const SizedBox(height: 24),
+                          _buildCheckItem(
+                            text: 'advanced search',
+                          ),
+                          const Spacer(),
+                          Text(
+                            'get full access for \$${packages.first.storeProduct.price} / ${packages.first.packageType.toString().split('.').last.toLowerCase()}',
+                            textAlign: TextAlign.center,
+                            style: const TextStyle(
+                              color: Colors.grey,
+                            ),
+                          ),
+                          const SizedBox(height: 4),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Expanded(
+                                child: CupertinoButton.filled(
+                                  onPressed: () => _onPurchase(
+                                    context,
+                                    packages: packages,
+                                  ),
+                                  borderRadius: BorderRadius.circular(15),
+                                  child: const Text(
+                                    'Purchase',
+                                    style: TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      color: Colors.white,
                                     ),
-                                  );
-                                }
-
-                                await EasyLoading.dismiss();
-                                context.pop();
-                              },
-                              child: const Text(
-                                'Purchase',
-                                style: TextStyle(
-                                  fontWeight: FontWeight.w700,
-                                  color: Colors.white,
+                                  ),
                                 ),
                               ),
-                            ),
+                            ],
+                          ),
+                          const SizedBox(height: 2),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              TextButton(
+                                onPressed: () {
+                                  context.popUntilHome();
+                                },
+                                child: const Text(
+                                  'Cancel',
+                                  style: TextStyle(
+                                    color: Colors.grey,
+                                  ),
+                                ),
+                              ),
+                              TextButton(
+                                onPressed: () => launchURL(
+                                  context,
+                                  'https://tapped.ai/privacy',
+                                ),
+                                child: const Text(
+                                  'Privacy',
+                                  style: TextStyle(
+                                    color: Colors.grey,
+                                  ),
+                                ),
+                              ),
+                              TextButton(
+                                onPressed: () => launchURL(
+                                  context,
+                                  'https://tapped.ai/terms',
+                                ),
+                                child: const Text(
+                                  'Terms',
+                                  style: TextStyle(
+                                    color: Colors.grey,
+                                  ),
+                                ),
+                              ),
+                            ],
                           ),
                         ],
                       ),
-                      const SizedBox(height: 2),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          TextButton(
-                            onPressed: () {
-                              context.popUntilHome();
-                            },
-                            child: const Text(
-                              'Cancel',
-                              style: TextStyle(
-                                color: Colors.grey,
-                              ),
-                            ),
-                          ),
-                          TextButton(
-                            onPressed: () => launchURL(
-                              context,
-                              'https://tapped.ai/privacy',
-                            ),
-                            child: const Text(
-                              'Privacy',
-                              style: TextStyle(
-                                color: Colors.grey,
-                              ),
-                            ),
-                          ),
-                          TextButton(
-                            onPressed: () => launchURL(
-                              context,
-                              'https://tapped.ai/terms',
-                            ),
-                            child: const Text(
-                              'Terms',
-                              style: TextStyle(
-                                color: Colors.grey,
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-                    ],
+                    ),
                   ),
-                ),
+                ],
               ),
-            ],
-          );
-        },
-      ),
+            );
+          },
+        );
+      },
     );
   }
 }

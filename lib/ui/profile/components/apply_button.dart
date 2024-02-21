@@ -5,6 +5,7 @@ import 'package:intheloopapp/domains/navigation_bloc/navigation_bloc.dart';
 import 'package:intheloopapp/domains/navigation_bloc/tapped_route.dart';
 import 'package:intheloopapp/utils/bloc_utils.dart';
 import 'package:intheloopapp/utils/current_user_builder.dart';
+import 'package:intheloopapp/utils/premium_builder.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class ApplyButton extends StatefulWidget {
@@ -70,96 +71,74 @@ class _ApplyButtonState extends State<ApplyButton> {
           );
         }
 
-        return FutureBuilder(
-          future: auth.getStripeClaim(),
+        return FutureBuilder<bool>(
+          future: database.isUserAppliedForOpportunity(
+            userId: currentUser.id,
+            opportunityId: _opportunity.id,
+          ),
           builder: (context, snapshot) {
-            final claim = snapshot.data;
-            if (claim == null) {
+            if (!snapshot.hasData) {
+              return const CupertinoActivityIndicator();
+            }
+
+            final applied = snapshot.data!;
+            if (applied) {
               return SizedBox(
                 width: double.infinity,
-                child: CupertinoButton(
-                  onPressed: () => launchUrl(
-                    Uri(
-                      scheme: 'https',
-                      path: 'tapped.ai/',
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(
+                    vertical: 4,
+                    horizontal: 32,
+                  ),
+                  child: CupertinoButton(
+                    onPressed: null,
+                    borderRadius: BorderRadius.circular(15),
+                    child: const Text(
+                      'Applied',
+                      style: TextStyle(
+                        fontWeight: FontWeight.w700,
+                        color: Colors.green,
+                      ),
                     ),
                   ),
-                  borderRadius: BorderRadius.circular(15),
-                  child: const Text('Subscribe to apply'),
                 ),
               );
             }
 
-            return FutureBuilder<bool>(
-              future: database.isUserAppliedForOpportunity(
-                userId: currentUser.id,
-                opportunityId: _opportunity.id,
-              ),
-              builder: (context, snapshot) {
-                if (!snapshot.hasData) {
-                  return const CupertinoActivityIndicator();
-                }
-
-                final applied = snapshot.data!;
-                if (applied) {
-                  return SizedBox(
-                    width: double.infinity,
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(
-                        vertical: 4,
-                        horizontal: 32,
-                      ),
-                      child: CupertinoButton(
-                        onPressed: null,
-                        borderRadius: BorderRadius.circular(15),
-                        child: const Text(
-                          'Applied',
-                          style: TextStyle(
-                            fontWeight: FontWeight.w700,
-                            color: Colors.green,
-                          ),
-                        ),
-                      ),
-                    ),
-                  );
-                }
-
-                return SizedBox(
-                  width: double.infinity,
-                  child: Padding(
-                    padding: const EdgeInsets.symmetric(
-                      vertical: 4,
-                      horizontal: 32,
-                    ),
-                    child: CupertinoButton.filled(
-                      onPressed: () {
-                        setState(() {
-                          loading = true;
-                        });
-                        database
-                            .applyForOpportunity(
-                          opportunity: _opportunity,
-                          userComment: '',
-                          userId: currentUser.id,
-                        )
-                            .then((value) {
-                          setState(() {
-                            loading = false;
-                          });
-                        });
-                      },
-                      borderRadius: BorderRadius.circular(15),
-                      child: const Text(
-                        'Apply',
-                        style: TextStyle(
-                          fontWeight: FontWeight.w700,
-                          color: Colors.white,
-                        ),
-                      ),
+            return SizedBox(
+              width: double.infinity,
+              child: Padding(
+                padding: const EdgeInsets.symmetric(
+                  vertical: 4,
+                  horizontal: 32,
+                ),
+                child: CupertinoButton.filled(
+                  onPressed: () {
+                    setState(() {
+                      loading = true;
+                    });
+                    database
+                        .applyForOpportunity(
+                      opportunity: _opportunity,
+                      userComment: '',
+                      userId: currentUser.id,
+                    )
+                        .then((value) {
+                      setState(() {
+                        loading = false;
+                      });
+                    });
+                  },
+                  borderRadius: BorderRadius.circular(15),
+                  child: const Text(
+                    'Apply',
+                    style: TextStyle(
+                      fontWeight: FontWeight.w700,
+                      color: Colors.white,
                     ),
                   ),
-                );
-              },
+                ),
+              ),
             );
           },
         );

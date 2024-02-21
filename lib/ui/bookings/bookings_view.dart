@@ -165,7 +165,6 @@ class BookingsView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final database = context.database;
     return CurrentUserBuilder(
       builder: (context, currentUser) {
         return RefreshIndicator(
@@ -190,14 +189,14 @@ class BookingsView extends StatelessWidget {
                             PremiumBuilder(
                               builder: (context, isPremium) {
                                 return switch (isPremium) {
-                                  None() => _buildChip(
+                                  false => _buildChip(
                                       context,
                                       label: 'premium',
                                       onPressed: () => context.push(
                                         PaywallPage(),
                                       ),
                                     ),
-                                  Some() => const SizedBox.shrink(),
+                                  true => const SizedBox.shrink(),
                                 };
                               },
                             ),

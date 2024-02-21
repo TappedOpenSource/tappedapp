@@ -27,7 +27,7 @@ class IapStoreConfig {
   static bool isForGooglePlay() => instance.store == Store.playStore;
 }
 
-Future<void> configureIapSdk() async {
+Future<void> configureIapSdk(String currentUserId) async {
   if (kIsWeb) return;
 
   if (Platform.isIOS || Platform.isMacOS) {
@@ -54,7 +54,7 @@ Future<void> configureIapSdk() async {
   PurchasesConfiguration configuration;
 
   configuration = PurchasesConfiguration(IapStoreConfig.instance.apiKey)
-    ..appUserID = null
+    ..appUserID = currentUserId
     ..observerMode = false;
   await Purchases.configure(configuration);
 }

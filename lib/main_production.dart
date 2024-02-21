@@ -32,7 +32,6 @@ Future<void> main() async {
     options: DefaultFirebaseOptions.currentPlatform,
   );
   await configureError();
-  await configureIapSdk();
 
   // Keep the app in portrait mode (no landscape)
   await SystemChrome.setPreferredOrientations([
