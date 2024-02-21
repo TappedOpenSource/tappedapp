@@ -9,6 +9,7 @@ import 'package:intheloopapp/domains/navigation_bloc/tapped_route.dart';
 import 'package:intheloopapp/utils/bloc_utils.dart';
 import 'package:intheloopapp/utils/current_user_builder.dart';
 import 'package:intheloopapp/utils/custom_claims_builder.dart';
+import 'package:intheloopapp/utils/premium_builder.dart';
 
 class RequestToPerform extends StatelessWidget {
   const RequestToPerform({
@@ -20,9 +21,8 @@ class RequestToPerform extends StatelessWidget {
 
   Widget _buildRequestButton(BuildContext context) {
     final theme = Theme.of(context);
-    return CustomClaimsBuilder(
-      builder: (context, claims) {
-        final isPremium = claims.contains(CustomClaim.premium);
+    return PremiumBuilder(
+      builder: (context, isPremium) {
         return SizedBox(
           width: double.infinity,
           child: CupertinoButton(

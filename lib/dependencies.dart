@@ -104,6 +104,9 @@ List<BlocProvider> buildBlocs({
         authRepository: context.auth,
       )..add(AppStarted()),
     ),
+    BlocProvider<SubscriptionBloc>(
+      create: (context) => SubscriptionBloc(),
+    ),
     BlocProvider<ConfirmEmailBloc>(
       create: (context) => ConfirmEmailBloc(
         authRepository: context.auth,
@@ -152,6 +155,7 @@ List<BlocProvider> buildBlocs({
         nav: context.nav,
         auth: context.auth,
         authBloc: context.authentication,
+        subscriptionBloc: context.subscriptions,
       ),
     ),
     BlocProvider<SearchBloc>(
@@ -161,8 +165,6 @@ List<BlocProvider> buildBlocs({
         places: context.places,
       ),
     ),
-    BlocProvider<SubscriptionBloc>(
-      create: (context) => SubscriptionBloc(),
-    ),
+
   ];
 }

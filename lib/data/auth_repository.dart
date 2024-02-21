@@ -43,7 +43,6 @@ class SignInPayload {
 }
 
 enum CustomClaim {
-  premium,
   admin,
   booker,
 }

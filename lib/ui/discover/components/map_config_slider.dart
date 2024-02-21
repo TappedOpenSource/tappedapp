@@ -5,6 +5,7 @@ import 'package:intheloopapp/domains/navigation_bloc/navigation_bloc.dart';
 import 'package:intheloopapp/domains/navigation_bloc/tapped_route.dart';
 import 'package:intheloopapp/ui/discover/discover_cubit.dart';
 import 'package:intheloopapp/utils/custom_claims_builder.dart';
+import 'package:intheloopapp/utils/premium_builder.dart';
 
 class MapConfigSlider extends StatelessWidget {
   const MapConfigSlider({super.key});
@@ -20,42 +21,46 @@ class MapConfigSlider extends StatelessWidget {
     final isSelected = currentOverlay == overlay;
     return CustomClaimsBuilder(
       builder: (context, claims) {
-        return InkWell(
-          onTap: () {
-            if (premiumOnly && !claims.contains(CustomClaim.premium)) {
-              context.push(PaywallPage());
-              return;
-            }
+        return PremiumBuilder(
+          builder: (context, isPremium) {
+            return InkWell(
+              onTap: () {
+                if (premiumOnly && !isPremium) {
+                  context.push(PaywallPage());
+                  return;
+                }
 
-            context.read<DiscoverCubit>().onMapOverlayChange(
-              overlay,
+                context.read<DiscoverCubit>().onMapOverlayChange(
+                  overlay,
+                );
+              },
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Container(
+                    height: 75,
+                    width: 75,
+                    decoration: BoxDecoration(
+                      image: DecorationImage(
+                        image: image,
+                        fit: BoxFit.cover,
+                      ),
+                      borderRadius: BorderRadius.circular(8),
+                    ),
+                  ),
+                  const SizedBox(height: 2),
+                  Text(
+                    label,
+                    style: TextStyle(
+                      color: isSelected
+                          ? theme.colorScheme.onSurface
+                          : theme.colorScheme.onSurface.withOpacity(0.3),
+                    ),
+                  ),
+                ],
+              ),
             );
           },
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Container(
-                height: 75,
-                width: 75,
-                decoration: BoxDecoration(
-                  image: DecorationImage(
-                    image: image,
-                    fit: BoxFit.cover,
-                  ),
-                  borderRadius: BorderRadius.circular(8),
-                ),
-              ),
-              const SizedBox(height: 2),
-              Text(
-                label,
-                style: TextStyle(
-                  color: isSelected
-                      ? theme.colorScheme.onSurface
-                      : theme.colorScheme.onSurface.withOpacity(0.3),
-                ),
-              ),
-            ],
-          ),
         );
       },
     );
