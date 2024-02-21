@@ -1,5 +1,7 @@
 import 'package:flutter/cupertino.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fpdart/fpdart.dart';
+import 'package:intheloopapp/domains/subscription_bloc/subscription_bloc.dart';
 import 'package:intheloopapp/utils/bloc_utils.dart';
 
 class PremiumBuilder extends StatelessWidget {
@@ -12,16 +14,9 @@ class PremiumBuilder extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // final auth = context.auth;
-    return FutureBuilder<bool>(
-      future: Future.value(false),
-      builder: (context, snapshot) {
-        final claim = snapshot.data;
-        return switch (claim) {
-          null => builder(context, false),
-          _ => builder(context, claim),
-        };
-      },
+    return BlocSelector<SubscriptionBloc, SubscriptionState, bool>(
+      selector: (state) => state is Initialized ? state.subscribed : false,
+      builder: builder,
     );
   }
 }

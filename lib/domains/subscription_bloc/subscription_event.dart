@@ -9,9 +9,10 @@ class CheckSubscriptionStatus extends SubscriptionEvent {
   final String userId;
 }
 
-class UpdateSubscriptionStatus extends SubscriptionEvent {
-  UpdateSubscriptionStatus({required this.userId, required this.hasSubscription});
+class UpdateSubscription extends SubscriptionEvent {
+  UpdateSubscription({
+    required this.subscribed,
+  });
 
-  final String userId;
-  final bool hasSubscription;
+  final bool subscribed;
 }

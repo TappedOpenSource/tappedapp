@@ -14,6 +14,7 @@ import 'package:intheloopapp/domains/navigation_bloc/navigation_bloc.dart';
 import 'package:intheloopapp/domains/onboarding_bloc/onboarding_bloc.dart';
 import 'package:intheloopapp/domains/opportunity_bloc/opportunity_bloc.dart';
 import 'package:intheloopapp/domains/search_bloc/search_bloc.dart';
+import 'package:intheloopapp/domains/subscription_bloc/subscription_bloc.dart';
 
 extension BlocUtils on BuildContext {
   DatabaseRepository get database => read<DatabaseRepository>();
@@ -32,4 +33,5 @@ extension BlocUtils on BuildContext {
   BookingsBloc get bookings => read<BookingsBloc>();
   OpportunityBloc get opportunities => read<OpportunityBloc>();
   SearchBloc get search => read<SearchBloc>();
+  SubscriptionBloc get subscriptions => read<SubscriptionBloc>();
 }

@@ -3,11 +3,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:intheloopapp/domains/navigation_bloc/navigation_bloc.dart';
+import 'package:intheloopapp/domains/subscription_bloc/subscription_bloc.dart';
 import 'package:intheloopapp/ui/common/waitlist_view.dart';
 import 'package:intheloopapp/ui/error/error_view.dart';
 import 'package:intheloopapp/ui/loading/logo_wave.dart';
 import 'package:intheloopapp/utils/app_logger.dart';
 import 'package:intheloopapp/utils/bloc_utils.dart';
+import 'package:intheloopapp/utils/premium_builder.dart';
 import 'package:purchases_flutter/purchases_flutter.dart';
 import 'package:stream_chat_flutter/stream_chat_flutter.dart';
 
@@ -57,6 +59,7 @@ class PaywallView extends StatelessWidget {
     required List<Package> packages,
   }) async {
     final scaffoldMessenger = ScaffoldMessenger.of(context);
+    final subscriptions = context.subscriptions;
     final nav = context.nav;
 
     await HapticFeedback.lightImpact();
@@ -68,10 +71,19 @@ class PaywallView extends StatelessWidget {
       final package = packages.where((element) {
         return element.packageType == PackageType.monthly;
       }).first;
-      await Purchases.purchasePackage(
+      final customerInfo = await Purchases.purchasePackage(
         package,
       );
-      // logger.info(customerInfo.toString());
+
+      final subscribed =
+          customerInfo.entitlements.active.containsKey(entitlementID);
+      subscriptions.add(
+            UpdateSubscription(
+              subscribed: subscribed,
+            ),
+          );
+
+      logger.info(customerInfo.toString());
     } catch (error, s) {
       logger.error('error purchasing package', error: error, stackTrace: s);
       scaffoldMessenger.showSnackBar(
@@ -97,15 +109,26 @@ class PaywallView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    return FutureBuilder(
-      future: Purchases.getCustomerInfo(),
-      builder: (context, snapshot) {
-        if (snapshot.hasError) {
-          logger.error(snapshot.error.toString());
-          return const ErrorView();
+    return PremiumBuilder(
+      builder: (context, isPremium) {
+        if (isPremium) {
+          return const Center(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                LogoWave(),
+                SizedBox(height: 20),
+                Text(
+                  'You are already a premium member',
+                  style: TextStyle(
+                    fontSize: 20,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              ],
+            ),
+          );
         }
-
-        final customerInfo = snapshot.data;
 
         return FutureBuilder(
           future: Purchases.getOfferings(),
@@ -117,7 +140,7 @@ class PaywallView extends StatelessWidget {
 
             final offerings = snapshot.data;
 
-            if (customerInfo == null || offerings == null) {
+            if (offerings == null) {
               return const Center(
                 child: CupertinoActivityIndicator(),
               );
@@ -125,8 +148,6 @@ class PaywallView extends StatelessWidget {
 
             final offering = offerings.current;
             final packages = offering?.availablePackages ?? [];
-
-            logger.info('customer info $customerInfo');
 
             return Scaffold(
               backgroundColor: theme.colorScheme.background,

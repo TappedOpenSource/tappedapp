@@ -34,6 +34,7 @@ import 'package:intheloopapp/domains/navigation_bloc/navigation_bloc.dart';
 import 'package:intheloopapp/domains/onboarding_bloc/onboarding_bloc.dart';
 import 'package:intheloopapp/domains/opportunity_bloc/opportunity_bloc.dart';
 import 'package:intheloopapp/domains/search_bloc/search_bloc.dart';
+import 'package:intheloopapp/domains/subscription_bloc/subscription_bloc.dart';
 import 'package:intheloopapp/ui/app_theme_cubit.dart';
 import 'package:intheloopapp/ui/premium_theme_cubit.dart';
 import 'package:intheloopapp/utils/bloc_utils.dart';
@@ -159,6 +160,9 @@ List<BlocProvider> buildBlocs({
         searchRepository: context.read<SearchRepository>(),
         places: context.places,
       ),
+    ),
+    BlocProvider<SubscriptionBloc>(
+      create: (context) => SubscriptionBloc(),
     ),
   ];
 }

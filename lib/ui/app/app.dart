@@ -9,6 +9,7 @@ import 'package:intheloopapp/domains/bookings_bloc/bookings_bloc.dart';
 import 'package:intheloopapp/domains/deep_link_bloc/deep_link_bloc.dart';
 import 'package:intheloopapp/domains/down_for_maintenance_bloc/down_for_maintenance_bloc.dart';
 import 'package:intheloopapp/domains/onboarding_bloc/onboarding_bloc.dart';
+import 'package:intheloopapp/domains/subscription_bloc/subscription_bloc.dart' hide Uninitialized;
 import 'package:intheloopapp/ui/app_theme_cubit.dart';
 import 'package:intheloopapp/ui/common/down_for_maintenance_view.dart';
 import 'package:intheloopapp/ui/loading/loading_view.dart';
@@ -18,7 +19,6 @@ import 'package:intheloopapp/ui/shell/shell_view.dart';
 import 'package:intheloopapp/ui/splash/splash_view.dart';
 import 'package:intheloopapp/ui/themes.dart';
 import 'package:intheloopapp/utils/bloc_utils.dart';
-import 'package:intheloopapp/utils/iap_store_config.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:stream_chat_flutter/stream_chat_flutter.dart';
 
@@ -43,7 +43,11 @@ class App extends StatelessWidget {
     BuildContext context,
     String currentAuthUserId,
   ) {
-    configureIapSdk(currentAuthUserId);
+    context.subscriptions.add(
+      CheckSubscriptionStatus(
+        userId: currentAuthUserId,
+      ),
+    );
     context.onboarding.add(
       OnboardingCheck(
         userId: currentAuthUserId,
