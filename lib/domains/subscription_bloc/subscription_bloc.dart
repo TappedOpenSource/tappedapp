@@ -5,6 +5,7 @@ import 'package:flutter/foundation.dart';
 import 'package:purchases_flutter/purchases_flutter.dart';
 
 part 'subscription_event.dart';
+
 part 'subscription_state.dart';
 
 const appleApiKey = 'appl_BAFlRDdZwaZXaWiKcgCirDSzGxO';
@@ -32,24 +33,31 @@ class SubscriptionBloc extends Bloc<SubscriptionEvent, SubscriptionState> {
 
       // Enable debug logs before calling `configure`.
       await Purchases.setLogLevel(LogLevel.debug);
-      final configuration = PurchasesConfiguration(IapStoreConfig.instance.apiKey)
-        ..appUserID = currentUserId
-        ..observerMode = false;
+      final configuration =
+          PurchasesConfiguration(IapStoreConfig.instance.apiKey)
+            ..appUserID = currentUserId
+            ..observerMode = false;
       await Purchases.configure(configuration);
 
       final customerInfo = await Purchases.getCustomerInfo();
-      final subscribed = customerInfo.entitlements.active.containsKey(entitlementID);
+      final subscribed =
+          customerInfo.entitlements.active.containsKey(entitlementID);
 
       emit(
         Initialized(
+          customerInfo: customerInfo,
           subscribed: subscribed,
         ),
       );
     });
     on<UpdateSubscription>((event, emit) {
+      final customerInfo = event.customerInfo;
+      final subscribed =
+          customerInfo.entitlements.active.containsKey(entitlementID);
       emit(
         Initialized(
-          subscribed: event.subscribed,
+          customerInfo: customerInfo,
+          subscribed: subscribed,
         ),
       );
     });
@@ -63,6 +71,7 @@ class IapStoreConfig {
   }
 
   IapStoreConfig._internal(this.store, this.apiKey);
+
   final Store store;
   final String apiKey;
   static IapStoreConfig? _instance;
@@ -72,5 +81,6 @@ class IapStoreConfig {
   }
 
   static bool isForAppleStore() => instance.store == Store.appStore;
+
   static bool isForGooglePlay() => instance.store == Store.playStore;
 }

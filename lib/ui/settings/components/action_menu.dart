@@ -1,9 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:intheloopapp/domains/navigation_bloc/navigation_bloc.dart';
+import 'package:intheloopapp/domains/navigation_bloc/tapped_route.dart';
+import 'package:intheloopapp/domains/subscription_bloc/subscription_bloc.dart';
 import 'package:intheloopapp/ui/settings/components/settings_button.dart';
 import 'package:intheloopapp/ui/settings/settings_cubit.dart';
 import 'package:intheloopapp/utils/app_logger.dart';
+import 'package:intheloopapp/utils/bloc_utils.dart';
+import 'package:intheloopapp/utils/premium_builder.dart';
 import 'package:purchases_flutter/purchases_flutter.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -21,21 +26,52 @@ class ActionMenu extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final subscriptions = context.subscriptions;
     return BlocBuilder<SettingsCubit, SettingsState>(
       builder: (context, state) {
         return Column(
           children: [
             const Divider(),
-            SettingsButton(
-              icon: const Icon(FontAwesomeIcons.comments),
-              label: 'Manage Subscription',
-              onTap: () async {
-                final customerInfo = await Purchases.getCustomerInfo();
-                final entitlements = customerInfo.entitlements.active;
-                final proEntitlement = entitlements['pro'];
+            PremiumBuilder(
+              builder: (context, isPremium) {
+                if (!isPremium) {
+                  return SettingsButton(
+                    icon: const Icon(FontAwesomeIcons.crown),
+                    label: 'Go Premium',
+                    onTap: () {
+                      context.push(PaywallPage());
+                    },
+                  );
+                }
 
-                logger.info('Pro Entitlement: $proEntitlement');
-                logger.info('Customer Info: $customerInfo');
+                return SettingsButton(
+                  icon: const Icon(FontAwesomeIcons.crown),
+                  label: 'Manage Subscription',
+                  onTap: () {
+                    logger.debug('Manage Subscription');
+                    return switch (subscriptions.state) {
+                      Initialized(:final customerInfo) =>
+                        customerInfo.managementURL != null
+                            ? launchUrl(
+                                Uri.parse(
+                                  customerInfo.managementURL!,
+                                ),
+                              )
+                            : context.push(PaywallPage()),
+                      _ => ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(25),
+                            ),
+                            backgroundColor: Colors.red,
+                            content: const Text(
+                              'Subscription is uninitialized',
+                            ),
+                          ),
+                        ),
+                    };
+                  },
+                );
               },
             ),
             const Divider(),
@@ -124,7 +160,7 @@ class ActionMenu extends StatelessWidget {
                         context.read<SettingsCubit>().logout();
                         Navigator.of(context).popUntil(
                           ModalRoute.withName('/'),
-                        );  
+                        );
                       },
                     ),
                   ],

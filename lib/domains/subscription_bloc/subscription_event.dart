@@ -4,15 +4,17 @@ part of 'subscription_bloc.dart';
 abstract class SubscriptionEvent {}
 
 class CheckSubscriptionStatus extends SubscriptionEvent {
-  CheckSubscriptionStatus({required this.userId});
+  CheckSubscriptionStatus({
+    required this.userId,
+  });
 
   final String userId;
 }
 
 class UpdateSubscription extends SubscriptionEvent {
   UpdateSubscription({
-    required this.subscribed,
+    required this.customerInfo,
   });
 
-  final bool subscribed;
+  final CustomerInfo customerInfo;
 }

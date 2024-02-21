@@ -74,12 +74,9 @@ class PaywallView extends StatelessWidget {
       final customerInfo = await Purchases.purchasePackage(
         package,
       );
-
-      final subscribed =
-          customerInfo.entitlements.active.containsKey(entitlementID);
       subscriptions.add(
             UpdateSubscription(
-              subscribed: subscribed,
+              customerInfo: customerInfo,
             ),
           );
 
