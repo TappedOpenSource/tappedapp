@@ -69,18 +69,18 @@ class DiscoverCubit extends Cubit<DiscoverState> {
       // continue accessing the position of the device.
       final position = await Future.any([
         Geolocator.getCurrentPosition(),
-        Future.delayed(const Duration(seconds: 3), () => null),
+        Future.delayed(const Duration(seconds: 2), () => null),
       ]);
       return (
-        position?.latitude ?? Location.rva.lat,
-        position?.longitude ?? Location.rva.lng,
+        position?.latitude ?? Location.nyc.lat,
+        position?.longitude ?? Location.nyc.lng,
       );
     } catch (e) {
-      return (Location.rva.lat, Location.rva.lng);
+      return (Location.nyc.lat, Location.nyc.lng);
     }
   }
 
-  Future<void> initLocation() async {
+  Future<(double, double)> initLocation() async {
     final (lat, lng) = await _determinePosition();
     final hits = await getVenues(
       lat: lat,
@@ -93,6 +93,8 @@ class DiscoverCubit extends Cubit<DiscoverState> {
         userLng: lng,
       ),
     );
+
+    return (lat, lng);
   }
 
   Future<List<UserModel>> getVenues({

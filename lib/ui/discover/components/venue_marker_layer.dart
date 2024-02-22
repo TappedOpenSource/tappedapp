@@ -37,18 +37,11 @@ class VenueMarkerLayer extends StatelessWidget {
                     width: 80,
                     height: 80,
                     point: LatLng(value.lat, value.lng),
-                    child: GestureDetector(
-                      onTap: () =>
-                          context.push(
-                            ProfilePage(
-                              userId: venue.id,
-                              user: Option.of(venue),
-                            ),
-                          ),
-                      child: UserAvatar(
-                        imageUrl: venue.profilePicture,
-                        radius: 20,
-                      ),
+                    child: UserAvatar(
+                      pushUser: Option.of(venue),
+                      pushId: Option.of(venue.id),
+                      imageUrl: venue.profilePicture,
+                      radius: 20,
                     ),
                   ),
                 };

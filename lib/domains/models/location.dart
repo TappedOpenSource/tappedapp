@@ -1,6 +1,7 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
 
 part 'location.freezed.dart';
+
 part 'location.g.dart';
 
 @freezed
@@ -28,5 +29,19 @@ class Location with _$Location {
     geohash: 'dqcjqfz6',
     lat: 38.907192,
     lng: -77.036873,
+  );
+
+  static const nyc = Location(
+    placeId: 'ChIJOwg_06VPwokRYv534QaPC8g',
+    geohash: 'dr5regw3',
+    lat: 40.712775,
+    lng: -74.005973,
+  );
+
+  static const chicago = Location(
+    placeId: 'ChIJ7cv00DwsDogRAMDACa2m4Ka8',
+    geohash: 'dp3wjztv',
+    lat: 41.878114,
+    lng: -87.629798,
   );
 }
