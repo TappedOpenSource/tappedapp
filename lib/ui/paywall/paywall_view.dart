@@ -202,7 +202,7 @@ class PaywallView extends StatelessWidget {
                           ),
                           const Spacer(),
                           Text(
-                            'get full access for \$${package.storeProduct.price} / ${package.packageType.toString().split('.').last.toLowerCase()}',
+                            'get full access for \$${package.storeProduct.price.toStringAsFixed(2)} / ${package.packageType.toString().split('.').last.toLowerCase()}',
                             textAlign: TextAlign.center,
                             style: const TextStyle(
                               color: Colors.grey,
