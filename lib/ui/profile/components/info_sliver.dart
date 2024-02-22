@@ -123,7 +123,7 @@ class InfoSliver extends StatelessWidget {
                                 ),
                             },
                         },
-                        if (occupations.isNotEmpty)
+                        if (occupations.isNotEmpty && occupations != ['Venue'] && occupations != ['venue'])
                           CupertinoListTile(
                             leading: const Icon(
                               CupertinoIcons.briefcase,

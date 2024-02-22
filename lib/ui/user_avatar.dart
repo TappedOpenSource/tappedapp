@@ -93,7 +93,7 @@ class UserAvatar extends StatelessWidget {
               );
             },
           ),
-          backgroundImage: getDefaultImage(pushId),
+          backgroundColor: Colors.black,
         ),
       ),
     );
