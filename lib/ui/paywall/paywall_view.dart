@@ -260,10 +260,10 @@ class PaywallView extends StatelessWidget {
                               TextButton(
                                 onPressed: () => launchURL(
                                   context,
-                                  'https://tapped.ai/terms',
+                                  'https://www.apple.com/legal/internet-services/itunes/dev/stdeula/',
                                 ),
                                 child: const Text(
-                                  'Terms',
+                                  'terms',
                                   style: TextStyle(
                                     color: Colors.grey,
                                   ),

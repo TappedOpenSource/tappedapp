@@ -147,7 +147,7 @@ class SignUpView extends StatelessWidget {
                             onPressed: () => launchUrl(
                               Uri(
                                 scheme: 'https',
-                                path: 'app.tapped.ai/privacy',
+                                path: 'tapped.ai/privacy',
                               ),
                             ),
                           ),
@@ -161,7 +161,7 @@ class SignUpView extends StatelessWidget {
                             onPressed: () => launchUrl(
                               Uri(
                                 scheme: 'https',
-                                path: 'app.tapped.ai/terms',
+                                path: 'https://www.apple.com/legal/internet-services/itunes/dev/stdeula/',
                               ),
                             ),
                           ),

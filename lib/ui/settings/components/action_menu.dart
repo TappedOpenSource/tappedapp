@@ -126,7 +126,7 @@ class ActionMenu extends StatelessWidget {
               onTap: () => launchUrl(
                 Uri(
                   scheme: 'https',
-                  path: 'app.tapped.ai/terms',
+                  path: 'https://www.apple.com/legal/internet-services/itunes/dev/stdeula/',
                 ),
               ),
             ),
