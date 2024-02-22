@@ -18,6 +18,7 @@ class SettingsState extends Equatable {
     this.spotifyId,
     this.youtubeChannelId,
     this.profileImage,
+    this.pressKitFile = const None(),
     this.status = FormzSubmissionStatus.initial,
     this.pushNotificationsDirectMessages = true,
     this.emailNotificationsAppReleases = true,
@@ -47,6 +48,8 @@ class SettingsState extends Equatable {
   final int? tiktokFollowers;
   final String? spotifyId;
   final String? youtubeChannelId;
+
+  final Option<File> pressKitFile;
 
   final File? profileImage;
   final FormzSubmissionStatus status;
@@ -82,6 +85,7 @@ class SettingsState extends Equatable {
         spotifyId,
         youtubeChannelId,
         profileImage,
+        pressKitFile,
         status,
         pushNotificationsDirectMessages,
         emailNotificationsAppReleases,
@@ -107,6 +111,7 @@ class SettingsState extends Equatable {
     String? spotifyId,
     String? youtubeChannelId,
     File? profileImage,
+    Option<File>? pressKitFile,
     FormzSubmissionStatus? status,
     bool? pushNotificationsDirectMessages,
     bool? emailNotificationsAppReleases,
@@ -131,6 +136,7 @@ class SettingsState extends Equatable {
       spotifyId: spotifyId ?? this.spotifyId,
       youtubeChannelId: youtubeChannelId ?? this.youtubeChannelId,
       profileImage: profileImage ?? this.profileImage,
+      pressKitFile: pressKitFile ?? this.pressKitFile,
       status: status ?? this.status,
       pushNotificationsDirectMessages: pushNotificationsDirectMessages ??
           this.pushNotificationsDirectMessages,

@@ -162,4 +162,24 @@ class FirebaseStorageImpl extends StorageRepository {
 
     return downloadUrl;
   }
+
+  @override
+  Future<String> uploadPressKit({
+    required String userId,
+    required File pressKitFile,
+  }) async {
+    final extension = p.extension(pressKitFile.path);
+    final prefix = userId.isEmpty ? 'press_kits' : 'press_kits/$userId';
+
+    final uniquePressKitId = const Uuid().v4();
+
+    final uploadTask = storageRef
+        .child('$prefix/press_kit_$uniquePressKitId$extension')
+        .putFile(pressKitFile);
+
+    final taskSnapshot = await uploadTask.whenComplete(() => null);
+    final downloadUrl = await taskSnapshot.ref.getDownloadURL();
+
+    return downloadUrl;
+  }
 }

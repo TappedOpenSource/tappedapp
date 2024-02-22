@@ -14,6 +14,7 @@ import 'package:intheloopapp/ui/forms/twitter_followers_text_field.dart';
 import 'package:intheloopapp/ui/forms/twitter_text_field.dart';
 import 'package:intheloopapp/ui/forms/username_text_field.dart';
 import 'package:intheloopapp/ui/forms/youtube_text_field.dart';
+import 'package:intheloopapp/ui/profile/components/epk_button.dart';
 import 'package:intheloopapp/ui/settings/components/genre_selection.dart';
 import 'package:intheloopapp/ui/settings/components/label_selection.dart';
 import 'package:intheloopapp/ui/settings/components/occupation_selection.dart';
@@ -130,12 +131,12 @@ class SettingsForm extends StatelessWidget {
               ),
               const SizedBox(height: 15),
               const ThemeSwitch(),
+              const SizedBox(height: 15),
+              const EPKButton(),
               if (state.status.isInProgress)
                 const CircularProgressIndicator(
                   valueColor: AlwaysStoppedAnimation(tappedAccent),
-                )
-              else
-                const SizedBox.shrink(),
+                ),
             ],
           ),
         );

@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:equatable/equatable.dart';
+import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:formz/formz.dart';
@@ -173,6 +174,39 @@ class SettingsCubit extends Cubit<SettingsState> {
     }
   }
 
+  Future<void> pickPressKit() async {
+    try {
+      final file = await FilePicker.platform.pickFiles(
+        type: FileType.custom,
+        allowedExtensions: ['pdf'],
+      );
+      if (file == null) {
+        return;
+      }
+
+      final path = file.files.single.path;
+      if (path == null) {
+        return;
+      }
+
+      emit(
+        state.copyWith(
+          pressKitFile: Option.of(File(path)),
+        ),
+      );
+    } catch (e) {
+      // print(e);
+    }
+  }
+
+  Future<void> removePressKit() async {
+    emit(
+      state.copyWith(
+        pressKitFile: const None(),
+      ),
+    );
+  }
+
   Future<void> saveProfile() async {
     // print(state.formKey);
     if (state.formKey.currentState == null) {
@@ -202,6 +236,19 @@ class SettingsCubit extends Cubit<SettingsState> {
               )
             : currentUser.profilePicture;
 
+        final pressKitUrl = await switch (state.pressKitFile) {
+          None() => Future<Option<String>>.value(
+              currentUser.performerInfo.flatMap((t) => t.pressKitUrl),
+            ),
+          Some(:final value) => (() async {
+              final url = await storageRepository.uploadPressKit(
+                userId: currentUser.id,
+                pressKitFile: value,
+              );
+              return Option.of(url);
+            })(),
+        };
+
         final location = switch (state.place) {
           None() => const None(),
           Some(:final value) => Option.of(
@@ -221,12 +268,13 @@ class SettingsCubit extends Cubit<SettingsState> {
               spotifyId: Option.fromNullable(state.spotifyId),
               rating: const None(),
               reviewCount: 0,
-              pressKitUrl: const None(),
+              pressKitUrl: pressKitUrl,
             ),
           Some(:final value) => value.copyWith(
               genres: state.genres,
               label: state.label,
               spotifyId: Option.fromNullable(state.spotifyId),
+              pressKitUrl: pressKitUrl,
             ),
         };
 
