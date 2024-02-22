@@ -7,6 +7,7 @@ abstract class SearchRepository {
   Future<List<UserModel>> queryUsers(String input, {
     List<String>? labels,
     List<String>? genres,
+    List<String>? venueGenres,
     List<String>? occupations,
     double? lat,
     double? lng,
@@ -42,6 +43,7 @@ abstract class SearchRepository {
     required double neLongitude,
     List<String>? labels,
     List<String>? genres,
+    List<String>? venueGenres,
     List<String>? occupations,
   });
 

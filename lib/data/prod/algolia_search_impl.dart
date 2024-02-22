@@ -54,6 +54,7 @@ class AlgoliaSearchImpl extends SearchRepository {
     String input, {
     List<String>? labels,
     List<String>? genres,
+    List<String>? venueGenres,
     List<String>? occupations,
     double? lat,
     double? lng,
@@ -71,12 +72,16 @@ class AlgoliaSearchImpl extends SearchRepository {
     final formattedOccupationFilter = occupations != null
         ? '(${occupations.map((e) => "occupations:'$e'").join(' OR ')})'
         : null;
+    final formattedVenueGenreFilter = venueGenres != null
+        ? '(${venueGenres.map((e) => "venueInfo.genres:'$e'").join(' OR ')})'
+        : null;
 
     final filters = [
       formattedIsDeletedFilter,
       formattedLabelFilter,
       formattedGenreFilter,
       formattedOccupationFilter,
+      formattedVenueGenreFilter,
     ]..removeWhere((element) => element == null);
 
     final formattedLocationFilter =
@@ -206,6 +211,7 @@ class AlgoliaSearchImpl extends SearchRepository {
     required double neLongitude,
     List<String>? labels,
     List<String>? genres,
+    List<String>? venueGenres,
     List<String>? occupations,
   }) async {
     var results = <AlgoliaObjectSnapshot>[];
@@ -220,12 +226,16 @@ class AlgoliaSearchImpl extends SearchRepository {
     final formattedOccupationFilter = occupations != null
         ? '(${occupations.map((e) => "occupations:'$e'").join(' OR ')})'
         : null;
+    final formattedVenueGenreFilter = venueGenres != null
+        ? '(${venueGenres.map((e) => "venueInfo.genres:'$e'").join(' OR ')})'
+        : null;
 
     final filters = [
       formattedIsDeletedFilter,
       formattedLabelFilter,
       formattedGenreFilter,
       formattedOccupationFilter,
+      formattedVenueGenreFilter,
     ]..removeWhere((element) => element == null);
 
     try {

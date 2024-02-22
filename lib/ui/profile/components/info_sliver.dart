@@ -26,11 +26,15 @@ class InfoSliver extends StatelessWidget {
     return BlocBuilder<ProfileCubit, ProfileState>(
       builder: (context, state) {
         final occupations = state.visitedUser.occupations;
-        final performerInfo = state.visitedUser.performerInfo.toNullable();
-        final genres = performerInfo?.genres ?? [];
-        final label = performerInfo?.label ?? 'None';
-
-        final pressKitUrl = performerInfo?.pressKitUrl ?? const None();
+        final performerInfo = state.visitedUser.performerInfo;
+        final venueInfo = state.visitedUser.venueInfo;
+        final genres = performerInfo.map((t) => t.genres).getOrElse(
+              () => venueInfo.map((t) => t.genres).getOrElse(() => []),
+            );
+        final label = performerInfo.map((t) => t.label).getOrElse(() => 'None');
+        final pressKitUrl = performerInfo
+            .map((t) => t.pressKitUrl)
+            .getOrElse(() => const None());
         final currPlace = state.place;
         final idealPerformerProfile =
             state.visitedUser.venueInfo.flatMap((t) => t.idealPerformerProfile);
@@ -51,7 +55,8 @@ class InfoSliver extends StatelessWidget {
                         color: theme.colorScheme.onSurface.withOpacity(0.1),
                         border: Border(
                           bottom: BorderSide(
-                            color: theme.colorScheme.onBackground.withOpacity(0.1),
+                            color:
+                                theme.colorScheme.onBackground.withOpacity(0.1),
                             width: 0.5,
                           ),
                         ),
@@ -223,7 +228,8 @@ class InfoSliver extends StatelessWidget {
                                   color: theme.colorScheme.onSurface,
                                 ),
                               ),
-                              trailing: const Icon(CupertinoIcons.chevron_forward),
+                              trailing:
+                                  const Icon(CupertinoIcons.chevron_forward),
                               onTap: () async {
                                 await launchUrl(Uri.parse(value));
                               },
@@ -238,7 +244,8 @@ class InfoSliver extends StatelessWidget {
                                   color: theme.colorScheme.onSurface,
                                 ),
                               ),
-                              trailing: const Icon(CupertinoIcons.chevron_forward),
+                              trailing:
+                                  const Icon(CupertinoIcons.chevron_forward),
                               onTap: () {
                                 if (!isPremium) {
                                   context.push(PaywallPage());
@@ -260,8 +267,8 @@ class InfoSliver extends StatelessWidget {
                                               Text(
                                                 'what kind of performers do they normally book?',
                                                 style: TextStyle(
-                                                  color:
-                                                      theme.colorScheme.onSurface,
+                                                  color: theme
+                                                      .colorScheme.onSurface,
                                                   fontSize: 24,
                                                   fontWeight: FontWeight.bold,
                                                 ),
@@ -270,8 +277,8 @@ class InfoSliver extends StatelessWidget {
                                               Text(
                                                 value,
                                                 style: TextStyle(
-                                                  color:
-                                                      theme.colorScheme.onSurface,
+                                                  color: theme
+                                                      .colorScheme.onSurface,
                                                   fontSize: 16,
                                                 ),
                                               ),

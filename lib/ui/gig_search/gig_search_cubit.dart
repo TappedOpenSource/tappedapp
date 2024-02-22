@@ -81,6 +81,7 @@ class GigSearchCubit extends Cubit<GigSearchState> {
     final hits = await search.queryUsers(
       '',
       occupations: ['venue', 'Venue'],
+      venueGenres: state.genres.map((e) => e.name).toList(),
       lat: lat,
       lng: lng,
     );
