@@ -56,7 +56,7 @@ class PaywallView extends StatelessWidget {
 
   Future<void> _onPurchase(
     BuildContext context, {
-    required List<Package> packages,
+    required Package package,
   }) async {
     final scaffoldMessenger = ScaffoldMessenger.of(context);
     final subscriptions = context.subscriptions;
@@ -68,9 +68,6 @@ class PaywallView extends StatelessWidget {
       maskType: EasyLoadingMaskType.black,
     );
     try {
-      final package = packages.where((element) {
-        return element.packageType == PackageType.monthly;
-      }).first;
       final customerInfo = await Purchases.purchasePackage(
         package,
       );
@@ -145,6 +142,9 @@ class PaywallView extends StatelessWidget {
 
             final offering = offerings.current;
             final packages = offering?.availablePackages ?? [];
+            final package = packages.where((element) {
+              return element.packageType == PackageType.monthly;
+            }).first;
 
             return Scaffold(
               backgroundColor: theme.colorScheme.background,
@@ -202,7 +202,7 @@ class PaywallView extends StatelessWidget {
                           ),
                           const Spacer(),
                           Text(
-                            'get full access for \$${packages.first.storeProduct.price} / ${packages.first.packageType.toString().split('.').last.toLowerCase()}',
+                            'get full access for \$${package.storeProduct.price} / ${package.packageType.toString().split('.').last.toLowerCase()}',
                             textAlign: TextAlign.center,
                             style: const TextStyle(
                               color: Colors.grey,
@@ -216,7 +216,7 @@ class PaywallView extends StatelessWidget {
                                 child: CupertinoButton.filled(
                                   onPressed: () => _onPurchase(
                                     context,
-                                    packages: packages,
+                                    package: package,
                                   ),
                                   borderRadius: BorderRadius.circular(15),
                                   child: const Text(
