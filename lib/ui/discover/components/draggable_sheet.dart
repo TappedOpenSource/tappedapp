@@ -54,7 +54,7 @@ class DraggableSheet extends StatelessWidget {
                               ),
                               child: Center(
                                 child: Padding(
-                                  padding: EdgeInsets.symmetric(
+                                  padding: const EdgeInsets.symmetric(
                                     vertical:
                                     32 / 2 - 4 / 2,
                                   ),
@@ -69,7 +69,7 @@ class DraggableSheet extends StatelessWidget {
                                 ),
                               ),
                             ),
-                            MapConfigSlider(),
+                            const MapConfigSlider(),
                             const Padding(
                               padding: EdgeInsets.symmetric(
                                 vertical: 16,

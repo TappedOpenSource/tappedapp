@@ -68,6 +68,9 @@ class MapBase extends StatelessWidget {
               builder: (context, state) {
                 return switch (state.mapOverlay) {
                   MapOverlay.venues => const VenueMarkerLayer(),
+                  MapOverlay.edmVenues => const VenueMarkerLayer(),
+                  MapOverlay.rapVenues => const VenueMarkerLayer(),
+                  MapOverlay.rockVenues => const VenueMarkerLayer(),
                   MapOverlay.bookings => BookingsHeatmapLayer(),
                   MapOverlay.opportunities => const OpportunitiesHeatmapLayer(),
                 };

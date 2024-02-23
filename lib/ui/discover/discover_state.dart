@@ -16,6 +16,9 @@ class DiscoverState with _$DiscoverState {
 @JsonEnum()
 enum MapOverlay {
   venues,
+  edmVenues,
+  rapVenues,
+  rockVenues,
   bookings,
   opportunities,
 }

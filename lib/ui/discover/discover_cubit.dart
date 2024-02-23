@@ -8,6 +8,7 @@ import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:intheloopapp/data/search_repository.dart';
 import 'package:intheloopapp/domains/models/booking.dart';
+import 'package:intheloopapp/domains/models/genre.dart';
 
 import 'package:intheloopapp/domains/models/location.dart';
 import 'package:intheloopapp/domains/models/opportunity.dart';
@@ -169,6 +170,42 @@ class DiscoverCubit extends Cubit<DiscoverState> {
             );
             emit(state.copyWith(venueHits: hits));
           },
+        MapOverlay.edmVenues => () async {
+          final hits = await search.queryUsersInBoundingBox(
+            '',
+            occupations: ['Venue', 'venue'],
+            venueGenres: ['edm'],
+            swLatitude: bounds.southWest.latitude,
+            swLongitude: bounds.southWest.longitude,
+            neLatitude: bounds.northEast.latitude,
+            neLongitude: bounds.northEast.longitude,
+          );
+          emit(state.copyWith(venueHits: hits));
+        },
+        MapOverlay.rapVenues => () async {
+          final hits = await search.queryUsersInBoundingBox(
+            '',
+            occupations: ['Venue', 'venue'],
+            venueGenres: ['rap', 'hiphop'],
+            swLatitude: bounds.southWest.latitude,
+            swLongitude: bounds.southWest.longitude,
+            neLatitude: bounds.northEast.latitude,
+            neLongitude: bounds.northEast.longitude,
+          );
+          emit(state.copyWith(venueHits: hits));
+        },
+        MapOverlay.rockVenues => () async {
+          final hits = await search.queryUsersInBoundingBox(
+            '',
+            occupations: ['Venue', 'venue'],
+            venueGenres: ['rock', 'alternative'],
+            swLatitude: bounds.southWest.latitude,
+            swLongitude: bounds.southWest.longitude,
+            neLatitude: bounds.northEast.latitude,
+            neLongitude: bounds.northEast.longitude,
+          );
+          emit(state.copyWith(venueHits: hits));
+        },
         MapOverlay.bookings => () async {
             final hits = await search.queryBookingsInBoundingBox(
               '',
