@@ -14,7 +14,9 @@ import 'package:purchases_flutter/purchases_flutter.dart';
 import 'package:stream_chat_flutter/stream_chat_flutter.dart';
 
 class PaywallView extends StatelessWidget {
-  const PaywallView({super.key});
+  const PaywallView({
+    super.key,
+  });
 
   // Widget _buildPackageCard(Package package) {
   //   return Card(
@@ -72,10 +74,10 @@ class PaywallView extends StatelessWidget {
         package,
       );
       subscriptions.add(
-            UpdateSubscription(
-              customerInfo: customerInfo,
-            ),
-          );
+        UpdateSubscription(
+          customerInfo: customerInfo,
+        ),
+      );
 
       logger.info(customerInfo.toString());
     } catch (error, s) {
@@ -127,11 +129,6 @@ class PaywallView extends StatelessWidget {
         return FutureBuilder(
           future: Purchases.getOfferings(),
           builder: (context, snapshot) {
-            if (snapshot.hasError) {
-              logger.error(snapshot.error.toString());
-              return const ErrorView();
-            }
-
             final offerings = snapshot.data;
 
             if (offerings == null) {
