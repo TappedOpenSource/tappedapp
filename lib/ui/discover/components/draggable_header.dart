@@ -32,10 +32,10 @@ class DraggableHeader extends StatelessWidget {
             ),
             child: Container(
               height: indicatorHeight,
-              width: 72,
+              width: 24,
               decoration: BoxDecoration(
                 borderRadius: const BorderRadius.all(Radius.circular(2)),
-                color: theme.colorScheme.onSurface.withOpacity(0.3),
+                color: theme.colorScheme.onSurface.withOpacity(0.1),
               ),
             ),
           ),

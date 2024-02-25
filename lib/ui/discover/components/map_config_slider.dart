@@ -84,7 +84,7 @@ class MapConfigSlider extends StatelessWidget {
                 context,
                 currentOverlay: state.mapOverlay,
                 overlay: MapOverlay.venues,
-                label: 'All Venues',
+                label: 'Venues',
                 image: AssetImage(
                   'assets/layers/venue_markers.png',
                 ) as ImageProvider,

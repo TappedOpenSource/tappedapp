@@ -12,6 +12,7 @@ import 'package:intheloopapp/ui/discover/components/map_base.dart';
 import 'package:intheloopapp/ui/discover/discover_cubit.dart';
 import 'package:intheloopapp/ui/profile/components/notification_icon_button.dart';
 import 'package:intheloopapp/utils/current_user_builder.dart';
+import 'package:intheloopapp/utils/premium_builder.dart';
 import 'package:latlong2/latlong.dart';
 
 class DiscoverView extends StatelessWidget {
@@ -97,53 +98,64 @@ class DiscoverView extends StatelessWidget {
     required Genre genre,
   }) {
     final theme = Theme.of(context);
-    return BlocBuilder<DiscoverCubit, DiscoverState>(
-      builder: (context, state) {
-        final selected = state.genreFilters.contains(genre);
-        return InkWell(
-          onTap: () {
-            context.read<DiscoverCubit>().toggleGenreFilter(genre);
+    return PremiumBuilder(
+      builder: (context, isPremium) {
+        return BlocBuilder<DiscoverCubit, DiscoverState>(
+          builder: (context, state) {
+            final selected = state.genreFilters.contains(genre);
+            return InkWell(
+              onTap: () {
+                if (!isPremium) {
+                  context.push(PaywallPage());
+                  return;
+                }
+
+                context.read<DiscoverCubit>().toggleGenreFilter(genre);
+              },
+              child: Card(
+                color: selected
+                    ? theme.colorScheme.primary
+                    : theme.colorScheme.surface,
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 16,
+                    vertical: 4,
+                  ),
+                  child: Row(
+                    children: [
+                      Icon(
+                        genre.icon,
+                        size: 12,
+                      ),
+                      const SizedBox(
+                        width: 6,
+                      ),
+                      Text(
+                        genre.name,
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            );
           },
-          child: Card(
-            color: selected
-                ? theme.colorScheme.primary
-                : theme.colorScheme.surface,
-            child: Padding(
-              padding: const EdgeInsets.symmetric(
-                horizontal: 16,
-                vertical: 4,
-              ),
-              child: Row(
-                children: [
-                  Icon(
-                    genre.icon,
-                    size: 12,
-                  ),
-                  const SizedBox(
-                    width: 6,
-                  ),
-                  Text(
-                    genre.name,
-                  ),
-                ],
-              ),
-            ),
-          ),
         );
       },
     );
   }
 
-  List<Widget> _buildGenreFilterButtons(BuildContext context, {
+  List<Widget> _buildGenreFilterButtons(
+    BuildContext context, {
     required List<Genre> genreFilters,
   }) {
-    final genres = List<Genre>.from(Genre.values)..sort(
-      (a, b) {
-        final containsA = genreFilters.contains(a) ? 1 : 0;
-        final containsB = genreFilters.contains(b) ? 1 : 0;
-        return containsB - containsA;
-      },
-    );
+    final genres = List<Genre>.from(Genre.values)
+      ..sort(
+        (a, b) {
+          final containsA = genreFilters.contains(a) ? 1 : 0;
+          final containsB = genreFilters.contains(b) ? 1 : 0;
+          return containsB - containsA;
+        },
+      );
     return genres
         .map(
           (Genre e) => _buildGenreFilterButton(
@@ -175,70 +187,74 @@ class DiscoverView extends StatelessWidget {
     final mapController = MapController();
     return CurrentUserBuilder(
       builder: (context, currentUser) {
-        final initGenres = currentUser.performerInfo
-            .map(
-              (info) => info.genres,
-            )
-            .getOrElse(() => []);
-        return BlocProvider<DiscoverCubit>(
-          create: (context) => DiscoverCubit(
-            search: context.read<SearchRepository>(),
-            initGenres: initGenres,
-          ),
-          child: Scaffold(
-            body: LayoutBuilder(
-              builder: (context, contains) {
-                return Stack(
-                  children: [
-                    MapBase(
-                      mapController: mapController,
-                    ),
-                    _buildControlButtons(context, mapController),
-                    SafeArea(
-                      child: Padding(
-                        padding: const EdgeInsets.symmetric(
-                          horizontal: 16,
+        return PremiumBuilder(
+          builder: (context, isPremium) {
+            final initGenres = isPremium
+                ? currentUser.performerInfo
+                    .map((info) => info.genres)
+                    .getOrElse(() => [])
+                : <Genre>[];
+            return BlocProvider<DiscoverCubit>(
+              create: (context) => DiscoverCubit(
+                search: context.read<SearchRepository>(),
+                initGenres: initGenres,
+              ),
+              child: Scaffold(
+                body: LayoutBuilder(
+                  builder: (context, contains) {
+                    return Stack(
+                      children: [
+                        MapBase(
+                          mapController: mapController,
                         ),
-                        child: Column(
-                          children: [
-                            Row(
+                        _buildControlButtons(context, mapController),
+                        SafeArea(
+                          child: Padding(
+                            padding: const EdgeInsets.symmetric(
+                              horizontal: 16,
+                            ),
+                            child: Column(
                               children: [
-                                Expanded(
-                                  child: InkWell(
-                                    onTap: () => context.push(
-                                      GigSearchInitPage(),
-                                    ),
-                                    child: Card(
-                                      child: Row(
-                                        children: [
-                                          IconButton(
-                                            onPressed: () => context.push(
-                                              GigSearchInitPage(),
-                                            ),
-                                            icon: const Icon(Icons.search),
+                                Row(
+                                  children: [
+                                    Expanded(
+                                      child: InkWell(
+                                        onTap: () => context.push(
+                                          GigSearchInitPage(),
+                                        ),
+                                        child: Card(
+                                          child: Row(
+                                            children: [
+                                              IconButton(
+                                                onPressed: () => context.push(
+                                                  GigSearchInitPage(),
+                                                ),
+                                                icon: const Icon(Icons.search),
+                                              ),
+                                              const Expanded(
+                                                child: Text('get booked...'),
+                                              ),
+                                            ],
                                           ),
-                                          const Expanded(
-                                            child: Text('get booked...'),
-                                          ),
-                                        ],
+                                        ),
                                       ),
                                     ),
-                                  ),
+                                    const NotificationIconButton(),
+                                  ],
                                 ),
-                                const NotificationIconButton(),
+                                _buildGenreList(context),
                               ],
                             ),
-                            _buildGenreList(context),
-                          ],
+                          ),
                         ),
-                      ),
-                    ),
-                  ],
-                );
-              },
-            ),
-            bottomSheet: const DraggableSheet(),
-          ),
+                      ],
+                    );
+                  },
+                ),
+                bottomSheet: const DraggableSheet(),
+              ),
+            );
+          },
         );
       },
     );

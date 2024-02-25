@@ -132,6 +132,9 @@ class DiscoverCubit extends Cubit<DiscoverState> {
     final hits = await search.queryUsers(
       '',
       occupations: ['Venue', 'venue'],
+      venueGenres: state.genreFilterStrings.isNotEmpty
+          ? state.genreFilterStrings
+          : null,
       lat: lat,
       lng: lng,
     );

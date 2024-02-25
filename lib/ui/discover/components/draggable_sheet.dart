@@ -60,10 +60,10 @@ class DraggableSheet extends StatelessWidget {
                                   ),
                                   child: Container(
                                     height: 4,
-                                    width: 72,
+                                    width: 62,
                                     decoration: BoxDecoration(
-                                      borderRadius: const BorderRadius.all(Radius.circular(2)),
-                                      color: theme.colorScheme.onSurface.withOpacity(0.3),
+                                      borderRadius: BorderRadius.circular(2),
+                                      color: theme.colorScheme.onSurface.withOpacity(0.15),
                                     ),
                                   ),
                                 ),

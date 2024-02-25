@@ -45,7 +45,7 @@ class BottomToolbar extends StatelessWidget {
               ),
             ),
             BottomNavigationBarItem(
-              label: 'Map',
+              label: 'Discover',
               icon: GestureDetector(
                 // onDoubleTap: () {
                 //   context
@@ -54,7 +54,7 @@ class BottomToolbar extends StatelessWidget {
                 //       SearchPage(),
                 //     );
                 // },
-                child: const Icon(CupertinoIcons.map),
+                child: const Icon(CupertinoIcons.search),
               ),
             ),
             BottomNavigationBarItem(
