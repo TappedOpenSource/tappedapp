@@ -129,22 +129,27 @@ class PaywallView extends StatelessWidget {
         return FutureBuilder(
           future: Purchases.getOfferings(),
           builder: (context, snapshot) {
-            // if (snapshot.hasError) {
-            //   ScaffoldMessenger.of(context).showSnackBar(
-            //     SnackBar(
-            //       backgroundColor: Colors.red,
-            //       shape: RoundedRectangleBorder(
-            //         borderRadius: BorderRadius.circular(10),
-            //       ),
-            //       content: const Text(
-            //         'error fetching offerings',
-            //         style: TextStyle(
-            //           color: Colors.white,
-            //         ),
-            //       ),
-            //     ),
-            //   );
-            // }
+            if (snapshot.hasError) {
+              logger.error(
+                'error fetching offerings',
+                error: snapshot.error,
+                stackTrace: snapshot.stackTrace,
+              );
+              ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(
+                  backgroundColor: Colors.red,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                  content: const Text(
+                    'error fetching offerings',
+                    style: TextStyle(
+                      color: Colors.white,
+                    ),
+                  ),
+                ),
+              );
+            }
 
             final offerings = snapshot.data;
 

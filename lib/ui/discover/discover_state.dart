@@ -7,6 +7,7 @@ class DiscoverState with _$DiscoverState {
     @Default([]) List<Booking> bookingHits,
     @Default([]) List<Opportunity> opportunityHits,
     @Default(MapOverlay.venues) MapOverlay mapOverlay,
+    @Default([]) List<Genre> genreFilters,
     @Default(37.5407246) double userLat,
     @Default(-77.4360481) double userLng,
     LatLngBounds? bounds,
@@ -16,14 +17,15 @@ class DiscoverState with _$DiscoverState {
 @JsonEnum()
 enum MapOverlay {
   venues,
-  edmVenues,
-  rapVenues,
-  rockVenues,
   bookings,
   opportunities,
 }
 
 extension DiscoverStateX on DiscoverState {
+  List<String> get genreFilterStrings {
+    return genreFilters.map((e) => e.name).toList();
+  }
+
   List<WeightedLatLng> get weightedVenueLatLngs {
     return venueHits
         .map(

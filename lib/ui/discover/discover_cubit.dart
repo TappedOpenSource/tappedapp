@@ -23,9 +23,15 @@ part 'discover_cubit.freezed.dart';
 class DiscoverCubit extends Cubit<DiscoverState> {
   DiscoverCubit({
     required this.search,
-  }) : super(const DiscoverState());
+    required this.initGenres,
+  }) : super(
+          DiscoverState(
+            genreFilters: initGenres,
+          ),
+        );
 
   final SearchRepository search;
+  final List<Genre> initGenres;
 
   final _debouncer = Debouncer(
     const Duration(milliseconds: 150),
@@ -98,6 +104,27 @@ class DiscoverCubit extends Cubit<DiscoverState> {
     return (lat, lng);
   }
 
+  void toggleGenreFilter(Genre genre) {
+    final genres = List<Genre>.from(state.genreFilters);
+    if (genres.contains(genre)) {
+      genres.remove(genre);
+    } else {
+      genres.add(genre);
+    }
+
+    onBoundsChange(
+      state.bounds,
+      overlay: state.mapOverlay,
+    );
+
+    emit(
+      state.copyWith(
+        genreFilters: genres,
+        mapOverlay: state.mapOverlay,
+      ),
+    );
+  }
+
   Future<List<UserModel>> getVenues({
     double? lat,
     double? lng,
@@ -163,6 +190,9 @@ class DiscoverCubit extends Cubit<DiscoverState> {
             final hits = await search.queryUsersInBoundingBox(
               '',
               occupations: ['Venue', 'venue'],
+              venueGenres: state.genreFilterStrings.isNotEmpty
+                  ? state.genreFilterStrings
+                  : null,
               swLatitude: bounds.southWest.latitude,
               swLongitude: bounds.southWest.longitude,
               neLatitude: bounds.northEast.latitude,
@@ -170,42 +200,6 @@ class DiscoverCubit extends Cubit<DiscoverState> {
             );
             emit(state.copyWith(venueHits: hits));
           },
-        MapOverlay.edmVenues => () async {
-          final hits = await search.queryUsersInBoundingBox(
-            '',
-            occupations: ['Venue', 'venue'],
-            venueGenres: ['edm'],
-            swLatitude: bounds.southWest.latitude,
-            swLongitude: bounds.southWest.longitude,
-            neLatitude: bounds.northEast.latitude,
-            neLongitude: bounds.northEast.longitude,
-          );
-          emit(state.copyWith(venueHits: hits));
-        },
-        MapOverlay.rapVenues => () async {
-          final hits = await search.queryUsersInBoundingBox(
-            '',
-            occupations: ['Venue', 'venue'],
-            venueGenres: ['rap', 'hiphop'],
-            swLatitude: bounds.southWest.latitude,
-            swLongitude: bounds.southWest.longitude,
-            neLatitude: bounds.northEast.latitude,
-            neLongitude: bounds.northEast.longitude,
-          );
-          emit(state.copyWith(venueHits: hits));
-        },
-        MapOverlay.rockVenues => () async {
-          final hits = await search.queryUsersInBoundingBox(
-            '',
-            occupations: ['Venue', 'venue'],
-            venueGenres: ['rock', 'alternative'],
-            swLatitude: bounds.southWest.latitude,
-            swLongitude: bounds.southWest.longitude,
-            neLatitude: bounds.northEast.latitude,
-            neLongitude: bounds.northEast.longitude,
-          );
-          emit(state.copyWith(venueHits: hits));
-        },
         MapOverlay.bookings => () async {
             final hits = await search.queryBookingsInBoundingBox(
               '',

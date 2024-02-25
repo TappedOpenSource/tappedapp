@@ -2,13 +2,16 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_map/flutter_map.dart';
+import 'package:fpdart/fpdart.dart';
 import 'package:intheloopapp/data/search_repository.dart';
+import 'package:intheloopapp/domains/models/genre.dart';
 import 'package:intheloopapp/domains/navigation_bloc/navigation_bloc.dart';
 import 'package:intheloopapp/domains/navigation_bloc/tapped_route.dart';
 import 'package:intheloopapp/ui/discover/components/draggable_sheet.dart';
 import 'package:intheloopapp/ui/discover/components/map_base.dart';
 import 'package:intheloopapp/ui/discover/discover_cubit.dart';
 import 'package:intheloopapp/ui/profile/components/notification_icon_button.dart';
+import 'package:intheloopapp/utils/current_user_builder.dart';
 import 'package:latlong2/latlong.dart';
 
 class DiscoverView extends StatelessWidget {
@@ -89,62 +92,155 @@ class DiscoverView extends StatelessWidget {
     );
   }
 
+  Widget _buildGenreFilterButton(
+    BuildContext context, {
+    required Genre genre,
+  }) {
+    final theme = Theme.of(context);
+    return BlocBuilder<DiscoverCubit, DiscoverState>(
+      builder: (context, state) {
+        final selected = state.genreFilters.contains(genre);
+        return InkWell(
+          onTap: () {
+            context.read<DiscoverCubit>().toggleGenreFilter(genre);
+          },
+          child: Card(
+            color: selected
+                ? theme.colorScheme.primary
+                : theme.colorScheme.surface,
+            child: Padding(
+              padding: const EdgeInsets.symmetric(
+                horizontal: 16,
+                vertical: 4,
+              ),
+              child: Row(
+                children: [
+                  Icon(
+                    genre.icon,
+                    size: 12,
+                  ),
+                  const SizedBox(
+                    width: 6,
+                  ),
+                  Text(
+                    genre.name,
+                  ),
+                ],
+              ),
+            ),
+          ),
+        );
+      },
+    );
+  }
+
+  List<Widget> _buildGenreFilterButtons(BuildContext context, {
+    required List<Genre> genreFilters,
+  }) {
+    final genres = List<Genre>.from(Genre.values)..sort(
+      (a, b) {
+        final containsA = genreFilters.contains(a) ? 1 : 0;
+        final containsB = genreFilters.contains(b) ? 1 : 0;
+        return containsB - containsA;
+      },
+    );
+    return genres
+        .map(
+          (Genre e) => _buildGenreFilterButton(
+            context,
+            genre: e,
+          ),
+        )
+        .toList();
+  }
+
+  Widget _buildGenreList(BuildContext context) {
+    return BlocBuilder<DiscoverCubit, DiscoverState>(
+      builder: (context, state) {
+        return SingleChildScrollView(
+          scrollDirection: Axis.horizontal,
+          child: Row(
+            children: _buildGenreFilterButtons(
+              context,
+              genreFilters: state.genreFilters,
+            ),
+          ),
+        );
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     final mapController = MapController();
-    return BlocProvider<DiscoverCubit>(
-      create: (context) => DiscoverCubit(
-        search: context.read<SearchRepository>(),
-      ),
-      child: Scaffold(
-        body: LayoutBuilder(
-          builder: (context, contains) {
-            return Stack(
-              children: [
-                MapBase(
-                  mapController: mapController,
-                ),
-                _buildControlButtons(context, mapController),
-                SafeArea(
-                  child: Padding(
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: 16,
+    return CurrentUserBuilder(
+      builder: (context, currentUser) {
+        final initGenres = currentUser.performerInfo
+            .map(
+              (info) => info.genres,
+            )
+            .getOrElse(() => []);
+        return BlocProvider<DiscoverCubit>(
+          create: (context) => DiscoverCubit(
+            search: context.read<SearchRepository>(),
+            initGenres: initGenres,
+          ),
+          child: Scaffold(
+            body: LayoutBuilder(
+              builder: (context, contains) {
+                return Stack(
+                  children: [
+                    MapBase(
+                      mapController: mapController,
                     ),
-                    child: Row(
-                      children: [
-                        Expanded(
-                          child: InkWell(
-                            onTap: () => context.push(
-                              GigSearchInitPage(),
-                            ),
-                            child: Card(
-                              child: Row(
-                                children: [
-                                  IconButton(
-                                    onPressed: () => context.push(
+                    _buildControlButtons(context, mapController),
+                    SafeArea(
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 16,
+                        ),
+                        child: Column(
+                          children: [
+                            Row(
+                              children: [
+                                Expanded(
+                                  child: InkWell(
+                                    onTap: () => context.push(
                                       GigSearchInitPage(),
                                     ),
-                                    icon: const Icon(Icons.search),
+                                    child: Card(
+                                      child: Row(
+                                        children: [
+                                          IconButton(
+                                            onPressed: () => context.push(
+                                              GigSearchInitPage(),
+                                            ),
+                                            icon: const Icon(Icons.search),
+                                          ),
+                                          const Expanded(
+                                            child: Text('get booked...'),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
                                   ),
-                                  const Expanded(
-                                    child: Text('get booked...'),
-                                  ),
-                                ],
-                              ),
+                                ),
+                                const NotificationIconButton(),
+                              ],
                             ),
-                          ),
+                            _buildGenreList(context),
+                          ],
                         ),
-                        const NotificationIconButton(),
-                      ],
+                      ),
                     ),
-                  ),
-                ),
-              ],
-            );
-          },
-        ),
-        bottomSheet: const DraggableSheet(),
-      ),
+                  ],
+                );
+              },
+            ),
+            bottomSheet: const DraggableSheet(),
+          ),
+        );
+      },
     );
   }
 }

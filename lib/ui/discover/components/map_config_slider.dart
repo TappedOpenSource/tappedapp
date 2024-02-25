@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:intheloopapp/data/auth_repository.dart';
 import 'package:intheloopapp/domains/navigation_bloc/navigation_bloc.dart';
 import 'package:intheloopapp/domains/navigation_bloc/tapped_route.dart';
 import 'package:intheloopapp/ui/discover/discover_cubit.dart';
@@ -78,66 +77,37 @@ class MapConfigSlider extends StatelessWidget {
       builder: (context, state) {
         return SizedBox(
           height: 150,
-          child: SingleChildScrollView(
-            scrollDirection: Axis.horizontal,
-            child: Row(
-              children: [
-                _buildMapOverlayButton(
-                  context,
-                  currentOverlay: state.mapOverlay,
-                  overlay: MapOverlay.venues,
-                  label: 'All Venues',
-                  image: AssetImage(
-                    'assets/layers/venue_markers.png',
-                  ) as ImageProvider,
-                ),
-                _buildMapOverlayButton(
-                  context,
-                  currentOverlay: state.mapOverlay,
-                  overlay: MapOverlay.edmVenues,
-                  label: 'EDM Venues',
-                  image: AssetImage(
-                    'assets/layers/venue_markers.png',
-                  ) as ImageProvider,
-                ),
-                _buildMapOverlayButton(
-                  context,
-                  currentOverlay: state.mapOverlay,
-                  overlay: MapOverlay.rapVenues,
-                  label: 'Rap Venues',
-                  image: AssetImage(
-                    'assets/layers/venue_markers.png',
-                  ) as ImageProvider,
-                ),
-                _buildMapOverlayButton(
-                  context,
-                  currentOverlay: state.mapOverlay,
-                  overlay: MapOverlay.rockVenues,
-                  label: 'Rock Venues',
-                  image: AssetImage(
-                    'assets/layers/venue_markers.png',
-                  ) as ImageProvider,
-                ),
-                _buildMapOverlayButton(
-                  context,
-                  currentOverlay: state.mapOverlay,
-                  overlay: MapOverlay.bookings,
-                  label: 'Bookings',
-                  image: AssetImage(
-                    'assets/layers/booking_heatmap.png',
-                  ) as ImageProvider,
-                ),
-                _buildMapOverlayButton(
-                  context,
-                  currentOverlay: state.mapOverlay,
-                  overlay: MapOverlay.opportunities,
-                  label: 'Opportunities',
-                  image: AssetImage(
-                    'assets/layers/op_heatmap.png',
-                  ) as ImageProvider,
-                ),
-              ],
-            ),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: [
+              _buildMapOverlayButton(
+                context,
+                currentOverlay: state.mapOverlay,
+                overlay: MapOverlay.venues,
+                label: 'All Venues',
+                image: AssetImage(
+                  'assets/layers/venue_markers.png',
+                ) as ImageProvider,
+              ),
+              _buildMapOverlayButton(
+                context,
+                currentOverlay: state.mapOverlay,
+                overlay: MapOverlay.bookings,
+                label: 'Bookings',
+                image: AssetImage(
+                  'assets/layers/booking_heatmap.png',
+                ) as ImageProvider,
+              ),
+              _buildMapOverlayButton(
+                context,
+                currentOverlay: state.mapOverlay,
+                overlay: MapOverlay.opportunities,
+                label: 'Opportunities',
+                image: AssetImage(
+                  'assets/layers/op_heatmap.png',
+                ) as ImageProvider,
+              ),
+            ],
           ),
         );
       },
