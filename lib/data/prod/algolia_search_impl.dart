@@ -59,6 +59,7 @@ class AlgoliaSearchImpl extends SearchRepository {
     double? lat,
     double? lng,
     int radius = 50000,
+    int limit = 20,
   }) async {
     var results = <AlgoliaObjectSnapshot>[];
 
@@ -99,6 +100,8 @@ class AlgoliaSearchImpl extends SearchRepository {
       }
 
       query = query.setAroundRadius(radius);
+
+      query = query.setHitsPerPage(limit);
 
       final snap = await query.getObjects();
 

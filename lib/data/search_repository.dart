@@ -12,6 +12,7 @@ abstract class SearchRepository {
     double? lat,
     double? lng,
     int radius = 50000,
+    int limit = 20,
   });
 
   // Future<List<UserModel>> queryVenues(

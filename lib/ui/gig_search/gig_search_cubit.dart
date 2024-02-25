@@ -84,6 +84,7 @@ class GigSearchCubit extends Cubit<GigSearchState> {
       venueGenres: state.genres.map((e) => e.name).toList(),
       lat: lat,
       lng: lng,
+      limit: 150,
     );
 
     emit(
