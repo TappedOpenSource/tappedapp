@@ -23,7 +23,7 @@ class EPKButton extends StatelessWidget {
               final uri = Uri.parse(value);
               launchUrl(uri);
             },
-            child: Text('View Current EPK'),
+            child: const Text('View Current EPK'),
           ),
         ),
     };

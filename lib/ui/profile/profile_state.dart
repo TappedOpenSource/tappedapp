@@ -36,6 +36,8 @@ class ProfileState extends Equatable {
   final bool isCollapsed;
   final bool didAddFeedback;
 
+  bool get isCurrentUser => currentUser.id == visitedUser.id;
+
   @override
   List<Object?> get props => [
         isFollowing,

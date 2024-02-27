@@ -1,3 +1,4 @@
+import 'package:feedback/feedback.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -6,6 +7,8 @@ import 'package:intheloopapp/ui/discover/components/map_config_slider.dart';
 import 'package:intheloopapp/ui/discover/components/user_slider.dart';
 import 'package:intheloopapp/ui/discover/components/venue_slider.dart';
 import 'package:intheloopapp/ui/discover/discover_cubit.dart';
+import 'package:intheloopapp/ui/profile/components/feedback_button.dart';
+import 'package:intheloopapp/utils/app_logger.dart';
 import 'package:intheloopapp/utils/bloc_utils.dart';
 import 'package:intheloopapp/utils/current_user_builder.dart';
 
@@ -15,7 +18,9 @@ class DraggableSheet extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final database = context.database;
+    final storage = context.storage;
     final theme = Theme.of(context);
+    final scaffoldMessenger = ScaffoldMessenger.of(context);
     return CurrentUserBuilder(
       builder: (context, currentUser) {
         return BlocBuilder<DiscoverCubit, DiscoverState>(
@@ -55,15 +60,15 @@ class DraggableSheet extends StatelessWidget {
                               child: Center(
                                 child: Padding(
                                   padding: const EdgeInsets.symmetric(
-                                    vertical:
-                                    32 / 2 - 4 / 2,
+                                    vertical: 32 / 2 - 4 / 2,
                                   ),
                                   child: Container(
                                     height: 4,
                                     width: 62,
                                     decoration: BoxDecoration(
                                       borderRadius: BorderRadius.circular(2),
-                                      color: theme.colorScheme.onSurface.withOpacity(0.15),
+                                      color: theme.colorScheme.onSurface
+                                          .withOpacity(0.15),
                                     ),
                                   ),
                                 ),
@@ -199,6 +204,14 @@ class DraggableSheet extends StatelessWidget {
                                 final bookingLeaders = snapshot.data ?? [];
                                 return UserSlider(users: bookingLeaders);
                               },
+                            ),
+                            const SizedBox(height: 10),
+                            const Row(
+                              children: [
+                                Expanded(
+                                  child: FeedbackButton(),
+                                ),
+                              ],
                             ),
                             const SizedBox(
                               height: 100,

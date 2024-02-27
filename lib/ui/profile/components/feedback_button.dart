@@ -61,7 +61,7 @@ class FeedbackButton extends StatelessWidget {
             'Feedback',
             style: TextStyle(
               fontSize: 17,
-              color: theme.colorScheme.onSurface,
+              color: theme.colorScheme.primary,
               fontWeight: FontWeight.bold,
             ),
           ),

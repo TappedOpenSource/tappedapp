@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:fpdart/fpdart.dart';
 import 'package:intheloopapp/domains/models/booking.dart';
 import 'package:intheloopapp/domains/models/user_model.dart';
 import 'package:intheloopapp/domains/navigation_bloc/navigation_bloc.dart';
@@ -11,10 +12,66 @@ import 'package:intheloopapp/ui/themes.dart';
 class BookingsSliver extends StatelessWidget {
   const BookingsSliver({super.key});
 
-  Widget _bookingsSlider({
+  Widget _bookingsSlider(
+    BuildContext context, {
+    required bool isCurrentUser,
     required List<Booking> bookings,
     required UserModel visitedUser,
   }) {
+    final theme = Theme.of(context);
+    if (bookings.isEmpty && isCurrentUser) {
+      return Column(
+        children: [
+          GestureDetector(
+            onTap: () => context.push(
+              AddPastBookingPage(),
+            ),
+            child: Row(
+              children: [
+                Expanded(
+                  child: Container(
+                    padding: const EdgeInsets.symmetric(
+                      vertical: 16,
+                    ),
+                    decoration: BoxDecoration(
+                      border: Border.all(
+                        color: theme.colorScheme.onSurface.withOpacity(0.1),
+                      ),
+                      borderRadius: BorderRadius.circular(8),
+                    ),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        const SizedBox(width: 16),
+                        Icon(
+                          Icons.add,
+                          color: theme.colorScheme.onSurface.withOpacity(0.5),
+                        ),
+                        const SizedBox(width: 16),
+                        Text(
+                          'Add Past Gigs',
+                          style: TextStyle(
+                            color: theme.colorScheme.onSurface.withOpacity(0.5),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+          const SizedBox(height: 6),
+          Text(
+            '(it helps you get more gigs!)',
+            style: TextStyle(
+              color: theme.colorScheme.onSurface.withOpacity(0.5),
+            ),
+          ),
+        ],
+      );
+    }
+
     return SizedBox(
       height: 200,
       child: ListView.builder(
@@ -37,9 +94,11 @@ class BookingsSliver extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocBuilder<ProfileCubit, ProfileState>(
       builder: (context, state) {
-        return switch (state.latestBookings.isNotEmpty) {
-          false => const SizedBox.shrink(),
-          true => () {
+        final latestBookings = state.latestBookings;
+        final isCurrentUser = state.isCurrentUser;
+        return switch ((latestBookings.isNotEmpty, isCurrentUser)) {
+          (false, false) => const SizedBox.shrink(),
+          (_, _) => () {
               return Padding(
                 padding: const EdgeInsets.symmetric(
                   horizontal: 20,
@@ -87,6 +146,8 @@ class BookingsSliver extends StatelessWidget {
                       ),
                     ),
                     _bookingsSlider(
+                      context,
+                      isCurrentUser: state.isCurrentUser,
                       bookings: state.latestBookings,
                       visitedUser: state.visitedUser,
                     ),

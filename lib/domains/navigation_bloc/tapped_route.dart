@@ -46,14 +46,9 @@ import 'package:intheloopapp/ui/request_to_perform/request_to_perform_view.dart'
 import 'package:intheloopapp/ui/reviews/user_reviews_feed.dart';
 import 'package:intheloopapp/ui/services/service_view.dart';
 import 'package:intheloopapp/ui/settings/settings_view.dart';
-import 'package:intheloopapp/utils/app_logger.dart';
 import 'package:intheloopapp/utils/hero_image.dart';
-import 'package:intheloopapp/utils/image_tool.dart';
-import 'package:mime/mime.dart';
-import 'package:path_provider/path_provider.dart';
 import 'package:photo_view/photo_view.dart';
 import 'package:stream_chat_flutter/stream_chat_flutter.dart';
-// import 'package:stream_video_flutter/stream_video_flutter.dart';
 
 sealed class TappedRoute {
   TappedRoute({
@@ -72,7 +67,7 @@ final class ProfilePage extends TappedRoute {
     HeroImage? heroImage,
     String? titleHeroTag,
   }) : super(
-          routeName: '/profile/$userId',
+          routeName: '/$userId',
           view: ProfileView(
             visitedUserId: userId,
             visitedUser: user,

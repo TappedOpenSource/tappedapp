@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:fpdart/fpdart.dart';
 import 'package:intheloopapp/domains/models/booking.dart';
@@ -30,7 +31,15 @@ class BookingTile extends StatelessWidget {
               null => SkeletonListTile(),
               None() => const SizedBox.shrink(),
               Some(:final value) => ListTile(
-                  leading: const Icon(Icons.book),
+                  leading: switch (booking.flierUrl) {
+                    None() => const Icon(Icons.book),
+                    Some(:final value) => CachedNetworkImage(
+                      imageUrl: value,
+                      width: 40,
+                      height: 40,
+                      fit: BoxFit.cover,
+                    ),
+                  },
                   title: RichText(
                     text: TextSpan(
                       children: [
@@ -121,7 +130,15 @@ class BookingTile extends StatelessWidget {
             };
             final onSurfaceColor = Theme.of(context).colorScheme.onSurface;
             return ListTile(
-              leading: const Icon(Icons.book),
+              leading: switch (booking.flierUrl) {
+                None() => const Icon(Icons.book),
+                Some(:final value) => CachedNetworkImage(
+                  imageUrl: value,
+                  width: 40,
+                  height: 40,
+                  fit: BoxFit.cover,
+                ),
+              },
               title: RichText(
                 text: TextSpan(
                   children: [

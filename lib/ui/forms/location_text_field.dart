@@ -10,6 +10,7 @@ class LocationTextField extends StatelessWidget {
   const LocationTextField({
     required this.initialPlace,
     required this.onChanged,
+    this.hintText = 'tap to select a city',
     super.key,
   });
 
@@ -18,6 +19,7 @@ class LocationTextField extends StatelessWidget {
     String placeId,
   ) onChanged;
   final Option<PlaceData> initialPlace;
+  final String hintText;
 
   @override
   Widget build(BuildContext context) {
@@ -45,7 +47,7 @@ class LocationTextField extends StatelessWidget {
                 ),
                 Text(
                   initialPlace.match(
-                    () => 'Tap to select a city',
+                    () => hintText,
                     (t) => getAddressComponent(t.addressComponents),
                   ),
                   overflow: TextOverflow.ellipsis,
