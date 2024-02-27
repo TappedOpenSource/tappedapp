@@ -34,4 +34,9 @@ abstract class StorageRepository {
     required String userId,
     required File pressKitFile,
   });
+
+  Future<String> uploadBookingFlier({
+    required String bookingId,
+    required File imageFile,
+  });
 }

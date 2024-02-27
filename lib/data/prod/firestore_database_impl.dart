@@ -742,17 +742,21 @@ class FirestoreDatabaseImpl extends DatabaseRepository {
   Future<void> createBooking(
     Booking booking,
   ) async {
-    await _analytics.logEvent(
-      name: 'booking_created',
-      parameters: {
-        'requester_id': booking.requesterId,
-        'requestee_id': booking.requesteeId,
-        'rate': booking.rate,
-        'total': booking.totalCost,
-        'booking_id': booking.id,
-      },
-    );
-    await _bookingsRef.doc(booking.id).set(booking.toJson());
+    try {
+      await _analytics.logEvent(
+        name: 'booking_created',
+        parameters: {
+          'requestee_id': booking.requesteeId,
+          'rate': booking.rate,
+          'total': booking.totalCost,
+          'booking_id': booking.id,
+        },
+      );
+      await _bookingsRef.doc(booking.id).set(booking.toJson());
+    } catch (e, s) {
+      logger.e('createBooking', error: e, stackTrace: s);
+      rethrow;
+    }
   }
 
   @override

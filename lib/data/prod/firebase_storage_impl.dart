@@ -182,4 +182,22 @@ class FirebaseStorageImpl extends StorageRepository {
 
     return downloadUrl;
   }
+
+  @override
+  Future<String> uploadBookingFlier({
+    required String bookingId,
+    required File imageFile,
+  }) async {
+    final ext = p.extension(imageFile.path);
+    const prefix = 'images/bookings';
+
+    final compressedImage = await compressImage(bookingId, imageFile);
+    final uploadTask =
+        storageRef.child('$prefix/$bookingId$ext').putFile(compressedImage);
+
+    final taskSnapshot = await uploadTask.whenComplete(() => null);
+    final downloadUrl = await taskSnapshot.ref.getDownloadURL();
+
+    return downloadUrl;
+  }
 }

@@ -40,9 +40,14 @@ class AddPastBookingState {
     return '$hours hrs $minutes mins';
   }
 
-
   String get formattedAmount {
     final total = amountPaid / 100;
+
+    // if total is an int, return without decimals
+    if (total % 1 == 0) {
+      return '\$${total.toInt()}';
+    }
+
     return '\$${total.toStringAsFixed(2)}';
   }
 

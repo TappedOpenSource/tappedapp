@@ -18,7 +18,7 @@ class AmountPaidField extends StatelessWidget {
     return BlocBuilder<AddPastBookingCubit, AddPastBookingState>(
       builder: (context, state) {
         return TextFormField(
-            initialValue: _formatter.format(state.formattedAmount),
+            initialValue: _formatter.format(state.amountPaid.toString()),
             keyboardType: TextInputType.number,
             decoration: const InputDecoration(
               prefixIcon: Icon(Icons.attach_money),

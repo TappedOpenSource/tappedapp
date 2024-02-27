@@ -39,18 +39,30 @@ class AppLogger {
     }
   }
 
+  void d(String message) {
+    debug(message);
+  }
   void debug(String message) {
     logger.fine(message);
   }
 
+  void i(String message) {
+    info(message);
+  }
   void info(String message) {
     logger.info(message);
   }
 
+  void w(String message) {
+    warning(message);
+  }
   void warning(String message) {
     logger.warning(message);
   }
 
+  void e(String message, {Object? error, StackTrace? stackTrace}) {
+    this.error(message, error: error, stackTrace: stackTrace);
+  }
   void error(
     String message, {
     Object? error,
