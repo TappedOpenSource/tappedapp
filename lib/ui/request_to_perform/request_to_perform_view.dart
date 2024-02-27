@@ -113,7 +113,6 @@ class _RequestToPerformViewState extends State<RequestToPerformView> {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final database = context.database;
     return CurrentUserBuilder(
       builder: (context, currentUser) {
         return Scaffold(

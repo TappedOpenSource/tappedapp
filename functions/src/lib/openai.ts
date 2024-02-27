@@ -1,9 +1,8 @@
 
-import { OpenAI } from "langchain/llms/openai";
-import { PromptTemplate } from "langchain/prompts";
+import { OpenAI, ChatOpenAI } from "@langchain/openai";
+import { PromptTemplate } from "@langchain/core/prompts";
 import { LLMChain } from "langchain/chains";
-import { ChainValues } from "langchain/dist/schema";
-import { ChatOpenAI } from "langchain/chat_models/openai";
+import { HumanMessage } from "@langchain/core/messages";
 
 // const AVATAR_PROMPT = '';
 // const STAGE_PHOTOS_PROMPT = '';
@@ -43,9 +42,6 @@ Format the response to be in markdown format.
 
 // const BRANDING_GUIDANCE_TEMPLATE = '';
 // const SOCIAL_BIO_TEMPLATE = '';
-const ALBUM_NAME_TEMPLATE = `Create an album name for {ARTIST_NAME}
-who makes {ARTIST_GENRES} music 
-and has {IG_FOLLOWER_COUNT} followers.`;
 
 const ENHANCE_BIO_TEMPLATE = `Create a concise and engaging artist 
 biography for {ARTIST_NAME}. 
@@ -78,42 +74,34 @@ export const llm = async (template: string, apiKey: string, options?: {
   return res.text;
 }
 
-export async function generateBasicAlbumName({
-  artistName,
-  artistGenres,
-  igFollowerCount,
-  apiKey,
-}: {
-    artistName: string;
-    artistGenres: string;
-    igFollowerCount: number;
-    apiKey: string;
-}): Promise<ChainValues> {
-  process.env.OPENAI_API_KEY = apiKey;
+export const chatGpt = async (
+  prompt: string,
+  options?: {
+    model?: string;
+    temperature?: number;
+  },
+): Promise<string> => {
+  const modelName = options?.model ?? "gpt-4-1106-preview";
+  const model = new ChatOpenAI({
+    modelName,
+    ...options,
+  });
 
-  const model = new OpenAI({ temperature: 0 });
-  const prompt = new PromptTemplate({
-    inputVariables: [
-      "ARTIST_NAME",
-      "ARTIST_GENRES",
-      "IG_FOLLOWER_COUNT",
+  const message = new HumanMessage({
+    content: [
+      {
+        type: "text",
+        text: prompt,
+      },
     ],
-    template: ALBUM_NAME_TEMPLATE,
   });
 
-  const chain = new LLMChain({
-    llm: model,
-    prompt: prompt,
-  });
+  const res = await model.invoke([ message ]);
 
-  const res = await chain.call({
-    ARTIST_NAME: artistName,
-    ARTIST_GENRES: artistGenres,
-    IG_FOLLOWER_COUNT: igFollowerCount,
-  });
+  const result = res.content.toString();
 
-  return res;
-}
+  return result;
+};
 
 export async function generateBasicMarketingPlan({
   releaseType,
@@ -182,8 +170,10 @@ export async function generateBasicMarketingPlan({
     // IG_FOLLOWER_COUNT: igFollowerCount,
   });
 
+  const content = res.content.toString();
+
   return {
-    content: res.content,
+    content: content,
     prompt: formatted,
   }
 }
@@ -303,8 +293,10 @@ export async function basicEnhancedBio({
     ARTIST_GENRES: artistGenres.join(", ")
   });
 
+  const content = res.content.toString();
+
   return {
-    content: res.content,
+    content,
     prompt: formatted,
   }
 }

@@ -23,7 +23,6 @@ export * from "./lib/payments";
 export * from "./lib/stream";
 export * from "./lib/ai_generators";
 export * from "./lib/opportunities";
-export * from "./lib/following";
 export * from "./lib/services";
 export * from "./lib/badges";
 export * from "./lib/signups";

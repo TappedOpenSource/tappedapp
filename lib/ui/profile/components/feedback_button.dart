@@ -1,6 +1,7 @@
 import 'package:feedback/feedback.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:intheloopapp/utils/app_logger.dart';
 import 'package:intheloopapp/utils/bloc_utils.dart';
 import 'package:intheloopapp/utils/current_user_builder.dart';
@@ -18,6 +19,7 @@ class FeedbackButton extends StatelessWidget {
       builder: (context, currentUser) {
         return CupertinoButton(
           onPressed: () {
+            HapticFeedback.lightImpact();
             BetterFeedback.of(context).show((UserFeedback feedback) {
               try {
                 logger

@@ -1,22 +1,17 @@
 import { SocialFollowing, UserModel, Option } from "../types/models";
 
-export const contactVenueTemplate = ({ performer, venue, note }: {
-    performer: UserModel,
-    note: string,
-    venue: UserModel,
-}): { subject: string, html: string; text: string } => {
-  console.log({ performer, venue });
-  const username = performer.username;
+export const contactVenueTemplate = ({ performer, emailText }: {
+  performer: UserModel,
+  emailText: string,
+}): { html: string; text: string } => {
   const spotifyId = performer.performerInfo?.spotifyId;
+  const username = performer.username;
   const displayName = performer.artistName || username;
-  const subject = `Performance Inquery from ${displayName}`;
 
   const html = `
   <p>Hey</p>
 
-  <p>My name is ${performer.artistName} and I got recommended to reach out to you by Tapped Ai.</p> 
-  <p>${note}</p>
-  <p>I was told to reach out to you guys to perform at a couple shows.</p>
+  <p>${emailText}</p> 
   
     ${formatSocialLinks(performer.socialFollowing, spotifyId)}
 
@@ -36,8 +31,7 @@ export const contactVenueTemplate = ({ performer, venue, note }: {
   const text = `
     Hey, 
 
-    My name is ${performer.artistName} and I got recommended to reach out to you by Tapped Ai. 
-    ${note}
+    ${emailText}
 
     ${formatSocialLinksText(performer.socialFollowing, spotifyId)}
 
@@ -52,7 +46,6 @@ export const contactVenueTemplate = ({ performer, venue, note }: {
   `
 
   return {
-    subject,
     text,
     html,
   };

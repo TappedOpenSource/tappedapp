@@ -132,6 +132,11 @@ class DiscoverView extends StatelessWidget {
                       ),
                       Text(
                         genre.name,
+                        style: TextStyle(
+                          color: selected
+                              ? Colors.white
+                              : theme.colorScheme.onSurface,
+                        ),
                       ),
                     ],
                   ),

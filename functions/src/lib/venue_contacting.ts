@@ -18,6 +18,7 @@ import { StreamChat, User } from "stream-chat";
 import { contactVenueTemplate } from "../email_templates/contact_venue";
 import { UserModel, VenueContactRequest } from "../types/models";
 import { getFoundersDeviceTokens } from "./utils";
+import { chatGpt } from "./openai";
 
 function createEmailMessageId() {
   const currentTime = Date.now().toString(36);
@@ -67,10 +68,15 @@ async function sendAsEmail({
   const client = new postmark.ServerClient(POSTMARK_SERVER_ID.value());
   const messageId = createEmailMessageId();
 
-  const { subject, text, html } = contactVenueTemplate({
+  const { subject, body } = await writeEmailWithAi({
     performer: user,
     venue: venueContactData?.venue,
     note,
+  });
+
+  const { text, html } = contactVenueTemplate({
+    performer: user,
+    emailText: body,
   });
 
   const ccs = [
@@ -314,6 +320,43 @@ async function sendEmailFromStreamMessage({
   debug({ emailRes });
 
   return;
+}
+
+async function writeEmailWithAi({ performer, venue, note }: {
+  performer: UserModel;
+  venue: UserModel;
+  note: string;
+}): Promise<{
+  subject: string;
+  body: string;
+}> {
+  const username = performer.username;
+  const displayName = performer.artistName || username;
+  const genres = performer.performerInfo?.genres?.join(", ") ?? "";
+
+  const venueName = venue.artistName;
+  const subject = `Performance Inquiry from ${displayName}`;
+
+  const res = await chatGpt(`
+  Venue Name: ${venueName}
+  Performer Name: ${displayName}
+  ${genres !== "" ? `Perfomers Genres: ${genres}` : ""}
+
+  Note: ${note}
+
+  Given the information above, write an paragraph to send to venues to request a booking in the style
+  of a musicians looking to perform there.
+  The paragraph should be friendly, professional, and a little dry (i.e. straight to the point).
+  Be sure to mention that you were recommended to reach out be Tapped Ai.
+  Your response should ONLY use the information provider and assume that's all the information that's available.
+  Don't include any intro like "dear venue owner" or signature like "sincerly" or "thanks".
+  Be concise, to the point and keep it short.
+  `)
+
+  return {
+    subject,
+    body: res,
+  };
 }
 
 export const notifyFoundersOnVenueContact = onDocumentCreated(
