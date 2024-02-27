@@ -1,5 +1,8 @@
+import 'dart:io';
+
 import 'package:bloc/bloc.dart';
 import 'package:fpdart/fpdart.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:intheloopapp/data/places_repository.dart';
 import 'package:intl/intl.dart';
 
@@ -45,6 +48,34 @@ class AddPastBookingCubit extends Cubit<AddPastBookingState> {
     emit(
       state.copyWith(
         duration: value,
+      ),
+    );
+  }
+
+  Future<void> handleImageFromGallery() async {
+    try {
+      final imageFile = await ImagePicker().pickImage(
+        source: ImageSource.gallery,
+      );
+      if (imageFile == null) {
+        return;
+      }
+      emit(
+        state.copyWith(
+          flierFile: Option.of(
+            File(imageFile.path),
+          ),
+        ),
+      );
+    } catch (e) {
+      // print(error);
+    }
+  }
+
+  void removeFlier() {
+    emit(
+      state.copyWith(
+        flierFile: const None(),
       ),
     );
   }

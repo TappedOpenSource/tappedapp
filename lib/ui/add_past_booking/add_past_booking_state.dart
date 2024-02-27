@@ -6,6 +6,7 @@ class AddPastBookingState {
     this.amountPaid = 0,
     this.place = const None(),
     this.duration = Duration.zero,
+    this.flierFile = const None(),
     DateTime? eventStart,
   }) {
     this.eventStart = eventStart ?? DateTime.now();
@@ -16,6 +17,7 @@ class AddPastBookingState {
   final Option<PlaceData> place;
   late final DateTime eventStart;
   final Duration duration;
+  final Option<File> flierFile;
 
   String get formattedStartDate {
     final outputFormat = DateFormat('MM/dd/yyyy');
@@ -48,6 +50,7 @@ class AddPastBookingState {
     Option<PlaceData>? place,
     DateTime? eventStart,
     Duration? duration,
+    Option<File>? flierFile,
   }) {
     return AddPastBookingState(
       eventName: eventName ?? this.eventName,
@@ -55,6 +58,7 @@ class AddPastBookingState {
       place: place ?? this.place,
       eventStart: eventStart ?? this.eventStart,
       duration: duration ?? this.duration,
+      flierFile: flierFile ?? this.flierFile,
     );
   }
 }
