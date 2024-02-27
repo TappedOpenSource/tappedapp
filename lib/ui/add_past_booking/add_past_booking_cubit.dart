@@ -17,11 +17,10 @@ class AddPastBookingCubit extends Cubit<AddPastBookingState> {
     );
   }
 
-  void amountPaidChanged(String input) {
-    final val = int.tryParse(input) ?? 0;
+  void amountPaidChanged(int input) {
     emit(
       state.copyWith(
-        amountPaid: val,
+        amountPaid: input,
       ),
     );
   }

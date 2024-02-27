@@ -5,6 +5,7 @@ import 'package:intheloopapp/ui/themes.dart';
 class TappedForm extends StatefulWidget {
   const TappedForm({
     required this.questions,
+    this.cancelButton = false,
     this.onNext,
     this.onPrevious,
     this.onSubmit,
@@ -12,6 +13,7 @@ class TappedForm extends StatefulWidget {
   });
 
   final List<(Widget, bool Function())> questions;
+  final bool cancelButton;
   final void Function()? onNext;
   final void Function()? onPrevious;
   final void Function()? onSubmit;
@@ -22,8 +24,11 @@ class TappedForm extends StatefulWidget {
 
 class _TappedFormState extends State<TappedForm> {
   int _index = 0;
+
   Widget get _currQuestion => widget.questions[_index].$1;
+
   bool Function() get _currValidator => widget.questions[_index].$2;
+
   bool get _isValid => _currValidator();
 
   @override
@@ -88,9 +93,19 @@ class _TappedFormState extends State<TappedForm> {
                       child: const Text(
                         'back',
                       ),
-                    )
-                  else
-                    const SizedBox.shrink(),
+                    ),
+                  if (_index == 0 && widget.cancelButton)
+                    CupertinoButton(
+                      onPressed: () {
+                        Navigator.of(context).pop();
+                      },
+                      child: const Text(
+                        'cancel',
+                        style: TextStyle(
+                          color: Colors.red,
+                        ),
+                      ),
+                    ),
                   if (_index != numQuestions - 1 && _isValid)
                     CupertinoButton(
                       onPressed: () {

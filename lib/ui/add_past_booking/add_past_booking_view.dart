@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:intheloopapp/domains/models/booking.dart';
 import 'package:intheloopapp/ui/add_past_booking/add_past_booking_cubit.dart';
 import 'package:intheloopapp/ui/add_past_booking/components/amount_paid_field.dart';
 import 'package:intheloopapp/ui/add_past_booking/components/event_date_field.dart';
@@ -19,8 +20,8 @@ class AddPastBookingView extends StatelessWidget {
       create: (context) => AddPastBookingCubit(),
       child: Scaffold(
         backgroundColor: theme.colorScheme.background,
-        appBar: AppBar(),
         body: TappedForm(
+          cancelButton: true,
           questions: [
             (
               const EventDateField(),
@@ -31,7 +32,7 @@ class AddPastBookingView extends StatelessWidget {
               () => true,
             ),
             (
-              const AmountPaidField(),
+              AmountPaidField(),
               () => true,
             ),
             (

@@ -15,7 +15,16 @@ class EventDateField extends StatelessWidget {
       builder: (context, state) {
         return Column(
           mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
+            Text(
+              'when was it?',
+              style: TextStyle(
+                fontSize: 22,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+            const SizedBox(height: 8),
             FormItem(
               children: [
                 const Text('Date'),

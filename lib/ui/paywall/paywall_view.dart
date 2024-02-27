@@ -108,20 +108,47 @@ class PaywallView extends StatelessWidget {
     return PremiumBuilder(
       builder: (context, isPremium) {
         if (isPremium) {
-          return const Center(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                LogoWave(),
-                SizedBox(height: 20),
-                Text(
-                  'You are already a premium member',
-                  style: TextStyle(
-                    fontSize: 20,
-                    fontWeight: FontWeight.bold,
+          return SafeArea(
+            child: Padding(
+              padding: const EdgeInsets.symmetric(
+                vertical: 20,
+                horizontal: 20,
+              ),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Spacer(),
+                  LogoWave(),
+                  SizedBox(height: 20),
+                  Text(
+                    'You are already a premium member',
+                    style: TextStyle(
+                      fontSize: 20,
+                      fontWeight: FontWeight.bold,
+                    ),
                   ),
-                ),
-              ],
+                  Spacer(),
+                  Row(
+                    children: [
+                      Expanded(
+                        child: CupertinoButton.filled(
+                          onPressed: () {
+                            context.pop();
+                          },
+                          borderRadius: BorderRadius.circular(15),
+                          child: const Text(
+                            'Okay',
+                            style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              color: Colors.white,
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
             ),
           );
         }

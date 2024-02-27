@@ -7,6 +7,30 @@ import 'package:intheloopapp/ui/forms/location_text_field.dart';
 class EventLocationField extends StatelessWidget {
   const EventLocationField({super.key});
 
+  Widget _buildDivider({required Color color}) => Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Expanded(
+            child: Divider(
+              color: color,
+            ),
+          ),
+          const SizedBox(width: 16),
+          Text(
+            'or',
+            style: TextStyle(
+              color: color,
+            ),
+          ),
+          const SizedBox(width: 16),
+          Expanded(
+            child: Divider(
+              color: color,
+            ),
+          ),
+        ],
+      );
+
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
@@ -16,31 +40,9 @@ class EventLocationField extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Text('search venue'),
-            const SizedBox(height: 8),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Expanded(
-                  child: Divider(
-                    color: theme.colorScheme.onSurface.withOpacity(0.5),
-                  ),
-                ),
-                const SizedBox(width: 16),
-                Text(
-                  'or',
-                  style: TextStyle(
-                    color: theme.colorScheme.onSurface.withOpacity(0.5),
-                  ),
-                ),
-                const SizedBox(width: 16),
-                Expanded(
-                  child: Divider(
-                    color: theme.colorScheme.onSurface.withOpacity(0.5),
-                  ),
-                ),
-              ],
-            ),
-            const SizedBox(height: 8),
+            const SizedBox(height: 32),
+            _buildDivider(color: theme.colorScheme.onSurface.withOpacity(0.5)),
+            const SizedBox(height: 32),
             LocationTextField(
               hintText: 'search address',
               initialPlace: state.place,

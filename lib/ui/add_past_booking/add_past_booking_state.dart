@@ -36,6 +36,12 @@ class AddPastBookingState {
     return '$hours hrs $minutes mins';
   }
 
+
+  String get formattedAmount {
+    final total = amountPaid / 100;
+    return '\$${total.toStringAsFixed(2)}';
+  }
+
   AddPastBookingState copyWith({
     Option<String>? eventName,
     int? amountPaid,
