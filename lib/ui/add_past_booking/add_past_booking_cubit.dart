@@ -4,6 +4,7 @@ import 'package:bloc/bloc.dart';
 import 'package:fpdart/fpdart.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:intheloopapp/data/places_repository.dart';
+import 'package:intheloopapp/domains/models/user_model.dart';
 import 'package:intl/intl.dart';
 
 part 'add_past_booking_state.dart';
@@ -32,6 +33,14 @@ class AddPastBookingCubit extends Cubit<AddPastBookingState> {
     emit(
       state.copyWith(
         place: input,
+      ),
+    );
+  }
+
+  void venueChanged(Option<UserModel> venue) {
+    emit(
+      state.copyWith(
+        venue: venue
       ),
     );
   }

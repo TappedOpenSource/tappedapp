@@ -5,6 +5,7 @@ class AddPastBookingState {
     this.eventName = const None(),
     this.amountPaid = 0,
     this.place = const None(),
+    this.venue = const None(),
     this.duration = Duration.zero,
     this.flierFile = const None(),
     DateTime? eventStart,
@@ -15,6 +16,7 @@ class AddPastBookingState {
   final Option<String> eventName;
   final int amountPaid;
   final Option<PlaceData> place;
+  final Option<UserModel> venue;
   late final DateTime eventStart;
   final Duration duration;
   final Option<File> flierFile;
@@ -48,6 +50,7 @@ class AddPastBookingState {
     Option<String>? eventName,
     int? amountPaid,
     Option<PlaceData>? place,
+    Option<UserModel>? venue,
     DateTime? eventStart,
     Duration? duration,
     Option<File>? flierFile,
@@ -56,6 +59,7 @@ class AddPastBookingState {
       eventName: eventName ?? this.eventName,
       amountPaid: amountPaid ?? this.amountPaid,
       place: place ?? this.place,
+      venue: venue ?? this.venue,
       eventStart: eventStart ?? this.eventStart,
       duration: duration ?? this.duration,
       flierFile: flierFile ?? this.flierFile,

@@ -8,9 +8,14 @@ import 'package:intheloopapp/domains/navigation_bloc/tapped_route.dart';
 import 'package:intheloopapp/ui/user_avatar.dart';
 
 class UserTile extends StatelessWidget {
-  const UserTile({required this.user, super.key});
+  const UserTile({
+    required this.user,
+    this.onTap,
+    super.key,
+  });
 
   final UserModel user;
+  final void Function()? onTap;
 
   @override
   Widget build(BuildContext context) {
@@ -24,14 +29,15 @@ class UserTile extends StatelessWidget {
         radius: 20,
       ),
       title: Text(user.username.toString()),
-      onTap: () async {
-        final channel = await streamRepository.createSimpleChat(user.id);
-        if (channel.state == null) {
-          await channel.watch();
-        }
+      onTap: onTap ??
+          () async {
+            final channel = await streamRepository.createSimpleChat(user.id);
+            if (channel.state == null) {
+              await channel.watch();
+            }
 
-        navigationBloc.push(StreamChannelPage(channel: channel));
-      },
+            navigationBloc.push(StreamChannelPage(channel: channel));
+          },
     );
   }
 }

@@ -18,6 +18,7 @@ class UserTile extends StatefulWidget {
     this.showFollowButton = true,
     this.subtitle,
     this.trailing,
+    this.onTap,
     super.key,
   });
 
@@ -26,6 +27,7 @@ class UserTile extends StatefulWidget {
   final bool showFollowButton;
   final Widget? subtitle;
   final Widget? trailing;
+  final void Function()? onTap;
 
   @override
   State<UserTile> createState() => _UserTileState();
@@ -108,7 +110,7 @@ class _UserTileState extends State<UserTile> {
               ),
               subtitle: _buildSubtitle(user),
               trailing: widget.trailing,
-              onTap: () => context.push(
+              onTap: widget.onTap ?? () => context.push(
                 ProfilePage(
                   userId: user.id,
                   user: Option.of(

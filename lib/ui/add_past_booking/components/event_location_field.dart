@@ -1,8 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:fpdart/fpdart.dart';
 import 'package:intheloopapp/ui/add_past_booking/add_past_booking_cubit.dart';
+import 'package:intheloopapp/ui/common/venue_search_bar.dart';
 import 'package:intheloopapp/ui/forms/location_form/location_form_view.dart';
 import 'package:intheloopapp/ui/forms/location_text_field.dart';
+import 'package:intheloopapp/ui/user_tile.dart';
+import 'package:stream_chat_flutter/stream_chat_flutter.dart';
 
 class EventLocationField extends StatelessWidget {
   const EventLocationField({super.key});
@@ -31,6 +35,8 @@ class EventLocationField extends StatelessWidget {
         ],
       );
 
+  // Widget _buildSearchAnchor() {}
+
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
@@ -38,18 +44,57 @@ class EventLocationField extends StatelessWidget {
       builder: (context, state) {
         return Column(
           mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text('search venue'),
-            const SizedBox(height: 32),
-            _buildDivider(color: theme.colorScheme.onSurface.withOpacity(0.5)),
-            const SizedBox(height: 32),
-            LocationTextField(
-              hintText: 'search address',
-              initialPlace: state.place,
-              onChanged: (place, _) {
-                context.read<AddPastBookingCubit>().placeChanged(place);
-              },
+            const Text(
+              'where was it?',
+              style: TextStyle(
+                fontSize: 22,
+                fontWeight: FontWeight.bold,
+
+              ),
             ),
+            const SizedBox(height: 22),
+            switch (state.venue) {
+              None() => Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    VenueSearchBar(
+                      onSelected: (venue) {
+                        context.read<AddPastBookingCubit>().venueChanged(
+                              Option.of(venue),
+                            );
+                      },
+                    ),
+                    const SizedBox(height: 32),
+                    _buildDivider(
+                        color: theme.colorScheme.onSurface.withOpacity(0.5)),
+                    const SizedBox(height: 32),
+                    LocationTextField(
+                      hintText: 'search address',
+                      initialPlace: state.place,
+                      onChanged: (place, _) {
+                        context.read<AddPastBookingCubit>().placeChanged(place);
+                      },
+                    ),
+                  ],
+                ),
+              Some(:final value) => UserTile(
+                  user: state.venue,
+                  userId: value.id,
+                  trailing: IconButton(
+                    icon: Icon(
+                      Icons.close,
+                      color: theme.colorScheme.onSurface,
+                    ),
+                    onPressed: () {
+                      context.read<AddPastBookingCubit>().venueChanged(
+                            const None(),
+                          );
+                    },
+                  ),
+                ),
+            },
           ],
         );
       },
