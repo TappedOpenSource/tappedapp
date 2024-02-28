@@ -270,7 +270,7 @@ class DiscoverView extends StatelessWidget {
                                               const Expanded(
                                                 child: Text('get booked...'),
                                               ),
-                                              const NotificationIconButton(),
+                                              // const NotificationIconButton(),
                                             ],
                                           ),
                                         ),

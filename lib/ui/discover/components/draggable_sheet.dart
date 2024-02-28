@@ -69,110 +69,141 @@ class DraggableSheet extends StatelessWidget {
                                 ),
                               ),
                             ),
+                            Padding(
+                              padding: const EdgeInsets.symmetric(
+                                vertical: 8,
+                              ),
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Text(
+                                    '${state.venueHits.length} venues',
+                                    style: const TextStyle(
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.w700,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
                             const Padding(
                               padding: EdgeInsets.symmetric(
-                                vertical: 16,
-                                horizontal: 8,
+                                vertical: 8,
+                                horizontal: 20,
                               ),
                               child: Text(
-                                'Top Bookers',
+                                'EDM',
                                 style: TextStyle(
                                   fontSize: 28,
                                   fontWeight: FontWeight.bold,
                                 ),
                               ),
                             ),
-                            FutureBuilder(
-                              future: database.getBookerLeaders(),
-                              builder: (context, snapshot) {
-                                if (!snapshot.hasData) {
-                                  return const Center(
-                                    child: CupertinoActivityIndicator(),
-                                  );
-                                }
-
-                                final bookerLeaders = snapshot.data ?? [];
-                                return UserSlider(users: bookerLeaders);
-                              },
-                            ),
-                            const Padding(
-                              padding: EdgeInsets.symmetric(
-                                vertical: 16,
-                                horizontal: 8,
-                              ),
-                              child: Text(
-                                'Top DC Venues',
-                                style: TextStyle(
-                                  fontSize: 28,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              ),
-                            ),
-                            FutureBuilder(
-                              future: database.getDCVenues(),
-                              builder: (context, snapshot) {
-                                if (!snapshot.hasData) {
-                                  return const Center(
-                                    child: CupertinoActivityIndicator(),
-                                  );
-                                }
-
-                                final dcVenues = snapshot.data ?? [];
-                                return VenueSlider(venues: dcVenues);
-                              },
-                            ),
-                            const Padding(
-                              padding: EdgeInsets.symmetric(
-                                vertical: 16,
-                                horizontal: 8,
-                              ),
-                              child: Text(
-                                'Top NoVa Venues',
-                                style: TextStyle(
-                                  fontSize: 28,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              ),
-                            ),
-                            FutureBuilder(
-                              future: database.getNovaVenues(),
-                              builder: (context, snapshot) {
-                                if (!snapshot.hasData) {
-                                  return const Center(
-                                    child: CupertinoActivityIndicator(),
-                                  );
-                                }
-
-                                final novaVenues = snapshot.data ?? [];
-                                return VenueSlider(venues: novaVenues);
-                              },
-                            ),
-                            const Padding(
-                              padding: EdgeInsets.symmetric(
-                                vertical: 16,
-                                horizontal: 8,
-                              ),
-                              child: Text(
-                                'Top Maryland Venues',
-                                style: TextStyle(
-                                  fontSize: 28,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              ),
-                            ),
-                            FutureBuilder(
-                              future: database.getMarylandVenues(),
-                              builder: (context, snapshot) {
-                                if (!snapshot.hasData) {
-                                  return const Center(
-                                    child: CupertinoActivityIndicator(),
-                                  );
-                                }
-
-                                final marylandVenues = snapshot.data ?? [];
-                                return VenueSlider(venues: marylandVenues);
-                              },
-                            ),
+                            VenueSlider(venues: state.venueHits),
+                            // const Padding(
+                            //   padding: EdgeInsets.symmetric(
+                            //     vertical: 16,
+                            //     horizontal: 8,
+                            //   ),
+                            //   child: Text(
+                            //     'Top Bookers',
+                            //     style: TextStyle(
+                            //       fontSize: 28,
+                            //       fontWeight: FontWeight.bold,
+                            //     ),
+                            //   ),
+                            // ),
+                            // FutureBuilder(
+                            //   future: database.getBookerLeaders(),
+                            //   builder: (context, snapshot) {
+                            //     if (!snapshot.hasData) {
+                            //       return const Center(
+                            //         child: CupertinoActivityIndicator(),
+                            //       );
+                            //     }
+                            //
+                            //     final bookerLeaders = snapshot.data ?? [];
+                            //     return UserSlider(users: bookerLeaders);
+                            //   },
+                            // ),
+                            // const Padding(
+                            //   padding: EdgeInsets.symmetric(
+                            //     vertical: 16,
+                            //     horizontal: 8,
+                            //   ),
+                            //   child: Text(
+                            //     'Top DC Venues',
+                            //     style: TextStyle(
+                            //       fontSize: 28,
+                            //       fontWeight: FontWeight.bold,
+                            //     ),
+                            //   ),
+                            // ),
+                            // FutureBuilder(
+                            //   future: database.getDCVenues(),
+                            //   builder: (context, snapshot) {
+                            //     if (!snapshot.hasData) {
+                            //       return const Center(
+                            //         child: CupertinoActivityIndicator(),
+                            //       );
+                            //     }
+                            //
+                            //     final dcVenues = snapshot.data ?? [];
+                            //     return VenueSlider(venues: dcVenues);
+                            //   },
+                            // ),
+                            // const Padding(
+                            //   padding: EdgeInsets.symmetric(
+                            //     vertical: 16,
+                            //     horizontal: 8,
+                            //   ),
+                            //   child: Text(
+                            //     'Top NoVa Venues',
+                            //     style: TextStyle(
+                            //       fontSize: 28,
+                            //       fontWeight: FontWeight.bold,
+                            //     ),
+                            //   ),
+                            // ),
+                            // FutureBuilder(
+                            //   future: database.getNovaVenues(),
+                            //   builder: (context, snapshot) {
+                            //     if (!snapshot.hasData) {
+                            //       return const Center(
+                            //         child: CupertinoActivityIndicator(),
+                            //       );
+                            //     }
+                            //
+                            //     final novaVenues = snapshot.data ?? [];
+                            //     return VenueSlider(venues: novaVenues);
+                            //   },
+                            // ),
+                            // const Padding(
+                            //   padding: EdgeInsets.symmetric(
+                            //     vertical: 16,
+                            //     horizontal: 8,
+                            //   ),
+                            //   child: Text(
+                            //     'Top Maryland Venues',
+                            //     style: TextStyle(
+                            //       fontSize: 28,
+                            //       fontWeight: FontWeight.bold,
+                            //     ),
+                            //   ),
+                            // ),
+                            // FutureBuilder(
+                            //   future: database.getMarylandVenues(),
+                            //   builder: (context, snapshot) {
+                            //     if (!snapshot.hasData) {
+                            //       return const Center(
+                            //         child: CupertinoActivityIndicator(),
+                            //       );
+                            //     }
+                            //
+                            //     final marylandVenues = snapshot.data ?? [];
+                            //     return VenueSlider(venues: marylandVenues);
+                            //   },
+                            // ),
                             const Padding(
                               padding: EdgeInsets.symmetric(
                                 vertical: 16,
@@ -200,15 +231,25 @@ class DraggableSheet extends StatelessWidget {
                               },
                             ),
                             const SizedBox(height: 10),
-                            const Row(
-                              children: [
-                                Expanded(
-                                  child: FeedbackButton(),
-                                ),
-                              ],
+                            const Padding(
+                              padding: EdgeInsets.symmetric(
+                                vertical: 16,
+                                horizontal: 20,
+                              ),
+                              child: Column(
+                                children: [
+                                  Row(
+                                    children: [
+                                      Expanded(
+                                        child: FeedbackButton(),
+                                      ),
+                                    ],
+                                  ),
+                                ],
+                              ),
                             ),
                             const SizedBox(
-                              height: 100,
+                              height: 50,
                             ),
                           ],
                         ),

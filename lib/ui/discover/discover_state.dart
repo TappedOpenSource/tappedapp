@@ -82,4 +82,31 @@ extension DiscoverStateX on DiscoverState {
       },
     ).toList();
   }
+
+  List<UserModel> get edmVenues {
+    return venueHits
+        .where(
+          (e) => e.venueInfo.map(
+            (t) => t.genres.contains(Genre.edm),
+          ).getOrElse(() => false),
+        ).toList();
+  }
+
+  List<UserModel> get hipHopVenues {
+    return venueHits
+        .where(
+          (e) => e.venueInfo.map(
+            (t) => t.genres.contains(Genre.hiphop) || t.genres.contains(Genre.rap),
+          ).getOrElse(() => false),
+        ).toList();
+  }
+
+  List<UserModel> get rockVenues {
+    return venueHits
+        .where(
+          (e) => e.venueInfo.map(
+            (t) => t.genres.contains(Genre.rock),
+          ).getOrElse(() => false),
+        ).toList();
+  }
 }

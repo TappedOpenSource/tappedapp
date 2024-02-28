@@ -79,8 +79,6 @@ class AlgoliaSearchImpl extends SearchRepository {
         ? '(${venueGenres.map((e) => "venueInfo.genres:'$e'").join(' OR ')})'
         : null;
 
-
-
     final filters = [
       formattedIsDeletedFilter,
       formattedLabelFilter,
@@ -228,6 +226,7 @@ class AlgoliaSearchImpl extends SearchRepository {
     List<String>? genres,
     List<String>? venueGenres,
     List<String>? occupations,
+    int limit = 100,
   }) async {
     var results = <AlgoliaObjectSnapshot>[];
 
@@ -268,7 +267,7 @@ class AlgoliaSearchImpl extends SearchRepository {
           p2Lat: neLatitude,
           p2Lng: neLongitude,
         ),
-      ]).setHitsPerPage(100);
+      ]).setHitsPerPage(limit);
       final snap = await query.getObjects();
 
       await _analytics.logSearch(searchTerm: input);
@@ -296,6 +295,7 @@ class AlgoliaSearchImpl extends SearchRepository {
     required double swLongitude,
     required double neLatitude,
     required double neLongitude,
+    int limit = 100,
   }) async {
     var results = <AlgoliaObjectSnapshot>[];
 
@@ -308,7 +308,7 @@ class AlgoliaSearchImpl extends SearchRepository {
           p2Lat: neLatitude,
           p2Lng: neLongitude,
         ),
-      ]).setHitsPerPage(100);
+      ]).setHitsPerPage(limit);
       final snap = await query.getObjects();
 
       await _analytics.logSearch(searchTerm: input);
@@ -336,6 +336,7 @@ class AlgoliaSearchImpl extends SearchRepository {
     required double swLongitude,
     required double neLatitude,
     required double neLongitude,
+    int limit = 100,
   }) async {
     var results = <AlgoliaObjectSnapshot>[];
 
@@ -350,7 +351,7 @@ class AlgoliaSearchImpl extends SearchRepository {
           p2Lat: neLatitude,
           p2Lng: neLongitude,
         ),
-      ]).setHitsPerPage(100);
+      ]).setHitsPerPage(limit);
       final snap = await query.getObjects();
 
       await _analytics.logSearch(searchTerm: input);

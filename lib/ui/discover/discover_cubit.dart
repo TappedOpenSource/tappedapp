@@ -209,6 +209,7 @@ class DiscoverCubit extends Cubit<DiscoverState> {
               swLongitude: bounds.southWest.longitude,
               neLatitude: bounds.northEast.latitude,
               neLongitude: bounds.northEast.longitude,
+              limit: 500,
             );
             emit(state.copyWith(venueHits: hits));
           },
@@ -219,6 +220,7 @@ class DiscoverCubit extends Cubit<DiscoverState> {
               swLongitude: bounds.southWest.longitude,
               neLatitude: bounds.northEast.latitude,
               neLongitude: bounds.northEast.longitude,
+              limit: 500,
             );
             emit(state.copyWith(bookingHits: hits));
           },
@@ -229,6 +231,7 @@ class DiscoverCubit extends Cubit<DiscoverState> {
               swLongitude: bounds.southWest.longitude,
               neLatitude: bounds.northEast.latitude,
               neLongitude: bounds.northEast.longitude,
+              limit: 500,
             );
             emit(state.copyWith(opportunityHits: hits));
           },

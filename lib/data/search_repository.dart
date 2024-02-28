@@ -48,6 +48,7 @@ abstract class SearchRepository {
     List<String>? genres,
     List<String>? venueGenres,
     List<String>? occupations,
+    int limit = 100,
   });
 
   Future<List<Booking>> queryBookingsInBoundingBox(String input, {
@@ -55,6 +56,7 @@ abstract class SearchRepository {
     required double swLongitude,
     required double neLatitude,
     required double neLongitude,
+    int limit = 100,
   });
 
   Future<List<Opportunity>> queryOpportunitiesInBoundingBox(String input, {
@@ -62,5 +64,6 @@ abstract class SearchRepository {
     required double swLongitude,
     required double neLatitude,
     required double neLongitude,
+    int limit = 100,
   });
 }
