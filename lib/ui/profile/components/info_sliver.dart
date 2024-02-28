@@ -15,6 +15,7 @@ import 'package:intheloopapp/ui/profile/profile_cubit.dart';
 import 'package:intheloopapp/utils/custom_claims_builder.dart';
 import 'package:intheloopapp/utils/geohash.dart';
 import 'package:intheloopapp/utils/premium_builder.dart';
+import 'package:intl/intl.dart';
 import 'package:maps_launcher/maps_launcher.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -61,6 +62,7 @@ class InfoSliver extends StatelessWidget {
         final bookingEmail = state.visitedUser.venueInfo
             .flatMap((t) => t.bookingEmail)
             .toNullable();
+        final formatted = NumberFormat.compactLong();
         return CustomClaimsBuilder(
           builder: (context, claims) {
             final isAdmin = claims.contains(CustomClaim.admin);
@@ -135,7 +137,7 @@ class InfoSliver extends StatelessWidget {
                                     CupertinoIcons.person_2_alt,
                                   ),
                                   title: Text(
-                                    '$value capacity',
+                                    '${formatted.format(value)} capacity',
                                     style: TextStyle(
                                       color: theme.colorScheme.onSurface,
                                     ),

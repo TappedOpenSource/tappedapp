@@ -96,6 +96,8 @@ const _$GenreEnumMap = {
   Genre.rnb: 'rnb',
   Genre.country: 'country',
   Genre.edm: 'edm',
+  Genre.electronic: 'electronic',
+  Genre.dance: 'dance',
   Genre.jazz: 'jazz',
   Genre.latin: 'latin',
   Genre.classical: 'classical',
@@ -108,6 +110,11 @@ const _$GenreEnumMap = {
   Genre.indie: 'indie',
   Genre.folk: 'folk',
   Genre.alternative: 'alternative',
+  Genre.bluegrass: 'bluegrass',
+  Genre.gospel: 'gospel',
+  Genre.orchestra: 'orchestra',
+  Genre.theater: 'theater',
+  Genre.opera: 'opera',
   Genre.other: 'other',
 };
 
