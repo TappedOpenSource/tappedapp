@@ -119,8 +119,8 @@ extension DiscoverStateX on DiscoverState {
         .map(
           (e) => PieChartSectionData(
             value: e.value.toDouble(),
-            // color: e.key.color,
-            title: e.key.name,
+            color: e.key.color,
+            title: e.key.formattedName,
             radius: 50,
           ),
         )

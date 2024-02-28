@@ -70,6 +70,7 @@ class DraggableSheet extends StatelessWidget {
                                 ),
                               ),
                             ),
+
                             Padding(
                               padding: const EdgeInsets.symmetric(
                                 vertical: 8,
@@ -87,6 +88,30 @@ class DraggableSheet extends StatelessWidget {
                                 ],
                               ),
                             ),
+                            // AspectRatio(
+                            //   aspectRatio: 2,
+                            //   child: Row(
+                            //     children: [
+                            //       const SizedBox(height: 512),
+                            //       Expanded(
+                            //         child: PieChart(
+                            //           PieChartData(
+                            //             sections: state.genrePieData,
+                            //             centerSpaceRadius: 0,
+                            //             sectionsSpace: 0,
+                            //             startDegreeOffset: 180,
+                            //             borderData: FlBorderData(
+                            //               show: false,
+                            //             ),
+                            //             pieTouchData: PieTouchData(
+                            //               touchCallback: (pieTouchResponse, _) {},
+                            //             ),
+                            //           ),
+                            //         ),
+                            //       ),
+                            //     ],
+                            //   ),
+                            // ),
                             ...state.genreFilters.map((e) {
                               final hits = state.genreList(e);
                               return Column(

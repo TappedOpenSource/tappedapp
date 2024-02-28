@@ -96,4 +96,29 @@ extension GenreX on Genre {
       Genre.other => FontAwesomeIcons.music,
     };
   }
+
+  Color get color {
+return switch (this) {
+      Genre.pop => const Color(0xffFFD700),
+      Genre.rock => const Color(0xffFF4500),
+      Genre.hiphop => const Color(0xffFF69B4),
+      Genre.rap => const Color(0xffFF69B4),
+      Genre.rnb => const Color(0xffFF69B4),
+      Genre.country => const Color(0xffFFD700),
+      Genre.edm => const Color(0xffFF69B4),
+      Genre.jazz => const Color(0xffFFD700),
+      Genre.latin => const Color(0xffFFD700),
+      Genre.classical => const Color(0xffFFD700),
+      Genre.reggae => const Color(0xffFFD700),
+      Genre.blues => const Color(0xffFFD700),
+      Genre.soul => const Color(0xffFFD700),
+      Genre.funk => const Color(0xffFFD700),
+      Genre.metal => const Color(0xffFFD700),
+      Genre.punk => const Color(0xffFFD700),
+      Genre.indie => const Color(0xffFFD700),
+      Genre.folk => const Color(0xffFFD700),
+      Genre.alternative => const Color(0xffFFD700),
+      Genre.other => const Color(0xffFFD700),
+    };
+  }
 }
