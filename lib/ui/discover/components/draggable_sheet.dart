@@ -59,7 +59,7 @@ class DraggableSheet extends StatelessWidget {
                                   ),
                                   child: Container(
                                     height: 4,
-                                    width: 62,
+                                    width: 42,
                                     decoration: BoxDecoration(
                                       borderRadius: BorderRadius.circular(2),
                                       color: theme.colorScheme.onSurface
@@ -69,7 +69,6 @@ class DraggableSheet extends StatelessWidget {
                                 ),
                               ),
                             ),
-                            const MapConfigSlider(),
                             const Padding(
                               padding: EdgeInsets.symmetric(
                                 vertical: 16,

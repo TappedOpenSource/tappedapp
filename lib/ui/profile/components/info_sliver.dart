@@ -8,6 +8,7 @@ import 'package:intheloopapp/data/auth_repository.dart';
 import 'package:intheloopapp/domains/models/venue_info.dart';
 import 'package:intheloopapp/domains/navigation_bloc/navigation_bloc.dart';
 import 'package:intheloopapp/domains/navigation_bloc/tapped_route.dart';
+import 'package:intheloopapp/ui/common/social_following_menu.dart';
 import 'package:intheloopapp/ui/profile/components/more_options_button.dart';
 import 'package:intheloopapp/ui/profile/components/social_media_icons.dart';
 import 'package:intheloopapp/ui/profile/profile_cubit.dart';
@@ -19,6 +20,25 @@ import 'package:url_launcher/url_launcher.dart';
 
 class InfoSliver extends StatelessWidget {
   const InfoSliver({super.key});
+
+  Widget _buildSocialSection(BuildContext context, {
+    required IconData icon,
+    required String label,
+  }) {
+    return Row(
+      children: [
+        SizedBox(
+          width: 40,
+          height: 40,
+          child: Icon(
+            icon,
+            color: Colors.grey.withOpacity(0.5),
+          ),
+        ),
+        Text(label),
+      ],
+    );
+  }
 
   @override
   Widget build(BuildContext context) {

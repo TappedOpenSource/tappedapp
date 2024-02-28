@@ -21,6 +21,7 @@ mixin _$DiscoverState {
   List<Opportunity> get opportunityHits => throw _privateConstructorUsedError;
   MapOverlay get mapOverlay => throw _privateConstructorUsedError;
   List<Genre> get genreFilters => throw _privateConstructorUsedError;
+  RangeValues get capacityRange => throw _privateConstructorUsedError;
   double get userLat => throw _privateConstructorUsedError;
   double get userLng => throw _privateConstructorUsedError;
   LatLngBounds? get bounds => throw _privateConstructorUsedError;
@@ -42,6 +43,7 @@ abstract class $DiscoverStateCopyWith<$Res> {
       List<Opportunity> opportunityHits,
       MapOverlay mapOverlay,
       List<Genre> genreFilters,
+      RangeValues capacityRange,
       double userLat,
       double userLng,
       LatLngBounds? bounds});
@@ -65,6 +67,7 @@ class _$DiscoverStateCopyWithImpl<$Res, $Val extends DiscoverState>
     Object? opportunityHits = null,
     Object? mapOverlay = null,
     Object? genreFilters = null,
+    Object? capacityRange = null,
     Object? userLat = null,
     Object? userLng = null,
     Object? bounds = freezed,
@@ -90,6 +93,10 @@ class _$DiscoverStateCopyWithImpl<$Res, $Val extends DiscoverState>
           ? _value.genreFilters
           : genreFilters // ignore: cast_nullable_to_non_nullable
               as List<Genre>,
+      capacityRange: null == capacityRange
+          ? _value.capacityRange
+          : capacityRange // ignore: cast_nullable_to_non_nullable
+              as RangeValues,
       userLat: null == userLat
           ? _value.userLat
           : userLat // ignore: cast_nullable_to_non_nullable
@@ -120,6 +127,7 @@ abstract class _$$DiscoverStateImplCopyWith<$Res>
       List<Opportunity> opportunityHits,
       MapOverlay mapOverlay,
       List<Genre> genreFilters,
+      RangeValues capacityRange,
       double userLat,
       double userLng,
       LatLngBounds? bounds});
@@ -141,6 +149,7 @@ class __$$DiscoverStateImplCopyWithImpl<$Res>
     Object? opportunityHits = null,
     Object? mapOverlay = null,
     Object? genreFilters = null,
+    Object? capacityRange = null,
     Object? userLat = null,
     Object? userLng = null,
     Object? bounds = freezed,
@@ -166,6 +175,10 @@ class __$$DiscoverStateImplCopyWithImpl<$Res>
           ? _value._genreFilters
           : genreFilters // ignore: cast_nullable_to_non_nullable
               as List<Genre>,
+      capacityRange: null == capacityRange
+          ? _value.capacityRange
+          : capacityRange // ignore: cast_nullable_to_non_nullable
+              as RangeValues,
       userLat: null == userLat
           ? _value.userLat
           : userLat // ignore: cast_nullable_to_non_nullable
@@ -191,6 +204,7 @@ class _$DiscoverStateImpl implements _DiscoverState {
       final List<Opportunity> opportunityHits = const [],
       this.mapOverlay = MapOverlay.venues,
       final List<Genre> genreFilters = const [],
+      this.capacityRange = const RangeValues(0, 15000),
       this.userLat = 37.5407246,
       this.userLng = -77.4360481,
       this.bounds})
@@ -240,6 +254,9 @@ class _$DiscoverStateImpl implements _DiscoverState {
 
   @override
   @JsonKey()
+  final RangeValues capacityRange;
+  @override
+  @JsonKey()
   final double userLat;
   @override
   @JsonKey()
@@ -249,7 +266,7 @@ class _$DiscoverStateImpl implements _DiscoverState {
 
   @override
   String toString() {
-    return 'DiscoverState(venueHits: $venueHits, bookingHits: $bookingHits, opportunityHits: $opportunityHits, mapOverlay: $mapOverlay, genreFilters: $genreFilters, userLat: $userLat, userLng: $userLng, bounds: $bounds)';
+    return 'DiscoverState(venueHits: $venueHits, bookingHits: $bookingHits, opportunityHits: $opportunityHits, mapOverlay: $mapOverlay, genreFilters: $genreFilters, capacityRange: $capacityRange, userLat: $userLat, userLng: $userLng, bounds: $bounds)';
   }
 
   @override
@@ -267,6 +284,8 @@ class _$DiscoverStateImpl implements _DiscoverState {
                 other.mapOverlay == mapOverlay) &&
             const DeepCollectionEquality()
                 .equals(other._genreFilters, _genreFilters) &&
+            (identical(other.capacityRange, capacityRange) ||
+                other.capacityRange == capacityRange) &&
             (identical(other.userLat, userLat) || other.userLat == userLat) &&
             (identical(other.userLng, userLng) || other.userLng == userLng) &&
             (identical(other.bounds, bounds) || other.bounds == bounds));
@@ -280,6 +299,7 @@ class _$DiscoverStateImpl implements _DiscoverState {
       const DeepCollectionEquality().hash(_opportunityHits),
       mapOverlay,
       const DeepCollectionEquality().hash(_genreFilters),
+      capacityRange,
       userLat,
       userLng,
       bounds);
@@ -298,6 +318,7 @@ abstract class _DiscoverState implements DiscoverState {
       final List<Opportunity> opportunityHits,
       final MapOverlay mapOverlay,
       final List<Genre> genreFilters,
+      final RangeValues capacityRange,
       final double userLat,
       final double userLng,
       final LatLngBounds? bounds}) = _$DiscoverStateImpl;
@@ -312,6 +333,8 @@ abstract class _DiscoverState implements DiscoverState {
   MapOverlay get mapOverlay;
   @override
   List<Genre> get genreFilters;
+  @override
+  RangeValues get capacityRange;
   @override
   double get userLat;
   @override

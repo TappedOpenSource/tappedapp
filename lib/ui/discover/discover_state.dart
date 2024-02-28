@@ -8,6 +8,7 @@ class DiscoverState with _$DiscoverState {
     @Default([]) List<Opportunity> opportunityHits,
     @Default(MapOverlay.venues) MapOverlay mapOverlay,
     @Default([]) List<Genre> genreFilters,
+    @Default(RangeValues(0, 15000)) RangeValues capacityRange,
     @Default(37.5407246) double userLat,
     @Default(-77.4360481) double userLng,
     LatLngBounds? bounds,
