@@ -75,18 +75,23 @@ class DiscoverView extends StatelessWidget {
                       showModalBottomSheet<void>(
                         context: context,
                         builder: (context) {
-                          return MapConfigSlider(
-                            initialOverlay: state.mapOverlay,
-                            onChange: (overlay, premiumOnly) {
-                              if (premiumOnly && !isPremium) {
-                                context.push(PaywallPage());
-                                return;
-                              }
+                          return Padding(
+                            padding: const EdgeInsets.symmetric(
+                              vertical: 16,
+                            ),
+                            child: MapConfigSlider(
+                              initialOverlay: state.mapOverlay,
+                              onChange: (overlay, premiumOnly) {
+                                if (premiumOnly && !isPremium) {
+                                  context.push(PaywallPage());
+                                  return;
+                                }
 
-                              cubit.onMapOverlayChange(
-                                    overlay,
-                                  );
-                            },
+                                cubit.onMapOverlayChange(
+                                      overlay,
+                                    );
+                              },
+                            ),
                           );
                         },
                       );

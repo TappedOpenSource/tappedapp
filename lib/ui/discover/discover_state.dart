@@ -86,27 +86,44 @@ extension DiscoverStateX on DiscoverState {
   List<UserModel> get edmVenues {
     return venueHits
         .where(
-          (e) => e.venueInfo.map(
-            (t) => t.genres.contains(Genre.edm),
-          ).getOrElse(() => false),
-        ).toList();
+          (e) => e.venueInfo
+              .map(
+                (t) => t.genres.contains(Genre.edm),
+              )
+              .getOrElse(() => false),
+        )
+        .toList();
   }
 
-  List<UserModel> get hipHopVenues {
+  List<UserModel> genreList(Genre genre) {
     return venueHits
         .where(
-          (e) => e.venueInfo.map(
-            (t) => t.genres.contains(Genre.hiphop) || t.genres.contains(Genre.rap),
-          ).getOrElse(() => false),
-        ).toList();
+          (e) => e.venueInfo
+              .map(
+                (t) => t.genres.contains(genre),
+              )
+              .getOrElse(() => false),
+        )
+        .toList()
+      ..sort((a, b) {
+        final aCap = a.venueInfo.flatMap((e) => e.capacity).getOrElse(() => 0);
+        final bCap = b.venueInfo.flatMap((e) => e.capacity).getOrElse(() => 0);
+        return aCap.compareTo(bCap);
+      });
   }
 
-  List<UserModel> get rockVenues {
-    return venueHits
-        .where(
-          (e) => e.venueInfo.map(
-            (t) => t.genres.contains(Genre.rock),
-          ).getOrElse(() => false),
-        ).toList();
+  List<PieChartSectionData> get genrePieData {
+    final genreMap = {for (final e in Genre.values) e: genreList(e).length};
+
+    return genreMap.entries
+        .map(
+          (e) => PieChartSectionData(
+            value: e.value.toDouble(),
+            // color: e.key.color,
+            title: e.key.name,
+            radius: 50,
+          ),
+        )
+        .toList();
   }
 }

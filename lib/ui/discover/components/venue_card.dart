@@ -8,6 +8,7 @@ import 'package:intheloopapp/domains/navigation_bloc/tapped_route.dart';
 import 'package:intheloopapp/utils/bloc_utils.dart';
 import 'package:intheloopapp/utils/default_image.dart';
 import 'package:intheloopapp/utils/hero_image.dart';
+import 'package:intl/intl.dart';
 import 'package:stream_chat_flutter/stream_chat_flutter.dart';
 
 class VenueCard extends StatelessWidget {
@@ -27,6 +28,7 @@ class VenueCard extends StatelessWidget {
 
     final venueType =
         venue.venueInfo.map((e) => e.type).getOrElse(() => VenueType.other);
+    final formatter = NumberFormat.compact();
     return FutureBuilder(
       future: database.isVerified(venue.id),
       builder: (context, snapshot) {
@@ -116,13 +118,27 @@ class VenueCard extends StatelessWidget {
                               ],
                             ),
                           ),
-                          if (venueType != VenueType.other)
-                            Text(
-                              venueType.name.capitalize(),
-                              style: const TextStyle(
-                                color: Colors.white,
-                              ),
+                          Text(
+                            venueType.formattedName,
+                            style: const TextStyle(
+                              color: Colors.white,
                             ),
+                          ),
+                          venue.venueInfo.fold(
+                            () => const SizedBox.shrink(),
+                            (e) {
+                              final capacity = e.capacity.getOrElse(() => 0);
+                              return switch (capacity) {
+                                <= 0 => const SizedBox.shrink(),
+                                _ => Text(
+                                  '${formatter.format(capacity)} capacity',
+                                  style: const TextStyle(
+                                    color: Colors.white,
+                                  ),
+                                ),
+                              };
+                            },
+                          ),
                         ],
                       ),
                     ),

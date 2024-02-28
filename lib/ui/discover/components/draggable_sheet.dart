@@ -1,7 +1,8 @@
+import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:intheloopapp/ui/discover/components/map_config_slider.dart';
+import 'package:intheloopapp/domains/models/genre.dart';
 import 'package:intheloopapp/ui/discover/components/user_slider.dart';
 import 'package:intheloopapp/ui/discover/components/venue_slider.dart';
 import 'package:intheloopapp/ui/discover/discover_cubit.dart';
@@ -86,20 +87,28 @@ class DraggableSheet extends StatelessWidget {
                                 ],
                               ),
                             ),
-                            const Padding(
-                              padding: EdgeInsets.symmetric(
-                                vertical: 8,
-                                horizontal: 20,
-                              ),
-                              child: Text(
-                                'EDM',
-                                style: TextStyle(
-                                  fontSize: 28,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              ),
-                            ),
-                            VenueSlider(venues: state.venueHits),
+                            ...state.genreFilters.map((e) {
+                              final hits = state.genreList(e);
+                              return Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Padding(
+                                    padding: const EdgeInsets.symmetric(
+                                      vertical: 8,
+                                      horizontal: 20,
+                                    ),
+                                    child: Text(
+                                      e.formattedName.toUpperCase(),
+                                      style: const TextStyle(
+                                        fontSize: 28,
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                    ),
+                                  ),
+                                  VenueSlider(venues: hits),
+                                ],
+                              );
+                            }),
                             // const Padding(
                             //   padding: EdgeInsets.symmetric(
                             //     vertical: 16,
