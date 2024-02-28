@@ -97,6 +97,7 @@ class MapConfigSlider extends StatelessWidget {
                 image: AssetImage(
                   'assets/layers/booking_heatmap.png',
                 ) as ImageProvider,
+                premiumOnly: true,
               ),
               _buildMapOverlayButton(
                 context,
@@ -106,6 +107,7 @@ class MapConfigSlider extends StatelessWidget {
                 image: AssetImage(
                   'assets/layers/op_heatmap.png',
                 ) as ImageProvider,
+                premiumOnly: true,
               ),
             ],
           ),

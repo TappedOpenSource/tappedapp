@@ -1,4 +1,5 @@
 import 'package:bloc/bloc.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:formz/formz.dart';
 import 'package:fpdart/fpdart.dart';
@@ -53,6 +54,14 @@ class GigSearchCubit extends Cubit<GigSearchState> {
     );
   }
 
+  void updateCapacity(RangeValues capacityRange) {
+    emit(
+      state.copyWith(
+        capacityRange: capacityRange,
+      ),
+    );
+  }
+
   Future<void> searchVenues() async {
     if (state.genres.isEmpty) {
       throw Exception('Please select at least one genre');
@@ -78,12 +87,17 @@ class GigSearchCubit extends Cubit<GigSearchState> {
       (a) => a.lng,
     );
 
+    final minCap = state.capacityRange.start.round();
+    final maxCap = state.capacityRange.end.round();
+
     final hits = await search.queryUsers(
       '',
       occupations: ['venue', 'Venue'],
       venueGenres: state.genres.map((e) => e.name).toList(),
       lat: lat,
       lng: lng,
+      minCapacity: minCap,
+      maxCapacity: maxCap,
       limit: 150,
     );
 

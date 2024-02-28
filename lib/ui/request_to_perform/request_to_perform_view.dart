@@ -168,6 +168,7 @@ class _RequestToPerformViewState extends State<RequestToPerformView> {
                     decoration: const InputDecoration.collapsed(
                       hintText: 'What else should the venue know about you?',
                     ),
+                    textInputAction: TextInputAction.done,
                     style: const TextStyle(
                       letterSpacing: 0,
                     ),

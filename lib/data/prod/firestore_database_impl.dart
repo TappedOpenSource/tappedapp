@@ -1378,6 +1378,7 @@ class FirestoreDatabaseImpl extends DatabaseRepository {
           .doc(userId)
           .collection('opportunities')
           .orderBy('startTime', descending: true)
+          .where('startTime', isGreaterThanOrEqualTo: Timestamp.now())
           .where('touched', isNull: true)
           .limit(limit)
           .startAfterDocument(documentSnapshot)
@@ -1393,6 +1394,7 @@ class FirestoreDatabaseImpl extends DatabaseRepository {
         .doc(userId)
         .collection('opportunities')
         .orderBy('startTime', descending: true)
+        .where('startTime', isGreaterThanOrEqualTo: Timestamp.now())
         .where('touched', isNull: true)
         .limit(limit)
         .get();

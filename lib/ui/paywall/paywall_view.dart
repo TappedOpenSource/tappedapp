@@ -89,7 +89,7 @@ class PaywallView extends StatelessWidget {
             borderRadius: BorderRadius.circular(10),
           ),
           content: const Text(
-            'error purchasing package',
+            'purchase canceled',
             style: TextStyle(
               color: Colors.white,
             ),

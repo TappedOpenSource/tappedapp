@@ -1,14 +1,11 @@
-import 'package:feedback/feedback.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:intheloopapp/ui/discover/components/draggable_header.dart';
 import 'package:intheloopapp/ui/discover/components/map_config_slider.dart';
 import 'package:intheloopapp/ui/discover/components/user_slider.dart';
 import 'package:intheloopapp/ui/discover/components/venue_slider.dart';
 import 'package:intheloopapp/ui/discover/discover_cubit.dart';
 import 'package:intheloopapp/ui/profile/components/feedback_button.dart';
-import 'package:intheloopapp/utils/app_logger.dart';
 import 'package:intheloopapp/utils/bloc_utils.dart';
 import 'package:intheloopapp/utils/current_user_builder.dart';
 
@@ -18,9 +15,7 @@ class DraggableSheet extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final database = context.database;
-    final storage = context.storage;
     final theme = Theme.of(context);
-    final scaffoldMessenger = ScaffoldMessenger.of(context);
     return CurrentUserBuilder(
       builder: (context, currentUser) {
         return BlocBuilder<DiscoverCubit, DiscoverState>(

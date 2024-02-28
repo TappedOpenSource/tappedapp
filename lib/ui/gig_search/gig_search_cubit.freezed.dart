@@ -20,6 +20,7 @@ mixin _$GigSearchState {
   List<Genre> get genres => throw _privateConstructorUsedError;
   List<String> get startDate => throw _privateConstructorUsedError;
   List<String> get endDate => throw _privateConstructorUsedError;
+  RangeValues get capacityRange => throw _privateConstructorUsedError;
   DateRangeType get dateRangeType => throw _privateConstructorUsedError;
   List<SelectableResult> get results => throw _privateConstructorUsedError;
   FormzSubmissionStatus get formStatus => throw _privateConstructorUsedError;
@@ -40,6 +41,7 @@ abstract class $GigSearchStateCopyWith<$Res> {
       List<Genre> genres,
       List<String> startDate,
       List<String> endDate,
+      RangeValues capacityRange,
       DateRangeType dateRangeType,
       List<SelectableResult> results,
       FormzSubmissionStatus formStatus});
@@ -62,6 +64,7 @@ class _$GigSearchStateCopyWithImpl<$Res, $Val extends GigSearchState>
     Object? genres = null,
     Object? startDate = null,
     Object? endDate = null,
+    Object? capacityRange = null,
     Object? dateRangeType = null,
     Object? results = null,
     Object? formStatus = null,
@@ -83,6 +86,10 @@ class _$GigSearchStateCopyWithImpl<$Res, $Val extends GigSearchState>
           ? _value.endDate
           : endDate // ignore: cast_nullable_to_non_nullable
               as List<String>,
+      capacityRange: null == capacityRange
+          ? _value.capacityRange
+          : capacityRange // ignore: cast_nullable_to_non_nullable
+              as RangeValues,
       dateRangeType: null == dateRangeType
           ? _value.dateRangeType
           : dateRangeType // ignore: cast_nullable_to_non_nullable
@@ -112,6 +119,7 @@ abstract class _$$GigSearchStateImplCopyWith<$Res>
       List<Genre> genres,
       List<String> startDate,
       List<String> endDate,
+      RangeValues capacityRange,
       DateRangeType dateRangeType,
       List<SelectableResult> results,
       FormzSubmissionStatus formStatus});
@@ -132,6 +140,7 @@ class __$$GigSearchStateImplCopyWithImpl<$Res>
     Object? genres = null,
     Object? startDate = null,
     Object? endDate = null,
+    Object? capacityRange = null,
     Object? dateRangeType = null,
     Object? results = null,
     Object? formStatus = null,
@@ -153,6 +162,10 @@ class __$$GigSearchStateImplCopyWithImpl<$Res>
           ? _value._endDate
           : endDate // ignore: cast_nullable_to_non_nullable
               as List<String>,
+      capacityRange: null == capacityRange
+          ? _value.capacityRange
+          : capacityRange // ignore: cast_nullable_to_non_nullable
+              as RangeValues,
       dateRangeType: null == dateRangeType
           ? _value.dateRangeType
           : dateRangeType // ignore: cast_nullable_to_non_nullable
@@ -177,6 +190,7 @@ class _$GigSearchStateImpl implements _GigSearchState {
       final List<Genre> genres = const [],
       final List<String> startDate = const [],
       final List<String> endDate = const [],
+      this.capacityRange = const RangeValues(0, 200),
       this.dateRangeType = DateRangeType.fixed,
       final List<SelectableResult> results = const [],
       this.formStatus = FormzSubmissionStatus.initial})
@@ -217,6 +231,9 @@ class _$GigSearchStateImpl implements _GigSearchState {
 
   @override
   @JsonKey()
+  final RangeValues capacityRange;
+  @override
+  @JsonKey()
   final DateRangeType dateRangeType;
   final List<SelectableResult> _results;
   @override
@@ -233,7 +250,7 @@ class _$GigSearchStateImpl implements _GigSearchState {
 
   @override
   String toString() {
-    return 'GigSearchState(place: $place, genres: $genres, startDate: $startDate, endDate: $endDate, dateRangeType: $dateRangeType, results: $results, formStatus: $formStatus)';
+    return 'GigSearchState(place: $place, genres: $genres, startDate: $startDate, endDate: $endDate, capacityRange: $capacityRange, dateRangeType: $dateRangeType, results: $results, formStatus: $formStatus)';
   }
 
   @override
@@ -246,6 +263,8 @@ class _$GigSearchStateImpl implements _GigSearchState {
             const DeepCollectionEquality()
                 .equals(other._startDate, _startDate) &&
             const DeepCollectionEquality().equals(other._endDate, _endDate) &&
+            (identical(other.capacityRange, capacityRange) ||
+                other.capacityRange == capacityRange) &&
             (identical(other.dateRangeType, dateRangeType) ||
                 other.dateRangeType == dateRangeType) &&
             const DeepCollectionEquality().equals(other._results, _results) &&
@@ -260,6 +279,7 @@ class _$GigSearchStateImpl implements _GigSearchState {
       const DeepCollectionEquality().hash(_genres),
       const DeepCollectionEquality().hash(_startDate),
       const DeepCollectionEquality().hash(_endDate),
+      capacityRange,
       dateRangeType,
       const DeepCollectionEquality().hash(_results),
       formStatus);
@@ -278,6 +298,7 @@ abstract class _GigSearchState implements GigSearchState {
       final List<Genre> genres,
       final List<String> startDate,
       final List<String> endDate,
+      final RangeValues capacityRange,
       final DateRangeType dateRangeType,
       final List<SelectableResult> results,
       final FormzSubmissionStatus formStatus}) = _$GigSearchStateImpl;
@@ -290,6 +311,8 @@ abstract class _GigSearchState implements GigSearchState {
   List<String> get startDate;
   @override
   List<String> get endDate;
+  @override
+  RangeValues get capacityRange;
   @override
   DateRangeType get dateRangeType;
   @override

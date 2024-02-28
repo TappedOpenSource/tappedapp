@@ -30,7 +30,7 @@ class RequestToPerformConfirmationView extends StatelessWidget {
               ),
               const SizedBox(height: 28),
               const Text(
-                'You will get a DM from the venue if they accept your request. You can also check the status of your request in the "Bookings" section of your profile.',
+                'You will get a DM from the venue if they accept your request and venues usually take 1-2 weeks to respond. You can also check the status of your request in the "Bookings" section of your profile.',
                 style: TextStyle(
                   fontSize: 18,
                 ),

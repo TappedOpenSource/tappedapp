@@ -7,6 +7,7 @@ class GigSearchState with _$GigSearchState {
     @Default([]) List<Genre> genres,
     @Default([]) List<String> startDate,
     @Default([]) List<String> endDate,
+    @Default(RangeValues(0, 200)) RangeValues capacityRange,
     @Default(DateRangeType.fixed) DateRangeType dateRangeType,
     @Default([]) List<SelectableResult> results,
     @Default(FormzSubmissionStatus.initial) FormzSubmissionStatus formStatus,

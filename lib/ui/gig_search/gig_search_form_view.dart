@@ -76,6 +76,38 @@ class GigSearchFormView extends StatelessWidget {
                               .updateGenres(genres.whereType<Genre>().toList());
                         },
                       ),
+                      const SizedBox(height: 20),
+                      const Text(
+                        'capacity',
+                        style: TextStyle(
+                          fontWeight: FontWeight.w700,
+                          fontSize: 20,
+                        ),
+                      ),
+                      Row(
+                        children: [
+                          Text(state.capacityRange.start.round().toString()),
+                          Expanded(
+                            child: RangeSlider(
+                              values: state.capacityRange,
+                              max: 1000,
+                              onChanged: (values) {
+                                context
+                                    .read<GigSearchCubit>()
+                                    .updateCapacity(values);
+                              },
+                              activeColor: theme.colorScheme.primary,
+                              inactiveColor: theme.colorScheme.onSurface.withOpacity(0.4),
+                              divisions: 1000,
+                              labels: RangeLabels(
+                                state.capacityRange.start.round().toString(),
+                                state.capacityRange.end.round().toString(),
+                              ),
+                            ),
+                          ),
+                          Text(state.capacityRange.end.round().toString()),
+                        ],
+                      ),
                       // const SizedBox(height: 20),
                       // const Text(
                       //   'when',
