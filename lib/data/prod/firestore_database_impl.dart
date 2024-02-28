@@ -1244,8 +1244,7 @@ class FirestoreDatabaseImpl extends DatabaseRepository {
       return opportunities;
     } catch (e, s) {
       logger.e('getUserOpportunities', error: e, stackTrace: s);
-      rethrow;
-      // return [];
+      return [];
     }
   }
 
