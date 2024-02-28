@@ -189,6 +189,7 @@ class _CreateBookingFormState extends State<CreateBookingForm> {
                 width: double.infinity,
                 child: CupertinoButton.filled(
                   onPressed: () async {
+                    final scaffoldMessenger = ScaffoldMessenger.of(context);
                     try {
                       final booking = await context
                           .read<CreateBookingCubit>()
@@ -206,7 +207,7 @@ class _CreateBookingFormState extends State<CreateBookingForm> {
                         error: e,
                         stackTrace: s,
                       );
-                      ScaffoldMessenger.of(context).showSnackBar(
+                      scaffoldMessenger.showSnackBar(
                         SnackBar(
                           behavior: SnackBarBehavior.floating,
                           backgroundColor: Colors.red,
@@ -219,7 +220,7 @@ class _CreateBookingFormState extends State<CreateBookingForm> {
                         error: e,
                         stackTrace: s,
                       );
-                      ScaffoldMessenger.of(context).showSnackBar(
+                      scaffoldMessenger.showSnackBar(
                         const SnackBar(
                           behavior: SnackBarBehavior.floating,
                           backgroundColor: Colors.red,
