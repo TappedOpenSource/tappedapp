@@ -56,6 +56,8 @@ class AlgoliaSearchImpl extends SearchRepository {
     List<String>? genres,
     List<String>? venueGenres,
     List<String>? occupations,
+    int? minCapacity,
+    int? maxCapacity,
     double? lat,
     double? lng,
     int radius = 50000,
@@ -77,6 +79,8 @@ class AlgoliaSearchImpl extends SearchRepository {
         ? '(${venueGenres.map((e) => "venueInfo.genres:'$e'").join(' OR ')})'
         : null;
 
+
+
     final filters = [
       formattedIsDeletedFilter,
       formattedLabelFilter,
@@ -97,6 +101,14 @@ class AlgoliaSearchImpl extends SearchRepository {
 
       if (formattedLocationFilter != null) {
         query = query.setAroundLatLng(formattedLocationFilter);
+      }
+
+      if (minCapacity != null) {
+        query = query.setNumericFilter('venueInfo.capacity>=$minCapacity');
+      }
+
+      if (maxCapacity != null) {
+        query = query.setNumericFilter('venueInfo.capacity<=$maxCapacity');
       }
 
       query = query.setAroundRadius(radius);

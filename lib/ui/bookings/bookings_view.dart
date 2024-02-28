@@ -42,6 +42,31 @@ class BookingsView extends StatelessWidget {
     );
   }
 
+  Widget _buildUpcomingBookingsSheet(
+    BuildContext context, {
+    required List<Booking> upcomingBookings,
+  }) {
+    return SizedBox(
+      width: double.infinity,
+      child: DraggableScrollableSheet(
+        expand: false,
+        maxChildSize: 0.9,
+        builder: (context, scrollController) {
+          return Column(
+            children: [
+              Expanded(
+                child: BookingsList(
+                  bookings: upcomingBookings,
+                  scrollController: scrollController,
+                ),
+              ),
+            ],
+          );
+        },
+      ),
+    );
+  }
+
   Widget _buildGigsAppliedSheet(
     BuildContext context, {
     required String currentUserId,
@@ -234,6 +259,22 @@ class BookingsView extends StatelessWidget {
                             ),
                             _buildChip(
                               context,
+                              label: 'upcoming bookings',
+                              onPressed: () {
+                                showModalBottomSheet<void>(
+                                  context: context,
+                                  showDragHandle: true,
+                                  builder: (context) {
+                                    return _buildUpcomingBookingsSheet(
+                                      context,
+                                      upcomingBookings: state.upcomingBookings,
+                                    );
+                                  },
+                                );
+                              },
+                            ),
+                            _buildChip(
+                              context,
                               label: 'canceled bookings',
                               onPressed: () {
                                 showModalBottomSheet<void>(
@@ -290,7 +331,7 @@ class BookingsView extends StatelessWidget {
                                   child: Column(
                                     children: [
                                       const Text(
-                                        "SEE WHAT'S ON",
+                                        "LOOKING FOR GIGS?",
                                         textAlign: TextAlign.center,
                                         style: TextStyle(
                                           fontSize: 32,
@@ -322,8 +363,8 @@ class BookingsView extends StatelessWidget {
                                             fontWeight: FontWeight.bold,
                                           ),
                                         ),
-                                        onPressed: () => context.changeTab(
-                                          selectedTab: 0,
+                                        onPressed: () => context.push(
+                                          GigSearchInitPage(),
                                         ),
                                       ),
                                     ],

@@ -7,7 +7,6 @@ import 'package:intheloopapp/data/search_repository.dart';
 import 'package:intheloopapp/ui/gig_search/gig_search_cubit.dart';
 import 'package:intheloopapp/ui/gig_search/gig_search_form_view.dart';
 import 'package:intheloopapp/ui/gig_search/gig_search_results_view.dart';
-import 'package:intheloopapp/utils/bloc_utils.dart';
 import 'package:intheloopapp/utils/current_user_builder.dart';
 
 class GigSearchView extends StatelessWidget {

@@ -15,6 +15,8 @@ import 'package:intheloopapp/utils/current_user_builder.dart';
 import 'package:intheloopapp/utils/premium_builder.dart';
 import 'package:latlong2/latlong.dart';
 
+import 'components/filter_map_button.dart';
+
 class DiscoverView extends StatelessWidget {
   const DiscoverView({
     super.key,
@@ -239,12 +241,13 @@ class DiscoverView extends StatelessWidget {
                                               const Expanded(
                                                 child: Text('get booked...'),
                                               ),
+                                              const FilterMapButton(),
                                             ],
                                           ),
                                         ),
                                       ),
                                     ),
-                                    const NotificationIconButton(),
+                                    // const NotificationIconButton(),
                                   ],
                                 ),
                                 _buildGenreList(context),

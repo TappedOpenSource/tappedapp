@@ -1214,6 +1214,7 @@ class FirestoreDatabaseImpl extends DatabaseRepository {
         final opportunitiesSnapshot = await _opportunitiesRef
             .where('userId', isEqualTo: userId)
             .where('deleted', isEqualTo: false)
+            .where('startTime', isGreaterThanOrEqualTo: Timestamp.now())
             .orderBy('timestamp', descending: true)
             .limit(limit)
             .startAfterDocument(documentSnapshot)
@@ -1233,7 +1234,7 @@ class FirestoreDatabaseImpl extends DatabaseRepository {
           .limit(limit)
           .get();
 
-      logger.info(
+      logger.i(
         'userOpportunitiesSnapshot ${userOpportunitiesSnapshot.docs.length}',
       );
 
@@ -1242,8 +1243,9 @@ class FirestoreDatabaseImpl extends DatabaseRepository {
 
       return opportunities;
     } catch (e, s) {
-      logger.error('getUserOpportunities', error: e, stackTrace: s);
-      return [];
+      logger.e('getUserOpportunities', error: e, stackTrace: s);
+      rethrow;
+      // return [];
     }
   }
 

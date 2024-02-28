@@ -11,7 +11,6 @@ import 'package:intheloopapp/domains/navigation_bloc/tapped_route.dart';
 import 'package:intheloopapp/ui/profile/components/more_options_button.dart';
 import 'package:intheloopapp/ui/profile/components/social_media_icons.dart';
 import 'package:intheloopapp/ui/profile/profile_cubit.dart';
-import 'package:intheloopapp/utils/app_logger.dart';
 import 'package:intheloopapp/utils/custom_claims_builder.dart';
 import 'package:intheloopapp/utils/geohash.dart';
 import 'package:intheloopapp/utils/premium_builder.dart';
@@ -82,7 +81,7 @@ class InfoSliver extends StatelessWidget {
                               ),
                               child: CupertinoListTile(
                                 leading: const Icon(
-                                  CupertinoIcons.map,
+                                  CupertinoIcons.location,
                                 ),
                                 title: Text(
                                   getAddressComponent(value.addressComponents),

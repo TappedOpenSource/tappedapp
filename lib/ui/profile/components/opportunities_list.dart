@@ -19,10 +19,11 @@ class OpportunitiesList extends StatelessWidget {
       children: [
         SizedBox(
           height: 300,
-          child: ScrollSnapList(
-            selectedItemAnchor: SelectedItemAnchor.START,
-            onItemFocus: (index) {},
-            itemSize: MediaQuery.of(context).size.width - (96 - 8 * 2),
+          child: ListView.builder(
+            // selectedItemAnchor: SelectedItemAnchor.START,
+            // onItemFocus: (index) {},
+            // itemSize: MediaQuery.of(context).size.width - (96 - 8 * 2),
+            scrollDirection: Axis.horizontal,
             itemCount: sortedOpportunities.length,
             itemBuilder: (context, index) {
 

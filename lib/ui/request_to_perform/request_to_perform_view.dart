@@ -187,8 +187,9 @@ class _RequestToPerformViewState extends State<RequestToPerformView> {
                     children: [
                       CupertinoButton(
                         onPressed: () {
-                          showModalBottomSheet(
+                          showModalBottomSheet<void>(
                             context: context,
+                            showDragHandle: true,
                             builder: (context) {
                               return Padding(
                                 padding: const EdgeInsets.symmetric(

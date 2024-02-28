@@ -899,9 +899,6 @@ PODS:
     - SDWebImageWebPCoder
   - flutter_native_splash (0.0.1):
     - Flutter
-  - flutter_webrtc (0.9.36):
-    - Flutter
-    - WebRTC-SDK (= 114.5735.08)
   - FMDB (2.7.5):
     - FMDB/standard (= 2.7.5)
   - FMDB/standard (2.7.5)
@@ -1097,8 +1094,6 @@ PODS:
   - sqflite (0.0.3):
     - Flutter
     - FMDB (>= 2.7.5)
-  - stream_video_flutter (0.0.1):
-    - Flutter
   - Stripe (23.18.3):
     - StripeApplePay (= 23.18.3)
     - StripeCore (= 23.18.3)
@@ -1148,7 +1143,6 @@ PODS:
     - libwebp
   - wakelock_plus (0.0.1):
     - Flutter
-  - WebRTC-SDK (114.5735.08)
 
 DEPENDENCIES:
   - audio_service (from `.symlinks/plugins/audio_service/ios`)
@@ -1172,7 +1166,6 @@ DEPENDENCIES:
   - flutter_google_places_sdk_ios (from `.symlinks/plugins/flutter_google_places_sdk_ios/ios`)
   - flutter_image_compress_common (from `.symlinks/plugins/flutter_image_compress_common/ios`)
   - flutter_native_splash (from `.symlinks/plugins/flutter_native_splash/ios`)
-  - flutter_webrtc (from `.symlinks/plugins/flutter_webrtc/ios`)
   - gallery_saver (from `.symlinks/plugins/gallery_saver/ios`)
   - geolocator_apple (from `.symlinks/plugins/geolocator_apple/ios`)
   - google_sign_in_ios (from `.symlinks/plugins/google_sign_in_ios/darwin`)
@@ -1190,7 +1183,6 @@ DEPENDENCIES:
   - share_plus (from `.symlinks/plugins/share_plus/ios`)
   - sign_in_with_apple (from `.symlinks/plugins/sign_in_with_apple/ios`)
   - sqflite (from `.symlinks/plugins/sqflite/ios`)
-  - stream_video_flutter (from `.symlinks/plugins/stream_video_flutter/ios`)
   - stripe_ios (from `.symlinks/plugins/stripe_ios/ios`)
   - uni_links (from `.symlinks/plugins/uni_links/ios`)
   - url_launcher_ios (from `.symlinks/plugins/url_launcher_ios/ios`)
@@ -1259,7 +1251,6 @@ SPEC REPOS:
     - StripePaymentsUI
     - StripeUICore
     - SwiftyGif
-    - WebRTC-SDK
 
 EXTERNAL SOURCES:
   audio_service:
@@ -1304,8 +1295,6 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/flutter_image_compress_common/ios"
   flutter_native_splash:
     :path: ".symlinks/plugins/flutter_native_splash/ios"
-  flutter_webrtc:
-    :path: ".symlinks/plugins/flutter_webrtc/ios"
   gallery_saver:
     :path: ".symlinks/plugins/gallery_saver/ios"
   geolocator_apple:
@@ -1340,8 +1329,6 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/sign_in_with_apple/ios"
   sqflite:
     :path: ".symlinks/plugins/sqflite/ios"
-  stream_video_flutter:
-    :path: ".symlinks/plugins/stream_video_flutter/ios"
   stripe_ios:
     :path: ".symlinks/plugins/stripe_ios/ios"
   uni_links:
@@ -1404,7 +1391,6 @@ SPEC CHECKSUMS:
   flutter_google_places_sdk_ios: 8d3d6b935ddd9988780fcc605acd2500fd0ecdcd
   flutter_image_compress_common: ec1d45c362c9d30a3f6a0426c297f47c52007e3e
   flutter_native_splash: 52501b97d1c0a5f898d687f1646226c1f93c56ef
-  flutter_webrtc: 55df3aaa802114dad390191a46c2c8d535751268
   FMDB: 2ce00b547f966261cd18927a3ddb07cb6f3db82a
   gallery_saver: 9fc173c9f4fcc48af53b2a9ebea1b643255be542
   geolocator_apple: 9157311f654584b9bb72686c55fc02a97b73f461
@@ -1445,7 +1431,6 @@ SPEC CHECKSUMS:
   share_plus: c3fef564749587fc939ef86ffb283ceac0baf9f5
   sign_in_with_apple: f3bf75217ea4c2c8b91823f225d70230119b8440
   sqflite: 31f7eba61e3074736dff8807a9b41581e4f7f15a
-  stream_video_flutter: 63a4b019bbdfca0148ebec2aae8efde5563a3d6e
   Stripe: e046335ab6e3f25d39f1a55bd98620a85269cffa
   stripe_ios: 37dd66ec680264019be16c5f47333f381164e6a6
   StripeApplePay: 1aa77f8ec7a6d9463fa8f49ae0672fe59dbf4c73
@@ -1461,7 +1446,6 @@ SPEC CHECKSUMS:
   video_player_avfoundation: 02011213dab73ae3687df27ce441fbbcc82b5579
   video_thumbnail: c4e2a3c539e247d4de13cd545344fd2d26ffafd1
   wakelock_plus: 8b09852c8876491e4b6d179e17dfe2a0b5f60d47
-  WebRTC-SDK: c24d2a6c9f571f2ed42297cb8ffba9557093142b
 
 PODFILE CHECKSUM: efd43c12b0d50fe0ebc6ec0718d186c90c94e0f2
 

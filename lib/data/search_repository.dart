@@ -9,6 +9,8 @@ abstract class SearchRepository {
     List<String>? genres,
     List<String>? venueGenres,
     List<String>? occupations,
+    int? minCapacity,
+    int? maxCapacity,
     double? lat,
     double? lng,
     int radius = 50000,
