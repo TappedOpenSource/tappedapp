@@ -282,6 +282,7 @@ export type VenueContactRequest = {
   venue: UserModel;
   user: UserModel;
   bookingEmail: string;
+  attachments: string[];
   note: string;
   timestamp: Timestamp;
   originalMessageId: Option<string>;

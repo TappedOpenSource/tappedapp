@@ -4,7 +4,7 @@ import { marked } from "marked";
 import { LEAP_API_KEY, LEAP_WEBHOOK_SECRET, OPEN_AI_KEY, RESEND_API_KEY, aiModelsRef, auth, avatarsRef, creditsPerPriceId, creditsPerTestPriceId, creditsRef, fcm, guestMarketingPlansRef, mainBucket, marketingFormsRef, marketingPlansRef, projectId, stripeCoverArtTestWebhookSecret, stripeCoverArtWebhookSecret, stripeKey, stripeTestEndpointSecret, stripeTestKey, trainingImagesRef, usersRef } from "./firebase";
 import { Resend } from "resend";
 import { error, info } from "firebase-functions/logger";
-import { basicEnhancedBio, generateBasicAlbumName, generateBasicMarketingPlan, generateSingleBasicMarketingPlan } from "./openai";
+import { basicEnhancedBio, generateBasicMarketingPlan, generateSingleBasicMarketingPlan } from "./openai";
 import { HttpsError, onCall, onRequest } from "firebase-functions/v2/https";
 import { authenticatedRequest, getFoundersDeviceTokens } from "./utils";
 import { sd } from "./leapai";
@@ -206,56 +206,6 @@ export const onDeleteAvatar = functions
     }
 
     await mainBucket.deleteFiles({ prefix: `images/${userId}/avatar_${data.id}.png` });
-  });
-
-export const generateAlbumName = onCall(
-  {
-    secrets: [ OPEN_AI_KEY ],
-  },
-  async (request) => {
-    const oak = OPEN_AI_KEY.value();
-    const {
-      artistName,
-      artistGenres,
-      igFollowerCount,
-    } = request.data;
-
-    if (!(typeof artistName === "string") || artistName.length === 0) {
-      // Throwing an HttpsError so that the client gets the error details.
-      throw new HttpsError("invalid-argument", "The function must be called " +
-        "with argument \"artistName\".");
-    }
-
-    if (!Array.isArray(artistGenres) || artistGenres.length === 0) {
-      // Throwing an HttpsError so that the client gets the error details.
-      throw new HttpsError("invalid-argument", "The function must be called " +
-        "with argument \"artistGenres\".");
-    }
-
-    if (!(typeof igFollowerCount === "number") || artistName.length <= 0) {
-      // Throwing an HttpsError so that the client gets the error details.
-      throw new HttpsError("invalid-argument", "The function must be called " +
-        "with argument \"igFollowerCount\".");
-    }
-
-    // Checking that the user is authenticated.
-    if (!request.auth) {
-      // Throwing an HttpsError so that the client gets the error details.
-      throw new HttpsError("failed-precondition", "The function must be " +
-        "called while authenticated.");
-    }
-
-    const genres = artistGenres.join(", ");
-
-    const res = await generateBasicAlbumName({
-      artistName,
-      artistGenres: genres,
-      igFollowerCount,
-      apiKey: oak,
-    });
-    functions.logger.log({ res });
-
-    return res;
   });
 
 export const createAvatarInferenceJob = onCall(

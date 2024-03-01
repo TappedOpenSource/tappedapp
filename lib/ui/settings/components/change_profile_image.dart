@@ -12,16 +12,14 @@ class ChangeProfileImage extends StatelessWidget {
   const ChangeProfileImage({super.key});
 
   ImageProvider displayProfileImage(
-    File? newProfileImage,
-    String? currentProfileImage,
+    Option<File> newProfileImage,
+    Option<String> currentProfileImage,
   ) {
-    if (newProfileImage == null) {
-      return currentProfileImage == null
-          ? getDefaultImage(const None())
-          : CachedNetworkImageProvider(currentProfileImage);
-    } else {
-      return FileImage(newProfileImage);
-    }
+    return switch ((newProfileImage, currentProfileImage)) {
+    (Some(:final value), _) => FileImage(value) as ImageProvider,
+    (None(), Some(:final value)) => CachedNetworkImageProvider(value),
+    (None(), None()) => getDefaultImage(const None()),
+    };
   }
 
   @override
@@ -42,7 +40,7 @@ class ChangeProfileImage extends StatelessWidget {
                     radius: 45,
                     backgroundImage: displayProfileImage(
                       state.profileImage,
-                      currentUser.profilePicture.toNullable(),
+                      currentUser.profilePicture,
                     ),
                   ),
                   const CircleAvatar(

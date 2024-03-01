@@ -175,7 +175,7 @@ class InfoSliver extends StatelessWidget {
                               ),
                             ),
                           ),
-                        if (isAdmin && bookingEmail != null)
+                        if (isPremium && bookingEmail != null)
                           GestureDetector(
                             onLongPress: () async {
                               await Clipboard.setData(
@@ -202,7 +202,7 @@ class InfoSliver extends StatelessWidget {
                               ),
                             ),
                           ),
-                        if (isAdmin)
+                        if (isPremium)
                           switch (state.visitedUser.phoneNumber) {
                             None() => const SizedBox.shrink(),
                             Some(:final value) => GestureDetector(

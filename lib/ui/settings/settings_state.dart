@@ -17,7 +17,7 @@ class SettingsState extends Equatable {
     this.tiktokFollowers,
     this.spotifyId,
     this.youtubeChannelId,
-    this.profileImage,
+    this.profileImage = const None(),
     this.pressKitFile = const None(),
     this.status = FormzSubmissionStatus.initial,
     this.pushNotificationsDirectMessages = true,
@@ -25,10 +25,8 @@ class SettingsState extends Equatable {
     this.email = '',
     this.password = '',
     this.place = const None(),
-    ImagePicker? picker,
     GlobalKey<FormState>? formKey,
   }) {
-    this.picker = picker ?? ImagePicker();
     this.formKey = formKey ?? GlobalKey<FormState>(debugLabel: 'settings');
   }
 
@@ -51,7 +49,7 @@ class SettingsState extends Equatable {
 
   final Option<File> pressKitFile;
 
-  final File? profileImage;
+  final Option<File> profileImage;
   final FormzSubmissionStatus status;
 
   final String? placeId;
@@ -110,7 +108,7 @@ class SettingsState extends Equatable {
     int? tiktokFollowers,
     String? spotifyId,
     String? youtubeChannelId,
-    File? profileImage,
+    Option<File>? profileImage,
     Option<File>? pressKitFile,
     FormzSubmissionStatus? status,
     bool? pushNotificationsDirectMessages,
@@ -142,7 +140,6 @@ class SettingsState extends Equatable {
           this.pushNotificationsDirectMessages,
       emailNotificationsAppReleases:
           emailNotificationsAppReleases ?? this.emailNotificationsAppReleases,
-      picker: picker,
       formKey: formKey,
       email: email ?? this.email,
       password: password ?? this.password,

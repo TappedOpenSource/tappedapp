@@ -3,6 +3,7 @@ import { onRequest } from "firebase-functions/v2/https";
 import {
   contactVenuesRef,
   fcm,
+  OPEN_AI_KEY,
   orphanEmailsRef,
   POSTMARK_SERVER_ID,
   streamKey,
@@ -362,9 +363,10 @@ async function writeEmailWithAi({ performer, venue, note }: {
 export const notifyFoundersOnVenueContact = onDocumentCreated(
   {
     document: "contactVenues/{userId}/venuesContacted/{venueId}",
-    secrets: [ POSTMARK_SERVER_ID, streamKey, streamSecret ],
+    secrets: [ POSTMARK_SERVER_ID, streamKey, streamSecret, OPEN_AI_KEY ],
   },
   async (event) => {
+    process.env.OPENAI_API_KEY = OPEN_AI_KEY.value();
     const snapshot = event.data;
     const venueContactData = snapshot?.data() as
       | VenueContactRequest

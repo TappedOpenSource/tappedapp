@@ -105,7 +105,9 @@ class _TappedFormState extends State<TappedForm> {
                           color: Colors.red,
                         ),
                       ),
-                    ),
+                    )
+                  else
+                    const SizedBox.shrink(),
                   if (_index != numQuestions - 1 && _isValid)
                     CupertinoButton(
                       onPressed: () {

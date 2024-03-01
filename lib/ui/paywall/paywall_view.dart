@@ -287,7 +287,7 @@ class PaywallView extends StatelessWidget {
                                 child: const Text(
                                   'Cancel',
                                   style: TextStyle(
-                                    color: Colors.grey,
+                                    color: Colors.red,
                                   ),
                                 ),
                               ),

@@ -15,17 +15,16 @@ export const contactVenueTemplate = ({ performer, emailText }: {
   
     ${formatSocialLinks(performer.socialFollowing, spotifyId)}
 
-    <div style="margin-top: 20px;">
-      <h3>Past Bookings</h3>
     <p>You can check my past booking history on my here <a href="https://tapped.ai/${username}">https://tapped.ai/${username}</a></p>
-    </div>
+
+    ${formatPressKit(performer)}
   
   <p>If you require any additional information or wish to discuss this opportunity further please email me back and let me know.<p>
   
-  <p>Sent from <a href="https://tapped.ai">Tapped Ai</a></p>
-  
   <p>Thanks,</p>
   <p>${displayName}</p>
+
+  <p>Sent from <a href="https://tapped.ai">Tapped Ai</a></p>
   `;
 
   const text = `
@@ -36,6 +35,8 @@ export const contactVenueTemplate = ({ performer, emailText }: {
     ${formatSocialLinksText(performer.socialFollowing, spotifyId)}
 
     Past Bookings:  You can check my past booking history on my here https://tapped.ai/${username}
+
+    ${formatPressKitText(performer)}
 
     If you require any additional information or wish to discuss this opportunity further please email me back and let me know.
 
@@ -109,4 +110,22 @@ const formatSocialLinksText = (
         `;
 
   return socialLinks;
+}
+
+const formatPressKit = (performer: UserModel): string => {
+  const pressKitUrl = performer.performerInfo?.pressKitUrl;
+  if (!pressKitUrl) {
+    return "";
+  }
+  return `
+    <p>my press kit: <a href="${pressKitUrl}">${pressKitUrl}</a></p>
+  `;
+}
+
+const formatPressKitText = (performer: UserModel): string => {
+  const pressKitUrl = performer.performerInfo?.pressKitUrl;
+  if (!pressKitUrl) {
+    return "";
+  }
+  return `my press kit: ${pressKitUrl}`;
 }
