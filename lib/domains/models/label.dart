@@ -20,5 +20,4 @@ final List<String> labels = [
   'Epic Records',
   'Virgin Records',
   'Other',
-  'None',
 ];

@@ -6,22 +6,29 @@ part of 'performer_info.dart';
 // JsonSerializableGenerator
 // **************************************************************************
 
-PerformerInfo _$PerformerInfoFromJson(Map<String, dynamic> json) =>
-    PerformerInfo(
-      pressKitUrl: Option<String>.fromJson(
-          json['pressKitUrl'], (value) => value as String),
+_$PerformerInfoImpl _$$PerformerInfoImplFromJson(Map<String, dynamic> json) =>
+    _$PerformerInfoImpl(
+      pressKitUrl: json['pressKitUrl'] == null
+          ? const None()
+          : Option<String>.fromJson(
+              json['pressKitUrl'], (value) => value as String),
       genres: (json['genres'] as List<dynamic>?)
               ?.map((e) => $enumDecode(_$GenreEnumMap, e))
               .toList() ??
-          [],
-      rating: optionalDoubleFromJson(json['rating']),
+          const [],
+      rating: json['rating'] == null
+          ? const None()
+          : Option<double>.fromJson(
+              json['rating'], (value) => (value as num).toDouble()),
       reviewCount: json['reviewCount'] as int? ?? 0,
-      label: json['label'] as String? ?? 'None',
-      spotifyId: Option<String>.fromJson(
-          json['spotifyId'], (value) => value as String),
+      label: json['label'] as String? ?? 'Independent',
+      spotifyUrl: json['spotifyUrl'] == null
+          ? const None()
+          : Option<String>.fromJson(
+              json['spotifyUrl'], (value) => value as String),
     );
 
-Map<String, dynamic> _$PerformerInfoToJson(PerformerInfo instance) =>
+Map<String, dynamic> _$$PerformerInfoImplToJson(_$PerformerInfoImpl instance) =>
     <String, dynamic>{
       'pressKitUrl': instance.pressKitUrl.toJson(
         (value) => value,
@@ -32,7 +39,7 @@ Map<String, dynamic> _$PerformerInfoToJson(PerformerInfo instance) =>
       ),
       'reviewCount': instance.reviewCount,
       'label': instance.label,
-      'spotifyId': instance.spotifyId.toJson(
+      'spotifyUrl': instance.spotifyUrl.toJson(
         (value) => value,
       ),
     };

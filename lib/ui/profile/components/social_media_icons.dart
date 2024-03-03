@@ -36,6 +36,7 @@ class SocialMediaIcons extends StatelessWidget {
     return BlocBuilder<ProfileCubit, ProfileState>(
       builder: (context, state) {
         final socialFollowing = state.visitedUser.socialFollowing;
+        final spotifyUrl = state.visitedUser.performerInfo.flatMap((t) => t.spotifyUrl);
         return Padding(
           padding: const EdgeInsets.only(left: 16, right: 16, top: 16),
           child: Row(
@@ -123,6 +124,24 @@ class SocialMediaIcons extends StatelessWidget {
                       Uri(
                         scheme: 'https',
                         path: 'youtube.com/channel/$value',
+                      ),
+                    );
+                  },
+                ),
+              },
+              switch (spotifyUrl) {
+                None() => null,
+                Some(:final value) => _socialMediaIcon(
+                  color: Colors.green,
+                  icon: const Icon(
+                    FontAwesomeIcons.spotify,
+                    color: Colors.green,
+                  ),
+                  onTap: () {
+                    launchUrl(
+                      Uri(
+                        scheme: 'https',
+                        path: value,
                       ),
                     );
                   },

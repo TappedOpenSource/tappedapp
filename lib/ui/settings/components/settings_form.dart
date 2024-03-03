@@ -120,7 +120,7 @@ class SettingsForm extends StatelessWidget {
                         ),
               ),
               SpotifyTextField(
-                initialValue: state.spotifyId,
+                initialValue: state.spotifyUrl,
                 onChanged: (value) =>
                     context.read<SettingsCubit>().changeSpotify(value),
               ),
