@@ -15,6 +15,7 @@ class SettingsState extends Equatable {
     this.instagramFollowers,
     this.tiktokHandle,
     this.tiktokFollowers,
+    this.soundcloudHandle,
     this.spotifyUrl,
     this.youtubeChannelId,
     this.profileImage = const None(),
@@ -44,6 +45,7 @@ class SettingsState extends Equatable {
   final int? instagramFollowers;
   final String? tiktokHandle;
   final int? tiktokFollowers;
+  final String? soundcloudHandle;
   final String? spotifyUrl;
   final String? youtubeChannelId;
 
@@ -107,6 +109,7 @@ class SettingsState extends Equatable {
     String? tiktokHandle,
     int? tiktokFollowers,
     String? spotifyUrl,
+    String? soundcloudHandle,
     String? youtubeChannelId,
     Option<File>? profileImage,
     Option<File>? pressKitFile,
@@ -131,6 +134,7 @@ class SettingsState extends Equatable {
       instagramFollowers: instagramFollowers ?? this.instagramFollowers,
       tiktokHandle: tiktokHandle ?? this.tiktokHandle,
       tiktokFollowers: tiktokFollowers ?? this.tiktokFollowers,
+      soundcloudHandle: soundcloudHandle ?? this.soundcloudHandle,
       spotifyUrl: spotifyUrl ?? this.spotifyUrl,
       youtubeChannelId: youtubeChannelId ?? this.youtubeChannelId,
       profileImage: profileImage ?? this.profileImage,

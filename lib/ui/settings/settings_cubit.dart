@@ -122,6 +122,9 @@ class SettingsCubit extends Cubit<SettingsState> {
   void changeYoutube(String value) =>
       emit(state.copyWith(youtubeChannelId: value));
 
+  void changeSoundcloud(String value) =>
+      emit(state.copyWith(soundcloudHandle: value));
+
   void changePlace(Option<PlaceData> place, String placeId) {
     emit(
       state.copyWith(
@@ -321,6 +324,7 @@ class SettingsCubit extends Cubit<SettingsState> {
             tiktokFollowers: state.tiktokFollowers ?? 0,
             youtubeChannelId: Option.fromNullable(state.youtubeChannelId),
             spotifyUrl: Option.fromNullable(state.spotifyUrl),
+            soundcloudHandle: Option.fromNullable(state.soundcloudHandle),
           ),
           pushNotifications: currentUser.pushNotifications.copyWith(
             directMessages: state.pushNotificationsDirectMessages,
