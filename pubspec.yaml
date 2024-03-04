@@ -105,7 +105,6 @@ dependencies:
   skeleton_animation: 0.1.4
   skeleton_text: 3.0.1
   skeletons: 0.0.3
-  spotify_sdk: ^3.0.0-dev.3
   stack_trace: ^1.11.1
   stream_chat_flutter: 8.0.0-beta.1
 #  stream_video_flutter: 0.3.1
