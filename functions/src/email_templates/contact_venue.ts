@@ -1,4 +1,4 @@
-import { SocialFollowing, UserModel, Option } from "../types/models";
+import { SocialFollowing, UserModel } from "../types/models";
 
 export const contactVenueTemplate = ({ performer, emailText }: {
   performer: UserModel,
