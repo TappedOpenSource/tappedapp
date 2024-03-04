@@ -182,7 +182,6 @@ class SocialMediaIcons extends StatelessWidget {
                   },
                 ),
               },
-              }
             ].where((element) => element != null).whereType<Widget>().toList(),
           ),
         );
