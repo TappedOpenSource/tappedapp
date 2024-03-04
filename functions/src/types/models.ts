@@ -56,6 +56,13 @@ export type SocialFollowing = {
   twitterFollowers: number;
   facebookHandle?: Option<string>;
   facebookFollowers: number;
+  spotifyUrl?: Option<string>;
+  soundcloudHandle?: Option<string>;
+  soundcloudFollowers: number;
+  audiusHandle?: Option<string>;
+  audiusFollowers: number;
+  twitchHandle?: Option<string>;
+  twitchFollowers: number;
 };
 
 export type BookerInfo = {

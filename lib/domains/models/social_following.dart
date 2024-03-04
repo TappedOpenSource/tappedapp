@@ -18,6 +18,13 @@ class SocialFollowing with _$SocialFollowing {
     @Default(0) int twitterFollowers,
     @Default(None()) Option<String> facebookHandle,
     @Default(0) int facebookFollowers,
+    @Default(None()) Option<String> spotifyUrl,
+    @Default(None()) Option<String> soundcloudHandle,
+    @Default(0) int soundcloudFollowers,
+    @Default(None()) Option<String> audiusHandle,
+    @Default(0) int audiusFollowers,
+    @Default(None()) Option<String> twitchHandle,
+    @Default(0) int twitchFollowers,
   }) = _SocialFollowing;
 
   // fromJson

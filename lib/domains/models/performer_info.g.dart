@@ -22,10 +22,6 @@ _$PerformerInfoImpl _$$PerformerInfoImplFromJson(Map<String, dynamic> json) =>
               json['rating'], (value) => (value as num).toDouble()),
       reviewCount: json['reviewCount'] as int? ?? 0,
       label: json['label'] as String? ?? 'Independent',
-      spotifyUrl: json['spotifyUrl'] == null
-          ? const None()
-          : Option<String>.fromJson(
-              json['spotifyUrl'], (value) => value as String),
     );
 
 Map<String, dynamic> _$$PerformerInfoImplToJson(_$PerformerInfoImpl instance) =>
@@ -39,9 +35,6 @@ Map<String, dynamic> _$$PerformerInfoImplToJson(_$PerformerInfoImpl instance) =>
       ),
       'reviewCount': instance.reviewCount,
       'label': instance.label,
-      'spotifyUrl': instance.spotifyUrl.toJson(
-        (value) => value,
-      ),
     };
 
 const _$GenreEnumMap = {

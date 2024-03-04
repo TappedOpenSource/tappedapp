@@ -33,6 +33,25 @@ _$SocialFollowingImpl _$$SocialFollowingImplFromJson(
           : Option<String>.fromJson(
               json['facebookHandle'], (value) => value as String),
       facebookFollowers: json['facebookFollowers'] as int? ?? 0,
+      spotifyUrl: json['spotifyUrl'] == null
+          ? const None()
+          : Option<String>.fromJson(
+              json['spotifyUrl'], (value) => value as String),
+      soundcloudHandle: json['soundcloudHandle'] == null
+          ? const None()
+          : Option<String>.fromJson(
+              json['soundcloudHandle'], (value) => value as String),
+      soundcloudFollowers: json['soundcloudFollowers'] as int? ?? 0,
+      audiusHandle: json['audiusHandle'] == null
+          ? const None()
+          : Option<String>.fromJson(
+              json['audiusHandle'], (value) => value as String),
+      audiusFollowers: json['audiusFollowers'] as int? ?? 0,
+      twitchHandle: json['twitchHandle'] == null
+          ? const None()
+          : Option<String>.fromJson(
+              json['twitchHandle'], (value) => value as String),
+      twitchFollowers: json['twitchFollowers'] as int? ?? 0,
     );
 
 Map<String, dynamic> _$$SocialFollowingImplToJson(
@@ -57,4 +76,19 @@ Map<String, dynamic> _$$SocialFollowingImplToJson(
         (value) => value,
       ),
       'facebookFollowers': instance.facebookFollowers,
+      'spotifyUrl': instance.spotifyUrl.toJson(
+        (value) => value,
+      ),
+      'soundcloudHandle': instance.soundcloudHandle.toJson(
+        (value) => value,
+      ),
+      'soundcloudFollowers': instance.soundcloudFollowers,
+      'audiusHandle': instance.audiusHandle.toJson(
+        (value) => value,
+      ),
+      'audiusFollowers': instance.audiusFollowers,
+      'twitchHandle': instance.twitchHandle.toJson(
+        (value) => value,
+      ),
+      'twitchFollowers': instance.twitchFollowers,
     };

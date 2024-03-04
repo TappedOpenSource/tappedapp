@@ -14,7 +14,6 @@ class PerformerInfo with _$PerformerInfo {
     @Default(None()) Option<double> rating,
     @Default(0) int reviewCount,
     @Default('Independent') String label,
-    @Default(None()) Option<String> spotifyUrl,
   }) = _PerformerInfo;
 
   // fromJson

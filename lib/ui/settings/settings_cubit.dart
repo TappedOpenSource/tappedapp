@@ -72,10 +72,7 @@ class SettingsCubit extends Cubit<SettingsState> {
         placeId: currentUser.location
             .toNullable()
             ?.placeId,
-        spotifyUrl: currentUser.performerInfo
-            .toNullable()
-            ?.spotifyUrl
-            .toNullable(),
+        spotifyUrl: currentUser.socialFollowing.spotifyUrl.toNullable(),
         pushNotificationsDirectMessages:
         currentUser.pushNotifications.directMessages,
       ),
@@ -300,14 +297,12 @@ class SettingsCubit extends Cubit<SettingsState> {
               PerformerInfo(
                 genres: state.genres,
                 label: state.label ?? 'Independent',
-                spotifyUrl: Option.fromNullable(state.spotifyUrl),
                 pressKitUrl: pressKitUrl,
               ),
           Some(:final value) =>
               value.copyWith(
                 genres: state.genres,
                 label: state.label ?? 'Independent',
-                spotifyUrl: Option.fromNullable(state.spotifyUrl),
                 pressKitUrl: pressKitUrl,
               ),
         };
@@ -325,6 +320,7 @@ class SettingsCubit extends Cubit<SettingsState> {
             tiktokHandle: Option.fromNullable(state.tiktokHandle),
             tiktokFollowers: state.tiktokFollowers ?? 0,
             youtubeChannelId: Option.fromNullable(state.youtubeChannelId),
+            spotifyUrl: Option.fromNullable(state.spotifyUrl),
           ),
           pushNotifications: currentUser.pushNotifications.copyWith(
             directMessages: state.pushNotificationsDirectMessages,

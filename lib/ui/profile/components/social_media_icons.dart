@@ -36,7 +36,6 @@ class SocialMediaIcons extends StatelessWidget {
     return BlocBuilder<ProfileCubit, ProfileState>(
       builder: (context, state) {
         final socialFollowing = state.visitedUser.socialFollowing;
-        final spotifyUrl = state.visitedUser.performerInfo.flatMap((t) => t.spotifyUrl);
         return Padding(
           padding: const EdgeInsets.only(left: 16, right: 16, top: 16),
           child: Row(
@@ -129,7 +128,7 @@ class SocialMediaIcons extends StatelessWidget {
                   },
                 ),
               },
-              switch (spotifyUrl) {
+              switch (socialFollowing.spotifyUrl) {
                 None() => null,
                 Some(:final value) => _socialMediaIcon(
                   color: Colors.green,
@@ -147,6 +146,43 @@ class SocialMediaIcons extends StatelessWidget {
                   },
                 ),
               },
+              switch (socialFollowing.soundcloudHandle) {
+                None() => null,
+                Some(:final value) => _socialMediaIcon(
+                  color: Colors.orange,
+                  icon: const Icon(
+                    FontAwesomeIcons.soundcloud,
+                    color: Colors.orange,
+                  ),
+                  onTap: () {
+                    launchUrl(
+                      Uri(
+                        scheme: 'https',
+                        path: 'soundcloud.com/$value',
+                      ),
+                    );
+                  },
+                ),
+              },
+              switch (socialFollowing.twitchHandle) {
+                None() => null,
+                Some(:final value) => _socialMediaIcon(
+                  color: Colors.purple,
+                  icon: const Icon(
+                    FontAwesomeIcons.twitch,
+                    color: Colors.purple,
+                  ),
+                  onTap: () {
+                    launchUrl(
+                      Uri(
+                        scheme: 'https',
+                        path: 'twitch.tv/$value',
+                      ),
+                    );
+                  },
+                ),
+              },
+              }
             ].where((element) => element != null).whereType<Widget>().toList(),
           ),
         );

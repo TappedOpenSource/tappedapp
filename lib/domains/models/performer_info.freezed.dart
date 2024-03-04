@@ -25,7 +25,6 @@ mixin _$PerformerInfo {
   Option<double> get rating => throw _privateConstructorUsedError;
   int get reviewCount => throw _privateConstructorUsedError;
   String get label => throw _privateConstructorUsedError;
-  Option<String> get spotifyUrl => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
@@ -44,8 +43,7 @@ abstract class $PerformerInfoCopyWith<$Res> {
       List<Genre> genres,
       Option<double> rating,
       int reviewCount,
-      String label,
-      Option<String> spotifyUrl});
+      String label});
 }
 
 /// @nodoc
@@ -66,7 +64,6 @@ class _$PerformerInfoCopyWithImpl<$Res, $Val extends PerformerInfo>
     Object? rating = null,
     Object? reviewCount = null,
     Object? label = null,
-    Object? spotifyUrl = null,
   }) {
     return _then(_value.copyWith(
       pressKitUrl: null == pressKitUrl
@@ -89,10 +86,6 @@ class _$PerformerInfoCopyWithImpl<$Res, $Val extends PerformerInfo>
           ? _value.label
           : label // ignore: cast_nullable_to_non_nullable
               as String,
-      spotifyUrl: null == spotifyUrl
-          ? _value.spotifyUrl
-          : spotifyUrl // ignore: cast_nullable_to_non_nullable
-              as Option<String>,
     ) as $Val);
   }
 }
@@ -110,8 +103,7 @@ abstract class _$$PerformerInfoImplCopyWith<$Res>
       List<Genre> genres,
       Option<double> rating,
       int reviewCount,
-      String label,
-      Option<String> spotifyUrl});
+      String label});
 }
 
 /// @nodoc
@@ -130,7 +122,6 @@ class __$$PerformerInfoImplCopyWithImpl<$Res>
     Object? rating = null,
     Object? reviewCount = null,
     Object? label = null,
-    Object? spotifyUrl = null,
   }) {
     return _then(_$PerformerInfoImpl(
       pressKitUrl: null == pressKitUrl
@@ -153,10 +144,6 @@ class __$$PerformerInfoImplCopyWithImpl<$Res>
           ? _value.label
           : label // ignore: cast_nullable_to_non_nullable
               as String,
-      spotifyUrl: null == spotifyUrl
-          ? _value.spotifyUrl
-          : spotifyUrl // ignore: cast_nullable_to_non_nullable
-              as Option<String>,
     ));
   }
 }
@@ -169,8 +156,7 @@ class _$PerformerInfoImpl implements _PerformerInfo {
       final List<Genre> genres = const [],
       this.rating = const None(),
       this.reviewCount = 0,
-      this.label = 'Independent',
-      this.spotifyUrl = const None()})
+      this.label = 'Independent'})
       : _genres = genres;
 
   factory _$PerformerInfoImpl.fromJson(Map<String, dynamic> json) =>
@@ -197,13 +183,10 @@ class _$PerformerInfoImpl implements _PerformerInfo {
   @override
   @JsonKey()
   final String label;
-  @override
-  @JsonKey()
-  final Option<String> spotifyUrl;
 
   @override
   String toString() {
-    return 'PerformerInfo(pressKitUrl: $pressKitUrl, genres: $genres, rating: $rating, reviewCount: $reviewCount, label: $label, spotifyUrl: $spotifyUrl)';
+    return 'PerformerInfo(pressKitUrl: $pressKitUrl, genres: $genres, rating: $rating, reviewCount: $reviewCount, label: $label)';
   }
 
   @override
@@ -217,21 +200,13 @@ class _$PerformerInfoImpl implements _PerformerInfo {
             (identical(other.rating, rating) || other.rating == rating) &&
             (identical(other.reviewCount, reviewCount) ||
                 other.reviewCount == reviewCount) &&
-            (identical(other.label, label) || other.label == label) &&
-            (identical(other.spotifyUrl, spotifyUrl) ||
-                other.spotifyUrl == spotifyUrl));
+            (identical(other.label, label) || other.label == label));
   }
 
   @JsonKey(ignore: true)
   @override
-  int get hashCode => Object.hash(
-      runtimeType,
-      pressKitUrl,
-      const DeepCollectionEquality().hash(_genres),
-      rating,
-      reviewCount,
-      label,
-      spotifyUrl);
+  int get hashCode => Object.hash(runtimeType, pressKitUrl,
+      const DeepCollectionEquality().hash(_genres), rating, reviewCount, label);
 
   @JsonKey(ignore: true)
   @override
@@ -253,8 +228,7 @@ abstract class _PerformerInfo implements PerformerInfo {
       final List<Genre> genres,
       final Option<double> rating,
       final int reviewCount,
-      final String label,
-      final Option<String> spotifyUrl}) = _$PerformerInfoImpl;
+      final String label}) = _$PerformerInfoImpl;
 
   factory _PerformerInfo.fromJson(Map<String, dynamic> json) =
       _$PerformerInfoImpl.fromJson;
@@ -269,8 +243,6 @@ abstract class _PerformerInfo implements PerformerInfo {
   int get reviewCount;
   @override
   String get label;
-  @override
-  Option<String> get spotifyUrl;
   @override
   @JsonKey(ignore: true)
   _$$PerformerInfoImplCopyWith<_$PerformerInfoImpl> get copyWith =>

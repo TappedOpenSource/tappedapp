@@ -3,13 +3,15 @@ import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
+import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:intheloopapp/domains/activity_bloc/activity_bloc.dart';
 import 'package:intheloopapp/domains/authentication_bloc/authentication_bloc.dart';
 import 'package:intheloopapp/domains/bookings_bloc/bookings_bloc.dart';
 import 'package:intheloopapp/domains/deep_link_bloc/deep_link_bloc.dart';
 import 'package:intheloopapp/domains/down_for_maintenance_bloc/down_for_maintenance_bloc.dart';
 import 'package:intheloopapp/domains/onboarding_bloc/onboarding_bloc.dart';
-import 'package:intheloopapp/domains/subscription_bloc/subscription_bloc.dart' hide Uninitialized;
+import 'package:intheloopapp/domains/subscription_bloc/subscription_bloc.dart'
+    hide Uninitialized;
 import 'package:intheloopapp/ui/app_theme_cubit.dart';
 import 'package:intheloopapp/ui/common/down_for_maintenance_view.dart';
 import 'package:intheloopapp/ui/loading/loading_view.dart';
@@ -55,6 +57,7 @@ class App extends StatelessWidget {
     );
     context.read<DeepLinkBloc>().add(MonitorDeepLinks());
 
+    FlutterNativeSplash.remove();
     return BlocBuilder<OnboardingBloc, OnboardingState>(
       builder: (context, onboardState) {
         return switch (onboardState) {
@@ -125,6 +128,7 @@ class App extends StatelessWidget {
                       // return const OnboardingView();
 
                       if (downState.downForMaintenance) {
+                        FlutterNativeSplash.remove();
                         return const DownForMainenanceView();
                       }
 
@@ -136,12 +140,18 @@ class App extends StatelessWidget {
                         ) {
                           try {
                             return switch (authState) {
-                              Uninitialized() => const LoadingView(),
+                              Uninitialized() => (() {
+                                  FlutterNativeSplash.remove();
+                                  return const LoadingView();
+                                })(),
                               Authenticated() => _authenticated(
                                   context,
                                   authState.currentAuthUser.uid,
                                 ),
-                              Unauthenticated() => const SplashView(),
+                              Unauthenticated() => (() {
+                                FlutterNativeSplash.remove();
+                                return const SplashView();
+                              })(),
                             };
                           } catch (e, s) {
                             FirebaseCrashlytics.instance.recordError(
@@ -149,6 +159,7 @@ class App extends StatelessWidget {
                               s,
                               fatal: true,
                             );
+                            FlutterNativeSplash.remove();
                             return const LoadingView();
                           }
                         },

@@ -4,7 +4,6 @@ export const contactVenueTemplate = ({ performer, emailText }: {
   performer: UserModel,
   emailText: string,
 }): { html: string; text: string } => {
-  const spotifyId = performer.performerInfo?.spotifyId;
   const username = performer.username;
   const displayName = performer.artistName || username;
 
@@ -32,7 +31,7 @@ export const contactVenueTemplate = ({ performer, emailText }: {
 
     ${emailText}
 
-    ${formatSocialLinksText(performer.socialFollowing, spotifyId)}
+    ${formatSocialLinksText(performer.socialFollowing)}
 
     Past Bookings:  You can check my past booking history on my here https://tapped.ai/${username}
 
@@ -54,9 +53,8 @@ export const contactVenueTemplate = ({ performer, emailText }: {
 
 const formatSocialLinks = (
   socialFollowing: SocialFollowing, 
-  spotifyId: Option<string>,
 ): string => {
-  const { instagramHandle, facebookHandle, twitterHandle } = socialFollowing;
+  const { instagramHandle, facebookHandle, twitterHandle, spotifyUrl } = socialFollowing;
   const row = (label: string, link: string) => {
     if (!link) {
       return "";
@@ -67,7 +65,7 @@ const formatSocialLinks = (
   const instagram = instagramHandle ? row("Instagram", `https://instagram.com/${instagramHandle}`) : "";
   const facebook = facebookHandle ? row("Facebook", `https://facebook.com/${facebookHandle}`) : "";
   const twitter = twitterHandle ? row("Twitter", `https://twitter.com/${twitterHandle}`) : "";
-  const spotify = spotifyId ? row("Spotify", `https://open.spotify.com/artist/${spotifyId}`) : "";
+  const spotify = spotifyId ? row("Spotify", spotifyUrl) : "";
   //   const youtube = youtubeHandle ? row("Youtube", `https://youtube.com/${youtubeHandle}`) : "";
 
   const socialLinks = `

@@ -29,6 +29,13 @@ mixin _$SocialFollowing {
   int get twitterFollowers => throw _privateConstructorUsedError;
   Option<String> get facebookHandle => throw _privateConstructorUsedError;
   int get facebookFollowers => throw _privateConstructorUsedError;
+  Option<String> get spotifyUrl => throw _privateConstructorUsedError;
+  Option<String> get soundcloudHandle => throw _privateConstructorUsedError;
+  int get soundcloudFollowers => throw _privateConstructorUsedError;
+  Option<String> get audiusHandle => throw _privateConstructorUsedError;
+  int get audiusFollowers => throw _privateConstructorUsedError;
+  Option<String> get twitchHandle => throw _privateConstructorUsedError;
+  int get twitchFollowers => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
@@ -51,7 +58,14 @@ abstract class $SocialFollowingCopyWith<$Res> {
       Option<String> twitterHandle,
       int twitterFollowers,
       Option<String> facebookHandle,
-      int facebookFollowers});
+      int facebookFollowers,
+      Option<String> spotifyUrl,
+      Option<String> soundcloudHandle,
+      int soundcloudFollowers,
+      Option<String> audiusHandle,
+      int audiusFollowers,
+      Option<String> twitchHandle,
+      int twitchFollowers});
 }
 
 /// @nodoc
@@ -76,6 +90,13 @@ class _$SocialFollowingCopyWithImpl<$Res, $Val extends SocialFollowing>
     Object? twitterFollowers = null,
     Object? facebookHandle = null,
     Object? facebookFollowers = null,
+    Object? spotifyUrl = null,
+    Object? soundcloudHandle = null,
+    Object? soundcloudFollowers = null,
+    Object? audiusHandle = null,
+    Object? audiusFollowers = null,
+    Object? twitchHandle = null,
+    Object? twitchFollowers = null,
   }) {
     return _then(_value.copyWith(
       youtubeChannelId: null == youtubeChannelId
@@ -114,6 +135,34 @@ class _$SocialFollowingCopyWithImpl<$Res, $Val extends SocialFollowing>
           ? _value.facebookFollowers
           : facebookFollowers // ignore: cast_nullable_to_non_nullable
               as int,
+      spotifyUrl: null == spotifyUrl
+          ? _value.spotifyUrl
+          : spotifyUrl // ignore: cast_nullable_to_non_nullable
+              as Option<String>,
+      soundcloudHandle: null == soundcloudHandle
+          ? _value.soundcloudHandle
+          : soundcloudHandle // ignore: cast_nullable_to_non_nullable
+              as Option<String>,
+      soundcloudFollowers: null == soundcloudFollowers
+          ? _value.soundcloudFollowers
+          : soundcloudFollowers // ignore: cast_nullable_to_non_nullable
+              as int,
+      audiusHandle: null == audiusHandle
+          ? _value.audiusHandle
+          : audiusHandle // ignore: cast_nullable_to_non_nullable
+              as Option<String>,
+      audiusFollowers: null == audiusFollowers
+          ? _value.audiusFollowers
+          : audiusFollowers // ignore: cast_nullable_to_non_nullable
+              as int,
+      twitchHandle: null == twitchHandle
+          ? _value.twitchHandle
+          : twitchHandle // ignore: cast_nullable_to_non_nullable
+              as Option<String>,
+      twitchFollowers: null == twitchFollowers
+          ? _value.twitchFollowers
+          : twitchFollowers // ignore: cast_nullable_to_non_nullable
+              as int,
     ) as $Val);
   }
 }
@@ -135,7 +184,14 @@ abstract class _$$SocialFollowingImplCopyWith<$Res>
       Option<String> twitterHandle,
       int twitterFollowers,
       Option<String> facebookHandle,
-      int facebookFollowers});
+      int facebookFollowers,
+      Option<String> spotifyUrl,
+      Option<String> soundcloudHandle,
+      int soundcloudFollowers,
+      Option<String> audiusHandle,
+      int audiusFollowers,
+      Option<String> twitchHandle,
+      int twitchFollowers});
 }
 
 /// @nodoc
@@ -158,6 +214,13 @@ class __$$SocialFollowingImplCopyWithImpl<$Res>
     Object? twitterFollowers = null,
     Object? facebookHandle = null,
     Object? facebookFollowers = null,
+    Object? spotifyUrl = null,
+    Object? soundcloudHandle = null,
+    Object? soundcloudFollowers = null,
+    Object? audiusHandle = null,
+    Object? audiusFollowers = null,
+    Object? twitchHandle = null,
+    Object? twitchFollowers = null,
   }) {
     return _then(_$SocialFollowingImpl(
       youtubeChannelId: null == youtubeChannelId
@@ -196,6 +259,34 @@ class __$$SocialFollowingImplCopyWithImpl<$Res>
           ? _value.facebookFollowers
           : facebookFollowers // ignore: cast_nullable_to_non_nullable
               as int,
+      spotifyUrl: null == spotifyUrl
+          ? _value.spotifyUrl
+          : spotifyUrl // ignore: cast_nullable_to_non_nullable
+              as Option<String>,
+      soundcloudHandle: null == soundcloudHandle
+          ? _value.soundcloudHandle
+          : soundcloudHandle // ignore: cast_nullable_to_non_nullable
+              as Option<String>,
+      soundcloudFollowers: null == soundcloudFollowers
+          ? _value.soundcloudFollowers
+          : soundcloudFollowers // ignore: cast_nullable_to_non_nullable
+              as int,
+      audiusHandle: null == audiusHandle
+          ? _value.audiusHandle
+          : audiusHandle // ignore: cast_nullable_to_non_nullable
+              as Option<String>,
+      audiusFollowers: null == audiusFollowers
+          ? _value.audiusFollowers
+          : audiusFollowers // ignore: cast_nullable_to_non_nullable
+              as int,
+      twitchHandle: null == twitchHandle
+          ? _value.twitchHandle
+          : twitchHandle // ignore: cast_nullable_to_non_nullable
+              as Option<String>,
+      twitchFollowers: null == twitchFollowers
+          ? _value.twitchFollowers
+          : twitchFollowers // ignore: cast_nullable_to_non_nullable
+              as int,
     ));
   }
 }
@@ -212,7 +303,14 @@ class _$SocialFollowingImpl implements _SocialFollowing {
       this.twitterHandle = const None(),
       this.twitterFollowers = 0,
       this.facebookHandle = const None(),
-      this.facebookFollowers = 0});
+      this.facebookFollowers = 0,
+      this.spotifyUrl = const None(),
+      this.soundcloudHandle = const None(),
+      this.soundcloudFollowers = 0,
+      this.audiusHandle = const None(),
+      this.audiusFollowers = 0,
+      this.twitchHandle = const None(),
+      this.twitchFollowers = 0});
 
   factory _$SocialFollowingImpl.fromJson(Map<String, dynamic> json) =>
       _$$SocialFollowingImplFromJson(json);
@@ -244,10 +342,31 @@ class _$SocialFollowingImpl implements _SocialFollowing {
   @override
   @JsonKey()
   final int facebookFollowers;
+  @override
+  @JsonKey()
+  final Option<String> spotifyUrl;
+  @override
+  @JsonKey()
+  final Option<String> soundcloudHandle;
+  @override
+  @JsonKey()
+  final int soundcloudFollowers;
+  @override
+  @JsonKey()
+  final Option<String> audiusHandle;
+  @override
+  @JsonKey()
+  final int audiusFollowers;
+  @override
+  @JsonKey()
+  final Option<String> twitchHandle;
+  @override
+  @JsonKey()
+  final int twitchFollowers;
 
   @override
   String toString() {
-    return 'SocialFollowing(youtubeChannelId: $youtubeChannelId, tiktokHandle: $tiktokHandle, tiktokFollowers: $tiktokFollowers, instagramHandle: $instagramHandle, instagramFollowers: $instagramFollowers, twitterHandle: $twitterHandle, twitterFollowers: $twitterFollowers, facebookHandle: $facebookHandle, facebookFollowers: $facebookFollowers)';
+    return 'SocialFollowing(youtubeChannelId: $youtubeChannelId, tiktokHandle: $tiktokHandle, tiktokFollowers: $tiktokFollowers, instagramHandle: $instagramHandle, instagramFollowers: $instagramFollowers, twitterHandle: $twitterHandle, twitterFollowers: $twitterFollowers, facebookHandle: $facebookHandle, facebookFollowers: $facebookFollowers, spotifyUrl: $spotifyUrl, soundcloudHandle: $soundcloudHandle, soundcloudFollowers: $soundcloudFollowers, audiusHandle: $audiusHandle, audiusFollowers: $audiusFollowers, twitchHandle: $twitchHandle, twitchFollowers: $twitchFollowers)';
   }
 
   @override
@@ -272,7 +391,21 @@ class _$SocialFollowingImpl implements _SocialFollowing {
             (identical(other.facebookHandle, facebookHandle) ||
                 other.facebookHandle == facebookHandle) &&
             (identical(other.facebookFollowers, facebookFollowers) ||
-                other.facebookFollowers == facebookFollowers));
+                other.facebookFollowers == facebookFollowers) &&
+            (identical(other.spotifyUrl, spotifyUrl) ||
+                other.spotifyUrl == spotifyUrl) &&
+            (identical(other.soundcloudHandle, soundcloudHandle) ||
+                other.soundcloudHandle == soundcloudHandle) &&
+            (identical(other.soundcloudFollowers, soundcloudFollowers) ||
+                other.soundcloudFollowers == soundcloudFollowers) &&
+            (identical(other.audiusHandle, audiusHandle) ||
+                other.audiusHandle == audiusHandle) &&
+            (identical(other.audiusFollowers, audiusFollowers) ||
+                other.audiusFollowers == audiusFollowers) &&
+            (identical(other.twitchHandle, twitchHandle) ||
+                other.twitchHandle == twitchHandle) &&
+            (identical(other.twitchFollowers, twitchFollowers) ||
+                other.twitchFollowers == twitchFollowers));
   }
 
   @JsonKey(ignore: true)
@@ -287,7 +420,14 @@ class _$SocialFollowingImpl implements _SocialFollowing {
       twitterHandle,
       twitterFollowers,
       facebookHandle,
-      facebookFollowers);
+      facebookFollowers,
+      spotifyUrl,
+      soundcloudHandle,
+      soundcloudFollowers,
+      audiusHandle,
+      audiusFollowers,
+      twitchHandle,
+      twitchFollowers);
 
   @JsonKey(ignore: true)
   @override
@@ -314,7 +454,14 @@ abstract class _SocialFollowing implements SocialFollowing {
       final Option<String> twitterHandle,
       final int twitterFollowers,
       final Option<String> facebookHandle,
-      final int facebookFollowers}) = _$SocialFollowingImpl;
+      final int facebookFollowers,
+      final Option<String> spotifyUrl,
+      final Option<String> soundcloudHandle,
+      final int soundcloudFollowers,
+      final Option<String> audiusHandle,
+      final int audiusFollowers,
+      final Option<String> twitchHandle,
+      final int twitchFollowers}) = _$SocialFollowingImpl;
 
   factory _SocialFollowing.fromJson(Map<String, dynamic> json) =
       _$SocialFollowingImpl.fromJson;
@@ -337,6 +484,20 @@ abstract class _SocialFollowing implements SocialFollowing {
   Option<String> get facebookHandle;
   @override
   int get facebookFollowers;
+  @override
+  Option<String> get spotifyUrl;
+  @override
+  Option<String> get soundcloudHandle;
+  @override
+  int get soundcloudFollowers;
+  @override
+  Option<String> get audiusHandle;
+  @override
+  int get audiusFollowers;
+  @override
+  Option<String> get twitchHandle;
+  @override
+  int get twitchFollowers;
   @override
   @JsonKey(ignore: true)
   _$$SocialFollowingImplCopyWith<_$SocialFollowingImpl> get copyWith =>
