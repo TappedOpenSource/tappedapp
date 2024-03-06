@@ -31,6 +31,7 @@ class UserCard extends StatelessWidget {
       decimalDigits: 0,
       symbol: '',
     ).format(user.socialFollowing.audienceSize)} followers';
+    final category = user.performerInfo.map((t) => t.category);
 
     return CurrentUserBuilder(
       errorWidget: const ListTile(
@@ -136,13 +137,22 @@ class UserCard extends StatelessWidget {
                                   ],
                                 ),
                               ),
-                              if (user.socialFollowing.audienceSize != 0)
-                                Text(
-                                  audienceText,
-                                  style: const TextStyle(
-                                    color: Colors.white,
+                              switch (category) {
+                                Some(:final value) => Text(
+                                    value.name,
+                                    style: const TextStyle(
+                                      color: Colors.white,
+                                    ),
                                   ),
-                                ),
+                                None() => const SizedBox.shrink(),
+                              },
+                              // if (user.socialFollowing.audienceSize != 0)
+                              //   Text(
+                              //     audienceText,
+                              //     style: const TextStyle(
+                              //       color: Colors.white,
+                              //     ),
+                              //   ),
                             ],
                           ),
                         ),

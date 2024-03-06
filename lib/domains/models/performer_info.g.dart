@@ -22,6 +22,9 @@ _$PerformerInfoImpl _$$PerformerInfoImplFromJson(Map<String, dynamic> json) =>
               json['rating'], (value) => (value as num).toDouble()),
       reviewCount: json['reviewCount'] as int? ?? 0,
       label: json['label'] as String? ?? 'Independent',
+      category:
+          $enumDecodeNullable(_$PerformerCategoryEnumMap, json['category']) ??
+              PerformerCategory.undiscovered,
     );
 
 Map<String, dynamic> _$$PerformerInfoImplToJson(_$PerformerInfoImpl instance) =>
@@ -35,6 +38,7 @@ Map<String, dynamic> _$$PerformerInfoImplToJson(_$PerformerInfoImpl instance) =>
       ),
       'reviewCount': instance.reviewCount,
       'label': instance.label,
+      'category': _$PerformerCategoryEnumMap[instance.category]!,
     };
 
 const _$GenreEnumMap = {
@@ -65,4 +69,12 @@ const _$GenreEnumMap = {
   Genre.theater: 'theater',
   Genre.opera: 'opera',
   Genre.other: 'other',
+};
+
+const _$PerformerCategoryEnumMap = {
+  PerformerCategory.undiscovered: 'undiscovered',
+  PerformerCategory.emerging: 'emerging',
+  PerformerCategory.hometownHero: 'hometownHero',
+  PerformerCategory.mainstream: 'mainstream',
+  PerformerCategory.legendary: 'legendary',
 };
