@@ -109,8 +109,6 @@ class ChannelListView extends StatelessWidget {
               return const LoadingView();
             }
 
-            return _buildEmptyFeed(context);
-
             return StreamChannelListView(
               controller: StreamChannelListController(
                 client: StreamChat.of(context).client,

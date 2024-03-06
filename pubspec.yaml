@@ -1,5 +1,5 @@
 name: intheloopapp
-version: 1.2.77+90
+version: 1.2.78+91
 publish_to: none
 description: Mobile app for Tapped.
 environment: 
@@ -63,6 +63,7 @@ dependencies:
   fpdart: ^1.1.0
   freezed_annotation: ^2.4.1
   gallery_saver: ^2.3.2
+  gauge_indicator: ^0.4.3
   geolocator: ^10.1.0
   georange: 1.0.0
   google_fonts: 6.1.0
@@ -109,6 +110,7 @@ dependencies:
   stream_chat_flutter: 8.0.0-beta.1
 #  stream_video_flutter: 0.3.1
   timeago: 3.6.0
+  timelines: ^0.1.0
   transparent_pointer: 1.0.0
   uni_links: 0.5.1
   url_launcher: ^6.2.4

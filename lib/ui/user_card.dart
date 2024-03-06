@@ -1,6 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:fpdart/fpdart.dart';
+import 'package:intheloopapp/domains/models/performer_info.dart';
 import 'package:intheloopapp/domains/models/social_following.dart';
 import 'package:intheloopapp/domains/models/user_model.dart';
 import 'package:intheloopapp/domains/navigation_bloc/navigation_bloc.dart';
@@ -27,10 +28,10 @@ class UserCard extends StatelessWidget {
     final imageUrl = user.profilePicture.toNullable();
     if (user.deleted) return const SizedBox.shrink();
 
-    final audienceText = '${NumberFormat.compactCurrency(
-      decimalDigits: 0,
-      symbol: '',
-    ).format(user.socialFollowing.audienceSize)} followers';
+    // final audienceText = '${NumberFormat.compactCurrency(
+    //   decimalDigits: 0,
+    //   symbol: '',
+    // ).format(user.socialFollowing.audienceSize)} followers';
     final category = user.performerInfo.map((t) => t.category);
 
     return CurrentUserBuilder(
@@ -96,12 +97,15 @@ class UserCard extends StatelessWidget {
                         Container(
                           decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(10),
-                            gradient: const LinearGradient(
+                            gradient: LinearGradient(
                               begin: Alignment.topCenter,
                               end: Alignment.bottomCenter,
                               colors: [
                                 Colors.transparent,
-                                Colors.black,
+                                category.fold(
+                                  () => Colors.black,
+                                  (t) => t.color,
+                                ),
                               ],
                             ),
                           ),
@@ -139,7 +143,7 @@ class UserCard extends StatelessWidget {
                               ),
                               switch (category) {
                                 Some(:final value) => Text(
-                                    value.name,
+                                    value.formattedName,
                                     style: const TextStyle(
                                       color: Colors.white,
                                     ),

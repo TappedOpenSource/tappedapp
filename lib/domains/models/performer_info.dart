@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 import 'package:fpdart/fpdart.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:intheloopapp/domains/models/genre.dart';
@@ -47,7 +48,7 @@ enum PerformerCategory {
 }
 
 extension PerformerCategoryX on PerformerCategory {
-  String get name {
+  String get formattedName {
     return switch (this) {
       PerformerCategory.undiscovered => 'Undiscovered',
       PerformerCategory.emerging => 'Emerging',
@@ -64,6 +65,30 @@ extension PerformerCategoryX on PerformerCategory {
       PerformerCategory.hometownHero => 1500,
       PerformerCategory.mainstream => 100000,
       PerformerCategory.legendary => 1000000
+    };
+  }
+
+  (int, int) get performerScoreRange {
+    return switch (this) {
+      PerformerCategory.undiscovered => (0, 33),
+      PerformerCategory.emerging => (33, 66),
+      PerformerCategory.hometownHero => (66, 80),
+      PerformerCategory.mainstream => (80, 95),
+      PerformerCategory.legendary => (95, 100),
+    };
+  }
+
+  int get performerScore  {
+    return (performerScoreRange.$2 - performerScoreRange.$1 / 2).toInt();
+  }
+
+  Color get color {
+    return switch (this) {
+      PerformerCategory.undiscovered => Colors.grey,
+      PerformerCategory.emerging => Colors.lightBlueAccent,
+      PerformerCategory.hometownHero => Colors.orange,
+      PerformerCategory.mainstream => Colors.purple,
+      PerformerCategory.legendary => Colors.red,
     };
   }
 }

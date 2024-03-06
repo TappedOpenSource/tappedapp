@@ -1,6 +1,7 @@
 
 final List<String> occupations = [
   'Artist',
+  'Band',
   'DJ',
   'Music Producer',
   'Recording Engineer',

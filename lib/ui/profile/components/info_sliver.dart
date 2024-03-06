@@ -8,7 +8,7 @@ import 'package:intheloopapp/data/auth_repository.dart';
 import 'package:intheloopapp/domains/models/venue_info.dart';
 import 'package:intheloopapp/domains/navigation_bloc/navigation_bloc.dart';
 import 'package:intheloopapp/domains/navigation_bloc/tapped_route.dart';
-import 'package:intheloopapp/ui/common/social_following_menu.dart';
+import 'package:intheloopapp/ui/profile/components/category_gauge.dart';
 import 'package:intheloopapp/ui/profile/components/more_options_button.dart';
 import 'package:intheloopapp/ui/profile/components/social_media_icons.dart';
 import 'package:intheloopapp/ui/profile/profile_cubit.dart';
@@ -325,6 +325,7 @@ class InfoSliver extends StatelessWidget {
                         ),
                       ],
                     ),
+                    const CategoryGauge(),
                     const SocialMediaIcons(),
                   ],
                 );
