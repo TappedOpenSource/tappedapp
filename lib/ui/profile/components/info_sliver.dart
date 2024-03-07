@@ -1,3 +1,4 @@
+import 'package:feedback/feedback.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -12,6 +13,9 @@ import 'package:intheloopapp/ui/profile/components/category_gauge.dart';
 import 'package:intheloopapp/ui/profile/components/more_options_button.dart';
 import 'package:intheloopapp/ui/profile/components/social_media_icons.dart';
 import 'package:intheloopapp/ui/profile/profile_cubit.dart';
+import 'package:intheloopapp/utils/app_logger.dart';
+import 'package:intheloopapp/utils/bloc_utils.dart';
+import 'package:intheloopapp/utils/current_user_builder.dart';
 import 'package:intheloopapp/utils/custom_claims_builder.dart';
 import 'package:intheloopapp/utils/geohash.dart';
 import 'package:intheloopapp/utils/premium_builder.dart';
@@ -21,25 +25,6 @@ import 'package:url_launcher/url_launcher.dart';
 
 class InfoSliver extends StatelessWidget {
   const InfoSliver({super.key});
-
-  Widget _buildSocialSection(BuildContext context, {
-    required IconData icon,
-    required String label,
-  }) {
-    return Row(
-      children: [
-        SizedBox(
-          width: 40,
-          height: 40,
-          child: Icon(
-            icon,
-            color: Colors.grey.withOpacity(0.5),
-          ),
-        ),
-        Text(label),
-      ],
-    );
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -63,271 +48,343 @@ class InfoSliver extends StatelessWidget {
             .flatMap((t) => t.bookingEmail)
             .toNullable();
         final formatted = NumberFormat.compactLong();
-        return CustomClaimsBuilder(
-          builder: (context, claims) {
-            final isAdmin = claims.contains(CustomClaim.admin);
-            return PremiumBuilder(
-              builder: (context, isPremium) {
-                return Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    CupertinoListSection.insetGrouped(
-                      backgroundColor: theme.colorScheme.background,
-                      decoration: BoxDecoration(
-                        color: theme.colorScheme.onSurface.withOpacity(0.1),
-                        border: Border(
-                          bottom: BorderSide(
-                            color:
-                                theme.colorScheme.onBackground.withOpacity(0.1),
-                            width: 0.5,
-                          ),
-                        ),
-                      ),
+        return CurrentUserBuilder(
+          builder: (context, currentUser) {
+            return CustomClaimsBuilder(
+              builder: (context, claims) {
+                final isAdmin = claims.contains(CustomClaim.admin);
+                return PremiumBuilder(
+                  builder: (context, isPremium) {
+                    return Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        CupertinoListTile(
-                          leading: const Icon(
-                            CupertinoIcons.at,
-                          ),
-                          title: Text(
-                            state.visitedUser.username.toString(),
-                            style: TextStyle(
-                              color: theme.colorScheme.onSurface,
-                            ),
-                          ),
-                        ),
-                        switch (currPlace) {
-                          None() => const SizedBox.shrink(),
-                          Some(:final value) => GestureDetector(
-                              onLongPress: () => MapsLauncher.launchQuery(
-                                value.shortFormattedAddress,
-                              ),
-                              child: CupertinoListTile(
-                                leading: const Icon(
-                                  CupertinoIcons.location,
-                                ),
-                                title: Text(
-                                  getAddressComponent(value.addressComponents),
-                                  style: TextStyle(
-                                    color: theme.colorScheme.onSurface,
-                                  ),
-                                ),
+                        CupertinoListSection.insetGrouped(
+                          backgroundColor: theme.colorScheme.background,
+                          decoration: BoxDecoration(
+                            color: theme.colorScheme.onSurface.withOpacity(0.1),
+                            border: Border(
+                              bottom: BorderSide(
+                                color:
+                                    theme.colorScheme.onBackground.withOpacity(0.1),
+                                width: 0.5,
                               ),
                             ),
-                        },
-                        switch (state.visitedUser.venueInfo) {
-                          None() => const SizedBox.shrink(),
-                          Some(:final value) => CupertinoListTile(
+                          ),
+                          children: [
+                            CupertinoListTile(
                               leading: const Icon(
-                                CupertinoIcons.building_2_fill,
+                                CupertinoIcons.at,
                               ),
                               title: Text(
-                                value.type.formattedName,
+                                state.visitedUser.username.toString(),
                                 style: TextStyle(
                                   color: theme.colorScheme.onSurface,
                                 ),
                               ),
                             ),
-                        },
-                        switch (state.visitedUser.venueInfo) {
-                          None() => const SizedBox.shrink(),
-                          Some(:final value) => switch (value.capacity) {
+                            switch (currPlace) {
+                              None() => const SizedBox.shrink(),
+                              Some(:final value) => GestureDetector(
+                                  onLongPress: () => MapsLauncher.launchQuery(
+                                    value.shortFormattedAddress,
+                                  ),
+                                  child: CupertinoListTile(
+                                    leading: const Icon(
+                                      CupertinoIcons.location,
+                                    ),
+                                    title: Text(
+                                      getAddressComponent(value.addressComponents),
+                                      style: TextStyle(
+                                        color: theme.colorScheme.onSurface,
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                            },
+                            switch (state.visitedUser.venueInfo) {
                               None() => const SizedBox.shrink(),
                               Some(:final value) => CupertinoListTile(
                                   leading: const Icon(
-                                    CupertinoIcons.person_2_alt,
+                                    CupertinoIcons.building_2_fill,
                                   ),
                                   title: Text(
-                                    '${formatted.format(value)} capacity',
+                                    value.type.formattedName,
                                     style: TextStyle(
                                       color: theme.colorScheme.onSurface,
                                     ),
                                   ),
                                 ),
                             },
-                        },
-                        if (occupations.isNotEmpty && occupations != ['Venue'] && occupations != ['venue'])
-                          CupertinoListTile(
-                            leading: const Icon(
-                              CupertinoIcons.briefcase,
-                            ),
-                            title: SingleChildScrollView(
-                              scrollDirection: Axis.horizontal,
-                              child: Text(
-                                occupations.join(', '),
-                                style: TextStyle(
-                                  color: theme.colorScheme.onSurface,
-                                ),
-                              ),
-                            ),
-                          ),
-                        if (genres.isNotEmpty)
-                          CupertinoListTile(
-                            leading: const Icon(
-                              CupertinoIcons.music_note,
-                            ),
-                            title: SingleChildScrollView(
-                              scrollDirection: Axis.horizontal,
-                              child: Text(
-                                genres.map((e) => e.name).join(', '),
-                                style: TextStyle(
-                                  color: theme.colorScheme.onSurface,
-                                ),
-                              ),
-                            ),
-                          ),
-                        if (isPremium && bookingEmail != null)
-                          GestureDetector(
-                            onLongPress: () async {
-                              await Clipboard.setData(
-                                ClipboardData(text: bookingEmail),
-                              );
-                              await HapticFeedback.mediumImpact();
-                              await EasyLoading.showSuccess(
-                                'Copied Email',
-                                duration: const Duration(milliseconds: 500),
-                              );
+                            switch (state.visitedUser.venueInfo) {
+                              None() => const SizedBox.shrink(),
+                              Some(:final value) => switch (value.capacity) {
+                                  None() => const SizedBox.shrink(),
+                                  Some(:final value) => CupertinoListTile(
+                                      leading: const Icon(
+                                        CupertinoIcons.person_2_alt,
+                                      ),
+                                      title: Text(
+                                        '${formatted.format(value)} capacity',
+                                        style: TextStyle(
+                                          color: theme.colorScheme.onSurface,
+                                        ),
+                                      ),
+                                    ),
+                                },
                             },
-                            child: CupertinoListTile(
-                              leading: const Icon(
-                                CupertinoIcons.mail,
-                              ),
-                              title: SingleChildScrollView(
-                                scrollDirection: Axis.horizontal,
-                                child: Text(
-                                  bookingEmail,
-                                  style: TextStyle(
-                                    color: theme.colorScheme.onSurface,
+                            if (occupations.isNotEmpty &&
+                                occupations != ['Venue'] &&
+                                occupations != ['venue'])
+                              CupertinoListTile(
+                                leading: const Icon(
+                                  CupertinoIcons.briefcase,
+                                ),
+                                title: SingleChildScrollView(
+                                  scrollDirection: Axis.horizontal,
+                                  child: Text(
+                                    occupations.join(', '),
+                                    style: TextStyle(
+                                      color: theme.colorScheme.onSurface,
+                                    ),
                                   ),
                                 ),
                               ),
-                            ),
-                          ),
-                        if (isPremium)
-                          switch (state.visitedUser.phoneNumber) {
-                            None() => const SizedBox.shrink(),
-                            Some(:final value) => GestureDetector(
-                                onTap: () async {
+                            if (genres.isNotEmpty)
+                              CupertinoListTile(
+                                leading: const Icon(
+                                  CupertinoIcons.music_note,
+                                ),
+                                title: SingleChildScrollView(
+                                  scrollDirection: Axis.horizontal,
+                                  child: Text(
+                                    genres.map((e) => e.name).join(', '),
+                                    style: TextStyle(
+                                      color: theme.colorScheme.onSurface,
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            if (isPremium && bookingEmail != null)
+                              GestureDetector(
+                                onLongPress: () async {
                                   await Clipboard.setData(
-                                    ClipboardData(text: value),
+                                    ClipboardData(text: bookingEmail),
                                   );
                                   await HapticFeedback.mediumImpact();
                                   await EasyLoading.showSuccess(
-                                    'Copied Phone',
+                                    'Copied Email',
                                     duration: const Duration(milliseconds: 500),
                                   );
                                 },
                                 child: CupertinoListTile(
                                   leading: const Icon(
-                                    CupertinoIcons.phone,
+                                    CupertinoIcons.mail,
                                   ),
-                                  title: Text(
-                                    value,
-                                    style: TextStyle(
-                                      color: theme.colorScheme.onSurface,
+                                  title: SingleChildScrollView(
+                                    scrollDirection: Axis.horizontal,
+                                    child: Text(
+                                      bookingEmail,
+                                      style: TextStyle(
+                                        color: theme.colorScheme.onSurface,
+                                      ),
                                     ),
                                   ),
                                 ),
                               ),
-                          },
-                        if (label != 'None')
-                          CupertinoListTile(
-                            leading: const Icon(
-                              CupertinoIcons.tag,
-                            ),
-                            title: Text(
-                              label,
-                              style: TextStyle(
-                                color: theme.colorScheme.onSurface,
-                              ),
-                            ),
-                          ),
-                        switch (pressKitUrl) {
-                          None() => const SizedBox.shrink(),
-                          Some(:final value) => CupertinoListTile.notched(
-                              title: Text(
-                                'EPK',
-                                style: TextStyle(
-                                  color: theme.colorScheme.onSurface,
-                                ),
-                              ),
-                              trailing:
-                                  const Icon(CupertinoIcons.chevron_forward),
-                              onTap: () async {
-                                await launchUrl(Uri.parse(value));
-                              },
-                            ),
-                        },
-                        switch (idealPerformerProfile) {
-                          None() => const SizedBox.shrink(),
-                          Some(:final value) => CupertinoListTile(
-                              title: Text(
-                                'Ideal Performer Profile',
-                                style: TextStyle(
-                                  color: theme.colorScheme.onSurface,
-                                ),
-                              ),
-                              trailing:
-                                  const Icon(CupertinoIcons.chevron_forward),
-                              onTap: () {
-                                if (!isPremium) {
-                                  context.push(PaywallPage());
-                                  return;
-                                }
-
-                                showModalBottomSheet<void>(
-                                  context: context,
-                                  builder: (context) {
-                                    return SafeArea(
-                                      child: Padding(
-                                        padding: const EdgeInsets.symmetric(
-                                          vertical: 16,
-                                          horizontal: 20,
-                                        ),
-                                        child: SingleChildScrollView(
-                                          child: Column(
-                                            children: [
-                                              Text(
-                                                'what kind of performers do they normally book?',
-                                                style: TextStyle(
-                                                  color: theme
-                                                      .colorScheme.onSurface,
-                                                  fontSize: 24,
-                                                  fontWeight: FontWeight.bold,
-                                                ),
-                                              ),
-                                              const SizedBox(height: 12),
-                                              Text(
-                                                value,
-                                                style: TextStyle(
-                                                  color: theme
-                                                      .colorScheme.onSurface,
-                                                  fontSize: 16,
-                                                ),
-                                              ),
-                                            ],
-                                          ),
+                            if (isPremium)
+                              switch (state.visitedUser.phoneNumber) {
+                                None() => const SizedBox.shrink(),
+                                Some(:final value) => GestureDetector(
+                                    onTap: () async {
+                                      await Clipboard.setData(
+                                        ClipboardData(text: value),
+                                      );
+                                      await HapticFeedback.mediumImpact();
+                                      await EasyLoading.showSuccess(
+                                        'Copied Phone',
+                                        duration: const Duration(milliseconds: 500),
+                                      );
+                                    },
+                                    child: CupertinoListTile(
+                                      leading: const Icon(
+                                        CupertinoIcons.phone,
+                                      ),
+                                      title: Text(
+                                        value,
+                                        style: TextStyle(
+                                          color: theme.colorScheme.onSurface,
                                         ),
                                       ),
+                                    ),
+                                  ),
+                              },
+                            if (label != 'None')
+                              CupertinoListTile(
+                                leading: const Icon(
+                                  CupertinoIcons.tag,
+                                ),
+                                title: Text(
+                                  label,
+                                  style: TextStyle(
+                                    color: theme.colorScheme.onSurface,
+                                  ),
+                                ),
+                              ),
+                            switch (pressKitUrl) {
+                              None() => const SizedBox.shrink(),
+                              Some(:final value) => CupertinoListTile.notched(
+                                  title: Text(
+                                    'EPK',
+                                    style: TextStyle(
+                                      color: theme.colorScheme.onSurface,
+                                    ),
+                                  ),
+                                  trailing:
+                                      const Icon(CupertinoIcons.chevron_forward),
+                                  onTap: () async {
+                                    await launchUrl(Uri.parse(value));
+                                  },
+                                ),
+                            },
+                            switch (idealPerformerProfile) {
+                              None() => const SizedBox.shrink(),
+                              Some(:final value) => CupertinoListTile(
+                                  title: Text(
+                                    'Ideal Performer Profile',
+                                    style: TextStyle(
+                                      color: theme.colorScheme.onSurface,
+                                    ),
+                                  ),
+                                  trailing:
+                                      const Icon(CupertinoIcons.chevron_forward),
+                                  onTap: () {
+                                    if (!isPremium) {
+                                      context.push(PaywallPage());
+                                      return;
+                                    }
+
+                                    showModalBottomSheet<void>(
+                                      context: context,
+                                      builder: (context) {
+                                        return SafeArea(
+                                          child: Padding(
+                                            padding: const EdgeInsets.symmetric(
+                                              vertical: 16,
+                                              horizontal: 20,
+                                            ),
+                                            child: SingleChildScrollView(
+                                              child: Column(
+                                                children: [
+                                                  Text(
+                                                    'what kind of performers do they normally book?',
+                                                    style: TextStyle(
+                                                      color: theme
+                                                          .colorScheme.onSurface,
+                                                      fontSize: 24,
+                                                      fontWeight: FontWeight.bold,
+                                                    ),
+                                                  ),
+                                                  const SizedBox(height: 12),
+                                                  Text(
+                                                    value,
+                                                    style: TextStyle(
+                                                      color: theme
+                                                          .colorScheme.onSurface,
+                                                      fontSize: 16,
+                                                    ),
+                                                  ),
+                                                ],
+                                              ),
+                                            ),
+                                          ),
+                                        );
+                                      },
                                     );
                                   },
-                                );
-                              },
+                                ),
+                            },
+                            CupertinoListTile(
+                              title: Text(
+                                'More Options',
+                                style: TextStyle(
+                                  color: theme.colorScheme.onSurface,
+                                ),
+                              ),
+                              trailing: const MoreOptionsButton(),
                             ),
-                        },
-                        CupertinoListTile(
-                          title: Text(
-                            'More Options',
-                            style: TextStyle(
-                              color: theme.colorScheme.onSurface,
-                            ),
-                          ),
-                          trailing: const MoreOptionsButton(),
+                          ],
                         ),
+                        switch ((venueInfo, state.visitedUser.unclaimed)) {
+                          (Some(:final value), true) => GestureDetector(
+                              onTap: () {
+                                final scaffoldMessenger =
+                                    ScaffoldMessenger.of(context);
+                                final storage = context.storage;
+                                final database = context.database;
+
+                                HapticFeedback.lightImpact();
+                                BetterFeedback.of(context)
+                                    .show((UserFeedback feedback) {
+                                  try {
+                                    logger.debug(
+                                        'feedback: ${feedback.text} and ${feedback.extra}');
+
+                                    storage
+                                        .uploadFeedbackScreenshot(
+                                      currentUser.id,
+                                      feedback.screenshot,
+                                    )
+                                        .then((imageUrl) {
+                                      database.sendFeedback(
+                                        currentUser.id,
+                                        feedback,
+                                        imageUrl,
+                                      );
+                                    });
+
+                                    scaffoldMessenger.showSnackBar(
+                                      const SnackBar(
+                                        behavior: SnackBarBehavior.floating,
+                                        backgroundColor: Colors.green,
+                                        content: Text('feedback sent'),
+                                      ),
+                                    );
+                                  } catch (error, stackTrace) {
+                                    logger.error(
+                                      'error sending feedback',
+                                      error: error,
+                                      stackTrace: stackTrace,
+                                    );
+                                    scaffoldMessenger.showSnackBar(
+                                      const SnackBar(
+                                        behavior: SnackBarBehavior.floating,
+                                        backgroundColor: Colors.red,
+                                        content: Text('error sending feedback'),
+                                      ),
+                                    );
+                                  }
+                                });
+                              },
+                              child: const Padding(
+                                padding: EdgeInsets.symmetric(
+                                  horizontal: 20,
+                                ),
+                                child: Text(
+                                  'something incorrect? contact us',
+                                  style: TextStyle(
+                                    color: Colors.blue,
+                                    fontSize: 12,
+                                  ),
+                                ),
+                              ),
+                            ),
+                          (_, _) => const SizedBox.shrink(),
+                        },
+                        const CategoryGauge(),
+                        const SocialMediaIcons(),
                       ],
-                    ),
-                    const CategoryGauge(),
-                    const SocialMediaIcons(),
-                  ],
+                    );
+                  },
                 );
               },
             );
