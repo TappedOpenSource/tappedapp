@@ -52,19 +52,19 @@ class SettingsForm extends StatelessWidget {
                     context.read<SettingsCubit>().changeBio(value ?? ''),
                 initialValue: state.bio,
               ),
-              OccupationSelection(
-                initialValue: state.occupations,
-                onConfirm: (values) {
-                  context.read<SettingsCubit>().changeOccupations(
-                        values
-                            .where(
-                              (element) => element != null,
-                            )
-                            .whereType<String>()
-                            .toList(),
-                      );
-                },
-              ),
+              // OccupationSelection(
+              //   initialValue: state.occupations,
+              //   onConfirm: (values) {
+              //     context.read<SettingsCubit>().changeOccupations(
+              //           values
+              //               .where(
+              //                 (element) => element != null,
+              //               )
+              //               .whereType<String>()
+              //               .toList(),
+              //         );
+              //   },
+              // ),
               const LabelSelection(),
               GenreSelection(
                 initialValue: state.genres,

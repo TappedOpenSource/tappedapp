@@ -16,6 +16,9 @@ class CategoryGauge extends StatelessWidget {
     return BlocBuilder<ProfileCubit, ProfileState>(
       builder: (context, state) {
         final category = state.visitedUser.performerInfo.map((t) => t.category);
+        final isVenue = state.visitedUser.venueInfo.isSome();
+        if (isVenue) return const SizedBox.shrink();
+
         return switch (category) {
           None() => const SizedBox.shrink(),
           Some(:final value) => Padding(

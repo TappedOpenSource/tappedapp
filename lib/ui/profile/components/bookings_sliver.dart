@@ -12,81 +12,90 @@ import 'package:intheloopapp/ui/themes.dart';
 class BookingsSliver extends StatelessWidget {
   const BookingsSliver({super.key});
 
+  Widget _addBookingsButton(BuildContext context) {
+    final theme = Theme.of(context);
+    return Column(
+      children: [
+        GestureDetector(
+          onTap: () => context.push(
+            AddPastBookingPage(),
+          ),
+          child: Row(
+            children: [
+              Expanded(
+                child: Container(
+                  padding: const EdgeInsets.symmetric(
+                    vertical: 16,
+                  ),
+                  decoration: BoxDecoration(
+                    border: Border.all(
+                      color: theme.colorScheme.onSurface.withOpacity(0.1),
+                    ),
+                    borderRadius: BorderRadius.circular(8),
+                  ),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      const SizedBox(width: 16),
+                      Icon(
+                        Icons.add,
+                        color: theme.colorScheme.onSurface.withOpacity(0.5),
+                      ),
+                      const SizedBox(width: 16),
+                      Text(
+                        'Add Past Gigs',
+                        style: TextStyle(
+                          color: theme.colorScheme.onSurface.withOpacity(0.5),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
+        const SizedBox(height: 6),
+        Text(
+          '(it helps you get more gigs!)',
+          style: TextStyle(
+            color: theme.colorScheme.onSurface.withOpacity(0.5),
+          ),
+        ),
+      ],
+    );
+  }
+
   Widget _bookingsSlider(
     BuildContext context, {
     required bool isCurrentUser,
     required List<Booking> bookings,
     required UserModel visitedUser,
   }) {
-    final theme = Theme.of(context);
     if (bookings.isEmpty && isCurrentUser) {
-      return Column(
-        children: [
-          GestureDetector(
-            onTap: () => context.push(
-              AddPastBookingPage(),
-            ),
-            child: Row(
-              children: [
-                Expanded(
-                  child: Container(
-                    padding: const EdgeInsets.symmetric(
-                      vertical: 16,
-                    ),
-                    decoration: BoxDecoration(
-                      border: Border.all(
-                        color: theme.colorScheme.onSurface.withOpacity(0.1),
-                      ),
-                      borderRadius: BorderRadius.circular(8),
-                    ),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        const SizedBox(width: 16),
-                        Icon(
-                          Icons.add,
-                          color: theme.colorScheme.onSurface.withOpacity(0.5),
-                        ),
-                        const SizedBox(width: 16),
-                        Text(
-                          'Add Past Gigs',
-                          style: TextStyle(
-                            color: theme.colorScheme.onSurface.withOpacity(0.5),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-              ],
-            ),
-          ),
-          const SizedBox(height: 6),
-          Text(
-            '(it helps you get more gigs!)',
-            style: TextStyle(
-              color: theme.colorScheme.onSurface.withOpacity(0.5),
-            ),
-          ),
-        ],
-      );
+      return _addBookingsButton(context);
     }
 
-    return SizedBox(
-      height: 200,
-      child: ListView.builder(
-        scrollDirection: Axis.horizontal,
-        itemCount: bookings.length,
-        itemBuilder: (context, index) {
-          return Padding(
-            padding: const EdgeInsets.only(right: 8),
-            child: BookingCard(
-              booking: bookings[index],
-              visitedUser: visitedUser,
-            ),
-          );
-        },
-      ),
+    return Column(
+      children: [
+        SizedBox(
+          height: 200,
+          child: ListView.builder(
+            scrollDirection: Axis.horizontal,
+            itemCount: bookings.length,
+            itemBuilder: (context, index) {
+              return Padding(
+                padding: const EdgeInsets.only(right: 8),
+                child: BookingCard(
+                  booking: bookings[index],
+                  visitedUser: visitedUser,
+                ),
+              );
+            },
+          ),
+        ),
+        if (isCurrentUser) _addBookingsButton(context),
+      ],
     );
   }
 
