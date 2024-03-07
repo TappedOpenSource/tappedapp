@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:fpdart/fpdart.dart' hide State;
+import 'package:intheloopapp/domains/models/performer_info.dart';
 import 'package:intheloopapp/domains/models/social_following.dart';
 import 'package:intheloopapp/domains/models/user_model.dart';
 import 'package:intheloopapp/domains/navigation_bloc/navigation_bloc.dart';
@@ -42,12 +43,26 @@ class _UserTileState extends State<UserTile> {
     final widgetSubtitle = widget.subtitle;
     if (widgetSubtitle != null) return widgetSubtitle;
 
-    if (user.socialFollowing.audienceSize == 0) return const SizedBox.shrink();
-
-    return Text('${NumberFormat.compactCurrency(
-      decimalDigits: 0,
-      symbol: '',
-    ).format(user.socialFollowing.audienceSize)} followers');
+    final capacity = user.venueInfo.flatMap((t) => t.capacity);
+    final socialFollowing = user.socialFollowing;
+    final category = user.performerInfo.map((t) => t.category);
+    return switch ((capacity, category)) {
+      (None(), None()) => socialFollowing.audienceSize == 0
+          ? const SizedBox.shrink()
+          : Text('${NumberFormat.compactCurrency(
+              decimalDigits: 0,
+              symbol: '',
+            ).format(socialFollowing.audienceSize)} followers'),
+      (None(), Some(:final value)) => Text(
+          '${value.formattedName} performer'.toLowerCase(),
+          style: TextStyle(
+            color: value.color,
+          ),
+        ),
+      (Some(:final value), _) => Text(
+          '$value capacity venue',
+        ),
+    };
   }
 
   Widget _buildUserTile(
@@ -110,14 +125,15 @@ class _UserTileState extends State<UserTile> {
               ),
               subtitle: _buildSubtitle(user),
               trailing: widget.trailing,
-              onTap: widget.onTap ?? () => context.push(
-                ProfilePage(
-                  userId: user.id,
-                  user: Option.of(
-                    user,
-                  ),
-                ),
-              ),
+              onTap: widget.onTap ??
+                  () => context.push(
+                        ProfilePage(
+                          userId: user.id,
+                          user: Option.of(
+                            user,
+                          ),
+                        ),
+                      ),
             );
           },
         );

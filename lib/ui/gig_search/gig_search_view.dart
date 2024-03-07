@@ -4,6 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:formz/formz.dart';
 import 'package:fpdart/fpdart.dart';
 import 'package:intheloopapp/data/search_repository.dart';
+import 'package:intheloopapp/domains/models/performer_info.dart';
 import 'package:intheloopapp/ui/gig_search/gig_search_cubit.dart';
 import 'package:intheloopapp/ui/gig_search/gig_search_form_view.dart';
 import 'package:intheloopapp/ui/gig_search/gig_search_results_view.dart';
@@ -20,8 +21,8 @@ class GigSearchView extends StatelessWidget {
         return switch (state.formStatus) {
           FormzSubmissionStatus.initial => const GigSearchFormView(),
           FormzSubmissionStatus.inProgress => const Center(
-            child: CupertinoActivityIndicator(),
-          ),
+              child: CupertinoActivityIndicator(),
+            ),
           FormzSubmissionStatus.success => const GigSearchResultsView(),
           FormzSubmissionStatus.failure => const GigSearchFormView(),
           FormzSubmissionStatus.canceled => const GigSearchFormView(),
@@ -41,6 +42,13 @@ class GigSearchView extends StatelessWidget {
                 .map((info) => info.genres)
                 .getOrElse(() => []),
             initialPlace: const None(),
+            category: currentUser.performerInfo
+                .map(
+                  (t) => t.category,
+                )
+                .getOrElse(
+                  () => PerformerCategory.undiscovered,
+                ),
           ),
           child: _viewSelector(),
         );

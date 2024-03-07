@@ -7,6 +7,7 @@ import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:intheloopapp/data/places_repository.dart';
 import 'package:intheloopapp/data/search_repository.dart';
 import 'package:intheloopapp/domains/models/genre.dart';
+import 'package:intheloopapp/domains/models/performer_info.dart';
 import 'package:intheloopapp/domains/models/user_model.dart';
 import 'package:intheloopapp/utils/app_logger.dart';
 
@@ -19,16 +20,22 @@ class GigSearchCubit extends Cubit<GigSearchState> {
     required this.initialPlace,
     required this.initialGenres,
     required this.search,
+    required this.category,
   }) : super(
           GigSearchState(
             place: initialPlace,
             genres: initialGenres,
+            capacityRange: RangeValues(
+              0,
+              category.suggestedMaxCapacity.toDouble().clamp(0, 1000),
+            ),
           ),
         );
 
   final SearchRepository search;
   final Option<PlaceData> initialPlace;
   final List<Genre> initialGenres;
+  final PerformerCategory category;
 
   void resetForm() {
     emit(

@@ -61,6 +61,7 @@ class _TappedSearchBarState extends State<TappedSearchBar> {
     final theme = Theme.of(context);
     return SearchAnchor(
       searchController: _searchController,
+      viewBackgroundColor: theme.colorScheme.surface,
       builder: (context, searchController) {
         return Hero(
           tag: 'searchBar',
