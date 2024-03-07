@@ -65,16 +65,10 @@ class CategoryGauge extends StatelessWidget {
                           /// Optionally, you can configure your gauge, providing additional
                           /// styles and transformers.
                           axis: GaugeAxis(
-                            /// Provide the [min] and [max] value for the [value] argument.
-                            min: 0,
                             max: 100,
-
-                            /// Render the gauge as a 180-degree arc.
-                            degrees: 180,
 
                             /// Set the background color and axis thickness.
                             style: const GaugeAxisStyle(
-                              thickness: 20,
                               background: Colors.transparent,
                               segmentSpacing: 6,
                             ),

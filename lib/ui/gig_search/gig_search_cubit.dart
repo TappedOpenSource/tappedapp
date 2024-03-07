@@ -114,7 +114,7 @@ class GigSearchCubit extends Cubit<GigSearchState> {
             .map((hit) => SelectableResult(
                   user: hit,
                   selected: false,
-                ))
+                ),)
             .toList(),
       ),
     );

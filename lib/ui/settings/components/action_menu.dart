@@ -9,7 +9,6 @@ import 'package:intheloopapp/ui/settings/settings_cubit.dart';
 import 'package:intheloopapp/utils/app_logger.dart';
 import 'package:intheloopapp/utils/bloc_utils.dart';
 import 'package:intheloopapp/utils/premium_builder.dart';
-import 'package:purchases_flutter/purchases_flutter.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class ActionMenu extends StatelessWidget {

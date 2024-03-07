@@ -16,7 +16,7 @@ class ChangeProfileImage extends StatelessWidget {
     Option<String> currentProfileImage,
   ) {
     return switch ((newProfileImage, currentProfileImage)) {
-    (Some(:final value), _) => FileImage(value) as ImageProvider,
+    (Some(:final value), _) => FileImage(value),
     (None(), Some(:final value)) => CachedNetworkImageProvider(value),
     (None(), None()) => getDefaultImage(const None()),
     };

@@ -1,3 +1,4 @@
+import 'package:badges/badges.dart' as badges;
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fpdart/fpdart.dart';
@@ -5,7 +6,6 @@ import 'package:intheloopapp/domains/navigation_bloc/navigation_bloc.dart';
 import 'package:intheloopapp/domains/navigation_bloc/tapped_route.dart';
 import 'package:intheloopapp/ui/add_past_booking/add_past_booking_cubit.dart';
 import 'package:intheloopapp/utils/hero_image.dart';
-import 'package:badges/badges.dart' as badges;
 
 
 class UploadFlierField extends StatelessWidget {

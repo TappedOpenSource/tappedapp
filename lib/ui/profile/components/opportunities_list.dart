@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:intheloopapp/domains/models/opportunity.dart';
 import 'package:intheloopapp/ui/profile/components/opportunity_card.dart';
-import 'package:scroll_snap_list/scroll_snap_list.dart';
 
 class OpportunitiesList extends StatelessWidget {
   const OpportunitiesList({

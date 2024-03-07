@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:gauge_indicator/gauge_indicator.dart';
 import 'package:intheloopapp/domains/models/performer_info.dart';
 
 class PerformerCategoryDetails extends StatelessWidget {
@@ -48,7 +47,7 @@ class PerformerCategoryDetails extends StatelessWidget {
                               fontWeight: FontWeight.bold,
                               color: isSelected
                                   ? e.color
-                                  : e.color.withOpacity(0.5)),
+                                  : e.color.withOpacity(0.5),),
                         ),
                         Text(
                           e.description.toLowerCase(),

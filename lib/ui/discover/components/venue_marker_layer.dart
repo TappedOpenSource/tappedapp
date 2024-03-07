@@ -11,7 +11,6 @@ import 'package:intheloopapp/ui/discover/discover_cubit.dart';
 import 'package:intheloopapp/ui/user_avatar.dart';
 import 'package:intl/intl.dart';
 import 'package:latlong2/latlong.dart';
-import 'package:timeago/timeago.dart';
 
 class VenueMarkerLayer extends StatelessWidget {
   const VenueMarkerLayer({

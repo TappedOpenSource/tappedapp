@@ -39,7 +39,7 @@ class BookingCard extends StatelessWidget {
       },
       builder: (context, snapshot) {
         final user = snapshot.data ?? const None();
-        final ImageProvider<Object> imageProvider = booking.flierUrl.fold(
+        final imageProvider = booking.flierUrl.fold(
           () => user.flatMap((t) => t.profilePicture).fold(
             () => getDefaultImage(Option.of(booking.id)),
             (t) {

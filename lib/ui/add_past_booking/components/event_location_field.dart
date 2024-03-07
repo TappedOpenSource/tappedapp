@@ -3,10 +3,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fpdart/fpdart.dart';
 import 'package:intheloopapp/ui/add_past_booking/add_past_booking_cubit.dart';
 import 'package:intheloopapp/ui/common/venue_search_bar.dart';
-import 'package:intheloopapp/ui/forms/location_form/location_form_view.dart';
 import 'package:intheloopapp/ui/forms/location_text_field.dart';
 import 'package:intheloopapp/ui/user_tile.dart';
-import 'package:stream_chat_flutter/stream_chat_flutter.dart';
 
 class EventLocationField extends StatelessWidget {
   const EventLocationField({super.key});
@@ -68,7 +66,7 @@ class EventLocationField extends StatelessWidget {
                     ),
                     const SizedBox(height: 32),
                     _buildDivider(
-                        color: theme.colorScheme.onSurface.withOpacity(0.5)),
+                        color: theme.colorScheme.onSurface.withOpacity(0.5),),
                     const SizedBox(height: 32),
                     LocationTextField(
                       hintText: 'search address',

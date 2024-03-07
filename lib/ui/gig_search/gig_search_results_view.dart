@@ -38,7 +38,7 @@ class GigSearchResultsView extends StatelessWidget {
                 context.read<GigSearchCubit>().resetForm();
               },
             ),
-            actions: [],
+            actions: const [],
             bottom: PreferredSize(
               preferredSize: const Size.fromHeight(50),
               child: Padding(
@@ -65,7 +65,7 @@ class GigSearchResultsView extends StatelessWidget {
                     ),
                     Text(
                       'Found ${state.results.length} venues',
-                      style: theme.textTheme.subtitle1,
+                      style: theme.textTheme.titleMedium,
                     ),
                   ],
                 ),

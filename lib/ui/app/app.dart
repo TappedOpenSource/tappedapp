@@ -94,8 +94,8 @@ class App extends StatelessWidget {
             return BlocBuilder<AppThemeCubit, bool>(
               builder: (context, isDark) {
                 final appTheme = isDark
-                    ? buildDarkTheme(accentColor: accentColor)
-                    : buildLightTheme(accentColor: accentColor);
+                    ? buildDarkTheme()
+                    : buildLightTheme();
 
                 final defaultStreamTheme =
                     StreamChatThemeData.fromTheme(appTheme);

@@ -65,7 +65,7 @@ class BookingView extends StatelessWidget {
             ) ||
             currentUser.id == booking.requesteeId;
 
-        final ImageProvider<Object> imageProvider = flierImage.fold(
+        final imageProvider = flierImage.fold(
           () => booking.flierUrl.fold(
             () => getDefaultImage(const None()),
             (flierUrl) {

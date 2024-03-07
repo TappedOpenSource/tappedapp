@@ -2,8 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:fpdart/fpdart.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:intheloopapp/domains/models/genre.dart';
-import 'package:intheloopapp/utils/app_logger.dart';
-import 'package:json_annotation/json_annotation.dart';
 
 part 'performer_info.freezed.dart';
 part 'performer_info.g.dart';
@@ -80,7 +78,7 @@ extension PerformerCategoryX on PerformerCategory {
   }
 
   int get performerScore  {
-    return ((performerScoreRange.$2 + performerScoreRange.$1) / 2).toInt();
+    return (performerScoreRange.$2 + performerScoreRange.$1) ~/ 2;
   }
 
   Color get color {

@@ -66,8 +66,8 @@ class _RequestToPerformViewState extends State<RequestToPerformView> {
                     (info) => info.bookingEmail,
                   );
 
-                  bookingEmail.fold(
-                    () => Future<void>.value(),
+                  await bookingEmail.fold(
+                    Future<void>.value,
                     (email) async {
                       await database.contactVenue(
                         currentUser: currentUser,

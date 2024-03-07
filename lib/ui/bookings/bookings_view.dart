@@ -2,7 +2,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:fpdart/fpdart.dart';
 import 'package:intheloopapp/domains/bookings_bloc/bookings_bloc.dart';
 import 'package:intheloopapp/domains/models/booking.dart';
 import 'package:intheloopapp/domains/navigation_bloc/navigation_bloc.dart';
@@ -235,7 +234,7 @@ class BookingsView extends StatelessWidget {
                 child: Column(
                   children: [
                     const Text(
-                      "LOOKING FOR GIGS?",
+                      'LOOKING FOR GIGS?',
                       textAlign: TextAlign.center,
                       style: TextStyle(
                         fontSize: 32,

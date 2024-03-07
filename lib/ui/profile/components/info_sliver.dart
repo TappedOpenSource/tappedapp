@@ -328,7 +328,7 @@ class InfoSliver extends StatelessWidget {
                                     .show((UserFeedback feedback) {
                                   try {
                                     logger.debug(
-                                        'feedback: ${feedback.text} and ${feedback.extra}');
+                                        'feedback: ${feedback.text} and ${feedback.extra}',);
 
                                     storage
                                         .uploadFeedbackScreenshot(

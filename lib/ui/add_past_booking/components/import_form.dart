@@ -64,7 +64,7 @@ class ImportForm extends StatelessWidget {
                 ),
               );
               nav.pop();
-            } catch (error, stackTrace) {
+            } catch (error) {
               scaffoldMessenger.showSnackBar(
                 SnackBar(
                   shape: RoundedRectangleBorder(

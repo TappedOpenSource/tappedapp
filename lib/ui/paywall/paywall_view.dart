@@ -4,8 +4,6 @@ import 'package:flutter/services.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:intheloopapp/domains/navigation_bloc/navigation_bloc.dart';
 import 'package:intheloopapp/domains/subscription_bloc/subscription_bloc.dart';
-import 'package:intheloopapp/ui/common/waitlist_view.dart';
-import 'package:intheloopapp/ui/error/error_view.dart';
 import 'package:intheloopapp/ui/loading/logo_wave.dart';
 import 'package:intheloopapp/utils/app_logger.dart';
 import 'package:intheloopapp/utils/bloc_utils.dart';
@@ -117,17 +115,17 @@ class PaywallView extends StatelessWidget {
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Spacer(),
-                  LogoWave(),
-                  SizedBox(height: 20),
-                  Text(
+                  const Spacer(),
+                  const LogoWave(),
+                  const SizedBox(height: 20),
+                  const Text(
                     'You are already a premium member',
                     style: TextStyle(
                       fontSize: 20,
                       fontWeight: FontWeight.bold,
                     ),
                   ),
-                  Spacer(),
+                  const Spacer(),
                   Row(
                     children: [
                       Expanded(

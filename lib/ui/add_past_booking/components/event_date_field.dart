@@ -17,7 +17,7 @@ class EventDateField extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text(
+            const Text(
               'when was it?',
               style: TextStyle(
                 fontSize: 22,
@@ -38,7 +38,7 @@ class EventDateField extends StatelessWidget {
                         ),
                         lastDate: DateTime.now().add(
                           const Duration(days: 365),
-                        ));
+                        ),);
 
                     if (theDate == null) {
                       return;
@@ -132,9 +132,7 @@ class EventDateField extends StatelessWidget {
                                 child: CupertinoTimerPicker(
                                   mode: CupertinoTimerPickerMode.hm,
                                   initialTimerDuration: state.duration,
-                                  onTimerDurationChanged: (Duration value) {
-                                    cubit.updateDuration(value);
-                                  },
+                                  onTimerDurationChanged: cubit.updateDuration,
                                 ),
                               ),
                             ],

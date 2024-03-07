@@ -1,12 +1,6 @@
-import 'dart:io';
-import 'dart:typed_data';
 
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:fpdart/fpdart.dart';
-import 'package:gallery_saver/gallery_saver.dart';
-import 'package:image_gallery_saver/image_gallery_saver.dart';
 import 'package:intheloopapp/data/places_repository.dart';
 import 'package:intheloopapp/domains/models/badge.dart' as badge_model;
 import 'package:intheloopapp/domains/models/booking.dart';

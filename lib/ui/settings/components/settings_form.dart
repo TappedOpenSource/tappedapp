@@ -18,7 +18,6 @@ import 'package:intheloopapp/ui/forms/youtube_text_field.dart';
 import 'package:intheloopapp/ui/profile/components/epk_button.dart';
 import 'package:intheloopapp/ui/settings/components/genre_selection.dart';
 import 'package:intheloopapp/ui/settings/components/label_selection.dart';
-import 'package:intheloopapp/ui/settings/components/occupation_selection.dart';
 import 'package:intheloopapp/ui/settings/components/theme_switch.dart';
 import 'package:intheloopapp/ui/settings/settings_cubit.dart';
 import 'package:intheloopapp/ui/themes.dart';

@@ -1,14 +1,10 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fpdart/fpdart.dart';
-import 'package:intheloopapp/domains/navigation_bloc/navigation_bloc.dart';
-import 'package:intheloopapp/domains/navigation_bloc/tapped_route.dart';
 import 'package:intheloopapp/ui/loading/logo_wave.dart';
 import 'package:intheloopapp/ui/opportunity_feed/components/apply_animation_view.dart';
 import 'package:intheloopapp/ui/opportunity_feed/components/opportunity_view.dart';
 import 'package:intheloopapp/ui/opportunity_feed/cubit/opportunity_feed_cubit.dart';
-import 'package:intheloopapp/ui/themes.dart';
 
 class OpportunityFeed extends StatelessWidget {
   const OpportunityFeed({super.key});
@@ -19,7 +15,7 @@ class OpportunityFeed extends StatelessWidget {
         child: Padding(
           padding: const EdgeInsets.symmetric(
             horizontal: 20,
-            vertical: 12
+            vertical: 12,
           ),
           child: Container(
             height: double.infinity,

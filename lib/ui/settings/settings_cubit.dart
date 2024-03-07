@@ -180,7 +180,7 @@ class SettingsCubit extends Cubit<SettingsState> {
 
   Future<void> handleImageFromGallery() async {
     try {
-      Permission.photos
+      await Permission.photos
           .onDeniedCallback(AppSettings.openAppSettings)
           .request()
           .then((status) {

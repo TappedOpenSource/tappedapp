@@ -1,10 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:intheloopapp/domains/navigation_bloc/navigation_bloc.dart';
-import 'package:intheloopapp/domains/navigation_bloc/tapped_route.dart';
 import 'package:intheloopapp/ui/discover/discover_cubit.dart';
 import 'package:intheloopapp/utils/custom_claims_builder.dart';
-import 'package:intheloopapp/utils/premium_builder.dart';
 
 class MapConfigSlider extends StatefulWidget {
   const MapConfigSlider({
@@ -95,18 +91,18 @@ class _MapConfigSliderState extends State<MapConfigSlider> {
             currentOverlay: _currentOverlay,
             overlay: MapOverlay.venues,
             label: 'Venues',
-            image: AssetImage(
+            image: const AssetImage(
               'assets/layers/venue_markers.png',
-            ) as ImageProvider,
+            ),
           ),
           _buildMapOverlayButton(
             context,
             currentOverlay: _currentOverlay,
             overlay: MapOverlay.bookings,
             label: 'Bookings',
-            image: AssetImage(
+            image: const AssetImage(
               'assets/layers/booking_heatmap.png',
-            ) as ImageProvider,
+            ),
             premiumOnly: true,
           ),
           _buildMapOverlayButton(
@@ -114,9 +110,9 @@ class _MapConfigSliderState extends State<MapConfigSlider> {
             currentOverlay: _currentOverlay,
             overlay: MapOverlay.opportunities,
             label: 'Opportunities',
-            image: AssetImage(
+            image: const AssetImage(
               'assets/layers/op_heatmap.png',
-            ) as ImageProvider,
+            ),
             premiumOnly: true,
           ),
         ],

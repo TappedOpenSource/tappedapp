@@ -90,7 +90,7 @@ class EPKButton extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       const SizedBox(width: 16),
-                      Text(
+                      const Text(
                         '✅ EPK Uploaded',
                         style: TextStyle(
                           color: Colors.white,
