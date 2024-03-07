@@ -39,7 +39,7 @@ class BottomToolbar extends StatelessWidget {
           currentIndex: state.selectedTab,
           items: [
             const BottomNavigationBarItem(
-              label: 'Gigs',
+              label: 'gigs',
               icon: Icon(
                 CupertinoIcons.music_mic,
               ),
@@ -58,7 +58,7 @@ class BottomToolbar extends StatelessWidget {
               ),
             ),
             BottomNavigationBarItem(
-              label: 'Bookings',
+              label: 'bookings',
               icon: BlocBuilder<BookingsBloc, BookingsState>(
                 builder: (context, state) {
                   final pendingBookings = state.bookings.where((booking) {
@@ -79,7 +79,7 @@ class BottomToolbar extends StatelessWidget {
               ),
             ),
             BottomNavigationBarItem(
-              label: 'Messages',
+              label: 'messages',
               icon: StreamBuilder<int?>(
                 stream: streamClient
                     .on()
@@ -108,7 +108,7 @@ class BottomToolbar extends StatelessWidget {
               ),
             ),
             BottomNavigationBarItem(
-              label: 'Profile',
+              label: 'profile',
               activeIcon: Container(
                 height: 35,
                 width: 35,

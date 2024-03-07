@@ -168,7 +168,7 @@ export const cancelBookingIfExpired = onSchedule("0 * * * *", async (event) => {
 
   for (const booking of pendingBookings.docs) {
     const bookingData = booking.data() as Booking;
-    const timestamp = bookingData.timestamp.toMillis();
+    const timestamp = bookingData.startTime.toMillis();
     const now = Date.now();
 
     const ONE_DAY_MS = 24 * 60 * 60 * 1000;

@@ -65,7 +65,7 @@ class OpportunityFeed extends StatelessWidget {
                           ),
                         ),
                         Text(
-                          "you've gone thru all the opportunities in your area!",
+                          "you've gone thru all the gig opportunities in your area!",
                           textAlign: TextAlign.center,
                           style: TextStyle(
                             fontSize: 16,
