@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:fpdart/fpdart.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:intheloopapp/domains/models/genre.dart';
+import 'package:intheloopapp/utils/app_logger.dart';
 import 'package:json_annotation/json_annotation.dart';
 
 part 'performer_info.freezed.dart';
@@ -79,7 +80,7 @@ extension PerformerCategoryX on PerformerCategory {
   }
 
   int get performerScore  {
-    return (performerScoreRange.$2 - performerScoreRange.$1 / 2).toInt();
+    return ((performerScoreRange.$2 + performerScoreRange.$1) / 2).toInt();
   }
 
   Color get color {
@@ -89,6 +90,16 @@ extension PerformerCategoryX on PerformerCategory {
       PerformerCategory.hometownHero => Colors.orange,
       PerformerCategory.mainstream => Colors.purple,
       PerformerCategory.legendary => Colors.red,
+    };
+  }
+
+  String get description {
+    return switch (this) {
+      PerformerCategory.undiscovered => 'Performers who are new to the stage, with minimal audience engagement or recognition',
+      PerformerCategory.emerging => 'Rising performers who are gaining traction and capturing the attention of audiences, showing potential for growth in their live performances.',
+      PerformerCategory.hometownHero => 'Local performers who are celebrated and well-known within their community or region for their live shows.',
+      PerformerCategory.mainstream => 'Performers who have achieved widespread popularity and consistently draw large crowds to their live performances.',
+      PerformerCategory.legendary => 'Iconic performers who are revered and influential in the live performance industry, often regarded as legends by both audiences and peers.',
     };
   }
 }
