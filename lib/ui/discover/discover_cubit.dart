@@ -14,6 +14,7 @@ import 'package:intheloopapp/domains/models/genre.dart';
 import 'package:intheloopapp/domains/models/location.dart';
 import 'package:intheloopapp/domains/models/opportunity.dart';
 import 'package:intheloopapp/domains/models/user_model.dart';
+import 'package:intheloopapp/utils/app_logger.dart';
 import 'package:intheloopapp/utils/debouncer.dart';
 import 'package:latlong2/latlong.dart';
 
@@ -138,6 +139,8 @@ class DiscoverCubit extends Cubit<DiscoverState> {
     double? lat,
     double? lng,
   }) async {
+    try {
+
     final hits = await search.queryUsers(
       '',
       occupations: ['Venue', 'venue'],
@@ -149,6 +152,10 @@ class DiscoverCubit extends Cubit<DiscoverState> {
     );
 
     return hits;
+    } catch (e, s) {
+      logger.e('Error getting venues', error: e, stackTrace: s);
+      return [];
+    }
   }
 
   Future<List<Booking>> getBookings({
