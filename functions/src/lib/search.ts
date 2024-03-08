@@ -5,7 +5,7 @@ import { usersRef } from "./firebase";
 import { createActivity } from "./activities";
 import { Booking, UserModel } from "../types/models";
 
-export const transformLoopPayloadForSearch = functions.https
+export const transformLocationPayloadForSearch = functions.https
   .onCall((data) => {
 
     const { location, ...rest } = data;
@@ -15,7 +15,10 @@ export const transformLoopPayloadForSearch = functions.https
 
     const { lat, lng } = location;
 
-    const payload: Record<string, any> = rest;
+    const payload: Record<string, any> = {
+      location,
+      ...rest,
+    };
 
     if (lat !== undefined && lat !== null && lng !== undefined && lng !== null) {
       payload._geoloc = { lat, lng }

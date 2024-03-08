@@ -4,6 +4,7 @@ import 'package:flutter/services.dart';
 import 'package:formz/formz.dart';
 import 'package:fpdart/fpdart.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
+import 'package:intheloopapp/data/database_repository.dart';
 import 'package:intheloopapp/data/places_repository.dart';
 import 'package:intheloopapp/data/search_repository.dart';
 import 'package:intheloopapp/domains/models/genre.dart';
@@ -17,6 +18,7 @@ part 'gig_search_cubit.freezed.dart';
 
 class GigSearchCubit extends Cubit<GigSearchState> {
   GigSearchCubit({
+    required this.database,
     required this.initialPlace,
     required this.initialGenres,
     required this.search,
@@ -32,6 +34,7 @@ class GigSearchCubit extends Cubit<GigSearchState> {
           ),
         );
 
+  final DatabaseRepository database;
   final SearchRepository search;
   final Option<PlaceData> initialPlace;
   final List<Genre> initialGenres;
@@ -108,13 +111,25 @@ class GigSearchCubit extends Cubit<GigSearchState> {
       limit: 150,
     );
 
+    final potentialUsers = await Future.wait(hits.map((hit) async {
+      final user = await database.getUserById(hit.id);
+      return user;
+    }));
+
+    final users = potentialUsers
+        .whereType<Some<UserModel>>()
+        .map((e) => e.value)
+        .toList();
+
     emit(
       state.copyWith(
-        results: hits
-            .map((hit) => SelectableResult(
-                  user: hit,
-                  selected: false,
-                ),)
+        results: users
+            .map(
+              (hit) => SelectableResult(
+                user: hit,
+                selected: false,
+              ),
+            )
             .toList(),
       ),
     );

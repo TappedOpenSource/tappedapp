@@ -14,7 +14,7 @@ class GenreSelection extends StatelessWidget {
   final void Function(List<Genre?>) onConfirm;
 
   List<MultiSelectItem<Genre>> get _items => Genre.values
-      .map((genre) => MultiSelectItem<Genre>(genre, genre.name))
+      .map((genre) => MultiSelectItem<Genre>(genre, genre.formattedName))
       .toList();
 
   @override

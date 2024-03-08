@@ -25,14 +25,6 @@ class AlgoliaSearchImpl extends SearchRepository {
   final Algolia algolia;
 
   @cached
-  Future<UserModel> _getUser(String userId) async {
-    final userSnapshot = await usersRef.doc(userId).get();
-    final user = UserModel.fromDoc(userSnapshot);
-
-    return user;
-  }
-
-  @cached
   Future<Booking> _getBooking(String bookingId) async {
     final bookingSnapshot = await bookingsRef.doc(bookingId).get();
     final booking = Booking.fromDoc(bookingSnapshot);
@@ -123,14 +115,11 @@ class AlgoliaSearchImpl extends SearchRepository {
       rethrow;
     }
 
-    final userResults = await Future.wait(
-      results.map((res) async {
-        final user = await _getUser(res.objectID);
-        return user;
-      }),
-    );
+    final hits = results.map((res) {
+      return UserModel.fromJson(res.data);
+    }).toList();
 
-    return userResults;
+    return hits;
   }
 
   @override
@@ -278,14 +267,11 @@ class AlgoliaSearchImpl extends SearchRepository {
       rethrow;
     }
 
-    final userResults = await Future.wait(
-      results.map((res) async {
-        final user = await _getUser(res.objectID);
-        return user;
-      }),
-    );
+    final hits = results.map((res) {
+      return UserModel.fromJson(res.data);
+    }).toList();
 
-    return userResults;
+    return hits;
   }
 
   @override

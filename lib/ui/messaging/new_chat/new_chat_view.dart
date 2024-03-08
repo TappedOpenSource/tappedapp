@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:intheloopapp/data/database_repository.dart';
 import 'package:intheloopapp/data/search_repository.dart';
 import 'package:intheloopapp/ui/messaging/components/results_list.dart';
 import 'package:intheloopapp/ui/messaging/components/search_bar.dart' as search;
@@ -12,6 +13,7 @@ class NewChatView extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocProvider(
       create: (context) => NewChatCubit(
+        database: context.read<DatabaseRepository>(),
         searchRepository: context.read<SearchRepository>(),
       ),
       child: Scaffold(

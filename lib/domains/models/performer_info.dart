@@ -10,7 +10,7 @@ part 'performer_info.g.dart';
 class PerformerInfo with _$PerformerInfo {
   const factory PerformerInfo({
     @Default(None()) Option<String> pressKitUrl,
-    @Default([]) List<Genre> genres,
+    @Default([]) List<String> genres,
     @Default(None()) Option<double> rating,
     @Default(0) int reviewCount,
     @Default('Independent') String label,

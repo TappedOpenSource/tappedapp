@@ -36,10 +36,6 @@ class DraggableSheet extends StatelessWidget {
                 ),
                 child: Column(
                   children: [
-                    // DraggableHeader(
-                    //   scrollController: scrollController,
-                    //   bottomSheetDraggableAreaHeight: 32,
-                    // ),
                     Expanded(
                       child: SingleChildScrollView(
                         controller: scrollController,
@@ -88,30 +84,6 @@ class DraggableSheet extends StatelessWidget {
                                 ],
                               ),
                             ),
-                            // AspectRatio(
-                            //   aspectRatio: 2,
-                            //   child: Row(
-                            //     children: [
-                            //       const SizedBox(height: 512),
-                            //       Expanded(
-                            //         child: PieChart(
-                            //           PieChartData(
-                            //             sections: state.genrePieData,
-                            //             centerSpaceRadius: 0,
-                            //             sectionsSpace: 0,
-                            //             startDegreeOffset: 180,
-                            //             borderData: FlBorderData(
-                            //               show: false,
-                            //             ),
-                            //             pieTouchData: PieTouchData(
-                            //               touchCallback: (pieTouchResponse, _) {},
-                            //             ),
-                            //           ),
-                            //         ),
-                            //       ),
-                            //     ],
-                            //   ),
-                            // ),
                             ...state.genreFilters.map((e) {
                               final hits = state.genreList(e);
                               return Column(

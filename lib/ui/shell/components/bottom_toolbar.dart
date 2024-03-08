@@ -45,7 +45,7 @@ class BottomToolbar extends StatelessWidget {
               ),
             ),
             BottomNavigationBarItem(
-              label: 'Discover',
+              label: 'discover',
               icon: GestureDetector(
                 // onDoubleTap: () {
                 //   context

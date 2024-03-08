@@ -12,7 +12,7 @@ class VenueInfo with _$VenueInfo {
     @Default(None()) Option<String> autoReply,
     @Default(None()) Option<int> capacity,
     @Default(None()) Option<String> idealPerformerProfile,
-    @Default([]) List<Genre> genres,
+    @Default([]) List<String> genres,
     @Default([]) List<String> venuePhotos,
     @Default(None()) Option<String> productionInfo,
     @Default(None()) Option<String> frontOfHouse,

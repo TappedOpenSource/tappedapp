@@ -65,8 +65,8 @@ class InfoSliver extends StatelessWidget {
                             color: theme.colorScheme.onSurface.withOpacity(0.1),
                             border: Border(
                               bottom: BorderSide(
-                                color:
-                                    theme.colorScheme.onBackground.withOpacity(0.1),
+                                color: theme.colorScheme.onBackground
+                                    .withOpacity(0.1),
                                 width: 0.5,
                               ),
                             ),
@@ -94,7 +94,8 @@ class InfoSliver extends StatelessWidget {
                                       CupertinoIcons.location,
                                     ),
                                     title: Text(
-                                      getAddressComponent(value.addressComponents),
+                                      getAddressComponent(
+                                          value.addressComponents),
                                       style: TextStyle(
                                         color: theme.colorScheme.onSurface,
                                       ),
@@ -158,7 +159,9 @@ class InfoSliver extends StatelessWidget {
                                 title: SingleChildScrollView(
                                   scrollDirection: Axis.horizontal,
                                   child: Text(
-                                    genres.map((e) => e.formattedName).join(', '),
+                                    fromStrings(genres)
+                                        .map((e) => e.formattedName)
+                                        .join(', '),
                                     style: TextStyle(
                                       color: theme.colorScheme.onSurface,
                                     ),
@@ -203,7 +206,8 @@ class InfoSliver extends StatelessWidget {
                                       await HapticFeedback.mediumImpact();
                                       await EasyLoading.showSuccess(
                                         'Copied Phone',
-                                        duration: const Duration(milliseconds: 500),
+                                        duration:
+                                            const Duration(milliseconds: 500),
                                       );
                                     },
                                     child: CupertinoListTile(
@@ -240,8 +244,8 @@ class InfoSliver extends StatelessWidget {
                                       color: theme.colorScheme.onSurface,
                                     ),
                                   ),
-                                  trailing:
-                                      const Icon(CupertinoIcons.chevron_forward),
+                                  trailing: const Icon(
+                                      CupertinoIcons.chevron_forward),
                                   onTap: () async {
                                     await launchUrl(Uri.parse(value));
                                   },
@@ -256,8 +260,8 @@ class InfoSliver extends StatelessWidget {
                                       color: theme.colorScheme.onSurface,
                                     ),
                                   ),
-                                  trailing:
-                                      const Icon(CupertinoIcons.chevron_forward),
+                                  trailing: const Icon(
+                                      CupertinoIcons.chevron_forward),
                                   onTap: () {
                                     if (!isPremium) {
                                       context.push(PaywallPage());
@@ -279,18 +283,19 @@ class InfoSliver extends StatelessWidget {
                                                   Text(
                                                     'what kind of performers do they normally book?',
                                                     style: TextStyle(
-                                                      color: theme
-                                                          .colorScheme.onSurface,
+                                                      color: theme.colorScheme
+                                                          .onSurface,
                                                       fontSize: 24,
-                                                      fontWeight: FontWeight.bold,
+                                                      fontWeight:
+                                                          FontWeight.bold,
                                                     ),
                                                   ),
                                                   const SizedBox(height: 12),
                                                   Text(
                                                     value,
                                                     style: TextStyle(
-                                                      color: theme
-                                                          .colorScheme.onSurface,
+                                                      color: theme.colorScheme
+                                                          .onSurface,
                                                       fontSize: 16,
                                                     ),
                                                   ),
@@ -328,7 +333,8 @@ class InfoSliver extends StatelessWidget {
                                     .show((UserFeedback feedback) {
                                   try {
                                     logger.debug(
-                                        'feedback: ${feedback.text} and ${feedback.extra}',);
+                                      'feedback: ${feedback.text} and ${feedback.extra}',
+                                    );
 
                                     storage
                                         .uploadFeedbackScreenshot(

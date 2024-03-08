@@ -88,7 +88,7 @@ extension DiscoverStateX on DiscoverState {
         .where(
           (e) => e.venueInfo
               .map(
-                (t) => t.genres.contains(Genre.edm),
+                (t) => t.genres.contains(Genre.electronic),
               )
               .getOrElse(() => false),
         )
@@ -112,18 +112,18 @@ extension DiscoverStateX on DiscoverState {
       });
   }
 
-  List<PieChartSectionData> get genrePieData {
-    final genreMap = {for (final e in Genre.values) e: genreList(e).length};
-
-    return genreMap.entries
-        .map(
-          (e) => PieChartSectionData(
-            value: e.value.toDouble(),
-            color: e.key.color,
-            title: e.key.formattedName,
-            radius: 50,
-          ),
-        )
-        .toList();
-  }
+  // List<PieChartSectionData> get genrePieData {
+  //   final genreMap = {for (final e in Genre.values) e: genreList(e).length};
+  //
+  //   return genreMap.entries
+  //       .map(
+  //         (e) => PieChartSectionData(
+  //           value: e.value.toDouble(),
+  //           color: e.key.color,
+  //           title: e.key.formattedName,
+  //           radius: 50,
+  //         ),
+  //       )
+  //       .toList();
+  // }
 }

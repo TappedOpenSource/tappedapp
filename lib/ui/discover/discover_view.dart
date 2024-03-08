@@ -158,15 +158,15 @@ class DiscoverView extends StatelessWidget {
                   ),
                   child: Row(
                     children: [
-                      Icon(
-                        genre.icon,
+                      const Icon(
+                        Icons.music_note_rounded,
                         size: 12,
                       ),
                       const SizedBox(
                         width: 6,
                       ),
                       Text(
-                        genre.name,
+                        genre.formattedName,
                         style: TextStyle(
                           color: selected
                               ? Colors.white
@@ -233,11 +233,11 @@ class DiscoverView extends StatelessWidget {
                 ? currentUser.performerInfo
                     .map((info) => info.genres)
                     .getOrElse(() => [])
-                : <Genre>[];
+                : <String>[];
             return BlocProvider<DiscoverCubit>(
               create: (context) => DiscoverCubit(
                 search: context.read<SearchRepository>(),
-                initGenres: initGenres,
+                initGenres: fromStrings(initGenres),
               ),
               child: Scaffold(
                 body: LayoutBuilder(

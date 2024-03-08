@@ -13,7 +13,7 @@ _$PerformerInfoImpl _$$PerformerInfoImplFromJson(Map<String, dynamic> json) =>
           : Option<String>.fromJson(
               json['pressKitUrl'], (value) => value as String),
       genres: (json['genres'] as List<dynamic>?)
-              ?.map((e) => $enumDecode(_$GenreEnumMap, e))
+              ?.map((e) => e as String)
               .toList() ??
           const [],
       rating: json['rating'] == null
@@ -32,7 +32,7 @@ Map<String, dynamic> _$$PerformerInfoImplToJson(_$PerformerInfoImpl instance) =>
       'pressKitUrl': instance.pressKitUrl.toJson(
         (value) => value,
       ),
-      'genres': instance.genres.map((e) => _$GenreEnumMap[e]!).toList(),
+      'genres': instance.genres,
       'rating': instance.rating.toJson(
         (value) => value,
       ),
@@ -40,36 +40,6 @@ Map<String, dynamic> _$$PerformerInfoImplToJson(_$PerformerInfoImpl instance) =>
       'label': instance.label,
       'category': _$PerformerCategoryEnumMap[instance.category]!,
     };
-
-const _$GenreEnumMap = {
-  Genre.pop: 'pop',
-  Genre.rock: 'rock',
-  Genre.hiphop: 'hiphop',
-  Genre.rap: 'rap',
-  Genre.rnb: 'rnb',
-  Genre.country: 'country',
-  Genre.edm: 'edm',
-  Genre.electronic: 'electronic',
-  Genre.dance: 'dance',
-  Genre.jazz: 'jazz',
-  Genre.latin: 'latin',
-  Genre.classical: 'classical',
-  Genre.reggae: 'reggae',
-  Genre.blues: 'blues',
-  Genre.soul: 'soul',
-  Genre.funk: 'funk',
-  Genre.metal: 'metal',
-  Genre.punk: 'punk',
-  Genre.indie: 'indie',
-  Genre.folk: 'folk',
-  Genre.alternative: 'alternative',
-  Genre.bluegrass: 'bluegrass',
-  Genre.gospel: 'gospel',
-  Genre.orchestra: 'orchestra',
-  Genre.theater: 'theater',
-  Genre.opera: 'opera',
-  Genre.other: 'other',
-};
 
 const _$PerformerCategoryEnumMap = {
   PerformerCategory.undiscovered: 'undiscovered',

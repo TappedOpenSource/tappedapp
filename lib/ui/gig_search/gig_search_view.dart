@@ -2,7 +2,9 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:formz/formz.dart';
 import 'package:fpdart/fpdart.dart';
+import 'package:intheloopapp/data/database_repository.dart';
 import 'package:intheloopapp/data/search_repository.dart';
+import 'package:intheloopapp/domains/models/genre.dart';
 import 'package:intheloopapp/domains/models/performer_info.dart';
 import 'package:intheloopapp/ui/gig_search/gig_search_cubit.dart';
 import 'package:intheloopapp/ui/gig_search/gig_search_form_view.dart';
@@ -36,10 +38,13 @@ class GigSearchView extends StatelessWidget {
       builder: (context, currentUser) {
         return BlocProvider<GigSearchCubit>(
           create: (context) => GigSearchCubit(
+            database: context.read<DatabaseRepository>(),
             search: context.read<SearchRepository>(),
-            initialGenres: currentUser.performerInfo
-                .map((info) => info.genres)
-                .getOrElse(() => []),
+            initialGenres: fromStrings(
+              currentUser.performerInfo
+                  .map((info) => info.genres)
+                  .getOrElse(() => []),
+            ),
             initialPlace: const None(),
             category: currentUser.performerInfo
                 .map(

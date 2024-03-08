@@ -53,12 +53,12 @@ class SettingsCubit extends Cubit<SettingsState> {
         username: currentUser.username.toString(),
         artistName: currentUser.artistName,
         bio: currentUser.bio,
-        genres: currentUser.performerInfo
-            .toNullable()
-            ?.genres,
-        label: currentUser.performerInfo
-            .toNullable()
-            ?.label,
+        genres: fromStrings(
+          currentUser.performerInfo.map((t) => t.genres).getOrElse(
+                () => [],
+              ),
+        ),
+        label: currentUser.performerInfo.toNullable()?.label,
         occupations: currentUser.occupations,
         tiktokFollowers: currentUser.socialFollowing.tiktokFollowers,
         tiktokHandle: currentUser.socialFollowing.tiktokHandle.toNullable(),
@@ -66,15 +66,13 @@ class SettingsCubit extends Cubit<SettingsState> {
         twitterHandle: currentUser.socialFollowing.twitterHandle.toNullable(),
         instagramFollowers: currentUser.socialFollowing.instagramFollowers,
         instagramHandle:
-        currentUser.socialFollowing.instagramHandle.toNullable(),
+            currentUser.socialFollowing.instagramHandle.toNullable(),
         youtubeChannelId:
-        currentUser.socialFollowing.youtubeChannelId.toNullable(),
-        placeId: currentUser.location
-            .toNullable()
-            ?.placeId,
+            currentUser.socialFollowing.youtubeChannelId.toNullable(),
+        placeId: currentUser.location.toNullable()?.placeId,
         spotifyUrl: currentUser.socialFollowing.spotifyUrl.toNullable(),
         pushNotificationsDirectMessages:
-        currentUser.pushNotifications.directMessages,
+            currentUser.pushNotifications.directMessages,
       ),
     );
   }
@@ -107,8 +105,7 @@ class SettingsCubit extends Cubit<SettingsState> {
   void changeInstagram(String value) =>
       emit(state.copyWith(instagramHandle: value));
 
-  void changeInstagramFollowers(int value) =>
-      emit(
+  void changeInstagramFollowers(int value) => emit(
         state.copyWith(instagramFollowers: value),
       );
 
@@ -134,8 +131,7 @@ class SettingsCubit extends Cubit<SettingsState> {
     );
   }
 
-  void changeGenres(List<Genre> genres) =>
-      emit(
+  void changeGenres(List<Genre> genres) => emit(
         state.copyWith(genres: genres),
       );
 
@@ -147,8 +143,7 @@ class SettingsCubit extends Cubit<SettingsState> {
     );
   }
 
-  void changeOccupations(List<String> value) =>
-      emit(
+  void changeOccupations(List<String> value) => emit(
         state.copyWith(occupations: value),
       );
 
@@ -162,13 +157,11 @@ class SettingsCubit extends Cubit<SettingsState> {
 
   void changeLabel(String? value) => emit(state.copyWith(label: value));
 
-  void updateEmail(String? input) =>
-      emit(
+  void updateEmail(String? input) => emit(
         state.copyWith(email: input),
       );
 
-  void updatePassword(String? input) =>
-      emit(
+  void updatePassword(String? input) => emit(
         state.copyWith(password: input),
       );
 
@@ -188,7 +181,7 @@ class SettingsCubit extends Cubit<SettingsState> {
       });
 
       final imageFile =
-      await ImagePicker().pickImage(source: ImageSource.gallery);
+          await ImagePicker().pickImage(source: ImageSource.gallery);
       if (imageFile != null) {
         emit(
           state.copyWith(
@@ -258,56 +251,50 @@ class SettingsCubit extends Cubit<SettingsState> {
 
         final profilePictureUrl = await switch (state.profileImage) {
           None() => Future<Option<String>>.value(currentUser.profilePicture),
-          Some(:final value) =>
-              storageRepository
-                  .uploadProfilePicture(
+          Some(:final value) => storageRepository
+              .uploadProfilePicture(
                 currentUser.id,
                 value,
               )
-                  .then(Option.of),
+              .then(Option.of),
         };
 
         final pressKitUrl = await switch (state.pressKitFile) {
-          None() =>
-          Future<Option<String>>.value(
-            currentUser.performerInfo.flatMap((t) => t.pressKitUrl),
-          ),
-          Some(:final value) =>
-              (() async {
-                final url = await storageRepository.uploadPressKit(
-                  userId: currentUser.id,
-                  pressKitFile: value,
-                );
-                return Option.of(url);
-              })(),
+          None() => Future<Option<String>>.value(
+              currentUser.performerInfo.flatMap((t) => t.pressKitUrl),
+            ),
+          Some(:final value) => (() async {
+              final url = await storageRepository.uploadPressKit(
+                userId: currentUser.id,
+                pressKitFile: value,
+              );
+              return Option.of(url);
+            })(),
         };
 
         final location = switch (state.place) {
           None() => const None(),
-          Some(:final value) =>
-              Option.of(
-                Location(
-                  placeId: value.placeId,
-                  geohash: value.geohash,
-                  lat: value.lat,
-                  lng: value.lng,
-                ),
+          Some(:final value) => Option.of(
+              Location(
+                placeId: value.placeId,
+                geohash: value.geohash,
+                lat: value.lat,
+                lng: value.lng,
               ),
+            ),
         };
 
         final newPerformerInfo = switch (currentUser.performerInfo) {
-          None() =>
-              PerformerInfo(
-                genres: state.genres,
-                label: state.label ?? 'Independent',
-                pressKitUrl: pressKitUrl,
-              ),
-          Some(:final value) =>
-              value.copyWith(
-                genres: state.genres,
-                label: state.label ?? 'Independent',
-                pressKitUrl: pressKitUrl,
-              ),
+          None() => PerformerInfo(
+              genres: state.genres.map((e) => e.name).toList(),
+              label: state.label ?? 'Independent',
+              pressKitUrl: pressKitUrl,
+            ),
+          Some(:final value) => value.copyWith(
+              genres: state.genres.map((e) => e.name).toList(),
+              label: state.label ?? 'Independent',
+              pressKitUrl: pressKitUrl,
+            ),
         };
 
         final user = currentUser.copyWith(
@@ -415,6 +402,8 @@ class SettingsCubit extends Cubit<SettingsState> {
   Future<void> deleteUser() async {
     await authRepository.deleteUser();
     authenticationBloc.add(LoggedOut());
-    navigationBloc..add(const Pop())..add(const Pop());
+    navigationBloc
+      ..add(const Pop())
+      ..add(const Pop());
   }
 }

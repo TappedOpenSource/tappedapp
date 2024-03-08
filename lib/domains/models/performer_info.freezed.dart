@@ -21,7 +21,7 @@ PerformerInfo _$PerformerInfoFromJson(Map<String, dynamic> json) {
 /// @nodoc
 mixin _$PerformerInfo {
   Option<String> get pressKitUrl => throw _privateConstructorUsedError;
-  List<Genre> get genres => throw _privateConstructorUsedError;
+  List<String> get genres => throw _privateConstructorUsedError;
   Option<double> get rating => throw _privateConstructorUsedError;
   int get reviewCount => throw _privateConstructorUsedError;
   String get label => throw _privateConstructorUsedError;
@@ -41,7 +41,7 @@ abstract class $PerformerInfoCopyWith<$Res> {
   @useResult
   $Res call(
       {Option<String> pressKitUrl,
-      List<Genre> genres,
+      List<String> genres,
       Option<double> rating,
       int reviewCount,
       String label,
@@ -76,7 +76,7 @@ class _$PerformerInfoCopyWithImpl<$Res, $Val extends PerformerInfo>
       genres: null == genres
           ? _value.genres
           : genres // ignore: cast_nullable_to_non_nullable
-              as List<Genre>,
+              as List<String>,
       rating: null == rating
           ? _value.rating
           : rating // ignore: cast_nullable_to_non_nullable
@@ -107,7 +107,7 @@ abstract class _$$PerformerInfoImplCopyWith<$Res>
   @useResult
   $Res call(
       {Option<String> pressKitUrl,
-      List<Genre> genres,
+      List<String> genres,
       Option<double> rating,
       int reviewCount,
       String label,
@@ -140,7 +140,7 @@ class __$$PerformerInfoImplCopyWithImpl<$Res>
       genres: null == genres
           ? _value._genres
           : genres // ignore: cast_nullable_to_non_nullable
-              as List<Genre>,
+              as List<String>,
       rating: null == rating
           ? _value.rating
           : rating // ignore: cast_nullable_to_non_nullable
@@ -166,7 +166,7 @@ class __$$PerformerInfoImplCopyWithImpl<$Res>
 class _$PerformerInfoImpl implements _PerformerInfo {
   const _$PerformerInfoImpl(
       {this.pressKitUrl = const None(),
-      final List<Genre> genres = const [],
+      final List<String> genres = const [],
       this.rating = const None(),
       this.reviewCount = 0,
       this.label = 'Independent',
@@ -179,10 +179,10 @@ class _$PerformerInfoImpl implements _PerformerInfo {
   @override
   @JsonKey()
   final Option<String> pressKitUrl;
-  final List<Genre> _genres;
+  final List<String> _genres;
   @override
   @JsonKey()
-  List<Genre> get genres {
+  List<String> get genres {
     if (_genres is EqualUnmodifiableListView) return _genres;
     // ignore: implicit_dynamic_type
     return EqualUnmodifiableListView(_genres);
@@ -250,7 +250,7 @@ class _$PerformerInfoImpl implements _PerformerInfo {
 abstract class _PerformerInfo implements PerformerInfo {
   const factory _PerformerInfo(
       {final Option<String> pressKitUrl,
-      final List<Genre> genres,
+      final List<String> genres,
       final Option<double> rating,
       final int reviewCount,
       final String label,
@@ -262,7 +262,7 @@ abstract class _PerformerInfo implements PerformerInfo {
   @override
   Option<String> get pressKitUrl;
   @override
-  List<Genre> get genres;
+  List<String> get genres;
   @override
   Option<double> get rating;
   @override
