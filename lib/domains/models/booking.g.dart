@@ -46,6 +46,10 @@ _$BookingImpl _$$BookingImplFromJson(Map<String, dynamic> json) =>
           ? const None()
           : Option<double>.fromJson(
               json['lng'], (value) => (value as num).toDouble()),
+      genres: (json['genres'] as List<dynamic>?)
+              ?.map((e) => $enumDecode(_$GenreEnumMap, e))
+              .toList() ??
+          const [],
       flierUrl: json['flierUrl'] == null
           ? const None()
           : Option<String>.fromJson(
@@ -84,6 +88,7 @@ Map<String, dynamic> _$$BookingImplToJson(_$BookingImpl instance) =>
       'lng': instance.lng.toJson(
         (value) => value,
       ),
+      'genres': instance.genres.map((e) => _$GenreEnumMap[e]!).toList(),
       'flierUrl': instance.flierUrl.toJson(
         (value) => value,
       ),
@@ -93,4 +98,34 @@ const _$BookingStatusEnumMap = {
   BookingStatus.pending: 'pending',
   BookingStatus.confirmed: 'confirmed',
   BookingStatus.canceled: 'canceled',
+};
+
+const _$GenreEnumMap = {
+  Genre.pop: 'pop',
+  Genre.rock: 'rock',
+  Genre.hiphop: 'hiphop',
+  Genre.rap: 'rap',
+  Genre.rnb: 'rnb',
+  Genre.country: 'country',
+  Genre.edm: 'edm',
+  Genre.electronic: 'electronic',
+  Genre.dance: 'dance',
+  Genre.jazz: 'jazz',
+  Genre.latin: 'latin',
+  Genre.classical: 'classical',
+  Genre.reggae: 'reggae',
+  Genre.blues: 'blues',
+  Genre.soul: 'soul',
+  Genre.funk: 'funk',
+  Genre.metal: 'metal',
+  Genre.punk: 'punk',
+  Genre.indie: 'indie',
+  Genre.folk: 'folk',
+  Genre.alternative: 'alternative',
+  Genre.bluegrass: 'bluegrass',
+  Genre.gospel: 'gospel',
+  Genre.orchestra: 'orchestra',
+  Genre.theater: 'theater',
+  Genre.opera: 'opera',
+  Genre.other: 'other',
 };

@@ -60,7 +60,7 @@ class FeedbackButton extends StatelessWidget {
           color: theme.colorScheme.onSurface.withOpacity(0.1),
           padding: const EdgeInsets.all(12),
           child: Text(
-            'Feedback',
+            'feedback',
             style: TextStyle(
               fontSize: 17,
               color: theme.colorScheme.primary,

@@ -8,6 +8,7 @@ import 'package:intheloopapp/ui/discover/discover_cubit.dart';
 import 'package:intheloopapp/ui/profile/components/feedback_button.dart';
 import 'package:intheloopapp/utils/bloc_utils.dart';
 import 'package:intheloopapp/utils/current_user_builder.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class DraggableSheet extends StatelessWidget {
   const DraggableSheet({super.key});
@@ -264,17 +265,39 @@ class DraggableSheet extends StatelessWidget {
                               },
                             ),
                             const SizedBox(height: 10),
-                            const Padding(
-                              padding: EdgeInsets.symmetric(
+                            Padding(
+                              padding: const EdgeInsets.symmetric(
                                 vertical: 16,
                                 horizontal: 20,
                               ),
                               child: Column(
                                 children: [
-                                  Row(
+                                  const Row(
                                     children: [
                                       Expanded(
                                         child: FeedbackButton(),
+                                      ),
+                                    ],
+                                  ),
+                                  const SizedBox(height: 6),
+                                  Row(
+                                    children: [
+                                      Expanded(
+                                        child: CupertinoButton(
+                                          onPressed: () {
+                                            final uri = Uri.parse('https://tappedapp.notion.site/join-tapped-9ccf655358344b21979f73adadf22d98?pvs=4');
+                                            launchUrl(uri);
+                                          },
+                                          color: theme.colorScheme.onSurface.withOpacity(0.1),
+                                          padding: const EdgeInsets.all(12),
+                                          child: const Text(
+                                            'want a job?',
+                                            style: TextStyle(
+                                              color: Colors.white,
+                                              fontWeight: FontWeight.bold,
+                                            ),
+                                          ),
+                                        ),
                                       ),
                                     ],
                                   ),

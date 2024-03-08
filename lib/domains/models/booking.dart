@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:fpdart/fpdart.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:intheloopapp/data/prod/firestore_database_impl.dart';
+import 'package:intheloopapp/domains/models/genre.dart';
 
 part 'booking.freezed.dart';
 
@@ -26,6 +27,7 @@ class Booking with _$Booking {
     @Default(None()) Option<String> geohash,
     @Default(None()) Option<double> lat,
     @Default(None()) Option<double> lng,
+    @Default([]) List<Genre> genres,
     @Default(None()) Option<String> flierUrl,
   }) = _Booking;
 

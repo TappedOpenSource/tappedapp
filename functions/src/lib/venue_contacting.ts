@@ -653,18 +653,26 @@ export const streamBeforeMessageWebhook = onRequest(
 export const notifyFoundersOnOrphanEmail = onDocumentCreated(
   {
     document: "orphanEmails/{emailId}",
+    secrets: [ POSTMARK_SERVER_ID ],
   },
   async (event) => {
     const snapshot = event.data;
     const documentData = snapshot?.data();
+    const client = new postmark.ServerClient(POSTMARK_SERVER_ID.value());
 
     const error = documentData?.error;
     if (!error) {
-      info("no email found");
+      info("no error found");
       return;
     }
 
     const foundersTokens = await getFoundersDeviceTokens();
+
+    const email = documentData?.email;
+    await client.sendEmail({
+      "To": "johannes@tapped.ai",
+      ...email,
+    });
 
     const payload = {
       notification: {
