@@ -274,7 +274,13 @@ class AlgoliaSearchImpl extends SearchRepository {
     }
 
     final hits = results.map((res) {
-      return UserModel.fromJson(res.data);
+      final hitData = res.data;
+      final tmpTimestamp = hitData['timestamp'] as int?;
+      hitData['timestamp'] = tmpTimestamp == null
+          ? null
+          : Timestamp.fromMillisecondsSinceEpoch(tmpTimestamp);
+
+      return UserModel.fromJson(hitData);
     }).toList();
 
     return hits;
