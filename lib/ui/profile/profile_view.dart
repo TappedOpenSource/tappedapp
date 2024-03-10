@@ -6,6 +6,8 @@ import 'package:fpdart/fpdart.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intheloopapp/data/database_repository.dart';
 import 'package:intheloopapp/data/places_repository.dart';
+import 'package:intheloopapp/domains/models/performer_info.dart';
+import 'package:intheloopapp/domains/models/social_following.dart';
 import 'package:intheloopapp/domains/models/user_model.dart';
 import 'package:intheloopapp/domains/navigation_bloc/navigation_bloc.dart';
 import 'package:intheloopapp/domains/navigation_bloc/tapped_route.dart';
@@ -26,6 +28,9 @@ import 'package:intheloopapp/ui/themes.dart';
 import 'package:intheloopapp/utils/default_image.dart';
 import 'package:intheloopapp/utils/hero_image.dart';
 import 'package:intheloopapp/utils/premium_builder.dart';
+import 'package:intl/intl.dart';
+
+import 'package:intheloopapp/ui/profile/components/claim_profile_button.dart';
 
 class ProfileView extends StatelessWidget {
   ProfileView({
@@ -104,6 +109,42 @@ class ProfileView extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  Widget _subheader(UserModel user) {
+    final capacity = user.venueInfo.flatMap((t) => t.capacity);
+    final socialFollowing = user.socialFollowing;
+    final category = user.performerInfo.map((t) => t.category);
+    return switch ((capacity, category)) {
+      (None(), None()) => socialFollowing.audienceSize == 0
+          ? const SizedBox.shrink()
+          : Text(
+              '${NumberFormat.compactCurrency(
+                decimalDigits: 0,
+                symbol: '',
+              ).format(socialFollowing.audienceSize)} followers',
+              style: const TextStyle(
+                color: Colors.white,
+                fontWeight: FontWeight.w400,
+                fontSize: 12,
+              ),
+            ),
+      (None(), Some(:final value)) => Text(
+          '${value.formattedName} performer'.toLowerCase(),
+          style: TextStyle(
+            color: value.color,
+            fontWeight: FontWeight.w400,
+            fontSize: 12,
+          ),
+        ),
+      (Some(:final value), _) => Text(
+          '$value capacity venue',
+          style: const TextStyle(
+            fontWeight: FontWeight.w400,
+            fontSize: 12,
+          ),
+        ),
+    };
   }
 
   Widget _profilePage(
@@ -240,16 +281,7 @@ class ProfileView extends StatelessWidget {
                     );
                   },
                 ),
-                Text(
-                  visitedUser.occupations.join(', '),
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
-                  style: TextStyle(
-                    color: Colors.grey[300],
-                    fontSize: 12,
-                    fontWeight: FontWeight.w300,
-                  ),
-                ),
+                _subheader(visitedUser),
               ],
             ),
             background: _profileImage(
@@ -289,6 +321,10 @@ class ProfileView extends StatelessWidget {
         const SliverToBoxAdapter(
           child: BioSliver(),
         ),
+        if (state.visitedUser.unclaimed)
+          const SliverToBoxAdapter(
+            child: ClaimProfileButton(),
+          ),
         const SliverToBoxAdapter(
           child: SizedBox(
             height: 50,

@@ -2,18 +2,51 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fpdart/fpdart.dart';
-import 'package:intheloopapp/domains/models/genre.dart';
+import 'package:intheloopapp/domains/models/performer_info.dart';
+import 'package:intheloopapp/domains/models/user_model.dart';
 import 'package:intheloopapp/ui/discover/components/user_slider.dart';
-import 'package:intheloopapp/ui/discover/components/venue_slider.dart';
 import 'package:intheloopapp/ui/discover/discover_cubit.dart';
 import 'package:intheloopapp/ui/profile/components/feedback_button.dart';
 import 'package:intheloopapp/ui/user_avatar.dart';
+import 'package:intheloopapp/ui/user_tile.dart';
 import 'package:intheloopapp/utils/bloc_utils.dart';
 import 'package:intheloopapp/utils/current_user_builder.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class DraggableSheet extends StatelessWidget {
   const DraggableSheet({super.key});
+
+  Widget _venueTile(UserModel currentUser, UserModel venue) {
+    final category = currentUser.performerInfo.map((t) => t.category);
+    final userGenres =
+        currentUser.performerInfo.map((t) => t.genres).getOrElse(() => []);
+    final goodCapFit =
+        venue.venueInfo.flatMap((t) => t.capacity).map2(category, (cap, cat) {
+      return cat.suggestedMaxCapacity >= cap;
+    }).getOrElse(() => false);
+    final genreFit = venue.venueInfo.map((t) {
+      final one = Set.from(t.genres);
+      final two = Set.from(userGenres);
+      final intersect = one.intersection(two);
+      return intersect.isNotEmpty;
+    }).getOrElse(() => false);
+    final isGoodFit = goodCapFit && genreFit;
+
+    return UserTile(
+      userId: venue.id,
+      user: Option.of(venue),
+      trailing: isGoodFit
+          ? const Text(
+              'for you',
+              style: TextStyle(
+                color: Colors.green,
+                fontWeight: FontWeight.bold,
+                fontSize: 16,
+              ),
+            )
+          : null,
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -74,7 +107,8 @@ class DraggableSheet extends StatelessWidget {
                                 horizontal: 20,
                               ),
                               child: Row(
-                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
                                 children: [
                                   const SizedBox(width: 35),
                                   Row(
@@ -95,7 +129,8 @@ class DraggableSheet extends StatelessWidget {
                                     padding: const EdgeInsets.all(1),
                                     decoration: BoxDecoration(
                                       color: theme.colorScheme.primary,
-                                      borderRadius: BorderRadius.circular(35.0 / 2),
+                                      borderRadius:
+                                          BorderRadius.circular(35.0 / 2),
                                     ),
                                     child: UserAvatar(
                                       radius: 45,
@@ -107,133 +142,8 @@ class DraggableSheet extends StatelessWidget {
                                 ],
                               ),
                             ),
-                            ...state.genreFilters.map((e) {
-                              final hits = state.genreList(e);
-                              if (hits.isEmpty) return const SizedBox.shrink();
-                              return Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Padding(
-                                    padding: const EdgeInsets.symmetric(
-                                      vertical: 8,
-                                      horizontal: 20,
-                                    ),
-                                    child: Text(
-                                      e.formattedName.toUpperCase(),
-                                      style: const TextStyle(
-                                        fontSize: 28,
-                                        fontWeight: FontWeight.bold,
-                                      ),
-                                    ),
-                                  ),
-                                  VenueSlider(venues: hits),
-                                ],
-                              );
-                            }),
-                            // const Padding(
-                            //   padding: EdgeInsets.symmetric(
-                            //     vertical: 16,
-                            //     horizontal: 8,
-                            //   ),
-                            //   child: Text(
-                            //     'Top Bookers',
-                            //     style: TextStyle(
-                            //       fontSize: 28,
-                            //       fontWeight: FontWeight.bold,
-                            //     ),
-                            //   ),
-                            // ),
-                            // FutureBuilder(
-                            //   future: database.getBookerLeaders(),
-                            //   builder: (context, snapshot) {
-                            //     if (!snapshot.hasData) {
-                            //       return const Center(
-                            //         child: CupertinoActivityIndicator(),
-                            //       );
-                            //     }
-                            //
-                            //     final bookerLeaders = snapshot.data ?? [];
-                            //     return UserSlider(users: bookerLeaders);
-                            //   },
-                            // ),
-                            // const Padding(
-                            //   padding: EdgeInsets.symmetric(
-                            //     vertical: 16,
-                            //     horizontal: 8,
-                            //   ),
-                            //   child: Text(
-                            //     'Top DC Venues',
-                            //     style: TextStyle(
-                            //       fontSize: 28,
-                            //       fontWeight: FontWeight.bold,
-                            //     ),
-                            //   ),
-                            // ),
-                            // FutureBuilder(
-                            //   future: database.getDCVenues(),
-                            //   builder: (context, snapshot) {
-                            //     if (!snapshot.hasData) {
-                            //       return const Center(
-                            //         child: CupertinoActivityIndicator(),
-                            //       );
-                            //     }
-                            //
-                            //     final dcVenues = snapshot.data ?? [];
-                            //     return VenueSlider(venues: dcVenues);
-                            //   },
-                            // ),
-                            // const Padding(
-                            //   padding: EdgeInsets.symmetric(
-                            //     vertical: 16,
-                            //     horizontal: 8,
-                            //   ),
-                            //   child: Text(
-                            //     'Top NoVa Venues',
-                            //     style: TextStyle(
-                            //       fontSize: 28,
-                            //       fontWeight: FontWeight.bold,
-                            //     ),
-                            //   ),
-                            // ),
-                            // FutureBuilder(
-                            //   future: database.getNovaVenues(),
-                            //   builder: (context, snapshot) {
-                            //     if (!snapshot.hasData) {
-                            //       return const Center(
-                            //         child: CupertinoActivityIndicator(),
-                            //       );
-                            //     }
-                            //
-                            //     final novaVenues = snapshot.data ?? [];
-                            //     return VenueSlider(venues: novaVenues);
-                            //   },
-                            // ),
-                            // const Padding(
-                            //   padding: EdgeInsets.symmetric(
-                            //     vertical: 16,
-                            //     horizontal: 8,
-                            //   ),
-                            //   child: Text(
-                            //     'Top Maryland Venues',
-                            //     style: TextStyle(
-                            //       fontSize: 28,
-                            //       fontWeight: FontWeight.bold,
-                            //     ),
-                            //   ),
-                            // ),
-                            // FutureBuilder(
-                            //   future: database.getMarylandVenues(),
-                            //   builder: (context, snapshot) {
-                            //     if (!snapshot.hasData) {
-                            //       return const Center(
-                            //         child: CupertinoActivityIndicator(),
-                            //       );
-                            //     }
-                            //
-                            //     final marylandVenues = snapshot.data ?? [];
-                            //     return VenueSlider(venues: marylandVenues);
-                            //   },
-                            // ),
+                            ...state.venueHits
+                                .map((venue) => _venueTile(currentUser, venue)),
                             const Padding(
                               padding: EdgeInsets.symmetric(
                                 vertical: 16,
@@ -281,10 +191,12 @@ class DraggableSheet extends StatelessWidget {
                                       Expanded(
                                         child: CupertinoButton(
                                           onPressed: () {
-                                            final uri = Uri.parse('https://tappedapp.notion.site/join-tapped-9ccf655358344b21979f73adadf22d98?pvs=4');
+                                            final uri = Uri.parse(
+                                                'https://tappedapp.notion.site/join-tapped-9ccf655358344b21979f73adadf22d98?pvs=4');
                                             launchUrl(uri);
                                           },
-                                          color: theme.colorScheme.onSurface.withOpacity(0.1),
+                                          color: theme.colorScheme.onSurface
+                                              .withOpacity(0.1),
                                           padding: const EdgeInsets.all(12),
                                           child: const Text(
                                             'want a job?',

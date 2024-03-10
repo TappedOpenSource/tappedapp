@@ -17,6 +17,10 @@ _$UserModelImpl _$$UserModelImplFromJson(Map<String, dynamic> json) =>
           ? const None()
           : Option<String>.fromJson(
               json['phoneNumber'], (value) => value as String),
+      website: json['website'] == null
+          ? const None()
+          : Option<String>.fromJson(
+              json['website'], (value) => value as String),
       unclaimed: json['unclaimed'] as bool? ?? false,
       artistName: json['artistName'] as String? ?? '',
       profilePicture: json['profilePicture'] == null
@@ -79,6 +83,9 @@ Map<String, dynamic> _$$UserModelImplToJson(_$UserModelImpl instance) =>
       'username': const UsernameConverter().toJson(instance.username),
       'email': instance.email,
       'phoneNumber': instance.phoneNumber.toJson(
+        (value) => value,
+      ),
+      'website': instance.website.toJson(
         (value) => value,
       ),
       'unclaimed': instance.unclaimed,

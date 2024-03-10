@@ -27,6 +27,7 @@ class UserModel with _$UserModel {
     @UsernameConverter() required Username username,
     @Default('') String email,
     @Default(None()) Option<String> phoneNumber,
+    @Default(None()) Option<String> website,
     @Default(false) bool unclaimed,
     @Default('') String artistName,
     @Default(None()) Option<String> profilePicture,

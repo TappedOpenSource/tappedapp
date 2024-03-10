@@ -25,7 +25,7 @@ class OpportunitiesSliver extends StatelessWidget {
               child: Row(
                 children: [
                   Text(
-                    'Performance Opportunities',
+                    'gig opportunities',
                     style: TextStyle(
                       fontSize: 24,
                       fontWeight: FontWeight.bold,

@@ -32,7 +32,7 @@ class InfoSliver extends StatelessWidget {
     final theme = Theme.of(context);
     return BlocBuilder<ProfileCubit, ProfileState>(
       builder: (context, state) {
-        final occupations = state.visitedUser.occupations;
+        // final occupations = state.visitedUser.occupations;
         final performerInfo = state.visitedUser.performerInfo;
         final venueInfo = state.visitedUser.venueInfo;
         final genres = performerInfo.map((t) => t.genres).getOrElse(
@@ -135,25 +135,25 @@ class InfoSliver extends StatelessWidget {
                                     ),
                                 },
                             },
-                            if (occupations.isNotEmpty &&
-                                occupations != ['Venue'] &&
-                                occupations != ['venue'])
-                              CupertinoListTile(
-                                leading: const Icon(
-                                  CupertinoIcons.briefcase,
-                                ),
-                                title: SingleChildScrollView(
-                                  scrollDirection: Axis.horizontal,
-                                  child: Text(
-                                    occupations
-                                        .map((e) => e.toLowerCase())
-                                        .join(', '),
-                                    style: TextStyle(
-                                      color: theme.colorScheme.onSurface,
-                                    ),
-                                  ),
-                                ),
-                              ),
+                            // if (occupations.isNotEmpty &&
+                            //     occupations != ['Venue'] &&
+                            //     occupations != ['venue'])
+                            //   CupertinoListTile(
+                            //     leading: const Icon(
+                            //       CupertinoIcons.briefcase,
+                            //     ),
+                            //     title: SingleChildScrollView(
+                            //       scrollDirection: Axis.horizontal,
+                            //       child: Text(
+                            //         occupations
+                            //             .map((e) => e.toLowerCase())
+                            //             .join(', '),
+                            //         style: TextStyle(
+                            //           color: theme.colorScheme.onSurface,
+                            //         ),
+                            //       ),
+                            //     ),
+                            //   ),
                             if (genres.isNotEmpty)
                               CupertinoListTile(
                                 leading: const Icon(
@@ -180,7 +180,7 @@ class InfoSliver extends StatelessWidget {
                                   );
                                   await HapticFeedback.mediumImpact();
                                   await EasyLoading.showSuccess(
-                                    'Copied Email',
+                                    'copied email',
                                     duration: const Duration(milliseconds: 500),
                                   );
                                 },
@@ -209,7 +209,7 @@ class InfoSliver extends StatelessWidget {
                                       );
                                       await HapticFeedback.mediumImpact();
                                       await EasyLoading.showSuccess(
-                                        'Copied Phone',
+                                        'copied phone',
                                         duration:
                                             const Duration(milliseconds: 500),
                                       );
@@ -242,6 +242,9 @@ class InfoSliver extends StatelessWidget {
                             switch (pressKitUrl) {
                               None() => const SizedBox.shrink(),
                               Some(:final value) => CupertinoListTile.notched(
+                                  leading: const Icon(
+                                    CupertinoIcons.doc_person_fill,
+                                  ),
                                   title: Text(
                                     'press kit',
                                     style: TextStyle(
@@ -249,7 +252,8 @@ class InfoSliver extends StatelessWidget {
                                     ),
                                   ),
                                   trailing: const Icon(
-                                      CupertinoIcons.chevron_forward),
+                                    CupertinoIcons.chevron_forward,
+                                  ),
                                   onTap: () async {
                                     await launchUrl(Uri.parse(value));
                                   },

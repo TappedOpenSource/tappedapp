@@ -27,6 +27,7 @@ mixin _$UserModel {
   Username get username => throw _privateConstructorUsedError;
   String get email => throw _privateConstructorUsedError;
   Option<String> get phoneNumber => throw _privateConstructorUsedError;
+  Option<String> get website => throw _privateConstructorUsedError;
   bool get unclaimed => throw _privateConstructorUsedError;
   String get artistName => throw _privateConstructorUsedError;
   Option<String> get profilePicture => throw _privateConstructorUsedError;
@@ -64,6 +65,7 @@ abstract class $UserModelCopyWith<$Res> {
       @UsernameConverter() Username username,
       String email,
       Option<String> phoneNumber,
+      Option<String> website,
       bool unclaimed,
       String artistName,
       Option<String> profilePicture,
@@ -105,6 +107,7 @@ class _$UserModelCopyWithImpl<$Res, $Val extends UserModel>
     Object? username = null,
     Object? email = null,
     Object? phoneNumber = null,
+    Object? website = null,
     Object? unclaimed = null,
     Object? artistName = null,
     Object? profilePicture = null,
@@ -143,6 +146,10 @@ class _$UserModelCopyWithImpl<$Res, $Val extends UserModel>
       phoneNumber: null == phoneNumber
           ? _value.phoneNumber
           : phoneNumber // ignore: cast_nullable_to_non_nullable
+              as Option<String>,
+      website: null == website
+          ? _value.website
+          : website // ignore: cast_nullable_to_non_nullable
               as Option<String>,
       unclaimed: null == unclaimed
           ? _value.unclaimed
@@ -255,6 +262,7 @@ abstract class _$$UserModelImplCopyWith<$Res>
       @UsernameConverter() Username username,
       String email,
       Option<String> phoneNumber,
+      Option<String> website,
       bool unclaimed,
       String artistName,
       Option<String> profilePicture,
@@ -297,6 +305,7 @@ class __$$UserModelImplCopyWithImpl<$Res>
     Object? username = null,
     Object? email = null,
     Object? phoneNumber = null,
+    Object? website = null,
     Object? unclaimed = null,
     Object? artistName = null,
     Object? profilePicture = null,
@@ -335,6 +344,10 @@ class __$$UserModelImplCopyWithImpl<$Res>
       phoneNumber: null == phoneNumber
           ? _value.phoneNumber
           : phoneNumber // ignore: cast_nullable_to_non_nullable
+              as Option<String>,
+      website: null == website
+          ? _value.website
+          : website // ignore: cast_nullable_to_non_nullable
               as Option<String>,
       unclaimed: null == unclaimed
           ? _value.unclaimed
@@ -418,6 +431,7 @@ class _$UserModelImpl implements _UserModel {
       @UsernameConverter() required this.username,
       this.email = '',
       this.phoneNumber = const None(),
+      this.website = const None(),
       this.unclaimed = false,
       this.artistName = '',
       this.profilePicture = const None(),
@@ -454,6 +468,9 @@ class _$UserModelImpl implements _UserModel {
   @override
   @JsonKey()
   final Option<String> phoneNumber;
+  @override
+  @JsonKey()
+  final Option<String> website;
   @override
   @JsonKey()
   final bool unclaimed;
@@ -514,7 +531,7 @@ class _$UserModelImpl implements _UserModel {
 
   @override
   String toString() {
-    return 'UserModel(id: $id, timestamp: $timestamp, username: $username, email: $email, phoneNumber: $phoneNumber, unclaimed: $unclaimed, artistName: $artistName, profilePicture: $profilePicture, bio: $bio, occupations: $occupations, location: $location, badgesCount: $badgesCount, performerInfo: $performerInfo, bookerInfo: $bookerInfo, venueInfo: $venueInfo, socialFollowing: $socialFollowing, emailNotifications: $emailNotifications, pushNotifications: $pushNotifications, deleted: $deleted, stripeConnectedAccountId: $stripeConnectedAccountId, stripeCustomerId: $stripeCustomerId, latestAppVersion: $latestAppVersion)';
+    return 'UserModel(id: $id, timestamp: $timestamp, username: $username, email: $email, phoneNumber: $phoneNumber, website: $website, unclaimed: $unclaimed, artistName: $artistName, profilePicture: $profilePicture, bio: $bio, occupations: $occupations, location: $location, badgesCount: $badgesCount, performerInfo: $performerInfo, bookerInfo: $bookerInfo, venueInfo: $venueInfo, socialFollowing: $socialFollowing, emailNotifications: $emailNotifications, pushNotifications: $pushNotifications, deleted: $deleted, stripeConnectedAccountId: $stripeConnectedAccountId, stripeCustomerId: $stripeCustomerId, latestAppVersion: $latestAppVersion)';
   }
 
   @override
@@ -530,6 +547,7 @@ class _$UserModelImpl implements _UserModel {
             (identical(other.email, email) || other.email == email) &&
             (identical(other.phoneNumber, phoneNumber) ||
                 other.phoneNumber == phoneNumber) &&
+            (identical(other.website, website) || other.website == website) &&
             (identical(other.unclaimed, unclaimed) ||
                 other.unclaimed == unclaimed) &&
             (identical(other.artistName, artistName) ||
@@ -574,6 +592,7 @@ class _$UserModelImpl implements _UserModel {
         username,
         email,
         phoneNumber,
+        website,
         unclaimed,
         artistName,
         profilePicture,
@@ -614,6 +633,7 @@ abstract class _UserModel implements UserModel {
       @UsernameConverter() required final Username username,
       final String email,
       final Option<String> phoneNumber,
+      final Option<String> website,
       final bool unclaimed,
       final String artistName,
       final Option<String> profilePicture,
@@ -647,6 +667,8 @@ abstract class _UserModel implements UserModel {
   String get email;
   @override
   Option<String> get phoneNumber;
+  @override
+  Option<String> get website;
   @override
   bool get unclaimed;
   @override

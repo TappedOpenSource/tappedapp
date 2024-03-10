@@ -126,7 +126,7 @@ class CategoryGauge extends StatelessWidget {
                                   ),
                                   const SizedBox(width: 8),
                                   Text(
-                                    e.formattedName,
+                                    e.formattedName.toLowerCase(),
                                     style: TextStyle(
                                       fontWeight: isSelected
                                           ? FontWeight.bold

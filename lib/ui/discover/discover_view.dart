@@ -1,4 +1,5 @@
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_map/flutter_map.dart';
@@ -102,28 +103,30 @@ class DiscoverView extends StatelessWidget {
                     },
                     heroTag: 'overlay',
                   ),
-                  _buildMapButton(
-                    context,
-                    icon: Icons.add,
-                    onPressed: () {
-                      mapController.move(
-                        mapController.camera.center,
-                        mapController.camera.zoom + 1,
-                      );
-                    },
-                    heroTag: 'zoom-in',
-                  ),
-                  _buildMapButton(
-                    context,
-                    icon: Icons.remove,
-                    onPressed: () {
-                      mapController.move(
-                        mapController.camera.center,
-                        mapController.camera.zoom - 1,
-                      );
-                    },
-                    heroTag: 'zoom-out',
-                  ),
+                  if (kDebugMode)
+                    _buildMapButton(
+                      context,
+                      icon: Icons.add,
+                      onPressed: () {
+                        mapController.move(
+                          mapController.camera.center,
+                          mapController.camera.zoom + 1,
+                        );
+                      },
+                      heroTag: 'zoom-in',
+                    ),
+                  if (kDebugMode)
+                    _buildMapButton(
+                      context,
+                      icon: Icons.remove,
+                      onPressed: () {
+                        mapController.move(
+                          mapController.camera.center,
+                          mapController.camera.zoom - 1,
+                        );
+                      },
+                      heroTag: 'zoom-out',
+                    ),
                 ],
               ),
             );
@@ -288,7 +291,8 @@ class DiscoverView extends StatelessWidget {
 
                                         return badges.Badge(
                                           showBadge: unreadMessagesCount > 0,
-                                          position: badges.BadgePosition.topEnd(),
+                                          position:
+                                              badges.BadgePosition.topEnd(),
                                           // badgeContent: Text('$unreadMessagesCount'),
                                           child: IconButton(
                                             onPressed: () => context.push(
