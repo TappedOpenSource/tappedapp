@@ -40,7 +40,7 @@ class ReviewsSliver extends StatelessWidget {
                         child: const Row(
                           children: [
                             Text(
-                              'Reviews',
+                              'reviews',
                               style: TextStyle(
                                 fontSize: 24,
                                 fontWeight: FontWeight.bold,

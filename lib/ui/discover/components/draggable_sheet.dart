@@ -1,11 +1,13 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:fpdart/fpdart.dart';
 import 'package:intheloopapp/domains/models/genre.dart';
 import 'package:intheloopapp/ui/discover/components/user_slider.dart';
 import 'package:intheloopapp/ui/discover/components/venue_slider.dart';
 import 'package:intheloopapp/ui/discover/discover_cubit.dart';
 import 'package:intheloopapp/ui/profile/components/feedback_button.dart';
+import 'package:intheloopapp/ui/user_avatar.dart';
 import 'package:intheloopapp/utils/bloc_utils.dart';
 import 'package:intheloopapp/utils/current_user_builder.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -23,10 +25,10 @@ class DraggableSheet extends StatelessWidget {
           builder: (context, state) {
             return DraggableScrollableSheet(
               expand: false,
-              initialChildSize: 0.1,
-              minChildSize: 0.1,
+              initialChildSize: 0.11,
+              minChildSize: 0.11,
               snap: true,
-              snapSizes: const [0.1, 0.5, 1],
+              snapSizes: const [0.11, 0.5, 1],
               builder: (ctx, scrollController) => DecoratedBox(
                 decoration: BoxDecoration(
                   borderRadius: const BorderRadius.vertical(
@@ -66,19 +68,40 @@ class DraggableSheet extends StatelessWidget {
                                 ),
                               ),
                             ),
-
                             Padding(
                               padding: const EdgeInsets.symmetric(
                                 vertical: 8,
+                                horizontal: 20,
                               ),
                               child: Row(
-                                mainAxisAlignment: MainAxisAlignment.center,
+                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                 children: [
-                                  Text(
-                                    '${state.venueHits.length} ${state.venueHits.length == 1 ? 'venue' : 'venues'}',
-                                    style: const TextStyle(
-                                      fontSize: 16,
-                                      fontWeight: FontWeight.w700,
+                                  const SizedBox(width: 35),
+                                  Row(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      Text(
+                                        '${state.venueHits.length} ${state.venueHits.length == 1 ? 'venue' : 'venues'}',
+                                        style: const TextStyle(
+                                          fontSize: 16,
+                                          fontWeight: FontWeight.w700,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                  Container(
+                                    height: 35,
+                                    width: 35,
+                                    padding: const EdgeInsets.all(1),
+                                    decoration: BoxDecoration(
+                                      color: theme.colorScheme.primary,
+                                      borderRadius: BorderRadius.circular(35.0 / 2),
+                                    ),
+                                    child: UserAvatar(
+                                      radius: 45,
+                                      imageUrl: currentUser.profilePicture,
+                                      pushUser: Option.of(currentUser),
+                                      pushId: Option.of(currentUser.id),
                                     ),
                                   ),
                                 ],
@@ -86,6 +109,7 @@ class DraggableSheet extends StatelessWidget {
                             ),
                             ...state.genreFilters.map((e) {
                               final hits = state.genreList(e);
+                              if (hits.isEmpty) return const SizedBox.shrink();
                               return Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [

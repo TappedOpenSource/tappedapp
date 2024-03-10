@@ -35,9 +35,9 @@ class ReviewCount extends StatelessWidget {
                 ),
               ),
               if (allReviewCount == 1)
-                const Text('Review')
+                const Text('review')
               else
-                const Text('Reviews'),
+                const Text('reviews'),
             ],
           ),
         );

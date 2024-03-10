@@ -17,6 +17,7 @@ class TappedSearchBar extends StatefulWidget {
     this.controller,
     this.onChanged,
     this.onTap,
+    this.trailing,
     super.key,
   });
 
@@ -24,6 +25,7 @@ class TappedSearchBar extends StatefulWidget {
   final SearchController? controller;
   final void Function(String)? onChanged;
   final void Function()? onTap;
+  final List<Widget>? trailing;
 
   @override
   State<TappedSearchBar> createState() => _TappedSearchBarState();
@@ -61,20 +63,24 @@ class _TappedSearchBarState extends State<TappedSearchBar> {
     final theme = Theme.of(context);
     return SearchAnchor(
       searchController: _searchController,
-      viewBackgroundColor: theme.colorScheme.surface,
+      viewBackgroundColor: theme.colorScheme.background,
       builder: (context, searchController) {
         return Hero(
           tag: 'searchBar',
           child: SearchBar(
             // elevation: const MaterialStatePropertyAll(0),
+            backgroundColor: MaterialStatePropertyAll(
+              theme.colorScheme.background,
+            ),
+            elevation: const MaterialStatePropertyAll(0),
             controller: searchController,
             focusNode: _searchFocusNode,
-            hintText: 'Search Performers...',
+            hintText: 'search...',
             leading: IconButton(
               onPressed: () {},
               icon: const Icon(Icons.search),
             ),
-            trailing: [
+            trailing: widget.trailing ?? [
               CustomClaimsBuilder(
                 builder: (context, claims) {
                   final hasClaim = claims.isNotEmpty;

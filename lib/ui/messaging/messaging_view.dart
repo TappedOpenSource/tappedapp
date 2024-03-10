@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:intheloopapp/ui/common/tapped_app_bar.dart';
 import 'package:intheloopapp/ui/discover/components/tapped_search_bar.dart';
 import 'package:intheloopapp/ui/messaging/channel_list_view.dart';
 
@@ -10,12 +11,8 @@ class MessagingChannelListView extends StatelessWidget {
     return Scaffold(
       backgroundColor: Theme.of(context).colorScheme.background,
       extendBodyBehindAppBar: true,
-      appBar: AppBar(
-        title: const TappedSearchBar(),
-        elevation: 0,
-        backgroundColor: Colors.transparent,
-        shadowColor: Colors.transparent,
-        scrolledUnderElevation: 0,
+      appBar: const TappedAppBar(
+        title: 'messages',
       ),
       body: const ChannelListView(),
     );

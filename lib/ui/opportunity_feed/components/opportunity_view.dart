@@ -84,6 +84,7 @@ class OpportunityView extends StatelessWidget {
     return Scaffold(
       backgroundColor: theme.colorScheme.background,
       appBar: showAppBar ? AppBar() : null,
+      floatingActionButtonLocation: FloatingActionButtonLocation.startFloat,
       floatingActionButton: buildFloatingActionButton(
         context,
         opBloc: opBloc,

@@ -25,7 +25,7 @@ class BioSliver extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               const Text(
-                'About',
+                'about',
                 style: TextStyle(
                   fontWeight: FontWeight.bold,
                   fontSize: 24,

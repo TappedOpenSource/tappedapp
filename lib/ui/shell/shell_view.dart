@@ -28,23 +28,24 @@ class ShellView extends StatelessWidget {
                 .updateTheme(isPremiumMode: claim);
             return BlocBuilder<NavigationBloc, NavigationState>(
               builder: (context, state) {
-                return Scaffold(
-                  body: IndexedStack(
-                    index: state.selectedTab,
-                    children: [
-                      const OpportunityFeedView(),
-                      const DiscoverView(),
-                      const BookingsView(),
-                      const MessagingChannelListView(),
-                      ProfileView(
-                        visitedUserId: currentUser.id,
-                        visitedUser: Option.of(currentUser),
-                      ),
-                    ],
-                  ),
-                  bottomNavigationBar: BottomToolbar(
-                    user: currentUser,
-                  ),
+                return const Scaffold(
+                  body: DiscoverView(),
+                  // body: IndexedStack(
+                  //   index: state.selectedTab,
+                  //   children: [
+                  //     // const OpportunityFeedView(),
+                  //     const DiscoverView(),
+                  //     // const BookingsView(),
+                  //     // const MessagingChannelListView(),
+                  //     // ProfileView(
+                  //     //   visitedUserId: currentUser.id,
+                  //     //   visitedUser: Option.of(currentUser),
+                  //     // ),
+                  //   ],
+                  // ),
+                  // bottomNavigationBar: BottomToolbar(
+                  //   user: currentUser,
+                  // ),
                 );
               },
             );

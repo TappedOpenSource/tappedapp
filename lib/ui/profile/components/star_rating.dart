@@ -9,7 +9,7 @@ class StarRating extends StatelessWidget {
 
   Widget _ratingWidget(Option<double> rating) {
     final overallRating = switch (rating) {
-      None() => 'N/A',
+      None() => 'n/a',
       Some(:final value) => value.toStringAsFixed(1),
     };
     return Column(
@@ -20,7 +20,7 @@ class StarRating extends StatelessWidget {
             fontSize: 24,
           ),
         ),
-        const Text('Rating'),
+        const Text('rating'),
       ],
     );
   }

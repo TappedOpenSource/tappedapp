@@ -32,7 +32,7 @@ class FollowerCount extends StatelessWidget {
                 ),
               ),
               const Text(
-                'Followers',
+                'followers',
               ),
             ],
           ),

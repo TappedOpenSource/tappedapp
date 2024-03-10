@@ -30,7 +30,7 @@ class ServicesSliver extends StatelessWidget {
                 child: Row(
                   children: [
                     Text(
-                      'Services',
+                      'services',
                       style: TextStyle(
                         fontSize: 24,
                         fontWeight: FontWeight.bold,

@@ -127,7 +127,7 @@ class BookingsSliver extends StatelessWidget {
                         child: const Row(
                           children: [
                             Text(
-                              'Booking History',
+                              'booking history',
                               style: TextStyle(
                                 fontSize: 24,
                                 fontWeight: FontWeight.bold,

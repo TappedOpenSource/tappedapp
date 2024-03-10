@@ -38,12 +38,12 @@ class BottomToolbar extends StatelessWidget {
           // inactiveColor: Colors.white,
           currentIndex: state.selectedTab,
           items: [
-            const BottomNavigationBarItem(
-              label: 'gigs',
-              icon: Icon(
-                CupertinoIcons.music_mic,
-              ),
-            ),
+            // const BottomNavigationBarItem(
+            //   label: 'gigs',
+            //   icon: Icon(
+            //     CupertinoIcons.music_mic,
+            //   ),
+            // ),
             BottomNavigationBarItem(
               label: 'discover',
               icon: GestureDetector(
@@ -57,27 +57,27 @@ class BottomToolbar extends StatelessWidget {
                 child: const Icon(CupertinoIcons.search),
               ),
             ),
-            BottomNavigationBarItem(
-              label: 'bookings',
-              icon: BlocBuilder<BookingsBloc, BookingsState>(
-                builder: (context, state) {
-                  final pendingBookings = state.bookings.where((booking) {
-                    return (booking.status == BookingStatus.pending) &&
-                        (user.id == booking.requesteeId);
-                  }).toList();
-                  return badges.Badge(
-                    position: badges.BadgePosition.topEnd(top: -4, end: -5),
-                    showBadge: pendingBookings.isNotEmpty,
-                    badgeContent: Text(
-                      pendingBookings.length.toString(),
-                    ),
-                    child: const Icon(
-                      CupertinoIcons.tickets,
-                    ),
-                  );
-                },
-              ),
-            ),
+            // BottomNavigationBarItem(
+            //   label: 'bookings',
+            //   icon: BlocBuilder<BookingsBloc, BookingsState>(
+            //     builder: (context, state) {
+            //       final pendingBookings = state.bookings.where((booking) {
+            //         return (booking.status == BookingStatus.pending) &&
+            //             (user.id == booking.requesteeId);
+            //       }).toList();
+            //       return badges.Badge(
+            //         position: badges.BadgePosition.topEnd(top: -4, end: -5),
+            //         showBadge: pendingBookings.isNotEmpty,
+            //         badgeContent: Text(
+            //           pendingBookings.length.toString(),
+            //         ),
+            //         child: const Icon(
+            //           CupertinoIcons.tickets,
+            //         ),
+            //       );
+            //     },
+            //   ),
+            // ),
             BottomNavigationBarItem(
               label: 'messages',
               icon: StreamBuilder<int?>(
@@ -107,35 +107,35 @@ class BottomToolbar extends StatelessWidget {
                 },
               ),
             ),
-            BottomNavigationBarItem(
-              label: 'profile',
-              activeIcon: Container(
-                height: 35,
-                width: 35,
-                padding: const EdgeInsets.all(2),
-                decoration: BoxDecoration(
-                  color: theme.colorScheme.primary,
-                  borderRadius: BorderRadius.circular(35.0 / 2),
-                ),
-                child: UserAvatar(
-                  radius: 45,
-                  imageUrl: user.profilePicture,
-                ),
-              ),
-              icon: Container(
-                height: 30,
-                width: 30,
-                padding: const EdgeInsets.all(1),
-                decoration: BoxDecoration(
-                  color: theme.bottomNavigationBarTheme.unselectedItemColor,
-                  borderRadius: BorderRadius.circular(30.0 / 2),
-                ),
-                child: UserAvatar(
-                  radius: 45,
-                  imageUrl: user.profilePicture,
-                ),
-              ),
-            ),
+            // BottomNavigationBarItem(
+            //   label: 'profile',
+            //   activeIcon: Container(
+            //     height: 35,
+            //     width: 35,
+            //     padding: const EdgeInsets.all(2),
+            //     decoration: BoxDecoration(
+            //       color: theme.colorScheme.primary,
+            //       borderRadius: BorderRadius.circular(35.0 / 2),
+            //     ),
+            //     child: UserAvatar(
+            //       radius: 45,
+            //       imageUrl: user.profilePicture,
+            //     ),
+            //   ),
+            //   icon: Container(
+            //     height: 30,
+            //     width: 30,
+            //     padding: const EdgeInsets.all(1),
+            //     decoration: BoxDecoration(
+            //       color: theme.bottomNavigationBarTheme.unselectedItemColor,
+            //       borderRadius: BorderRadius.circular(30.0 / 2),
+            //     ),
+            //     child: UserAvatar(
+            //       radius: 45,
+            //       imageUrl: user.profilePicture,
+            //     ),
+            //   ),
+            // ),
           ],
         );
       },

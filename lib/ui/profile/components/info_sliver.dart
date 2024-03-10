@@ -95,7 +95,8 @@ class InfoSliver extends StatelessWidget {
                                     ),
                                     title: Text(
                                       getAddressComponent(
-                                          value.addressComponents),
+                                        value.addressComponents,
+                                      ).toLowerCase(),
                                       style: TextStyle(
                                         color: theme.colorScheme.onSurface,
                                       ),
@@ -110,7 +111,7 @@ class InfoSliver extends StatelessWidget {
                                     CupertinoIcons.building_2_fill,
                                   ),
                                   title: Text(
-                                    value.type.formattedName,
+                                    value.type.formattedName.toLowerCase(),
                                     style: TextStyle(
                                       color: theme.colorScheme.onSurface,
                                     ),
@@ -144,7 +145,9 @@ class InfoSliver extends StatelessWidget {
                                 title: SingleChildScrollView(
                                   scrollDirection: Axis.horizontal,
                                   child: Text(
-                                    occupations.join(', '),
+                                    occupations
+                                        .map((e) => e.toLowerCase())
+                                        .join(', '),
                                     style: TextStyle(
                                       color: theme.colorScheme.onSurface,
                                     ),
@@ -160,7 +163,8 @@ class InfoSliver extends StatelessWidget {
                                   scrollDirection: Axis.horizontal,
                                   child: Text(
                                     fromStrings(genres)
-                                        .map((e) => e.formattedName)
+                                        .map((e) =>
+                                            e.formattedName.toLowerCase())
                                         .join(', '),
                                     style: TextStyle(
                                       color: theme.colorScheme.onSurface,
@@ -229,7 +233,7 @@ class InfoSliver extends StatelessWidget {
                                   CupertinoIcons.tag,
                                 ),
                                 title: Text(
-                                  label,
+                                  label.toLowerCase(),
                                   style: TextStyle(
                                     color: theme.colorScheme.onSurface,
                                   ),
@@ -239,7 +243,7 @@ class InfoSliver extends StatelessWidget {
                               None() => const SizedBox.shrink(),
                               Some(:final value) => CupertinoListTile.notched(
                                   title: Text(
-                                    'EPK',
+                                    'press kit',
                                     style: TextStyle(
                                       color: theme.colorScheme.onSurface,
                                     ),
@@ -255,7 +259,7 @@ class InfoSliver extends StatelessWidget {
                               None() => const SizedBox.shrink(),
                               Some(:final value) => CupertinoListTile(
                                   title: Text(
-                                    'Ideal Performer Profile',
+                                    'ideal performer profile',
                                     style: TextStyle(
                                       color: theme.colorScheme.onSurface,
                                     ),
@@ -311,7 +315,7 @@ class InfoSliver extends StatelessWidget {
                             },
                             CupertinoListTile(
                               title: Text(
-                                'More Options',
+                                'more options',
                                 style: TextStyle(
                                   color: theme.colorScheme.onSurface,
                                 ),

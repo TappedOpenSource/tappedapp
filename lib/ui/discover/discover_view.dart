@@ -10,10 +10,15 @@ import 'package:intheloopapp/domains/navigation_bloc/tapped_route.dart';
 import 'package:intheloopapp/ui/discover/components/draggable_sheet.dart';
 import 'package:intheloopapp/ui/discover/components/map_base.dart';
 import 'package:intheloopapp/ui/discover/components/map_config_slider.dart';
+import 'package:intheloopapp/ui/discover/components/tapped_search_bar.dart';
 import 'package:intheloopapp/ui/discover/discover_cubit.dart';
+import 'package:intheloopapp/ui/messaging/channel_list_view.dart';
+import 'package:intheloopapp/ui/messaging/messaging_view.dart';
 import 'package:intheloopapp/utils/current_user_builder.dart';
 import 'package:intheloopapp/utils/premium_builder.dart';
 import 'package:latlong2/latlong.dart';
+import 'package:stream_chat_flutter/stream_chat_flutter.dart';
+import 'package:badges/badges.dart' as badges;
 
 class DiscoverView extends StatelessWidget {
   const DiscoverView({
@@ -52,7 +57,7 @@ class DiscoverView extends StatelessWidget {
           builder: (context, state) {
             final cubit = context.read<DiscoverCubit>();
             return Positioned(
-              bottom: 100 + 10,
+              bottom: 110 + 10,
               right: 10,
               child: Column(
                 children: [
@@ -87,8 +92,8 @@ class DiscoverView extends StatelessWidget {
                                 }
 
                                 cubit.onMapOverlayChange(
-                                      overlay,
-                                    );
+                                  overlay,
+                                );
                               },
                             ),
                           );
@@ -166,7 +171,7 @@ class DiscoverView extends StatelessWidget {
                         width: 6,
                       ),
                       Text(
-                        genre.formattedName,
+                        genre.formattedName.toLowerCase(),
                         style: TextStyle(
                           color: selected
                               ? Colors.white
@@ -225,6 +230,7 @@ class DiscoverView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final mapController = MapController();
+    final streamClient = StreamChat.of(context).client;
     return CurrentUserBuilder(
       builder: (context, currentUser) {
         return PremiumBuilder(
@@ -240,6 +246,15 @@ class DiscoverView extends StatelessWidget {
                 initGenres: fromStrings(initGenres),
               ),
               child: Scaffold(
+                floatingActionButtonLocation:
+                    FloatingActionButtonLocation.startDocked,
+                floatingActionButton: FloatingActionButton.extended(
+                  onPressed: () => context.push(
+                    GigSearchInitPage(),
+                  ),
+                  icon: const Icon(Icons.search),
+                  label: const Text('get booked'),
+                ),
                 body: LayoutBuilder(
                   builder: (context, contains) {
                     return Stack(
@@ -255,34 +270,41 @@ class DiscoverView extends StatelessWidget {
                             ),
                             child: Column(
                               children: [
-                                Row(
-                                  children: [
-                                    Expanded(
-                                      child: InkWell(
-                                        onTap: () => context.push(
-                                          GigSearchInitPage(),
-                                        ),
-                                        child: Card(
-                                          child: Row(
-                                            children: [
-                                              IconButton(
-                                                onPressed: () => context.push(
-                                                  GigSearchInitPage(),
-                                                ),
-                                                icon: const Icon(Icons.search),
-                                              ),
-                                              const Expanded(
-                                                child: Text('get booked...'),
-                                              ),
-                                              // const NotificationIconButton(),
-                                            ],
+                                TappedSearchBar(
+                                  trailing: [
+                                    StreamBuilder<int?>(
+                                      stream: streamClient
+                                          .on()
+                                          .where((event) =>
+                                              event.totalUnreadCount != null)
+                                          .map(
+                                            (event) => event.totalUnreadCount,
                                           ),
-                                        ),
-                                      ),
+                                      initialData:
+                                          streamClient.state.totalUnreadCount,
+                                      builder: (context, snapshot) {
+                                        final unreadMessagesCount =
+                                            snapshot.data ?? 0;
+
+                                        return badges.Badge(
+                                          showBadge: unreadMessagesCount > 0,
+                                          position: badges.BadgePosition.topEnd(),
+                                          // badgeContent: Text('$unreadMessagesCount'),
+                                          child: IconButton(
+                                            onPressed: () => context.push(
+                                              MessagingChannelListPage(),
+                                            ),
+                                            icon: const Icon(
+                                              CupertinoIcons
+                                                  .chat_bubble_text_fill,
+                                            ),
+                                          ),
+                                        );
+                                      },
                                     ),
-                                    // const NotificationIconButton(),
                                   ],
                                 ),
+                                const SizedBox(height: 4),
                                 _buildGenreList(context),
                               ],
                             ),
