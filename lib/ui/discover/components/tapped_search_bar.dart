@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fpdart/fpdart.dart' hide State;
+import 'package:intheloopapp/data/search_repository.dart';
 import 'package:intheloopapp/domains/models/user_model.dart';
 import 'package:intheloopapp/domains/navigation_bloc/navigation_bloc.dart';
 import 'package:intheloopapp/domains/navigation_bloc/tapped_route.dart';
@@ -61,6 +62,7 @@ class _TappedSearchBarState extends State<TappedSearchBar> {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+    final searchRepo = context.read<SearchRepository>();
     return SearchAnchor(
       searchController: _searchController,
       viewBackgroundColor: theme.colorScheme.background,
@@ -80,27 +82,34 @@ class _TappedSearchBarState extends State<TappedSearchBar> {
               onPressed: () {},
               icon: const Icon(Icons.search),
             ),
-            trailing: widget.trailing ?? [
-              CustomClaimsBuilder(
-                builder: (context, claims) {
-                  final hasClaim = claims.isNotEmpty;
-                  return IconButton(
-                    onPressed: () {
-                      return switch (hasClaim) {
-                        true => context.push(
-                            AdvancedSearchPage(),
-                          ),
-                        false => context.push(
-                            PaywallPage(),
-                          ),
-                      };
+            trailing: widget.trailing ??
+                [
+                  CustomClaimsBuilder(
+                    builder: (context, claims) {
+                      final hasClaim = claims.isNotEmpty;
+                      return IconButton(
+                        onPressed: () {
+                          return switch (hasClaim) {
+                            true => context.push(
+                                AdvancedSearchPage(),
+                              ),
+                            false => context.push(
+                                PaywallPage(),
+                              ),
+                          };
+                        },
+                        icon: const Icon(CupertinoIcons.doc_text_search),
+                        color: theme.colorScheme.onSurface,
+                      );
                     },
-                    icon: const Icon(CupertinoIcons.doc_text_search),
-                    color: theme.colorScheme.onSurface,
-                  );
-                },
-              ),
-            ],
+                  ),
+                ],
+            onChanged: (_) {
+              if (searchController.isOpen) {
+                return;
+              }
+              searchController.openView();
+            },
             onTap: () {
               searchController.openView();
               widget.onTap?.call();
@@ -111,6 +120,17 @@ class _TappedSearchBarState extends State<TappedSearchBar> {
       viewBuilder: (suggestions) {
         return BlocBuilder<SearchBloc, SearchState>(
           builder: (context, state) {
+            if (suggestions.isNotEmpty && state.searchResults.isEmpty) {
+              final sugList = suggestions.toList();
+              return ListView.builder(
+                itemCount: suggestions.length,
+                itemBuilder: (context, index) {
+                  final userWidget = sugList[index];
+                  return userWidget;
+                },
+              );
+            }
+
             if (state.loading) {
               return const Center(
                 child: LogoWave(),
@@ -132,8 +152,9 @@ class _TappedSearchBarState extends State<TappedSearchBar> {
           },
         );
       },
-      suggestionsBuilder: (context, searchController) {
-        return _searchResults.map(
+      suggestionsBuilder: (context, searchController) async {
+        final suggestedUsers = await searchRepo.queryUsers('');
+        return suggestedUsers.map(
           (user) => UserTile(
             userId: user.id,
             user: Option.of(user),
