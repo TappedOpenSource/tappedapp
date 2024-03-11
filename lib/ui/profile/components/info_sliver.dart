@@ -162,9 +162,8 @@ class InfoSliver extends StatelessWidget {
                                 title: SingleChildScrollView(
                                   scrollDirection: Axis.horizontal,
                                   child: Text(
-                                    fromStrings(genres)
-                                        .map((e) =>
-                                            e.formattedName.toLowerCase())
+                                    genres
+                                        .map((e) => e.toLowerCase())
                                         .join(', '),
                                     style: TextStyle(
                                       color: theme.colorScheme.onSurface,

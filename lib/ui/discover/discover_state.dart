@@ -88,7 +88,7 @@ extension DiscoverStateX on DiscoverState {
         .where(
           (e) => e.venueInfo
               .map(
-                (t) => t.genres.contains(Genre.electronic),
+                (t) => t.genres.contains(Genre.electronic.name),
               )
               .getOrElse(() => false),
         )
@@ -100,7 +100,7 @@ extension DiscoverStateX on DiscoverState {
         .where(
           (e) => e.venueInfo
               .map(
-                (t) => t.genres.contains(genre),
+                (t) => t.genres.contains(genre.name),
               )
               .getOrElse(() => false),
         )

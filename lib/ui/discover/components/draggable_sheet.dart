@@ -102,9 +102,10 @@ class DraggableSheet extends StatelessWidget {
                               ),
                             ),
                             Padding(
-                              padding: const EdgeInsets.symmetric(
-                                vertical: 8,
-                                horizontal: 20,
+                              padding: const EdgeInsets.only(
+                                bottom: 24,
+                                left: 20,
+                                right: 20,
                               ),
                               child: Row(
                                 mainAxisAlignment:
