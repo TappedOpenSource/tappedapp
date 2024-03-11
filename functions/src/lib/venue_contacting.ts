@@ -20,6 +20,7 @@ import { contactVenueTemplate } from "../email_templates/contact_venue";
 import { UserModel, VenueContactRequest } from "../types/models";
 import { getFoundersDeviceTokens } from "./utils";
 import { chatGpt } from "./openai";
+import { notifyFounders } from "./notifications";
 
 function createEmailMessageId() {
   const currentTime = Date.now().toString(36);
@@ -366,60 +367,69 @@ export const notifyFoundersOnVenueContact = onDocumentCreated(
     secrets: [ POSTMARK_SERVER_ID, streamKey, streamSecret, OPEN_AI_KEY ],
   },
   async (event) => {
-    process.env.OPENAI_API_KEY = OPEN_AI_KEY.value();
-    const snapshot = event.data;
-    const venueContactData = snapshot?.data() as
+    try {
+
+      process.env.OPENAI_API_KEY = OPEN_AI_KEY.value();
+      const snapshot = event.data;
+      const venueContactData = snapshot?.data() as
       | VenueContactRequest
       | undefined;
-    if (venueContactData === undefined) {
-      error("no venueContactData found");
-      return;
-    }
+      if (venueContactData === undefined) {
+        error("no venueContactData found");
+        return;
+      }
 
-    const venueId = event.params.venueId;
-    const userId = event.params.userId;
+      const venueId = event.params.venueId;
+      const userId = event.params.userId;
 
-    const streamChat = new StreamChat(streamKey.value(), streamSecret.value());
+      const streamChat = new StreamChat(streamKey.value(), streamSecret.value());
 
-    // check if claimed or unclaimed
-    // if claimed, send message as DM, and return;
-    const venueSnap = await usersRef.doc(venueId).get();
-    const venueData = venueSnap.data() as UserModel | undefined;
-    if (venueData === undefined) {
-      error("no venueData found");
-      return;
-    }
+      // check if claimed or unclaimed
+      // if claimed, send message as DM, and return;
+      const venueSnap = await usersRef.doc(venueId).get();
+      const venueData = venueSnap.data() as UserModel | undefined;
+      if (venueData === undefined) {
+        error("no venueData found");
+        return;
+      }
 
-    // if autoreply setup, send autoreply as DM;
-    const autoReply = venueData.venueInfo?.autoReply;
-    if (autoReply !== undefined && autoReply !== null) {
-      await dmAutoReply({
-        streamClient: streamChat,
-        venueId,
+      // if autoreply setup, send autoreply as DM;
+      const autoReply = venueData.venueInfo?.autoReply;
+      if (autoReply !== undefined && autoReply !== null) {
+        await dmAutoReply({
+          streamClient: streamChat,
+          venueId,
+          userId,
+          autoReply,
+        });
+        return;
+      }
+
+      const note = venueContactData.note ?? "";
+
+      const unclaimed = venueData.unclaimed;
+      if (!unclaimed) {
+        await sendAsDirectMessage({
+          streamClient: streamChat,
+          userId,
+          venueId,
+          note,
+        });
+        return;
+      }
+
+      await sendAsEmail({
+        venueContactData,
         userId,
-        autoReply,
+        venue: venueData,
       });
-      return;
-    }
-
-    const note = venueContactData.note ?? "";
-
-    const unclaimed = venueData.unclaimed;
-    if (!unclaimed) {
-      await sendAsDirectMessage({
-        streamClient: streamChat,
-        userId,
-        venueId,
-        note,
+    } catch (e: any) {
+      error(e);
+      await notifyFounders({
+        title: "Error in venue contact",
+        body: e.message,
       });
-      return;
     }
-
-    await sendAsEmail({
-      venueContactData,
-      userId,
-      venue: venueData,
-    });
   },
 );
 

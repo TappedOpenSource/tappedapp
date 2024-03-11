@@ -1,17 +1,18 @@
 /* eslint-disable import/no-unresolved */
 import * as functions from "firebase-functions";
 import { marked } from "marked";
-import { LEAP_API_KEY, LEAP_WEBHOOK_SECRET, OPEN_AI_KEY, RESEND_API_KEY, aiModelsRef, auth, avatarsRef, creditsPerPriceId, creditsPerTestPriceId, creditsRef, fcm, guestMarketingPlansRef, mainBucket, marketingFormsRef, marketingPlansRef, projectId, stripeCoverArtTestWebhookSecret, stripeCoverArtWebhookSecret, stripeKey, stripeTestEndpointSecret, stripeTestKey, trainingImagesRef, usersRef } from "./firebase";
+import { LEAP_API_KEY, LEAP_WEBHOOK_SECRET, OPEN_AI_KEY, RESEND_API_KEY, aiModelsRef, auth, avatarsRef, creditsPerPriceId, creditsPerTestPriceId, creditsRef, guestMarketingPlansRef, mainBucket, marketingFormsRef, marketingPlansRef, projectId, stripeCoverArtTestWebhookSecret, stripeCoverArtWebhookSecret, stripeKey, stripeTestEndpointSecret, stripeTestKey, trainingImagesRef, usersRef } from "./firebase";
 import { Resend } from "resend";
 import { error, info } from "firebase-functions/logger";
 import { basicEnhancedBio, generateBasicMarketingPlan, generateSingleBasicMarketingPlan } from "./openai";
 import { HttpsError, onCall, onRequest } from "firebase-functions/v2/https";
-import { authenticatedRequest, getFoundersDeviceTokens } from "./utils";
+import { authenticatedRequest } from "./utils";
 import { sd } from "./leapai";
 import { FieldValue, Timestamp } from "firebase-admin/firestore";
 import { MarketingPlan, UserModel } from "../types/models";
 import Stripe from "stripe";
 import { v4 as uuidv4 } from "uuid";
+import { notifyFounders } from "./notifications";
 
 const WEBHOOK_URL = `https://us-central1-${projectId}.cloudfunctions.net/trainWebhook`;
 const IMAGE_WEBHOOK_URL = `https://us-central1-${projectId}.cloudfunctions.net/imageWebhook`;
@@ -871,28 +872,18 @@ export const notifyFoundersOnMarketingForm = functions
   .onCreate(async (snapshot) => {
     const form = snapshot.data();
 
-    const devices = await getFoundersDeviceTokens();
-    const payload = {
-      notification: {
-        title: "New Marketing Form \uD83D\uDE43",
-        body: `${form.artistName} just created a marketing plan`,
-      }
-    };
-
-    fcm.sendToDevice(devices, payload);
+    await notifyFounders({
+      title: "New Marketing Form \uD83D\uDE43",
+      body: `${form.artistName} just created a marketing plan`,
+    })
   });
 
 export const notifyFoundersOnGuestMarketingPlan = functions
   .firestore
   .document("guestMarketingPlans/{planId}")
   .onCreate(async () => {
-    const devices = await getFoundersDeviceTokens();
-    const payload = {
-      notification: {
-        title: "New Marketing Plan \uD83D\uDE43",
-        body: "Someone just created a marketing plan",
-      }
-    };
-
-    fcm.sendToDevice(devices, payload);
+    await notifyFounders({
+      title: "New Marketing Plan \uD83D\uDE43",
+      body: "Someone just created a marketing plan",
+    })
   });

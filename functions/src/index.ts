@@ -30,6 +30,7 @@ export * from "./lib/calendar";
 export * from "./lib/places";
 export * from "./lib/user_feedback";
 export * from "./lib/venue_contacting";
+export * from "./lib/notifications";
 
 const _deleteUser = async (data: { id: string }) => {
   // Checking attribute.
