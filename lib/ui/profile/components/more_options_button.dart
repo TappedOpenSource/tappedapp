@@ -10,6 +10,7 @@ import 'package:intheloopapp/ui/themes.dart';
 import 'package:intheloopapp/utils/admin_builder.dart';
 import 'package:intheloopapp/utils/app_logger.dart';
 import 'package:intheloopapp/utils/bloc_utils.dart';
+import 'package:intl/intl.dart';
 import 'package:share_plus/share_plus.dart';
 
 class MoreOptionsButton extends StatelessWidget {
@@ -24,6 +25,7 @@ class MoreOptionsButton extends StatelessWidget {
     final database = context.database;
     final nav = context.nav;
     final scaffoldMessenger = ScaffoldMessenger.of(context);
+    final dateFormat = DateFormat('yyyy-MM-dd HH:mm:ss');
     showCupertinoModalPopup<void>(
       context: context,
       builder: (BuildContext context) => CupertinoActionSheet(
@@ -58,6 +60,17 @@ class MoreOptionsButton extends StatelessWidget {
                   child: Text(
                     'latest app version ${user.latestAppVersion.getOrElse(() => 'unknown')}',
                   ),
+                ),
+            },
+          if (isAdmin)
+            switch (user.timestamp) {
+              None() => CupertinoActionSheetAction(
+                  onPressed: () {},
+                  child: const Text('joined unknown'),
+                ),
+              Some(:final value) => CupertinoActionSheetAction(
+                  onPressed: () {},
+                  child: Text('joined ${dateFormat.format(value)}'),
                 ),
             },
           if (isAdmin)

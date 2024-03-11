@@ -22,7 +22,7 @@ class RequestToPerformConfirmationView extends StatelessWidget {
             children: [
               const SizedBox(height: 24),
               const Text(
-                'Your request has been sent!',
+                'your request has been sent!',
                 style: TextStyle(
                   fontSize: 36,
                   fontWeight: FontWeight.bold,
@@ -30,7 +30,7 @@ class RequestToPerformConfirmationView extends StatelessWidget {
               ),
               const SizedBox(height: 28),
               const Text(
-                'You will get a DM from the venue if they accept your request and venues usually take 1-2 weeks to respond. You can also check the status of your request in the "Bookings" section of your profile.',
+                'you will get a DM from the venue if they accept your request and venues usually take 1-2 weeks to respond. you can also check the status of your request in the "bookings" section of your profile.',
                 style: TextStyle(
                   fontSize: 18,
                 ),
@@ -44,7 +44,7 @@ class RequestToPerformConfirmationView extends StatelessWidget {
                       color: theme.colorScheme.primary,
                       borderRadius: BorderRadius.circular(15),
                       child: const Text(
-                        'Okay',
+                        'okay',
                         style: TextStyle(
                           color: Colors.white,
                           fontWeight: FontWeight.bold,
