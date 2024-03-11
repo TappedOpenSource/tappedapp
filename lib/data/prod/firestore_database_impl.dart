@@ -45,15 +45,13 @@ final _contactVenuesRef = _firestore.collection('contactVenues');
 
 const verifiedBadgeId = '0aa46576-1fbe-4312-8b69-e2fef3269083';
 
-const commentsSubcollection = 'loopComments';
-const likesSubcollection = 'loopLikes';
-const feedSubcollection = 'userFeed';
-
 const blockerSubcollection = 'blockedUsers';
 const blockeeSubcollection = 'blockedByUsers';
 
 const bookerReviewsSubcollection = 'bookerReviews';
 const performerReviewsSubcollection = 'performerReviews';
+
+const tccUserId = 'yfjw9oCMwPVzAxgENxGxecPcNym1';
 
 Future<bool> _asyncShouldCache(bool candidate) async {
   return candidate;
@@ -479,10 +477,14 @@ class FirestoreDatabaseImpl extends DatabaseRepository {
       ),
     );
 
-    return ops
-        .whereType<Some<Opportunity>>()
-        .map((e) => e.toNullable())
-        .toList();
+    final iliasOps = await getOpportunitiesByUserId(tccUserId);
+
+    final featured =
+        ops.whereType<Some<Opportunity>>().map((e) => e.toNullable()).toList();
+
+    return featured
+      ..addAll(iliasOps)
+      ..sort((a, b) => b.startTime.compareTo(a.startTime));
   }
 
   @override

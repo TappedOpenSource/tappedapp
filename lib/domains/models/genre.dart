@@ -1,5 +1,4 @@
 import 'package:fpdart/fpdart.dart';
-import 'package:intheloopapp/utils/app_logger.dart';
 import 'package:json_annotation/json_annotation.dart';
 
 @JsonEnum()
@@ -20,6 +19,10 @@ enum Genre {
   funk,
   @JsonValue('jazz')
   jazz,
+  @JsonValue('punk')
+  punk,
+  @JsonValue('psychedelia')
+  psychedelia,
   @JsonValue('afrobeat')
   afrobeat,
   @JsonValue('aggrotech')
@@ -202,12 +205,8 @@ enum Genre {
   progressivePop,
   @JsonValue('psichedeliaOccultaItaliana')
   psichedeliaOccultaItaliana,
-  @JsonValue('psychedelia')
-  psychedelia,
   @JsonValue('psychobilly')
   psychobilly,
-  @JsonValue('punk')
-  punk,
   @JsonValue('radioDrama')
   radioDrama,
   @JsonValue('ragtime')

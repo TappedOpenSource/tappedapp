@@ -7,6 +7,7 @@ import 'package:intheloopapp/domains/models/user_model.dart';
 import 'package:intheloopapp/ui/discover/components/user_slider.dart';
 import 'package:intheloopapp/ui/discover/discover_cubit.dart';
 import 'package:intheloopapp/ui/profile/components/feedback_button.dart';
+import 'package:intheloopapp/ui/profile/components/opportunities_list.dart';
 import 'package:intheloopapp/ui/user_avatar.dart';
 import 'package:intheloopapp/ui/user_tile.dart';
 import 'package:intheloopapp/utils/bloc_utils.dart';
@@ -169,6 +170,23 @@ class DraggableSheet extends StatelessWidget {
 
                                 final bookingLeaders = snapshot.data ?? [];
                                 return UserSlider(users: bookingLeaders);
+                              },
+                            ),
+                            const SizedBox(height: 10),
+                            FutureBuilder(
+                              future: database.getFeaturedOpportunities(),
+                              builder: (context, snapshot) {
+                                if (!snapshot.hasData) {
+                                  return const Center(
+                                    child: CupertinoActivityIndicator(),
+                                  );
+                                }
+
+                                final featuredOpportunities =
+                                    snapshot.data ?? [];
+                                return OpportunitiesList(
+                                  opportunities: featuredOpportunities,
+                                );
                               },
                             ),
                             const SizedBox(height: 10),
