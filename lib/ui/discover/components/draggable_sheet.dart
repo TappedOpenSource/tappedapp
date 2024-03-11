@@ -25,8 +25,8 @@ class DraggableSheet extends StatelessWidget {
       return cat.suggestedMaxCapacity >= cap;
     }).getOrElse(() => false);
     final genreFit = venue.venueInfo.map((t) {
-      final one = Set.from(t.genres);
-      final two = Set.from(userGenres);
+      final one = Set<String>.from(t.genres.map((e) => e.toLowerCase()));
+      final two = Set<String>.from(userGenres.map((e) => e.toLowerCase()));
       final intersect = one.intersection(two);
       return intersect.isNotEmpty;
     }).getOrElse(() => false);
