@@ -33,7 +33,7 @@ mixin _$VenueInfo {
   Option<String> get microphones => throw _privateConstructorUsedError;
   Option<String> get lights => throw _privateConstructorUsedError;
   VenueType get type => throw _privateConstructorUsedError;
-  Option<double> get averageTicketPrice => throw _privateConstructorUsedError;
+  Option<int> get averageTicketPrice => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
@@ -59,7 +59,7 @@ abstract class $VenueInfoCopyWith<$Res> {
       Option<String> microphones,
       Option<String> lights,
       VenueType type,
-      Option<double> averageTicketPrice});
+      Option<int> averageTicketPrice});
 }
 
 /// @nodoc
@@ -141,7 +141,7 @@ class _$VenueInfoCopyWithImpl<$Res, $Val extends VenueInfo>
       averageTicketPrice: null == averageTicketPrice
           ? _value.averageTicketPrice
           : averageTicketPrice // ignore: cast_nullable_to_non_nullable
-              as Option<double>,
+              as Option<int>,
     ) as $Val);
   }
 }
@@ -167,7 +167,7 @@ abstract class _$$VenueInfoImplCopyWith<$Res>
       Option<String> microphones,
       Option<String> lights,
       VenueType type,
-      Option<double> averageTicketPrice});
+      Option<int> averageTicketPrice});
 }
 
 /// @nodoc
@@ -247,7 +247,7 @@ class __$$VenueInfoImplCopyWithImpl<$Res>
       averageTicketPrice: null == averageTicketPrice
           ? _value.averageTicketPrice
           : averageTicketPrice // ignore: cast_nullable_to_non_nullable
-              as Option<double>,
+              as Option<int>,
     ));
   }
 }
@@ -325,7 +325,7 @@ class _$VenueInfoImpl implements _VenueInfo {
   final VenueType type;
   @override
   @JsonKey()
-  final Option<double> averageTicketPrice;
+  final Option<int> averageTicketPrice;
 
   @override
   String toString() {
@@ -408,7 +408,7 @@ abstract class _VenueInfo implements VenueInfo {
       final Option<String> microphones,
       final Option<String> lights,
       final VenueType type,
-      final Option<double> averageTicketPrice}) = _$VenueInfoImpl;
+      final Option<int> averageTicketPrice}) = _$VenueInfoImpl;
 
   factory _VenueInfo.fromJson(Map<String, dynamic> json) =
       _$VenueInfoImpl.fromJson;
@@ -438,7 +438,7 @@ abstract class _VenueInfo implements VenueInfo {
   @override
   VenueType get type;
   @override
-  Option<double> get averageTicketPrice;
+  Option<int> get averageTicketPrice;
   @override
   @JsonKey(ignore: true)
   _$$VenueInfoImplCopyWith<_$VenueInfoImpl> get copyWith =>

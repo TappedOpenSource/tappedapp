@@ -62,13 +62,13 @@ class DiscoverCubit extends Cubit<DiscoverState> {
           // Android's shouldShowRequestPermissionRationale
           // returned true. According to Android guidelines
           // your App should show an explanatory UI now.
-          return Future.error('Location permissions are denied');
+          throw Exception('Location permissions are denied');
         }
       }
 
       if (permission == LocationPermission.deniedForever) {
         // Permissions are denied forever, handle appropriately.
-        return Future.error(
+        throw Exception(
           'Location permissions are permanently denied, we cannot request permissions.',
         );
       }

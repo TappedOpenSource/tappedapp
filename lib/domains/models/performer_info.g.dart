@@ -27,12 +27,12 @@ _$PerformerInfoImpl _$$PerformerInfoImplFromJson(Map<String, dynamic> json) =>
               PerformerCategory.undiscovered,
       averageTicketPrice: json['averageTicketPrice'] == null
           ? const None()
-          : Option<double>.fromJson(
-              json['averageTicketPrice'], (value) => (value as num).toDouble()),
+          : Option<int>.fromJson(
+              json['averageTicketPrice'], (value) => value as int),
       averageAttendance: json['averageAttendance'] == null
           ? const None()
-          : Option<double>.fromJson(
-              json['averageAttendance'], (value) => (value as num).toDouble()),
+          : Option<int>.fromJson(
+              json['averageAttendance'], (value) => value as int),
     );
 
 Map<String, dynamic> _$$PerformerInfoImplToJson(_$PerformerInfoImpl instance) =>

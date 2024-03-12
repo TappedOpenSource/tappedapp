@@ -7,6 +7,7 @@ import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:fpdart/fpdart.dart';
 import 'package:intheloopapp/data/auth_repository.dart';
 import 'package:intheloopapp/domains/models/genre.dart';
+import 'package:intheloopapp/domains/models/performer_info.dart';
 import 'package:intheloopapp/domains/models/venue_info.dart';
 import 'package:intheloopapp/domains/navigation_bloc/navigation_bloc.dart';
 import 'package:intheloopapp/domains/navigation_bloc/tapped_route.dart';
@@ -38,6 +39,9 @@ class InfoSliver extends StatelessWidget {
         final genres = performerInfo.map((t) => t.genres).getOrElse(
               () => venueInfo.map((t) => t.genres).getOrElse(() => []),
             );
+        final averagePerformerTicketPrice = performerInfo
+            .map((t) => t.formattedAverageTicketPrice)
+            .getOrElse(() => const None());
         final label = performerInfo.map((t) => t.label).getOrElse(() => 'None');
         final pressKitUrl = performerInfo
             .map((t) => t.pressKitUrl)
@@ -135,25 +139,6 @@ class InfoSliver extends StatelessWidget {
                                     ),
                                 },
                             },
-                            // if (occupations.isNotEmpty &&
-                            //     occupations != ['Venue'] &&
-                            //     occupations != ['venue'])
-                            //   CupertinoListTile(
-                            //     leading: const Icon(
-                            //       CupertinoIcons.briefcase,
-                            //     ),
-                            //     title: SingleChildScrollView(
-                            //       scrollDirection: Axis.horizontal,
-                            //       child: Text(
-                            //         occupations
-                            //             .map((e) => e.toLowerCase())
-                            //             .join(', '),
-                            //         style: TextStyle(
-                            //           color: theme.colorScheme.onSurface,
-                            //         ),
-                            //       ),
-                            //     ),
-                            //   ),
                             if (genres.isNotEmpty)
                               CupertinoListTile(
                                 leading: const Icon(
@@ -171,6 +156,21 @@ class InfoSliver extends StatelessWidget {
                                   ),
                                 ),
                               ),
+                            if (isPremium)
+                              switch (averagePerformerTicketPrice) {
+                                None() => const SizedBox.shrink(),
+                                Some(:final value) => CupertinoListTile(
+                                    leading: const Icon(
+                                      CupertinoIcons.money_dollar,
+                                    ),
+                                    title: Text(
+                                      '$value average ticket price',
+                                      style: TextStyle(
+                                        color: theme.colorScheme.onSurface,
+                                      ),
+                                    ),
+                                  ),
+                              },
                             if (isPremium && bookingEmail != null)
                               GestureDetector(
                                 onLongPress: () async {

@@ -54,8 +54,8 @@ _$VenueInfoImpl _$$VenueInfoImplFromJson(Map<String, dynamic> json) =>
           VenueType.other,
       averageTicketPrice: json['averageTicketPrice'] == null
           ? const None()
-          : Option<double>.fromJson(
-              json['averageTicketPrice'], (value) => (value as num).toDouble()),
+          : Option<int>.fromJson(
+              json['averageTicketPrice'], (value) => value as int),
     );
 
 Map<String, dynamic> _$$VenueInfoImplToJson(_$VenueInfoImpl instance) =>

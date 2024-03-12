@@ -26,8 +26,8 @@ mixin _$PerformerInfo {
   int get reviewCount => throw _privateConstructorUsedError;
   String get label => throw _privateConstructorUsedError;
   PerformerCategory get category => throw _privateConstructorUsedError;
-  Option<double> get averageTicketPrice => throw _privateConstructorUsedError;
-  Option<double> get averageAttendance => throw _privateConstructorUsedError;
+  Option<int> get averageTicketPrice => throw _privateConstructorUsedError;
+  Option<int> get averageAttendance => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
@@ -48,8 +48,8 @@ abstract class $PerformerInfoCopyWith<$Res> {
       int reviewCount,
       String label,
       PerformerCategory category,
-      Option<double> averageTicketPrice,
-      Option<double> averageAttendance});
+      Option<int> averageTicketPrice,
+      Option<int> averageAttendance});
 }
 
 /// @nodoc
@@ -102,11 +102,11 @@ class _$PerformerInfoCopyWithImpl<$Res, $Val extends PerformerInfo>
       averageTicketPrice: null == averageTicketPrice
           ? _value.averageTicketPrice
           : averageTicketPrice // ignore: cast_nullable_to_non_nullable
-              as Option<double>,
+              as Option<int>,
       averageAttendance: null == averageAttendance
           ? _value.averageAttendance
           : averageAttendance // ignore: cast_nullable_to_non_nullable
-              as Option<double>,
+              as Option<int>,
     ) as $Val);
   }
 }
@@ -126,8 +126,8 @@ abstract class _$$PerformerInfoImplCopyWith<$Res>
       int reviewCount,
       String label,
       PerformerCategory category,
-      Option<double> averageTicketPrice,
-      Option<double> averageAttendance});
+      Option<int> averageTicketPrice,
+      Option<int> averageAttendance});
 }
 
 /// @nodoc
@@ -178,11 +178,11 @@ class __$$PerformerInfoImplCopyWithImpl<$Res>
       averageTicketPrice: null == averageTicketPrice
           ? _value.averageTicketPrice
           : averageTicketPrice // ignore: cast_nullable_to_non_nullable
-              as Option<double>,
+              as Option<int>,
       averageAttendance: null == averageAttendance
           ? _value.averageAttendance
           : averageAttendance // ignore: cast_nullable_to_non_nullable
-              as Option<double>,
+              as Option<int>,
     ));
   }
 }
@@ -230,10 +230,10 @@ class _$PerformerInfoImpl implements _PerformerInfo {
   final PerformerCategory category;
   @override
   @JsonKey()
-  final Option<double> averageTicketPrice;
+  final Option<int> averageTicketPrice;
   @override
   @JsonKey()
-  final Option<double> averageAttendance;
+  final Option<int> averageAttendance;
 
   @override
   String toString() {
@@ -295,8 +295,8 @@ abstract class _PerformerInfo implements PerformerInfo {
       final int reviewCount,
       final String label,
       final PerformerCategory category,
-      final Option<double> averageTicketPrice,
-      final Option<double> averageAttendance}) = _$PerformerInfoImpl;
+      final Option<int> averageTicketPrice,
+      final Option<int> averageAttendance}) = _$PerformerInfoImpl;
 
   factory _PerformerInfo.fromJson(Map<String, dynamic> json) =
       _$PerformerInfoImpl.fromJson;
@@ -314,9 +314,9 @@ abstract class _PerformerInfo implements PerformerInfo {
   @override
   PerformerCategory get category;
   @override
-  Option<double> get averageTicketPrice;
+  Option<int> get averageTicketPrice;
   @override
-  Option<double> get averageAttendance;
+  Option<int> get averageAttendance;
   @override
   @JsonKey(ignore: true)
   _$$PerformerInfoImplCopyWith<_$PerformerInfoImpl> get copyWith =>

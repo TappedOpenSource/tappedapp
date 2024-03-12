@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:fpdart/fpdart.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
+import 'package:intl/intl.dart';
 
 part 'performer_info.freezed.dart';
 part 'performer_info.g.dart';
@@ -14,8 +15,8 @@ class PerformerInfo with _$PerformerInfo {
     @Default(0) int reviewCount,
     @Default('Independent') String label,
     @Default(PerformerCategory.undiscovered) PerformerCategory category,
-    @Default(None()) Option<double> averageTicketPrice,
-    @Default(None()) Option<double> averageAttendance,
+    @Default(None()) Option<int> averageTicketPrice,
+    @Default(None()) Option<int> averageAttendance,
   }) = _PerformerInfo;
 
   // fromJson
@@ -31,6 +32,18 @@ class OptionalPerformerInfoConverter implements JsonConverter<Option<PerformerIn
 
   @override
   PerformerInfo? toJson(Option<PerformerInfo> option) => option.toNullable();
+}
+
+extension PerformerInfoX on PerformerInfo {
+  Option<String> get formattedAverageTicketPrice {
+    return averageTicketPrice.map(
+      (price) {
+        final double doublePrice = price / 100;
+        final formatter = NumberFormat.compactSimpleCurrency();
+        return formatter.format(doublePrice);
+      },
+    );
+  }
 }
 
 @JsonEnum()
@@ -101,4 +114,5 @@ extension PerformerCategoryX on PerformerCategory {
       PerformerCategory.legendary => 'Iconic performers who are revered and influential in the live performance industry, often regarded as legends by both audiences and peers.',
     };
   }
+
 }
