@@ -35,7 +35,7 @@ class DiscoverCubit extends Cubit<DiscoverState> {
   final List<Genre> initGenres;
 
   final _debouncer = Debouncer(
-    const Duration(milliseconds: 250),
+    const Duration(milliseconds: 500),
     executionInterval: const Duration(milliseconds: 500),
   );
 
