@@ -152,7 +152,7 @@ class DraggableSheet extends StatelessWidget {
                                 horizontal: 8,
                               ),
                               child: Text(
-                                'Top Performers',
+                                'top performers',
                                 style: TextStyle(
                                   fontSize: 28,
                                   fontWeight: FontWeight.bold,
@@ -172,7 +172,19 @@ class DraggableSheet extends StatelessWidget {
                                 return UserSlider(users: bookingLeaders);
                               },
                             ),
-                            const SizedBox(height: 10),
+                            const Padding(
+                              padding: EdgeInsets.symmetric(
+                                vertical: 16,
+                                horizontal: 8,
+                              ),
+                              child: Text(
+                                'top gig opportunities',
+                                style: TextStyle(
+                                  fontSize: 28,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                            ),
                             FutureBuilder(
                               future: database.getFeaturedOpportunities(),
                               builder: (context, snapshot) {

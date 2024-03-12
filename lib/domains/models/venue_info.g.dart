@@ -52,6 +52,10 @@ _$VenueInfoImpl _$$VenueInfoImplFromJson(Map<String, dynamic> json) =>
           : Option<String>.fromJson(json['lights'], (value) => value as String),
       type: $enumDecodeNullable(_$VenueTypeEnumMap, json['type']) ??
           VenueType.other,
+      averageTicketPrice: json['averageTicketPrice'] == null
+          ? const None()
+          : Option<double>.fromJson(
+              json['averageTicketPrice'], (value) => (value as num).toDouble()),
     );
 
 Map<String, dynamic> _$$VenueInfoImplToJson(_$VenueInfoImpl instance) =>
@@ -86,6 +90,9 @@ Map<String, dynamic> _$$VenueInfoImplToJson(_$VenueInfoImpl instance) =>
         (value) => value,
       ),
       'type': _$VenueTypeEnumMap[instance.type]!,
+      'averageTicketPrice': instance.averageTicketPrice.toJson(
+        (value) => value,
+      ),
     };
 
 const _$VenueTypeEnumMap = {

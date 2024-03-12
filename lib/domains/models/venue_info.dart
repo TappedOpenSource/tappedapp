@@ -20,6 +20,7 @@ class VenueInfo with _$VenueInfo {
     @Default(None()) Option<String> microphones,
     @Default(None()) Option<String> lights,
     @Default(VenueType.other) VenueType type,
+    @Default(None()) Option<double> averageTicketPrice,
   }) = _VenueInfo;
 
   // fromJson

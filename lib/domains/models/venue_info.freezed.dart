@@ -33,6 +33,7 @@ mixin _$VenueInfo {
   Option<String> get microphones => throw _privateConstructorUsedError;
   Option<String> get lights => throw _privateConstructorUsedError;
   VenueType get type => throw _privateConstructorUsedError;
+  Option<double> get averageTicketPrice => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
@@ -57,7 +58,8 @@ abstract class $VenueInfoCopyWith<$Res> {
       Option<String> monitors,
       Option<String> microphones,
       Option<String> lights,
-      VenueType type});
+      VenueType type,
+      Option<double> averageTicketPrice});
 }
 
 /// @nodoc
@@ -85,6 +87,7 @@ class _$VenueInfoCopyWithImpl<$Res, $Val extends VenueInfo>
     Object? microphones = null,
     Object? lights = null,
     Object? type = null,
+    Object? averageTicketPrice = null,
   }) {
     return _then(_value.copyWith(
       bookingEmail: null == bookingEmail
@@ -135,6 +138,10 @@ class _$VenueInfoCopyWithImpl<$Res, $Val extends VenueInfo>
           ? _value.type
           : type // ignore: cast_nullable_to_non_nullable
               as VenueType,
+      averageTicketPrice: null == averageTicketPrice
+          ? _value.averageTicketPrice
+          : averageTicketPrice // ignore: cast_nullable_to_non_nullable
+              as Option<double>,
     ) as $Val);
   }
 }
@@ -159,7 +166,8 @@ abstract class _$$VenueInfoImplCopyWith<$Res>
       Option<String> monitors,
       Option<String> microphones,
       Option<String> lights,
-      VenueType type});
+      VenueType type,
+      Option<double> averageTicketPrice});
 }
 
 /// @nodoc
@@ -185,6 +193,7 @@ class __$$VenueInfoImplCopyWithImpl<$Res>
     Object? microphones = null,
     Object? lights = null,
     Object? type = null,
+    Object? averageTicketPrice = null,
   }) {
     return _then(_$VenueInfoImpl(
       bookingEmail: null == bookingEmail
@@ -235,6 +244,10 @@ class __$$VenueInfoImplCopyWithImpl<$Res>
           ? _value.type
           : type // ignore: cast_nullable_to_non_nullable
               as VenueType,
+      averageTicketPrice: null == averageTicketPrice
+          ? _value.averageTicketPrice
+          : averageTicketPrice // ignore: cast_nullable_to_non_nullable
+              as Option<double>,
     ));
   }
 }
@@ -254,7 +267,8 @@ class _$VenueInfoImpl implements _VenueInfo {
       this.monitors = const None(),
       this.microphones = const None(),
       this.lights = const None(),
-      this.type = VenueType.other})
+      this.type = VenueType.other,
+      this.averageTicketPrice = const None()})
       : _genres = genres,
         _venuePhotos = venuePhotos;
 
@@ -309,10 +323,13 @@ class _$VenueInfoImpl implements _VenueInfo {
   @override
   @JsonKey()
   final VenueType type;
+  @override
+  @JsonKey()
+  final Option<double> averageTicketPrice;
 
   @override
   String toString() {
-    return 'VenueInfo(bookingEmail: $bookingEmail, autoReply: $autoReply, capacity: $capacity, idealPerformerProfile: $idealPerformerProfile, genres: $genres, venuePhotos: $venuePhotos, productionInfo: $productionInfo, frontOfHouse: $frontOfHouse, monitors: $monitors, microphones: $microphones, lights: $lights, type: $type)';
+    return 'VenueInfo(bookingEmail: $bookingEmail, autoReply: $autoReply, capacity: $capacity, idealPerformerProfile: $idealPerformerProfile, genres: $genres, venuePhotos: $venuePhotos, productionInfo: $productionInfo, frontOfHouse: $frontOfHouse, monitors: $monitors, microphones: $microphones, lights: $lights, type: $type, averageTicketPrice: $averageTicketPrice)';
   }
 
   @override
@@ -340,7 +357,9 @@ class _$VenueInfoImpl implements _VenueInfo {
             (identical(other.microphones, microphones) ||
                 other.microphones == microphones) &&
             (identical(other.lights, lights) || other.lights == lights) &&
-            (identical(other.type, type) || other.type == type));
+            (identical(other.type, type) || other.type == type) &&
+            (identical(other.averageTicketPrice, averageTicketPrice) ||
+                other.averageTicketPrice == averageTicketPrice));
   }
 
   @JsonKey(ignore: true)
@@ -358,7 +377,8 @@ class _$VenueInfoImpl implements _VenueInfo {
       monitors,
       microphones,
       lights,
-      type);
+      type,
+      averageTicketPrice);
 
   @JsonKey(ignore: true)
   @override
@@ -387,7 +407,8 @@ abstract class _VenueInfo implements VenueInfo {
       final Option<String> monitors,
       final Option<String> microphones,
       final Option<String> lights,
-      final VenueType type}) = _$VenueInfoImpl;
+      final VenueType type,
+      final Option<double> averageTicketPrice}) = _$VenueInfoImpl;
 
   factory _VenueInfo.fromJson(Map<String, dynamic> json) =
       _$VenueInfoImpl.fromJson;
@@ -416,6 +437,8 @@ abstract class _VenueInfo implements VenueInfo {
   Option<String> get lights;
   @override
   VenueType get type;
+  @override
+  Option<double> get averageTicketPrice;
   @override
   @JsonKey(ignore: true)
   _$$VenueInfoImplCopyWith<_$VenueInfoImpl> get copyWith =>
