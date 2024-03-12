@@ -3,12 +3,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intheloopapp/domains/models/service.dart';
 import 'package:intheloopapp/ui/create_service/create_service_cubit.dart';
+import 'package:rive/rive.dart';
 
 class EditServiceButton extends StatelessWidget {
   const EditServiceButton({
     required this.onEdited,
     required this.service,
-    this.label = 'Save',
+    this.label = 'save',
     super.key,
   });
 
@@ -18,10 +19,9 @@ class EditServiceButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final onSurfaceColor = Theme.of(context).colorScheme.onSurface;
     return BlocBuilder<CreateServiceCubit, CreateServiceState>(
       builder: (context, state) {
-        return CupertinoButton.filled(
+        return TextButton(
           onPressed: () {
             try {
               context.read<CreateServiceCubit>().edit(
@@ -38,14 +38,8 @@ class EditServiceButton extends StatelessWidget {
               );
             }
           },
-          borderRadius: BorderRadius.circular(15),
           child: Text(
             label,
-
-            style: TextStyle(
-              color: onSurfaceColor,
-              fontWeight: FontWeight.w700,
-            ),
           ),
         );
       },

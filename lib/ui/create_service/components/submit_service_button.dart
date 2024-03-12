@@ -16,7 +16,7 @@ class SubmitServiceButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocBuilder<CreateServiceCubit, CreateServiceState>(
       builder: (context, state) {
-        return CupertinoButton.filled(
+        return TextButton(
           onPressed: () {
             try {
               context.read<CreateServiceCubit>().create(onCreated);
@@ -30,7 +30,7 @@ class SubmitServiceButton extends StatelessWidget {
               );
             }
           },
-          child: const Text('Create'),
+          child: const Text('create'),
         );
       },
     );

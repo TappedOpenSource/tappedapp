@@ -11,6 +11,7 @@ import 'package:intheloopapp/ui/create_service/components/edit_service_button.da
 import 'package:intheloopapp/ui/create_service/components/rate_type_selector.dart';
 import 'package:intheloopapp/ui/create_service/components/submit_service_button.dart';
 import 'package:intheloopapp/ui/create_service/components/title_text_field.dart';
+import 'package:intheloopapp/ui/create_service/create_service_button.dart';
 import 'package:intheloopapp/ui/create_service/create_service_cubit.dart';
 import 'package:intheloopapp/ui/forms/rate_text_field.dart';
 import 'package:intheloopapp/ui/themes.dart';
@@ -42,72 +43,69 @@ class CreateServiceView extends StatelessWidget {
           )..initFields(service),
           child: Scaffold(
             backgroundColor: Theme.of(context).colorScheme.background,
-            appBar: AppBar(),
+            appBar: AppBar(
+              actions: [
+                switch (service) {
+                  None() => SubmitServiceButton(
+                    onCreated: onSubmit,
+                  ),
+                  Some(:final value) => EditServiceButton(
+                    onEdited: onSubmit,
+                    service: value,
+                  ),
+                },
+              ],
+            ),
             body: SafeArea(
               child: Padding(
                 padding: const EdgeInsets.symmetric(
                   vertical: 12,
                   horizontal: 20,
                 ),
-                child: Column(
-                  children: [
-                    const TitleTextField(),
-                    const SizedBox(height: 16),
-                    const DescriptionTextField(),
-                    const SizedBox(height: 36),
-                    FutureBuilder(
-                      future: currentUser.hasValidConnectedAccount(payments),
-                      builder: (context, snapshot) {
-                        final isValid = snapshot.data;
-                        return switch (isValid) {
-                          null => const CupertinoActivityIndicator(),
-                          false => GestureDetector(
-                              onTap: () => context.push(SettingsPage()),
-                              child: const Text(
-                                'connect your bank to make this paid',
-                                style: TextStyle(
-                                  color: tappedAccent,
+                child: SingleChildScrollView(
+                  child: Column(
+                    children: [
+                      const TitleTextField(),
+                      const SizedBox(height: 16),
+                      const DescriptionTextField(),
+                      const SizedBox(height: 36),
+                      FutureBuilder(
+                        future: currentUser.hasValidConnectedAccount(payments),
+                        builder: (context, snapshot) {
+                          final isValid = snapshot.data;
+                          return switch (isValid) {
+                            null => const CupertinoActivityIndicator(),
+                            false => GestureDetector(
+                                onTap: () => context.push(SettingsPage()),
+                                child: const Text(
+                                  'connect your bank to make this paid',
+                                  style: TextStyle(
+                                    color: tappedAccent,
+                                  ),
                                 ),
                               ),
-                            ),
-                          true => Column(
-                              children: [
-                                BlocBuilder<CreateServiceCubit,
-                                    CreateServiceState>(
-                                  builder: (context, state) {
-                                    return RateTextField(
-                                      initialValue: state.rate,
-                                      onChanged: (input) => context
-                                          .read<CreateServiceCubit>()
-                                          .onRateChange(input),
-                                    );
-                                  },
-                                ),
-                                const SizedBox(height: 16),
-                                const RateTypeSelector(),
-                              ],
-                            ),
-                        };
-                      },
-                    ),
-                    const Spacer(),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Expanded(
-                          child: switch (service) {
-                            None() => SubmitServiceButton(
-                                onCreated: onSubmit,
+                            true => Column(
+                                children: [
+                                  BlocBuilder<CreateServiceCubit,
+                                      CreateServiceState>(
+                                    builder: (context, state) {
+                                      return RateTextField(
+                                        initialValue: state.rate,
+                                        onChanged: (input) => context
+                                            .read<CreateServiceCubit>()
+                                            .onRateChange(input),
+                                      );
+                                    },
+                                  ),
+                                  const SizedBox(height: 16),
+                                  const RateTypeSelector(),
+                                ],
                               ),
-                            Some(:final value) => EditServiceButton(
-                                onEdited: onSubmit,
-                                service: value,
-                              ),
-                          },
-                        ),
-                      ],
-                    ),
-                  ],
+                          };
+                        },
+                      ),
+                    ],
+                  ),
                 ),
               ),
             ),

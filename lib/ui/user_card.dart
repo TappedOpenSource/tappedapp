@@ -141,7 +141,7 @@ class UserCard extends StatelessWidget {
                               ),
                               switch (category) {
                                 Some(:final value) => Text(
-                                    value.formattedName,
+                                    value.formattedName.toLowerCase(),
                                     style: const TextStyle(
                                       color: Colors.white,
                                     ),
