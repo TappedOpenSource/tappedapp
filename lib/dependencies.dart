@@ -37,6 +37,7 @@ import 'package:intheloopapp/domains/search_bloc/search_bloc.dart';
 import 'package:intheloopapp/domains/subscription_bloc/subscription_bloc.dart';
 import 'package:intheloopapp/ui/app_theme_cubit.dart';
 import 'package:intheloopapp/ui/premium_theme_cubit.dart';
+import 'package:intheloopapp/ui/safety_mode_cubit.dart';
 import 'package:intheloopapp/utils/bloc_utils.dart';
 import 'package:stream_chat_flutter/stream_chat_flutter.dart';
 
@@ -95,6 +96,9 @@ List<BlocProvider> buildBlocs({
   return [
     BlocProvider<AppThemeCubit>(
       create: (_) => AppThemeCubit(),
+    ),
+    BlocProvider<SafetyModeCubit>(
+      create: (_) => SafetyModeCubit(),
     ),
     BlocProvider<PremiumThemeCubit>(
       create: (_) => PremiumThemeCubit(),
@@ -165,6 +169,5 @@ List<BlocProvider> buildBlocs({
         places: context.places,
       ),
     ),
-
   ];
 }

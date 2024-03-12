@@ -2,6 +2,7 @@ import 'package:avatar_stack/avatar_stack.dart';
 import 'package:avatar_stack/positions.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:fpdart/fpdart.dart' hide State;
 import 'package:intheloopapp/domains/models/user_model.dart';
@@ -9,6 +10,7 @@ import 'package:intheloopapp/domains/navigation_bloc/navigation_bloc.dart';
 import 'package:intheloopapp/domains/navigation_bloc/tapped_route.dart';
 import 'package:intheloopapp/ui/common/social_following_menu.dart';
 import 'package:intheloopapp/ui/request_to_perform/components/past_bookings_slider.dart';
+import 'package:intheloopapp/ui/safety_mode_cubit.dart';
 import 'package:intheloopapp/ui/user_avatar.dart';
 import 'package:intheloopapp/utils/app_logger.dart';
 import 'package:intheloopapp/utils/bloc_utils.dart';
@@ -36,77 +38,90 @@ class _RequestToPerformViewState extends State<RequestToPerformView> {
     super.initState();
   }
 
-  Widget _buildSendButton(
-    BuildContext context, {
+  Widget _buildSendButton(BuildContext context, {
     required UserModel currentUser,
   }) {
     final database = context.database;
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        Expanded(
-          child: CupertinoButton.filled(
-            onPressed: () {
-              if (_note.isEmpty) {
-                ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(
-                    backgroundColor: Colors.red,
-                    content: Text(
-                      'Message cannot be empty',
-                    ),
-                  ),
-                );
-                return;
-              }
+    return BlocBuilder<SafetyModeCubit, bool>(
+      builder: (context, safeModeOn) {
+        return Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Expanded(
+              child: CupertinoButton.filled(
+                onPressed: () async {
+                  final scaffoldMessenger = ScaffoldMessenger.of(context);
+                  final nav = context.nav;
+                  if (_note.isEmpty) {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(
+                        backgroundColor: Colors.red,
+                        content: Text(
+                          'Message cannot be empty',
+                        ),
+                      ),
+                    );
+                    return;
+                  }
 
-              EasyLoading.show(status: 'Sending Request');
-              Future.wait(
-                _venues.map((venue) async {
-                  final bookingEmail = venue.venueInfo.flatMap(
-                    (info) => info.bookingEmail,
-                  );
+                  await EasyLoading.show(status: 'Sending Request');
+                  if (safeModeOn) {
+                    await Future.delayed(const Duration(seconds: 1));
+                    await EasyLoading.dismiss();
+                    nav.push(RequestToPerformConfirmationPage());
+                    return;
+                  }
 
-                  await bookingEmail.fold(
-                    Future<void>.value,
-                    (email) async {
-                      await database.contactVenue(
-                        currentUser: currentUser,
-                        venue: venue,
-                        note: _note,
-                        bookingEmail: email,
-                      );
-                    },
-                  );
-                }),
-              ).then((value) {
-                EasyLoading.dismiss();
-                context.push(RequestToPerformConfirmationPage());
-              }).onError((error, stackTrace) {
-                EasyLoading.dismiss();
-                logger.error(
-                  'error sending the request',
-                  error: error,
-                  stackTrace: stackTrace,
-                );
-                ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(
-                    backgroundColor: Colors.red,
-                    content: Text('error sending the request'),
+                  try {
+                    await Future.wait(
+                      _venues.map((venue) async {
+                        final bookingEmail = venue.venueInfo.flatMap(
+                              (info) => info.bookingEmail,
+                        );
+
+                        await bookingEmail.fold(
+                          Future<void>.value,
+                              (email) async {
+                            await database.contactVenue(
+                              currentUser: currentUser,
+                              venue: venue,
+                              note: _note,
+                              bookingEmail: email,
+                            );
+                          },
+                        );
+                      }),
+                    );
+                    await EasyLoading.dismiss();
+                    nav.push(RequestToPerformConfirmationPage());
+                  } catch (error, stackTrace) {
+                    await EasyLoading.dismiss();
+                    logger.error(
+                      'error sending the request',
+                      error: error,
+                      stackTrace: stackTrace,
+                    );
+                    scaffoldMessenger.showSnackBar(
+                      const SnackBar(
+                        backgroundColor: Colors.red,
+                        content: Text('error sending the request'),
+                      ),
+                    );
+                  }
+                },
+                borderRadius: BorderRadius.circular(15),
+                child: Text(
+                  safeModeOn ? 'Send Request (safe mode on)' : 'Send Request',
+                  style: const TextStyle(
+                    fontWeight: FontWeight.bold,
+                    color: Colors.white,
                   ),
-                );
-              });
-            },
-            borderRadius: BorderRadius.circular(15),
-            child: const Text(
-              'Send Request',
-              style: TextStyle(
-                fontWeight: FontWeight.bold,
-                color: Colors.white,
+                ),
               ),
             ),
-          ),
-        ),
-      ],
+          ],
+        );
+      },
     );
   }
 
@@ -135,13 +150,14 @@ class _RequestToPerformViewState extends State<RequestToPerformView> {
                       ),
                       stackedWidgets: _venues
                           .map(
-                            (venue) => UserAvatar(
+                            (venue) =>
+                            UserAvatar(
                               pushUser: Option.of(venue),
                               pushId: Option.of(venue.id),
                               imageUrl: venue.profilePicture,
                               radius: 25,
                             ),
-                          )
+                      )
                           .toList(),
                       buildInfoWidget: (surplus) {
                         return CircleAvatar(
@@ -176,7 +192,7 @@ class _RequestToPerformViewState extends State<RequestToPerformView> {
                     minLines: 8,
                     initialValue: _note,
                     validator: (value) =>
-                        value!.isEmpty ? 'message cannot be empty' : null,
+                    value!.isEmpty ? 'message cannot be empty' : null,
                     onChanged: (input) {
                       setState(() {
                         _note = input;
@@ -200,7 +216,7 @@ class _RequestToPerformViewState extends State<RequestToPerformView> {
                                 child: SingleChildScrollView(
                                   child: Column(
                                     crossAxisAlignment:
-                                        CrossAxisAlignment.start,
+                                    CrossAxisAlignment.start,
                                     children: [
                                       const SizedBox(height: 12),
                                       Text(
