@@ -40,8 +40,9 @@ class InfoSliver extends StatelessWidget {
               () => venueInfo.map((t) => t.genres).getOrElse(() => []),
             );
         final averagePerformerTicketPrice = performerInfo
-            .map((t) => t.formattedAverageTicketPrice)
-            .getOrElse(() => const None());
+            .flatMap((t) => t.formattedAverageTicketPrice);
+        final averageAttendance = performerInfo
+            .flatMap((t) => t.averageAttendance);
         final label = performerInfo.map((t) => t.label).getOrElse(() => 'None');
         final pressKitUrl = performerInfo
             .map((t) => t.pressKitUrl)
@@ -58,6 +59,7 @@ class InfoSliver extends StatelessWidget {
             return CustomClaimsBuilder(
               builder: (context, claims) {
                 final isAdmin = claims.contains(CustomClaim.admin);
+                final isBooker = claims.contains(CustomClaim.booker);
                 return PremiumBuilder(
                   builder: (context, isPremium) {
                     return Column(
@@ -156,7 +158,7 @@ class InfoSliver extends StatelessWidget {
                                   ),
                                 ),
                               ),
-                            if (isPremium)
+                            if (isAdmin || isBooker)
                               switch (averagePerformerTicketPrice) {
                                 None() => const SizedBox.shrink(),
                                 Some(:final value) => CupertinoListTile(
@@ -165,6 +167,21 @@ class InfoSliver extends StatelessWidget {
                                     ),
                                     title: Text(
                                       '$value average ticket price',
+                                      style: TextStyle(
+                                        color: theme.colorScheme.onSurface,
+                                      ),
+                                    ),
+                                  ),
+                              },
+                            if (isAdmin || isBooker)
+                              switch (averageAttendance) {
+                                None() => const SizedBox.shrink(),
+                                Some(:final value) => CupertinoListTile(
+                                    leading: const Icon(
+                                      CupertinoIcons.person_3_fill,
+                                    ),
+                                    title: Text(
+                                      '${formatted.format(value)} person ticket sale avg.',
                                       style: TextStyle(
                                         color: theme.colorScheme.onSurface,
                                       ),
