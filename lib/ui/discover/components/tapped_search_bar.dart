@@ -35,7 +35,6 @@ class TappedSearchBar extends StatefulWidget {
 class _TappedSearchBarState extends State<TappedSearchBar> {
   late final FocusNode _searchFocusNode;
   late final SearchController _searchController;
-  final List<UserModel> _searchResults = [];
 
   void search() {
     final query = _searchController.text;

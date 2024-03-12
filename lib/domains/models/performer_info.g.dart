@@ -25,6 +25,14 @@ _$PerformerInfoImpl _$$PerformerInfoImplFromJson(Map<String, dynamic> json) =>
       category:
           $enumDecodeNullable(_$PerformerCategoryEnumMap, json['category']) ??
               PerformerCategory.undiscovered,
+      averageTicketPrice: json['averageTicketPrice'] == null
+          ? const None()
+          : Option<double>.fromJson(
+              json['averageTicketPrice'], (value) => (value as num).toDouble()),
+      averageAttendance: json['averageAttendance'] == null
+          ? const None()
+          : Option<double>.fromJson(
+              json['averageAttendance'], (value) => (value as num).toDouble()),
     );
 
 Map<String, dynamic> _$$PerformerInfoImplToJson(_$PerformerInfoImpl instance) =>
@@ -39,6 +47,12 @@ Map<String, dynamic> _$$PerformerInfoImplToJson(_$PerformerInfoImpl instance) =>
       'reviewCount': instance.reviewCount,
       'label': instance.label,
       'category': _$PerformerCategoryEnumMap[instance.category]!,
+      'averageTicketPrice': instance.averageTicketPrice.toJson(
+        (value) => value,
+      ),
+      'averageAttendance': instance.averageAttendance.toJson(
+        (value) => value,
+      ),
     };
 
 const _$PerformerCategoryEnumMap = {

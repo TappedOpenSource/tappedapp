@@ -232,6 +232,7 @@ class DiscoverView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
     final mapController = MapController();
     final streamClient = StreamChat.of(context).client;
     return CurrentUserBuilder(
@@ -273,8 +274,13 @@ class DiscoverView extends StatelessWidget {
                             ),
                             child: Column(
                               children: [
-                                TappedSearchBar(
-                                  trailing: [
+                                Row(
+                                  children: [
+                                    const Expanded(
+                                      child: TappedSearchBar(
+                                        trailing: [],
+                                      ),
+                                    ),
                                     StreamBuilder<int?>(
                                       stream: streamClient
                                           .on()
@@ -289,18 +295,23 @@ class DiscoverView extends StatelessWidget {
                                         final unreadMessagesCount =
                                             snapshot.data ?? 0;
 
-                                        return badges.Badge(
-                                          showBadge: unreadMessagesCount > 0,
-                                          position:
-                                              badges.BadgePosition.topEnd(),
-                                          // badgeContent: Text('$unreadMessagesCount'),
-                                          child: IconButton(
-                                            onPressed: () => context.push(
-                                              MessagingChannelListPage(),
-                                            ),
-                                            icon: const Icon(
-                                              CupertinoIcons
-                                                  .chat_bubble_text_fill,
+                                        return Card(
+                                          color: theme.colorScheme.background,
+                                          elevation: 0,
+                                          shape: const CircleBorder(),
+                                          child: badges.Badge(
+                                            showBadge: unreadMessagesCount > 0,
+                                            position:
+                                                badges.BadgePosition.topEnd(),
+                                            child: IconButton(
+                                              onPressed: () => context.push(
+                                                MessagingChannelListPage(),
+                                              ),
+                                              icon: Icon(
+                                                CupertinoIcons
+                                                    .chat_bubble_text_fill,
+                                                color: theme.colorScheme.onBackground,
+                                              ),
                                             ),
                                           ),
                                         );

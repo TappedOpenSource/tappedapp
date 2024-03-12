@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:formz/formz.dart';
+import 'package:intheloopapp/data/database_repository.dart';
 import 'package:intheloopapp/ui/forms/tapped_form/tapped_form.dart';
 import 'package:intheloopapp/ui/onboarding/components/onboarding_complete_view.dart';
 import 'package:intheloopapp/ui/onboarding/components/onboarding_init_view.dart';
@@ -15,6 +16,7 @@ class OnboardingForm extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final database = context.read<DatabaseRepository>();
     return BlocBuilder<OnboardingFlowCubit, OnboardingFlowState>(
       builder: (context, state) {
         if (state.status.isInProgress) {
@@ -22,25 +24,7 @@ class OnboardingForm extends StatelessWidget {
         }
 
         return TappedForm(
-          onSubmit: () {
-            context
-                .read<OnboardingFlowCubit>()
-                .finishOnboarding()
-                .onError((error, stackTrace) {
-              logger.error(
-                'Error completing onboarding',
-                error: error,
-                stackTrace: stackTrace,
-              );
-              ScaffoldMessenger.of(context).showSnackBar(
-                SnackBar(
-                  behavior: SnackBarBehavior.floating,
-                  backgroundColor: Colors.red,
-                  content: Text(error.toString()),
-                ),
-              );
-            });
-          },
+          onSubmit: context.read<OnboardingFlowCubit>().finishOnboarding,
           questions: [
             (
               const OnboardingInitView(),
@@ -48,11 +32,24 @@ class OnboardingForm extends StatelessWidget {
             ),
             (
               const OnboardingUsernameView(),
-              () => context.read<OnboardingFlowCubit>().state.username.isValid,
+              () async {
+                final currentUserId =
+                    context.read<OnboardingFlowCubit>().state.currentUserId;
+                final username =
+                    context.read<OnboardingFlowCubit>().state.username;
+                final usernameIsValid = username.isValid;
+                final usernameIsAvailable =
+                    await database.checkUsernameAvailability(
+                  username.value,
+                  currentUserId,
+                );
+
+                return usernameIsValid && usernameIsAvailable;
+              },
             ),
             (
               const OnboardingProfilePictureView(),
-              () =>  true,
+              () => true,
             ),
             (
               const OnboardingSocialMediaView(),

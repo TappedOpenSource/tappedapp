@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:fpdart/fpdart.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
-import 'package:intheloopapp/domains/models/genre.dart';
 
 part 'performer_info.freezed.dart';
 part 'performer_info.g.dart';
@@ -15,6 +14,8 @@ class PerformerInfo with _$PerformerInfo {
     @Default(0) int reviewCount,
     @Default('Independent') String label,
     @Default(PerformerCategory.undiscovered) PerformerCategory category,
+    @Default(None()) Option<double> averageTicketPrice,
+    @Default(None()) Option<double> averageAttendance,
   }) = _PerformerInfo;
 
   // fromJson

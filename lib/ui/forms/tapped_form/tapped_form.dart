@@ -1,6 +1,9 @@
+import 'dart:async';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:intheloopapp/ui/themes.dart';
+import 'package:intheloopapp/utils/app_logger.dart';
 
 class TappedForm extends StatefulWidget {
   const TappedForm({
@@ -12,11 +15,11 @@ class TappedForm extends StatefulWidget {
     super.key,
   });
 
-  final List<(Widget, bool Function())> questions;
+  final List<(Widget, FutureOr<bool> Function())> questions;
   final bool cancelButton;
-  final void Function()? onNext;
-  final void Function()? onPrevious;
-  final void Function()? onSubmit;
+  final FutureOr<void> Function()? onNext;
+  final FutureOr<void> Function()? onPrevious;
+  final FutureOr<void> Function()? onSubmit;
 
   @override
   State<TappedForm> createState() => _TappedFormState();
@@ -24,12 +27,64 @@ class TappedForm extends StatefulWidget {
 
 class _TappedFormState extends State<TappedForm> {
   int _index = 0;
+  int get _numQuestions => widget.questions.length;
 
   Widget get _currQuestion => widget.questions[_index].$1;
 
-  bool Function() get _currValidator => widget.questions[_index].$2;
+  FutureOr<bool> Function() get _currValidator => widget.questions[_index].$2;
 
-  bool get _isValid => _currValidator();
+  Widget _buildNextButton() {
+    final isLast = _index == _numQuestions - 1;
+
+    return switch (isLast) {
+      false => CupertinoButton(
+        onPressed: () {
+          setState(() {
+            _index++;
+          });
+          widget.onNext?.call();
+        },
+        borderRadius: BorderRadius.circular(12),
+        color: tappedAccent,
+        child: const Text(
+          'next',
+          style: TextStyle(
+            color: Colors.white,
+            fontWeight: FontWeight.w700,
+          ),
+        ),
+      ),
+      true => CupertinoButton(
+        onPressed: () {
+          try {
+            widget.onSubmit?.call();
+          } catch (e, s) {
+            logger.error(
+              'Error submitting form',
+              error: e,
+              stackTrace: s,
+            );
+            ScaffoldMessenger.of(context).showSnackBar(
+              const SnackBar(
+                behavior: SnackBarBehavior.floating,
+                backgroundColor: Colors.red,
+                content: Text('something went wrong'),
+              ),
+            );
+          }
+        },
+        borderRadius: BorderRadius.circular(12),
+        color: tappedAccent,
+        child: const Text(
+          'finish',
+          style: TextStyle(
+            color: Colors.white,
+            fontWeight: FontWeight.w700,
+          ),
+        ),
+      ),
+    };
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -79,67 +134,47 @@ class _TappedFormState extends State<TappedForm> {
                 ),
               ),
               const SizedBox(height: 16),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  if (_index != 0)
-                    CupertinoButton(
-                      onPressed: () {
-                        setState(() {
-                          _index--;
-                        });
-                        widget.onPrevious?.call();
-                      },
-                      child: const Text(
-                        'back',
-                      ),
-                    ),
-                  if (_index == 0 && widget.cancelButton)
-                    CupertinoButton(
-                      onPressed: () {
-                        Navigator.of(context).pop();
-                      },
-                      child: const Text(
-                        'cancel',
-                        style: TextStyle(
-                          color: Colors.red,
+              FutureBuilder(
+                future: Future.value(_currValidator()),
+                builder: (context, snapshot) {
+                  final isValid = snapshot.data;
+                  return Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      if (_index != 0)
+                        CupertinoButton(
+                          onPressed: () {
+                            setState(() {
+                              _index--;
+                            });
+                            widget.onPrevious?.call();
+                          },
+                          child: const Text(
+                            'back',
+                          ),
                         ),
-                      ),
-                    )
-                  else
-                    const SizedBox.shrink(),
-                  if (_index != numQuestions - 1 && _isValid)
-                    CupertinoButton(
-                      onPressed: () {
-                        setState(() {
-                          _index++;
-                        });
-                        widget.onNext?.call();
+                      if (_index == 0 && widget.cancelButton)
+                        CupertinoButton(
+                          onPressed: () {
+                            Navigator.of(context).pop();
+                          },
+                          child: const Text(
+                            'cancel',
+                            style: TextStyle(
+                              color: Colors.red,
+                            ),
+                          ),
+                        )
+                      else
+                        const SizedBox.shrink(),
+                      switch (isValid) {
+                        null => const CupertinoActivityIndicator(),
+                        false => const SizedBox.shrink(),
+                        true => _buildNextButton(),
                       },
-                      borderRadius: BorderRadius.circular(12),
-                      color: tappedAccent,
-                      child: const Text(
-                        'next',
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontWeight: FontWeight.w700,
-                        ),
-                      ),
-                    ),
-                  if (_index == numQuestions - 1 && _isValid)
-                    CupertinoButton(
-                      onPressed: widget.onSubmit?.call,
-                      borderRadius: BorderRadius.circular(12),
-                      color: tappedAccent,
-                      child: const Text(
-                        'finish',
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontWeight: FontWeight.w700,
-                        ),
-                      ),
-                    ),
-                ],
+                    ],
+                  );
+                },
               ),
             ],
           ),
