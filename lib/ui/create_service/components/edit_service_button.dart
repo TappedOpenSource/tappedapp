@@ -22,14 +22,15 @@ class EditServiceButton extends StatelessWidget {
     return BlocBuilder<CreateServiceCubit, CreateServiceState>(
       builder: (context, state) {
         return TextButton(
-          onPressed: () {
+          onPressed: () async {
+            final scaffoldMessenger = ScaffoldMessenger.of(context);
             try {
-              context.read<CreateServiceCubit>().edit(
+              await context.read<CreateServiceCubit>().edit(
                     service,
                     onEdited,
                   );
             } catch (e) {
-              ScaffoldMessenger.of(context).showSnackBar(
+              scaffoldMessenger.showSnackBar(
                 SnackBar(
                   behavior: SnackBarBehavior.floating,
                   backgroundColor: Colors.red,

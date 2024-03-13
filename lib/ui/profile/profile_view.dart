@@ -250,8 +250,7 @@ class ProfileView extends StatelessWidget {
               children: [
                 PremiumBuilder(
                   builder: (context, isPremium) {
-                    final showClaim =
-                        isPremium && currentUser.id == visitedUser.id;
+                    final theme = Theme.of(context);
                     return Text.rich(
                       TextSpan(
                         text: visitedUser.displayName,
@@ -261,16 +260,68 @@ class ProfileView extends StatelessWidget {
                           fontWeight: FontWeight.w900,
                         ),
                         children: [
-                          if (state.isVerified || showClaim)
+                          if (state.isVerified)
                             WidgetSpan(
-                              child: Icon(
-                                Icons.verified,
-                                size: 18,
-                                color: switch ((showClaim, state.isVerified)) {
-                                  (true, _) => Colors.purple,
-                                  (_, true) => tappedAccent,
-                                  (_, false) => Colors.transparent,
-                                },
+                              child: GestureDetector(
+                                onTap: () => showModalBottomSheet(
+                                  context: context,
+                                  showDragHandle: true,
+                                  builder: (context) {
+                                    return SizedBox(
+                                      width: double.infinity,
+                                      height: 400,
+                                      child: Padding(
+                                        padding: EdgeInsets.symmetric(
+                                          horizontal: 20,
+                                        ),
+                                        child: Column(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.center,
+                                          children: [
+                                            Icon(
+                                              Icons.verified,
+                                              color:
+                                              theme.colorScheme.primary,
+                                              size: 96,
+                                            ),
+                                            const SizedBox(height: 12),
+                                            Text(
+                                              '${state.visitedUser.displayName} has been verified',
+                                              style: const TextStyle(
+                                                fontSize: 18,
+                                                fontWeight: FontWeight.w600,
+                                              ),
+                                            ),
+                                            const SizedBox(height: 18),
+                                            Row(
+                                              children: [
+                                                const Icon(
+                                                  Icons.lightbulb,
+                                                  color: Colors.amber,
+                                                ),
+                                                const SizedBox(width: 8),
+                                                Expanded(
+                                                  child: Text(
+                                                    'to get verified, post a screenshot of your profile to your instagram story and tag us @tappedai!',
+                                                    maxLines: 2,
+                                                    style: TextStyle(
+                                                      color: theme.colorScheme.onSurface.withOpacity(0.5),
+                                                    ),
+                                                  ),
+                                                ),
+                                              ],
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                    );
+                                  },
+                                ),
+                                child: const Icon(
+                                  Icons.verified,
+                                  size: 18,
+                                  color: tappedAccent
+                                ),
                               ),
                               alignment: PlaceholderAlignment.middle,
                             ),

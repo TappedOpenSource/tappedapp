@@ -17,11 +17,12 @@ class SubmitServiceButton extends StatelessWidget {
     return BlocBuilder<CreateServiceCubit, CreateServiceState>(
       builder: (context, state) {
         return TextButton(
-          onPressed: () {
+          onPressed: () async {
+            final scaffoldMessenger = ScaffoldMessenger.of(context);
             try {
-              context.read<CreateServiceCubit>().create(onCreated);
+              await context.read<CreateServiceCubit>().create(onCreated);
             } catch (e) {
-              ScaffoldMessenger.of(context).showSnackBar(
+              scaffoldMessenger.showSnackBar(
                 SnackBar(
                   behavior: SnackBarBehavior.floating,
                   backgroundColor: Colors.red,
