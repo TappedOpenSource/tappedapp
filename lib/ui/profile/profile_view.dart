@@ -275,8 +275,7 @@ class ProfileView extends StatelessWidget {
                                           horizontal: 20,
                                         ),
                                         child: Column(
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.center,
+                                          mainAxisAlignment: MainAxisAlignment.center,
                                           children: [
                                             Icon(
                                               Icons.verified,
@@ -302,7 +301,7 @@ class ProfileView extends StatelessWidget {
                                                 const SizedBox(width: 8),
                                                 Expanded(
                                                   child: Text(
-                                                    'to get verified, post a screenshot of your profile to your instagram story and tag us @tappedai!',
+                                                    'to get verified, post a screenshot of your profile to your instagram story and tag us @tappedai',
                                                     maxLines: 2,
                                                     style: TextStyle(
                                                       color: theme.colorScheme.onSurface.withOpacity(0.5),

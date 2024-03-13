@@ -40,7 +40,7 @@ class InfoSliver extends StatelessWidget {
               () => venueInfo.map((t) => t.genres).getOrElse(() => []),
             );
         final averagePerformerTicketPrice = performerInfo
-            .flatMap((t) => t.formattedAverageTicketPrice);
+            .map((t) => t.formattedPriceRange);
         final averageAttendance = performerInfo
             .flatMap((t) => t.averageAttendance);
         final label = performerInfo.map((t) => t.label).getOrElse(() => 'None');
@@ -166,7 +166,7 @@ class InfoSliver extends StatelessWidget {
                                       CupertinoIcons.money_dollar,
                                     ),
                                     title: Text(
-                                      '$value average ticket price',
+                                      '$value avg. ticket price',
                                       style: TextStyle(
                                         color: theme.colorScheme.onSurface,
                                       ),
