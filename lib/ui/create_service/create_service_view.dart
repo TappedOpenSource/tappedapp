@@ -15,6 +15,7 @@ import 'package:intheloopapp/ui/create_service/create_service_button.dart';
 import 'package:intheloopapp/ui/create_service/create_service_cubit.dart';
 import 'package:intheloopapp/ui/forms/rate_text_field.dart';
 import 'package:intheloopapp/ui/themes.dart';
+import 'package:intheloopapp/utils/app_logger.dart';
 import 'package:intheloopapp/utils/bloc_utils.dart';
 import 'package:intheloopapp/utils/current_user_builder.dart';
 
@@ -35,11 +36,15 @@ class CreateServiceView extends StatelessWidget {
     final payments = context.payments;
     return CurrentUserBuilder(
       builder: (context, currentUser) {
+        final ownerId = service.fold(
+          () => currentUser.id,
+          (value) => value.userId,
+        );
         return BlocProvider<CreateServiceCubit>(
           create: (context) => CreateServiceCubit(
             database: database,
             nav: nav,
-            currentUserId: currentUser.id,
+            ownerId: ownerId,
           )..initFields(service),
           child: Scaffold(
             backgroundColor: Theme.of(context).colorScheme.background,
@@ -47,12 +52,12 @@ class CreateServiceView extends StatelessWidget {
               actions: [
                 switch (service) {
                   None() => SubmitServiceButton(
-                    onCreated: onSubmit,
-                  ),
+                      onCreated: onSubmit,
+                    ),
                   Some(:final value) => EditServiceButton(
-                    onEdited: onSubmit,
-                    service: value,
-                  ),
+                      onEdited: onSubmit,
+                      service: value,
+                    ),
                 },
               ],
             ),
@@ -69,8 +74,19 @@ class CreateServiceView extends StatelessWidget {
                       const SizedBox(height: 16),
                       const DescriptionTextField(),
                       const SizedBox(height: 36),
-                      FutureBuilder(
-                        future: currentUser.hasValidConnectedAccount(payments),
+                      FutureBuilder<bool>(
+                        future: (() async {
+                          if (ownerId == currentUser.id) {
+                            return currentUser
+                                .hasValidConnectedAccount(payments);
+                          }
+
+                          final owner = await database.getUserById(ownerId);
+                          return owner.fold(
+                            () => Future.value(false),
+                            (t) => t.hasValidConnectedAccount(payments),
+                          );
+                        })(),
                         builder: (context, snapshot) {
                           final isValid = snapshot.data;
                           return switch (isValid) {

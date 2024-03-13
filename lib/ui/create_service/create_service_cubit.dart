@@ -15,13 +15,13 @@ class CreateServiceCubit extends Cubit<CreateServiceState> {
   CreateServiceCubit({
     required this.database,
     required this.nav,
-    required this.currentUserId,
+    required this.ownerId,
   }) : super(const CreateServiceState());
 
   final DatabaseRepository database;
   final NavigationBloc nav;
 
-  final String currentUserId;
+  final String ownerId;
 
   void initFields(Option<Service> service) {
     if (service is Some<Service>) {
@@ -103,7 +103,7 @@ class CreateServiceCubit extends Cubit<CreateServiceState> {
 
       final service = Service(
         id: const Uuid().v4(),
-        userId: currentUserId,
+        userId: ownerId,
         title: state.title.value,
         description: state.description.value,
         rate: state.rate,

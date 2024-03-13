@@ -9,6 +9,7 @@ import 'package:intheloopapp/ui/conditional_parent_widget.dart';
 import 'package:intheloopapp/ui/profile/profile_cubit.dart';
 import 'package:intheloopapp/ui/settings/components/create_service_button.dart';
 import 'package:intheloopapp/ui/settings/components/service_card.dart';
+import 'package:intheloopapp/utils/admin_builder.dart';
 
 class ServicesList extends StatelessWidget {
   const ServicesList({
@@ -22,65 +23,69 @@ class ServicesList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        SizedBox(
-          height: 190,
-          child: ListView.builder(
-            scrollDirection: Axis.horizontal,
-            itemCount: isCurrentUser ? services.length + 1 : services.length,
-            itemBuilder: (context, index) {
-              if (index == services.length) {
-                return CreateServiceButton(
-                  onCreated: context.read<ProfileCubit>().onServiceCreated,
-                );
-              }
+    return AdminBuilder(
+      builder: (context, isAdmin) {
+        return Column(
+          children: [
+            SizedBox(
+              height: 190,
+              child: ListView.builder(
+                scrollDirection: Axis.horizontal,
+                itemCount: isCurrentUser ? services.length + 1 : services.length,
+                itemBuilder: (context, index) {
+                  if (index == services.length) {
+                    return CreateServiceButton(
+                      onCreated: context.read<ProfileCubit>().onServiceCreated,
+                    );
+                  }
 
-              final service = services[index];
+                  final service = services[index];
 
-              return ConditionalParentWidget(
-                condition: isCurrentUser,
-                conditionalBuilder: ({
-                  required Widget child,
-                }) {
-                  return badges.Badge(
-                    onTap: () {
-                      try {
-                        context.push(
-                          CreateServicePage(
-                            onSubmit: context.read<ProfileCubit>().onServiceEdited,
-                            service: Option.of(service),
-                          ),
-                        );
-                      } catch (e) {
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          const SnackBar(
-                            behavior: SnackBarBehavior.floating,
-                            backgroundColor: Colors.red,
-                            content: Text('Error editing service'),
-                          ),
-                        );
-                      }
+                  return ConditionalParentWidget(
+                    condition: isCurrentUser || isAdmin,
+                    conditionalBuilder: ({
+                      required Widget child,
+                    }) {
+                      return badges.Badge(
+                        onTap: () {
+                          try {
+                            context.push(
+                              CreateServicePage(
+                                onSubmit: context.read<ProfileCubit>().onServiceEdited,
+                                service: Option.of(service),
+                              ),
+                            );
+                          } catch (e) {
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              const SnackBar(
+                                behavior: SnackBarBehavior.floating,
+                                backgroundColor: Colors.red,
+                                content: Text('Error editing service'),
+                              ),
+                            );
+                          }
+                        },
+                        badgeStyle: const badges.BadgeStyle(
+                          badgeColor: Color.fromARGB(255, 47, 47, 47),
+                        ),
+                        badgeContent: const Icon(
+                          Icons.edit,
+                          color: Colors.white,
+                          size: 25,
+                        ),
+                        child: child,
+                      );
                     },
-                    badgeStyle: const badges.BadgeStyle(
-                      badgeColor: Color.fromARGB(255, 47, 47, 47),
+                    child: ServiceCard(
+                      service: service,
                     ),
-                    badgeContent: const Icon(
-                      Icons.edit,
-                      color: Colors.white,
-                      size: 25,
-                    ),
-                    child: child,
                   );
                 },
-                child: ServiceCard(
-                  service: service,
-                ),
-              );
-            },
-          ),
-        ),
-      ],
+              ),
+            ),
+          ],
+        );
+      },
     );
   }
 }
