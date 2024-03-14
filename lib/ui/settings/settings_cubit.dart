@@ -1,12 +1,12 @@
 import 'dart:io';
 
 import 'package:app_settings/app_settings.dart';
-import 'package:equatable/equatable.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:formz/formz.dart';
 import 'package:fpdart/fpdart.dart';
+import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:intheloopapp/data/auth_repository.dart';
 import 'package:intheloopapp/data/database_repository.dart';
@@ -26,6 +26,8 @@ import 'package:permission_handler/permission_handler.dart';
 
 part 'settings_state.dart';
 
+part 'settings_cubit.freezed.dart';
+
 class SettingsCubit extends Cubit<SettingsState> {
   SettingsCubit({
     required this.navigationBloc,
@@ -36,7 +38,11 @@ class SettingsCubit extends Cubit<SettingsState> {
     required this.storageRepository,
     required this.places,
     required this.currentUser,
-  }) : super(SettingsState());
+  }) : super(
+          SettingsState(
+            formKey: GlobalKey<FormState>(debugLabel: 'settings'),
+          ),
+        );
 
   final UserModel currentUser;
   final NavigationBloc navigationBloc;
@@ -58,7 +64,7 @@ class SettingsCubit extends Cubit<SettingsState> {
                 () => [],
               ),
         ),
-        label: currentUser.performerInfo.toNullable()?.label,
+        label: currentUser.performerInfo.toNullable()?.label ?? 'independent',
         occupations: currentUser.occupations,
         tiktokFollowers: currentUser.socialFollowing.tiktokFollowers,
         tiktokHandle: currentUser.socialFollowing.tiktokHandle.toNullable(),
@@ -71,6 +77,9 @@ class SettingsCubit extends Cubit<SettingsState> {
             currentUser.socialFollowing.youtubeChannelId.toNullable(),
         placeId: currentUser.location.toNullable()?.placeId,
         spotifyUrl: currentUser.socialFollowing.spotifyUrl.toNullable(),
+        soundcloudHandle:
+            currentUser.socialFollowing.soundcloudHandle.toNullable(),
+        audiusHandle: currentUser.socialFollowing.audiusHandle.toNullable(),
         pushNotificationsDirectMessages:
             currentUser.pushNotifications.directMessages,
       ),
@@ -155,14 +164,14 @@ class SettingsCubit extends Cubit<SettingsState> {
     );
   }
 
-  void changeLabel(String? value) => emit(state.copyWith(label: value));
+  void changeLabel(String? value) => emit(state.copyWith(label: value ?? ''));
 
   void updateEmail(String? input) => emit(
-        state.copyWith(email: input),
+        state.copyWith(email: input ?? ''),
       );
 
   void updatePassword(String? input) => emit(
-        state.copyWith(password: input),
+        state.copyWith(password: input ?? ''),
       );
 
   void changeDirectMsgPush({required bool selected}) =>
@@ -319,7 +328,6 @@ class SettingsCubit extends Cubit<SettingsState> {
           emailNotifications: currentUser.emailNotifications.copyWith(
             appReleases: state.emailNotificationsAppReleases,
           ),
-          occupations: state.occupations,
           location: location,
           profilePicture: profilePictureUrl,
           // stripeConnectedAccountId: state.stripeConnectedAccountId,

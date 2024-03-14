@@ -21,8 +21,8 @@ class SoundcloudTextField extends StatelessWidget {
       ],
       initialValue: initialValue,
       decoration: const InputDecoration(
-        prefixIcon: Icon(FontAwesomeIcons.instagram),
-        prefixText: '@ ',
+        prefixIcon: Icon(FontAwesomeIcons.soundcloud),
+        prefixText: '',
         labelText: 'soundcloud handle',
       ),
       onChanged: (input) {

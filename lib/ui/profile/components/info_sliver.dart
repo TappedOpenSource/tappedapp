@@ -412,7 +412,6 @@ class InfoSliver extends StatelessWidget {
                           (_, _) => const SizedBox.shrink(),
                         },
                         const CategoryGauge(),
-                        const SocialMediaIcons(),
                       ],
                     );
                   },

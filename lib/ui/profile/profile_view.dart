@@ -23,6 +23,7 @@ import 'package:intheloopapp/ui/profile/components/info_sliver.dart';
 import 'package:intheloopapp/ui/profile/components/opportunities_sliver.dart';
 import 'package:intheloopapp/ui/profile/components/reviews_sliver.dart';
 import 'package:intheloopapp/ui/profile/components/services_sliver.dart';
+import 'package:intheloopapp/ui/profile/components/social_media_icons.dart';
 import 'package:intheloopapp/ui/profile/profile_cubit.dart';
 import 'package:intheloopapp/ui/themes.dart';
 import 'package:intheloopapp/utils/default_image.dart';
@@ -350,6 +351,7 @@ class ProfileView extends StatelessWidget {
         const SliverToBoxAdapter(
           child: InfoSliver(),
         ),
+        const SocialMediaIcons(),
         const SliverToBoxAdapter(
           child: OpportunitiesSliver(),
         ),
