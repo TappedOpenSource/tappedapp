@@ -13,8 +13,6 @@ import 'package:intheloopapp/ui/discover/components/map_base.dart';
 import 'package:intheloopapp/ui/discover/components/map_config_slider.dart';
 import 'package:intheloopapp/ui/discover/components/tapped_search_bar.dart';
 import 'package:intheloopapp/ui/discover/discover_cubit.dart';
-import 'package:intheloopapp/ui/messaging/channel_list_view.dart';
-import 'package:intheloopapp/ui/messaging/messaging_view.dart';
 import 'package:intheloopapp/utils/current_user_builder.dart';
 import 'package:intheloopapp/utils/premium_builder.dart';
 import 'package:latlong2/latlong.dart';
@@ -299,15 +297,22 @@ class DiscoverView extends StatelessWidget {
                                           color: theme.colorScheme.background,
                                           elevation: 0,
                                           shape: const CircleBorder(),
-                                          child: badges.Badge(
-                                            showBadge: unreadMessagesCount > 0,
-                                            position:
-                                                badges.BadgePosition.topEnd(),
-                                            child: IconButton(
-                                              onPressed: () => context.push(
-                                                MessagingChannelListPage(),
+                                          child: IconButton(
+                                            onPressed: () => context.push(
+                                              MessagingChannelListPage(),
+                                            ),
+                                            icon: badges.Badge(
+                                              showBadge: unreadMessagesCount > 0,
+                                              badgeContent: Text(
+                                                unreadMessagesCount.toString(),
+                                                style: TextStyle(
+                                                  color: theme.colorScheme.onBackground,
+                                                ),
                                               ),
-                                              icon: Icon(
+                                              position:
+                                              badges.BadgePosition.topEnd(
+                                              ),
+                                              child: Icon(
                                                 CupertinoIcons
                                                     .chat_bubble_text_fill,
                                                 color: theme.colorScheme.onBackground,
