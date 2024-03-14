@@ -436,9 +436,8 @@ export const notifyFoundersOnVenueContact = onDocumentCreated(
 export const inboundEmailWebhook = onRequest(
   { secrets: [ POSTMARK_SERVER_ID, streamKey, streamSecret ] },
   async (req, res) => {
+    const body = req.body;
     try {
-      const body = req.body;
-
       const subject = body.Subject;
       const to = body.To;
       const from = body.From;
@@ -453,15 +452,7 @@ export const inboundEmailWebhook = onRequest(
       )?.Value;
 
       if (!subject || !replyToMessageId) {
-        error("no subject or reply-to messageId found");
-        await orphanEmailsRef.add({
-          email: {
-            ...body,
-          },
-          error: "no subject or reply-to messageId found",
-        });
-        res.status(400).send("bad request");
-        return;
+        throw new Error("no subject or reply-to messageId found");
       }
 
       const username = to.split("@")[0];
@@ -471,14 +462,7 @@ export const inboundEmailWebhook = onRequest(
         .get();
       if (userSnap.empty) {
         debug(`no user found for this username (${username})`);
-        await orphanEmailsRef.add({
-          email: {
-            ...body,
-          },
-          error: "no user found for this username",
-        });
-        res.status(200).send("ok");
-        return;
+        throw new Error("no user found for this username");
       }
 
       const userId = userSnap.docs[0].id;
@@ -493,14 +477,7 @@ export const inboundEmailWebhook = onRequest(
         debug(
           `no venue contact found for this user and messageId (${userId},${references})`,
         );
-        await orphanEmailsRef.add({
-          email: {
-            ...body,
-          },
-          error: "no venue contact found for this user and messageId",
-        });
-        res.status(200).send("ok");
-        return;
+        throw new Error("no venue contact found for this user and messageId");
       }
       const venueContactData = venueContactsSnap.docs[0].data();
       const allEmails = venueContactData.allEmails ?? [];
@@ -550,8 +527,14 @@ export const inboundEmailWebhook = onRequest(
       await fcm.sendToDevice(foundsTokens, payload);
 
       res.status(200).send("ok");
-    } catch (e) {
-      error(e);
+    } catch (e: any) {
+      error(e.message);
+      await orphanEmailsRef.add({
+        email: {
+          ...body,
+        },
+        error: e.message,
+      });
       res.status(500).send("error");
     }
   },

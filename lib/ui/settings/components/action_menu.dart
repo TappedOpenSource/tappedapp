@@ -26,6 +26,7 @@ class ActionMenu extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final subscriptions = context.subscriptions;
+    final theme = Theme.of(context);
     return BlocBuilder<SettingsCubit, SettingsState>(
       builder: (context, state) {
         return Column(
@@ -36,18 +37,17 @@ class ActionMenu extends StatelessWidget {
                 if (!isPremium) {
                   return SettingsButton(
                     icon: const Icon(FontAwesomeIcons.crown),
-                    label: 'Go Premium',
+                    label: 'go premium',
                     onTap: () {
                       context.push(PaywallPage());
                     },
                   );
                 }
-
                 return SettingsButton(
                   icon: const Icon(FontAwesomeIcons.crown),
-                  label: 'Manage Subscription',
+                  label: 'manage subscription',
                   onTap: () {
-                    logger.debug('Manage Subscription');
+                    logger.debug('manage subscription');
                     return switch (subscriptions.state) {
                       Initialized(:final customerInfo) =>
                         customerInfo.managementURL != null
@@ -64,7 +64,7 @@ class ActionMenu extends StatelessWidget {
                             ),
                             backgroundColor: Colors.red,
                             content: const Text(
-                              'Subscription is uninitialized',
+                              'subscription is uninitialized',
                             ),
                           ),
                         ),
@@ -72,6 +72,55 @@ class ActionMenu extends StatelessWidget {
                   },
                 );
               },
+            ),
+            const Divider(),
+            SettingsButton(
+              icon: const Icon(Icons.verified),
+              label: 'get verified',
+              onTap: () => showModalBottomSheet(
+                context: context,
+                showDragHandle: true,
+                builder: (context) {
+                  return SizedBox(
+                    width: double.infinity,
+                    height: 200,
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 20,
+                      ),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Icon(
+                            Icons.verified,
+                            color:
+                            theme.colorScheme.primary,
+                            size: 96,
+                          ),
+                          Row(
+                            children: [
+                              const Icon(
+                                Icons.lightbulb,
+                                color: Colors.amber,
+                              ),
+                              const SizedBox(width: 8),
+                              Expanded(
+                                child: Text(
+                                  'to get verified, post a screenshot of your profile to your instagram story and tag us @tappedai',
+                                  maxLines: 2,
+                                  style: TextStyle(
+                                    color: theme.colorScheme.onSurface.withOpacity(0.5),
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ],
+                      ),
+                    ),
+                  );
+                },
+              ),
             ),
             const Divider(),
             SettingsButton(

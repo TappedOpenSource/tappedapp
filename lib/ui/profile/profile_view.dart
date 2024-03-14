@@ -320,7 +320,7 @@ class ProfileView extends StatelessWidget {
                                 child: const Icon(
                                   Icons.verified,
                                   size: 18,
-                                  color: tappedAccent
+                                  color: tappedAccent,
                                 ),
                               ),
                               alignment: PlaceholderAlignment.middle,
