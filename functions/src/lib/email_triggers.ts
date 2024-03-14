@@ -231,7 +231,7 @@ export const sendBookingRequestSentEmailOnBooking = functions
     const requester = requesterSnapshot.data();
     const requesterEmail = requester?.email;
     const unclaimed = requester?.unclaimed ?? false;
-    const addedByUser = requester?.addedByUser ?? false;
+    const addedByUser = booking.addedByUser ?? false;
 
     debug({ requesterEmail, unclaimed, addedByUser });
 
@@ -253,7 +253,6 @@ export const sendBookingRequestSentEmailOnBooking = functions
       debug(`requester ${requester?.id} email ends with @tapped.ai, skipping email`);
       return;
     }
-
 
     if (booking.calendarEventId !== undefined) {
       debug(`booking ${booking.id} already has a calendar event, skipping email`);
