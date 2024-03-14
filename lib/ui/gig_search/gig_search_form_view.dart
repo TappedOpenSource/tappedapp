@@ -86,26 +86,31 @@ class GigSearchFormView extends StatelessWidget {
                       ),
                       Row(
                         children: [
-                          Text(state.capacityRange.start.round().toString()),
+                          Text(state.capacityRangeStart.toString()),
                           Expanded(
                             child: RangeSlider(
                               values: state.capacityRange,
-                              max: 1000,
+                              max: maxCapacity,
                               onChanged: (values) {
                                 context
                                     .read<GigSearchCubit>()
                                     .updateCapacity(values);
                               },
                               activeColor: theme.colorScheme.primary,
-                              inactiveColor: theme.colorScheme.onSurface.withOpacity(0.4),
-                              divisions: 1000,
+                              inactiveColor:
+                                  theme.colorScheme.onSurface.withOpacity(0.4),
+                              divisions: maxCapacity.toInt(),
                               labels: RangeLabels(
-                                state.capacityRange.start.round().toString(),
-                                state.capacityRange.end.round().toString(),
+                                state.capacityRangeStart.toString(),
+                                state.capacityRangeEnd.toString(),
                               ),
                             ),
                           ),
-                          Text(state.capacityRange.end.round().toString()),
+                          Text(
+                            state.capacityRangeEnd == maxCapacity
+                                ? '${maxCapacity.round()}+'
+                                : state.capacityRangeEnd.toString(),
+                          ),
                         ],
                       ),
                       // const SizedBox(height: 20),

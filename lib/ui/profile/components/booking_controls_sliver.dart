@@ -1,41 +1,24 @@
-import 'package:feedback/feedback.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_easyloading/flutter_easyloading.dart';
-import 'package:fpdart/fpdart.dart';
-import 'package:intheloopapp/data/auth_repository.dart';
 import 'package:intheloopapp/domains/bookings_bloc/bookings_bloc.dart';
 import 'package:intheloopapp/domains/models/booking.dart';
-import 'package:intheloopapp/domains/models/genre.dart';
-import 'package:intheloopapp/domains/models/venue_info.dart';
-import 'package:intheloopapp/domains/navigation_bloc/navigation_bloc.dart';
-import 'package:intheloopapp/domains/navigation_bloc/tapped_route.dart';
 import 'package:intheloopapp/ui/bookings/components/bookings_list.dart';
 import 'package:intheloopapp/ui/discover/components/venue_card.dart';
-import 'package:intheloopapp/ui/profile/components/category_gauge.dart';
-import 'package:intheloopapp/ui/profile/components/more_options_button.dart';
 import 'package:intheloopapp/ui/profile/components/opportunity_card.dart';
-import 'package:intheloopapp/ui/profile/components/social_media_icons.dart';
-import 'package:intheloopapp/ui/profile/profile_cubit.dart';
-import 'package:intheloopapp/utils/app_logger.dart';
 import 'package:intheloopapp/utils/bloc_utils.dart';
 import 'package:intheloopapp/utils/current_user_builder.dart';
 import 'package:intheloopapp/utils/custom_claims_builder.dart';
-import 'package:intheloopapp/utils/geohash.dart';
 import 'package:intheloopapp/utils/premium_builder.dart';
-import 'package:maps_launcher/maps_launcher.dart';
-import 'package:url_launcher/url_launcher.dart';
 
 class BookingControlsSliver extends StatelessWidget {
   const BookingControlsSliver({super.key});
 
-
   Widget _buildPendingBookingsSheet(
-      BuildContext context, {
-        required List<Booking> pendingBookings,
-      }) {
+    BuildContext context, {
+    required List<Booking> pendingBookings,
+  }) {
     return SizedBox(
       width: double.infinity,
       child: DraggableScrollableSheet(
@@ -224,71 +207,69 @@ class BookingControlsSliver extends StatelessWidget {
                             ),
                           ),
                           children: [
-                            if (state.pendingBookings.isNotEmpty)
-                              CupertinoListTile.notched(
-                                title: Text(
-                                  'booking requests',
-                                  style: TextStyle(
-                                    color: theme.colorScheme.onSurface,
-                                  ),
-                                ),
-                                trailing:
-                                    const Icon(CupertinoIcons.chevron_forward),
-                                onTap: () => showModalBottomSheet(
-                                  context: context,
-                                  showDragHandle: true,
-                                  builder: (context) {
-                                    return _buildPendingBookingsSheet(
-                                      context,
-                                      pendingBookings: state.pendingBookings,
-                                    );
-                                  },
+                            CupertinoListTile.notched(
+                              leading: const Icon(CupertinoIcons.clock_fill),
+                              title: Text(
+                                'booking requests (${state.pendingBookings.length})',
+                                style: TextStyle(
+                                  color: theme.colorScheme.onSurface,
                                 ),
                               ),
-                            if (state.upcomingBookings.isNotEmpty)
-                              CupertinoListTile.notched(
-                                leading: const Icon(CupertinoIcons.calendar),
-                                title: Text(
-                                  'upcoming bookings',
-                                  style: TextStyle(
-                                    color: theme.colorScheme.onSurface,
-                                  ),
-                                ),
-                                trailing:
-                                    const Icon(CupertinoIcons.chevron_forward),
-                                onTap: () => showModalBottomSheet(
-                                  context: context,
-                                  showDragHandle: true,
-                                  builder: (context) {
-                                    return _buildUpcomingBookingsSheet(
-                                      context,
-                                      upcomingBookings: state.upcomingBookings,
-                                    );
-                                  },
+                              trailing:
+                                  const Icon(CupertinoIcons.chevron_forward),
+                              onTap: () => showModalBottomSheet(
+                                context: context,
+                                showDragHandle: true,
+                                builder: (context) {
+                                  return _buildPendingBookingsSheet(
+                                    context,
+                                    pendingBookings: state.pendingBookings,
+                                  );
+                                },
+                              ),
+                            ),
+                            CupertinoListTile.notched(
+                              leading: const Icon(CupertinoIcons.calendar),
+                              title: Text(
+                                'upcoming bookings (${state.upcomingBookings.length})',
+                                style: TextStyle(
+                                  color: theme.colorScheme.onSurface,
                                 ),
                               ),
-                            if (state.canceledBookings.isNotEmpty)
-                              CupertinoListTile.notched(
-                                leading: const Icon(CupertinoIcons.xmark),
-                                title: Text(
-                                  'canceled bookings',
-                                  style: TextStyle(
-                                    color: theme.colorScheme.onSurface,
-                                  ),
-                                ),
-                                trailing:
-                                    const Icon(CupertinoIcons.chevron_forward),
-                                onTap: () => showModalBottomSheet(
-                                  context: context,
-                                  showDragHandle: true,
-                                  builder: (context) {
-                                    return _buildCanceledBookingsSheet(
-                                      context,
-                                      canceledBookings: state.canceledBookings,
-                                    );
-                                  },
+                              trailing:
+                                  const Icon(CupertinoIcons.chevron_forward),
+                              onTap: () => showModalBottomSheet(
+                                context: context,
+                                showDragHandle: true,
+                                builder: (context) {
+                                  return _buildUpcomingBookingsSheet(
+                                    context,
+                                    upcomingBookings: state.upcomingBookings,
+                                  );
+                                },
+                              ),
+                            ),
+                            CupertinoListTile.notched(
+                              leading: const Icon(CupertinoIcons.xmark),
+                              title: Text(
+                                'canceled bookings (${state.canceledBookings.length})',
+                                style: TextStyle(
+                                  color: theme.colorScheme.onSurface,
                                 ),
                               ),
+                              trailing:
+                                  const Icon(CupertinoIcons.chevron_forward),
+                              onTap: () => showModalBottomSheet(
+                                context: context,
+                                showDragHandle: true,
+                                builder: (context) {
+                                  return _buildCanceledBookingsSheet(
+                                    context,
+                                    canceledBookings: state.canceledBookings,
+                                  );
+                                },
+                              ),
+                            ),
                             CupertinoListTile.notched(
                               leading: const Icon(CupertinoIcons.chat_bubble),
                               title: Text(
@@ -298,7 +279,7 @@ class BookingControlsSliver extends StatelessWidget {
                                 ),
                               ),
                               trailing:
-                              const Icon(CupertinoIcons.chevron_forward),
+                                  const Icon(CupertinoIcons.chevron_forward),
                               onTap: () => showModalBottomSheet(
                                 context: context,
                                 showDragHandle: true,
@@ -319,7 +300,7 @@ class BookingControlsSliver extends StatelessWidget {
                                 ),
                               ),
                               trailing:
-                              const Icon(CupertinoIcons.chevron_forward),
+                                  const Icon(CupertinoIcons.chevron_forward),
                               onTap: () => showModalBottomSheet(
                                 context: context,
                                 showDragHandle: true,

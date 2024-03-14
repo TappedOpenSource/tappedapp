@@ -1,5 +1,7 @@
 part of 'gig_search_cubit.dart';
 
+const maxCapacity = 1000.0;
+
 @freezed
 class GigSearchState with _$GigSearchState {
   const factory GigSearchState({
@@ -25,6 +27,9 @@ extension SelectedGigSearch on GigSearchState {
         .map((e) => e.user)
         .toList();
   }
+
+  int get capacityRangeStart => capacityRange.start.round();
+  int get capacityRangeEnd => capacityRange.end.round();
 }
 
 @JsonEnum()

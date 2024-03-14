@@ -97,8 +97,8 @@ class GigSearchCubit extends Cubit<GigSearchState> {
       (a) => a.lng,
     );
 
-    final minCap = state.capacityRange.start.round();
-    final maxCap = state.capacityRange.end.round();
+    final minCap = state.capacityRangeStart;
+    final maxCap = state.capacityRangeEnd == maxCapacity ? 100000 : state.capacityRangeEnd;
 
     final hits = await search.queryUsers(
       '',
