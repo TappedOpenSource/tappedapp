@@ -7,6 +7,7 @@ import 'package:intheloopapp/data/database_repository.dart';
 import 'package:intheloopapp/data/places_repository.dart';
 import 'package:intheloopapp/data/storage_repository.dart';
 import 'package:intheloopapp/domains/models/booking.dart';
+import 'package:intheloopapp/domains/models/genre.dart';
 import 'package:intheloopapp/domains/models/location.dart';
 import 'package:intheloopapp/domains/models/user_model.dart';
 import 'package:intheloopapp/utils/app_logger.dart';
@@ -134,6 +135,12 @@ class AddPastBookingCubit extends Cubit<AddPastBookingState> {
       );
     });
 
+    final userData = await database.getUserById(currentUserId);
+    final user = userData.getOrElse(() => throw 'User not found');
+    final genres = user.performerInfo
+        .map((t) => fromStrings(t.genres))
+        .getOrElse(() => []);
+
     final booking = Booking(
       id: uuid,
       addedByUser: true,
@@ -146,10 +153,8 @@ class AddPastBookingCubit extends Cubit<AddPastBookingState> {
       startTime: eventStart,
       endTime: eventEnd,
       flierUrl: flierUrl,
-      placeId: location.map((t) => t.placeId),
-      geohash: location.map((t) => t.geohash),
-      lat: location.map((t) => t.lat),
-      lng: location.map((t) => t.lng),
+      genres: genres,
+      location: location,
     );
 
     logger.i(booking.toString());

@@ -1,9 +1,13 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/material.dart';
 import 'package:fpdart/fpdart.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:intheloopapp/data/prod/firestore_database_impl.dart';
 import 'package:intheloopapp/domains/models/genre.dart';
 import 'package:intheloopapp/domains/models/location.dart';
+import 'package:intheloopapp/domains/models/user_model.dart';
+import 'package:intheloopapp/utils/default_image.dart';
 
 part 'booking.freezed.dart';
 
@@ -24,12 +28,8 @@ class Booking with _$Booking {
     @Default(0) int rate,
     @Default(None()) Option<String> serviceId,
     @Default(false) bool addedByUser,
-    @Default(None()) Option<String> placeId,
-    @Default(None()) Option<String> geohash,
-    @Default(None()) Option<double> lat,
-    @Default(None()) Option<double> lng,
     @Default(None()) Option<String> flierUrl,
-
+    @Default(None()) Option<String> ticketUrl,
     @Default([]) List<Genre> genres,
     @Default(None()) Option<Location> location,
   }) = _Booking;
@@ -60,6 +60,21 @@ extension BookingHelpers on Booking {
   Duration get duration => endTime.difference(startTime);
 
   int get totalCost => ((rate / 60) * duration.inMinutes).toInt();
+
+  ImageProvider getBookingImage(Option<UserModel> user) {
+    return flierUrl.fold(
+          () => user.flatMap((t) => t.profilePicture).fold(
+            () => getDefaultImage(Option.of(id)),
+            (t) {
+          if (t.isNotEmpty) {
+            return CachedNetworkImageProvider(t);
+          }
+          return getDefaultImage(Option.of(id));
+        },
+      ),
+      CachedNetworkImageProvider.new,
+    );
+  }
 }
 
 @JsonEnum()
@@ -67,4 +82,14 @@ enum BookingStatus {
   pending,
   confirmed,
   canceled,
+}
+
+extension BookingStatusX on BookingStatus {
+  String get formattedName {
+    return switch (this) {
+      BookingStatus.pending => 'Pending',
+      BookingStatus.confirmed => 'Confirmed',
+      BookingStatus.canceled => 'Canceled',
+    };
+  }
 }

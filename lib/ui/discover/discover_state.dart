@@ -52,8 +52,8 @@ extension DiscoverStateX on DiscoverState {
     return bookingHits
         .map(
           (hit) {
-            final lat = hit.lat;
-            final lng = hit.lng;
+            final lat = hit.location.map((t) => t.lat);
+            final lng = hit.location.map((t) => t.lng);
 
             return lat.map2(
               lng,

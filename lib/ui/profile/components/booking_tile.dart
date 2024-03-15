@@ -4,6 +4,9 @@ import 'package:fpdart/fpdart.dart';
 import 'package:intheloopapp/domains/models/booking.dart';
 import 'package:intheloopapp/domains/models/service.dart';
 import 'package:intheloopapp/domains/models/user_model.dart';
+import 'package:intheloopapp/domains/navigation_bloc/navigation_bloc.dart';
+import 'package:intheloopapp/domains/navigation_bloc/tapped_route.dart';
+import 'package:intheloopapp/ui/booking/booking_view.dart';
 import 'package:intheloopapp/utils/bloc_utils.dart';
 import 'package:intheloopapp/utils/linkify.dart';
 import 'package:skeletons/skeletons.dart';
@@ -31,15 +34,20 @@ class BookingTile extends StatelessWidget {
               null => SkeletonListTile(),
               None() => const SizedBox.shrink(),
               Some(:final value) => ListTile(
-                  leading: switch (booking.flierUrl) {
-                    None() => const Icon(Icons.book),
-                    Some(:final value) => CachedNetworkImage(
-                      imageUrl: value,
-                      width: 40,
-                      height: 40,
-                      fit: BoxFit.cover,
+                  onTap: () => context.push(
+                    BookingPage(booking: booking),
+                  ),
+                  leading: Container(
+                    height: 40,
+                    width: 40,
+                    decoration: BoxDecoration(
+                      color: Colors.grey,
+                      image: DecorationImage(
+                        image: booking.getBookingImage(const None()),
+                        fit: BoxFit.cover,
+                      ),
                     ),
-                  },
+                  ),
                   title: RichText(
                     text: TextSpan(
                       children: [
@@ -130,15 +138,17 @@ class BookingTile extends StatelessWidget {
             };
             final onSurfaceColor = Theme.of(context).colorScheme.onSurface;
             return ListTile(
-              leading: switch (booking.flierUrl) {
-                None() => const Icon(Icons.book),
-                Some(:final value) => CachedNetworkImage(
-                  imageUrl: value,
-                  width: 40,
-                  height: 40,
-                  fit: BoxFit.cover,
+              leading: Container(
+                height: 40,
+                width: 40,
+                decoration: BoxDecoration(
+                  color: Colors.grey,
+                  image: DecorationImage(
+                    image: booking.getBookingImage(requester),
+                    fit: BoxFit.cover,
+                  ),
                 ),
-              },
+              ),
               title: RichText(
                 text: TextSpan(
                   children: [

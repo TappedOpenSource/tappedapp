@@ -8,6 +8,7 @@ import 'package:intheloopapp/data/payment_repository.dart';
 import 'package:intheloopapp/data/places_repository.dart';
 import 'package:intheloopapp/data/stream_repository.dart';
 import 'package:intheloopapp/domains/models/booking.dart';
+import 'package:intheloopapp/domains/models/location.dart';
 import 'package:intheloopapp/domains/models/service.dart';
 import 'package:intheloopapp/domains/models/user_model.dart';
 import 'package:intheloopapp/domains/navigation_bloc/navigation_bloc.dart';
@@ -96,9 +97,19 @@ class CreateBookingCubit extends Cubit<CreateBookingState> {
 
     final nullablePlace = state.place.toNullable();
 
+    final placeId = nullablePlace?.placeId;
     final lat = nullablePlace?.lat;
     final lng = nullablePlace?.lng;
     final geohash = nullablePlace?.geohash;
+
+    final location = (lat != null && lng != null && geohash != null && placeId != null)
+      ? Location(
+          lat: lat,
+          lng: lng,
+          geohash: geohash,
+          placeId: placeId,
+        )
+      : null;
 
     final booking = Booking(
       id: const Uuid().v4(),
@@ -109,10 +120,7 @@ class CreateBookingCubit extends Cubit<CreateBookingState> {
       requesteeId: state.service.userId,
       rate: state.service.rate,
       status: BookingStatus.pending,
-      placeId: state.placeId,
-      geohash: Option.fromNullable(geohash),
-      lat: Option.fromNullable(lat),
-      lng: Option.fromNullable(lng),
+      location: Option.fromNullable(location),
       startTime: state.startTime.value,
       endTime: state.endTime.value,
       timestamp: DateTime.now(),
