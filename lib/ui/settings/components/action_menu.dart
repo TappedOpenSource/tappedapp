@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:intheloopapp/domains/authentication_bloc/authentication_bloc.dart';
 import 'package:intheloopapp/domains/navigation_bloc/navigation_bloc.dart';
 import 'package:intheloopapp/domains/navigation_bloc/tapped_route.dart';
 import 'package:intheloopapp/domains/subscription_bloc/subscription_bloc.dart';
@@ -27,6 +28,8 @@ class ActionMenu extends StatelessWidget {
   Widget build(BuildContext context) {
     final subscriptions = context.subscriptions;
     final theme = Theme.of(context);
+    final nav = context.nav;
+    final authBloc = context.authentication;
     return BlocBuilder<SettingsCubit, SettingsState>(
       builder: (context, state) {
         return Column(
@@ -93,8 +96,7 @@ class ActionMenu extends StatelessWidget {
                         children: [
                           Icon(
                             Icons.verified,
-                            color:
-                            theme.colorScheme.primary,
+                            color: theme.colorScheme.primary,
                             size: 96,
                           ),
                           Row(
@@ -109,7 +111,8 @@ class ActionMenu extends StatelessWidget {
                                   'to get verified, post a screenshot of your profile to your instagram story and tag us @tappedai',
                                   maxLines: 2,
                                   style: TextStyle(
-                                    color: theme.colorScheme.onSurface.withOpacity(0.5),
+                                    color: theme.colorScheme.onSurface
+                                        .withOpacity(0.5),
                                   ),
                                 ),
                               ),
@@ -174,7 +177,8 @@ class ActionMenu extends StatelessWidget {
               onTap: () => launchUrl(
                 Uri(
                   scheme: 'https',
-                  path: 'https://www.apple.com/legal/internet-services/itunes/dev/stdeula/',
+                  path:
+                      'https://www.apple.com/legal/internet-services/itunes/dev/stdeula/',
                 ),
               ),
             ),
@@ -185,10 +189,9 @@ class ActionMenu extends StatelessWidget {
                 size: 20,
               ),
               label: 'Sign Out',
-              // onTap: context.read<SettingsCubit>().logout,
               onTap: () => showDialog<AlertDialog>(
                 context: context,
-                builder: (_) => AlertDialog(
+                builder: (context) => AlertDialog(
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(25),
                   ),
@@ -205,10 +208,17 @@ class ActionMenu extends StatelessWidget {
                     TextButton(
                       child: const Text('Continue'),
                       onPressed: () {
-                        context.read<SettingsCubit>().logout();
-                        Navigator.of(context).popUntil(
-                          ModalRoute.withName('/'),
-                        );
+                        try {
+                          Navigator.of(context).pop();
+                          nav.popUntilHome();
+                          authBloc.add(LoggedOut());
+                        } catch (e, s) {
+                          logger.e(
+                            'error signing out',
+                            error: e,
+                            stackTrace: s,
+                          );
+                        }
                       },
                     ),
                   ],

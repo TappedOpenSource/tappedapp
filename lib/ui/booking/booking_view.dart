@@ -316,7 +316,7 @@ class BookingView extends StatelessWidget {
                                         title: Text(
                                           value.displayName,
                                           style: TextStyle(
-                                            color: theme.colorScheme.onSurface,
+                                            color: theme.colorScheme.primary,
                                           ),
                                         ),
                                       ),

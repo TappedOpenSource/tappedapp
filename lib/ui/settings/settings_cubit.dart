@@ -346,10 +346,6 @@ class SettingsCubit extends Cubit<SettingsState> {
     }
   }
 
-  void logout() {
-    authenticationBloc.add(LoggedOut());
-  }
-
   Future<void> reauthWithGoogle() async {
     emit(
       state.copyWith(status: FormzSubmissionStatus.inProgress),
