@@ -73,8 +73,8 @@ class SettingsCubit extends Cubit<SettingsState> {
         instagramFollowers: currentUser.socialFollowing.instagramFollowers,
         instagramHandle:
             currentUser.socialFollowing.instagramHandle.toNullable(),
-        youtubeChannelId:
-            currentUser.socialFollowing.youtubeChannelId.toNullable(),
+        youtubeHandle:
+            currentUser.socialFollowing.youtubeHandle.toNullable(),
         placeId: currentUser.location.toNullable()?.placeId,
         spotifyUrl: currentUser.socialFollowing.spotifyUrl.toNullable(),
         soundcloudHandle:
@@ -126,7 +126,7 @@ class SettingsCubit extends Cubit<SettingsState> {
   void changeSpotify(String value) => emit(state.copyWith(spotifyUrl: value));
 
   void changeYoutube(String value) =>
-      emit(state.copyWith(youtubeChannelId: value));
+      emit(state.copyWith(youtubeHandle: value));
 
   void changeSoundcloud(String value) =>
       emit(state.copyWith(soundcloudHandle: value));
@@ -318,7 +318,7 @@ class SettingsCubit extends Cubit<SettingsState> {
             instagramFollowers: state.instagramFollowers ?? 0,
             tiktokHandle: Option.fromNullable(state.tiktokHandle),
             tiktokFollowers: state.tiktokFollowers ?? 0,
-            youtubeChannelId: Option.fromNullable(state.youtubeChannelId),
+            youtubeHandle: Option.fromNullable(state.youtubeHandle),
             spotifyUrl: Option.fromNullable(state.spotifyUrl),
             soundcloudHandle: Option.fromNullable(state.soundcloudHandle),
           ),

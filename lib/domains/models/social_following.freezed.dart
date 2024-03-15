@@ -21,6 +21,7 @@ SocialFollowing _$SocialFollowingFromJson(Map<String, dynamic> json) {
 /// @nodoc
 mixin _$SocialFollowing {
   Option<String> get youtubeChannelId => throw _privateConstructorUsedError;
+  Option<String> get youtubeHandle => throw _privateConstructorUsedError;
   Option<String> get tiktokHandle => throw _privateConstructorUsedError;
   int get tiktokFollowers => throw _privateConstructorUsedError;
   Option<String> get instagramHandle => throw _privateConstructorUsedError;
@@ -51,6 +52,7 @@ abstract class $SocialFollowingCopyWith<$Res> {
   @useResult
   $Res call(
       {Option<String> youtubeChannelId,
+      Option<String> youtubeHandle,
       Option<String> tiktokHandle,
       int tiktokFollowers,
       Option<String> instagramHandle,
@@ -82,6 +84,7 @@ class _$SocialFollowingCopyWithImpl<$Res, $Val extends SocialFollowing>
   @override
   $Res call({
     Object? youtubeChannelId = null,
+    Object? youtubeHandle = null,
     Object? tiktokHandle = null,
     Object? tiktokFollowers = null,
     Object? instagramHandle = null,
@@ -102,6 +105,10 @@ class _$SocialFollowingCopyWithImpl<$Res, $Val extends SocialFollowing>
       youtubeChannelId: null == youtubeChannelId
           ? _value.youtubeChannelId
           : youtubeChannelId // ignore: cast_nullable_to_non_nullable
+              as Option<String>,
+      youtubeHandle: null == youtubeHandle
+          ? _value.youtubeHandle
+          : youtubeHandle // ignore: cast_nullable_to_non_nullable
               as Option<String>,
       tiktokHandle: null == tiktokHandle
           ? _value.tiktokHandle
@@ -177,6 +184,7 @@ abstract class _$$SocialFollowingImplCopyWith<$Res>
   @useResult
   $Res call(
       {Option<String> youtubeChannelId,
+      Option<String> youtubeHandle,
       Option<String> tiktokHandle,
       int tiktokFollowers,
       Option<String> instagramHandle,
@@ -206,6 +214,7 @@ class __$$SocialFollowingImplCopyWithImpl<$Res>
   @override
   $Res call({
     Object? youtubeChannelId = null,
+    Object? youtubeHandle = null,
     Object? tiktokHandle = null,
     Object? tiktokFollowers = null,
     Object? instagramHandle = null,
@@ -226,6 +235,10 @@ class __$$SocialFollowingImplCopyWithImpl<$Res>
       youtubeChannelId: null == youtubeChannelId
           ? _value.youtubeChannelId
           : youtubeChannelId // ignore: cast_nullable_to_non_nullable
+              as Option<String>,
+      youtubeHandle: null == youtubeHandle
+          ? _value.youtubeHandle
+          : youtubeHandle // ignore: cast_nullable_to_non_nullable
               as Option<String>,
       tiktokHandle: null == tiktokHandle
           ? _value.tiktokHandle
@@ -296,6 +309,7 @@ class __$$SocialFollowingImplCopyWithImpl<$Res>
 class _$SocialFollowingImpl implements _SocialFollowing {
   const _$SocialFollowingImpl(
       {this.youtubeChannelId = const None(),
+      this.youtubeHandle = const None(),
       this.tiktokHandle = const None(),
       this.tiktokFollowers = 0,
       this.instagramHandle = const None(),
@@ -318,6 +332,9 @@ class _$SocialFollowingImpl implements _SocialFollowing {
   @override
   @JsonKey()
   final Option<String> youtubeChannelId;
+  @override
+  @JsonKey()
+  final Option<String> youtubeHandle;
   @override
   @JsonKey()
   final Option<String> tiktokHandle;
@@ -366,7 +383,7 @@ class _$SocialFollowingImpl implements _SocialFollowing {
 
   @override
   String toString() {
-    return 'SocialFollowing(youtubeChannelId: $youtubeChannelId, tiktokHandle: $tiktokHandle, tiktokFollowers: $tiktokFollowers, instagramHandle: $instagramHandle, instagramFollowers: $instagramFollowers, twitterHandle: $twitterHandle, twitterFollowers: $twitterFollowers, facebookHandle: $facebookHandle, facebookFollowers: $facebookFollowers, spotifyUrl: $spotifyUrl, soundcloudHandle: $soundcloudHandle, soundcloudFollowers: $soundcloudFollowers, audiusHandle: $audiusHandle, audiusFollowers: $audiusFollowers, twitchHandle: $twitchHandle, twitchFollowers: $twitchFollowers)';
+    return 'SocialFollowing(youtubeChannelId: $youtubeChannelId, youtubeHandle: $youtubeHandle, tiktokHandle: $tiktokHandle, tiktokFollowers: $tiktokFollowers, instagramHandle: $instagramHandle, instagramFollowers: $instagramFollowers, twitterHandle: $twitterHandle, twitterFollowers: $twitterFollowers, facebookHandle: $facebookHandle, facebookFollowers: $facebookFollowers, spotifyUrl: $spotifyUrl, soundcloudHandle: $soundcloudHandle, soundcloudFollowers: $soundcloudFollowers, audiusHandle: $audiusHandle, audiusFollowers: $audiusFollowers, twitchHandle: $twitchHandle, twitchFollowers: $twitchFollowers)';
   }
 
   @override
@@ -376,6 +393,8 @@ class _$SocialFollowingImpl implements _SocialFollowing {
             other is _$SocialFollowingImpl &&
             (identical(other.youtubeChannelId, youtubeChannelId) ||
                 other.youtubeChannelId == youtubeChannelId) &&
+            (identical(other.youtubeHandle, youtubeHandle) ||
+                other.youtubeHandle == youtubeHandle) &&
             (identical(other.tiktokHandle, tiktokHandle) ||
                 other.tiktokHandle == tiktokHandle) &&
             (identical(other.tiktokFollowers, tiktokFollowers) ||
@@ -413,6 +432,7 @@ class _$SocialFollowingImpl implements _SocialFollowing {
   int get hashCode => Object.hash(
       runtimeType,
       youtubeChannelId,
+      youtubeHandle,
       tiktokHandle,
       tiktokFollowers,
       instagramHandle,
@@ -447,6 +467,7 @@ class _$SocialFollowingImpl implements _SocialFollowing {
 abstract class _SocialFollowing implements SocialFollowing {
   const factory _SocialFollowing(
       {final Option<String> youtubeChannelId,
+      final Option<String> youtubeHandle,
       final Option<String> tiktokHandle,
       final int tiktokFollowers,
       final Option<String> instagramHandle,
@@ -468,6 +489,8 @@ abstract class _SocialFollowing implements SocialFollowing {
 
   @override
   Option<String> get youtubeChannelId;
+  @override
+  Option<String> get youtubeHandle;
   @override
   Option<String> get tiktokHandle;
   @override

@@ -112,8 +112,27 @@ class SocialMediaIcons extends StatelessWidget {
                   },
                 ),
             },
-            switch (socialFollowing.youtubeChannelId) {
-              None() => null,
+            switch (socialFollowing.youtubeHandle) {
+              None() => (() {
+                  return switch (socialFollowing.youtubeChannelId) {
+                    None() => const SizedBox.shrink(),
+                    Some(:final value) => _socialMediaIcon(
+                        color: Colors.red,
+                        icon: Icon(
+                          FontAwesomeIcons.youtube,
+                          color: Colors.red.shade700,
+                        ),
+                        onTap: () {
+                          launchUrl(
+                            Uri(
+                              scheme: 'https',
+                              path: 'youtube.com/channel/$value',
+                            ),
+                          );
+                        },
+                      ),
+                  };
+                })(),
               Some(:final value) => _socialMediaIcon(
                   color: Colors.red,
                   icon: Icon(
@@ -124,7 +143,7 @@ class SocialMediaIcons extends StatelessWidget {
                     launchUrl(
                       Uri(
                         scheme: 'https',
-                        path: 'youtube.com/channel/$value',
+                        path: 'youtube.com/@$value',
                       ),
                     );
                   },
@@ -188,11 +207,10 @@ class SocialMediaIcons extends StatelessWidget {
               None() => null,
               Some(:final value) => _socialMediaIcon(
                   color: Colors.purpleAccent,
-                  icon: SvgPicture.asset(
-                      'assets/audius_logo.svg',
-                      colorFilter: ColorFilter.mode(Colors.purple, BlendMode.srcIn),
-                      semanticsLabel: 'Audius Logo'
-                  ),
+                  icon: SvgPicture.asset('assets/audius_logo.svg',
+                      colorFilter:
+                          ColorFilter.mode(Colors.purple, BlendMode.srcIn),
+                      semanticsLabel: 'Audius Logo'),
                   onTap: () {
                     launchUrl(
                       Uri(

@@ -13,6 +13,10 @@ _$SocialFollowingImpl _$$SocialFollowingImplFromJson(
           ? const None()
           : Option<String>.fromJson(
               json['youtubeChannelId'], (value) => value as String),
+      youtubeHandle: json['youtubeHandle'] == null
+          ? const None()
+          : Option<String>.fromJson(
+              json['youtubeHandle'], (value) => value as String),
       tiktokHandle: json['tiktokHandle'] == null
           ? const None()
           : Option<String>.fromJson(
@@ -58,6 +62,9 @@ Map<String, dynamic> _$$SocialFollowingImplToJson(
         _$SocialFollowingImpl instance) =>
     <String, dynamic>{
       'youtubeChannelId': instance.youtubeChannelId.toJson(
+        (value) => value,
+      ),
+      'youtubeHandle': instance.youtubeHandle.toJson(
         (value) => value,
       ),
       'tiktokHandle': instance.tiktokHandle.toJson(

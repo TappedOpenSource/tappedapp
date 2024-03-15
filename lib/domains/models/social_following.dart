@@ -10,6 +10,7 @@ part 'social_following.g.dart';
 class SocialFollowing with _$SocialFollowing {
   const factory SocialFollowing({
     @Default(None()) Option<String> youtubeChannelId,
+    @Default(None()) Option<String> youtubeHandle,
     @Default(None()) Option<String> tiktokHandle,
     @Default(0) int tiktokFollowers,
     @Default(None()) Option<String> instagramHandle,
