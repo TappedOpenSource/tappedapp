@@ -232,6 +232,7 @@ export const sendBookingRequestSentEmailOnBooking = functions
     const requesterEmail = requester?.email;
     const unclaimed = requester?.unclaimed ?? false;
     const addedByUser = booking.addedByUser ?? false;
+    const status = booking.status;
 
     debug({ requesterEmail, unclaimed, addedByUser });
 
@@ -259,6 +260,11 @@ export const sendBookingRequestSentEmailOnBooking = functions
       return;
     }
 
+    if (status !== "pending") {
+      debug(`booking ${booking.id} is not pending, skipping email`);
+      return;
+    }
+
     await mailRef.add({
       to: [ requesterEmail ],
       template: {
@@ -277,6 +283,7 @@ export const sendBookingRequestReceivedEmailOnBooking = functions
     const requesteeEmail = requestee?.email;
     const unclaimed = requestee?.unclaimed ?? false;
     const addedByUser = requestee?.addedByUser ?? false;
+    const status = booking.status;
 
     debug({ requesteeEmail, unclaimed, addedByUser });
 
@@ -301,6 +308,11 @@ export const sendBookingRequestReceivedEmailOnBooking = functions
 
     if (booking.calendarEventId !== undefined) {
       debug(`booking ${booking.id} already has a calendar event, skipping email`);
+      return;
+    }
+
+    if (status !== "pending") {
+      debug(`booking ${booking.id} is not pending, skipping email`);
       return;
     }
 

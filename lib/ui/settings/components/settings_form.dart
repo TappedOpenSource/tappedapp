@@ -125,7 +125,7 @@ class SettingsForm extends StatelessWidget {
                     context.read<SettingsCubit>().changeSpotify(value),
               ),
               YoutubeTextField(
-                initialValue: state.youtubeChannelId,
+                initialValue: state.youtubeHandle,
                 onChanged: (value) =>
                     context.read<SettingsCubit>().changeYoutube(value),
               ),
