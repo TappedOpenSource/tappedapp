@@ -39,10 +39,10 @@ class InfoSliver extends StatelessWidget {
         final genres = performerInfo.map((t) => t.genres).getOrElse(
               () => venueInfo.map((t) => t.genres).getOrElse(() => []),
             );
-        final averagePerformerTicketPrice = performerInfo
-            .map((t) => t.formattedPriceRange);
-        final averageAttendance = performerInfo
-            .flatMap((t) => t.averageAttendance);
+        final averagePerformerTicketPrice =
+            performerInfo.map((t) => t.formattedPriceRange);
+        final averageAttendance =
+            performerInfo.flatMap((t) => t.averageAttendance);
         final label = performerInfo.map((t) => t.label).getOrElse(() => 'None');
         final pressKitUrl = performerInfo
             .map((t) => t.pressKitUrl)

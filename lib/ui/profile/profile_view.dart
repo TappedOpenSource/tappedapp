@@ -270,7 +270,7 @@ class ProfileView extends StatelessWidget {
                                   builder: (context) {
                                     return SizedBox(
                                       width: double.infinity,
-                                      height: 400,
+                                      height: 300,
                                       child: Padding(
                                         padding: EdgeInsets.symmetric(
                                           horizontal: 20,
