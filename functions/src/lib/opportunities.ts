@@ -6,7 +6,7 @@ import {
   onDocumentWritten,
 } from "firebase-functions/v2/firestore";
 import { createActivity } from "./activities";
-import { creditsRef, fcm, getSecretValue, opportunitiesRef, opportunityFeedsRef, tokensRef, usersRef } from "./firebase";
+import { creditsRef, opportunitiesRef, opportunityFeedsRef, usersRef } from "./firebase";
 import { Opportunity, OpportunityFeedItem, UserModel } from "../types/models";
 import { Timestamp } from "firebase-admin/firestore";
 import { HttpsError } from "firebase-functions/v2/https";
@@ -14,161 +14,6 @@ import { debug, error, info } from "firebase-functions/logger";
 import { onSchedule } from "firebase-functions/v2/scheduler";
 // import { v4 as uuidv4 } from "uuid";
 // import { llm } from "./openai";
-
-export const virginiaVenueIds = [
-  "DGeZx8VvolPscUOJzFX8cfgE3Rr2", // Jungle Room
-  "z9INma3qmmPOTw3ncnzHTWSEvPF2", // The Canal Club
-  "tloWCuKGHYScMCp3YamsHKVi3XU2", // Brown's Island
-  "jyz81JbwQycJoBzTTs4N724Gffc2", // The National
-  "I1ZA0M2h1ITitcqOQHaj891dKWq2", // Banditos
-  "Gh9aJvgx6hWe9oQU111d66RYV6D3", // The Hof
-  "FrtrbxFXtFZWe6UhHGJ6BxNkzvn1", // Gallery 5
-  "ETpFbKBUazdkda9cCxRZ0pMosjm1", // Switch RVA
-  "D495K9XmCxfdfhMZOqghPvGKpQB3", // The Broadberry
-  "9FKyhrndDreJtzXnJc3eh6dt0QB2", // Sine's
-  "8R4gqTCxxzaNt1Bt4nLjqUEn6jd2", // Get Right
-  "8R4gqTCxxzaNt1Bt4nLjqUEn6jd2", // Altria
-  "blWPqZivnqMmbLbJBSegtFixUey1", // Black Iris
-  "Y1wv3xMl9VN5yHH9PCCyws0ABPy2", // Ashland Threatre
-  "TzivAopcsugl0lTk2FmcnT0eHJx1", // Richmond Music Hall
-  "QSxvMxvLlHgAhqJbJf18IzNAP3D3", // In Your Ear
-  "8ObJtER8PDUYKmQ0w7Tze0P6SHa2", // The Camel
-  "drGG9B3UwPTCugiUqwFIzYDo45v2", // Therapy
-  "xYiQfClgLsSxSdkxd0oeP8aYIdG2", // Kabana
-  "3HzyzGTkZCN0lcVsBrQJG7kP3Zr2", // The Park 
-  "QGSNkGPB2wbEchwdD8VxJkhaBFN2", // VACU Ampitheatre
-  "5aisevPU3lW97dJZ2eJbIrDMfXI3", // Fallout
-  "MejIpHsC1EWyA2Xuvh1PVhEMesa2", // The 4 cyber cafe
-  "FsQWuDwH5lZxEpd7TpwXi7fFKqj1", // Alley RVA
-  "Mleihxk6vIh3LOLR0P03Rjft6vJ2", // The Golden Pony
-  "S506h6zIMLM3BPtnEuiJWEFtrbh2", // The Loud
-];
-
-export const dcVenueIds = [
-  "00ZIBU93q0eLmzuPu5qliQHnDE92",
-  "5KXpcoAMYGW8q2PBF2WntltjC6z2",
-  "7MIWjtTGTHRSf1kppWmtntuQs2l2",
-  "cvdmcGyu7wMsBQMZbdCthXq1CCX2",
-  "tm3MiUbcpQQwAvqwTsOY5kJM1mQ2",
-  "Qar0DrUBCDerthNqajKM51LSzFn2",
-  "tga3oqoyIDXYozsKtkpus3gpMeP2",
-  "EyRV4VE5zbPLWdmsHew4KSvRCt72",
-  "RzQD4ooYk2Ss56aW5dc6DulaaDw1",
-  "kgTTomDB24OXOZlUwKuqLU8UdAW2",
-  "L5eCmlC8Ctg5NfB4J8VAo6FZFrH2",
-  "Qa2sP9JDgrX3cRuY3GyzBCpXW8c2",
-  "Y39CGyTENNRbFhgGa3aXZQXNgBb2",
-  "FzQEr1y6FRgPKDw27v6vmSFIoEr1",
-  "RsIn7VT7eseAw6DdvLnFvRGLMqy1",
-  "oH56wniKfvYa95OWTf5WANOxAbj2",
-  "GiLBU7RIAwdNw4kzfIi6O8dGebF2",
-  "NXhLa2fRxYee1FcpN4eEHM0LSxq1",
-  "QiZjKYKkrbN7ess6NvmGRp6Y5sr1",
-  "vdtlKMOSp9bEvw2ffZW0Pek95Xa2",
-  "YpqhcL4Ze4WIvDo9MvLcjZs5g2f2",
-  "VPiVSXeJwWdWEw9Vd1pAZPiWssY2",
-  "E3Z6FpYv5LXV6vGVw1n9A0TMsNH2",
-  "6GHkazi3dxPbhLJOcsfEQ9r9BFg2",
-  "n9J2e7h2HGeW0TyCPYo2cwRu9Lg1",
-  "UkqQj5ge19auK0Wr34Z8Zc9Oj6I2",
-  "1hXOE6zzYMUy2Tly9bDjHuZJ9Yz2",
-  "bMo6zfOwKbNwDxIZYXKubiiTdRl1",
-  "5X0ufOuSsXNevw8bZOQRqWkLPGB3",
-  "7isjJFsTxoTC0GlDjhgXBKncwd83",
-  "TXAvfUxOLzUCigFpPS83Jsnbi7l2",
-  "cIqJxvbC9wW1UYXWJ1MO0xDPs5D2",
-  "L9qTUbocx1fLwRVdrSu3aA11MXR2",
-  "WU9ItYebvAYwNTALeIRcpuOYZhp1",
-  "Cy2AmwSUAXcAhK3kzpY3bZK75zn1",
-  "M3uI6vhozgQFHi3fhkmcUS9L9Kb2",
-  "xsmeqE6zXEOGX0yI1dlq3rYX1jl2",
-  "CvjoKHvvsRgVVnkBbphvOXamZx03",
-  "yjjgckaVYseiPsbu36nFdPmJ2083",
-  "xAKOdUE1s8SVIGoOqyDvoI2uKOh1",
-  "oFK0eAAm3dacy5U7p3HpXW1ozA53",
-  "bHDyyJUT1mfCc17UWPwbuLdKPrF2",
-  "gYrjJB496iTREW7ncnRVtXT9jQw2",
-  "gx6LSAEkBGTWd62N8XniNBmIdZl2",
-  "dBoVTxi1lLT9r03NISpXWXoDtCt1",
-  "UT8F6eUeqzbco8LIBxee2RvKNdc2",
-  "0NAIabACqsQrBm7niDQRdNy26lA2",
-  "kIfc37QVjcVu6loGrBz5yIGUfq63",
-  "UIhIJfzDbuSJQwqFEFhtZDp5aQP2",
-  "qNcrA5Y5o4M6jg4qbq2NmmGcu1h1",
-  "qVI1SiXaDmXHpnrGG2XgohJyZb02",
-  "5V4mdhkQSYd3WnbJPBuaUOxqxJe2",
-  "GSS7g8bA5zR1TSAmbdBYJiZxwao1",
-  "8ZQmLcRUQLTVKfdaeGesuimElfk2",
-  "qw4v44tIZfbzNpveXxD13gKKm1J2",
-  "oABMmMY0TNbbCQ1sKtcZC2GqJr32",
-  "yVdp6tFlD6dUFhY66g5eumpHbqI3",
-  "fgq2S5E4tVN3A4zMtoFW0tBLoLi2",
-  "07dnM8g68eg2cmRWH8QCYMh5oiI2",
-  "EU2AkkXc5ddRFKg99bhfp9C2Ryj2",
-  "C81BKW3SdtO17NMmsV6AYBYSYMH2",
-  "bX9WH19YQXT7yetLkTqHSFhC5tz1",
-  "KEqohZWF3zWhBFuCvAZHoD1VqYf2",
-  "GtUBlO8R0Ybx9exDZ4OUDk8yKCl2",
-  "pwZDZDPMevc1esklmaREH2R2wLa2",
-  "lIDR0JCS0YPiM550iAskxYTom9M2",
-  "yCUWh4ITEWQqIqv7gcPWEN6Nc7P2",
-  "GSS7g8bA5zR1TSAmbdBYJiZxwao1",
-  "3I75may4fxVX2lZv5k5tY8qCHDH3",
-  "wsruDo3yQcb5oJWfI1mLzyAn8z93",
-  "PQfDlQkXdqhPqLYW37ZB3gKQ2Tr2",
-  "60N3iJIUT3VSQMtG8KVMuwJ22sO2",
-  "xYydBkRmRrTQ1HvBc7TNh0CeaM32"
-];
-
-export const novaVenueIds = [
-  "9i5dUZgjaFQpP0dwr2ADWVkR4r42",
-  "LureUTJhufbo3WtVTOBxu8CrCLc2",
-  "x9riU2yNGLfVsVJsxdI1k6kTHCg2",
-  "y08QlfbgCrQLlrGzohCbgMwRfZw2",
-  "lkPs1LGKz5gznMj0bRpPWQKAWmi1",
-  "YgMLQ7sbDncrQyGn2wA4IS2jU0r1",
-  "miqneFyZ3lVmji81wik5h3RyUnF2",
-  "buH3UwX0UhUzpOKxBsgyPuJPpZD3",
-  "wkH5Ns6nYNQZhZ7NrivhYN7rTg82",
-  "tJifcvFdZJf8REVsn9UA46FY4Wz2",
-  "K4lMYs46JCgeP4Xnwj7FKyaE1Ht2",
-  "xY3051DN7MOGzLVZNGWNfGQhXFZ2",
-  "W2Zy3dlEmhTohNO2sa7aK1Uebl92",
-  "uYGJDSGA78clq9mzvFuCJUMJf8U2",
-  "DJOt2UF7viQOWCbBDtCGVh9RQgp1",
-  "2PMu6d6xosNBgRmOlJsVPl5vMIM2",
-  "NuLHoBVVNKQ4W5YnBEfc6bjKzNv1",
-  "LEZk5gdIkVayBvZgXHGlYoj3OG53",
-  "z7dilUXtStfxwo1ONV7lSuuvB973",
-  "dyhAON8hnKWhgQgPFXeCaXJuf6k2",
-  "zm3qGbA64xUhDoMwHmqk3AqfomB2",
-  "hOwoaYqD3Ee0x27Mc6bD2YPsFk72",
-  "RUaxeKNvfeNz7QSVz001JfjVl1w1",
-  "sRVA1QSoB2TTkT5H2XJtDCBFRoN2",
-  "DqJIJawDQVZ30jRjSmzGC4MKg6R2",
-  "xH0o8jPxrtMzoSSrs0zrWwb3y2l1",
-  "MEXvzNpe7RZHy6mN2U5yLKpPkRt2",
-  "2MCo5FTXmCN8JnshBpIDEkBgocs1",
-  "QgjyZCCznKdEowMXxBNuoipEs3B3",
-  "dG2Hk5C25AMiA4cvXdkyAYjWoXF2",
-  "vzLnzq1herXo7CbvUOHanr7NLId2",
-  "spT2s3VhnhQj80la5NIeaSRjNZo1",
-  "PMd9TPodfXRx5vYLPdRDjo7A4om2",
-  "moM87sjaPFPxdnyRomE5FF5Kmq62",
-  "7lJyh250I7frC6dHTnCAAmkRgKL2"
-];
-
-export const marylandVenueIds = [
-  "ckTmjlrn3JhmPCmYVMN9HeOYnBB3",
-  "15v8PhLD2kO18Urleipgu6P4YRC2",
-  "ndI4JztVvVdUVzuWZmxSVJH5ENj2",
-  "okWXRjc5PxTyAvLeoYMgmpGOig92",
-  "kIfc37QVjcVu6loGrBz5yIGUfq63"
-];
-
-export const virginiaBeachVenueIds: string[] = [];
-
-
 
 const _addOpportunityToUserFeed = async (
   userId: string,
@@ -394,44 +239,44 @@ const _addInterestedUserToOpportunity = async (
 //   );
 // }
 
-const _sendUserQuotaNotification = async (
-  userId: string, 
-  openaiKey: string,
-) => {
+// const _sendUserQuotaNotification = async (
+//   userId: string, 
+//   openaiKey: string,
+// ) => {
 
-  // add new opportunities to the feed
-  // try {
-  //   await _createMockOpportunities({ count: 10, openaiKey });
-  // } catch (e) {
-  //   error("error creating mock opportunities", e);
-  // }
+//   // add new opportunities to the feed
+//   // try {
+//   //   await _createMockOpportunities({ count: 10, openaiKey });
+//   // } catch (e) {
+//   //   error("error creating mock opportunities", e);
+//   // }
 
-  // get userId device tokens
-  const tokensSnap = await tokensRef
-    .doc(userId)
-    .collection("tokens")
-    .get();
+//   // get userId device tokens
+//   const tokensSnap = await tokensRef
+//     .doc(userId)
+//     .collection("tokens")
+//     .get();
 
 
-  const tokens: string[] = tokensSnap.docs.map((snap) => snap.id);
-  await Promise.all(tokens.map(async (token) => {
-    try {
+//   const tokens: string[] = tokensSnap.docs.map((snap) => snap.id);
+//   await Promise.all(tokens.map(async (token) => {
+//     try {
 
-      await fcm.send({
-        token,
-        notification: {
-          title: "you're back!",
-          body: "you can apply for 5 more opportunities today!",
-        },
-      });
-    } catch (e) {
-      error(`error sending quota notification to ${userId} - ${token}`, e);
-      await tokensRef.doc(userId).collection("tokens").doc(token).delete();
-    }
-  }));
-}
+//       await fcm.send({
+//         token,
+//         notification: {
+//           title: "you're back!",
+//           body: "you can apply for 5 more opportunities today!",
+//         },
+//       });
+//     } catch (e) {
+//       error(`error sending quota notification to ${userId} - ${token}`, e);
+//       await tokensRef.doc(userId).collection("tokens").doc(token).delete();
+//     }
+//   }));
+// }
 
-const _setDailyOpportunityQuota = async (openaiKey: string) => {
+const _setDailyOpportunityQuota = async () => {
   const usersSnap = await usersRef
     .where("deleted", "!=", true)
     .get();
@@ -449,12 +294,6 @@ const _setDailyOpportunityQuota = async (openaiKey: string) => {
         });
       } catch (e) {
         error("error setting daily opportunity quota", e);
-      }
-
-      try {
-        await _sendUserQuotaNotification(userDoc.id, openaiKey);
-      } catch (e) {
-        error("error sending quota notification", e);
       }
     }),
   );
@@ -574,11 +413,4 @@ export const copyOpportunitiesToFeedOnCreateUser = onDocumentCreated(
     );
   });
 
-export const setDailyOpportunityQuota = onSchedule("0 0 * * *", async () => {
-  const openaiKey = await getSecretValue("OPEN_AI_KEY")
-  if (openaiKey === null) {
-    throw new Error("OPEN_AI_KEY is null");
-  }
-
-  await _setDailyOpportunityQuota(openaiKey);
-});
+export const setDailyOpportunityQuota = onSchedule("0 0 * * *", _setDailyOpportunityQuota);
