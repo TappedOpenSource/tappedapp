@@ -298,7 +298,7 @@ class BookingView extends StatelessWidget {
                         return Text(
                           place?.match(
                                 () => '',
-                                (place) => getAddressComponent(
+                                (place) => formattedFullAddress(
                                   place.addressComponents,
                                 ),
                               ) ??
