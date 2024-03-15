@@ -39,8 +39,9 @@ mixin _$Booking {
   Option<String> get geohash => throw _privateConstructorUsedError;
   Option<double> get lat => throw _privateConstructorUsedError;
   Option<double> get lng => throw _privateConstructorUsedError;
-  List<Genre> get genres => throw _privateConstructorUsedError;
   Option<String> get flierUrl => throw _privateConstructorUsedError;
+  List<Genre> get genres => throw _privateConstructorUsedError;
+  Option<Location> get location => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
@@ -69,8 +70,9 @@ abstract class $BookingCopyWith<$Res> {
       Option<String> geohash,
       Option<double> lat,
       Option<double> lng,
+      Option<String> flierUrl,
       List<Genre> genres,
-      Option<String> flierUrl});
+      Option<Location> location});
 }
 
 /// @nodoc
@@ -102,8 +104,9 @@ class _$BookingCopyWithImpl<$Res, $Val extends Booking>
     Object? geohash = null,
     Object? lat = null,
     Object? lng = null,
-    Object? genres = null,
     Object? flierUrl = null,
+    Object? genres = null,
+    Object? location = null,
   }) {
     return _then(_value.copyWith(
       id: null == id
@@ -170,14 +173,18 @@ class _$BookingCopyWithImpl<$Res, $Val extends Booking>
           ? _value.lng
           : lng // ignore: cast_nullable_to_non_nullable
               as Option<double>,
-      genres: null == genres
-          ? _value.genres
-          : genres // ignore: cast_nullable_to_non_nullable
-              as List<Genre>,
       flierUrl: null == flierUrl
           ? _value.flierUrl
           : flierUrl // ignore: cast_nullable_to_non_nullable
               as Option<String>,
+      genres: null == genres
+          ? _value.genres
+          : genres // ignore: cast_nullable_to_non_nullable
+              as List<Genre>,
+      location: null == location
+          ? _value.location
+          : location // ignore: cast_nullable_to_non_nullable
+              as Option<Location>,
     ) as $Val);
   }
 }
@@ -206,8 +213,9 @@ abstract class _$$BookingImplCopyWith<$Res> implements $BookingCopyWith<$Res> {
       Option<String> geohash,
       Option<double> lat,
       Option<double> lng,
+      Option<String> flierUrl,
       List<Genre> genres,
-      Option<String> flierUrl});
+      Option<Location> location});
 }
 
 /// @nodoc
@@ -237,8 +245,9 @@ class __$$BookingImplCopyWithImpl<$Res>
     Object? geohash = null,
     Object? lat = null,
     Object? lng = null,
-    Object? genres = null,
     Object? flierUrl = null,
+    Object? genres = null,
+    Object? location = null,
   }) {
     return _then(_$BookingImpl(
       id: null == id
@@ -305,14 +314,18 @@ class __$$BookingImplCopyWithImpl<$Res>
           ? _value.lng
           : lng // ignore: cast_nullable_to_non_nullable
               as Option<double>,
-      genres: null == genres
-          ? _value._genres
-          : genres // ignore: cast_nullable_to_non_nullable
-              as List<Genre>,
       flierUrl: null == flierUrl
           ? _value.flierUrl
           : flierUrl // ignore: cast_nullable_to_non_nullable
               as Option<String>,
+      genres: null == genres
+          ? _value._genres
+          : genres // ignore: cast_nullable_to_non_nullable
+              as List<Genre>,
+      location: null == location
+          ? _value.location
+          : location // ignore: cast_nullable_to_non_nullable
+              as Option<Location>,
     ));
   }
 }
@@ -337,8 +350,9 @@ class _$BookingImpl implements _Booking {
       this.geohash = const None(),
       this.lat = const None(),
       this.lng = const None(),
+      this.flierUrl = const None(),
       final List<Genre> genres = const [],
-      this.flierUrl = const None()})
+      this.location = const None()})
       : _genres = genres;
 
   factory _$BookingImpl.fromJson(Map<String, dynamic> json) =>
@@ -389,6 +403,9 @@ class _$BookingImpl implements _Booking {
   @override
   @JsonKey()
   final Option<double> lng;
+  @override
+  @JsonKey()
+  final Option<String> flierUrl;
   final List<Genre> _genres;
   @override
   @JsonKey()
@@ -400,11 +417,11 @@ class _$BookingImpl implements _Booking {
 
   @override
   @JsonKey()
-  final Option<String> flierUrl;
+  final Option<Location> location;
 
   @override
   String toString() {
-    return 'Booking(id: $id, requesteeId: $requesteeId, status: $status, startTime: $startTime, endTime: $endTime, timestamp: $timestamp, requesterId: $requesterId, name: $name, note: $note, rate: $rate, serviceId: $serviceId, addedByUser: $addedByUser, placeId: $placeId, geohash: $geohash, lat: $lat, lng: $lng, genres: $genres, flierUrl: $flierUrl)';
+    return 'Booking(id: $id, requesteeId: $requesteeId, status: $status, startTime: $startTime, endTime: $endTime, timestamp: $timestamp, requesterId: $requesterId, name: $name, note: $note, rate: $rate, serviceId: $serviceId, addedByUser: $addedByUser, placeId: $placeId, geohash: $geohash, lat: $lat, lng: $lng, flierUrl: $flierUrl, genres: $genres, location: $location)';
   }
 
   @override
@@ -434,33 +451,37 @@ class _$BookingImpl implements _Booking {
             (identical(other.geohash, geohash) || other.geohash == geohash) &&
             (identical(other.lat, lat) || other.lat == lat) &&
             (identical(other.lng, lng) || other.lng == lng) &&
-            const DeepCollectionEquality().equals(other._genres, _genres) &&
             (identical(other.flierUrl, flierUrl) ||
-                other.flierUrl == flierUrl));
+                other.flierUrl == flierUrl) &&
+            const DeepCollectionEquality().equals(other._genres, _genres) &&
+            (identical(other.location, location) ||
+                other.location == location));
   }
 
   @JsonKey(ignore: true)
   @override
-  int get hashCode => Object.hash(
-      runtimeType,
-      id,
-      requesteeId,
-      status,
-      startTime,
-      endTime,
-      timestamp,
-      requesterId,
-      name,
-      note,
-      rate,
-      serviceId,
-      addedByUser,
-      placeId,
-      geohash,
-      lat,
-      lng,
-      const DeepCollectionEquality().hash(_genres),
-      flierUrl);
+  int get hashCode => Object.hashAll([
+        runtimeType,
+        id,
+        requesteeId,
+        status,
+        startTime,
+        endTime,
+        timestamp,
+        requesterId,
+        name,
+        note,
+        rate,
+        serviceId,
+        addedByUser,
+        placeId,
+        geohash,
+        lat,
+        lng,
+        flierUrl,
+        const DeepCollectionEquality().hash(_genres),
+        location
+      ]);
 
   @JsonKey(ignore: true)
   @override
@@ -494,8 +515,9 @@ abstract class _Booking implements Booking {
       final Option<String> geohash,
       final Option<double> lat,
       final Option<double> lng,
+      final Option<String> flierUrl,
       final List<Genre> genres,
-      final Option<String> flierUrl}) = _$BookingImpl;
+      final Option<Location> location}) = _$BookingImpl;
 
   factory _Booking.fromJson(Map<String, dynamic> json) = _$BookingImpl.fromJson;
 
@@ -535,9 +557,11 @@ abstract class _Booking implements Booking {
   @override
   Option<double> get lng;
   @override
+  Option<String> get flierUrl;
+  @override
   List<Genre> get genres;
   @override
-  Option<String> get flierUrl;
+  Option<Location> get location;
   @override
   @JsonKey(ignore: true)
   _$$BookingImplCopyWith<_$BookingImpl> get copyWith =>

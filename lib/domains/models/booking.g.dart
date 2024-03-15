@@ -46,14 +46,18 @@ _$BookingImpl _$$BookingImplFromJson(Map<String, dynamic> json) =>
           ? const None()
           : Option<double>.fromJson(
               json['lng'], (value) => (value as num).toDouble()),
-      genres: (json['genres'] as List<dynamic>?)
-              ?.map((e) => $enumDecode(_$GenreEnumMap, e))
-              .toList() ??
-          const [],
       flierUrl: json['flierUrl'] == null
           ? const None()
           : Option<String>.fromJson(
               json['flierUrl'], (value) => value as String),
+      genres: (json['genres'] as List<dynamic>?)
+              ?.map((e) => $enumDecode(_$GenreEnumMap, e))
+              .toList() ??
+          const [],
+      location: json['location'] == null
+          ? const None()
+          : Option<Location>.fromJson(json['location'],
+              (value) => Location.fromJson(value as Map<String, dynamic>)),
     );
 
 Map<String, dynamic> _$$BookingImplToJson(_$BookingImpl instance) =>
@@ -88,8 +92,11 @@ Map<String, dynamic> _$$BookingImplToJson(_$BookingImpl instance) =>
       'lng': instance.lng.toJson(
         (value) => value,
       ),
-      'genres': instance.genres.map((e) => _$GenreEnumMap[e]!).toList(),
       'flierUrl': instance.flierUrl.toJson(
+        (value) => value,
+      ),
+      'genres': instance.genres.map((e) => _$GenreEnumMap[e]!).toList(),
+      'location': instance.location.toJson(
         (value) => value,
       ),
     };
