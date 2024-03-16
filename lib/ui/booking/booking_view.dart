@@ -82,6 +82,7 @@ class BookingView extends StatelessWidget {
         final timeFormat = DateFormat.jm();
         return AdminBuilder(
           builder: (context, isAdmin) {
+            final scaffoldMessenger = ScaffoldMessenger.of(context);
             return Scaffold(
               backgroundColor: Theme.of(context).colorScheme.background,
               appBar: AppBar(
@@ -89,21 +90,21 @@ class BookingView extends StatelessWidget {
                   if (isAdmin)
                     IconButton(
                       icon: const Icon(Icons.more_horiz),
-                      onPressed: () => showCupertinoModalPopup(
-                        context: context,
-                        builder: (context) {
-                          return CupertinoActionSheet(
-                            actions: [
-                              CupertinoActionSheetAction(
-                                onPressed: () {
-                                  final scaffoldMessenger =
-                                      ScaffoldMessenger.of(context);
-                                  // Copy to clipboard
-                                  Clipboard.setData(
-                                    ClipboardData(
-                                      text: booking.id,
-                                    ),
-                                  ).then((value) {
+                      onPressed: () {
+                        final scaffoldMessenger = ScaffoldMessenger.of(context);
+                        showCupertinoModalPopup<void>(
+                          context: context,
+                          builder: (context) {
+                            return CupertinoActionSheet(
+                              actions: [
+                                CupertinoActionSheetAction(
+                                  onPressed: () async {
+                                    // Copy to clipboard
+                                    await Clipboard.setData(
+                                      ClipboardData(
+                                        text: booking.id,
+                                      ),
+                                    );
                                     Navigator.pop(context);
                                     scaffoldMessenger.showSnackBar(
                                       SnackBar(
@@ -115,14 +116,14 @@ class BookingView extends StatelessWidget {
                                         ),
                                       ),
                                     );
-                                  });
-                                },
-                                child: Text(booking.id),
-                              ),
-                            ],
-                          );
-                        },
-                      ),
+                                  },
+                                  child: Text(booking.id),
+                                ),
+                              ],
+                            );
+                          },
+                        );
+                      },
                     ),
                 ],
               ),

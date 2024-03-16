@@ -1,3 +1,4 @@
+import 'package:cached_annotation/cached_annotation.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -17,7 +18,8 @@ import 'package:url_launcher/url_launcher.dart';
 class DraggableSheet extends StatelessWidget {
   const DraggableSheet({super.key});
 
-  Widget _venueTile(UserModel currentUser, UserModel venue) {
+  @cached
+  bool _isVenueGoodFit(UserModel currentUser, UserModel venue) {
     final category = currentUser.performerInfo.map((t) => t.category);
     final userGenres =
         currentUser.performerInfo.map((t) => t.genres).getOrElse(() => []);
@@ -32,6 +34,12 @@ class DraggableSheet extends StatelessWidget {
       return intersect.isNotEmpty;
     }).getOrElse(() => false);
     final isGoodFit = goodCapFit && genreFit;
+
+    return isGoodFit;
+  }
+
+  Widget _venueTile(UserModel currentUser, UserModel venue) {
+    final isGoodFit = _isVenueGoodFit(currentUser, venue);
 
     return UserTile(
       userId: venue.id,
@@ -57,6 +65,19 @@ class DraggableSheet extends StatelessWidget {
       builder: (context, currentUser) {
         return BlocBuilder<DiscoverCubit, DiscoverState>(
           builder: (context, state) {
+            final sortedVenueHits = List.from(state.venueHits)
+              ..sort((a, b) {
+                final aIsGoodFit = _isVenueGoodFit(currentUser, a);
+                final bIsGoodFit = _isVenueGoodFit(currentUser, b);
+
+                if (aIsGoodFit && !bIsGoodFit) {
+                  return -1;
+                } else if (!aIsGoodFit && bIsGoodFit) {
+                  return 1;
+                } else {
+                  return 0;
+                }
+              });
             return DraggableScrollableSheet(
               expand: false,
               initialChildSize: 0.11,
@@ -144,7 +165,7 @@ class DraggableSheet extends StatelessWidget {
                                 ],
                               ),
                             ),
-                            ...state.venueHits
+                            ...sortedVenueHits
                                 .map((venue) => _venueTile(currentUser, venue)),
                             const Padding(
                               padding: EdgeInsets.symmetric(
