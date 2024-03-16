@@ -16,6 +16,7 @@ import { getFoundersDeviceTokens } from "./utils";
 import { createActivity } from "./activities";
 import { FieldValue } from "firebase-admin/firestore";
 import { debug } from "firebase-functions/logger";
+import { slackNotification } from "./notifications";
 
 const _updatePerformerRating = async ({
   userId,
@@ -28,13 +29,17 @@ const _updatePerformerRating = async ({
   reviewCount: number;
   newRating: number;
 }) => {
-  const overallRating = (currRating * reviewCount + newRating) / (reviewCount + 1);
+  const overallRating =
+    (currRating * reviewCount + newRating) / (reviewCount + 1);
 
-  await usersRef.doc(userId).set({
-    performerInfo: {
-      rating: overallRating,
+  await usersRef.doc(userId).set(
+    {
+      performerInfo: {
+        rating: overallRating,
+      },
     },
-  }, { merge: true });
+    { merge: true }
+  );
 };
 
 const _updateBookerRating = async ({
@@ -48,13 +53,17 @@ const _updateBookerRating = async ({
   reviewCount: number;
   newRating: number;
 }) => {
-  const overallRating = (currRating * reviewCount + newRating) / (reviewCount + 1);
+  const overallRating =
+    (currRating * reviewCount + newRating) / (reviewCount + 1);
 
-  await usersRef.doc(userId).set({
-    bookerInfo: {
-      rating: overallRating,
+  await usersRef.doc(userId).set(
+    {
+      bookerInfo: {
+        rating: overallRating,
+      },
     },
-  }, { merge: true });
+    { merge: true }
+  );
 };
 
 export const addActivityOnBooking = functions.firestore
@@ -62,7 +71,10 @@ export const addActivityOnBooking = functions.firestore
   .onCreate(async (snapshot, context) => {
     const booking = snapshot.data() as Booking;
     if (booking === undefined) {
-      throw new HttpsError("failed-precondition", `booking ${context.params.bookingId} does not exist`,);
+      throw new HttpsError(
+        "failed-precondition",
+        `booking ${context.params.bookingId} does not exist`
+      );
     }
 
     const addedByUser = booking.addedByUser ?? false;
@@ -84,7 +96,10 @@ export const addActivityOnBookingUpdate = functions.firestore
   .onUpdate(async (change, context) => {
     const booking = change.after.data() as Booking;
     if (booking === undefined) {
-      throw new HttpsError("failed-precondition", `booking ${context.params.bookingId} does not exist`,);
+      throw new HttpsError(
+        "failed-precondition",
+        `booking ${context.params.bookingId} does not exist`
+      );
     }
 
     const status = booking.status as BookingStatus;
@@ -95,7 +110,7 @@ export const addActivityOnBookingUpdate = functions.firestore
       throw new HttpsError("unauthenticated", "user is not authenticated");
     }
 
-    for (const userId of [ booking.requesterId, booking.requesteeId ]) {
+    for (const userId of [booking.requesterId, booking.requesteeId]) {
       if (userId === uid) {
         continue;
       }
@@ -109,13 +124,15 @@ export const addActivityOnBookingUpdate = functions.firestore
     }
   });
 
-export const notifyFoundersOnBookings = functions
-  .firestore
+export const notifyFoundersOnBookings = functions.firestore
   .document("bookings/{bookingId}")
   .onCreate(async (data) => {
     const booking = data.data() as Booking;
     if (booking === undefined) {
-      throw new HttpsError("failed-precondition", `booking ${data.id} does not exist`,);
+      throw new HttpsError(
+        "failed-precondition",
+        `booking ${data.id} does not exist`
+      );
     }
 
     const addedByUser = booking.addedByUser ?? false;
@@ -125,7 +142,10 @@ export const notifyFoundersOnBookings = functions
     }
 
     if (booking.serviceId === undefined) {
-      throw new HttpsError("failed-precondition", `booking ${data.id} does not have a serviceId`,);
+      throw new HttpsError(
+        "failed-precondition",
+        `booking ${data.id} does not have a serviceId`
+      );
     }
 
     const serviceSnapshot = await servicesRef
@@ -145,9 +165,18 @@ export const notifyFoundersOnBookings = functions
     const payload: messaging.MessagingPayload = {
       notification: {
         title: "NEW TAPPED BOOKING!!!",
-        body: `${requester?.artistName ?? "<UNKNOWN>"} booked ${requestee?.artistName ?? "<UNKNOWN>"} for service ${service?.title ?? "<UNKNOWN>"}`,
+        body: `${requester?.artistName ?? "<UNKNOWN>"} booked ${
+          requestee?.artistName ?? "<UNKNOWN>"
+        } for service ${service?.title ?? "<UNKNOWN>"}`,
         clickAction: "FLUTTER_NOTIFICATION_CLICK",
       },
+    };
+
+    const msg = {
+      title: "NEW TAPPED BOOKING!!!",
+      body: `${requester?.artistName ?? "<UNKNOWN>"} booked ${
+        requestee?.artistName ?? "<UNKNOWN>"
+      } for service ${service?.title ?? "<UNKNOWN>"}`,
     };
 
     const deviceTokens = await getFoundersDeviceTokens();
@@ -155,8 +184,11 @@ export const notifyFoundersOnBookings = functions
     try {
       const resp = await fcm.sendToDevice(deviceTokens, payload);
       if (resp.failureCount > 0) {
-        functions.logger.warn(`Failed to send message to some devices: ${resp.failureCount}`);
+        functions.logger.warn(
+          `Failed to send message to some devices: ${resp.failureCount}`
+        );
       }
+      await slackNotification(msg);
     } catch (e: any) {
       functions.logger.error(`ERROR : ${e}`);
       throw new Error(`cannot send notification to device ${e.message}`);
@@ -164,7 +196,9 @@ export const notifyFoundersOnBookings = functions
   });
 
 export const cancelBookingIfExpired = onSchedule("0 * * * *", async (event) => {
-  const pendingBookings = await bookingsRef.where("status", "==", "pending").get();
+  const pendingBookings = await bookingsRef
+    .where("status", "==", "pending")
+    .get();
 
   for (const booking of pendingBookings.docs) {
     const bookingData = booking.data() as Booking;
@@ -172,7 +206,7 @@ export const cancelBookingIfExpired = onSchedule("0 * * * *", async (event) => {
     const now = Date.now();
 
     const ONE_DAY_MS = 24 * 60 * 60 * 1000;
-    if (now > (timestamp + ONE_DAY_MS)) {
+    if (now > timestamp + ONE_DAY_MS) {
       await booking.ref.update({
         status: "canceled",
       });
@@ -180,18 +214,20 @@ export const cancelBookingIfExpired = onSchedule("0 * * * *", async (event) => {
   }
 });
 
-export const incrementReviewCountOnBookerReview = functions
-  .firestore
+export const incrementReviewCountOnBookerReview = functions.firestore
   .document(`reviews/{userId}/${bookerReviewsSubcollection}/{reviewId}`)
   .onCreate(async (data, context) => {
     const userId = context.params.userId;
     const userRef = usersRef.doc(userId);
 
-    await userRef.set({
-      bookerInfo: {
-        reviewCount: FieldValue.increment(1),
+    await userRef.set(
+      {
+        bookerInfo: {
+          reviewCount: FieldValue.increment(1),
+        },
       },
-    }, { merge: true });
+      { merge: true }
+    );
 
     const currRating = (await userRef.get()).data()?.bookingInfo?.rating || 0;
     const reviewCount = (await userRef.get()).data()?.bookingInfo?.rating || 0;
@@ -205,21 +241,24 @@ export const incrementReviewCountOnBookerReview = functions
     });
   });
 
-export const incrementReviewCountOnPerformerReview = functions
-  .firestore
+export const incrementReviewCountOnPerformerReview = functions.firestore
   .document(`reviews/{userId}/${performerReviewsSubcollection}/{reviewId}`)
   .onCreate(async (data, context) => {
     const userId = context.params.userId;
     const userRef = usersRef.doc(userId);
 
-    await userRef.set({
-      performerInfo: {
-        reviewCount: FieldValue.increment(1),
+    await userRef.set(
+      {
+        performerInfo: {
+          reviewCount: FieldValue.increment(1),
+        },
       },
-    }, { merge: true });
+      { merge: true }
+    );
 
     const currRating = (await userRef.get()).data()?.performerInfo?.rating || 0;
-    const reviewCount = (await userRef.get()).data()?.performInfo?.reviewCount || 0;
+    const reviewCount =
+      (await userRef.get()).data()?.performInfo?.reviewCount || 0;
     const newRating = data.data()?.overallRating || 0;
 
     _updatePerformerRating({

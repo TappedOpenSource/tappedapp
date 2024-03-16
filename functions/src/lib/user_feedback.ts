@@ -2,6 +2,7 @@
 import { onDocumentCreated } from "firebase-functions/v2/firestore";
 import { getFoundersDeviceTokens } from "./utils";
 import { fcm } from "./firebase";
+import { slackNotification } from "./notifications";
 
 export const notifyFoundersOnUserFeedbackSubmitted = onDocumentCreated(
   { document: "userFeedback/{feedbackId}" },
@@ -13,8 +14,12 @@ export const notifyFoundersOnUserFeedbackSubmitted = onDocumentCreated(
       notification: {
         title: "New User Feedback \uD83D\uDE43",
         body: feedback?.text ?? "[no text provided]",
-      }
+      },
     };
-
+    slackNotification({
+      title: "New User Feedback \uD83D\uDE43",
+      body: feedback?.text ?? "[no text provided]",
+    });
     fcm.sendToDevice(devices, payload);
-  });
+  }
+);
