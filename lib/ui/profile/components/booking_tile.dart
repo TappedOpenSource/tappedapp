@@ -138,6 +138,9 @@ class BookingTile extends StatelessWidget {
             };
             final onSurfaceColor = Theme.of(context).colorScheme.onSurface;
             return ListTile(
+              onTap: () => context.push(
+                BookingPage(booking: booking),
+              ),
               leading: Container(
                 height: 40,
                 width: 40,

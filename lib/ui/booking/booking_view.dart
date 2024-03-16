@@ -110,8 +110,8 @@ class BookingView extends StatelessWidget {
                                         behavior: SnackBarBehavior.floating,
                                         backgroundColor:
                                             theme.colorScheme.primary,
-                                        content: Text(
-                                          'latest app version copied to clipboard',
+                                        content: const Text(
+                                          'booking id copied to clipboard',
                                         ),
                                       ),
                                     );
@@ -403,18 +403,20 @@ class BookingView extends StatelessWidget {
                           ),
                         ),
                       ),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(
+                    const Padding(
+                      padding: EdgeInsets.symmetric(
                         horizontal: 20,
                       ),
-                      child: const Row(
+                      child: Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          Text(
-                            'to modify the booking, please contact support@tapped.ai',
-                            textAlign: TextAlign.center,
-                            style: TextStyle(
-                              color: Colors.grey,
+                          Expanded(
+                            child: Text(
+                              'to modify the booking, please contact support@tapped.ai',
+                              textAlign: TextAlign.center,
+                              style: TextStyle(
+                                color: Colors.grey,
+                              ),
                             ),
                           ),
                         ],
