@@ -29,7 +29,7 @@ class Booking with _$Booking {
     @Default(None()) Option<String> serviceId,
     @Default(false) bool addedByUser,
     @Default(None()) Option<String> flierUrl,
-    @Default(None()) Option<String> ticketUrl,
+    @Default(None()) Option<String> eventUrl,
     @Default([]) List<Genre> genres,
     @Default(None()) Option<Location> location,
   }) = _Booking;

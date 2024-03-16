@@ -12,6 +12,7 @@ import 'package:intheloopapp/domains/models/service.dart';
 import 'package:intheloopapp/domains/models/user_model.dart';
 import 'package:intheloopapp/domains/navigation_bloc/navigation_bloc.dart';
 import 'package:intheloopapp/domains/navigation_bloc/tapped_route.dart';
+import 'package:intheloopapp/ui/user_avatar.dart';
 import 'package:intheloopapp/ui/user_tile.dart';
 import 'package:intheloopapp/utils/admin_builder.dart';
 import 'package:intheloopapp/utils/bloc_utils.dart';
@@ -237,39 +238,87 @@ class BookingView extends StatelessWidget {
                     //     },
                     //   ),
                     CupertinoListSection.insetGrouped(
-                      backgroundColor: theme.colorScheme.surface,
-                      children: [
-                        FutureBuilder<Option<PlaceData>>(
-                          future: context.places.getPlaceById(
-                            booking.location
-                                .map((t) => t.placeId)
-                                .getOrElse(() => ''),
+                      backgroundColor: theme.colorScheme.background,
+                      decoration: BoxDecoration(
+                        color: theme.colorScheme.onSurface.withOpacity(0.1),
+                        border: Border(
+                          bottom: BorderSide(
+                            color:
+                                theme.colorScheme.onBackground.withOpacity(0.1),
+                            width: 0.5,
                           ),
-                          builder: (context, snapshot) {
-                            final place = snapshot.data;
-
-                            return switch (place) {
-                              null => const SizedBox.shrink(),
-                              None() => const SizedBox.shrink(),
-                              Some(:final value) => CupertinoListTile(
-                                  leading: const Icon(
-                                    CupertinoIcons.location,
-                                  ),
-                                  title: SingleChildScrollView(
-                                    scrollDirection: Axis.horizontal,
-                                    child: Text(
-                                      formattedFullAddress(
-                                        value.addressComponents,
+                        ),
+                      ),
+                      children: [
+                        switch (booking.requesterId) {
+                          None() => const SizedBox.shrink(),
+                          Some(:final value) =>
+                            FutureBuilder<Option<UserModel>>(
+                              future: database.getUserById(value),
+                              builder: (context, snapshot) {
+                                final requester = snapshot.data;
+                                return switch (requester) {
+                                  null => SkeletonListTile(),
+                                  None() => SkeletonListTile(),
+                                  Some(:final value) => GestureDetector(
+                                      onTap: () => context.push(
+                                        ProfilePage(
+                                          userId: value.id,
+                                          user: Option.of(value),
+                                        ),
                                       ),
-                                      style: TextStyle(
-                                        color: theme.colorScheme.onSurface,
+                                      child: CupertinoListTile(
+                                        leading: UserAvatar(
+                                          pushId: Option.of(value.id),
+                                          pushUser: Option.of(value),
+                                          imageUrl: value.profilePicture,
+                                          radius: 20,
+                                        ),
+                                        title: Text(
+                                          value.displayName,
+                                          style: TextStyle(
+                                            color: theme.colorScheme.primary,
+                                            fontWeight: FontWeight.bold,
+                                          ),
+                                        ),
                                       ),
                                     ),
-                                  ),
-                                ),
-                            };
-                          },
-                        ),
+                                };
+                              },
+                            ),
+                        },
+                        switch (booking.location) {
+                          None() => const SizedBox.shrink(),
+                          Some(:final value) =>
+                            FutureBuilder<Option<PlaceData>>(
+                              future:
+                                  context.places.getPlaceById(value.placeId),
+                              builder: (context, snapshot) {
+                                final place = snapshot.data;
+
+                                return switch (place) {
+                                  null => const SizedBox.shrink(),
+                                  None() => const SizedBox.shrink(),
+                                  Some(:final value) => CupertinoListTile(
+                                      leading: const Icon(
+                                        CupertinoIcons.location,
+                                      ),
+                                      title: SingleChildScrollView(
+                                        scrollDirection: Axis.horizontal,
+                                        child: Text(
+                                          formattedFullAddress(
+                                            value.addressComponents,
+                                          ),
+                                          style: TextStyle(
+                                            color: theme.colorScheme.onSurface,
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                };
+                              },
+                            ),
+                        },
                         CupertinoListTile(
                           leading: const Icon(
                             CupertinoIcons.calendar,
@@ -292,39 +341,6 @@ class BookingView extends StatelessWidget {
                             ),
                           ),
                         ),
-                        switch (booking.requesterId) {
-                          None() => const SizedBox.shrink(),
-                          Some(:final value) =>
-                            FutureBuilder<Option<UserModel>>(
-                              future: database.getUserById(value),
-                              builder: (context, snapshot) {
-                                final requester = snapshot.data;
-                                return switch (requester) {
-                                  null => SkeletonListTile(),
-                                  None() => SkeletonListTile(),
-                                  Some(:final value) => GestureDetector(
-                                      onTap: () => context.push(
-                                        ProfilePage(
-                                          userId: value.id,
-                                          user: Option.of(value),
-                                        ),
-                                      ),
-                                      child: CupertinoListTile(
-                                        leading: const Icon(
-                                          CupertinoIcons.person,
-                                        ),
-                                        title: Text(
-                                          value.displayName,
-                                          style: TextStyle(
-                                            color: theme.colorScheme.primary,
-                                          ),
-                                        ),
-                                      ),
-                                    ),
-                                };
-                              },
-                            ),
-                        },
                         if (isCurrentUserInvolved || isAdmin)
                           CupertinoListTile(
                             leading: const Icon(
@@ -343,7 +359,8 @@ class BookingView extends StatelessWidget {
                               CupertinoIcons.info,
                             ),
                             title: Text(
-                              'booking ${booking.status.formattedName}',
+                              'booking ${booking.status.formattedName}'
+                                  .toLowerCase(),
                               style: TextStyle(
                                 color: theme.colorScheme.onSurface,
                               ),

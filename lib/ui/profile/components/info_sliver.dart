@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
+import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:fpdart/fpdart.dart';
 import 'package:intheloopapp/data/auth_repository.dart';
 import 'package:intheloopapp/domains/models/performer_info.dart';
@@ -31,11 +32,16 @@ class InfoSliver extends StatelessWidget {
     final theme = Theme.of(context);
     return BlocBuilder<ProfileCubit, ProfileState>(
       builder: (context, state) {
-        // final occupations = state.visitedUser.occupations;
         final performerInfo = state.visitedUser.performerInfo;
         final venueInfo = state.visitedUser.venueInfo;
+        final bookerInfo = state.visitedUser.bookerInfo;
         final genres = performerInfo.map((t) => t.genres).getOrElse(
               () => venueInfo.map((t) => t.genres).getOrElse(() => []),
+            );
+        final rating = performerInfo.map((t) => t.rating).getOrElse(
+              () => bookerInfo.map((t) => t.rating).getOrElse(
+                    () => const None(),
+                  ),
             );
         final averagePerformerTicketPrice =
             performerInfo.map((t) => t.formattedPriceRange);
@@ -76,6 +82,7 @@ class InfoSliver extends StatelessWidget {
                             ),
                           ),
                           children: [
+
                             CupertinoListTile(
                               leading: const Icon(
                                 CupertinoIcons.at,
@@ -253,6 +260,23 @@ class InfoSliver extends StatelessWidget {
                                   ),
                                 ),
                               ),
+
+                            switch (rating) {
+                              None() => const SizedBox.shrink(),
+                              Some(:final value) => CupertinoListTile(
+                                leading: const Icon(
+                                  CupertinoIcons.star_circle,
+                                ),
+                                title: RatingBarIndicator(
+                                  rating: value,
+                                  itemBuilder: (context, index) => const Icon(
+                                    Icons.star,
+                                    color: Colors.amber,
+                                  ),
+                                  itemSize: 20,
+                                ),
+                              ),
+                            },
                             switch (pressKitUrl) {
                               None() => const SizedBox.shrink(),
                               Some(:final value) => CupertinoListTile.notched(

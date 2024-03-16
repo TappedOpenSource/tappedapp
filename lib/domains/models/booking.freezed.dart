@@ -34,13 +34,9 @@ mixin _$Booking {
   String get note => throw _privateConstructorUsedError;
   int get rate => throw _privateConstructorUsedError;
   Option<String> get serviceId => throw _privateConstructorUsedError;
-  bool get addedByUser =>
-      throw _privateConstructorUsedError; // @Default(None()) Option<String> placeId,
-// @Default(None()) Option<String> geohash,
-// @Default(None()) Option<double> lat,
-// @Default(None()) Option<double> lng,
+  bool get addedByUser => throw _privateConstructorUsedError;
   Option<String> get flierUrl => throw _privateConstructorUsedError;
-  Option<String> get ticketUrl => throw _privateConstructorUsedError;
+  Option<String> get eventUrl => throw _privateConstructorUsedError;
   List<Genre> get genres => throw _privateConstructorUsedError;
   Option<Location> get location => throw _privateConstructorUsedError;
 
@@ -68,7 +64,7 @@ abstract class $BookingCopyWith<$Res> {
       Option<String> serviceId,
       bool addedByUser,
       Option<String> flierUrl,
-      Option<String> ticketUrl,
+      Option<String> eventUrl,
       List<Genre> genres,
       Option<Location> location});
 }
@@ -99,7 +95,7 @@ class _$BookingCopyWithImpl<$Res, $Val extends Booking>
     Object? serviceId = null,
     Object? addedByUser = null,
     Object? flierUrl = null,
-    Object? ticketUrl = null,
+    Object? eventUrl = null,
     Object? genres = null,
     Object? location = null,
   }) {
@@ -156,9 +152,9 @@ class _$BookingCopyWithImpl<$Res, $Val extends Booking>
           ? _value.flierUrl
           : flierUrl // ignore: cast_nullable_to_non_nullable
               as Option<String>,
-      ticketUrl: null == ticketUrl
-          ? _value.ticketUrl
-          : ticketUrl // ignore: cast_nullable_to_non_nullable
+      eventUrl: null == eventUrl
+          ? _value.eventUrl
+          : eventUrl // ignore: cast_nullable_to_non_nullable
               as Option<String>,
       genres: null == genres
           ? _value.genres
@@ -193,7 +189,7 @@ abstract class _$$BookingImplCopyWith<$Res> implements $BookingCopyWith<$Res> {
       Option<String> serviceId,
       bool addedByUser,
       Option<String> flierUrl,
-      Option<String> ticketUrl,
+      Option<String> eventUrl,
       List<Genre> genres,
       Option<Location> location});
 }
@@ -222,7 +218,7 @@ class __$$BookingImplCopyWithImpl<$Res>
     Object? serviceId = null,
     Object? addedByUser = null,
     Object? flierUrl = null,
-    Object? ticketUrl = null,
+    Object? eventUrl = null,
     Object? genres = null,
     Object? location = null,
   }) {
@@ -279,9 +275,9 @@ class __$$BookingImplCopyWithImpl<$Res>
           ? _value.flierUrl
           : flierUrl // ignore: cast_nullable_to_non_nullable
               as Option<String>,
-      ticketUrl: null == ticketUrl
-          ? _value.ticketUrl
-          : ticketUrl // ignore: cast_nullable_to_non_nullable
+      eventUrl: null == eventUrl
+          ? _value.eventUrl
+          : eventUrl // ignore: cast_nullable_to_non_nullable
               as Option<String>,
       genres: null == genres
           ? _value._genres
@@ -312,7 +308,7 @@ class _$BookingImpl implements _Booking {
       this.serviceId = const None(),
       this.addedByUser = false,
       this.flierUrl = const None(),
-      this.ticketUrl = const None(),
+      this.eventUrl = const None(),
       final List<Genre> genres = const [],
       this.location = const None()})
       : _genres = genres;
@@ -353,16 +349,12 @@ class _$BookingImpl implements _Booking {
   @override
   @JsonKey()
   final bool addedByUser;
-// @Default(None()) Option<String> placeId,
-// @Default(None()) Option<String> geohash,
-// @Default(None()) Option<double> lat,
-// @Default(None()) Option<double> lng,
   @override
   @JsonKey()
   final Option<String> flierUrl;
   @override
   @JsonKey()
-  final Option<String> ticketUrl;
+  final Option<String> eventUrl;
   final List<Genre> _genres;
   @override
   @JsonKey()
@@ -378,7 +370,7 @@ class _$BookingImpl implements _Booking {
 
   @override
   String toString() {
-    return 'Booking(id: $id, requesteeId: $requesteeId, status: $status, startTime: $startTime, endTime: $endTime, timestamp: $timestamp, requesterId: $requesterId, name: $name, note: $note, rate: $rate, serviceId: $serviceId, addedByUser: $addedByUser, flierUrl: $flierUrl, ticketUrl: $ticketUrl, genres: $genres, location: $location)';
+    return 'Booking(id: $id, requesteeId: $requesteeId, status: $status, startTime: $startTime, endTime: $endTime, timestamp: $timestamp, requesterId: $requesterId, name: $name, note: $note, rate: $rate, serviceId: $serviceId, addedByUser: $addedByUser, flierUrl: $flierUrl, eventUrl: $eventUrl, genres: $genres, location: $location)';
   }
 
   @override
@@ -406,8 +398,8 @@ class _$BookingImpl implements _Booking {
                 other.addedByUser == addedByUser) &&
             (identical(other.flierUrl, flierUrl) ||
                 other.flierUrl == flierUrl) &&
-            (identical(other.ticketUrl, ticketUrl) ||
-                other.ticketUrl == ticketUrl) &&
+            (identical(other.eventUrl, eventUrl) ||
+                other.eventUrl == eventUrl) &&
             const DeepCollectionEquality().equals(other._genres, _genres) &&
             (identical(other.location, location) ||
                 other.location == location));
@@ -430,7 +422,7 @@ class _$BookingImpl implements _Booking {
       serviceId,
       addedByUser,
       flierUrl,
-      ticketUrl,
+      eventUrl,
       const DeepCollectionEquality().hash(_genres),
       location);
 
@@ -463,7 +455,7 @@ abstract class _Booking implements Booking {
       final Option<String> serviceId,
       final bool addedByUser,
       final Option<String> flierUrl,
-      final Option<String> ticketUrl,
+      final Option<String> eventUrl,
       final List<Genre> genres,
       final Option<Location> location}) = _$BookingImpl;
 
@@ -496,13 +488,10 @@ abstract class _Booking implements Booking {
   Option<String> get serviceId;
   @override
   bool get addedByUser;
-  @override // @Default(None()) Option<String> placeId,
-// @Default(None()) Option<String> geohash,
-// @Default(None()) Option<double> lat,
-// @Default(None()) Option<double> lng,
+  @override
   Option<String> get flierUrl;
   @override
-  Option<String> get ticketUrl;
+  Option<String> get eventUrl;
   @override
   List<Genre> get genres;
   @override

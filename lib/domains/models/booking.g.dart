@@ -34,10 +34,10 @@ _$BookingImpl _$$BookingImplFromJson(Map<String, dynamic> json) =>
           ? const None()
           : Option<String>.fromJson(
               json['flierUrl'], (value) => value as String),
-      ticketUrl: json['ticketUrl'] == null
+      eventUrl: json['eventUrl'] == null
           ? const None()
           : Option<String>.fromJson(
-              json['ticketUrl'], (value) => value as String),
+              json['eventUrl'], (value) => value as String),
       genres: (json['genres'] as List<dynamic>?)
               ?.map((e) => $enumDecode(_$GenreEnumMap, e))
               .toList() ??
@@ -71,7 +71,7 @@ Map<String, dynamic> _$$BookingImplToJson(_$BookingImpl instance) =>
       'flierUrl': instance.flierUrl.toJson(
         (value) => value,
       ),
-      'ticketUrl': instance.ticketUrl.toJson(
+      'eventUrl': instance.eventUrl.toJson(
         (value) => value,
       ),
       'genres': instance.genres.map((e) => _$GenreEnumMap[e]!).toList(),

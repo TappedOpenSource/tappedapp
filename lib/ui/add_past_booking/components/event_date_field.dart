@@ -31,14 +31,15 @@ class EventDateField extends StatelessWidget {
                 CupertinoButton(
                   onPressed: () async {
                     final theDate = await showDatePicker(
-                        context: context,
-                        initialDate: state.eventStart,
-                        firstDate: DateTime.now().subtract(
-                          const Duration(days: 365 * 10),
-                        ),
-                        lastDate: DateTime.now().add(
-                          const Duration(days: 365),
-                        ),);
+                      context: context,
+                      initialDate: state.eventStart,
+                      firstDate: DateTime.now().subtract(
+                        const Duration(days: 365 * 10),
+                      ),
+                      lastDate: DateTime.now().add(
+                        const Duration(days: 365),
+                      ),
+                    );
 
                     if (theDate == null) {
                       return;
@@ -133,6 +134,7 @@ class EventDateField extends StatelessWidget {
                                   mode: CupertinoTimerPickerMode.hm,
                                   initialTimerDuration: state.duration,
                                   onTimerDurationChanged: cubit.updateDuration,
+
                                 ),
                               ),
                             ],
