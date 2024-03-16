@@ -96,9 +96,7 @@ class App extends StatelessWidget {
             const accentColor = tappedAccent;
             return BlocBuilder<AppThemeCubit, bool>(
               builder: (context, isDark) {
-                final appTheme = isDark
-                    ? buildDarkTheme()
-                    : buildLightTheme();
+                final appTheme = isDark ? buildDarkTheme() : buildLightTheme();
 
                 final defaultStreamTheme =
                     StreamChatThemeData.fromTheme(appTheme);
@@ -131,12 +129,12 @@ class App extends StatelessWidget {
                       builder: (context, downState) {
                         // return const SplashView();
                         // return const OnboardingView();
-                    
+
                         if (downState.downForMaintenance) {
                           FlutterNativeSplash.remove();
                           return const DownForMainenanceView();
                         }
-                    
+
                         return BlocBuilder<AuthenticationBloc,
                             AuthenticationState>(
                           builder: (
@@ -154,9 +152,9 @@ class App extends StatelessWidget {
                                     authState.currentAuthUser.uid,
                                   ),
                                 Unauthenticated() => (() {
-                                  FlutterNativeSplash.remove();
-                                  return const SplashView();
-                                })(),
+                                    FlutterNativeSplash.remove();
+                                    return const SplashView();
+                                  })(),
                               };
                             } catch (e, s) {
                               FirebaseCrashlytics.instance.recordError(
