@@ -7,6 +7,7 @@ import {
   OPEN_AI_KEY,
   orphanEmailsRef,
   POSTMARK_SERVER_ID,
+  SLACK_WEBHOOK_URL,
   streamKey,
   streamSecret,
   usersRef,
@@ -153,7 +154,7 @@ async function sendAsDirectMessage({
 
   // join channel
   const channel = streamClient.channel("messaging", {
-    members: [userId, venueId],
+    members: [ userId, venueId ],
   });
   await channel.create();
 
@@ -189,7 +190,7 @@ async function dmAutoReply({
 
   // join channel
   const channel = streamClient.channel("messaging", {
-    members: [userId, venueId],
+    members: [ userId, venueId ],
   });
   await channel.create();
 
@@ -224,7 +225,7 @@ async function sendStreamMessageFromEmail({
 
   // join channel
   const channel = streamClient.channel("messaging", {
-    members: [userId, venueId],
+    members: [ userId, venueId ],
   });
   await channel.create();
 
@@ -369,7 +370,7 @@ async function writeEmailWithAi({
 export const notifyFoundersOnVenueContact = onDocumentCreated(
   {
     document: "contactVenues/{userId}/venuesContacted/{venueId}",
-    secrets: [POSTMARK_SERVER_ID, streamKey, streamSecret, OPEN_AI_KEY],
+    secrets: [ POSTMARK_SERVER_ID, streamKey, streamSecret, OPEN_AI_KEY ],
   },
   async (event) => {
     try {
@@ -441,7 +442,7 @@ export const notifyFoundersOnVenueContact = onDocumentCreated(
 );
 
 export const inboundEmailWebhook = onRequest(
-  { secrets: [POSTMARK_SERVER_ID, streamKey, streamSecret] },
+  { secrets: [ POSTMARK_SERVER_ID, streamKey, streamSecret, SLACK_WEBHOOK_URL, ] },
   async (req, res) => {
     const body = req.body;
     try {
@@ -489,7 +490,7 @@ export const inboundEmailWebhook = onRequest(
       const venueContactData = venueContactsSnap.docs[0].data();
       const allEmails = venueContactData.allEmails ?? [];
       const newAllEmails = allEmails
-        .concat([from])
+        .concat([ from ])
         .filter((e: string, i: number, a: string[]) => a.indexOf(e) === i);
 
       const venueId = venueContactsSnap.docs[0].id;
@@ -536,6 +537,7 @@ export const inboundEmailWebhook = onRequest(
       slackNotification({
         title: "NEW EMAIL!!!",
         body: `New email from ${from} in response to ${username}`,
+        slackWebhookUrl: SLACK_WEBHOOK_URL.value(),
       });
 
       res.status(200).send("ok");
@@ -553,7 +555,7 @@ export const inboundEmailWebhook = onRequest(
 );
 
 export const streamBeforeMessageWebhook = onRequest(
-  { secrets: [streamKey, streamSecret, POSTMARK_SERVER_ID] },
+  { secrets: [ streamKey, streamSecret, POSTMARK_SERVER_ID ] },
   async (req, res) => {
     const client = new StreamChat(streamKey.value(), streamSecret.value());
 
@@ -658,7 +660,7 @@ export const streamBeforeMessageWebhook = onRequest(
 export const notifyFoundersOnOrphanEmail = onDocumentCreated(
   {
     document: "orphanEmails/{emailId}",
-    secrets: [POSTMARK_SERVER_ID],
+    secrets: [ POSTMARK_SERVER_ID, SLACK_WEBHOOK_URL ],
   },
   async (event) => {
     const snapshot = event.data;
@@ -689,6 +691,7 @@ export const notifyFoundersOnOrphanEmail = onDocumentCreated(
     slackNotification({
       title: "Orphan Email",
       body: `An email was not able to be processed: ${error}`,
+      slackWebhookUrl: SLACK_WEBHOOK_URL.value(),
     });
 
     fcm.sendToDevice(foundersTokens, payload);

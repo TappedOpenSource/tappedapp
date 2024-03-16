@@ -20,15 +20,17 @@ export async function notifyFounders({ title, body }: {
 export async function slackNotification({
   title,
   body,
+  slackWebhookUrl
 }: {
   title: string;
   body: string;
+  slackWebhookUrl: string;
 }): Promise<void> {
   try {
     const message = {
       text: `*${title}* - ${body}`,
     };
-    const response = await fetch(SLACK_WEBHOOK_URL, {
+    const response = await fetch(slackWebhookUrl, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -36,10 +38,8 @@ export async function slackNotification({
       body: JSON.stringify(message),
     });
 
-    if (response.ok) {
-      console.log("Notification sent to Slack successfully");
-    } else {
-      throw new Error("Slack notification failed to send");
+    if (!response.ok) {
+      throw new Error(`slack notification failed to send with status ${response.status}`);
     }
   } catch (error) {
     console.error(error);

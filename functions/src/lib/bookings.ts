@@ -10,6 +10,7 @@ import {
   usersRef,
   bookerReviewsSubcollection,
   performerReviewsSubcollection,
+  SLACK_WEBHOOK_URL,
 } from "./firebase";
 import { Booking, BookingStatus } from "../types/models";
 import { getFoundersDeviceTokens } from "./utils";
@@ -110,7 +111,7 @@ export const addActivityOnBookingUpdate = functions.firestore
       throw new HttpsError("unauthenticated", "user is not authenticated");
     }
 
-    for (const userId of [booking.requesterId, booking.requesteeId]) {
+    for (const userId of [ booking.requesterId, booking.requesteeId ]) {
       if (userId === uid) {
         continue;
       }
@@ -124,7 +125,9 @@ export const addActivityOnBookingUpdate = functions.firestore
     }
   });
 
-export const notifyFoundersOnBookings = functions.firestore
+export const notifyFoundersOnBookings = functions
+  .runWith({ secrets: [ SLACK_WEBHOOK_URL ] })
+  .firestore
   .document("bookings/{bookingId}")
   .onCreate(async (data) => {
     const booking = data.data() as Booking;
@@ -188,7 +191,10 @@ export const notifyFoundersOnBookings = functions.firestore
           `Failed to send message to some devices: ${resp.failureCount}`
         );
       }
-      await slackNotification(msg);
+      await slackNotification({
+        ...msg,
+        slackWebhookUrl: SLACK_WEBHOOK_URL.value(),
+      });
     } catch (e: any) {
       functions.logger.error(`ERROR : ${e}`);
       throw new Error(`cannot send notification to device ${e.message}`);
