@@ -7,6 +7,7 @@ import 'package:intheloopapp/domains/models/booking.dart';
 import 'package:intheloopapp/domains/models/user_model.dart';
 import 'package:intheloopapp/domains/navigation_bloc/navigation_bloc.dart';
 import 'package:intheloopapp/domains/navigation_bloc/tapped_route.dart';
+import 'package:intheloopapp/ui/profile/components/booking_card.dart';
 import 'package:intheloopapp/ui/profile/components/booking_tile.dart';
 import 'package:intheloopapp/utils/app_logger.dart';
 import 'package:intheloopapp/utils/bloc_utils.dart';
@@ -34,6 +35,7 @@ class _UserBookingsFeedState extends State<UserBookingsFeed> {
   BookingsStatus _bookingsStatus = BookingsStatus.initial;
   StreamSubscription<Booking>? _bookingListener;
   late DatabaseRepository _databaseRepository;
+
 
   bool get _isBottom {
     if (!_scrollController.hasClients) return false;
@@ -195,18 +197,21 @@ class _UserBookingsFeedState extends State<UserBookingsFeed> {
                   },
                 ),
                 SliverPadding(
-                  padding: const EdgeInsets.all(8),
-                  sliver: SliverList(
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 20,
+                    vertical: 16,
+                  ),
+                  sliver: SliverGrid.count(
                     // itemExtent: 100,
-                    delegate: SliverChildBuilderDelegate(
-                      (BuildContext context, int index) {
-                        return BookingTile(
-                          visitedUser: user,
-                          booking: _userBookings[index],
-                        );
-                      },
-                      childCount: _userBookings.length,
-                    ),
+                    crossAxisCount: 2,
+                    crossAxisSpacing: 15,
+                    mainAxisSpacing: 20,
+                    children: _userBookings.map((booking) {
+                      return BookingCard(
+                        visitedUser: user,
+                        booking: booking,
+                      );
+                    }).toList(),
                   ),
                 ),
               ],

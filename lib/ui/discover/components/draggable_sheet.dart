@@ -65,7 +65,7 @@ class DraggableSheet extends StatelessWidget {
       builder: (context, currentUser) {
         return BlocBuilder<DiscoverCubit, DiscoverState>(
           builder: (context, state) {
-            final sortedVenueHits = List.from(state.venueHits)
+            final sortedVenueHits = List<UserModel>.from(state.venueHits)
               ..sort((a, b) {
                 final aIsGoodFit = _isVenueGoodFit(currentUser, a);
                 final bIsGoodFit = _isVenueGoodFit(currentUser, b);

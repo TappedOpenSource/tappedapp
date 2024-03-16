@@ -6,7 +6,6 @@ import 'package:intheloopapp/domains/models/user_model.dart';
 import 'package:intheloopapp/domains/navigation_bloc/navigation_bloc.dart';
 import 'package:intheloopapp/domains/navigation_bloc/tapped_route.dart';
 import 'package:intheloopapp/utils/bloc_utils.dart';
-import 'package:intheloopapp/utils/default_image.dart';
 import 'package:intheloopapp/utils/hero_image.dart';
 import 'package:intl/intl.dart';
 import 'package:uuid/uuid.dart';
@@ -83,18 +82,21 @@ class BookingCard extends StatelessWidget {
                 ),
                 switch (titleText) {
                   None() => const SizedBox.shrink(),
-                  Some(:final value) => Text(
-                      value,
-                      overflow: TextOverflow.ellipsis,
-                      style: const TextStyle(
-                        fontSize: 14,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
+                  Some(:final value) => value.isNotEmpty
+                      ? Text(
+                          value,
+                          overflow: TextOverflow.ellipsis,
+                          style: const TextStyle(
+                            fontSize: 14,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        )
+                      : const SizedBox.shrink(),
                 },
                 Text(
                   formatted,
                   style: const TextStyle(
+                    overflow: TextOverflow.ellipsis,
                     fontSize: 12,
                     fontWeight: FontWeight.w300,
                     color: Colors.grey,
