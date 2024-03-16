@@ -386,17 +386,22 @@ class BookingView extends StatelessWidget {
                           ),
                         ),
                       ),
-                    const Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Text(
-                          'to modify the booking, please contact support@tapped.ai',
-                          textAlign: TextAlign.center,
-                          style: TextStyle(
-                            color: Colors.grey,
+                    Padding(
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 20,
+                      ),
+                      child: const Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Text(
+                            'to modify the booking, please contact support@tapped.ai',
+                            textAlign: TextAlign.center,
+                            style: TextStyle(
+                              color: Colors.grey,
+                            ),
                           ),
-                        ),
-                      ],
+                        ],
+                      ),
                     ),
                     const SizedBox(height: 20),
                   ],
