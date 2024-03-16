@@ -23,6 +23,7 @@ import 'package:intheloopapp/ui/themes.dart';
 import 'package:intheloopapp/utils/bloc_utils.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:stream_chat_flutter/stream_chat_flutter.dart';
+import 'package:upgrader/upgrader.dart';
 
 class App extends StatelessWidget {
   const App({
@@ -121,50 +122,53 @@ class App extends StatelessWidget {
                       }
                     },
                   ),
-                  home: BlocBuilder<DownForMaintenanceBloc,
-                      DownForMaintenanceState>(
-                    builder: (context, downState) {
-                      // return const SplashView();
-                      // return const OnboardingView();
-
-                      if (downState.downForMaintenance) {
-                        FlutterNativeSplash.remove();
-                        return const DownForMainenanceView();
-                      }
-
-                      return BlocBuilder<AuthenticationBloc,
-                          AuthenticationState>(
-                        builder: (
-                          BuildContext context,
-                          AuthenticationState authState,
-                        ) {
-                          try {
-                            return switch (authState) {
-                              Uninitialized() => (() {
+                  home: UpgradeAlert(
+                    dialogStyle: UpgradeDialogStyle.cupertino,
+                    child: BlocBuilder<DownForMaintenanceBloc,
+                        DownForMaintenanceState>(
+                      builder: (context, downState) {
+                        // return const SplashView();
+                        // return const OnboardingView();
+                    
+                        if (downState.downForMaintenance) {
+                          FlutterNativeSplash.remove();
+                          return const DownForMainenanceView();
+                        }
+                    
+                        return BlocBuilder<AuthenticationBloc,
+                            AuthenticationState>(
+                          builder: (
+                            BuildContext context,
+                            AuthenticationState authState,
+                          ) {
+                            try {
+                              return switch (authState) {
+                                Uninitialized() => (() {
+                                    FlutterNativeSplash.remove();
+                                    return const LoadingView();
+                                  })(),
+                                Authenticated() => _authenticated(
+                                    context,
+                                    authState.currentAuthUser.uid,
+                                  ),
+                                Unauthenticated() => (() {
                                   FlutterNativeSplash.remove();
-                                  return const LoadingView();
+                                  return const SplashView();
                                 })(),
-                              Authenticated() => _authenticated(
-                                  context,
-                                  authState.currentAuthUser.uid,
-                                ),
-                              Unauthenticated() => (() {
-                                FlutterNativeSplash.remove();
-                                return const SplashView();
-                              })(),
-                            };
-                          } catch (e, s) {
-                            FirebaseCrashlytics.instance.recordError(
-                              e,
-                              s,
-                              fatal: true,
-                            );
-                            FlutterNativeSplash.remove();
-                            return const LoadingView();
-                          }
-                        },
-                      );
-                    },
+                              };
+                            } catch (e, s) {
+                              FirebaseCrashlytics.instance.recordError(
+                                e,
+                                s,
+                                fatal: true,
+                              );
+                              FlutterNativeSplash.remove();
+                              return const LoadingView();
+                            }
+                          },
+                        );
+                      },
+                    ),
                   ),
                 );
               },

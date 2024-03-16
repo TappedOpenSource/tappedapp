@@ -12,9 +12,11 @@ import 'package:hydrated_bloc/hydrated_bloc.dart';
 import 'package:intheloopapp/dependencies.dart';
 import 'package:intheloopapp/firebase_options.dart';
 import 'package:intheloopapp/ui/app/app.dart';
+import 'package:intheloopapp/utils/app_logger.dart';
 import 'package:intheloopapp/utils/error.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:stream_chat_flutter/stream_chat_flutter.dart';
+import 'package:url_launcher/url_launcher.dart';
 // import 'package:stream_video_flutter/stream_video_flutter.dart';
 
 Future<void> main() async {
@@ -35,10 +37,10 @@ Future<void> main() async {
   await configureError();
 
   // Keep the app in portrait mode (no landscape)
-  await SystemChrome.setPreferredOrientations([
-    DeviceOrientation.portraitUp,
-    DeviceOrientation.portraitDown,
-  ]);
+  // await SystemChrome.setPreferredOrientations([
+  //   DeviceOrientation.portraitUp,
+  //   DeviceOrientation.portraitDown,
+  // ]);
 
 
   FirebaseMessaging.onBackgroundMessage(
@@ -63,8 +65,6 @@ Future<void> main() async {
   );
 }
 
-/// The root widget for the app
-
 Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
   // If you're going to use other Firebase services in the background,
   // such as Firestore, make sure you call
@@ -73,5 +73,13 @@ Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
     options: DefaultFirebaseOptions.currentPlatform,
   );
 
-  // print(message.data);
+  final messageData = message.data;
+  logger.debug(messageData.toString());
+
+  final url = messageData['url'] as String?;
+
+  if (url != null) {
+    final uri = Uri.parse(url);
+    await launchUrl(uri);
+  }
 }
