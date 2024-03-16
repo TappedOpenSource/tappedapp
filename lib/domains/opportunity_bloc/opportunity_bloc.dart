@@ -11,6 +11,7 @@ import 'package:intheloopapp/domains/models/opportunity.dart';
 import 'package:intheloopapp/domains/navigation_bloc/navigation_bloc.dart';
 import 'package:intheloopapp/domains/navigation_bloc/tapped_route.dart';
 import 'package:intheloopapp/domains/subscription_bloc/subscription_bloc.dart';
+import 'package:intheloopapp/utils/app_logger.dart';
 
 part 'opportunity_event.dart';
 
@@ -32,6 +33,7 @@ class OpportunityBloc extends Bloc<OpportunityEvent, OpportunityState> {
       _quotaSubscription = database
           .getUserOpportunityQuotaObserver(currentUserId)
           .listen((event) {
+            logger.info('Quota: $event');
         add(SetQuota(quota: event));
       });
     });

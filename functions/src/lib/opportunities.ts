@@ -283,8 +283,10 @@ const _setDailyOpportunityQuota = async () => {
 
   await Promise.all(
     usersSnap.docs.map(async (userDoc) => {
-      const email: string | undefined = userDoc.data().email;
-      if (email === undefined || email?.includes("tapped.ai")) {
+      const userData = userDoc.data() as UserMode;
+      const unclaimed = userData.unclaimed;
+      if (unclaimed) {
+        debug('skipping unclaimed user', { username: userData.username });
         return;
       }
 
