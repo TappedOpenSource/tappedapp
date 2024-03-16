@@ -36,6 +36,7 @@ class _UserBookingsFeedState extends State<UserBookingsFeed> {
   StreamSubscription<Booking>? _bookingListener;
   late DatabaseRepository _databaseRepository;
 
+  bool isList = false;
 
   bool get _isBottom {
     if (!_scrollController.hasClients) return false;
@@ -195,24 +196,48 @@ class _UserBookingsFeedState extends State<UserBookingsFeed> {
                   onStretchTrigger: () async {
                     await _initBookings();
                   },
+                  actions: [
+                    IconButton(
+                      icon: Icon(
+                        isList ? Icons.grid_view : Icons.list,
+                      ),
+                      onPressed: () {
+                        setState(() {
+                          isList = !isList;
+                        });
+                      },
+                    ),
+                  ],
                 ),
                 SliverPadding(
                   padding: const EdgeInsets.symmetric(
                     horizontal: 20,
                     vertical: 16,
                   ),
-                  sliver: SliverGrid.count(
-                    // itemExtent: 100,
-                    crossAxisCount: 2,
-                    crossAxisSpacing: 15,
-                    mainAxisSpacing: 20,
-                    children: _userBookings.map((booking) {
-                      return BookingCard(
-                        visitedUser: user,
-                        booking: booking,
-                      );
-                    }).toList(),
-                  ),
+                  sliver: isList
+                      ? SliverList(
+                          delegate: SliverChildBuilderDelegate(
+                            (context, index) {
+                              return BookingTile(
+                                visitedUser: user,
+                                booking: _userBookings[index],
+                              );
+                            },
+                            childCount: _userBookings.length,
+                          ),
+                        )
+                      : SliverGrid.count(
+                          // itemExtent: 100,
+                          crossAxisCount: 2,
+                          crossAxisSpacing: 15,
+                          mainAxisSpacing: 20,
+                          children: _userBookings.map((booking) {
+                            return BookingCard(
+                              visitedUser: user,
+                              booking: booking,
+                            );
+                          }).toList(),
+                        ),
                 ),
               ],
             );
