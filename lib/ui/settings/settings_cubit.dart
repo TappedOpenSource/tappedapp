@@ -286,7 +286,7 @@ class SettingsCubit extends Cubit<SettingsState> {
           Some(:final value) => Option.of(
               Location(
                 placeId: value.placeId,
-                geohash: value.geohash,
+                // geohash: value.geohash,
                 lat: value.lat,
                 lng: value.lng,
               ),

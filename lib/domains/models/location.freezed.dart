@@ -20,8 +20,8 @@ Location _$LocationFromJson(Map<String, dynamic> json) {
 
 /// @nodoc
 mixin _$Location {
-  String get placeId => throw _privateConstructorUsedError;
-  String get geohash => throw _privateConstructorUsedError;
+  String get placeId =>
+      throw _privateConstructorUsedError; // required String geohash,
   double get lat => throw _privateConstructorUsedError;
   double get lng => throw _privateConstructorUsedError;
 
@@ -36,7 +36,7 @@ abstract class $LocationCopyWith<$Res> {
   factory $LocationCopyWith(Location value, $Res Function(Location) then) =
       _$LocationCopyWithImpl<$Res, Location>;
   @useResult
-  $Res call({String placeId, String geohash, double lat, double lng});
+  $Res call({String placeId, double lat, double lng});
 }
 
 /// @nodoc
@@ -53,7 +53,6 @@ class _$LocationCopyWithImpl<$Res, $Val extends Location>
   @override
   $Res call({
     Object? placeId = null,
-    Object? geohash = null,
     Object? lat = null,
     Object? lng = null,
   }) {
@@ -61,10 +60,6 @@ class _$LocationCopyWithImpl<$Res, $Val extends Location>
       placeId: null == placeId
           ? _value.placeId
           : placeId // ignore: cast_nullable_to_non_nullable
-              as String,
-      geohash: null == geohash
-          ? _value.geohash
-          : geohash // ignore: cast_nullable_to_non_nullable
               as String,
       lat: null == lat
           ? _value.lat
@@ -86,7 +81,7 @@ abstract class _$$LocationImplCopyWith<$Res>
       __$$LocationImplCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call({String placeId, String geohash, double lat, double lng});
+  $Res call({String placeId, double lat, double lng});
 }
 
 /// @nodoc
@@ -101,7 +96,6 @@ class __$$LocationImplCopyWithImpl<$Res>
   @override
   $Res call({
     Object? placeId = null,
-    Object? geohash = null,
     Object? lat = null,
     Object? lng = null,
   }) {
@@ -109,10 +103,6 @@ class __$$LocationImplCopyWithImpl<$Res>
       placeId: null == placeId
           ? _value.placeId
           : placeId // ignore: cast_nullable_to_non_nullable
-              as String,
-      geohash: null == geohash
-          ? _value.geohash
-          : geohash // ignore: cast_nullable_to_non_nullable
               as String,
       lat: null == lat
           ? _value.lat
@@ -130,18 +120,14 @@ class __$$LocationImplCopyWithImpl<$Res>
 @JsonSerializable()
 class _$LocationImpl implements _Location {
   const _$LocationImpl(
-      {required this.placeId,
-      required this.geohash,
-      required this.lat,
-      required this.lng});
+      {required this.placeId, required this.lat, required this.lng});
 
   factory _$LocationImpl.fromJson(Map<String, dynamic> json) =>
       _$$LocationImplFromJson(json);
 
   @override
   final String placeId;
-  @override
-  final String geohash;
+// required String geohash,
   @override
   final double lat;
   @override
@@ -149,7 +135,7 @@ class _$LocationImpl implements _Location {
 
   @override
   String toString() {
-    return 'Location(placeId: $placeId, geohash: $geohash, lat: $lat, lng: $lng)';
+    return 'Location(placeId: $placeId, lat: $lat, lng: $lng)';
   }
 
   @override
@@ -158,14 +144,13 @@ class _$LocationImpl implements _Location {
         (other.runtimeType == runtimeType &&
             other is _$LocationImpl &&
             (identical(other.placeId, placeId) || other.placeId == placeId) &&
-            (identical(other.geohash, geohash) || other.geohash == geohash) &&
             (identical(other.lat, lat) || other.lat == lat) &&
             (identical(other.lng, lng) || other.lng == lng));
   }
 
   @JsonKey(ignore: true)
   @override
-  int get hashCode => Object.hash(runtimeType, placeId, geohash, lat, lng);
+  int get hashCode => Object.hash(runtimeType, placeId, lat, lng);
 
   @JsonKey(ignore: true)
   @override
@@ -184,7 +169,6 @@ class _$LocationImpl implements _Location {
 abstract class _Location implements Location {
   const factory _Location(
       {required final String placeId,
-      required final String geohash,
       required final double lat,
       required final double lng}) = _$LocationImpl;
 
@@ -193,9 +177,7 @@ abstract class _Location implements Location {
 
   @override
   String get placeId;
-  @override
-  String get geohash;
-  @override
+  @override // required String geohash,
   double get lat;
   @override
   double get lng;

@@ -100,13 +100,13 @@ class CreateBookingCubit extends Cubit<CreateBookingState> {
     final placeId = nullablePlace?.placeId;
     final lat = nullablePlace?.lat;
     final lng = nullablePlace?.lng;
-    final geohash = nullablePlace?.geohash;
+    // final geohash = nullablePlace?.geohash;
 
-    final location = (lat != null && lng != null && geohash != null && placeId != null)
+    final location = (lat != null && lng != null && placeId != null)
       ? Location(
           lat: lat,
           lng: lng,
-          geohash: geohash,
+          // geohash: geohash,
           placeId: placeId,
         )
       : null;

@@ -123,4 +123,30 @@ class GooglePlacesImpl implements PlacesRepository {
       rethrow;
     }
   }
+
+  @override
+  @cached
+  Future<Option<String>> getPlaceByLatLng(double lat, double lng) async {
+    try {
+      final callable = _functions.httpsCallable('getPlaceIdByLatLng');
+
+      final results = await callable<Map<String, dynamic>>({
+        'lat': lat,
+        'lng': lng,
+      });
+      final data = results.data;
+      final placeId = Option.fromNullable(
+        data.getOrElse<String?>('placeId', null),
+      );
+
+      return placeId;
+    } catch (e, s) {
+      logger.error(
+        'error fetching place by lat/lng: $lat, $lng',
+        error: e,
+        stackTrace: s,
+      );
+      return const None();
+    }
+  }
 }

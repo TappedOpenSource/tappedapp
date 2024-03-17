@@ -138,7 +138,7 @@ class CreateOpportunityCubit extends Cubit<CreateOpportunityState> {
         None() => throw Exception('missing location'),
         Some(:final value) => Location(
             placeId: value.placeId,
-            geohash: value.geohash,
+            // geohash: value.geohash,
             lat: value.lat,
             lng: value.lng,
           ),

@@ -130,7 +130,7 @@ class AddPastBookingCubit extends Cubit<AddPastBookingState> {
           placeId: placeData.placeId,
           lat: placeData.lat,
           lng: placeData.lng,
-          geohash: placeData.geohash,
+          // geohash: placeData.geohash,
         ),
       );
     });

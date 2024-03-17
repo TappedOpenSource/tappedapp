@@ -9,6 +9,7 @@ abstract class PlacesRepository {
     String placeId,
     PhotoMetadata metadata,
   );
+  Future<Option<String>> getPlaceIdByLatLng(double lat, double lng);
 }
 
 class PlaceData {

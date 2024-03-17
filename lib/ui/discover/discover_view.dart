@@ -8,6 +8,7 @@ import 'package:intheloopapp/data/search_repository.dart';
 import 'package:intheloopapp/domains/models/genre.dart';
 import 'package:intheloopapp/domains/navigation_bloc/navigation_bloc.dart';
 import 'package:intheloopapp/domains/navigation_bloc/tapped_route.dart';
+import 'package:intheloopapp/domains/onboarding_bloc/onboarding_bloc.dart';
 import 'package:intheloopapp/ui/discover/components/draggable_sheet.dart';
 import 'package:intheloopapp/ui/discover/components/map_base.dart';
 import 'package:intheloopapp/ui/discover/components/map_config_slider.dart';
@@ -244,8 +245,10 @@ class DiscoverView extends StatelessWidget {
                 : <String>[];
             return BlocProvider<DiscoverCubit>(
               create: (context) => DiscoverCubit(
+                currentUser: currentUser,
                 search: context.read<SearchRepository>(),
                 initGenres: fromStrings(initGenres),
+                onboardingBloc: context.read<OnboardingBloc>(),
               ),
               child: Scaffold(
                 floatingActionButtonLocation:

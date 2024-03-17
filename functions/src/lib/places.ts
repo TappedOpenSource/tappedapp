@@ -218,3 +218,67 @@ export const getPlacePhotoUrlFromName = onCall(
 
     return res;
   });
+
+export const getPlaceIdByLatLng = onCall(
+  {
+    secrets: [ GOOGLE_PLACES_API_KEY ],
+  },
+  async (request) => {
+
+    const data = request.data;
+
+    if (data.lat === undefined || data.lng === undefined) {
+      throw new HttpsError(
+        "invalid-argument",
+        "The function argument 'lat' and 'lng' cannot be empty"
+      );
+    }
+
+    const { lat, lng } = data;
+
+
+    const res = await fetch(
+      "https://places.googleapis.com/v1/places:searchText",
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "X-Goog-Api-Key": GOOGLE_PLACES_API_KEY.value(),
+          "X-Goog-FieldMask":
+            "places.id",
+        },
+        body: JSON.stringify({
+          textQuery: "nearest city",
+          locationBias: {
+            circle: {
+              center: {
+                latitude: lat,
+                longitude: lng,
+              },
+              radius: 500,
+            },
+          },
+        }),
+      },
+    );
+
+    debug({ res });
+    const json = await res.json();
+  
+    if (json.error) {
+      console.error(json.error);
+      throw new Error(json.error.message);
+    }
+  
+    const places = json.places;
+    if (places === undefined || places === null || places.length === 0) {
+      return null;
+    }
+  
+    const place = places[0];
+    const placeId = place.id as string;
+    // const place = await _getPlaceDetails(placeId);
+    // await googlePlacesCacheRef.doc(place.id).set(place);
+  
+    return placeId;
+  });

@@ -7,12 +7,14 @@ import 'package:flutter_map_heatmap/flutter_map_heatmap.dart';
 import 'package:fpdart/fpdart.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:geolocator/geolocator.dart';
+import 'package:intheloopapp/data/places_repository.dart';
 import 'package:intheloopapp/data/search_repository.dart';
 import 'package:intheloopapp/domains/models/booking.dart';
 import 'package:intheloopapp/domains/models/genre.dart';
 import 'package:intheloopapp/domains/models/location.dart';
 import 'package:intheloopapp/domains/models/opportunity.dart';
 import 'package:intheloopapp/domains/models/user_model.dart';
+import 'package:intheloopapp/domains/onboarding_bloc/onboarding_bloc.dart';
 import 'package:intheloopapp/utils/app_logger.dart';
 import 'package:intheloopapp/utils/debouncer.dart';
 import 'package:latlong2/latlong.dart';
@@ -23,16 +25,22 @@ part 'discover_cubit.freezed.dart';
 
 class DiscoverCubit extends Cubit<DiscoverState> {
   DiscoverCubit({
+    required this.currentUser,
     required this.search,
     required this.initGenres,
+    required this.onboardingBloc,
+    required this.places,
   }) : super(
           DiscoverState(
             genreFilters: initGenres,
           ),
         );
 
+  final UserModel currentUser;
   final SearchRepository search;
   final List<Genre> initGenres;
+  final OnboardingBloc onboardingBloc;
+  final PlacesRepository places;
 
   final _debouncer = Debouncer(
     const Duration(milliseconds: 500),
@@ -79,6 +87,33 @@ class DiscoverCubit extends Cubit<DiscoverState> {
         Geolocator.getCurrentPosition(),
         Future.delayed(const Duration(seconds: 2), () => null),
       ]);
+
+      if (position != null) {
+        final currLoc = currentUser.location;
+        if (currLoc.isNone()) {
+          final placeId = await places.getPlaceIdByLatLng(
+            position.latitude,
+            position.longitude,
+          );
+
+          placeId.map((t) {
+            final user = currentUser.copyWith(
+              location: Option.of(
+                Location(
+                  placeId: t,
+                  // geohash: '',
+                  lat: position.latitude,
+                  lng: position.longitude,
+                ),
+              ),
+            );
+            onboardingBloc.add(
+              UpdateOnboardedUser(user: user),
+            );
+          });
+        }
+      }
+
       return (
         position?.latitude ?? Location.nyc.lat,
         position?.longitude ?? Location.nyc.lng,
@@ -139,18 +174,17 @@ class DiscoverCubit extends Cubit<DiscoverState> {
     double? lng,
   }) async {
     try {
+      final hits = await search.queryUsers(
+        '',
+        occupations: ['Venue', 'venue'],
+        venueGenres: state.genreFilterStrings.isNotEmpty
+            ? state.genreFilterStrings
+            : null,
+        lat: lat,
+        lng: lng,
+      );
 
-    final hits = await search.queryUsers(
-      '',
-      occupations: ['Venue', 'venue'],
-      venueGenres: state.genreFilterStrings.isNotEmpty
-          ? state.genreFilterStrings
-          : null,
-      lat: lat,
-      lng: lng,
-    );
-
-    return hits;
+      return hits;
     } catch (e, s) {
       logger.e('Error getting venues', error: e, stackTrace: s);
       return [];
