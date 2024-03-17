@@ -283,10 +283,10 @@ const _setDailyOpportunityQuota = async () => {
 
   await Promise.all(
     usersSnap.docs.map(async (userDoc) => {
-      const userData = userDoc.data() as UserMode;
+      const userData = userDoc.data() as UserModel;
       const unclaimed = userData.unclaimed;
       if (unclaimed) {
-        debug('skipping unclaimed user', { username: userData.username });
+        debug("skipping unclaimed user", { username: userData.username });
         return;
       }
 
