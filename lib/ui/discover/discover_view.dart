@@ -14,6 +14,7 @@ import 'package:intheloopapp/ui/discover/components/map_base.dart';
 import 'package:intheloopapp/ui/discover/components/map_config_slider.dart';
 import 'package:intheloopapp/ui/discover/components/tapped_search_bar.dart';
 import 'package:intheloopapp/ui/discover/discover_cubit.dart';
+import 'package:intheloopapp/utils/bloc_utils.dart';
 import 'package:intheloopapp/utils/current_user_builder.dart';
 import 'package:intheloopapp/utils/premium_builder.dart';
 import 'package:latlong2/latlong.dart';
@@ -249,6 +250,7 @@ class DiscoverView extends StatelessWidget {
                 search: context.read<SearchRepository>(),
                 initGenres: fromStrings(initGenres),
                 onboardingBloc: context.read<OnboardingBloc>(),
+                places: context.places,
               ),
               child: Scaffold(
                 floatingActionButtonLocation:

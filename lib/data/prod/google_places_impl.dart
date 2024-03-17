@@ -126,7 +126,7 @@ class GooglePlacesImpl implements PlacesRepository {
 
   @override
   @cached
-  Future<Option<String>> getPlaceByLatLng(double lat, double lng) async {
+  Future<Option<String>> getPlaceIdByLatLng(double lat, double lng) async {
     try {
       final callable = _functions.httpsCallable('getPlaceIdByLatLng');
 
