@@ -697,3 +697,32 @@ export const notifyFoundersOnOrphanEmail = onDocumentCreated(
     fcm.sendToDevice(foundersTokens, payload);
   }
 );
+
+export const notifyFoundersOnEmail = onDocumentCreated(
+  {
+    document: "contactVenues/{userId}/venuesContacted/{venueId}/emailsSent/{emailId}",
+    secrets: [ SLACK_WEBHOOK_URL ],
+  },
+  async (event) => {
+
+    const snapshot = event.data;
+    const documentData = snapshot?.data();
+    const email = documentData ?? null;
+    const venueId = event.params.venueId;
+    const userId = event.params.userId;
+
+    const venue = await usersRef.doc(venueId).get();
+    const venueData = venue.data() as UserModel;
+    const venueName = venueData.artistName ?? venueData.username;
+
+
+    const user = await usersRef.doc(userId).get();
+    const userData = user.data() as UserModel;
+    const username = userData.artistName ?? userData.username;
+
+    slackNotification({
+      title: "New Email",
+      body: `new email between ${username} and ${venueName}. Here's a sample of the email: ${email?.TextBody.substring(0, 50)}`,
+      slackWebhookUrl: SLACK_WEBHOOK_URL.value(),
+    });
+  });
