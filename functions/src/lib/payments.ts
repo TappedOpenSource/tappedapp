@@ -68,6 +68,8 @@ export const _createPaymentIntent = async (data: {
 
   const bookingFee = parseFloat(weirdTSError);
 
+  info(`booking fee is ${bookingFee}`);
+
   const application_fee = data.amount * bookingFee;
 
   const paymentIntent = await stripe.paymentIntents.create({
@@ -117,7 +119,7 @@ export const _createStripeAccount = async ({ countryCode }: {
     country: country,
   });
 
-  info(`Created Stripe account ${account.id} for ${country}`);
+  info(`created Stripe account ${account.id} for ${country}`);
 
   return account.id;
 }
@@ -155,7 +157,7 @@ export const _createConnectedAccount = async ({ accountId, country }: {
     type: "account_onboarding",
   })
 
-  info(`Created Stripe account link ${accountLinks.url} for ${account}`)
+  info(`created Stripe account link ${accountLinks.url} for ${account}`)
 
   return { success: true, url: accountLinks.url, accountId: account };
 }

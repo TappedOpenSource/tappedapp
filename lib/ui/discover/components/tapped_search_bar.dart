@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fpdart/fpdart.dart' hide State;
+import 'package:intheloopapp/data/database_repository.dart';
 import 'package:intheloopapp/data/search_repository.dart';
 import 'package:intheloopapp/domains/models/user_model.dart';
 import 'package:intheloopapp/domains/navigation_bloc/navigation_bloc.dart';
@@ -61,6 +62,7 @@ class _TappedSearchBarState extends State<TappedSearchBar> {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+    final database = context.read<DatabaseRepository>();
     final searchRepo = context.read<SearchRepository>();
     return SearchAnchor(
       searchController: _searchController,
@@ -152,8 +154,13 @@ class _TappedSearchBarState extends State<TappedSearchBar> {
         );
       },
       suggestionsBuilder: (context, searchController) async {
-        final suggestedUsers = await searchRepo.queryUsers('');
-        return suggestedUsers.map(
+        final suggestedUsers = await database.getBookingLeaders();
+        final venuesNearby = await searchRepo.queryUsers(
+          '',
+          occupations: ['Venue', 'venue'],
+        );
+        final combined = [...suggestedUsers, ...venuesNearby]..shuffle();
+        return combined.map(
           (user) => UserTile(
             userId: user.id,
             user: Option.of(user),
