@@ -49,15 +49,24 @@ class UserAvatar extends StatelessWidget {
         (None(), None()) => child,
         (Some(:final value), None()) => GestureDetector(
             onTap: () {
-              context.push(
-                ProfilePage(
-                  userId: value,
-                  user: const None(),
-                ),
+              showCupertinoModalBottomSheet<void>(
+                context: context,
+                builder: (context) {
+                  return ProfileView(
+                    visitedUserId: value,
+                    visitedUser: const None(),
+                  );
+                },
               );
+
+              // context.push(
+              //   ProfilePage(
+              //     userId: value.id,
+              //     user: pushUser,
+              //   ),
+              // );
             },
-            child: child,
-          ),
+        ),
         (_, Some(:final value)) => GestureDetector(
             onTap: () {
               showCupertinoModalBottomSheet<void>(

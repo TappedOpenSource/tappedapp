@@ -43,6 +43,7 @@ class MapBase extends StatelessWidget {
           options: MapOptions(
             // minZoom: 10,
             maxZoom: 18,
+            initialZoom: 6,
             initialCenter: LatLng(lat, lng),
             onPositionChanged: (position, hasGesture) {
               context.read<DiscoverCubit>().onBoundsChange(

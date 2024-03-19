@@ -18,6 +18,7 @@ import 'package:intheloopapp/utils/bloc_utils.dart';
 import 'package:intheloopapp/utils/current_user_builder.dart';
 import 'package:intheloopapp/utils/premium_builder.dart';
 import 'package:latlong2/latlong.dart';
+import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:stream_chat_flutter/stream_chat_flutter.dart';
 import 'package:badges/badges.dart' as badges;
 
@@ -253,15 +254,6 @@ class DiscoverView extends StatelessWidget {
                 places: context.places,
               ),
               child: Scaffold(
-                floatingActionButtonLocation:
-                    FloatingActionButtonLocation.startDocked,
-                floatingActionButton: FloatingActionButton.extended(
-                  onPressed: () => context.push(
-                    GigSearchInitPage(),
-                  ),
-                  icon: const Icon(Icons.search),
-                  label: const Text('get booked'),
-                ),
                 body: LayoutBuilder(
                   builder: (context, contains) {
                     return Stack(

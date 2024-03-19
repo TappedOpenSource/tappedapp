@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intheloopapp/data/database_repository.dart';
 import 'package:intheloopapp/domains/navigation_bloc/tapped_route.dart';
+import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 
 part 'navigation_event.dart';
 
@@ -17,7 +18,7 @@ class NavigationBloc extends Bloc<NavigationEvent, NavigationState> {
     on<Push>((event, emit) {
       final route = event.route;
       navigationKey.currentState?.push(
-        MaterialPageRoute<Widget>(
+        MaterialWithModalsPageRoute<Widget>(
           settings: RouteSettings(name: route.routeName),
           builder: (context) => Material(
             child: route.view,

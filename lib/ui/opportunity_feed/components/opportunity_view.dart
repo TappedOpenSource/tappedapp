@@ -11,6 +11,7 @@ import 'package:intheloopapp/domains/navigation_bloc/navigation_bloc.dart';
 import 'package:intheloopapp/domains/navigation_bloc/tapped_route.dart';
 import 'package:intheloopapp/domains/opportunity_bloc/opportunity_bloc.dart';
 import 'package:intheloopapp/ui/conditional_parent_widget.dart';
+import 'package:intheloopapp/ui/opportunities/interested_users_view.dart';
 import 'package:intheloopapp/ui/themes.dart';
 import 'package:intheloopapp/ui/user_tile.dart';
 import 'package:intheloopapp/utils/admin_builder.dart';
@@ -21,6 +22,7 @@ import 'package:intheloopapp/utils/hero_image.dart';
 import 'package:intheloopapp/utils/opportunity_image.dart';
 import 'package:intl/intl.dart';
 import 'package:maps_launcher/maps_launcher.dart';
+import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:skeleton_text/skeleton_text.dart';
 
@@ -231,16 +233,19 @@ class OpportunityView extends StatelessWidget {
                             children: [
                               Expanded(
                                 child: CupertinoButton(
-                                  onPressed: () => context.push(
-                                    InterestedUsersPage(
-                                      opportunity: op,
-                                    ),
-                                  ),
+                                  onPressed: () {
+                                    showCupertinoModalBottomSheet(
+                                      context: context,
+                                      builder: (context) => InterestedUsersView(
+                                        opportunity: op,
+                                      ),
+                                    );
+                                  },
                                   color: theme.colorScheme.primary,
                                   padding: const EdgeInsets.all(12),
                                   // borderRadius: BorderRadius.circular(15),
                                   child: const Text(
-                                    'See Applicants',
+                                    'see applicants',
                                     style: TextStyle(
                                       fontSize: 17,
                                       color: Colors.white,
@@ -261,7 +266,7 @@ class OpportunityView extends StatelessWidget {
                     ),
                     builder: (context, snapshot) {
                       final placeData = snapshot.data;
-                      return switch(placeData) {
+                      return switch (placeData) {
                         null => const CupertinoActivityIndicator(),
                         None() => const SizedBox.shrink(),
                         Some(:final value) => GestureDetector(
@@ -272,7 +277,8 @@ class OpportunityView extends StatelessWidget {
                               children: [
                                 Icon(
                                   CupertinoIcons.location_circle_fill,
-                                  color: theme.colorScheme.onSurface.withOpacity(0.5),
+                                  color: theme.colorScheme.onSurface
+                                      .withOpacity(0.5),
                                 ),
                                 const SizedBox(width: 8),
                                 Text(

@@ -159,7 +159,9 @@ class _TappedSearchBarState extends State<TappedSearchBar> {
           '',
           occupations: ['Venue', 'venue'],
         );
-        final combined = [...suggestedUsers, ...venuesNearby]..shuffle();
+        final combined = [...suggestedUsers, ...venuesNearby]..sort(
+            (a, b) => a.displayName.compareTo(b.displayName),
+        );
         return combined.map(
           (user) => UserTile(
             userId: user.id,

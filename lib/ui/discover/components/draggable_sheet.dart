@@ -5,6 +5,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fpdart/fpdart.dart';
 import 'package:intheloopapp/domains/models/performer_info.dart';
 import 'package:intheloopapp/domains/models/user_model.dart';
+import 'package:intheloopapp/domains/navigation_bloc/navigation_bloc.dart';
+import 'package:intheloopapp/domains/navigation_bloc/tapped_route.dart';
 import 'package:intheloopapp/ui/discover/components/user_slider.dart';
 import 'package:intheloopapp/ui/discover/discover_cubit.dart';
 import 'package:intheloopapp/ui/profile/components/feedback_button.dart';
@@ -164,6 +166,27 @@ class DraggableSheet extends StatelessWidget {
                                   ),
                                 ],
                               ),
+                            ),
+                            Row(
+                              children: [
+                                Expanded(
+                                  child: CupertinoButton(
+                                    onPressed: () => context.push(
+                                      GigSearchInitPage(),
+                                    ),
+                                    borderRadius: BorderRadius.circular(15),
+                                    color: theme.colorScheme.primary
+                                        .withOpacity(0.1),
+                                    child: Text(
+                                      'get connected...',
+                                      style: TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                        color: theme.colorScheme.primary,
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ],
                             ),
                             ...sortedVenueHits
                                 .map((venue) => _venueTile(currentUser, venue)),

@@ -5,11 +5,13 @@ import 'package:intheloopapp/domains/models/performer_info.dart';
 import 'package:intheloopapp/domains/models/user_model.dart';
 import 'package:intheloopapp/domains/navigation_bloc/navigation_bloc.dart';
 import 'package:intheloopapp/domains/navigation_bloc/tapped_route.dart';
+import 'package:intheloopapp/ui/profile/profile_view.dart';
 import 'package:intheloopapp/ui/user_avatar.dart';
 import 'package:intheloopapp/utils/bloc_utils.dart';
 import 'package:intheloopapp/utils/current_user_builder.dart';
 import 'package:intheloopapp/utils/default_image.dart';
 import 'package:intheloopapp/utils/hero_image.dart';
+import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:uuid/uuid.dart';
 
 class UserCard extends StatelessWidget {
@@ -60,17 +62,34 @@ class UserCard extends StatelessWidget {
                 fit: StackFit.expand,
                 children: [
                   GestureDetector(
-                    onTap: () => context.push(
-                      ProfilePage(
-                        userId: user.id,
-                        user: Option.of(user),
-                        heroImage: HeroImage(
-                          imageProvider: provider,
-                          heroTag: heroImageTag,
-                        ),
-                        titleHeroTag: heroTitleTag,
-                      ),
-                    ),
+                    onTap: () {
+                      showCupertinoModalBottomSheet(
+                        context: context,
+                        builder: (context) {
+                          return ProfileView(
+                            visitedUserId: user.id,
+                            visitedUser: Option.of(user),
+                            heroImage: HeroImage(
+                              imageProvider: provider,
+                              heroTag: heroImageTag,
+                            ),
+                            titleHeroTag: heroTitleTag,
+                          );
+                        },
+                      );
+
+                      // context.push(
+                      //   ProfilePage(
+                      //     userId: user.id,
+                      //     user: Option.of(user),
+                      //     heroImage: HeroImage(
+                      //       imageProvider: provider,
+                      //       heroTag: heroImageTag,
+                      //     ),
+                      //     titleHeroTag: heroTitleTag,
+                      //   ),
+                      // );
+                    },
                     child: Stack(
                       fit: StackFit.expand,
                       children: [

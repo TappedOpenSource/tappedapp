@@ -129,7 +129,6 @@ class _UserTileState extends State<UserTile> {
               trailing: widget.trailing,
               onTap: widget.onTap ??
                   () {
-                    nav.popUntilHome();
                     showCupertinoModalBottomSheet<void>(
                       context: context,
                       builder: (context) {

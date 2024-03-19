@@ -8,6 +8,7 @@ import 'package:intheloopapp/domains/navigation_bloc/navigation_bloc.dart';
 import 'package:intheloopapp/domains/navigation_bloc/tapped_route.dart';
 import 'package:intheloopapp/domains/onboarding_bloc/onboarding_bloc.dart';
 import 'package:intheloopapp/ui/conditional_parent_widget.dart';
+import 'package:intheloopapp/ui/opportunity_feed/components/opportunity_view.dart';
 import 'package:intheloopapp/utils/admin_builder.dart';
 import 'package:intheloopapp/utils/bloc_utils.dart';
 import 'package:intheloopapp/utils/current_user_builder.dart';
@@ -15,6 +16,7 @@ import 'package:intheloopapp/utils/geohash.dart';
 import 'package:intheloopapp/utils/hero_image.dart';
 import 'package:intheloopapp/utils/opportunity_image.dart';
 import 'package:intl/intl.dart';
+import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:skeletons/skeletons.dart';
 import 'package:uuid/uuid.dart';
 
@@ -172,8 +174,9 @@ class _OpportunityCardState extends State<OpportunityCard> {
                       width: cardWidth,
                       height: 300,
                       child: InkWell(
-                        onTap: () => context.push(
-                          OpportunityPage(
+                        onTap: () => showCupertinoModalBottomSheet(
+                          context: context,
+                          builder: (context) => OpportunityView(
                             opportunityId: widget.opportunity.id,
                             opportunity: Option.of(widget.opportunity),
                             heroImage: HeroImage(
