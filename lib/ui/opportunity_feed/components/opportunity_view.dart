@@ -114,9 +114,16 @@ class OpportunityView extends StatelessWidget {
                 },
               )
             else
-              Hero(
-                tag: hero.heroTag,
-                child: opImage(hero.imageProvider),
+              GestureDetector(
+                onTap: () => context.push(
+                  ImagePage(
+                    heroImage: hero,
+                  ),
+                ),
+                child: Hero(
+                  tag: hero.heroTag,
+                  child: opImage(hero.imageProvider),
+                ),
               ),
             Padding(
               padding: const EdgeInsets.symmetric(
@@ -359,15 +366,7 @@ class OpportunityView extends StatelessWidget {
               ),
               label: const Text('Not Interested'),
             ),
-          true => FloatingActionButton.extended(
-              onPressed: () {
-                onDismiss?.call();
-              },
-              label: const Text('Already Applied (click to dismiss)'),
-              icon: const Icon(
-                CupertinoIcons.xmark,
-              ),
-            ),
+          true => const SizedBox.shrink(),
         };
       },
     );
