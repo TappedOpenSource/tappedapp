@@ -5,6 +5,7 @@ import 'package:intheloopapp/data/database_repository.dart';
 import 'package:intheloopapp/domains/navigation_bloc/tapped_route.dart';
 
 part 'navigation_event.dart';
+
 part 'navigation_state.dart';
 
 class NavigationBloc extends Bloc<NavigationEvent, NavigationState> {
@@ -25,9 +26,6 @@ class NavigationBloc extends Bloc<NavigationEvent, NavigationState> {
       );
       emit(state);
     });
-    on<ChangeTab>((event, emit) {
-      emit(state.copyWith(selectedTab: event.selectedTab));
-    });
     on<Pop>((event, emit) {
       navigationKey.currentState?.pop();
 
@@ -44,14 +42,6 @@ extension RoutingHelpers on NavigationBloc {
     add(Push(route));
   }
 
-  void changeTab({required int selectedTab}) {
-    add(
-      ChangeTab(
-        selectedTab: selectedTab,
-      ),
-    );
-  }
-
   void pop() {
     add(const Pop());
   }
@@ -64,14 +54,6 @@ extension RoutingHelpers on NavigationBloc {
 extension Routing on BuildContext {
   void push(TappedRoute route) {
     read<NavigationBloc>().add(Push(route));
-  }
-
-  void changeTab({required int selectedTab}) {
-    read<NavigationBloc>().add(
-      ChangeTab(
-        selectedTab: selectedTab,
-      ),
-    );
   }
 
   void pop() {

@@ -6,10 +6,12 @@ import 'package:intheloopapp/domains/models/user_model.dart';
 import 'package:intheloopapp/domains/navigation_bloc/navigation_bloc.dart';
 import 'package:intheloopapp/domains/navigation_bloc/tapped_route.dart';
 import 'package:intheloopapp/ui/common/rating_chip.dart';
+import 'package:intheloopapp/ui/profile/profile_view.dart';
 import 'package:intheloopapp/ui/user_avatar.dart';
 import 'package:intheloopapp/utils/bloc_utils.dart';
 import 'package:intheloopapp/utils/current_user_builder.dart';
 import 'package:intl/intl.dart';
+import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:skeletons/skeletons.dart';
 
 class UserTile extends StatefulWidget {
@@ -72,7 +74,7 @@ class _UserTileState extends State<UserTile> {
     if (user.deleted) return const SizedBox.shrink();
 
     final database = context.database;
-
+    final nav = context.nav;
     return CurrentUserBuilder(
       errorWidget: const ListTile(
         leading: UserAvatar(
@@ -126,14 +128,18 @@ class _UserTileState extends State<UserTile> {
               subtitle: _buildSubtitle(user),
               trailing: widget.trailing,
               onTap: widget.onTap ??
-                  () => context.push(
-                        ProfilePage(
-                          userId: user.id,
-                          user: Option.of(
-                            user,
-                          ),
-                        ),
-                      ),
+                  () {
+                    nav.popUntilHome();
+                    showCupertinoModalBottomSheet<void>(
+                      context: context,
+                      builder: (context) {
+                        return ProfileView(
+                          visitedUserId: user.id,
+                          visitedUser: Option.of(user),
+                        );
+                      },
+                    );
+                  },
             );
           },
         );

@@ -12,8 +12,34 @@ import 'package:intheloopapp/utils/premium_builder.dart';
 import 'package:stream_chat_flutter/stream_chat_flutter.dart'
     hide ChannelName, ChannelPreview;
 
-class ChannelListView extends StatelessWidget {
-  const ChannelListView({super.key});
+class ChannelListView extends StatefulWidget {
+  const ChannelListView({
+    required this.client,
+    super.key,
+  });
+
+  final StreamChatClient client;
+
+  @override
+  State<ChannelListView> createState() => _ChannelListViewState();
+}
+
+class _ChannelListViewState extends State<ChannelListView> {
+  late final _controller = StreamChannelListController(
+    client: widget.client,
+    filter: Filter.in_(
+      'members',
+      [StreamChat.of(context).currentUser!.id],
+    ),
+    channelStateSort: const [SortOption('last_message_at')],
+    limit: 20,
+  );
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
 
   Widget _buildEmptyFeed(BuildContext context) {
     return PremiumBuilder(
@@ -22,8 +48,8 @@ class ChannelListView extends StatelessWidget {
           child: Center(
             child: Padding(
               padding: const EdgeInsets.symmetric(
-                  horizontal: 20,
-                  vertical: 12,
+                horizontal: 20,
+                vertical: 12,
               ),
               child: Container(
                 height: double.infinity,
@@ -109,51 +135,25 @@ class ChannelListView extends StatelessWidget {
               return const LoadingView();
             }
 
-            return StreamChannelListView(
-              controller: StreamChannelListController(
-                client: StreamChat.of(context).client,
-                filter: Filter.in_(
-                  'members',
-                  [currentUser.id],
-                ),
-                channelStateSort: const [SortOption('last_message_at')],
-                limit: 20,
-              ),
-              emptyBuilder: (context) {
-                return Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    const Text(
-                      'reach out to more venues and get the conversation started',
-                      style: TextStyle(
-                        fontSize: 20,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                    CupertinoButton(
-                      onPressed: () => context.push(
-                        PaywallPage(),
-                      ),
-                      child: const Text(
-                        'Upgrade',
-                      ),
-                    ),
-                  ],
-                );
-              },
-              itemBuilder: (
-                BuildContext context,
-                List<Channel> channels,
-                int index,
-                StreamChannelListTile defaultChannelTile,
-              ) {
-                final channel = channels[index];
+            return RefreshIndicator(
+              onRefresh: _controller.refresh,
+              child: StreamChannelListView(
+                controller: _controller,
+                emptyBuilder: _buildEmptyFeed,
+                itemBuilder: (
+                  BuildContext context,
+                  List<Channel> channels,
+                  int index,
+                  StreamChannelListTile defaultChannelTile,
+                ) {
+                  final channel = channels[index];
 
-                return ChannelPreview(channel: channel);
-              },
-              onChannelTap: (channel) {
-                context.push(StreamChannelPage(channel: channel));
-              },
+                  return ChannelPreview(channel: channel);
+                },
+                onChannelTap: (channel) {
+                  context.push(StreamChannelPage(channel: channel));
+                },
+              ),
             );
           },
         );

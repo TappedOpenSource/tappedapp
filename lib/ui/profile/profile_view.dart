@@ -1,4 +1,5 @@
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -220,6 +221,7 @@ class ProfileView extends StatelessWidget {
           backgroundColor: Theme.of(context).colorScheme.background,
           expandedHeight: expandedBarHeight,
           collapsedHeight: collapsedBarHeight,
+          automaticallyImplyLeading: false,
           pinned: true,
           stretch: true,
           onStretchTrigger: () async {
@@ -234,7 +236,15 @@ class ProfileView extends StatelessWidget {
               cubit.loadIsVerified(visitedUser.id),
             ]);
           },
-          // automaticallyImplyLeading: false,
+          actions: [
+            IconButton(
+              onPressed: () => context.pop(),
+              icon: Icon(
+                CupertinoIcons.xmark_circle_fill,
+                color: Colors.white.withOpacity(0.8),
+              ),
+            ),
+          ],
           flexibleSpace: FlexibleSpaceBar(
             stretchModes: const [
               StretchMode.zoomBackground,
@@ -245,95 +255,90 @@ class ProfileView extends StatelessWidget {
               vertical: 6,
             ),
             centerTitle: false,
-            title: Column(
-              mainAxisAlignment: MainAxisAlignment.end,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                PremiumBuilder(
-                  builder: (context, isPremium) {
-                    final theme = Theme.of(context);
-                    return Text.rich(
-                      TextSpan(
-                        text: visitedUser.displayName,
-                        style: GoogleFonts.manrope(
-                          color: Colors.white,
-                          fontSize: 32,
-                          fontWeight: FontWeight.w900,
-                        ),
-                        children: [
-                          if (state.isVerified)
-                            WidgetSpan(
-                              child: GestureDetector(
-                                onTap: () => showModalBottomSheet(
-                                  context: context,
-                                  showDragHandle: true,
-                                  builder: (context) {
-                                    return SizedBox(
-                                      width: double.infinity,
-                                      height: 300,
-                                      child: Padding(
-                                        padding: EdgeInsets.symmetric(
-                                          horizontal: 20,
+            title: PremiumBuilder(
+              builder: (context, isPremium) {
+                final theme = Theme.of(context);
+                return Text.rich(
+                  TextSpan(
+                    text: visitedUser.displayName,
+                    style: GoogleFonts.manrope(
+                      color: Colors.white,
+                      fontSize: 32,
+                      fontWeight: FontWeight.w900,
+                    ),
+                    children: [
+                      if (state.isVerified)
+                        WidgetSpan(
+                          child: GestureDetector(
+                            onTap: () => showModalBottomSheet(
+                              context: context,
+                              showDragHandle: true,
+                              builder: (context) {
+                                return SizedBox(
+                                  width: double.infinity,
+                                  height: 300,
+                                  child: Padding(
+                                    padding: EdgeInsets.symmetric(
+                                      horizontal: 20,
+                                    ),
+                                    child: Column(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      children: [
+                                        Icon(
+                                          Icons.verified,
+                                          color: theme.colorScheme.primary,
+                                          size: 96,
                                         ),
-                                        child: Column(
-                                          mainAxisAlignment: MainAxisAlignment.center,
+                                        const SizedBox(height: 12),
+                                        Text(
+                                          '${state.visitedUser.displayName} has been verified',
+                                          style: const TextStyle(
+                                            fontSize: 18,
+                                            fontWeight: FontWeight.w600,
+                                          ),
+                                        ),
+                                        const SizedBox(height: 18),
+                                        Row(
                                           children: [
-                                            Icon(
-                                              Icons.verified,
-                                              color:
-                                              theme.colorScheme.primary,
-                                              size: 96,
+                                            const Icon(
+                                              Icons.lightbulb,
+                                              color: Colors.amber,
                                             ),
-                                            const SizedBox(height: 12),
-                                            Text(
-                                              '${state.visitedUser.displayName} has been verified',
-                                              style: const TextStyle(
-                                                fontSize: 18,
-                                                fontWeight: FontWeight.w600,
+                                            const SizedBox(width: 8),
+                                            Expanded(
+                                              child: Text(
+                                                'to get verified, post a screenshot of your profile to your instagram story and tag us @tappedai',
+                                                maxLines: 2,
+                                                style: TextStyle(
+                                                  color: theme
+                                                      .colorScheme.onSurface
+                                                      .withOpacity(0.5),
+                                                ),
                                               ),
-                                            ),
-                                            const SizedBox(height: 18),
-                                            Row(
-                                              children: [
-                                                const Icon(
-                                                  Icons.lightbulb,
-                                                  color: Colors.amber,
-                                                ),
-                                                const SizedBox(width: 8),
-                                                Expanded(
-                                                  child: Text(
-                                                    'to get verified, post a screenshot of your profile to your instagram story and tag us @tappedai',
-                                                    maxLines: 2,
-                                                    style: TextStyle(
-                                                      color: theme.colorScheme.onSurface.withOpacity(0.5),
-                                                    ),
-                                                  ),
-                                                ),
-                                              ],
                                             ),
                                           ],
                                         ),
-                                      ),
-                                    );
-                                  },
-                                ),
-                                child: const Icon(
-                                  Icons.verified,
-                                  size: 18,
-                                  color: tappedAccent,
-                                ),
-                              ),
-                              alignment: PlaceholderAlignment.middle,
+                                      ],
+                                    ),
+                                  ),
+                                );
+                              },
                             ),
-                        ],
-                      ),
-                      overflow: TextOverflow.fade,
-                      maxLines: 2,
-                    );
-                  },
-                ),
-                _subheader(visitedUser),
-              ],
+                            child: const Icon(
+                              Icons.verified,
+                              size: 18,
+                              color: tappedAccent,
+                            ),
+                          ),
+                          alignment: PlaceholderAlignment.middle,
+                        ),
+                    ],
+                  ),
+                  overflow: TextOverflow.fade,
+                  maxLines: 2,
+                );
+              },
             ),
             background: _profileImage(
               context,

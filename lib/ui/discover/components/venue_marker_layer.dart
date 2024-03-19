@@ -8,9 +8,11 @@ import 'package:fpdart/fpdart.dart';
 import 'package:intheloopapp/domains/navigation_bloc/navigation_bloc.dart';
 import 'package:intheloopapp/domains/navigation_bloc/tapped_route.dart';
 import 'package:intheloopapp/ui/discover/discover_cubit.dart';
+import 'package:intheloopapp/ui/profile/profile_view.dart';
 import 'package:intheloopapp/ui/user_avatar.dart';
 import 'package:intl/intl.dart';
 import 'package:latlong2/latlong.dart';
+import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 
 class VenueMarkerLayer extends StatelessWidget {
   const VenueMarkerLayer({
@@ -42,12 +44,17 @@ class VenueMarkerLayer extends StatelessWidget {
                       child: Row(
                         children: [
                           GestureDetector(
-                            onTap: () => context.push(
-                              ProfilePage(
-                                userId: venue.id,
-                                user: Option.of(venue),
-                              ),
-                            ),
+                            onTap: () {
+                              showCupertinoModalBottomSheet<void>(
+                                context: context,
+                                builder: (context) {
+                                  return ProfileView(
+                                    visitedUserId: venue.id,
+                                    visitedUser: Option.of(venue),
+                                  );
+                                },
+                              );
+                            },
                             child: Card(
                               child: Padding(
                                 padding: const EdgeInsets.symmetric(
@@ -66,17 +73,17 @@ class VenueMarkerLayer extends StatelessWidget {
                                         .flatMap((t) => t.capacity)) {
                                       None() => const SizedBox.shrink(),
                                       Some(:final value) => Padding(
-                                        padding: const EdgeInsets.only(
-                                          left: 5,
-                                        ),
-                                        child: Text(
+                                          padding: const EdgeInsets.only(
+                                            left: 5,
+                                          ),
+                                          child: Text(
                                             formatter.format(value),
                                             style: const TextStyle(
                                               fontSize: 12,
                                               fontWeight: FontWeight.bold,
                                             ),
                                           ),
-                                      ),
+                                        ),
                                     },
                                   ],
                                 ),
