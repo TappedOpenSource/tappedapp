@@ -4,9 +4,11 @@ import 'package:intheloopapp/domains/models/booking.dart';
 import 'package:intheloopapp/domains/models/user_model.dart';
 import 'package:intheloopapp/domains/navigation_bloc/navigation_bloc.dart';
 import 'package:intheloopapp/domains/navigation_bloc/tapped_route.dart';
+import 'package:intheloopapp/ui/bookings/user_bookings_feed.dart';
 import 'package:intheloopapp/ui/profile/components/booking_card.dart';
 import 'package:intheloopapp/ui/profile/profile_cubit.dart';
 import 'package:intheloopapp/ui/themes.dart';
+import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 
 class BookingsSliver extends StatelessWidget {
   const BookingsSliver({super.key});
@@ -120,8 +122,13 @@ class BookingsSliver extends StatelessWidget {
                       ),
                       child: GestureDetector(
                         onTap: () {
-                          context.push(
-                            BookingsPage(userId: state.visitedUser.id),
+                          showCupertinoModalBottomSheet<void>(
+                            context: context,
+                            builder: (context) {
+                              return UserBookingsFeed(
+                                userId: state.visitedUser.id,
+                              );
+                            },
                           );
                         },
                         child: const Row(

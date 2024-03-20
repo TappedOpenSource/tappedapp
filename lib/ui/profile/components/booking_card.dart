@@ -5,9 +5,11 @@ import 'package:intheloopapp/domains/models/booking.dart';
 import 'package:intheloopapp/domains/models/user_model.dart';
 import 'package:intheloopapp/domains/navigation_bloc/navigation_bloc.dart';
 import 'package:intheloopapp/domains/navigation_bloc/tapped_route.dart';
+import 'package:intheloopapp/ui/booking/booking_view.dart';
 import 'package:intheloopapp/utils/bloc_utils.dart';
 import 'package:intheloopapp/utils/hero_image.dart';
 import 'package:intl/intl.dart';
+import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:uuid/uuid.dart';
 
 class BookingCard extends StatelessWidget {
@@ -47,8 +49,9 @@ class BookingCard extends StatelessWidget {
         );
         return InkWell(
           onTap: () {
-            context.push(
-              BookingPage(
+            showCupertinoModalBottomSheet<void>(
+              context: context,
+              builder: (context) => BookingView(
                 booking: booking,
                 flierImage: Option.of(
                   HeroImage(

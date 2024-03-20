@@ -5,7 +5,9 @@ import 'package:intheloopapp/domains/navigation_bloc/navigation_bloc.dart';
 import 'package:intheloopapp/domains/navigation_bloc/tapped_route.dart';
 import 'package:intheloopapp/ui/profile/components/review_tile.dart';
 import 'package:intheloopapp/ui/profile/profile_cubit.dart';
+import 'package:intheloopapp/ui/reviews/user_reviews_feed.dart';
 import 'package:intheloopapp/ui/themes.dart';
+import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 
 class ReviewsSliver extends StatelessWidget {
   const ReviewsSliver({super.key});
@@ -31,8 +33,9 @@ class ReviewsSliver extends StatelessWidget {
                       ),
                       child: GestureDetector(
                         onTap: () {
-                          context.push(
-                            ReviewsPage(
+                          showCupertinoModalBottomSheet<void>(
+                            context: context,
+                            builder: (context) => UserReviewsFeed(
                               userId: state.visitedUser.id,
                             ),
                           );

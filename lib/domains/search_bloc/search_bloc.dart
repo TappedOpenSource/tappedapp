@@ -72,8 +72,8 @@ class SearchBloc extends Bloc<SearchEvent, SearchState> {
         state.occupations.isNotEmpty ||
         state.genres.isNotEmpty ||
         state.labels.isNotEmpty ||
-        state.place != null ||
-        state.placeId != null) {
+        state.place.isSome() ||
+        state.placeId.isSome()) {
       emit(state.copyWith(loading: true, searchTerm: input));
       const duration = Duration(milliseconds: 500);
       final completer = Completer<void>();
