@@ -4,10 +4,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
+import 'package:flutter_map/flutter_map.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:fpdart/fpdart.dart';
 import 'package:intheloopapp/data/auth_repository.dart';
 import 'package:intheloopapp/domains/models/performer_info.dart';
+import 'package:intheloopapp/domains/models/social_following.dart';
 import 'package:intheloopapp/domains/models/venue_info.dart';
 import 'package:intheloopapp/domains/navigation_bloc/navigation_bloc.dart';
 import 'package:intheloopapp/domains/navigation_bloc/tapped_route.dart';
@@ -32,6 +34,7 @@ class InfoSliver extends StatelessWidget {
     final theme = Theme.of(context);
     return BlocBuilder<ProfileCubit, ProfileState>(
       builder: (context, state) {
+        final audience = state.visitedUser.socialFollowing.audienceSize;
         final performerInfo = state.visitedUser.performerInfo;
         final venueInfo = state.visitedUser.venueInfo;
         final bookerInfo = state.visitedUser.bookerInfo;
@@ -45,8 +48,12 @@ class InfoSliver extends StatelessWidget {
             );
         final averagePerformerTicketPrice =
             performerInfo.map((t) => t.formattedPriceRange);
-        final averageAttendance =
-            performerInfo.flatMap((t) => t.averageAttendance);
+        final averageAttendance = performerInfo.flatMap(
+          (t) => t.averageAttendance.fold(
+            () => Option.of((audience / 250).round()),
+            Option.of,
+          ),
+        );
         final label = performerInfo.map((t) => t.label).getOrElse(() => 'None');
         final pressKitUrl = performerInfo
             .map((t) => t.pressKitUrl)
@@ -82,7 +89,6 @@ class InfoSliver extends StatelessWidget {
                             ),
                           ),
                           children: [
-
                             CupertinoListTile(
                               leading: const Icon(
                                 CupertinoIcons.at,
@@ -260,22 +266,21 @@ class InfoSliver extends StatelessWidget {
                                   ),
                                 ),
                               ),
-
                             switch (rating) {
                               None() => const SizedBox.shrink(),
                               Some(:final value) => CupertinoListTile(
-                                leading: const Icon(
-                                  CupertinoIcons.star_circle,
-                                ),
-                                title: RatingBarIndicator(
-                                  rating: value,
-                                  itemBuilder: (context, index) => const Icon(
-                                    Icons.star,
-                                    color: Colors.amber,
+                                  leading: const Icon(
+                                    CupertinoIcons.star_circle,
                                   ),
-                                  itemSize: 20,
+                                  title: RatingBarIndicator(
+                                    rating: value,
+                                    itemBuilder: (context, index) => const Icon(
+                                      Icons.star,
+                                      color: Colors.amber,
+                                    ),
+                                    itemSize: 20,
+                                  ),
                                 ),
-                              ),
                             },
                             switch (pressKitUrl) {
                               None() => const SizedBox.shrink(),

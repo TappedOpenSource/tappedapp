@@ -52,15 +52,19 @@ class _TappedSearchBarState extends State<TappedSearchBar> {
     required DatabaseRepository database,
     required SearchRepository searchRepo,
   }) async {
-    final suggestedUsers = await database.getBookingLeaders();
+    final [suggestedUsers, venuesNearby] = await Future.wait([
+      database.getBookingLeaders(),
+      searchRepo.queryUsers(
+        '',
+        occupations: ['Venue', 'venue'],
+      ),
+    ]);
+
     final featuredOps = await database.getFeaturedOpportunities();
     final sortedOps = featuredOps..sort(
       (a, b) => a.startTime.compareTo(b.startTime),
     );
-    final venuesNearby = await searchRepo.queryUsers(
-      '',
-      occupations: ['Venue', 'venue'],
-    );
+
     final combined = [...suggestedUsers, ...venuesNearby]..sort(
         (a, b) => a.displayName.compareTo(b.displayName),
       );
