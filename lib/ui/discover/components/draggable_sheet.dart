@@ -167,26 +167,31 @@ class DraggableSheet extends StatelessWidget {
                                 ],
                               ),
                             ),
-                            Row(
-                              children: [
-                                Expanded(
-                                  child: CupertinoButton(
-                                    onPressed: () => context.push(
-                                      GigSearchInitPage(),
-                                    ),
-                                    borderRadius: BorderRadius.circular(15),
-                                    color: theme.colorScheme.primary
-                                        .withOpacity(0.1),
-                                    child: Text(
-                                      'get connected...',
-                                      style: TextStyle(
-                                        fontWeight: FontWeight.bold,
-                                        color: theme.colorScheme.primary,
+                            Padding(
+                              padding: const EdgeInsets.symmetric(
+                                horizontal: 20,
+                              ),
+                              child: Row(
+                                children: [
+                                  Expanded(
+                                    child: CupertinoButton(
+                                      onPressed: () => context.push(
+                                        GigSearchInitPage(),
+                                      ),
+                                      borderRadius: BorderRadius.circular(15),
+                                      color: theme.colorScheme.primary
+                                          .withOpacity(0.1),
+                                      child: Text(
+                                        'get booked',
+                                        style: TextStyle(
+                                          fontWeight: FontWeight.bold,
+                                          color: theme.colorScheme.primary,
+                                        ),
                                       ),
                                     ),
                                   ),
-                                ),
-                              ],
+                                ],
+                              ),
                             ),
                             ...sortedVenueHits
                                 .map((venue) => _venueTile(currentUser, venue)),
