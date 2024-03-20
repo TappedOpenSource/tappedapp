@@ -28,6 +28,7 @@ class SignUpView extends StatelessWidget {
         ),
         child: BlocBuilder<LoginCubit, LoginState>(
           builder: (context, state) {
+            final scaffoldMessenger = ScaffoldMessenger.of(context);
             return Align(
               alignment: const Alignment(0, -1 / 3),
               child: SingleChildScrollView(
@@ -102,7 +103,7 @@ class SignUpView extends StatelessWidget {
                               .read<LoginCubit>()
                               .signInWithGoogle()
                               .onError((error, stackTrace) {
-                            ScaffoldMessenger.of(context).showSnackBar(
+                            scaffoldMessenger.showSnackBar(
                               SnackBar(
                                 behavior: SnackBarBehavior.floating,
                                 backgroundColor: Colors.red,
@@ -121,7 +122,7 @@ class SignUpView extends StatelessWidget {
                                 .read<LoginCubit>()
                                 .signInWithApple()
                                 .onError((error, stackTrace) {
-                              ScaffoldMessenger.of(context).showSnackBar(
+                              scaffoldMessenger.showSnackBar(
                                 SnackBar(
                                   behavior: SnackBarBehavior.floating,
                                   backgroundColor: Colors.red,
