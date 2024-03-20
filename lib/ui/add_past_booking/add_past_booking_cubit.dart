@@ -153,7 +153,7 @@ class AddPastBookingCubit extends Cubit<AddPastBookingState> {
       startTime: eventStart,
       endTime: eventEnd,
       flierUrl: flierUrl,
-      genres: genres,
+      genres: genres.map((e) => e.toString()).toList(),
       location: location,
     );
 

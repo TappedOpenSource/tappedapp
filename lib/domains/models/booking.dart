@@ -30,7 +30,7 @@ class Booking with _$Booking {
     @Default(false) bool addedByUser,
     @Default(None()) Option<String> flierUrl,
     @Default(None()) Option<String> eventUrl,
-    @Default([]) List<Genre> genres,
+    @Default([]) List<String> genres,
     @Default(None()) Option<Location> location,
   }) = _Booking;
 

@@ -37,7 +37,7 @@ mixin _$Booking {
   bool get addedByUser => throw _privateConstructorUsedError;
   Option<String> get flierUrl => throw _privateConstructorUsedError;
   Option<String> get eventUrl => throw _privateConstructorUsedError;
-  List<Genre> get genres => throw _privateConstructorUsedError;
+  List<String> get genres => throw _privateConstructorUsedError;
   Option<Location> get location => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
@@ -65,7 +65,7 @@ abstract class $BookingCopyWith<$Res> {
       bool addedByUser,
       Option<String> flierUrl,
       Option<String> eventUrl,
-      List<Genre> genres,
+      List<String> genres,
       Option<Location> location});
 }
 
@@ -159,7 +159,7 @@ class _$BookingCopyWithImpl<$Res, $Val extends Booking>
       genres: null == genres
           ? _value.genres
           : genres // ignore: cast_nullable_to_non_nullable
-              as List<Genre>,
+              as List<String>,
       location: null == location
           ? _value.location
           : location // ignore: cast_nullable_to_non_nullable
@@ -190,7 +190,7 @@ abstract class _$$BookingImplCopyWith<$Res> implements $BookingCopyWith<$Res> {
       bool addedByUser,
       Option<String> flierUrl,
       Option<String> eventUrl,
-      List<Genre> genres,
+      List<String> genres,
       Option<Location> location});
 }
 
@@ -282,7 +282,7 @@ class __$$BookingImplCopyWithImpl<$Res>
       genres: null == genres
           ? _value._genres
           : genres // ignore: cast_nullable_to_non_nullable
-              as List<Genre>,
+              as List<String>,
       location: null == location
           ? _value.location
           : location // ignore: cast_nullable_to_non_nullable
@@ -309,7 +309,7 @@ class _$BookingImpl implements _Booking {
       this.addedByUser = false,
       this.flierUrl = const None(),
       this.eventUrl = const None(),
-      final List<Genre> genres = const [],
+      final List<String> genres = const [],
       this.location = const None()})
       : _genres = genres;
 
@@ -355,10 +355,10 @@ class _$BookingImpl implements _Booking {
   @override
   @JsonKey()
   final Option<String> eventUrl;
-  final List<Genre> _genres;
+  final List<String> _genres;
   @override
   @JsonKey()
-  List<Genre> get genres {
+  List<String> get genres {
     if (_genres is EqualUnmodifiableListView) return _genres;
     // ignore: implicit_dynamic_type
     return EqualUnmodifiableListView(_genres);
@@ -456,7 +456,7 @@ abstract class _Booking implements Booking {
       final bool addedByUser,
       final Option<String> flierUrl,
       final Option<String> eventUrl,
-      final List<Genre> genres,
+      final List<String> genres,
       final Option<Location> location}) = _$BookingImpl;
 
   factory _Booking.fromJson(Map<String, dynamic> json) = _$BookingImpl.fromJson;
@@ -493,7 +493,7 @@ abstract class _Booking implements Booking {
   @override
   Option<String> get eventUrl;
   @override
-  List<Genre> get genres;
+  List<String> get genres;
   @override
   Option<Location> get location;
   @override
