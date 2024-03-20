@@ -135,7 +135,7 @@ const formatPressKit = (performer: UserModel): string => {
     return "";
   }
   return `
-    <p>my press kit: <a href="${pressKitUrl}">${pressKitUrl}</a></p>
+    <p><a href="${pressKitUrl}">my press kit</a></p>
   `;
 }
 
