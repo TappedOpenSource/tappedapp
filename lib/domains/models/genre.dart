@@ -9,8 +9,8 @@ enum Genre {
   hipHop,
   @JsonValue('electronic')
   electronic,
-  @JsonValue('rAndB')
-  rAndB,
+  @JsonValue('rnb')
+  rnb,
   @JsonValue('rock')
   rock,
   @JsonValue('metal')
@@ -394,7 +394,7 @@ extension GenreX on Genre {
       Genre.psychedelia => 'Psychedelia',
       Genre.psychobilly => 'Psychobilly',
       Genre.punk => 'Punk',
-      Genre.rAndB => 'R&B',
+      Genre.rnb => 'R&B',
       Genre.radioDrama => 'Radio Drama',
       Genre.ragtime => 'Ragtime',
       Genre.rapRock => 'Rap Rock',
