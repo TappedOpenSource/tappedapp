@@ -188,7 +188,6 @@ class _OpportunityCardState extends State<OpportunityCard> {
                               setState(() {
                                 _isApplied = true;
                               });
-                              context.pop();
                             },
                             onDislike: () {
                               setState(() {

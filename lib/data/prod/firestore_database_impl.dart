@@ -1306,6 +1306,7 @@ class FirestoreDatabaseImpl extends DatabaseRepository {
     required Opportunity opportunity,
   }) async {
     try {
+      logger.debug('applyForOpportunity, userId: $userId, opportunity: $opportunity');
       await _analytics.logEvent(
         name: 'apply_for_opportunity',
         parameters: {
@@ -1314,14 +1315,23 @@ class FirestoreDatabaseImpl extends DatabaseRepository {
         },
       );
 
-      await _opportunityFeedsRef
-          .doc(userId)
-          .collection('opportunities')
+      await _opportunitiesRef
           .doc(opportunity.id)
-          .update({
-        'touched': 'like',
+          .collection('interestedUsers')
+          .doc(userId)
+          .set({
+        'timestamp': Timestamp.now(),
         'userComment': userComment,
       });
+      //
+      // await _opportunityFeedsRef
+      //     .doc(userId)
+      //     .collection('opportunities')
+      //     .doc(opportunity.id)
+      //     .update({
+      //   'touched': 'like',
+      //   'userComment': userComment,
+      // });
     } catch (e, s) {
       logger.error('applyForOpporunities', error: e, stackTrace: s);
       rethrow;
