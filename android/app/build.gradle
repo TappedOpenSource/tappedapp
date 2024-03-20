@@ -52,7 +52,7 @@ android {
 
     defaultConfig {
         applicationId "com.intheloopstudio"
-        minSdkVersion 33
+        minSdkVersion 30
         targetSdkVersion 34
         versionCode flutterVersionCode.toInteger()
         versionName flutterVersionName
