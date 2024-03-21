@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:fpdart/fpdart.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:intheloopapp/data/prod/firestore_database_impl.dart';
-import 'package:intheloopapp/domains/models/genre.dart';
 import 'package:intheloopapp/domains/models/location.dart';
 import 'package:intheloopapp/domains/models/user_model.dart';
 import 'package:intheloopapp/utils/default_image.dart';

@@ -3,8 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:fpdart/fpdart.dart';
 import 'package:intheloopapp/domains/models/performer_info.dart';
 import 'package:intheloopapp/domains/models/user_model.dart';
-import 'package:intheloopapp/domains/navigation_bloc/navigation_bloc.dart';
-import 'package:intheloopapp/domains/navigation_bloc/tapped_route.dart';
 import 'package:intheloopapp/ui/profile/profile_view.dart';
 import 'package:intheloopapp/ui/user_avatar.dart';
 import 'package:intheloopapp/utils/bloc_utils.dart';

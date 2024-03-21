@@ -19,6 +19,7 @@ import 'package:intheloopapp/ui/loading/loading_view.dart';
 import 'package:intheloopapp/ui/profile/components/bio_sliver.dart';
 import 'package:intheloopapp/ui/profile/components/booking_controls_sliver.dart';
 import 'package:intheloopapp/ui/profile/components/bookings_sliver.dart';
+import 'package:intheloopapp/ui/profile/components/claim_profile_button.dart';
 import 'package:intheloopapp/ui/profile/components/header_sliver.dart';
 import 'package:intheloopapp/ui/profile/components/info_sliver.dart';
 import 'package:intheloopapp/ui/profile/components/opportunities_sliver.dart';
@@ -31,8 +32,6 @@ import 'package:intheloopapp/utils/default_image.dart';
 import 'package:intheloopapp/utils/hero_image.dart';
 import 'package:intheloopapp/utils/premium_builder.dart';
 import 'package:intl/intl.dart';
-
-import 'package:intheloopapp/ui/profile/components/claim_profile_button.dart';
 
 class ProfileView extends StatelessWidget {
   ProfileView({
@@ -278,7 +277,7 @@ class ProfileView extends StatelessWidget {
                                   width: double.infinity,
                                   height: 300,
                                   child: Padding(
-                                    padding: EdgeInsets.symmetric(
+                                    padding: const EdgeInsets.symmetric(
                                       horizontal: 20,
                                     ),
                                     child: Column(

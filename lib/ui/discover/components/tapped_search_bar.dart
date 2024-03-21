@@ -10,7 +10,6 @@ import 'package:intheloopapp/domains/navigation_bloc/navigation_bloc.dart';
 import 'package:intheloopapp/domains/navigation_bloc/tapped_route.dart';
 import 'package:intheloopapp/domains/search_bloc/search_bloc.dart';
 import 'package:intheloopapp/ui/loading/logo_wave.dart';
-import 'package:intheloopapp/ui/profile/components/opportunities_list.dart';
 import 'package:intheloopapp/ui/profile/components/opportunity_card.dart';
 import 'package:intheloopapp/ui/user_tile.dart';
 import 'package:intheloopapp/utils/bloc_utils.dart';

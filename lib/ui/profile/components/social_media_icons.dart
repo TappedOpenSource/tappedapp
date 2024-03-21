@@ -209,8 +209,8 @@ class SocialMediaIcons extends StatelessWidget {
                   color: Colors.purpleAccent,
                   icon: SvgPicture.asset('assets/audius_logo.svg',
                       colorFilter:
-                          ColorFilter.mode(Colors.purple, BlendMode.srcIn),
-                      semanticsLabel: 'Audius Logo'),
+                          const ColorFilter.mode(Colors.purple, BlendMode.srcIn),
+                      semanticsLabel: 'Audius Logo',),
                   onTap: () {
                     launchUrl(
                       Uri(

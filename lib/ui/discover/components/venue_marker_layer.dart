@@ -5,8 +5,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:flutter_map_marker_cluster/flutter_map_marker_cluster.dart';
 import 'package:fpdart/fpdart.dart';
-import 'package:intheloopapp/domains/navigation_bloc/navigation_bloc.dart';
-import 'package:intheloopapp/domains/navigation_bloc/tapped_route.dart';
 import 'package:intheloopapp/ui/discover/discover_cubit.dart';
 import 'package:intheloopapp/ui/profile/profile_view.dart';
 import 'package:intheloopapp/ui/user_avatar.dart';

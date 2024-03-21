@@ -11,11 +11,9 @@ import 'package:intheloopapp/ui/create_service/components/edit_service_button.da
 import 'package:intheloopapp/ui/create_service/components/rate_type_selector.dart';
 import 'package:intheloopapp/ui/create_service/components/submit_service_button.dart';
 import 'package:intheloopapp/ui/create_service/components/title_text_field.dart';
-import 'package:intheloopapp/ui/create_service/create_service_button.dart';
 import 'package:intheloopapp/ui/create_service/create_service_cubit.dart';
 import 'package:intheloopapp/ui/forms/rate_text_field.dart';
 import 'package:intheloopapp/ui/themes.dart';
-import 'package:intheloopapp/utils/app_logger.dart';
 import 'package:intheloopapp/utils/bloc_utils.dart';
 import 'package:intheloopapp/utils/current_user_builder.dart';
 

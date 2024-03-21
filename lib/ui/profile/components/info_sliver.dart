@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
-import 'package:flutter_map/flutter_map.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:fpdart/fpdart.dart';
 import 'package:intheloopapp/data/auth_repository.dart';
@@ -312,7 +311,7 @@ class InfoSliver extends StatelessWidget {
                                     ),
                                   ),
                                   trailing: const Icon(
-                                      CupertinoIcons.chevron_forward),
+                                      CupertinoIcons.chevron_forward,),
                                   onTap: () {
                                     if (!isPremium) {
                                       context.push(PaywallPage());

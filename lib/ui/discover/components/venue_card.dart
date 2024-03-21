@@ -22,18 +22,18 @@ class VenueCard extends StatelessWidget {
 
   Widget _goodFitChip(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.all(8.0),
+      padding: const EdgeInsets.all(8),
       child: Container(
         width: 84,
         decoration: BoxDecoration(
-          color: Color(0xFF117714).withOpacity(0.75),
+          color: const Color(0xFF117714).withOpacity(0.75),
           borderRadius: BorderRadius.circular(5),
         ),
-        padding: EdgeInsets.symmetric(
+        padding: const EdgeInsets.symmetric(
           vertical: 4,
           horizontal: 8,
         ),
-        child: Row(
+        child: const Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Icon(

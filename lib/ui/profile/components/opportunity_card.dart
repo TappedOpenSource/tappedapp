@@ -5,7 +5,6 @@ import 'package:flutter/material.dart';
 import 'package:fpdart/fpdart.dart' hide State;
 import 'package:intheloopapp/domains/models/opportunity.dart';
 import 'package:intheloopapp/domains/navigation_bloc/navigation_bloc.dart';
-import 'package:intheloopapp/domains/navigation_bloc/tapped_route.dart';
 import 'package:intheloopapp/domains/onboarding_bloc/onboarding_bloc.dart';
 import 'package:intheloopapp/ui/conditional_parent_widget.dart';
 import 'package:intheloopapp/ui/opportunity_feed/components/opportunity_view.dart';

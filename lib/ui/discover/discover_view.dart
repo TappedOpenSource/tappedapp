@@ -1,3 +1,4 @@
+import 'package:badges/badges.dart' as badges;
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -18,9 +19,7 @@ import 'package:intheloopapp/utils/bloc_utils.dart';
 import 'package:intheloopapp/utils/current_user_builder.dart';
 import 'package:intheloopapp/utils/premium_builder.dart';
 import 'package:latlong2/latlong.dart';
-import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:stream_chat_flutter/stream_chat_flutter.dart';
-import 'package:badges/badges.dart' as badges;
 
 class DiscoverView extends StatelessWidget {
   const DiscoverView({
@@ -280,7 +279,7 @@ class DiscoverView extends StatelessWidget {
                                       stream: streamClient
                                           .on()
                                           .where((event) =>
-                                              event.totalUnreadCount != null)
+                                              event.totalUnreadCount != null,)
                                           .map(
                                             (event) => event.totalUnreadCount,
                                           ),

@@ -114,7 +114,7 @@ class GigSearchCubit extends Cubit<GigSearchState> {
     final potentialUsers = await Future.wait(hits.map((hit) async {
       final user = await database.getUserById(hit.id);
       return user;
-    }));
+    }),);
 
     final users = potentialUsers
         .whereType<Some<UserModel>>()

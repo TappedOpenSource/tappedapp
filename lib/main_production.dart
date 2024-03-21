@@ -5,7 +5,6 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_map_tile_caching/flutter_map_tile_caching.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:hydrated_bloc/hydrated_bloc.dart';
@@ -79,7 +78,7 @@ Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
   );
 
   final messageData = message.data;
-  logger.info('onMessageBackground ${messageData.toString()}');
+  logger.info('onMessageBackground $messageData');
 }
 
 Future<void> _firebaseOnMessageHandler(RemoteMessage message) async {
@@ -91,7 +90,7 @@ Future<void> _firebaseOnMessageHandler(RemoteMessage message) async {
   );
 
   final messageData = message.data;
-  logger.info('onMessage ${messageData.toString()}');
+  logger.info('onMessage $messageData');
 }
 
 Future<void> _firebaseOnMessageAppOpenHandler(RemoteMessage message) async {
@@ -103,7 +102,7 @@ Future<void> _firebaseOnMessageAppOpenHandler(RemoteMessage message) async {
   );
 
   final messageData = message.data;
-  logger.info('onMessageAppOpen ${messageData.toString()}');
+  logger.info('onMessageAppOpen $messageData');
 
   final url = messageData['url'] as String?;
 

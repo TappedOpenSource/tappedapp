@@ -23,7 +23,6 @@ import 'package:intl/intl.dart';
 import 'package:maps_launcher/maps_launcher.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:skeletons/skeletons.dart';
-import 'package:timeago/timeago.dart' as timeago;
 
 class BookingView extends StatelessWidget {
   const BookingView({
@@ -343,7 +342,7 @@ class BookingView extends StatelessWidget {
                             CupertinoIcons.time,
                           ),
                           title: Text(
-                            '${timeFormat.format(booking.startTime)}',
+                            timeFormat.format(booking.startTime),
                             style: TextStyle(
                               color: theme.colorScheme.onSurface,
                             ),

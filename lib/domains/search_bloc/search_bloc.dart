@@ -181,7 +181,7 @@ class SearchBloc extends Bloc<SearchEvent, SearchState> {
 
   //   final place = await places.getPlaceById(placeId);
 
-  //   // TODO(jonaylor89): In the future, this should be paginated
+  //   // `TODO`(jonaylor89): In the future, this should be paginated
   //   final searchRes = await database.searchUsersByLocation(
   //     lat: place?.latLng?.lat ?? 0,
   //     lng: place?.latLng?.lng ?? 0,

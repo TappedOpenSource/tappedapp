@@ -41,7 +41,7 @@ extension PerformerInfoX on PerformerInfo {
   Option<String> get formattedAverageTicketPrice {
     return averageTicketPrice.map(
       (price) {
-        final double doublePrice = price / 100;
+        final doublePrice = price / 100;
         final formatter = NumberFormat.compactSimpleCurrency();
         return formatter.format(doublePrice);
       },

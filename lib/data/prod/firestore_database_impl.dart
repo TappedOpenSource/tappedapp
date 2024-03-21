@@ -1307,7 +1307,7 @@ class FirestoreDatabaseImpl extends DatabaseRepository {
   }) async {
     try {
       logger.debug(
-          'applyForOpportunity, userId: $userId, opportunity: $opportunity');
+          'applyForOpportunity, userId: $userId, opportunity: $opportunity',);
       await _analytics.logEvent(
         name: 'apply_for_opportunity',
         parameters: {

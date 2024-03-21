@@ -272,7 +272,7 @@ class DraggableSheet extends StatelessWidget {
                                         child: CupertinoButton(
                                           onPressed: () {
                                             final uri = Uri.parse(
-                                                'https://tappedapp.notion.site/join-tapped-9ccf655358344b21979f73adadf22d98?pvs=4');
+                                                'https://tappedapp.notion.site/join-tapped-9ccf655358344b21979f73adadf22d98?pvs=4',);
                                             launchUrl(uri);
                                           },
                                           color: theme.colorScheme.onSurface

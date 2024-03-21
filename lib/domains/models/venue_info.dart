@@ -1,6 +1,5 @@
 import 'package:fpdart/fpdart.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
-import 'package:intheloopapp/domains/models/genre.dart';
 
 part 'venue_info.freezed.dart';
 part 'venue_info.g.dart';
