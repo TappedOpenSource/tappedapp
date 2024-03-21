@@ -20,6 +20,7 @@ import 'package:intheloopapp/utils/default_image.dart';
 import 'package:intheloopapp/utils/geohash.dart';
 import 'package:intheloopapp/utils/hero_image.dart';
 import 'package:intl/intl.dart';
+import 'package:maps_launcher/maps_launcher.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:skeletons/skeletons.dart';
 import 'package:timeago/timeago.dart' as timeago;
@@ -305,14 +306,19 @@ class BookingView extends StatelessWidget {
                                       leading: const Icon(
                                         CupertinoIcons.location,
                                       ),
-                                      title: SingleChildScrollView(
-                                        scrollDirection: Axis.horizontal,
-                                        child: Text(
-                                          formattedFullAddress(
-                                            value.addressComponents,
-                                          ),
-                                          style: TextStyle(
-                                            color: theme.colorScheme.onSurface,
+                                      title: GestureDetector(
+                                        onLongPress: () => MapsLauncher.launchQuery(
+                                          value.shortFormattedAddress,
+                                        ),
+                                        child: SingleChildScrollView(
+                                          scrollDirection: Axis.horizontal,
+                                          child: Text(
+                                            formattedFullAddress(
+                                              value.addressComponents,
+                                            ),
+                                            style: TextStyle(
+                                              color: theme.colorScheme.onSurface,
+                                            ),
                                           ),
                                         ),
                                       ),
