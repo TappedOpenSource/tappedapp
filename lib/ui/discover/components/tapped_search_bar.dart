@@ -167,7 +167,7 @@ class _TappedSearchBarState extends State<TappedSearchBar> {
               );
             }
 
-            if (suggestions.isNotEmpty) {
+            if (suggestions.isNotEmpty && _searchController.text.isNotEmpty) {
               final sugList = suggestions.toList();
               final ops = sugList.whereType<OpportunityCard>();
               final users = sugList.whereType<UserTile>();

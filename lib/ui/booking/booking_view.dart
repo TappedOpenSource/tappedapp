@@ -4,14 +4,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fpdart/fpdart.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:intheloopapp/data/database_repository.dart';
 import 'package:intheloopapp/data/places_repository.dart';
 import 'package:intheloopapp/domains/models/booking.dart';
-import 'package:intheloopapp/domains/models/service.dart';
 import 'package:intheloopapp/domains/models/user_model.dart';
 import 'package:intheloopapp/domains/navigation_bloc/navigation_bloc.dart';
 import 'package:intheloopapp/domains/navigation_bloc/tapped_route.dart';
+import 'package:intheloopapp/ui/profile/profile_view.dart';
 import 'package:intheloopapp/ui/user_avatar.dart';
 import 'package:intheloopapp/ui/user_tile.dart';
 import 'package:intheloopapp/utils/admin_builder.dart';
@@ -21,6 +20,7 @@ import 'package:intheloopapp/utils/default_image.dart';
 import 'package:intheloopapp/utils/geohash.dart';
 import 'package:intheloopapp/utils/hero_image.dart';
 import 'package:intl/intl.dart';
+import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:skeletons/skeletons.dart';
 import 'package:timeago/timeago.dart' as timeago;
 
@@ -82,7 +82,6 @@ class BookingView extends StatelessWidget {
         final timeFormat = DateFormat.jm();
         return AdminBuilder(
           builder: (context, isAdmin) {
-            final scaffoldMessenger = ScaffoldMessenger.of(context);
             return Scaffold(
               backgroundColor: Theme.of(context).colorScheme.background,
               appBar: AppBar(
@@ -262,10 +261,12 @@ class BookingView extends StatelessWidget {
                                   null => SkeletonListTile(),
                                   None() => SkeletonListTile(),
                                   Some(:final value) => GestureDetector(
-                                      onTap: () => context.push(
-                                        ProfilePage(
-                                          userId: value.id,
-                                          user: Option.of(value),
+                                      onTap: () =>
+                                          showCupertinoModalBottomSheet<void>(
+                                        context: context,
+                                        builder: (context) => ProfileView(
+                                          visitedUserId: value.id,
+                                          visitedUser: Option.of(value),
                                         ),
                                       ),
                                       child: CupertinoListTile(

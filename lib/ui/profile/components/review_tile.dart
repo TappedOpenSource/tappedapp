@@ -28,30 +28,32 @@ class ReviewTile extends StatelessWidget {
         return switch (snapshot.data) {
           null => SkeletonListTile(),
           None() => SkeletonListTile(),
-          Some(:final value) => () {
-              return Card(
-                elevation: 0,
-                color: theme.colorScheme.onSurface.withOpacity(0.1),
-                child: Column(
-                  children: [
-                    UserTile(
-                      userId: value.id,
-                      user: Option.of(value),
+          Some(:final value) => value.deleted
+              ? const SizedBox.shrink()
+              : () {
+                  return Card(
+                    elevation: 0,
+                    color: theme.colorScheme.onSurface.withOpacity(0.1),
+                    child: Column(
+                      children: [
+                        UserTile(
+                          userId: value.id,
+                          user: Option.of(value),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.only(
+                            left: 16,
+                            right: 16,
+                            bottom: 16,
+                          ),
+                          child: Text(
+                            review.overallReview,
+                          ),
+                        ),
+                      ],
                     ),
-                    Padding(
-                      padding: const EdgeInsets.only(
-                        left: 16,
-                        right: 16,
-                        bottom: 16,
-                      ),
-                      child: Text(
-                        review.overallReview,
-                      ),
-                    ),
-                  ],
-                ),
-              );
-            }(),
+                  );
+                }(),
         };
       },
     );
