@@ -42,7 +42,7 @@ class PerformerCategoryDetails extends StatelessWidget {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          e.formattedName,
+                          e.formattedName.toLowerCase(),
                           style: TextStyle(
                               fontWeight: FontWeight.bold,
                               color: isSelected

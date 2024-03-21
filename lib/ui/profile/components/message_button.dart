@@ -42,7 +42,7 @@ class MessageButton extends StatelessWidget {
           //   color: Colors.white,
           // ),
           child: Text(
-            'Message',
+            'message',
             style: TextStyle(
               fontWeight: FontWeight.bold,
               color: theme.colorScheme.onSurface,

@@ -35,7 +35,16 @@ class OnboardingCompleteView extends StatelessWidget {
               ),
             ),
             const Text(
-              'you can start start applying for performance opportunities now! \n\nyou can edit your profile at any time by going to your settings.',
+              'you can start hitting up venues and getting gigs! \n\nyou can edit your profile at any time by going to your settings.',
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                fontSize: 14,
+                color: Colors.grey,
+              ),
+            ),
+            const SizedBox(height: 8),
+            const Text(
+              'if you want to get verified, post a screenshot of your profile to your instagram story and tag us @tappedai',
               textAlign: TextAlign.center,
               style: TextStyle(
                 fontSize: 14,

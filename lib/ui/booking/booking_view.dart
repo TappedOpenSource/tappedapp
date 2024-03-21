@@ -349,7 +349,7 @@ class BookingView extends StatelessWidget {
                               CupertinoIcons.money_dollar,
                             ),
                             title: Text(
-                              '\$${(booking.rate / 100).toStringAsFixed(2)} / hour',
+                              '\$${(booking.rate / 100).toStringAsFixed(2)}',
                               style: TextStyle(
                                 color: theme.colorScheme.onSurface,
                               ),
@@ -382,7 +382,7 @@ class BookingView extends StatelessWidget {
                             context.pop();
                           });
                         },
-                        child: const Text('Confirm Booking'),
+                        child: const Text('confirm booking'),
                       ),
 
                     if (isCurrentUserInvolved &&
@@ -399,7 +399,7 @@ class BookingView extends StatelessWidget {
                           });
                         },
                         child: const Text(
-                          'Cancel Booking',
+                          'cancel booking',
                           style: TextStyle(
                             color: Colors.red,
                           ),

@@ -31,7 +31,7 @@ class OnboardingInitView extends StatelessWidget {
           ),
         ),
         const Text(
-          'this info will help get you booked',
+          'this info will help get you get booked',
           style: TextStyle(
             fontSize: 18,
             fontWeight: FontWeight.w300,

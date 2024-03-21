@@ -9,7 +9,6 @@ import 'package:intheloopapp/ui/onboarding/components/onboarding_profile_picture
 import 'package:intheloopapp/ui/onboarding/components/onboarding_social_media_view.dart';
 import 'package:intheloopapp/ui/onboarding/components/onboarding_username_view.dart';
 import 'package:intheloopapp/ui/onboarding/onboarding_flow_cubit.dart';
-import 'package:intheloopapp/utils/app_logger.dart';
 
 class OnboardingForm extends StatelessWidget {
   const OnboardingForm({super.key});
