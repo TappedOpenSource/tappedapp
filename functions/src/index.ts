@@ -48,8 +48,7 @@ const _deleteUser = async (data: { id: string }) => {
   }
 
   usersRef.doc(data.id).set({
-    username: "*deleted*",
-    deleted: true,
+    unclaimed: true,
   });
 
   // *delete loop protocol*
@@ -76,7 +75,7 @@ const _deleteUser = async (data: { id: string }) => {
   mainBucket.deleteFiles({ prefix: `audio/loops/${data.id}` });
 
   // *delete all images keyed at 'images/users/{UID}/{IMAGEURL}'*
-  mainBucket.deleteFiles({ prefix: `images/users/${data.id}` });
+  // mainBucket.deleteFiles({ prefix: `images/users/${data.id}` });
 
   // TODO: delete follower table stuff?
   // TODO: delete following table stuff?
