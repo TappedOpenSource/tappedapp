@@ -113,6 +113,13 @@ class GigSearchFormView extends StatelessWidget {
                           ),
                         ],
                       ),
+                      Text(
+                        'we have the capacity range defaulted to numbers that align with your previous booking history',
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                          color: theme.colorScheme.onSurface.withOpacity(0.6),
+                        ),
+                      ),
                       // const SizedBox(height: 20),
                       // const Text(
                       //   'when',
