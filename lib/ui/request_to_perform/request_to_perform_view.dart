@@ -1,5 +1,6 @@
 import 'package:avatar_stack/avatar_stack.dart';
 import 'package:avatar_stack/positions.dart';
+import 'package:cloud_functions/cloud_functions.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -38,7 +39,8 @@ class _RequestToPerformViewState extends State<RequestToPerformView> {
     super.initState();
   }
 
-  Widget _buildSendButton(BuildContext context, {
+  Widget _buildSendButton(
+    BuildContext context, {
     required UserModel currentUser,
   }) {
     final database = context.database;
@@ -73,24 +75,32 @@ class _RequestToPerformViewState extends State<RequestToPerformView> {
                   }
 
                   try {
+                    final _functions = FirebaseFunctions.instance;
+                    final callable =
+                        _functions.httpsCallable('sendEmailOnVenueContacting');
                     await Future.wait(
-                      _venues.map((venue) async {
-                        final bookingEmail = venue.venueInfo.flatMap(
-                              (info) => info.bookingEmail,
-                        );
+                      [
+                        callable<Map<String, dynamic>>({
+                          'userId': currentUser.id,
+                        }),
+                        ..._venues.map((venue) async {
+                          final bookingEmail = venue.venueInfo.flatMap(
+                            (info) => info.bookingEmail,
+                          );
 
-                        await bookingEmail.fold(
-                          Future<void>.value,
-                              (email) async {
-                            await database.contactVenue(
-                              currentUser: currentUser,
-                              venue: venue,
-                              note: _note,
-                              bookingEmail: email,
-                            );
-                          },
-                        );
-                      }),
+                          await bookingEmail.fold(
+                            Future<void>.value,
+                            (email) async {
+                              await database.contactVenue(
+                                currentUser: currentUser,
+                                venue: venue,
+                                note: _note,
+                                bookingEmail: email,
+                              );
+                            },
+                          );
+                        }),
+                      ],
                     );
                     await EasyLoading.dismiss();
                     nav.push(RequestToPerformConfirmationPage());
@@ -150,14 +160,13 @@ class _RequestToPerformViewState extends State<RequestToPerformView> {
                       ),
                       stackedWidgets: _venues
                           .map(
-                            (venue) =>
-                            UserAvatar(
+                            (venue) => UserAvatar(
                               pushUser: Option.of(venue),
                               pushId: Option.of(venue.id),
                               imageUrl: venue.profilePicture,
                               radius: 25,
                             ),
-                      )
+                          )
                           .toList(),
                       buildInfoWidget: (surplus) {
                         return CircleAvatar(
@@ -192,7 +201,7 @@ class _RequestToPerformViewState extends State<RequestToPerformView> {
                     minLines: 8,
                     initialValue: _note,
                     validator: (value) =>
-                    value!.isEmpty ? 'message cannot be empty' : null,
+                        value!.isEmpty ? 'message cannot be empty' : null,
                     onChanged: (input) {
                       setState(() {
                         _note = input;
@@ -216,7 +225,7 @@ class _RequestToPerformViewState extends State<RequestToPerformView> {
                                 child: SingleChildScrollView(
                                   child: Column(
                                     crossAxisAlignment:
-                                    CrossAxisAlignment.start,
+                                        CrossAxisAlignment.start,
                                     children: [
                                       const SizedBox(height: 12),
                                       Text(

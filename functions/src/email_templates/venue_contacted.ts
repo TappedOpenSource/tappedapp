@@ -4,7 +4,7 @@ hey!
 
 <p>We hope this message finds you well!</p>
 
-<p>your performance request has been successfully submitted to the venue through our app. This means that your talent and music have the opportunity to grace their stage!</p>
+<p>your performance request has been successfully submitted. This means that your talent and music have the opportunity to grace their stage!</p>
 
 <p>Rest assured, we've forwarded your request to the venue management, and they'll be reviewing it shortly. While we can't guarantee acceptance, we're rooting for you and your music!</p>
 
