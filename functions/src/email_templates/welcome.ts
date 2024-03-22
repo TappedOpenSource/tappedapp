@@ -4,7 +4,7 @@ hey!
 
 thanks for signing up for Tapped! we're super excited to have you on board.
 
-you're one step closer to creating a world tour from your iPhone and performing i front of your fans
+you're one step closer to creating a world tour from your iPhone and performing in front of your fans
 
 play around with the app and let us know what you think. we're always looking for feedback to make the app better for you.
 
