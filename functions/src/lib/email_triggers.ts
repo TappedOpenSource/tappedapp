@@ -487,6 +487,36 @@ export const sendEmailOnSubscriptionPurchase = onRequest(
     res.sendStatus(200);
   });
 
+export const sendEmailOnSubscriptionExpiration = onRequest(
+  { secrets: [ RESEND_API_KEY ] },
+  async (req, res) => {
+    info("sendEmailOnSubscriptionExpiration", req.body);
+    const resend = new Resend(RESEND_API_KEY.value());
+    const { event } = req.body;
+    const { app_user_id } = event;
+
+    const userSnap = await usersRef.doc(app_user_id).get();
+    if (!userSnap.exists) {
+      error(`user does not exist ${app_user_id}`)
+      res.sendStatus(500);
+      return;
+    }
+
+    const user = userSnap.data() as UserModel;
+    const email = user.email;
+
+    if (email === undefined || email === null || email === "") {
+      throw new Error(`email is undefined, null or empty: ${email}`);
+    }
+
+    await resend.emails.send({
+      from: "no-reply@tapped.ai",
+      to: [ email ],
+      subject: "your subscription has expired!",
+      html: `<div style="white-space: pre;">${subscriptionExpiration}</div>`,
+    });
+  });
+
 export const sendEmailOnVenueContacting = onCall(
   { secrets: [ RESEND_API_KEY ] },
   async (req) => {
