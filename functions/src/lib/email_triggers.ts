@@ -32,6 +32,7 @@ import { labelApplied } from "../email_templates/label_applied";
 import { premiumWaitlist } from "../email_templates/premium_waitlist";
 import { subscriptionPurchase } from "../email_templates/subscription_purchase";
 import { venueContacted } from "../email_templates/venue_contacted";
+import { subscriptionExpiration } from "../email_templates/subscription_expiration";
 // import { venueContacted } from "../email_templates/venue_contacted";
 
 export const sendWelcomeEmailOnUserCreated = functions
