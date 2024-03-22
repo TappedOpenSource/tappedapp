@@ -54,6 +54,19 @@ class _RequestToPerformViewState extends State<RequestToPerformView> {
                 onPressed: () async {
                   final scaffoldMessenger = ScaffoldMessenger.of(context);
                   final nav = context.nav;
+
+                  if (_venues.isEmpty) {
+                    scaffoldMessenger.showSnackBar(
+                      const SnackBar(
+                        backgroundColor: Colors.red,
+                        content: Text(
+                          'No venues selected',
+                        ),
+                      ),
+                    );
+                    return;
+                  }
+
                   if (_note.isEmpty) {
                     ScaffoldMessenger.of(context).showSnackBar(
                       const SnackBar(
