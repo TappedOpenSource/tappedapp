@@ -47,10 +47,10 @@ class InfoSliver extends StatelessWidget {
             );
         final averagePerformerTicketPrice =
             performerInfo.map((t) => t.formattedPriceRange);
-        final averageAttendance = performerInfo.flatMap(
+        final averageAttendance = performerInfo.map(
           (t) => t.averageAttendance.fold(
-            () => Option.of((audience / 250).round()),
-            Option.of,
+            () => (audience / 250).round(),
+            (attendance) => attendance,
           ),
         );
         final label = performerInfo.map((t) => t.label).getOrElse(() => 'None');
@@ -120,7 +120,7 @@ class InfoSliver extends StatelessWidget {
                                   ),
                                 ),
                             },
-                            switch (state.visitedUser.venueInfo) {
+                            switch (venueInfo) {
                               None() => const SizedBox.shrink(),
                               Some(:final value) => CupertinoListTile(
                                   leading: const Icon(
@@ -311,7 +311,8 @@ class InfoSliver extends StatelessWidget {
                                     ),
                                   ),
                                   trailing: const Icon(
-                                      CupertinoIcons.chevron_forward,),
+                                    CupertinoIcons.chevron_forward,
+                                  ),
                                   onTap: () {
                                     if (!isPremium) {
                                       context.push(PaywallPage());
