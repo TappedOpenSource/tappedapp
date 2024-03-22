@@ -32,7 +32,9 @@ import { premiumWaitlist } from "../email_templates/premium_waitlist";
 import { subscriptionPurchase } from "../email_templates/subscription_purchase";
 // import { venueContacted } from "../email_templates/venue_contacted";
 
-export const sendWelcomeEmailOnUserCreated = functions.auth
+export const sendWelcomeEmailOnUserCreated = functions
+  .runWith({ secrets: [ RESEND_API_KEY ] })
+  .auth
   .user()
   .onCreate(async (user: UserRecord) => {
     const email = user.email;
@@ -47,12 +49,13 @@ export const sendWelcomeEmailOnUserCreated = functions.auth
     }
 
     debug(`sending welcome email to ${email}`);
-    await mailRef.add({
+    const resend = new Resend(RESEND_API_KEY.value());
+    await resend.emails.send({
+      from: "no-reply@tapped.ai",
       to: [ email ],
-      template: {
-        name: "welcome",
-      },
-    })
+      subject: "welcome to Tapped!",
+      html: `<div style="white-space: pre;">${labelApplied}</div>`,
+    });
   });
 
 export const sendEmailOnLabelApplication = onDocumentCreated({

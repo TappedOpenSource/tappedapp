@@ -15,7 +15,9 @@ with Tapped Premium, you'll have access to a ton of features that will help you 
 
 check out our IG post for info on contacting venues <a href=https://www.instagram.com/p/C4Os5HAOf4p/>https://www.instagram.com/p/C4Os5HAOf4p/</a>
 
+if you have any questions or problem, email me - johannes@tapped.ai
 
 best,
-Tapped Team
+Johannes
+Tapped CEO
 `;
