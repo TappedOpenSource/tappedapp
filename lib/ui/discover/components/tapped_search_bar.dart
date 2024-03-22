@@ -104,6 +104,8 @@ class _TappedSearchBarState extends State<TappedSearchBar> {
     final searchRepo = context.read<SearchRepository>();
     return SearchAnchor(
       searchController: _searchController,
+      textCapitalization: TextCapitalization.none,
+      textInputAction: TextInputAction.search,
       viewBackgroundColor: theme.colorScheme.background,
       viewElevation: 0,
       builder: (context, searchController) {

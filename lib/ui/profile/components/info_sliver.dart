@@ -134,7 +134,7 @@ class InfoSliver extends StatelessWidget {
                                   ),
                                 ),
                             },
-                            switch (state.visitedUser.venueInfo) {
+                            switch (venueInfo) {
                               None() => const SizedBox.shrink(),
                               Some(:final value) => switch (value.capacity) {
                                   None() => const SizedBox.shrink(),
@@ -184,9 +184,10 @@ class InfoSliver extends StatelessWidget {
                                   ),
                               },
                             if (isAdmin || isBooker)
-                              switch (averageAttendance) {
-                                None() => const SizedBox.shrink(),
-                                Some(:final value) => CupertinoListTile(
+                              switch ((venueInfo, averageAttendance)) {
+                                (Some(), _) => const SizedBox.shrink(),
+                                (_, None()) => const SizedBox.shrink(),
+                                (_, Some(:final value)) => CupertinoListTile(
                                     leading: const Icon(
                                       CupertinoIcons.person_3_fill,
                                     ),
