@@ -46,6 +46,7 @@ class CreateBookingView extends StatelessWidget {
             return BlocProvider(
               create: (context) => CreateBookingCubit(
                 currentUser: currentUser,
+                requesteeId: requesteeId,
                 service: service,
                 requesteeStripeConnectedAccountId:
                     requesteeStripeConnectedAccountId,

@@ -79,9 +79,26 @@ class ServiceSelectionView extends StatelessWidget {
           }
 
           return ListView.builder(
-            itemCount: services.length,
+            itemCount: services.length + 1,
             itemBuilder: (context, index) {
-              final service = sortedServices[index];
+              if (index == 0) {
+                return ListTile(
+                  leading: const Icon(Icons.work),
+                  title: const Text('custom booking'),
+                  subtitle: const Text('create a custom booking'),
+                  onTap: () => context.push(
+                    CreateBookingPage(
+                      requesteeId: userId,
+                      service: const None(),
+                      requesteeStripeConnectedAccountId:
+                          requesteeStripeConnectedAccountId,
+                    ),
+                  ),
+                );
+              }
+
+              final listIndex = index - 1;
+              final service = sortedServices[listIndex];
 
               return switch ((
                 requesteeStripeConnectedAccountId,

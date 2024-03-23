@@ -26,6 +26,7 @@ part 'create_booking_state.dart';
 class CreateBookingCubit extends Cubit<CreateBookingState> {
   CreateBookingCubit({
     required this.currentUser,
+    required this.requesteeId,
     required this.service,
     required this.requesteeStripeConnectedAccountId,
     required this.navigationBloc,
@@ -37,12 +38,14 @@ class CreateBookingCubit extends Cubit<CreateBookingState> {
   }) : super(
           CreateBookingState(
             currentUserId: currentUser.id,
+            requesteeId: requesteeId,
             service: service,
             bookingFee: bookingFee,
           ),
         );
 
   final UserModel currentUser;
+  final String requesteeId;
   final Option<Service> service;
   final Option<String> requesteeStripeConnectedAccountId;
   final double bookingFee;
@@ -79,6 +82,12 @@ class CreateBookingCubit extends Cubit<CreateBookingState> {
         ),
       );
 
+  void updateRate(int? value) => emit(
+        state.copyWith(
+          rate: value,
+        ),
+      );
+
   void updatePlace({
     required Option<PlaceData> place,
     required Option<String> placeId,
@@ -95,6 +104,7 @@ class CreateBookingCubit extends Cubit<CreateBookingState> {
       throw Exception('Form is not valid');
     }
 
+    final note = state.note.value.isNotEmpty ? state.note.value : 'booking sent';
     final nullablePlace = state.place.toNullable();
 
     final placeId = nullablePlace?.placeId;
@@ -114,11 +124,11 @@ class CreateBookingCubit extends Cubit<CreateBookingState> {
     final booking = Booking(
       id: const Uuid().v4(),
       name: Option.of(state.name.value),
-      note: state.note.value,
-      serviceId: Option.of(state.service.id),
+      note: note,
+      serviceId: state.service.map((t) => t.id),
       requesterId: Option.of(state.currentUserId),
-      requesteeId: state.service.userId,
-      rate: state.service.rate,
+      requesteeId: state.requesteeId, // state.service.userId,
+      rate: state.rate,
       status: BookingStatus.pending,
       location: Option.fromNullable(location),
       startTime: state.startTime.value,
@@ -143,7 +153,7 @@ class CreateBookingCubit extends Cubit<CreateBookingState> {
           amount: total,
         );
 
-        if (intent.customer != currentUser.stripeCustomerId) {
+        if (intent.customer != currentUser.stripeCustomerId.toNullable()) {
           onboardingBloc.add(
             UpdateOnboardedUser(
               user: currentUser.copyWith(
@@ -158,10 +168,10 @@ class CreateBookingCubit extends Cubit<CreateBookingState> {
         await payments.confirmPaymentSheetPayment();
       }
 
-      final channel = await streamRepo.createSimpleChat(state.service.userId);
+      final channel = await streamRepo.createSimpleChat(state.requesteeId); // state.service.userId;
       await channel.sendMessage(
         Message(
-          text: state.note.value,
+          text: note,
         ),
       );
       await database.createBooking(booking);

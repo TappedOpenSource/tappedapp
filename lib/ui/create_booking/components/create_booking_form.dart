@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_stripe/flutter_stripe.dart';
 import 'package:fpdart/fpdart.dart' hide State;
@@ -11,6 +12,7 @@ import 'package:intheloopapp/ui/create_booking/components/booking_name_text_fiel
 import 'package:intheloopapp/ui/create_booking/components/booking_note_text_field.dart';
 import 'package:intheloopapp/ui/create_booking/create_booking_cubit.dart';
 import 'package:intheloopapp/ui/forms/location_text_field.dart';
+import 'package:intheloopapp/ui/forms/rate_text_field.dart';
 import 'package:intheloopapp/utils/app_logger.dart';
 import 'package:intheloopapp/utils/bloc_utils.dart';
 
@@ -50,6 +52,7 @@ class _CreateBookingFormState extends State<CreateBookingForm> {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
     final nav = context.nav;
     return BlocBuilder<CreateBookingCubit, CreateBookingState>(
       builder: (context, state) {
@@ -71,7 +74,7 @@ class _CreateBookingFormState extends State<CreateBookingForm> {
               ),
               FormItem(
                 children: [
-                  const Text('Start Time'),
+                  const Text('start time'),
                   CupertinoButton(
                     onPressed: () => _showDialog(
                       context,
@@ -99,7 +102,7 @@ class _CreateBookingFormState extends State<CreateBookingForm> {
               ),
               FormItem(
                 children: <Widget>[
-                  const Text('End Time'),
+                  const Text('end time'),
                   CupertinoButton(
                     onPressed: () => _showDialog(
                       context,
@@ -127,7 +130,7 @@ class _CreateBookingFormState extends State<CreateBookingForm> {
                 children: [
                   const Padding(
                     padding: EdgeInsets.symmetric(vertical: 22),
-                    child: Text('Duration'),
+                    child: Text('duration'),
                   ),
                   Text(
                     state.formattedDuration,
@@ -142,37 +145,78 @@ class _CreateBookingFormState extends State<CreateBookingForm> {
                   Padding(
                     padding: const EdgeInsets.symmetric(vertical: 22),
                     child: Text(
-                      // ignore: lines_longer_than_80_chars
-                      'Artist Rate (\$${(state.service.rate / 100).toStringAsFixed(2)}${state.service.rateType == RateType.hourly ? '/hr' : ''})',
+                      state.rateType == RateType.fixed
+                          ? 'performer rate'
+                          :
+                          // ignore: lines_longer_than_80_chars
+                          'performer rate (\$${(state.rate / 100).toStringAsFixed(2)}${state.rateType == RateType.hourly ? '/hr' : ''})',
                     ),
                   ),
-                  Text(
-                    state.formattedArtistRate,
-                    style: const TextStyle(
-                      fontSize: 22,
+                  GestureDetector(
+                    onTap: switch (state.service) {
+                      Some() => null,
+                      None() => () {
+                          final cubit = context.read<CreateBookingCubit>();
+                          showModalBottomSheet<void>(
+                            context: context,
+                            showDragHandle: true,
+                            builder: (context) {
+                              return Padding(
+                                padding: const EdgeInsets.symmetric(
+                                  horizontal: 20,
+                                ),
+                                child: Column(
+                                  children: [
+                                    RateTextField(
+                                      initialValue: state.rate,
+                                      onChanged: cubit.updateRate,
+                                    ),
+                                    CupertinoButton(
+                                      onPressed: () {
+                                        Navigator.of(context).pop(0);
+                                      },
+                                      child: const Text('done'),
+                                    ),
+                                  ],
+                                ),
+                              );
+                            },
+                          );
+                        },
+                    },
+                    child: Text(
+                      state.formattedArtistRate,
+                      style: TextStyle(
+                        fontSize: 22,
+                        color: state.service.fold(
+                          () => theme.colorScheme.primary,
+                          (t) => theme.colorScheme.onBackground,
+                        ),
+                      ),
                     ),
                   ),
                 ],
               ),
-              FormItem(
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.symmetric(vertical: 22),
-                    child: Text('Booking Fee (${state.bookingFee * 100}%)'),
-                  ),
-                  Text(
-                    state.formattedApplicationFee,
-                    style: const TextStyle(
-                      fontSize: 22,
+              if (state.bookingFee > 0)
+                FormItem(
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 22),
+                      child: Text('booking fee (${state.bookingFee * 100}%)'),
                     ),
-                  ),
-                ],
-              ),
+                    Text(
+                      state.formattedApplicationFee,
+                      style: const TextStyle(
+                        fontSize: 22,
+                      ),
+                    ),
+                  ],
+                ),
               FormItem(
                 children: [
                   const Padding(
                     padding: EdgeInsets.symmetric(vertical: 22),
-                    child: Text('Total'),
+                    child: Text('total'),
                   ),
                   Text(
                     state.formattedTotal,
@@ -231,7 +275,7 @@ class _CreateBookingFormState extends State<CreateBookingForm> {
                   },
                   borderRadius: BorderRadius.circular(15),
                   child: const Text(
-                    'Confirm Booking',
+                    'confirm booking',
                     style: TextStyle(
                       fontWeight: FontWeight.w700,
                       color: Colors.white,

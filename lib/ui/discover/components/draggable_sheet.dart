@@ -206,19 +206,19 @@ class DraggableSheet extends StatelessWidget {
                                   true => Padding(
                                       padding: const EdgeInsets.symmetric(
                                         vertical: 8,
+                                        horizontal: 20,
                                       ),
                                       child: SizedBox(
                                         width: double.infinity,
                                         child: CupertinoButton(
                                           onPressed: () =>
                                               context.push(AdminPage()),
-                                          color: theme.colorScheme.onSurface
-                                              .withOpacity(0.1),
-                                          child: Text(
-                                            'admin dashboard',
+                                          color: Colors.red.withOpacity(0.1),
+                                          borderRadius: BorderRadius.circular(15),
+                                          child: const Text(
+                                            'add opportunity',
                                             style: TextStyle(
-                                              color:
-                                                  theme.colorScheme.onSurface,
+                                              color: Colors.red,
                                               fontWeight: FontWeight.bold,
                                             ),
                                           ),

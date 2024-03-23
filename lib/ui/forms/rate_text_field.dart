@@ -6,10 +6,12 @@ class RateTextField extends StatelessWidget {
   RateTextField({
     super.key,
     this.onChanged,
+    this.onSubmitted,
     this.initialValue = 0,
   });
 
   final void Function(int)? onChanged;
+  final void Function(int)? onSubmitted;
   final int initialValue;
 
   final _formatter = CurrencyTextInputFormatter(
@@ -29,6 +31,12 @@ class RateTextField extends StatelessWidget {
       ),
       inputFormatters: <TextInputFormatter>[_formatter],
       keyboardType: TextInputType.number,
+      onFieldSubmitted: (input) {
+        final value = _formatter.getUnformattedValue().toDouble();
+        final usdValue = (value * 100).toInt();
+
+        onSubmitted?.call(usdValue);
+      },
       onChanged: (input) {
         final value = _formatter.getUnformattedValue().toDouble();
         final usdValue = (value * 100).toInt();

@@ -18,8 +18,8 @@ class BookingNameTextField extends StatelessWidget {
           controller: controller,
           decoration: const InputDecoration(
             prefixIcon: Icon(Icons.event),
-            labelText: 'Event Name (optional)',
-            hintText: 'Something in the Water',
+            labelText: 'event name (optional)',
+            hintText: 'something in the water',
           ),
           style: const TextStyle(
             fontSize: 18,
