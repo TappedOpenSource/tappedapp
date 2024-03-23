@@ -17,12 +17,14 @@ import 'package:skeletons/skeletons.dart';
 
 class CreateBookingView extends StatelessWidget {
   const CreateBookingView({
+    required this.requesteeId,
     required this.service,
     required this.requesteeStripeConnectedAccountId,
     super.key,
   });
 
-  final Service service;
+  final String requesteeId;
+  final Option<Service> service;
   final Option<String> requesteeStripeConnectedAccountId;
 
   @override
@@ -74,7 +76,7 @@ class CreateBookingView extends StatelessWidget {
                   child: ListView(
                     children: [
                       FutureBuilder<Option<UserModel>>(
-                        future: database.getUserById(service.userId),
+                        future: database.getUserById(requesteeId),
                         builder: (context, snapshot) {
                           if (!snapshot.hasData) {
                             return SkeletonListTile();

@@ -22,7 +22,7 @@ class CreateBookingState extends Equatable with FormzMixin {
   final String currentUserId;
   final BookingName name;
   final BookingNote note;
-  final Service service;
+  final Option<Service> service;
   final double bookingFee;
   final FormzSubmissionStatus status;
   late final StartTime startTime;
@@ -57,7 +57,7 @@ class CreateBookingState extends Equatable with FormzMixin {
 
   CreateBookingState copyWith({
     String? currentUserId,
-    Service? service,
+    Option<Service>? service,
     double? bookingFee,
     BookingName? name,
     BookingNote? note,
@@ -97,18 +97,6 @@ class CreateBookingState extends Equatable with FormzMixin {
   String get formattedDuration {
     final d = endTime.value.difference(startTime.value);
     return d.toString().split('.').first.padLeft(8, '0');
-  }
-
-  int get artistCost {
-    if (service.rateType == RateType.fixed) {
-      return service.rate;
-    }
-
-    final d = endTime.value.difference(startTime.value);
-    final rateInMinutes = service.rate / 60;
-    final total = d.inMinutes * rateInMinutes;
-
-    return total.toInt();
   }
 
   int get applicationFee {

@@ -43,7 +43,7 @@ class CreateBookingCubit extends Cubit<CreateBookingState> {
         );
 
   final UserModel currentUser;
-  final Service service;
+  final Option<Service> service;
   final Option<String> requesteeStripeConnectedAccountId;
   final double bookingFee;
   final NavigationBloc navigationBloc;

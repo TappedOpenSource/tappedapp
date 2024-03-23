@@ -76,7 +76,8 @@ class RequestToBookButton extends StatelessWidget {
                 return _enabledButton(
                   onPressed: () => context.push(
                     CreateBookingPage(
-                      service: theService,
+                      requesteeId: theService.userId,
+                      service: Option.of(theService),
                       requesteeStripeConnectedAccountId:
                           user.stripeConnectedAccountId,
                     ),
@@ -98,7 +99,8 @@ class RequestToBookButton extends StatelessWidget {
                     true => CupertinoButton.filled(
                         onPressed: () {
                           final nextPage = CreateBookingPage(
-                            service: theService,
+                            requesteeId: theService.userId,
+                            service: Option.of(theService),
                             requesteeStripeConnectedAccountId:
                                 user.stripeConnectedAccountId,
                           );

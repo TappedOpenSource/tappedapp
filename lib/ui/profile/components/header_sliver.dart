@@ -72,36 +72,6 @@ class HeaderSliver extends StatelessWidget {
                     ),
                   ],
                 ),
-              if (isCurrentUser)
-                CustomClaimsBuilder(
-                  builder: (context, claims) {
-                    final isAdmin = claims.contains(CustomClaim.admin);
-                    final isBooker = claims.contains(CustomClaim.booker);
-                    return switch (isAdmin || isBooker) {
-                      false => const SizedBox.shrink(),
-                      true => Padding(
-                          padding: const EdgeInsets.symmetric(
-                            vertical: 8,
-                          ),
-                          child: SizedBox(
-                            width: double.infinity,
-                            child: CupertinoButton(
-                              onPressed: () => context.push(AdminPage()),
-                              color:
-                                  theme.colorScheme.onSurface.withOpacity(0.1),
-                              child: Text(
-                                'admin dashboard',
-                                style: TextStyle(
-                                  color: theme.colorScheme.onSurface,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              ),
-                            ),
-                          ),
-                        ),
-                    };
-                  },
-                ),
               if (!isCurrentUser && state.services.isNotEmpty)
                 const SizedBox(height: 8),
               if (!isCurrentUser && state.services.isNotEmpty)

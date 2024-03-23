@@ -3,6 +3,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fpdart/fpdart.dart';
+import 'package:intheloopapp/data/auth_repository.dart';
 import 'package:intheloopapp/domains/models/performer_info.dart';
 import 'package:intheloopapp/domains/models/user_model.dart';
 import 'package:intheloopapp/domains/navigation_bloc/navigation_bloc.dart';
@@ -15,6 +16,7 @@ import 'package:intheloopapp/ui/user_avatar.dart';
 import 'package:intheloopapp/ui/user_tile.dart';
 import 'package:intheloopapp/utils/bloc_utils.dart';
 import 'package:intheloopapp/utils/current_user_builder.dart';
+import 'package:intheloopapp/utils/custom_claims_builder.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class DraggableSheet extends StatelessWidget {
@@ -193,6 +195,39 @@ class DraggableSheet extends StatelessWidget {
                                 ],
                               ),
                             ),
+                            CustomClaimsBuilder(
+                              builder: (context, claims) {
+                                final isAdmin =
+                                    claims.contains(CustomClaim.admin);
+                                final isBooker =
+                                    claims.contains(CustomClaim.booker);
+                                return switch (isAdmin || isBooker) {
+                                  false => const SizedBox.shrink(),
+                                  true => Padding(
+                                      padding: const EdgeInsets.symmetric(
+                                        vertical: 8,
+                                      ),
+                                      child: SizedBox(
+                                        width: double.infinity,
+                                        child: CupertinoButton(
+                                          onPressed: () =>
+                                              context.push(AdminPage()),
+                                          color: theme.colorScheme.onSurface
+                                              .withOpacity(0.1),
+                                          child: Text(
+                                            'admin dashboard',
+                                            style: TextStyle(
+                                              color:
+                                                  theme.colorScheme.onSurface,
+                                              fontWeight: FontWeight.bold,
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                };
+                              },
+                            ),
                             ...sortedVenueHits
                                 .map((venue) => _venueTile(currentUser, venue)),
                             const Padding(
@@ -272,7 +307,8 @@ class DraggableSheet extends StatelessWidget {
                                         child: CupertinoButton(
                                           onPressed: () {
                                             final uri = Uri.parse(
-                                                'https://tappedapp.notion.site/join-tapped-9ccf655358344b21979f73adadf22d98?pvs=4',);
+                                              'https://tappedapp.notion.site/join-tapped-9ccf655358344b21979f73adadf22d98?pvs=4',
+                                            );
                                             launchUrl(uri);
                                           },
                                           color: theme.colorScheme.onSurface

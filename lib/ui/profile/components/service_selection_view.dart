@@ -22,14 +22,16 @@ class ServiceSelectionView extends StatelessWidget {
     return switch ((requesteeStripeConnectedAccountId, service.rate)) {
       (_, <= 0) => () => context.push(
             CreateBookingPage(
-              service: service,
+              requesteeId: userId,
+              service: Option.of(service),
               requesteeStripeConnectedAccountId: const None(),
             ),
           ),
       (None(), _) => null,
       (Some(:final value), _) => () => context.push(
             CreateBookingPage(
-              service: service,
+              requesteeId: userId,
+              service: Option.of(service),
               requesteeStripeConnectedAccountId: Option.of(value),
             ),
           ),

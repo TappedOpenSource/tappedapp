@@ -66,7 +66,7 @@ class ServiceCard extends StatelessWidget {
                     service: service,
                     serviceUser: const None(),
                   ),),
-                  child: const Text('More Info'),
+                  child: const Text('more info'),
                 ),
               ],
             ),

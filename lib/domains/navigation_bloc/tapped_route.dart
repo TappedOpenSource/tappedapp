@@ -103,18 +103,21 @@ final class BadgesPage extends TappedRoute {
 
 final class CreateBookingPage extends TappedRoute {
   CreateBookingPage({
+    required this.requesteeId,
     required this.service,
     required this.requesteeStripeConnectedAccountId,
   }) : super(
           routeName: '/create_booking',
           view: CreateBookingView(
             service: service,
+            requesteeId: requesteeId,
             requesteeStripeConnectedAccountId:
                 requesteeStripeConnectedAccountId,
           ),
         );
 
-  final Service service;
+  final String requesteeId;
+  final Option<Service> service;
   final Option<String> requesteeStripeConnectedAccountId;
 }
 

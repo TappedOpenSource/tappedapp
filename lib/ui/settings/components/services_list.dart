@@ -1,4 +1,5 @@
 import 'package:badges/badges.dart' as badges;
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fpdart/fpdart.dart';
@@ -21,6 +22,62 @@ class ServicesList extends StatelessWidget {
   final List<Service> services;
   final bool isCurrentUser;
 
+  Widget _customBookingButton(BuildContext context) {
+    final theme = Theme.of(context);
+    return BlocBuilder<ProfileCubit, ProfileState>(
+      builder: (context, state) {
+        return InkWell(
+          onTap: () {},
+          child: Card(
+            elevation: 0,
+            color: theme.colorScheme.onSurface.withOpacity(0.1),
+            child: Container(
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(10),
+              ),
+              width: 190,
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 8),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    const Icon(
+                      Icons.work,
+                      size: 50,
+                      // color: Colors.blue,
+                    ),
+                    const Text(
+                      'custom booking',
+                      maxLines: 2,
+                      overflow: TextOverflow.ellipsis,
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                        fontSize: 20,
+                        fontWeight: FontWeight.bold,
+                        // color: Colors.blue,
+                      ),
+                    ),
+                    CupertinoButton(
+                      onPressed: () => context.push(
+                        CreateBookingPage(
+                          requesteeId: state.visitedUser.id,
+                          service: const None(),
+                          requesteeStripeConnectedAccountId:
+                              state.visitedUser.stripeConnectedAccountId,
+                        ),
+                      ),
+                      child: const Text('book now'),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ),
+        );
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return AdminBuilder(
@@ -31,16 +88,15 @@ class ServicesList extends StatelessWidget {
               height: 190,
               child: ListView.builder(
                 scrollDirection: Axis.horizontal,
-                itemCount: isCurrentUser ? services.length + 1 : services.length,
+                itemCount:
+                    isCurrentUser ? services.length : services.length + 1,
                 itemBuilder: (context, index) {
-                  if (index == services.length) {
-                    return CreateServiceButton(
-                      onCreated: context.read<ProfileCubit>().onServiceCreated,
-                    );
+                  if (index == 0 && !isCurrentUser) {
+                    return _customBookingButton(context);
                   }
 
-                  final service = services[index];
-
+                  final listIndex = isCurrentUser ? index : index - 1;
+                  final service = services[listIndex];
                   return ConditionalParentWidget(
                     condition: isCurrentUser || isAdmin,
                     conditionalBuilder: ({
@@ -51,7 +107,9 @@ class ServicesList extends StatelessWidget {
                           try {
                             context.push(
                               CreateServicePage(
-                                onSubmit: context.read<ProfileCubit>().onServiceEdited,
+                                onSubmit: context
+                                    .read<ProfileCubit>()
+                                    .onServiceEdited,
                                 service: Option.of(service),
                               ),
                             );

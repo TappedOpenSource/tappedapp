@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 
 part 'service.freezed.dart';
+
 part 'service.g.dart';
 
 @freezed
@@ -33,7 +34,20 @@ class Service with _$Service {
 enum RateType {
   @JsonValue('hourly')
   hourly,
-
   @JsonValue('fixed')
   fixed,
+}
+
+extension ServiceX on Service {
+  int performerCost(DateTime startTime, DateTime endTime) {
+    if (rateType == RateType.fixed) {
+      return rate;
+    }
+
+    final d = endTime.difference(startTime);
+    final rateInMinutes = rate / 60;
+    final total = d.inMinutes * rateInMinutes;
+
+    return total.toInt();
+  }
 }
