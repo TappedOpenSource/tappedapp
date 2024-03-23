@@ -1,11 +1,7 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fpdart/fpdart.dart';
-import 'package:intheloopapp/data/auth_repository.dart';
 import 'package:intheloopapp/domains/models/social_following.dart';
-import 'package:intheloopapp/domains/navigation_bloc/navigation_bloc.dart';
-import 'package:intheloopapp/domains/navigation_bloc/tapped_route.dart';
 import 'package:intheloopapp/ui/profile/components/feedback_button.dart';
 import 'package:intheloopapp/ui/profile/components/follower_count.dart';
 import 'package:intheloopapp/ui/profile/components/message_button.dart';
@@ -15,7 +11,6 @@ import 'package:intheloopapp/ui/profile/components/review_count.dart';
 import 'package:intheloopapp/ui/profile/components/settings_button.dart';
 import 'package:intheloopapp/ui/profile/components/star_rating.dart';
 import 'package:intheloopapp/ui/profile/profile_cubit.dart';
-import 'package:intheloopapp/utils/custom_claims_builder.dart';
 
 class HeaderSliver extends StatelessWidget {
   const HeaderSliver({super.key});

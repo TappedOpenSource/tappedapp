@@ -88,9 +88,9 @@ class _RequestToPerformViewState extends State<RequestToPerformView> {
                   }
 
                   try {
-                    final _functions = FirebaseFunctions.instance;
+                    final functions = FirebaseFunctions.instance;
                     final callable =
-                        _functions.httpsCallable('sendEmailOnVenueContacting');
+                        functions.httpsCallable('sendEmailOnVenueContacting');
                     await Future.wait(
                       [
                         callable<Map<String, dynamic>>({

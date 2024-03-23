@@ -268,9 +268,16 @@ class CreateOpportunityForm extends StatelessWidget {
                     context.pop();
                   });
                 },
+                borderRadius: BorderRadius.circular(15),
                 child: state.loading
                     ? const CupertinoActivityIndicator()
-                    : const Text('full send'),
+                    : const Text(
+                        'full send',
+                        style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          color: Colors.white,
+                        ),
+                      ),
               ),
             ],
           ),

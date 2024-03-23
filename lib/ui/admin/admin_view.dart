@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intheloopapp/ui/admin/create_opportunity_cubit.dart';
 import 'package:intheloopapp/ui/admin/create_opportunity_form.dart';
-import 'package:intheloopapp/ui/common/tapped_app_bar.dart';
 import 'package:intheloopapp/utils/bloc_utils.dart';
 import 'package:intheloopapp/utils/current_user_builder.dart';
 
@@ -24,9 +23,7 @@ class AdminView extends StatelessWidget {
           ),
           child: Scaffold(
             backgroundColor: theme.colorScheme.background,
-            appBar: const TappedAppBar(
-              title: 'Admin',
-            ),
+            appBar: AppBar(),
             body: const CreateOpportunityForm(),
           ),
         );
