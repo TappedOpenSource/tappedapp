@@ -192,133 +192,310 @@ class PaywallView extends StatelessWidget {
 
             return Scaffold(
               backgroundColor: theme.colorScheme.background,
-              body: Column(
-                children: [
-                  Container(
-                    width: double.infinity,
-                    height: MediaQuery.of(context).size.height * 0.3,
-                    decoration: const BoxDecoration(
-                      borderRadius: BorderRadius.only(
-                        bottomLeft: Radius.circular(50),
-                        bottomRight: Radius.circular(50),
-                      ),
-                      image: DecorationImage(
-                        fit: BoxFit.cover,
-                        image: AssetImage(
-                          'assets/splash.gif',
-                        ),
+              bottomNavigationBar: Container(
+                color: theme.colorScheme.background,
+                height: 150,
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 20,
+                ),
+                child: Column(
+                  children: [
+                    Text(
+                      'get full access for \$${package.storeProduct.price.toStringAsFixed(2)} / ${package.packageType.toString().split('.').last.toLowerCase()}',
+                      textAlign: TextAlign.center,
+                      style: const TextStyle(
+                        color: Colors.grey,
                       ),
                     ),
-                  ),
-                  Expanded(
-                    child: Padding(
-                      padding: const EdgeInsets.only(
-                        left: 20,
-                        right: 20,
-                        bottom: 20,
-                      ),
-                      child: Column(
-                        children: [
-                          const Text(
-                            'CREATE A WORLD TOUR FROM YOUR IPHONE',
-                            textAlign: TextAlign.center,
-                            style: TextStyle(
-                              fontWeight: FontWeight.w900,
-                              fontSize: 28,
+                    const SizedBox(height: 4),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Expanded(
+                          child: CupertinoButton.filled(
+                            onPressed: () => _onPurchase(
+                              context,
+                              package: package,
+                            ),
+                            borderRadius: BorderRadius.circular(15),
+                            child: const Text(
+                              'Purchase',
+                              style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                                color: Colors.white,
+                              ),
                             ),
                           ),
-                          const SizedBox(height: 24),
-                          _buildCheckItem(
-                            text: 'unlimited gig opportunities',
+                        ),
+                      ],
+                    ),
+                    const SizedBox(height: 2),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        TextButton(
+                          onPressed: () {
+                            context.pop();
+                          },
+                          child: const Text(
+                            'Cancel',
+                            style: TextStyle(
+                              color: Colors.red,
+                            ),
                           ),
-                          const SizedBox(height: 24),
-                          _buildCheckItem(
-                            text:
-                                'exclusive info on venues looking for performers',
+                        ),
+                        TextButton(
+                          onPressed: () => launchURL(
+                            context,
+                            'https://tapped.ai/privacy',
                           ),
-                          const SizedBox(height: 24),
-                          _buildCheckItem(
-                            text: 'contact info for thousands of venues',
-                          ),
-                          const SizedBox(height: 24),
-                          _buildCheckItem(
-                            text: 'advanced search',
-                          ),
-                          const Spacer(),
-                          Text(
-                            'get full access for \$${package.storeProduct.price.toStringAsFixed(2)} / ${package.packageType.toString().split('.').last.toLowerCase()}',
-                            textAlign: TextAlign.center,
-                            style: const TextStyle(
+                          child: const Text(
+                            'Privacy',
+                            style: TextStyle(
                               color: Colors.grey,
                             ),
                           ),
-                          const SizedBox(height: 4),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
+                        ),
+                        TextButton(
+                          onPressed: () => launchURL(
+                            context,
+                            'https://www.apple.com/legal/internet-services/itunes/dev/stdeula/',
+                          ),
+                          child: const Text(
+                            'terms',
+                            style: TextStyle(
+                              color: Colors.grey,
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                    // SizedBox(
+                    //   height: 30,
+                    // ),                       // SizedBox(
+                    //   height: 30,
+                    // ),
+                  ],
+                ),
+              ),
+              body: Stack(
+                children: [
+                  SingleChildScrollView(
+                    child: Column(
+                      children: [
+                        Container(
+                          width: double.infinity,
+                          height: MediaQuery.of(context).size.height * 0.3,
+                          decoration: const BoxDecoration(
+                            borderRadius: BorderRadius.only(
+                              bottomLeft: Radius.circular(50),
+                              bottomRight: Radius.circular(50),
+                            ),
+                            image: DecorationImage(
+                              fit: BoxFit.cover,
+                              image: AssetImage(
+                                'assets/splash.gif',
+                              ),
+                            ),
+                          ),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.only(
+                            left: 20,
+                            right: 20,
+                            bottom: 20,
+                          ),
+                          child: Column(
                             children: [
-                              Expanded(
-                                child: CupertinoButton.filled(
-                                  onPressed: () => _onPurchase(
-                                    context,
-                                    package: package,
-                                  ),
-                                  borderRadius: BorderRadius.circular(15),
-                                  child: const Text(
-                                    'Purchase',
-                                    style: TextStyle(
-                                      fontWeight: FontWeight.bold,
-                                      color: Colors.white,
-                                    ),
-                                  ),
+                              const Text(
+                                'CREATE A WORLD TOUR FROM YOUR IPHONE',
+                                textAlign: TextAlign.center,
+                                style: TextStyle(
+                                  fontWeight: FontWeight.w900,
+                                  fontSize: 28,
                                 ),
                               ),
+                              const SizedBox(height: 12),
+                              _buildCheckItem(
+                                text: 'unlimited gig opportunities',
+                              ),
+                              const SizedBox(height: 12),
+                              _buildCheckItem(
+                                text:
+                                    'exclusive info on venues looking for performers',
+                              ),
+                              const SizedBox(height: 12),
+                              _buildCheckItem(
+                                text: 'contact info for thousands of venues',
+                              ),
+                              const SizedBox(height: 12),
+                              _buildCheckItem(
+                                text: 'advanced search',
+                              ),
+                              // const Spacer(),
+                              // Text(
+                              //   'get full access for \$${package.storeProduct.price.toStringAsFixed(2)} / ${package.packageType.toString().split('.').last.toLowerCase()}',
+                              //   textAlign: TextAlign.center,
+                              //   style: const TextStyle(
+                              //     color: Colors.grey,
+                              //   ),
+                              // ),
+                              // const SizedBox(height: 4),
+                              // Row(
+                              //   mainAxisAlignment: MainAxisAlignment.center,
+                              //   children: [
+                              //     Expanded(
+                              //       child: CupertinoButton.filled(
+                              //         onPressed: () => _onPurchase(
+                              //           context,
+                              //           package: package,
+                              //         ),
+                              //         borderRadius: BorderRadius.circular(15),
+                              //         child: const Text(
+                              //           'Purchase',
+                              //           style: TextStyle(
+                              //             fontWeight: FontWeight.bold,
+                              //             color: Colors.white,
+                              //           ),
+                              //         ),
+                              //       ),
+                              //     ),
+                              //   ],
+                              // ),
+                              // const SizedBox(height: 2),
+                              // Row(
+                              //   mainAxisAlignment: MainAxisAlignment.center,
+                              //   children: [
+                              //     TextButton(
+                              //       onPressed: () {
+                              //         context.pop();
+                              //       },
+                              //       child: const Text(
+                              //         'Cancel',
+                              //         style: TextStyle(
+                              //           color: Colors.red,
+                              //         ),
+                              //       ),
+                              //     ),
+                              //     TextButton(
+                              //       onPressed: () => launchURL(
+                              //         context,
+                              //         'https://tapped.ai/privacy',
+                              //       ),
+                              //       child: const Text(
+                              //         'Privacy',
+                              //         style: TextStyle(
+                              //           color: Colors.grey,
+                              //         ),
+                              //       ),
+                              //     ),
+                              //     TextButton(
+                              //       onPressed: () => launchURL(
+                              //         context,
+                              //         'https://www.apple.com/legal/internet-services/itunes/dev/stdeula/',
+                              //       ),
+                              //       child: const Text(
+                              //         'terms',
+                              //         style: TextStyle(
+                              //           color: Colors.grey,
+                              //         ),
+                              //       ),
+                              //     ),
+                              //   ],
+                              // ),
                             ],
                           ),
-                          const SizedBox(height: 2),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              TextButton(
-                                onPressed: () {
-                                  context.popUntilHome();
-                                },
-                                child: const Text(
-                                  'Cancel',
-                                  style: TextStyle(
-                                    color: Colors.red,
-                                  ),
-                                ),
-                              ),
-                              TextButton(
-                                onPressed: () => launchURL(
-                                  context,
-                                  'https://tapped.ai/privacy',
-                                ),
-                                child: const Text(
-                                  'Privacy',
-                                  style: TextStyle(
-                                    color: Colors.grey,
-                                  ),
-                                ),
-                              ),
-                              TextButton(
-                                onPressed: () => launchURL(
-                                  context,
-                                  'https://www.apple.com/legal/internet-services/itunes/dev/stdeula/',
-                                ),
-                                child: const Text(
-                                  'terms',
-                                  style: TextStyle(
-                                    color: Colors.grey,
-                                  ),
-                                ),
-                              ),
-                            ],
-                          ),
-                        ],
-                      ),
+                        ),
+                      ],
                     ),
                   ),
+                  // Positioned(
+                  //   bottom: 0,
+                  //   left: 0,
+                  //   child: Container(
+                  //     // color: theme.colorScheme.background,
+                  //     color: Colors.green,
+                  //     child: Column(
+                  //       children: [
+                  //         Text(
+                  //           'get full access for \$${package.storeProduct.price.toStringAsFixed(2)} / ${package.packageType.toString().split('.').last.toLowerCase()}',
+                  //           textAlign: TextAlign.center,
+                  //           style: const TextStyle(
+                  //             color: Colors.grey,
+                  //           ),
+                  //         ),
+                  //         const SizedBox(height: 4),
+                  //         Row(
+                  //           mainAxisAlignment: MainAxisAlignment.center,
+                  //           children: [
+                  //             Expanded(
+                  //               child: CupertinoButton.filled(
+                  //                 onPressed: () => _onPurchase(
+                  //                   context,
+                  //                   package: package,
+                  //                 ),
+                  //                 borderRadius: BorderRadius.circular(15),
+                  //                 child: const Text(
+                  //                   'Purchase',
+                  //                   style: TextStyle(
+                  //                     fontWeight: FontWeight.bold,
+                  //                     color: Colors.white,
+                  //                   ),
+                  //                 ),
+                  //               ),
+                  //             ),
+                  //           ],
+                  //         ),
+                  //         const SizedBox(height: 2),
+                  //         Row(
+                  //           mainAxisAlignment: MainAxisAlignment.center,
+                  //           children: [
+                  //             TextButton(
+                  //               onPressed: () {
+                  //                 context.pop();
+                  //               },
+                  //               child: const Text(
+                  //                 'Cancel',
+                  //                 style: TextStyle(
+                  //                   color: Colors.red,
+                  //                 ),
+                  //               ),
+                  //             ),
+                  //             TextButton(
+                  //               onPressed: () => launchURL(
+                  //                 context,
+                  //                 'https://tapped.ai/privacy',
+                  //               ),
+                  //               child: const Text(
+                  //                 'Privacy',
+                  //                 style: TextStyle(
+                  //                   color: Colors.grey,
+                  //                 ),
+                  //               ),
+                  //             ),
+                  //             TextButton(
+                  //               onPressed: () => launchURL(
+                  //                 context,
+                  //                 'https://www.apple.com/legal/internet-services/itunes/dev/stdeula/',
+                  //               ),
+                  //               child: const Text(
+                  //                 'terms',
+                  //                 style: TextStyle(
+                  //                   color: Colors.grey,
+                  //                 ),
+                  //               ),
+                  //             ),
+                  //           ],
+                  //         ),
+                  //         // SizedBox(
+                  //         //   height: 30,
+                  //         // ),                       // SizedBox(
+                  //         //   height: 30,
+                  //         // ),
+                  //       ],
+                  //     ),
+                  //   ),
+                  // ),
                 ],
               ),
             );
