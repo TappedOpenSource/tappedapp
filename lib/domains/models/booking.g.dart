@@ -76,7 +76,7 @@ Map<String, dynamic> _$$BookingImplToJson(_$BookingImpl instance) =>
       ),
       'genres': instance.genres,
       'location': instance.location.toJson(
-        (value) => value,
+        (value) => value.toJson(),
       ),
     };
 

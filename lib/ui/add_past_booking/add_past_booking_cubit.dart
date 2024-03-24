@@ -136,7 +136,7 @@ class AddPastBookingCubit extends Cubit<AddPastBookingState> {
     });
 
     final userData = await database.getUserById(currentUserId);
-    final user = userData.getOrElse(() => throw 'User not found');
+    final user = userData.getOrElse(() => throw 'user not found');
     final genres = user.performerInfo
         .map((t) => fromStrings(t.genres))
         .getOrElse(() => []);

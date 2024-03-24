@@ -14,6 +14,7 @@ part 'booking.g.dart';
 
 @freezed
 class Booking with _$Booking {
+  @JsonSerializable(explicitToJson: true)
   const factory Booking({
     required String id,
     required String requesteeId,

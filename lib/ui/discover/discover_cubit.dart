@@ -7,6 +7,7 @@ import 'package:flutter_map_heatmap/flutter_map_heatmap.dart';
 import 'package:fpdart/fpdart.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:geolocator/geolocator.dart';
+import 'package:intheloopapp/data/database_repository.dart';
 import 'package:intheloopapp/data/places_repository.dart';
 import 'package:intheloopapp/data/search_repository.dart';
 import 'package:intheloopapp/domains/models/booking.dart';
@@ -27,6 +28,7 @@ class DiscoverCubit extends Cubit<DiscoverState> {
   DiscoverCubit({
     required this.currentUser,
     required this.search,
+    required this.database,
     required this.initGenres,
     required this.onboardingBloc,
     required this.places,
@@ -38,6 +40,7 @@ class DiscoverCubit extends Cubit<DiscoverState> {
 
   final UserModel currentUser;
   final SearchRepository search;
+  final DatabaseRepository database;
   final List<Genre> initGenres;
   final OnboardingBloc onboardingBloc;
   final PlacesRepository places;
@@ -253,6 +256,14 @@ class DiscoverCubit extends Cubit<DiscoverState> {
               limit: 250,
             );
             emit(state.copyWith(venueHits: hits));
+          },
+        MapOverlay.userBookings => () async {
+            final bookings = await database.getBookingsByRequestee(
+              currentUser.id,
+              limit: 250,
+            );
+
+            emit(state.copyWith(userBookings: bookings));
           },
         MapOverlay.bookings => () async {
             final hits = await search.queryBookingsInBoundingBox(

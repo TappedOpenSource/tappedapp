@@ -292,7 +292,8 @@ class __$$BookingImplCopyWithImpl<$Res>
 }
 
 /// @nodoc
-@JsonSerializable()
+
+@JsonSerializable(explicitToJson: true)
 class _$BookingImpl implements _Booking {
   const _$BookingImpl(
       {required this.id,

@@ -82,9 +82,10 @@ class _MapConfigSliderState extends State<MapConfigSlider> {
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      height: 150,
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+      height: 300,
+      child: GridView.count(
+        crossAxisCount: 2,
+        childAspectRatio: 1.5,
         children: [
           _buildMapOverlayButton(
             context,
@@ -93,6 +94,15 @@ class _MapConfigSliderState extends State<MapConfigSlider> {
             label: 'venues',
             image: const AssetImage(
               'assets/layers/venue_markers.png',
+            ),
+          ),
+          _buildMapOverlayButton(
+            context,
+            currentOverlay: _currentOverlay,
+            overlay: MapOverlay.userBookings,
+            label: 'my bookings',
+            image: const AssetImage(
+              'assets/layers/my_bookings_polygon.png',
             ),
           ),
           _buildMapOverlayButton(

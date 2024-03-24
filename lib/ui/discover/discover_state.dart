@@ -4,6 +4,7 @@ part of 'discover_cubit.dart';
 class DiscoverState with _$DiscoverState {
   const factory DiscoverState({
     @Default([]) List<UserModel> venueHits,
+    @Default([]) List<Booking> userBookings,
     @Default([]) List<Booking> bookingHits,
     @Default([]) List<Opportunity> opportunityHits,
     @Default(MapOverlay.venues) MapOverlay mapOverlay,
@@ -18,6 +19,7 @@ class DiscoverState with _$DiscoverState {
 @JsonEnum()
 enum MapOverlay {
   venues,
+  userBookings,
   bookings,
   opportunities,
 }

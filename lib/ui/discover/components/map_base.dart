@@ -5,6 +5,7 @@ import 'package:flutter_map_tile_caching/flutter_map_tile_caching.dart';
 import 'package:intheloopapp/domains/models/location.dart';
 import 'package:intheloopapp/ui/app_theme_cubit.dart';
 import 'package:intheloopapp/ui/discover/components/bookings_heatmap_layer.dart';
+import 'package:intheloopapp/ui/discover/components/bookings_polygon_layer.dart';
 import 'package:intheloopapp/ui/discover/components/opportunities_heatmap_layer.dart';
 import 'package:intheloopapp/ui/discover/components/venue_marker_layer.dart';
 import 'package:intheloopapp/ui/discover/discover_cubit.dart';
@@ -69,6 +70,7 @@ class MapBase extends StatelessWidget {
               builder: (context, state) {
                 return switch (state.mapOverlay) {
                   MapOverlay.venues => const VenueMarkerLayer(),
+                  MapOverlay.userBookings => const BookingsPolygonLayer(),
                   MapOverlay.bookings => BookingsHeatmapLayer(),
                   MapOverlay.opportunities => const OpportunitiesHeatmapLayer(),
                 };

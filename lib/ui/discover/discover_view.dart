@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:fpdart/fpdart.dart';
+import 'package:intheloopapp/data/database_repository.dart';
 import 'package:intheloopapp/data/search_repository.dart';
 import 'package:intheloopapp/domains/models/genre.dart';
 import 'package:intheloopapp/domains/navigation_bloc/navigation_bloc.dart';
@@ -79,10 +80,12 @@ class DiscoverView extends StatelessWidget {
                     onPressed: () {
                       showModalBottomSheet<void>(
                         context: context,
+                        showDragHandle: true,
                         builder: (context) {
                           return Padding(
                             padding: const EdgeInsets.symmetric(
                               vertical: 16,
+                              horizontal: 20,
                             ),
                             child: MapConfigSlider(
                               initialOverlay: state.mapOverlay,
@@ -247,6 +250,7 @@ class DiscoverView extends StatelessWidget {
             return BlocProvider<DiscoverCubit>(
               create: (context) => DiscoverCubit(
                 currentUser: currentUser,
+                database: context.database,
                 search: context.read<SearchRepository>(),
                 initGenres: fromStrings(initGenres),
                 onboardingBloc: context.read<OnboardingBloc>(),
