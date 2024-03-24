@@ -54,11 +54,24 @@ class ServicesSliver extends StatelessWidget {
                         ),
                       ),
                       const SizedBox(width: 8),
-                      Icon(
-                        CupertinoIcons.add_circled,
-                        size: 20,
-                        color: Colors.grey.shade600,
-                      ),
+                      if (isCurrentUser)
+                        GestureDetector(
+                          onTap: () {
+                            context.push(
+                              CreateServicePage(
+                                onSubmit: context
+                                    .read<ProfileCubit>()
+                                    .onServiceCreated,
+                                service: const None(),
+                              ),
+                            );
+                          },
+                          child: Icon(
+                            CupertinoIcons.add_circled,
+                            size: 20,
+                            color: Colors.grey.shade600,
+                          ),
+                        ),
                     ],
                   ),
                 ),
