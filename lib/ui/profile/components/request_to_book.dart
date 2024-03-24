@@ -41,7 +41,7 @@ class RequestToBookButton extends StatelessWidget {
         onPressed();
       },
       child: const Text(
-        'Request to Book',
+        'request to book',
         style: TextStyle(
           fontWeight: FontWeight.w700,
           color: Colors.white,

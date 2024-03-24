@@ -61,7 +61,7 @@ class CreateBookingView extends StatelessWidget {
                   title: const Row(
                     children: [
                       Text(
-                        'Request to Book',
+                        'request to book',
                         style: TextStyle(
                           fontSize: 32,
                           fontWeight: FontWeight.bold,
