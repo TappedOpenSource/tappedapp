@@ -23,7 +23,7 @@ class TwitterTextField extends StatelessWidget {
       decoration: const InputDecoration(
         prefixIcon: Icon(FontAwesomeIcons.twitter),
         prefixText: '@ ',
-        labelText: 'Twitter',
+        labelText: 'twitter',
       ),
       onChanged: (input) {
         input = input.trim().toLowerCase();

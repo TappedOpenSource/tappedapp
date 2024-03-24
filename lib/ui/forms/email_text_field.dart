@@ -5,7 +5,7 @@ class EmailTextField extends StatelessWidget {
   const EmailTextField({
     super.key,
     this.onChanged,
-    this.labelText = 'Email',
+    this.labelText = 'email',
   });
 
   final void Function(String?)? onChanged;
@@ -27,7 +27,7 @@ class EmailTextField extends StatelessWidget {
           keyboardType: TextInputType.emailAddress,
           validator: (value) => EmailValidator.validate(value ?? '')
               ? null
-              : 'Please enter a valid email',
+              : 'please enter a valid email',
           onChanged: (input) async {
             onChanged?.call(input);
           },

@@ -90,7 +90,7 @@ class _MapConfigSliderState extends State<MapConfigSlider> {
             context,
             currentOverlay: _currentOverlay,
             overlay: MapOverlay.venues,
-            label: 'Venues',
+            label: 'venues',
             image: const AssetImage(
               'assets/layers/venue_markers.png',
             ),
@@ -99,7 +99,7 @@ class _MapConfigSliderState extends State<MapConfigSlider> {
             context,
             currentOverlay: _currentOverlay,
             overlay: MapOverlay.bookings,
-            label: 'Bookings',
+            label: 'bookings',
             image: const AssetImage(
               'assets/layers/booking_heatmap.png',
             ),
@@ -109,7 +109,7 @@ class _MapConfigSliderState extends State<MapConfigSlider> {
             context,
             currentOverlay: _currentOverlay,
             overlay: MapOverlay.opportunities,
-            label: 'Opportunities',
+            label: 'opportunities',
             image: const AssetImage(
               'assets/layers/op_heatmap.png',
             ),

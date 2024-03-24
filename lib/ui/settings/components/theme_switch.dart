@@ -31,7 +31,7 @@ class ThemeSwitch extends StatelessWidget {
                     // color: tappedAccent,
                   ),
                   Text(
-                    'Light',
+                    'light',
                     style: TextStyle(
                       // color: tappedAccent,
                       fontSize: 14,
@@ -50,7 +50,7 @@ class ThemeSwitch extends StatelessWidget {
                     // color: tappedAccent,
                   ),
                   Text(
-                    'Dark',
+                    'dark',
                     style: TextStyle(
                       // color: tappedAccent,
                       fontSize: 14,

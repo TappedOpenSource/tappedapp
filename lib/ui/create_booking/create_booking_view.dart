@@ -82,7 +82,6 @@ class CreateBookingView extends StatelessWidget {
                           }
 
                           final requestee = snapshot.data;
-
                           return switch (requestee) {
                             null => SkeletonListTile(),
                             None() => SkeletonListTile(),

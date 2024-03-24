@@ -17,7 +17,7 @@ class InstagramFollowersTextField extends StatelessWidget {
       initialValue: iVal.toString(),
       decoration: const InputDecoration(
         prefixIcon: Icon(Icons.people),
-        labelText: 'Instagram Followers',
+        labelText: 'instagram followers',
       ),
       keyboardType: TextInputType.number,
       onChanged: (input) {

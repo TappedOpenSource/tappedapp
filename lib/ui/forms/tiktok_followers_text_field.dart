@@ -17,7 +17,7 @@ class TikTokFollowersTextField extends StatelessWidget {
       initialValue: iVal.toString(),
       decoration: const InputDecoration(
         prefixIcon: Icon(Icons.people),
-        labelText: 'TikTok Followers',
+        labelText: 'tiktok followers',
       ),
       keyboardType: TextInputType.number,
       onChanged: (input) {

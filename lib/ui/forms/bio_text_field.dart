@@ -18,7 +18,7 @@ class BioTextField extends StatelessWidget {
       initialValue: initialValue,
       decoration: const InputDecoration(
         prefixIcon: Icon(Icons.short_text_rounded),
-        labelText: 'Bio',
+        labelText: 'bio',
       ),
       validator: (input) {
         if (input == null || input.trim().length < 2) {

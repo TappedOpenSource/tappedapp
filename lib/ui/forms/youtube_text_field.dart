@@ -23,7 +23,7 @@ class YoutubeTextField extends StatelessWidget {
       decoration: const InputDecoration(
         prefixIcon: Icon(FontAwesomeIcons.youtube),
         prefixText: 'youtube.com/@',
-        labelText: 'Youtube Handle',
+        labelText: 'youtube handle',
       ),
       onChanged: (input) {
         input = input.trim();

@@ -17,7 +17,7 @@ class TwitterFollowersTextField extends StatelessWidget {
       initialValue: iVal.toString(),
       decoration: const InputDecoration(
         prefixIcon: Icon(Icons.people),
-        labelText: 'Twitter Followers',
+        labelText: 'twitter followers',
       ),
       keyboardType: TextInputType.number,
       onChanged: (input) {
