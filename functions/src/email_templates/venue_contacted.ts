@@ -1,20 +1,20 @@
 
 export const venueContacted = `
-hey! 
+<p>hey!
 
-<p>We hope this message finds you well!</p>
+We hope this message finds you well!
 
-<p>your performance request has been successfully submitted. This means that your talent and music have the opportunity to grace their stage!</p>
+your performance request has been successfully submitted. This means that your talent and music have the opportunity to grace their stage!
 
-<p>Rest assured, we've forwarded your request to the venue management, and they'll be reviewing it shortly. While we can't guarantee acceptance, we're rooting for you and your music!</p>
+Rest assured, we've forwarded your request to the venue management, and they'll be reviewing it shortly. While we can't guarantee acceptance, we're rooting for you and your music!
 
-<p>Please keep an eye on your DM inbox for any updates regarding your request. If the venue decides to accept your request, we'll promptly notify you.</p>
+Please keep an eye on your DM inbox for any updates regarding your request. If the venue decides to accept your request, we'll promptly notify you.
 
-<p>In the meantime, keep practicing, keep sharing your music, and keep spreading those positive vibes!</p>
+In the meantime, keep practicing, keep sharing your music, and keep spreading those positive vibes!
 
-<p>If you have any questions or concerns, feel free to reach out to us. We're here to support you every step of the way.</p>
+If you have any questions or concerns, feel free to reach out to us. We're here to support you every step of the way.
 
-<p>Thank you for using our app to connect with venues and share your musical talent!</p>
+Thank you for using our app to connect with venues and share your musical talent!</p>
 
 best,
 Tapped Team

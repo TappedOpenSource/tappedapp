@@ -93,7 +93,7 @@ class _RequestToPerformViewState extends State<RequestToPerformView> {
                         functions.httpsCallable('sendEmailOnVenueContacting');
                     await Future.wait(
                       [
-                        callable<Map<String, dynamic>>({
+                        callable<void>({
                           'userId': currentUser.id,
                         }),
                         ..._venues.map((venue) async {

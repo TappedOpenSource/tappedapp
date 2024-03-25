@@ -141,14 +141,6 @@ async function sendAsDirectMessage({
   userId: string;
   note: string;
 }) {
-  // create DM channel between both parties
-  const token = streamClient.createToken(userId);
-  await streamClient.connectUser(
-    {
-      id: userId,
-    },
-    token
-  );
 
   // join channel
   const channel = streamClient.channel("messaging", {
@@ -160,10 +152,8 @@ async function sendAsDirectMessage({
   const noteString = note !== "" ? ` - ${note}` : "";
   await channel.sendMessage({
     text: `hey! I was recommended to contact you about performing at your venue ${noteString}`,
+    user_id: userId,
   });
-
-  // disconnectUser
-  await streamClient.disconnectUser();
 }
 
 async function dmAutoReply({
@@ -178,7 +168,7 @@ async function dmAutoReply({
   autoReply: string | null;
 }) {
   const defaultReply = `
-
+  Hey! Thanks for reaching out. We'll reach back out to you soon
 `
   const text = autoReply ?? defaultReply;
 
@@ -192,7 +182,7 @@ async function dmAutoReply({
   // post msg
   await channel.sendMessage({
     text,
-    userId: venueId,
+    user_id: venueId,
   });
 
   const channelSnap = await channel.query({});
