@@ -24,7 +24,7 @@ import 'package:intheloopapp/data/remote_config_repository.dart';
 import 'package:intheloopapp/data/search_repository.dart';
 import 'package:intheloopapp/data/storage_repository.dart';
 import 'package:intheloopapp/data/stream_repository.dart';
-import 'package:intheloopapp/domains/activity_bloc/activity_bloc.dart';
+// import 'package:intheloopapp/domains/activity_bloc/activity_bloc.dart';
 import 'package:intheloopapp/domains/authentication_bloc/authentication_bloc.dart';
 import 'package:intheloopapp/domains/bookings_bloc/bookings_bloc.dart';
 import 'package:intheloopapp/domains/confirm_email_bloc/confirm_email_bloc.dart';
@@ -141,12 +141,12 @@ List<BlocProvider> buildBlocs({
         remoteConfigRepository: context.remoteConfig,
       )..add(CheckStatus()),
     ),
-    BlocProvider<ActivityBloc>(
-      create: (context) => ActivityBloc(
-        databaseRepository: context.database,
-        authenticationBloc: context.authentication,
-      ),
-    ),
+    // BlocProvider<ActivityBloc>(
+    //   create: (context) => ActivityBloc(
+    //     databaseRepository: context.database,
+    //     authenticationBloc: context.authentication,
+    //   ),
+    // ),
     BlocProvider<BookingsBloc>(
       create: (context) => BookingsBloc(
         database: context.database,

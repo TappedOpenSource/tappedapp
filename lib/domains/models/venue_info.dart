@@ -20,6 +20,7 @@ class VenueInfo with _$VenueInfo {
     @Default(None()) Option<String> lights,
     @Default(VenueType.other) VenueType type,
     @Default(None()) Option<int> averageTicketPrice,
+    @Default([]) List<String> topPerformerIds,
   }) = _VenueInfo;
 
   // fromJson

@@ -79,11 +79,12 @@ class LoginForm extends StatelessWidget {
                 ),
                 GoogleLoginButton(
                   onPressed: () async {
+                    final scaffoldMessenger = ScaffoldMessenger.of(context);
                     try {
                       await context.read<LoginCubit>().signInWithGoogle();
                       nav.pop();
                     } catch (e) {
-                      ScaffoldMessenger.of(context)
+                      scaffoldMessenger
                         ..hideCurrentSnackBar()
                         ..showSnackBar(
                           const SnackBar(
@@ -99,17 +100,18 @@ class LoginForm extends StatelessWidget {
                 if (!kIsWeb && Platform.isIOS)
                   AppleLoginButton(
                     onPressed: () async {
+                      final scaffoldMessenger = ScaffoldMessenger.of(context);
                       try {
                         await context.read<LoginCubit>().signInWithApple();
                         nav.pop();
                       } catch (e) {
-                        ScaffoldMessenger.of(context)
+                        scaffoldMessenger
                           ..hideCurrentSnackBar()
                           ..showSnackBar(
                             const SnackBar(
                               behavior: SnackBarBehavior.floating,
                               backgroundColor: Colors.redAccent,
-                              content: Text('Authentication Failure'),
+                              content: Text('authentication failure'),
                             ),
                           );
                       }

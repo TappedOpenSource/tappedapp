@@ -47,7 +47,7 @@ class CloudMessagingImpl extends NotificationRepository {
             );
           } catch (e, s) {
             logger.error(
-              'Saving device token failed',
+              'saving device token failed',
               error: e,
               stackTrace: s,
             );
@@ -56,7 +56,7 @@ class CloudMessagingImpl extends NotificationRepository {
       }
     } catch (e, s) {
       logger.error(
-        'Saving device token failed',
+        'saving device token failed',
         error: e,
         stackTrace: s,
       );

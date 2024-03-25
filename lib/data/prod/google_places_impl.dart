@@ -66,7 +66,7 @@ class GooglePlacesImpl implements PlacesRepository {
       return Option.of(place);
     } catch (e, s) {
       logger.error(
-        'Error fetching place by id: $placeId',
+        'error fetching place by id: $placeId',
         error: e,
         stackTrace: s,
       );

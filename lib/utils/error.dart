@@ -13,7 +13,7 @@ Future<void> configureError() async {
       );
       FirebaseCrashlytics.instance.recordFlutterFatalError(errorDetails);
     } catch (e) {
-      logger.debug('Failed to report error to Firebase Crashlytics');
+      logger.debug('failed to report error to Firebase Crashlytics');
     }
   };
   PlatformDispatcher.instance.onError = (error, stack) {
@@ -21,7 +21,7 @@ Future<void> configureError() async {
       logger.error('error', error: error, stackTrace: stack, fatal: true);
       return true;
     } catch (e) {
-      logger.debug('Failed to report error to Firebase Crashlytics: $e');
+      logger.debug('failed to report error to Firebase Crashlytics: $e');
       return false;
     }
   };

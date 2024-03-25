@@ -68,7 +68,7 @@ class App extends StatelessWidget {
                 userId: currentAuthUserId,
               );
               context.stream.connectUser(currentAuthUserId);
-              context.read<ActivityBloc>().add(InitListenerEvent());
+              // context.read<ActivityBloc>().add(InitListenerEvent());
               context.read<OpportunityBloc>().add(const InitQuotaListener());
               context.bookings.add(FetchBookings());
               context.database.publishLatestAppVersion(currentAuthUserId);

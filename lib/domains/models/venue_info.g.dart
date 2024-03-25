@@ -56,6 +56,10 @@ _$VenueInfoImpl _$$VenueInfoImplFromJson(Map<String, dynamic> json) =>
           ? const None()
           : Option<int>.fromJson(
               json['averageTicketPrice'], (value) => value as int),
+      topPerformerIds: (json['topPerformerIds'] as List<dynamic>?)
+              ?.map((e) => e as String)
+              .toList() ??
+          const [],
     );
 
 Map<String, dynamic> _$$VenueInfoImplToJson(_$VenueInfoImpl instance) =>
@@ -93,6 +97,7 @@ Map<String, dynamic> _$$VenueInfoImplToJson(_$VenueInfoImpl instance) =>
       'averageTicketPrice': instance.averageTicketPrice.toJson(
         (value) => value,
       ),
+      'topPerformerIds': instance.topPerformerIds,
     };
 
 const _$VenueTypeEnumMap = {
