@@ -10,6 +10,7 @@ import 'package:image_picker/image_picker.dart';
 import 'package:intheloopapp/data/database_repository.dart';
 import 'package:intheloopapp/data/storage_repository.dart';
 import 'package:intheloopapp/domains/authentication_bloc/authentication_bloc.dart';
+import 'package:intheloopapp/domains/models/performer_info.dart';
 import 'package:intheloopapp/domains/models/social_following.dart';
 import 'package:intheloopapp/domains/models/user_model.dart';
 import 'package:intheloopapp/domains/models/username.dart';
@@ -142,6 +143,9 @@ class OnboardingFlowCubit extends Cubit<OnboardingFlowState> {
           tiktokFollowers: state.tiktokFollowers,
           instagramHandle: instagramHandle,
           instagramFollowers: state.instagramFollowers,
+        ),
+        performerInfo: const Option.of(
+          PerformerInfo(),
         ),
       );
 

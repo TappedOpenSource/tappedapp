@@ -1,10 +1,8 @@
 /* eslint-disable import/no-unresolved */
 import { onSchedule } from "firebase-functions/v2/scheduler";
-import { messaging } from "firebase-admin";
 import { HttpsError } from "firebase-functions/v2/https";
 import * as functions from "firebase-functions";
 import {
-  fcm,
   bookingsRef,
   servicesRef,
   usersRef,
@@ -13,7 +11,6 @@ import {
   SLACK_WEBHOOK_URL,
 } from "./firebase";
 import { Booking, BookingStatus } from "../types/models";
-import { getFoundersDeviceTokens } from "./utils";
 import { createActivity } from "./activities";
 import { FieldValue } from "firebase-admin/firestore";
 import { debug } from "firebase-functions/logger";

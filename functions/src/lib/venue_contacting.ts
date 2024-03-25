@@ -22,7 +22,7 @@ import { contactVenueTemplate } from "../email_templates/contact_venue";
 import { UserModel, VenueContactRequest } from "../types/models";
 import { getFoundersDeviceTokens } from "./utils";
 import { chatGpt } from "./openai";
-import { notifyFounders, slackNotification } from "./notifications";
+import { slackNotification } from "./notifications";
 
 function createEmailMessageId() {
   const currentTime = Date.now().toString(36);
@@ -370,7 +370,7 @@ async function writeEmailWithAi({
 export const notifyFoundersOnVenueContact = onDocumentCreated(
   {
     document: "contactVenues/{userId}/venuesContacted/{venueId}",
-    secrets: [ POSTMARK_SERVER_ID, streamKey, streamSecret, OPEN_AI_KEY ],
+    secrets: [ POSTMARK_SERVER_ID, streamKey, streamSecret, OPEN_AI_KEY, SLACK_WEBHOOK_URL ],
   },
   async (event) => {
     try {
@@ -433,9 +433,10 @@ export const notifyFoundersOnVenueContact = onDocumentCreated(
       });
     } catch (e: any) {
       error(e);
-      await notifyFounders({
+      await slackNotification({
         title: "Error in venue contact",
         body: e.message,
+        slackWebhookUrl: SLACK_WEBHOOK_URL.value(),
       });
     }
   }
