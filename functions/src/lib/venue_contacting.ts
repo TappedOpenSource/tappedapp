@@ -3,7 +3,6 @@
 import { onRequest } from "firebase-functions/v2/https";
 import {
   contactVenuesRef,
-  fcm,
   OPEN_AI_KEY,
   orphanEmailsRef,
   POSTMARK_SERVER_ID,
@@ -20,7 +19,6 @@ import { onDocumentCreated } from "firebase-functions/v2/firestore";
 import { StreamChat, User } from "stream-chat";
 import { contactVenueTemplate } from "../email_templates/contact_venue";
 import { UserModel, VenueContactRequest } from "../types/models";
-import { getFoundersDeviceTokens } from "./utils";
 import { chatGpt } from "./openai";
 import { slackNotification } from "./notifications";
 
@@ -177,16 +175,13 @@ async function dmAutoReply({
   streamClient: StreamChat;
   venueId: string;
   userId: string;
-  autoReply: string;
+  autoReply: string | null;
 }) {
-  // create DM channel between both parties
-  const token = streamClient.createToken(venueId);
-  await streamClient.connectUser(
-    {
-      id: venueId,
-    },
-    token
-  );
+  const defaultReply = `
+
+`
+  const text = autoReply ?? defaultReply;
+
 
   // join channel
   const channel = streamClient.channel("messaging", {
@@ -196,11 +191,17 @@ async function dmAutoReply({
 
   // post msg
   await channel.sendMessage({
-    text: autoReply,
+    text,
+    userId: venueId,
   });
 
-  // disconnectUser
-  await streamClient.disconnectUser();
+  const channelSnap = await channel.query({});
+  const isNew = channelSnap.channel.last_message_at === null;
+  if (isNew) {
+    await channel.updatePartial({
+      set: { frozen: true },
+    });
+  }
 }
 
 async function sendStreamMessageFromEmail({
@@ -214,14 +215,6 @@ async function sendStreamMessageFromEmail({
   venueId: string;
   message: string;
 }) {
-  // create DM channel between both parties
-  const token = streamClient.createToken(venueId);
-  await streamClient.connectUser(
-    {
-      id: venueId,
-    },
-    token
-  );
 
   // join channel
   const channel = streamClient.channel("messaging", {
@@ -229,13 +222,15 @@ async function sendStreamMessageFromEmail({
   });
   await channel.create();
 
+  await channel.updatePartial({
+    set: { frozen: false },
+  });
+
   // post msg
   await channel.sendMessage({
     text: message,
+    user_id: venueId,
   });
-
-  // disconnectUser
-  await streamClient.disconnectUser();
 }
 
 async function sendEmailFromStreamMessage({
@@ -402,14 +397,14 @@ export const notifyFoundersOnVenueContact = onDocumentCreated(
       }
 
       // if autoreply setup, send autoreply as DM;
-      const autoReply = venueData.venueInfo?.autoReply;
-      if (autoReply !== undefined && autoReply !== null) {
-        await dmAutoReply({
-          streamClient: streamChat,
-          venueId,
-          userId,
-          autoReply,
-        });
+      const autoReply = venueData.venueInfo?.autoReply ?? null;
+      await dmAutoReply({
+        streamClient: streamChat,
+        venueId,
+        userId,
+        autoReply,
+      });
+      if (autoReply !== null) {
         return;
       }
 
@@ -525,15 +520,6 @@ export const inboundEmailWebhook = onRequest(
           allEmails: newAllEmails,
           latestMessageId,
         });
-
-      const foundsTokens = await getFoundersDeviceTokens();
-      const payload = {
-        notification: {
-          title: "NEW EMAIL!!!",
-          body: `New email from ${from} in response to ${username}`,
-        },
-      };
-      await fcm.sendToDevice(foundsTokens, payload);
 
       slackNotification({
         title: "NEW EMAIL!!!",
