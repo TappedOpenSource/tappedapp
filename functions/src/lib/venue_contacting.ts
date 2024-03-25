@@ -674,28 +674,17 @@ export const notifyFoundersOnOrphanEmail = onDocumentCreated(
       return;
     }
 
-    const foundersTokens = await getFoundersDeviceTokens();
-
     const email = documentData?.email;
     await client.sendEmail({
       To: "johannes@tapped.ai",
       ...email,
     });
 
-    const payload = {
-      notification: {
-        title: "Orphan Email",
-        body: `An email was not able to be processed: ${error}`,
-      },
-    };
-
     slackNotification({
       title: "Orphan Email",
       body: `An email was not able to be processed: ${error}`,
       slackWebhookUrl: SLACK_WEBHOOK_URL.value(),
     });
-
-    fcm.sendToDevice(foundersTokens, payload);
   }
 );
 
