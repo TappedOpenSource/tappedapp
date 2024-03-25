@@ -16,6 +16,10 @@ _$PerformerInfoImpl _$$PerformerInfoImplFromJson(Map<String, dynamic> json) =>
               ?.map((e) => e as String)
               .toList() ??
           const [],
+      subgenres: (json['subgenres'] as List<dynamic>?)
+              ?.map((e) => e as String)
+              .toList() ??
+          const [],
       rating: json['rating'] == null
           ? const None()
           : Option<double>.fromJson(
@@ -41,6 +45,7 @@ Map<String, dynamic> _$$PerformerInfoImplToJson(_$PerformerInfoImpl instance) =>
         (value) => value,
       ),
       'genres': instance.genres,
+      'subgenres': instance.subgenres,
       'rating': instance.rating.toJson(
         (value) => value,
       ),

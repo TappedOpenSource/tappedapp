@@ -22,6 +22,7 @@ PerformerInfo _$PerformerInfoFromJson(Map<String, dynamic> json) {
 mixin _$PerformerInfo {
   Option<String> get pressKitUrl => throw _privateConstructorUsedError;
   List<String> get genres => throw _privateConstructorUsedError;
+  List<String> get subgenres => throw _privateConstructorUsedError;
   Option<double> get rating => throw _privateConstructorUsedError;
   int get reviewCount => throw _privateConstructorUsedError;
   String get label => throw _privateConstructorUsedError;
@@ -44,6 +45,7 @@ abstract class $PerformerInfoCopyWith<$Res> {
   $Res call(
       {Option<String> pressKitUrl,
       List<String> genres,
+      List<String> subgenres,
       Option<double> rating,
       int reviewCount,
       String label,
@@ -67,6 +69,7 @@ class _$PerformerInfoCopyWithImpl<$Res, $Val extends PerformerInfo>
   $Res call({
     Object? pressKitUrl = null,
     Object? genres = null,
+    Object? subgenres = null,
     Object? rating = null,
     Object? reviewCount = null,
     Object? label = null,
@@ -82,6 +85,10 @@ class _$PerformerInfoCopyWithImpl<$Res, $Val extends PerformerInfo>
       genres: null == genres
           ? _value.genres
           : genres // ignore: cast_nullable_to_non_nullable
+              as List<String>,
+      subgenres: null == subgenres
+          ? _value.subgenres
+          : subgenres // ignore: cast_nullable_to_non_nullable
               as List<String>,
       rating: null == rating
           ? _value.rating
@@ -122,6 +129,7 @@ abstract class _$$PerformerInfoImplCopyWith<$Res>
   $Res call(
       {Option<String> pressKitUrl,
       List<String> genres,
+      List<String> subgenres,
       Option<double> rating,
       int reviewCount,
       String label,
@@ -143,6 +151,7 @@ class __$$PerformerInfoImplCopyWithImpl<$Res>
   $Res call({
     Object? pressKitUrl = null,
     Object? genres = null,
+    Object? subgenres = null,
     Object? rating = null,
     Object? reviewCount = null,
     Object? label = null,
@@ -158,6 +167,10 @@ class __$$PerformerInfoImplCopyWithImpl<$Res>
       genres: null == genres
           ? _value._genres
           : genres // ignore: cast_nullable_to_non_nullable
+              as List<String>,
+      subgenres: null == subgenres
+          ? _value._subgenres
+          : subgenres // ignore: cast_nullable_to_non_nullable
               as List<String>,
       rating: null == rating
           ? _value.rating
@@ -193,13 +206,15 @@ class _$PerformerInfoImpl implements _PerformerInfo {
   const _$PerformerInfoImpl(
       {this.pressKitUrl = const None(),
       final List<String> genres = const [],
+      final List<String> subgenres = const [],
       this.rating = const None(),
       this.reviewCount = 0,
       this.label = 'Independent',
       this.category = PerformerCategory.undiscovered,
       this.averageTicketPrice = const None(),
       this.averageAttendance = const None()})
-      : _genres = genres;
+      : _genres = genres,
+        _subgenres = subgenres;
 
   factory _$PerformerInfoImpl.fromJson(Map<String, dynamic> json) =>
       _$$PerformerInfoImplFromJson(json);
@@ -214,6 +229,15 @@ class _$PerformerInfoImpl implements _PerformerInfo {
     if (_genres is EqualUnmodifiableListView) return _genres;
     // ignore: implicit_dynamic_type
     return EqualUnmodifiableListView(_genres);
+  }
+
+  final List<String> _subgenres;
+  @override
+  @JsonKey()
+  List<String> get subgenres {
+    if (_subgenres is EqualUnmodifiableListView) return _subgenres;
+    // ignore: implicit_dynamic_type
+    return EqualUnmodifiableListView(_subgenres);
   }
 
   @override
@@ -237,7 +261,7 @@ class _$PerformerInfoImpl implements _PerformerInfo {
 
   @override
   String toString() {
-    return 'PerformerInfo(pressKitUrl: $pressKitUrl, genres: $genres, rating: $rating, reviewCount: $reviewCount, label: $label, category: $category, averageTicketPrice: $averageTicketPrice, averageAttendance: $averageAttendance)';
+    return 'PerformerInfo(pressKitUrl: $pressKitUrl, genres: $genres, subgenres: $subgenres, rating: $rating, reviewCount: $reviewCount, label: $label, category: $category, averageTicketPrice: $averageTicketPrice, averageAttendance: $averageAttendance)';
   }
 
   @override
@@ -248,6 +272,8 @@ class _$PerformerInfoImpl implements _PerformerInfo {
             (identical(other.pressKitUrl, pressKitUrl) ||
                 other.pressKitUrl == pressKitUrl) &&
             const DeepCollectionEquality().equals(other._genres, _genres) &&
+            const DeepCollectionEquality()
+                .equals(other._subgenres, _subgenres) &&
             (identical(other.rating, rating) || other.rating == rating) &&
             (identical(other.reviewCount, reviewCount) ||
                 other.reviewCount == reviewCount) &&
@@ -266,6 +292,7 @@ class _$PerformerInfoImpl implements _PerformerInfo {
       runtimeType,
       pressKitUrl,
       const DeepCollectionEquality().hash(_genres),
+      const DeepCollectionEquality().hash(_subgenres),
       rating,
       reviewCount,
       label,
@@ -291,6 +318,7 @@ abstract class _PerformerInfo implements PerformerInfo {
   const factory _PerformerInfo(
       {final Option<String> pressKitUrl,
       final List<String> genres,
+      final List<String> subgenres,
       final Option<double> rating,
       final int reviewCount,
       final String label,
@@ -305,6 +333,8 @@ abstract class _PerformerInfo implements PerformerInfo {
   Option<String> get pressKitUrl;
   @override
   List<String> get genres;
+  @override
+  List<String> get subgenres;
   @override
   Option<double> get rating;
   @override

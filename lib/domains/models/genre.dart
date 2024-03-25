@@ -432,7 +432,7 @@ extension GenreX on Genre {
     };
   }
 //
-// List<String> get subgenres {
+// List<SubGenre> get subgenres {
 //   return switch (this) {
 //
 //   };

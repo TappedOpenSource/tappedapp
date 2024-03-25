@@ -12,6 +12,7 @@ class PerformerInfo with _$PerformerInfo {
   const factory PerformerInfo({
     @Default(None()) Option<String> pressKitUrl,
     @Default([]) List<String> genres,
+    @Default([]) List<String> subgenres,
     @Default(None()) Option<double> rating,
     @Default(0) int reviewCount,
     @Default('Independent') String label,
