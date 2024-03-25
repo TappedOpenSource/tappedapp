@@ -165,40 +165,16 @@ export const notifyFoundersOnBookings = functions
     const requesteeSnapshot = await usersRef.doc(booking.requesteeId).get();
     const requestee = requesteeSnapshot.data();
 
-    const payload: messaging.MessagingPayload = {
-      notification: {
-        title: "NEW TAPPED BOOKING!!!",
-        body: `${requester?.artistName ?? "<UNKNOWN>"} booked ${
-          requestee?.artistName ?? "<UNKNOWN>"
-        } for service ${service?.title ?? "<UNKNOWN>"}`,
-        clickAction: "FLUTTER_NOTIFICATION_CLICK",
-      },
-    };
-
     const msg = {
       title: "NEW TAPPED BOOKING!!!",
       body: `${requester?.artistName ?? "<UNKNOWN>"} booked ${
         requestee?.artistName ?? "<UNKNOWN>"
       } for service ${service?.title ?? "<UNKNOWN>"}`,
     };
-
-    const deviceTokens = await getFoundersDeviceTokens();
-
-    try {
-      const resp = await fcm.sendToDevice(deviceTokens, payload);
-      if (resp.failureCount > 0) {
-        functions.logger.warn(
-          `Failed to send message to some devices: ${resp.failureCount}`
-        );
-      }
-      await slackNotification({
-        ...msg,
-        slackWebhookUrl: SLACK_WEBHOOK_URL.value(),
-      });
-    } catch (e: any) {
-      functions.logger.error(`ERROR : ${e}`);
-      throw new Error(`cannot send notification to device ${e.message}`);
-    }
+    await slackNotification({
+      ...msg,
+      slackWebhookUrl: SLACK_WEBHOOK_URL.value(),
+    });
   });
 
 export const cancelBookingIfExpired = onSchedule("0 * * * *", async (event) => {

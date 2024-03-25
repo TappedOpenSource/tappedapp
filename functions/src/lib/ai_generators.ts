@@ -40,7 +40,7 @@ import { FieldValue, Timestamp } from "firebase-admin/firestore";
 import { MarketingPlan, UserModel } from "../types/models";
 import Stripe from "stripe";
 import { v4 as uuidv4 } from "uuid";
-import { notifyFounders, slackNotification } from "./notifications";
+import { slackNotification } from "./notifications";
 
 const WEBHOOK_URL = `https://us-central1-${projectId}.cloudfunctions.net/trainWebhook`;
 const IMAGE_WEBHOOK_URL = `https://us-central1-${projectId}.cloudfunctions.net/imageWebhook`;
@@ -894,12 +894,6 @@ export const notifyFoundersOnMarketingForm = functions
   .document("marketingForm/{formId}")
   .onCreate(async (snapshot) => {
     const form = snapshot.data();
-
-    await notifyFounders({
-      title: "New Marketing Form \uD83D\uDE43",
-      body: `${form.artistName} just created a marketing plan`,
-    });
-
     await slackNotification({
       title: "New Marketing Form \uD83D\uDE43",
       body: `${form.artistName} just created a marketing plan`,
@@ -912,10 +906,6 @@ export const notifyFoundersOnGuestMarketingPlan = functions
   .firestore
   .document("guestMarketingPlans/{planId}")
   .onCreate(async () => {
-    await notifyFounders({
-      title: "New Marketing Plan \uD83D\uDE43",
-      body: "Someone just created a marketing plan",
-    });
     await slackNotification({
       title: "New Marketing Plan \uD83D\uDE43",
       body: "Someone just created a marketing plan",
