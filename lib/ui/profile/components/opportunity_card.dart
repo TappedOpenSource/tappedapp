@@ -42,20 +42,23 @@ class _OpportunityCardState extends State<OpportunityCard> {
   void initState() {
     super.initState();
     final state = context.onboarding.state;
-    final currentUser =
-        state is Onboarded ? Option.of(state.currentUser) : const None();
-    currentUser.map((t) {
-      context.database
-          .isUserAppliedForOpportunity(
-        opportunityId: _opportunity.id,
-        userId: t.id,
-      )
-          .then((isApplied) {
-        setState(() {
-          _isApplied = isApplied;
-        });
-      });
-    });
+    return switch (state) {
+      Onboarded(:final currentUser) => (() {
+          context.database
+              .isUserAppliedForOpportunity(
+            opportunityId: _opportunity.id,
+            userId: currentUser.id,
+          )
+              .then((isApplied) {
+            if (mounted) {
+              setState(() {
+                _isApplied = isApplied;
+              });
+            }
+          });
+        })(),
+      _ => null,
+    };
   }
 
   @override
