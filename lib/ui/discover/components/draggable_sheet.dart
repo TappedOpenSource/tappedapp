@@ -12,6 +12,7 @@ import 'package:intheloopapp/ui/discover/components/user_slider.dart';
 import 'package:intheloopapp/ui/discover/discover_cubit.dart';
 import 'package:intheloopapp/ui/profile/components/feedback_button.dart';
 import 'package:intheloopapp/ui/profile/components/opportunities_list.dart';
+import 'package:intheloopapp/ui/profile/profile_view.dart';
 import 'package:intheloopapp/ui/user_avatar.dart';
 import 'package:intheloopapp/ui/user_tile.dart';
 import 'package:intheloopapp/utils/bloc_utils.dart';
@@ -20,7 +21,12 @@ import 'package:intheloopapp/utils/custom_claims_builder.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class DraggableSheet extends StatelessWidget {
-  const DraggableSheet({super.key});
+  DraggableSheet({
+    DraggableScrollableController? dragController,
+    super.key,
+  }) : dragController = dragController ?? DraggableScrollableController();
+
+  final DraggableScrollableController dragController;
 
   @cached
   bool _isVenueGoodFit(UserModel currentUser, UserModel venue) {
@@ -88,6 +94,7 @@ class DraggableSheet extends StatelessWidget {
               minChildSize: 0.11,
               snap: true,
               snapSizes: const [0.11, 0.5, 1],
+              controller: dragController,
               builder: (ctx, scrollController) => DecoratedBox(
                 decoration: BoxDecoration(
                   borderRadius: const BorderRadius.vertical(
@@ -214,7 +221,8 @@ class DraggableSheet extends StatelessWidget {
                                           onPressed: () =>
                                               context.push(AdminPage()),
                                           color: Colors.red.withOpacity(0.1),
-                                          borderRadius: BorderRadius.circular(15),
+                                          borderRadius:
+                                              BorderRadius.circular(15),
                                           child: const Text(
                                             'add opportunity',
                                             style: TextStyle(

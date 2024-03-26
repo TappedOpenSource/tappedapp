@@ -7,8 +7,6 @@ import 'package:fpdart/fpdart.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intheloopapp/data/database_repository.dart';
 import 'package:intheloopapp/data/places_repository.dart';
-import 'package:intheloopapp/domains/models/performer_info.dart';
-import 'package:intheloopapp/domains/models/social_following.dart';
 import 'package:intheloopapp/domains/models/user_model.dart';
 import 'package:intheloopapp/domains/navigation_bloc/navigation_bloc.dart';
 import 'package:intheloopapp/domains/navigation_bloc/tapped_route.dart';
@@ -39,18 +37,20 @@ class ProfileView extends StatelessWidget {
     required this.visitedUser,
     this.heroImage,
     this.titleHeroTag,
+    this.onQuit,
     this.collapsedBarHeight = 60.0,
     this.expandedBarHeight = 300.0,
     super.key,
-  });
+    ScrollController? scrollController,
+  }): this.scrollController = scrollController ?? ScrollController();
 
   final String visitedUserId;
   final double collapsedBarHeight;
   final double expandedBarHeight;
   final HeroImage? heroImage;
   final String? titleHeroTag;
-
-  final scrollController = ScrollController();
+  final void Function()? onQuit;
+  final ScrollController scrollController;
 
   // callers can provide a user to avoid a database call
   final Option<UserModel> visitedUser;
@@ -112,41 +112,41 @@ class ProfileView extends StatelessWidget {
     );
   }
 
-  Widget _subheader(UserModel user) {
-    final capacity = user.venueInfo.flatMap((t) => t.capacity);
-    final socialFollowing = user.socialFollowing;
-    final category = user.performerInfo.map((t) => t.category);
-    return switch ((capacity, category)) {
-      (None(), None()) => socialFollowing.audienceSize == 0
-          ? const SizedBox.shrink()
-          : Text(
-              '${NumberFormat.compactCurrency(
-                decimalDigits: 0,
-                symbol: '',
-              ).format(socialFollowing.audienceSize)} followers',
-              style: const TextStyle(
-                color: Colors.white,
-                fontWeight: FontWeight.w400,
-                fontSize: 12,
-              ),
-            ),
-      (None(), Some(:final value)) => Text(
-          '${value.formattedName} performer'.toLowerCase(),
-          style: TextStyle(
-            color: value.color,
-            fontWeight: FontWeight.w400,
-            fontSize: 12,
-          ),
-        ),
-      (Some(:final value), _) => Text(
-          '$value capacity venue',
-          style: const TextStyle(
-            fontWeight: FontWeight.w400,
-            fontSize: 12,
-          ),
-        ),
-    };
-  }
+  // Widget _subheader(UserModel user) {
+  //   final capacity = user.venueInfo.flatMap((t) => t.capacity);
+  //   final socialFollowing = user.socialFollowing;
+  //   final category = user.performerInfo.map((t) => t.category);
+  //   return switch ((capacity, category)) {
+  //     (None(), None()) => socialFollowing.audienceSize == 0
+  //         ? const SizedBox.shrink()
+  //         : Text(
+  //             '${NumberFormat.compactCurrency(
+  //               decimalDigits: 0,
+  //               symbol: '',
+  //             ).format(socialFollowing.audienceSize)} followers',
+  //             style: const TextStyle(
+  //               color: Colors.white,
+  //               fontWeight: FontWeight.w400,
+  //               fontSize: 12,
+  //             ),
+  //           ),
+  //     (None(), Some(:final value)) => Text(
+  //         '${value.formattedName} performer'.toLowerCase(),
+  //         style: TextStyle(
+  //           color: value.color,
+  //           fontWeight: FontWeight.w400,
+  //           fontSize: 12,
+  //         ),
+  //       ),
+  //     (Some(:final value), _) => Text(
+  //         '$value capacity venue',
+  //         style: const TextStyle(
+  //           fontWeight: FontWeight.w400,
+  //           fontSize: 12,
+  //         ),
+  //       ),
+  //   };
+  // }
 
   Widget _profilePage(
     UserModel currentUser,
@@ -222,7 +222,7 @@ class ProfileView extends StatelessWidget {
           collapsedHeight: collapsedBarHeight,
           automaticallyImplyLeading: false,
           pinned: true,
-          stretch: true,
+          // stretch: true,
           onStretchTrigger: () async {
             final cubit = context.read<ProfileCubit>();
             await Future.wait([
@@ -237,7 +237,7 @@ class ProfileView extends StatelessWidget {
           },
           actions: [
             IconButton(
-              onPressed: () => context.pop(),
+              onPressed: onQuit ?? () => context.pop(),
               icon: Icon(
                 CupertinoIcons.xmark_circle_fill,
                 color: Colors.white.withOpacity(0.8),

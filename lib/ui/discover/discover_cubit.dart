@@ -291,4 +291,31 @@ class DiscoverCubit extends Cubit<DiscoverState> {
       },
     );
   }
+
+  // Future<void> viewCurrentUser(
+  //     DraggableScrollableController dragController) async {
+  //   emit(
+  //     state.copyWith(
+  //       showCurrentUser: true,
+  //       mapOverlay: MapOverlay.userBookings,
+  //     ),
+  //   );
+  //   onBoundsChange(
+  //     state.bounds,
+  //     overlay: MapOverlay.userBookings,
+  //   );
+  // }
+  //
+  // void quitCurrentUserView(DraggableScrollableController dragController) {
+  //   emit(
+  //     state.copyWith(
+  //       showCurrentUser: false,
+  //       mapOverlay: MapOverlay.venues,
+  //     ),
+  //   );
+  //   onBoundsChange(
+  //     state.bounds,
+  //     overlay: MapOverlay.venues,
+  //   );
+  // }
 }

@@ -5,7 +5,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:fpdart/fpdart.dart';
-import 'package:intheloopapp/data/database_repository.dart';
 import 'package:intheloopapp/data/search_repository.dart';
 import 'package:intheloopapp/domains/models/genre.dart';
 import 'package:intheloopapp/domains/navigation_bloc/navigation_bloc.dart';
@@ -282,8 +281,10 @@ class DiscoverView extends StatelessWidget {
                                     StreamBuilder<int?>(
                                       stream: streamClient
                                           .on()
-                                          .where((event) =>
-                                              event.totalUnreadCount != null,)
+                                          .where(
+                                            (event) =>
+                                                event.totalUnreadCount != null,
+                                          )
                                           .map(
                                             (event) => event.totalUnreadCount,
                                           ),
@@ -302,20 +303,22 @@ class DiscoverView extends StatelessWidget {
                                               MessagingChannelListPage(),
                                             ),
                                             icon: badges.Badge(
-                                              showBadge: unreadMessagesCount > 0,
+                                              showBadge:
+                                                  unreadMessagesCount > 0,
                                               badgeContent: Text(
                                                 unreadMessagesCount.toString(),
                                                 style: TextStyle(
-                                                  color: theme.colorScheme.onBackground,
+                                                  color: theme
+                                                      .colorScheme.onBackground,
                                                 ),
                                               ),
                                               position:
-                                              badges.BadgePosition.topEnd(
-                                              ),
+                                                  badges.BadgePosition.topEnd(),
                                               child: Icon(
                                                 CupertinoIcons
                                                     .chat_bubble_text_fill,
-                                                color: theme.colorScheme.onBackground,
+                                                color: theme
+                                                    .colorScheme.onBackground,
                                               ),
                                             ),
                                           ),
@@ -334,7 +337,7 @@ class DiscoverView extends StatelessWidget {
                     );
                   },
                 ),
-                bottomSheet: const DraggableSheet(),
+                bottomSheet: DraggableSheet(),
               ),
             );
           },
