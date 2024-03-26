@@ -21,6 +21,7 @@ import { contactVenueTemplate } from "../email_templates/contact_venue";
 import { UserModel, VenueContactRequest } from "../types/models";
 import { chatGpt } from "./openai";
 import { slackNotification } from "./notifications";
+import { Timestamp } from "firebase-admin/firestore";
 
 function createEmailMessageId() {
   const currentTime = Date.now().toString(36);
@@ -145,6 +146,7 @@ async function sendAsDirectMessage({
   // join channel
   const channel = streamClient.channel("messaging", {
     members: [ userId, venueId ],
+    created_by_id: venueId, 
   });
   await channel.create();
 
@@ -176,6 +178,7 @@ async function dmAutoReply({
   // join channel
   const channel = streamClient.channel("messaging", {
     members: [ userId, venueId ],
+    created_by_id: venueId, 
   });
   await channel.create();
 
@@ -209,6 +212,7 @@ async function sendStreamMessageFromEmail({
   // join channel
   const channel = streamClient.channel("messaging", {
     members: [ userId, venueId ],
+    created_by_id: venueId, 
   });
   await channel.create();
 
@@ -358,12 +362,13 @@ export const notifyFoundersOnVenueContact = onDocumentCreated(
     secrets: [ POSTMARK_SERVER_ID, streamKey, streamSecret, OPEN_AI_KEY, SLACK_WEBHOOK_URL ],
   },
   async (event) => {
-    try {
-      process.env.OPENAI_API_KEY = OPEN_AI_KEY.value();
-      const snapshot = event.data;
-      const venueContactData = snapshot?.data() as
+    process.env.OPENAI_API_KEY = OPEN_AI_KEY.value();
+    const snapshot = event.data;
+    const venueContactData = snapshot?.data() as
         | VenueContactRequest
         | undefined;
+
+    try {
       if (venueContactData === undefined) {
         error("no venueContactData found");
         return;
@@ -420,7 +425,7 @@ export const notifyFoundersOnVenueContact = onDocumentCreated(
       error(e);
       await slackNotification({
         title: "Error in venue contact",
-        body: e.message,
+        body: `${JSON.stringify(venueContactData)} - ${e.message}`,
         slackWebhookUrl: SLACK_WEBHOOK_URL.value(),
       });
     }
@@ -691,4 +696,23 @@ export const notifyFoundersOnEmail = onDocumentCreated(
       body: `new email between ${username} and ${venueName}. Here's a sample of the email: ${email?.TextBody.substring(0, 50)}`,
       slackWebhookUrl: SLACK_WEBHOOK_URL.value(),
     });
+  });
+
+export const setLatestContactRequest = onDocumentCreated(
+  { document: "contactVenues/{userId}/venuesContacted/{venueId}" },
+  async (event) => {
+    const userId = event.params.userId;
+    const snapshot = event.data;
+    const documentData = snapshot?.data() as VenueContactRequest | undefined;
+    if (documentData === undefined) {
+      error("no document data found");
+      return;
+    }
+
+    await contactVenuesRef
+      .doc(userId)
+      .set({
+        latestContactRequest: documentData,
+        timestamp: Timestamp.now(),
+      }, { merge: true });
   });

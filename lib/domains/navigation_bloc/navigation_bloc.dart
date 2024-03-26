@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intheloopapp/data/database_repository.dart';
 import 'package:intheloopapp/domains/navigation_bloc/tapped_route.dart';
+import 'package:intheloopapp/utils/app_logger.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 
 part 'navigation_event.dart';
@@ -28,9 +29,17 @@ class NavigationBloc extends Bloc<NavigationEvent, NavigationState> {
       emit(state);
     });
     on<Pop>((event, emit) {
-      navigationKey.currentState?.pop();
+      try {
+        navigationKey.currentState?.pop();
 
-      emit(state);
+        emit(state);
+      } catch (e, s) {
+        logger.error(
+          'error popping route',
+          error: e,
+          stackTrace: s,
+        );
+      }
     });
   }
 

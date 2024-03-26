@@ -9,27 +9,22 @@ const _introMessage = async (
   newUserId: string,
 ) => {
   const johannesId = "8yYVxpQ7cURSzNfBsaBGF7A7kkv2";
-  const token = await streamClient.createToken(johannesId);
-  await streamClient.connectUser({
-    id: johannesId,
-  }, token);
 
-  // join channel
   const channel = streamClient.channel("messaging", {
     members: [ johannesId, newUserId ],
+    created_by_id: johannesId,
   });
   await channel.create();
 
   // post msg
   await channel.sendMessage({ 
     text: "welcome to tapped!",
+    user_id: johannesId,
   });
   await channel.sendMessage({ 
     text: "I work with the engineering team so if you have any ideas on how to make the app better lemme know and I can send it to them",
+    user_id: johannesId,
   });
-
-  // disconnectUser
-  await streamClient.disconnectUser();
 }
 
 export const createStreamUserOnUserCreated = functions

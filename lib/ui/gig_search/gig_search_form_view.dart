@@ -9,6 +9,7 @@ import 'package:intheloopapp/ui/forms/location_text_field.dart';
 import 'package:intheloopapp/ui/gig_search/gig_search_cubit.dart';
 import 'package:intheloopapp/ui/settings/components/genre_selection.dart';
 import 'package:intheloopapp/ui/user_tile.dart';
+import 'package:intheloopapp/utils/app_logger.dart';
 import 'package:intheloopapp/utils/current_user_builder.dart';
 import 'package:intheloopapp/utils/premium_builder.dart';
 
@@ -60,9 +61,17 @@ class GigSearchFormView extends StatelessWidget {
                           LocationTextField(
                             initialPlace: state.place,
                             onChanged: (placeData, _) {
-                              context
-                                  .read<GigSearchCubit>()
-                                  .updateLocation(placeData);
+                              try {
+                                context
+                                    .read<GigSearchCubit>()
+                                    .updateLocation(placeData);
+                              } catch (e, s) {
+                                logger.e(
+                                  'Error updating location',
+                                  error: e,
+                                  stackTrace: s,
+                                );
+                              }
                             },
                           ),
                           const SizedBox(height: 20),
@@ -76,9 +85,8 @@ class GigSearchFormView extends StatelessWidget {
                           GenreSelection(
                             initialValue: state.genres,
                             onConfirm: (genres) {
-                              context
-                                  .read<GigSearchCubit>()
-                                  .updateGenres(genres.whereType<Genre>().toList());
+                              context.read<GigSearchCubit>().updateGenres(
+                                  genres.whereType<Genre>().toList());
                             },
                           ),
                           const SizedBox(height: 20),
@@ -102,8 +110,8 @@ class GigSearchFormView extends StatelessWidget {
                                         .updateCapacity(values);
                                   },
                                   activeColor: theme.colorScheme.primary,
-                                  inactiveColor:
-                                      theme.colorScheme.onSurface.withOpacity(0.4),
+                                  inactiveColor: theme.colorScheme.onSurface
+                                      .withOpacity(0.4),
                                   divisions: maxCapacity.toInt(),
                                   labels: RangeLabels(
                                     state.capacityRangeStart.toString(),
@@ -122,7 +130,8 @@ class GigSearchFormView extends StatelessWidget {
                             'we have the capacity range defaulted to numbers that align with your previous booking history',
                             textAlign: TextAlign.center,
                             style: TextStyle(
-                              color: theme.colorScheme.onSurface.withOpacity(0.6),
+                              color:
+                                  theme.colorScheme.onSurface.withOpacity(0.6),
                             ),
                           ),
                           // const SizedBox(height: 20),
@@ -167,11 +176,13 @@ class GigSearchFormView extends StatelessWidget {
                                         .read<GigSearchCubit>()
                                         .searchVenues()
                                         .catchError((error) {
-                                      ScaffoldMessenger.of(context).showSnackBar(
+                                      ScaffoldMessenger.of(context)
+                                          .showSnackBar(
                                         SnackBar(
                                           backgroundColor: Colors.redAccent,
                                           shape: RoundedRectangleBorder(
-                                            borderRadius: BorderRadius.circular(15),
+                                            borderRadius:
+                                                BorderRadius.circular(15),
                                           ),
                                           content: Text(
                                             error.toString(),
