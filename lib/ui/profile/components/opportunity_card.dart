@@ -190,6 +190,8 @@ class _OpportunityCardState extends State<OpportunityCard> {
                               setState(() {
                                 _isApplied = true;
                               });
+
+                              Navigator.pop(context);
                             },
                             onDislike: () {
                               setState(() {

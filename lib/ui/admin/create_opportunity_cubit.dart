@@ -102,7 +102,7 @@ class CreateOpportunityCubit extends Cubit<CreateOpportunityState> {
     );
   }
 
-  Future<Opportunity> submit() async {
+  Future<Option<Opportunity>> submit() async {
     logger.debug('creating new opportunity');
     emit(
       state.copyWith(
@@ -161,7 +161,7 @@ class CreateOpportunityCubit extends Cubit<CreateOpportunityState> {
       await database.createOpportunity(op);
       await database.copyOpportunityToFeeds(op);
 
-      return op;
+      return Option.of(op);
     } catch (e, s) {
       logger.error('error creating opportunity', error: e, stackTrace: s);
       rethrow;

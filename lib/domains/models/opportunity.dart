@@ -18,7 +18,7 @@ class Opportunity with _$Opportunity {
     @Default('') String title,
     @Default('') String description,
     @Default(None()) Option<String> flierUrl,
-    @Default(Location.rva) Location location,
+    @Default(Location.nyc) Location location,
     @Default(false) bool isPaid,
     @Default(None()) Option<OpportunityInteraction> touched,
     @Default(false) bool deleted,

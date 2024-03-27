@@ -265,13 +265,20 @@ class CreateOpportunityForm extends StatelessWidget {
                         content: Text('error: $error'),
                       ),
                     );
+
+                    return const None();
                   }).then((value) {
+                    if (value.isNone()) {
+                      context.pop();
+                    }
+
+                    final op = value.getOrElse(() => throw Exception());
                     context
                       ..pop()
                       ..push(
                         OpportunityPage(
-                          opportunityId: value.id,
-                          opportunity: Option.of(value),
+                          opportunityId: op.id,
+                          opportunity: value,
                         ),
                       );
                   });
