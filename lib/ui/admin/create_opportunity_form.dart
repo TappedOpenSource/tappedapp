@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fpdart/fpdart.dart';
 import 'package:intheloopapp/domains/navigation_bloc/navigation_bloc.dart';
+import 'package:intheloopapp/domains/navigation_bloc/tapped_route.dart';
 import 'package:intheloopapp/ui/admin/create_opportunity_cubit.dart';
 import 'package:intheloopapp/ui/common/form_item.dart';
 import 'package:intheloopapp/ui/forms/location_text_field.dart';
@@ -261,11 +262,18 @@ class CreateOpportunityForm extends StatelessWidget {
                       SnackBar(
                         behavior: SnackBarBehavior.floating,
                         backgroundColor: Colors.red,
-                        content: Text('Error: $error'),
+                        content: Text('error: $error'),
                       ),
                     );
                   }).then((value) {
-                    context.pop();
+                    context
+                      ..pop()
+                      ..push(
+                        OpportunityPage(
+                          opportunityId: value.id,
+                          opportunity: Option.of(value),
+                        ),
+                      );
                   });
                 },
                 borderRadius: BorderRadius.circular(15),

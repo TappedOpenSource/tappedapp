@@ -191,7 +191,7 @@ class DraggableSheet extends StatelessWidget {
                                       color: theme.colorScheme.primary
                                           .withOpacity(0.1),
                                       child: Text(
-                                        'get booked',
+                                        'venue outreach',
                                         style: TextStyle(
                                           fontWeight: FontWeight.bold,
                                           color: theme.colorScheme.primary,
@@ -270,7 +270,7 @@ class DraggableSheet extends StatelessWidget {
                                 horizontal: 8,
                               ),
                               child: Text(
-                                'top gig opportunities',
+                                'apply to perform',
                                 style: TextStyle(
                                   fontSize: 28,
                                   fontWeight: FontWeight.bold,

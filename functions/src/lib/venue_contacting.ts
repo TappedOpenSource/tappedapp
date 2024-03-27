@@ -424,7 +424,7 @@ export const notifyFoundersOnVenueContact = onDocumentCreated(
     } catch (e: any) {
       error(e);
       await slackNotification({
-        title: "Error in venue contact",
+        title: "error in venue contact",
         body: `${JSON.stringify(venueContactData)} - ${e.message}`,
         slackWebhookUrl: SLACK_WEBHOOK_URL.value(),
       });
@@ -691,9 +691,12 @@ export const notifyFoundersOnEmail = onDocumentCreated(
     const userData = user.data() as UserModel;
     const username = userData.artistName ?? userData.username;
 
+    const sender = email?.From;
+    const receiver = email?.To;
+
     slackNotification({
-      title: "New Email",
-      body: `new email between ${username} and ${venueName}. Here's a sample of the email: ${email?.TextBody.substring(0, 50)}`,
+      title: `new email (${username} and ${venueName})`,
+      body: `${sender} => ${receiver}`,
       slackWebhookUrl: SLACK_WEBHOOK_URL.value(),
     });
   });
