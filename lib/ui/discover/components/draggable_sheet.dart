@@ -191,7 +191,7 @@ class DraggableSheet extends StatelessWidget {
                                       color: theme.colorScheme.primary
                                           .withOpacity(0.1),
                                       child: Text(
-                                        'venue outreach',
+                                        'mass outreach',
                                         style: TextStyle(
                                           fontWeight: FontWeight.bold,
                                           color: theme.colorScheme.primary,
