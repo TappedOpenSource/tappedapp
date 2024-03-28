@@ -222,7 +222,7 @@ class ProfileView extends StatelessWidget {
           collapsedHeight: collapsedBarHeight,
           automaticallyImplyLeading: false,
           pinned: true,
-          // stretch: true,
+          stretch: true,
           onStretchTrigger: () async {
             final cubit = context.read<ProfileCubit>();
             await Future.wait([
