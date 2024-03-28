@@ -40,14 +40,6 @@ class GigSearchFormView extends StatelessWidget {
                       'assets/tapped_logo.png',
                       height: 30,
                     ),
-                    // title: const Text(
-                    //   'tapped ai',
-                    //   style: TextStyle(
-                    //     fontFamily: 'Rubik One',
-                    //     fontWeight: FontWeight.w700,
-                    //     fontSize: 20,
-                    //   ),
-                    // ),
                   ),
                   body: SafeArea(
                     child: Padding(
@@ -60,6 +52,13 @@ class GigSearchFormView extends StatelessWidget {
                           return Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
+                              const Text(
+                                'reach out to thousands of venues in a matter of seconds to get booked for a show',
+                                textAlign: TextAlign.center,
+                                style: TextStyle(
+                                  color: Colors.grey,
+                                ),
+                              ),
                               const Text(
                                 'who',
                                 style: TextStyle(
