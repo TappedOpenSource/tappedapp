@@ -108,18 +108,18 @@ class _UserBookingsFeedState extends State<UserBookingsFeed> {
       final bookingsRequestee =
           await _databaseRepository.getBookingsByRequestee(
         _userId,
-        limit: 10,
+        limit: 50,
         lastBookingRequestId:
-            _userBookings.where((e) => e.requesteeId == _userId).last.id,
+            _userBookings.where((e) => e.requesteeId == _userId).lastOrNull?.id,
       );
       final bookingsRequester =
           await _databaseRepository.getBookingsByRequester(
         _userId,
-        limit: 10,
+        limit: 50,
         lastBookingRequestId: _userBookings
             .where((e) => e.requesterId.getOrElse(() => '') == _userId)
-            .last
-            .id,
+            .lastOrNull
+            ?.id,
       );
 
       (bookingsRequestee.isEmpty && bookingsRequester.isEmpty)
@@ -229,8 +229,8 @@ class _UserBookingsFeedState extends State<UserBookingsFeed> {
                       : SliverGrid.count(
                           // itemExtent: 100,
                           crossAxisCount: 2,
-                          crossAxisSpacing: 15,
-                          mainAxisSpacing: 20,
+                          crossAxisSpacing: 20,
+                          mainAxisSpacing: 15,
                           children: _userBookings.map((booking) {
                             return BookingCard(
                               visitedUser: user,
@@ -263,7 +263,7 @@ class _UserBookingsFeedState extends State<UserBookingsFeed> {
                     AddPastBookingPage(),
                   ),
                   icon: const Icon(Icons.add),
-                  label: const Text('Add Booking'),
+                  label: const Text('add booking'),
                 )
               : null,
           body: FutureBuilder<Option<UserModel>>(
@@ -272,7 +272,7 @@ class _UserBookingsFeedState extends State<UserBookingsFeed> {
               final user = snapshot.data;
               return switch (user) {
                 null => const Center(child: CircularProgressIndicator()),
-                None() => const Center(child: Text('User not found')),
+                None() => const Center(child: Text('user not found')),
                 Some(:final value) => _buildUserBookingFeed(value),
               };
             },
