@@ -30,9 +30,10 @@ Future<void> main() async {
         : await getTemporaryDirectory(),
   );
 
-  await Firebase.initializeApp(
+  final app = await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
+  logger.debug('firebase app name: $app');
   await configureError();
 
   // Keep the app in portrait mode (no landscape)
