@@ -9,6 +9,7 @@ import 'package:intheloopapp/ui/profile/components/request_to_book.dart';
 import 'package:intheloopapp/ui/profile/components/request_to_perform.dart';
 import 'package:intheloopapp/ui/profile/components/review_count.dart';
 import 'package:intheloopapp/ui/profile/components/settings_button.dart';
+import 'package:intheloopapp/ui/profile/components/share_button.dart';
 import 'package:intheloopapp/ui/profile/components/star_rating.dart';
 import 'package:intheloopapp/ui/profile/profile_cubit.dart';
 
@@ -63,7 +64,7 @@ class HeaderSliver extends StatelessWidget {
                       width: 8,
                     ),
                     Expanded(
-                      child: FeedbackButton(),
+                      child: ShareButton(),
                     ),
                   ],
                 ),

@@ -268,7 +268,7 @@ class _$OpportunityImpl implements _Opportunity {
       this.title = '',
       this.description = '',
       this.flierUrl = const None(),
-      this.location = Location.rva,
+      this.location = Location.nyc,
       this.isPaid = false,
       this.touched = const None(),
       this.deleted = false});

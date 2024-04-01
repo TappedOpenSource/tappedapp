@@ -1,5 +1,5 @@
 name: intheloopapp
-version: 1.2.94+107
+version: 1.2.95+108
 publish_to: none
 description: Mobile app for Tapped.
 environment: 
@@ -124,6 +124,8 @@ dependencies:
   uuid: 4.2.1
   visibility_detector: 0.4.0+2
   modal_bottom_sheet: 3.0.0
+  screenshot: ^2.3.0
+  qr_flutter: ^4.1.0
 
 dev_dependencies: 
   build_runner: ^2.4.8

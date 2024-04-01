@@ -33,6 +33,7 @@ import { premiumWaitlist } from "../email_templates/premium_waitlist";
 import { subscriptionPurchase } from "../email_templates/subscription_purchase";
 import { venueContacted } from "../email_templates/venue_contacted";
 import { subscriptionExpiration } from "../email_templates/subscription_expiration";
+import { welcomeTemplate } from "../email_templates/welcome";
 // import { venueContacted } from "../email_templates/venue_contacted";
 
 export const sendWelcomeEmailOnUserCreated = functions
@@ -57,7 +58,7 @@ export const sendWelcomeEmailOnUserCreated = functions
       from: "no-reply@tapped.ai",
       to: [ email ],
       subject: "welcome to Tapped!",
-      html: `<div style="white-space: pre;">${labelApplied}</div>`,
+      html: `<div style="white-space: pre;">${welcomeTemplate}</div>`,
     });
   });
 

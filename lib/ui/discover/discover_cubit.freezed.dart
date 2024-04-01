@@ -24,8 +24,8 @@ mixin _$DiscoverState {
   List<Genre> get genreFilters => throw _privateConstructorUsedError;
   RangeValues get capacityRange => throw _privateConstructorUsedError;
   double get userLat => throw _privateConstructorUsedError;
-  double get userLng => throw _privateConstructorUsedError;
-  bool get showCurrentUser => throw _privateConstructorUsedError;
+  double get userLng =>
+      throw _privateConstructorUsedError; // @Default(false) bool showCurrentUser,
   LatLngBounds? get bounds => throw _privateConstructorUsedError;
 
   @JsonKey(ignore: true)
@@ -49,7 +49,6 @@ abstract class $DiscoverStateCopyWith<$Res> {
       RangeValues capacityRange,
       double userLat,
       double userLng,
-      bool showCurrentUser,
       LatLngBounds? bounds});
 }
 
@@ -75,7 +74,6 @@ class _$DiscoverStateCopyWithImpl<$Res, $Val extends DiscoverState>
     Object? capacityRange = null,
     Object? userLat = null,
     Object? userLng = null,
-    Object? showCurrentUser = null,
     Object? bounds = freezed,
   }) {
     return _then(_value.copyWith(
@@ -115,10 +113,6 @@ class _$DiscoverStateCopyWithImpl<$Res, $Val extends DiscoverState>
           ? _value.userLng
           : userLng // ignore: cast_nullable_to_non_nullable
               as double,
-      showCurrentUser: null == showCurrentUser
-          ? _value.showCurrentUser
-          : showCurrentUser // ignore: cast_nullable_to_non_nullable
-              as bool,
       bounds: freezed == bounds
           ? _value.bounds
           : bounds // ignore: cast_nullable_to_non_nullable
@@ -145,7 +139,6 @@ abstract class _$$DiscoverStateImplCopyWith<$Res>
       RangeValues capacityRange,
       double userLat,
       double userLng,
-      bool showCurrentUser,
       LatLngBounds? bounds});
 }
 
@@ -169,7 +162,6 @@ class __$$DiscoverStateImplCopyWithImpl<$Res>
     Object? capacityRange = null,
     Object? userLat = null,
     Object? userLng = null,
-    Object? showCurrentUser = null,
     Object? bounds = freezed,
   }) {
     return _then(_$DiscoverStateImpl(
@@ -209,10 +201,6 @@ class __$$DiscoverStateImplCopyWithImpl<$Res>
           ? _value.userLng
           : userLng // ignore: cast_nullable_to_non_nullable
               as double,
-      showCurrentUser: null == showCurrentUser
-          ? _value.showCurrentUser
-          : showCurrentUser // ignore: cast_nullable_to_non_nullable
-              as bool,
       bounds: freezed == bounds
           ? _value.bounds
           : bounds // ignore: cast_nullable_to_non_nullable
@@ -234,7 +222,6 @@ class _$DiscoverStateImpl implements _DiscoverState {
       this.capacityRange = const RangeValues(0, 15000),
       this.userLat = 37.5407246,
       this.userLng = -77.4360481,
-      this.showCurrentUser = false,
       this.bounds})
       : _venueHits = venueHits,
         _userBookings = userBookings,
@@ -299,15 +286,13 @@ class _$DiscoverStateImpl implements _DiscoverState {
   @override
   @JsonKey()
   final double userLng;
-  @override
-  @JsonKey()
-  final bool showCurrentUser;
+// @Default(false) bool showCurrentUser,
   @override
   final LatLngBounds? bounds;
 
   @override
   String toString() {
-    return 'DiscoverState(venueHits: $venueHits, userBookings: $userBookings, bookingHits: $bookingHits, opportunityHits: $opportunityHits, mapOverlay: $mapOverlay, genreFilters: $genreFilters, capacityRange: $capacityRange, userLat: $userLat, userLng: $userLng, showCurrentUser: $showCurrentUser, bounds: $bounds)';
+    return 'DiscoverState(venueHits: $venueHits, userBookings: $userBookings, bookingHits: $bookingHits, opportunityHits: $opportunityHits, mapOverlay: $mapOverlay, genreFilters: $genreFilters, capacityRange: $capacityRange, userLat: $userLat, userLng: $userLng, bounds: $bounds)';
   }
 
   @override
@@ -331,8 +316,6 @@ class _$DiscoverStateImpl implements _DiscoverState {
                 other.capacityRange == capacityRange) &&
             (identical(other.userLat, userLat) || other.userLat == userLat) &&
             (identical(other.userLng, userLng) || other.userLng == userLng) &&
-            (identical(other.showCurrentUser, showCurrentUser) ||
-                other.showCurrentUser == showCurrentUser) &&
             (identical(other.bounds, bounds) || other.bounds == bounds));
   }
 
@@ -348,7 +331,6 @@ class _$DiscoverStateImpl implements _DiscoverState {
       capacityRange,
       userLat,
       userLng,
-      showCurrentUser,
       bounds);
 
   @JsonKey(ignore: true)
@@ -369,7 +351,6 @@ abstract class _DiscoverState implements DiscoverState {
       final RangeValues capacityRange,
       final double userLat,
       final double userLng,
-      final bool showCurrentUser,
       final LatLngBounds? bounds}) = _$DiscoverStateImpl;
 
   @override
@@ -390,9 +371,7 @@ abstract class _DiscoverState implements DiscoverState {
   double get userLat;
   @override
   double get userLng;
-  @override
-  bool get showCurrentUser;
-  @override
+  @override // @Default(false) bool showCurrentUser,
   LatLngBounds? get bounds;
   @override
   @JsonKey(ignore: true)

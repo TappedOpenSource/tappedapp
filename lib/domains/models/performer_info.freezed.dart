@@ -25,7 +25,9 @@ mixin _$PerformerInfo {
   List<String> get subgenres => throw _privateConstructorUsedError;
   Option<double> get rating => throw _privateConstructorUsedError;
   int get reviewCount => throw _privateConstructorUsedError;
+  int get bookingCount => throw _privateConstructorUsedError;
   String get label => throw _privateConstructorUsedError;
+  Option<String> get bookingAgency => throw _privateConstructorUsedError;
   PerformerCategory get category => throw _privateConstructorUsedError;
   Option<int> get averageTicketPrice => throw _privateConstructorUsedError;
   Option<int> get averageAttendance => throw _privateConstructorUsedError;
@@ -48,7 +50,9 @@ abstract class $PerformerInfoCopyWith<$Res> {
       List<String> subgenres,
       Option<double> rating,
       int reviewCount,
+      int bookingCount,
       String label,
+      Option<String> bookingAgency,
       PerformerCategory category,
       Option<int> averageTicketPrice,
       Option<int> averageAttendance});
@@ -72,7 +76,9 @@ class _$PerformerInfoCopyWithImpl<$Res, $Val extends PerformerInfo>
     Object? subgenres = null,
     Object? rating = null,
     Object? reviewCount = null,
+    Object? bookingCount = null,
     Object? label = null,
+    Object? bookingAgency = null,
     Object? category = null,
     Object? averageTicketPrice = null,
     Object? averageAttendance = null,
@@ -98,10 +104,18 @@ class _$PerformerInfoCopyWithImpl<$Res, $Val extends PerformerInfo>
           ? _value.reviewCount
           : reviewCount // ignore: cast_nullable_to_non_nullable
               as int,
+      bookingCount: null == bookingCount
+          ? _value.bookingCount
+          : bookingCount // ignore: cast_nullable_to_non_nullable
+              as int,
       label: null == label
           ? _value.label
           : label // ignore: cast_nullable_to_non_nullable
               as String,
+      bookingAgency: null == bookingAgency
+          ? _value.bookingAgency
+          : bookingAgency // ignore: cast_nullable_to_non_nullable
+              as Option<String>,
       category: null == category
           ? _value.category
           : category // ignore: cast_nullable_to_non_nullable
@@ -132,7 +146,9 @@ abstract class _$$PerformerInfoImplCopyWith<$Res>
       List<String> subgenres,
       Option<double> rating,
       int reviewCount,
+      int bookingCount,
       String label,
+      Option<String> bookingAgency,
       PerformerCategory category,
       Option<int> averageTicketPrice,
       Option<int> averageAttendance});
@@ -154,7 +170,9 @@ class __$$PerformerInfoImplCopyWithImpl<$Res>
     Object? subgenres = null,
     Object? rating = null,
     Object? reviewCount = null,
+    Object? bookingCount = null,
     Object? label = null,
+    Object? bookingAgency = null,
     Object? category = null,
     Object? averageTicketPrice = null,
     Object? averageAttendance = null,
@@ -180,10 +198,18 @@ class __$$PerformerInfoImplCopyWithImpl<$Res>
           ? _value.reviewCount
           : reviewCount // ignore: cast_nullable_to_non_nullable
               as int,
+      bookingCount: null == bookingCount
+          ? _value.bookingCount
+          : bookingCount // ignore: cast_nullable_to_non_nullable
+              as int,
       label: null == label
           ? _value.label
           : label // ignore: cast_nullable_to_non_nullable
               as String,
+      bookingAgency: null == bookingAgency
+          ? _value.bookingAgency
+          : bookingAgency // ignore: cast_nullable_to_non_nullable
+              as Option<String>,
       category: null == category
           ? _value.category
           : category // ignore: cast_nullable_to_non_nullable
@@ -209,7 +235,9 @@ class _$PerformerInfoImpl implements _PerformerInfo {
       final List<String> subgenres = const [],
       this.rating = const None(),
       this.reviewCount = 0,
+      this.bookingCount = 0,
       this.label = 'Independent',
+      this.bookingAgency = const None(),
       this.category = PerformerCategory.undiscovered,
       this.averageTicketPrice = const None(),
       this.averageAttendance = const None()})
@@ -248,7 +276,13 @@ class _$PerformerInfoImpl implements _PerformerInfo {
   final int reviewCount;
   @override
   @JsonKey()
+  final int bookingCount;
+  @override
+  @JsonKey()
   final String label;
+  @override
+  @JsonKey()
+  final Option<String> bookingAgency;
   @override
   @JsonKey()
   final PerformerCategory category;
@@ -261,7 +295,7 @@ class _$PerformerInfoImpl implements _PerformerInfo {
 
   @override
   String toString() {
-    return 'PerformerInfo(pressKitUrl: $pressKitUrl, genres: $genres, subgenres: $subgenres, rating: $rating, reviewCount: $reviewCount, label: $label, category: $category, averageTicketPrice: $averageTicketPrice, averageAttendance: $averageAttendance)';
+    return 'PerformerInfo(pressKitUrl: $pressKitUrl, genres: $genres, subgenres: $subgenres, rating: $rating, reviewCount: $reviewCount, bookingCount: $bookingCount, label: $label, bookingAgency: $bookingAgency, category: $category, averageTicketPrice: $averageTicketPrice, averageAttendance: $averageAttendance)';
   }
 
   @override
@@ -277,7 +311,11 @@ class _$PerformerInfoImpl implements _PerformerInfo {
             (identical(other.rating, rating) || other.rating == rating) &&
             (identical(other.reviewCount, reviewCount) ||
                 other.reviewCount == reviewCount) &&
+            (identical(other.bookingCount, bookingCount) ||
+                other.bookingCount == bookingCount) &&
             (identical(other.label, label) || other.label == label) &&
+            (identical(other.bookingAgency, bookingAgency) ||
+                other.bookingAgency == bookingAgency) &&
             (identical(other.category, category) ||
                 other.category == category) &&
             (identical(other.averageTicketPrice, averageTicketPrice) ||
@@ -295,7 +333,9 @@ class _$PerformerInfoImpl implements _PerformerInfo {
       const DeepCollectionEquality().hash(_subgenres),
       rating,
       reviewCount,
+      bookingCount,
       label,
+      bookingAgency,
       category,
       averageTicketPrice,
       averageAttendance);
@@ -321,7 +361,9 @@ abstract class _PerformerInfo implements PerformerInfo {
       final List<String> subgenres,
       final Option<double> rating,
       final int reviewCount,
+      final int bookingCount,
       final String label,
+      final Option<String> bookingAgency,
       final PerformerCategory category,
       final Option<int> averageTicketPrice,
       final Option<int> averageAttendance}) = _$PerformerInfoImpl;
@@ -340,7 +382,11 @@ abstract class _PerformerInfo implements PerformerInfo {
   @override
   int get reviewCount;
   @override
+  int get bookingCount;
+  @override
   String get label;
+  @override
+  Option<String> get bookingAgency;
   @override
   PerformerCategory get category;
   @override

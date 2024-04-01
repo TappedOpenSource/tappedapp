@@ -54,6 +54,7 @@ class InfoSliver extends StatelessWidget {
           ),
         );
         final label = performerInfo.map((t) => t.label).getOrElse(() => 'None');
+        final bookingAgency = performerInfo.flatMap((t) => t.bookingAgency);
         final pressKitUrl = performerInfo
             .map((t) => t.pressKitUrl)
             .getOrElse(() => const None());
@@ -266,6 +267,20 @@ class InfoSliver extends StatelessWidget {
                                   ),
                                 ),
                               ),
+                            switch (bookingAgency) {
+                              None() => const SizedBox.shrink(),
+                              Some(:final value) => CupertinoListTile(
+                                  leading: const Icon(
+                                    CupertinoIcons.person_2_alt,
+                                  ),
+                                  title: Text(
+                                    value,
+                                    style: TextStyle(
+                                      color: theme.colorScheme.onSurface,
+                                    ),
+                                  ),
+                                ),
+                            },
                             switch (rating) {
                               None() => const SizedBox.shrink(),
                               Some(:final value) => CupertinoListTile(

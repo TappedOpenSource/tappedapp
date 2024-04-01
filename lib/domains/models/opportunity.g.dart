@@ -22,7 +22,7 @@ _$OpportunityImpl _$$OpportunityImplFromJson(Map<String, dynamic> json) =>
           : Option<String>.fromJson(
               json['flierUrl'], (value) => value as String),
       location: json['location'] == null
-          ? Location.rva
+          ? Location.nyc
           : Location.fromJson(json['location'] as Map<String, dynamic>),
       isPaid: json['isPaid'] as bool? ?? false,
       touched: json['touched'] == null

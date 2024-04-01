@@ -25,7 +25,12 @@ _$PerformerInfoImpl _$$PerformerInfoImplFromJson(Map<String, dynamic> json) =>
           : Option<double>.fromJson(
               json['rating'], (value) => (value as num).toDouble()),
       reviewCount: json['reviewCount'] as int? ?? 0,
+      bookingCount: json['bookingCount'] as int? ?? 0,
       label: json['label'] as String? ?? 'Independent',
+      bookingAgency: json['bookingAgency'] == null
+          ? const None()
+          : Option<String>.fromJson(
+              json['bookingAgency'], (value) => value as String),
       category:
           $enumDecodeNullable(_$PerformerCategoryEnumMap, json['category']) ??
               PerformerCategory.undiscovered,
@@ -50,7 +55,11 @@ Map<String, dynamic> _$$PerformerInfoImplToJson(_$PerformerInfoImpl instance) =>
         (value) => value,
       ),
       'reviewCount': instance.reviewCount,
+      'bookingCount': instance.bookingCount,
       'label': instance.label,
+      'bookingAgency': instance.bookingAgency.toJson(
+        (value) => value,
+      ),
       'category': _$PerformerCategoryEnumMap[instance.category]!,
       'averageTicketPrice': instance.averageTicketPrice.toJson(
         (value) => value,
