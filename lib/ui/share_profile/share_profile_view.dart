@@ -19,7 +19,7 @@ import 'package:screenshot/screenshot.dart';
 import 'package:share_plus/share_plus.dart';
 
 class ShareProfileView extends StatefulWidget {
-  ShareProfileView({
+  const ShareProfileView({
     required this.userId,
     required this.user,
     super.key,
