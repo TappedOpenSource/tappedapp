@@ -106,7 +106,7 @@ class GigSearchFormView extends StatelessWidget {
                                 initialValue: state.genres,
                                 onConfirm: (genres) {
                                   context.read<GigSearchCubit>().updateGenres(
-                                      genres.whereType<Genre>().toList());
+                                      genres.whereType<Genre>().toList(),);
                                 },
                               ),
                               const SizedBox(height: 20),

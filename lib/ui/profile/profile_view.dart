@@ -29,7 +29,6 @@ import 'package:intheloopapp/ui/themes.dart';
 import 'package:intheloopapp/utils/default_image.dart';
 import 'package:intheloopapp/utils/hero_image.dart';
 import 'package:intheloopapp/utils/premium_builder.dart';
-import 'package:intl/intl.dart';
 
 class ProfileView extends StatelessWidget {
   ProfileView({
@@ -42,7 +41,7 @@ class ProfileView extends StatelessWidget {
     this.expandedBarHeight = 300.0,
     super.key,
     ScrollController? scrollController,
-  }): this.scrollController = scrollController ?? ScrollController();
+  }): scrollController = scrollController ?? ScrollController();
 
   final String visitedUserId;
   final double collapsedBarHeight;

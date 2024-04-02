@@ -2,9 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:fpdart/fpdart.dart';
-import 'package:intheloopapp/domains/models/booking.dart';
 import 'package:intheloopapp/ui/discover/discover_cubit.dart';
-import 'package:intheloopapp/utils/app_logger.dart';
 import 'package:latlong2/latlong.dart';
 
 class BookingsPolygonLayer extends StatelessWidget {

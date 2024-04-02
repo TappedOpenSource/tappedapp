@@ -12,7 +12,6 @@ import 'package:intheloopapp/ui/discover/components/user_slider.dart';
 import 'package:intheloopapp/ui/discover/discover_cubit.dart';
 import 'package:intheloopapp/ui/profile/components/feedback_button.dart';
 import 'package:intheloopapp/ui/profile/components/opportunities_list.dart';
-import 'package:intheloopapp/ui/profile/profile_view.dart';
 import 'package:intheloopapp/ui/user_avatar.dart';
 import 'package:intheloopapp/ui/user_tile.dart';
 import 'package:intheloopapp/utils/bloc_utils.dart';

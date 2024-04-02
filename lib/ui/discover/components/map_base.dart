@@ -2,7 +2,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:flutter_map_tile_caching/flutter_map_tile_caching.dart';
-import 'package:intheloopapp/domains/models/location.dart';
 import 'package:intheloopapp/ui/app_theme_cubit.dart';
 import 'package:intheloopapp/ui/discover/components/bookings_heatmap_layer.dart';
 import 'package:intheloopapp/ui/discover/components/bookings_polygon_layer.dart';

@@ -1,7 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:fpdart/fpdart.dart' hide State;
@@ -48,7 +47,7 @@ class _ShareProfileViewState extends State<ShareProfileView> {
       final image = await _screenshotController.capture();
       if (image == null) {
         logger.debug('image is null');
-        return null;
+        return;
       }
 
       await Share.shareXFiles([
@@ -251,9 +250,9 @@ class _ShareProfileViewState extends State<ShareProfileView> {
                               fontWeight: FontWeight.w800,
                             ),
                           ),
-                          Text(
+                          const Text(
                             'followers',
-                            style: const TextStyle(
+                            style: TextStyle(
                               fontSize: 10,
                               fontWeight: FontWeight.w200,
                             ),
