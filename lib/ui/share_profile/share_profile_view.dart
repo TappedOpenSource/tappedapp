@@ -16,6 +16,7 @@ import 'package:intheloopapp/utils/geohash.dart';
 import 'package:intl/intl.dart';
 import 'package:screenshot/screenshot.dart';
 import 'package:share_plus/share_plus.dart';
+import 'package:skeletons/skeletons.dart';
 
 class ShareProfileView extends StatefulWidget {
   const ShareProfileView({
@@ -232,7 +233,7 @@ class _ShareProfileViewState extends State<ShareProfileView> {
                           final place = snapshot.data;
 
                           return switch (place) {
-                            null => const CupertinoActivityIndicator(),
+                            null => SkeletonListTile(),
                             None() => const SizedBox.shrink(),
                             Some(:final value) => CupertinoListTile(
                                 leading: const Icon(

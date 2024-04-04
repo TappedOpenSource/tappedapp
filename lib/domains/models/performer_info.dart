@@ -21,6 +21,7 @@ class PerformerInfo with _$PerformerInfo {
     @Default(PerformerCategory.undiscovered) PerformerCategory category,
     @Default(None()) Option<int> averageTicketPrice,
     @Default(None()) Option<int> averageAttendance,
+    @Default(None()) Option<String> bookingEmail,
   }) = _PerformerInfo;
 
   // fromJson

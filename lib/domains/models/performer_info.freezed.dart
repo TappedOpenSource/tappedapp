@@ -31,6 +31,7 @@ mixin _$PerformerInfo {
   PerformerCategory get category => throw _privateConstructorUsedError;
   Option<int> get averageTicketPrice => throw _privateConstructorUsedError;
   Option<int> get averageAttendance => throw _privateConstructorUsedError;
+  Option<String> get bookingEmail => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
@@ -55,7 +56,8 @@ abstract class $PerformerInfoCopyWith<$Res> {
       Option<String> bookingAgency,
       PerformerCategory category,
       Option<int> averageTicketPrice,
-      Option<int> averageAttendance});
+      Option<int> averageAttendance,
+      Option<String> bookingEmail});
 }
 
 /// @nodoc
@@ -82,6 +84,7 @@ class _$PerformerInfoCopyWithImpl<$Res, $Val extends PerformerInfo>
     Object? category = null,
     Object? averageTicketPrice = null,
     Object? averageAttendance = null,
+    Object? bookingEmail = null,
   }) {
     return _then(_value.copyWith(
       pressKitUrl: null == pressKitUrl
@@ -128,6 +131,10 @@ class _$PerformerInfoCopyWithImpl<$Res, $Val extends PerformerInfo>
           ? _value.averageAttendance
           : averageAttendance // ignore: cast_nullable_to_non_nullable
               as Option<int>,
+      bookingEmail: null == bookingEmail
+          ? _value.bookingEmail
+          : bookingEmail // ignore: cast_nullable_to_non_nullable
+              as Option<String>,
     ) as $Val);
   }
 }
@@ -151,7 +158,8 @@ abstract class _$$PerformerInfoImplCopyWith<$Res>
       Option<String> bookingAgency,
       PerformerCategory category,
       Option<int> averageTicketPrice,
-      Option<int> averageAttendance});
+      Option<int> averageAttendance,
+      Option<String> bookingEmail});
 }
 
 /// @nodoc
@@ -176,6 +184,7 @@ class __$$PerformerInfoImplCopyWithImpl<$Res>
     Object? category = null,
     Object? averageTicketPrice = null,
     Object? averageAttendance = null,
+    Object? bookingEmail = null,
   }) {
     return _then(_$PerformerInfoImpl(
       pressKitUrl: null == pressKitUrl
@@ -222,6 +231,10 @@ class __$$PerformerInfoImplCopyWithImpl<$Res>
           ? _value.averageAttendance
           : averageAttendance // ignore: cast_nullable_to_non_nullable
               as Option<int>,
+      bookingEmail: null == bookingEmail
+          ? _value.bookingEmail
+          : bookingEmail // ignore: cast_nullable_to_non_nullable
+              as Option<String>,
     ));
   }
 }
@@ -240,7 +253,8 @@ class _$PerformerInfoImpl implements _PerformerInfo {
       this.bookingAgency = const None(),
       this.category = PerformerCategory.undiscovered,
       this.averageTicketPrice = const None(),
-      this.averageAttendance = const None()})
+      this.averageAttendance = const None(),
+      this.bookingEmail = const None()})
       : _genres = genres,
         _subgenres = subgenres;
 
@@ -292,10 +306,13 @@ class _$PerformerInfoImpl implements _PerformerInfo {
   @override
   @JsonKey()
   final Option<int> averageAttendance;
+  @override
+  @JsonKey()
+  final Option<String> bookingEmail;
 
   @override
   String toString() {
-    return 'PerformerInfo(pressKitUrl: $pressKitUrl, genres: $genres, subgenres: $subgenres, rating: $rating, reviewCount: $reviewCount, bookingCount: $bookingCount, label: $label, bookingAgency: $bookingAgency, category: $category, averageTicketPrice: $averageTicketPrice, averageAttendance: $averageAttendance)';
+    return 'PerformerInfo(pressKitUrl: $pressKitUrl, genres: $genres, subgenres: $subgenres, rating: $rating, reviewCount: $reviewCount, bookingCount: $bookingCount, label: $label, bookingAgency: $bookingAgency, category: $category, averageTicketPrice: $averageTicketPrice, averageAttendance: $averageAttendance, bookingEmail: $bookingEmail)';
   }
 
   @override
@@ -321,7 +338,9 @@ class _$PerformerInfoImpl implements _PerformerInfo {
             (identical(other.averageTicketPrice, averageTicketPrice) ||
                 other.averageTicketPrice == averageTicketPrice) &&
             (identical(other.averageAttendance, averageAttendance) ||
-                other.averageAttendance == averageAttendance));
+                other.averageAttendance == averageAttendance) &&
+            (identical(other.bookingEmail, bookingEmail) ||
+                other.bookingEmail == bookingEmail));
   }
 
   @JsonKey(ignore: true)
@@ -338,7 +357,8 @@ class _$PerformerInfoImpl implements _PerformerInfo {
       bookingAgency,
       category,
       averageTicketPrice,
-      averageAttendance);
+      averageAttendance,
+      bookingEmail);
 
   @JsonKey(ignore: true)
   @override
@@ -366,7 +386,8 @@ abstract class _PerformerInfo implements PerformerInfo {
       final Option<String> bookingAgency,
       final PerformerCategory category,
       final Option<int> averageTicketPrice,
-      final Option<int> averageAttendance}) = _$PerformerInfoImpl;
+      final Option<int> averageAttendance,
+      final Option<String> bookingEmail}) = _$PerformerInfoImpl;
 
   factory _PerformerInfo.fromJson(Map<String, dynamic> json) =
       _$PerformerInfoImpl.fromJson;
@@ -393,6 +414,8 @@ abstract class _PerformerInfo implements PerformerInfo {
   Option<int> get averageTicketPrice;
   @override
   Option<int> get averageAttendance;
+  @override
+  Option<String> get bookingEmail;
   @override
   @JsonKey(ignore: true)
   _$$PerformerInfoImplCopyWith<_$PerformerInfoImpl> get copyWith =>
