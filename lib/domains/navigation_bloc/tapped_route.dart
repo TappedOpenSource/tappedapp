@@ -40,6 +40,7 @@ import 'package:intheloopapp/ui/request_to_perform/request_to_perform_view.dart'
 import 'package:intheloopapp/ui/reviews/user_reviews_feed.dart';
 import 'package:intheloopapp/ui/services/service_view.dart';
 import 'package:intheloopapp/ui/settings/settings_view.dart';
+import 'package:intheloopapp/ui/share_profile/share_profile_view.dart';
 import 'package:intheloopapp/utils/hero_image.dart';
 import 'package:photo_view/photo_view.dart';
 import 'package:stream_chat_flutter/stream_chat_flutter.dart';
@@ -555,4 +556,20 @@ final class ImagePage extends TappedRoute {
   // }
   //
   final HeroImage heroImage;
+}
+
+final class ShareProfilePage extends TappedRoute {
+  ShareProfilePage({
+    required this.userId,
+    required this.user,
+  }) : super(
+          routeName: '/share_profile/$userId',
+          view: ShareProfileView(
+            userId: userId,
+            user: user,
+          ),
+        );
+
+  final String userId;
+  final Option<UserModel> user;
 }

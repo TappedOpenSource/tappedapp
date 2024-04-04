@@ -87,10 +87,10 @@ class _ShareProfileViewState extends State<ShareProfileView> {
       controller: _screenshotController,
       child: AspectRatio(
         aspectRatio: 1 / 1.6,
-      // child: ConstrainedBox(
-      //   constraints: BoxConstraints(
-      //     maxHeight: 600,
-      //   ),
+        // child: ConstrainedBox(
+        //   constraints: BoxConstraints(
+        //     maxHeight: 600,
+        //   ),
         child: Container(
           decoration: BoxDecoration(
             color: theme.colorScheme.surface,
@@ -313,158 +313,158 @@ class _ShareProfileViewState extends State<ShareProfileView> {
                     switch (socialFollowing.tiktokHandle) {
                       None() => null,
                       Some(:final value) => Container(
-                        decoration: BoxDecoration(
-                          // color:
-                          // theme.colorScheme.onBackground.withOpacity(0.1),
-                          borderRadius: BorderRadius.circular(15),
-                        ),
-                        padding: const EdgeInsets.symmetric(
-                          horizontal: 6,
-                          vertical: 3,
-                        ),
-                        child: Row(
-                          children: [
-                            const Icon(FontAwesomeIcons.tiktok, size: 20),
-                            if (socialFollowing.tiktokFollowers > 0)
-                              Padding(
-                                padding: const EdgeInsets.only(left: 5),
-                                child: Text(
-                                  numberFormat.format(
-                                    socialFollowing.tiktokFollowers,
+                          decoration: BoxDecoration(
+                            // color:
+                            // theme.colorScheme.onBackground.withOpacity(0.1),
+                            borderRadius: BorderRadius.circular(15),
+                          ),
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: 6,
+                            vertical: 3,
+                          ),
+                          child: Row(
+                            children: [
+                              const Icon(FontAwesomeIcons.tiktok, size: 20),
+                              if (socialFollowing.tiktokFollowers > 0)
+                                Padding(
+                                  padding: const EdgeInsets.only(left: 5),
+                                  child: Text(
+                                    numberFormat.format(
+                                      socialFollowing.tiktokFollowers,
+                                    ),
                                   ),
                                 ),
-                              ),
-                          ],
+                            ],
+                          ),
                         ),
-                      ),
                     },
                     switch (socialFollowing.instagramHandle) {
                       None() => null,
                       Some(:final value) => Container(
-                        decoration: BoxDecoration(
-                          // color:
-                          // theme.colorScheme.onBackground.withOpacity(0.1),
-                          borderRadius: BorderRadius.circular(15),
-                        ),
-                        padding: const EdgeInsets.symmetric(
-                          horizontal: 6,
-                          vertical: 3,
-                        ),
-                        child: Row(
-                          children: [
-                            const Icon(
-                              FontAwesomeIcons.instagram,
-                              size: 20,
-                            ),
-                            if (socialFollowing.instagramFollowers > 0)
-                              Padding(
-                                padding: const EdgeInsets.only(left: 5),
-                                child: Text(
-                                  numberFormat.format(
-                                    socialFollowing.instagramFollowers,
+                          decoration: BoxDecoration(
+                            // color:
+                            // theme.colorScheme.onBackground.withOpacity(0.1),
+                            borderRadius: BorderRadius.circular(15),
+                          ),
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: 6,
+                            vertical: 3,
+                          ),
+                          child: Row(
+                            children: [
+                              const Icon(
+                                FontAwesomeIcons.instagram,
+                                size: 20,
+                              ),
+                              if (socialFollowing.instagramFollowers > 0)
+                                Padding(
+                                  padding: const EdgeInsets.only(left: 5),
+                                  child: Text(
+                                    numberFormat.format(
+                                      socialFollowing.instagramFollowers,
+                                    ),
                                   ),
                                 ),
-                              ),
-                          ],
+                            ],
+                          ),
                         ),
-                      ),
                     },
                     switch (socialFollowing.twitterHandle) {
                       None() => null,
                       Some(:final value) => Container(
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(15),
-                        ),
-                        padding: const EdgeInsets.symmetric(
-                          horizontal: 5,
-                          vertical: 2,
-                        ),
-                        child: Row(
-                          children: [
-                            const Icon(
-                              FontAwesomeIcons.xTwitter,
-                              size: 20,
-                            ),
-                            if (socialFollowing.twitterFollowers > 0)
-                              Padding(
-                                padding: const EdgeInsets.only(left: 5),
-                                child: Text(
-                                  numberFormat.format(
-                                    socialFollowing.twitterFollowers,
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(15),
+                          ),
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: 5,
+                            vertical: 2,
+                          ),
+                          child: Row(
+                            children: [
+                              const Icon(
+                                FontAwesomeIcons.xTwitter,
+                                size: 20,
+                              ),
+                              if (socialFollowing.twitterFollowers > 0)
+                                Padding(
+                                  padding: const EdgeInsets.only(left: 5),
+                                  child: Text(
+                                    numberFormat.format(
+                                      socialFollowing.twitterFollowers,
+                                    ),
                                   ),
                                 ),
-                              ),
-                          ],
+                            ],
+                          ),
                         ),
-                      ),
                     },
                     switch (socialFollowing.facebookHandle) {
                       None() => null,
                       Some(:final value) => Container(
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(15),
-                        ),
-                        padding: const EdgeInsets.symmetric(
-                          horizontal: 5,
-                          vertical: 2,
-                        ),
-                        child: Row(
-                          children: [
-                            const Icon(FontAwesomeIcons.facebook, size: 20),
-                            if (socialFollowing.facebookFollowers > 0)
-                              Padding(
-                                padding: const EdgeInsets.only(left: 5),
-                                child: Text(
-                                  numberFormat.format(
-                                    socialFollowing.facebookFollowers,
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(15),
+                          ),
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: 5,
+                            vertical: 2,
+                          ),
+                          child: Row(
+                            children: [
+                              const Icon(FontAwesomeIcons.facebook, size: 20),
+                              if (socialFollowing.facebookFollowers > 0)
+                                Padding(
+                                  padding: const EdgeInsets.only(left: 5),
+                                  child: Text(
+                                    numberFormat.format(
+                                      socialFollowing.facebookFollowers,
+                                    ),
                                   ),
                                 ),
-                              ),
-                          ],
+                            ],
+                          ),
                         ),
-                      ),
                     },
                     switch (socialFollowing.youtubeHandle) {
                       None() => null,
                       Some(:final value) => Container(
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(15),
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(15),
+                          ),
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: 5,
+                            vertical: 2,
+                          ),
+                          child: const Icon(FontAwesomeIcons.youtube, size: 20),
                         ),
-                        padding: const EdgeInsets.symmetric(
-                          horizontal: 5,
-                          vertical: 2,
-                        ),
-                        child: const Icon(FontAwesomeIcons.youtube, size: 20),
-                      ),
                     },
                     switch (socialFollowing.twitchHandle) {
                       None() => null,
                       Some(:final value) => Container(
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(15),
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(15),
+                          ),
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: 5,
+                            vertical: 2,
+                          ),
+                          child: const Icon(FontAwesomeIcons.twitch, size: 20),
                         ),
-                        padding: const EdgeInsets.symmetric(
-                          horizontal: 5,
-                          vertical: 2,
-                        ),
-                        child: const Icon(FontAwesomeIcons.twitch, size: 20),
-                      ),
                     },
                     switch (socialFollowing.soundcloudHandle) {
                       None() => null,
                       Some(:final value) => Container(
-                        decoration: BoxDecoration(
-                          // color:
-                          // theme.colorScheme.onBackground.withOpacity(0.1),
-                          borderRadius: BorderRadius.circular(15),
+                          decoration: BoxDecoration(
+                            // color:
+                            // theme.colorScheme.onBackground.withOpacity(0.1),
+                            borderRadius: BorderRadius.circular(15),
+                          ),
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: 5,
+                            vertical: 2,
+                          ),
+                          child:
+                              const Icon(FontAwesomeIcons.soundcloud, size: 20),
                         ),
-                        padding: const EdgeInsets.symmetric(
-                          horizontal: 5,
-                          vertical: 2,
-                        ),
-                        child:
-                        const Icon(FontAwesomeIcons.soundcloud, size: 20),
-                      ),
                     },
                   ].whereType<Widget>().toList(),
                 ),
@@ -516,6 +516,7 @@ class _ShareProfileViewState extends State<ShareProfileView> {
   Widget build(BuildContext context) {
     final database = context.database;
     final theme = Theme.of(context);
+
     return Scaffold(
       // backgroundColor: Colors.grey[700],
       backgroundColor: theme.colorScheme.surface,
