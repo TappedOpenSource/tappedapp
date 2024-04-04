@@ -71,384 +71,442 @@ class _ShareProfileViewState extends State<ShareProfileView> {
     required UserModel user,
   }) {
     final theme = Theme.of(context);
-    const borderRadius = 25.0;
-    final bookingCount = user.performerInfo.map((t) => t.bookingCount);
+    // const borderRadius = 25.0;
+    // final bookingCount = user.performerInfo.map((t) => t.bookingCount);
     final reviewCount = user.performerInfo.map((t) => t.reviewCount);
     final audience = user.socialFollowing.audienceSize;
     final rating = user.performerInfo.flatMap((t) => t.rating);
     final socialFollowing = user.socialFollowing;
     final numberFormat = NumberFormat.compact();
+    final genres = user.performerInfo.map((t) => t.genres).getOrElse(() => []);
+    final label = user.performerInfo.map((t) => t.label);
     final category = user.performerInfo.map((t) => t.category);
+    final averagePerformerTicketPrice =
+        user.performerInfo.map((t) => t.formattedPriceRange);
     return Screenshot(
       controller: _screenshotController,
-      child: Container(
-        width: 450,
-        height: 600,
-        decoration: BoxDecoration(
-          color: theme.colorScheme.surface,
-          // gradient: LinearGradient(
-          //   begin: Alignment.topLeft,
-          //   end: Alignment.bottomRight,
-          //   colors: [
-          //     theme.colorScheme.primary,
-          //   ],
-          // ),
-          // borderRadius: BorderRadius.circular(borderRadius),
-          border: Border.all(
-            color: theme.colorScheme.onSurface.withOpacity(0.1),
-            width: 2,
-          ),
-          boxShadow: [
-            BoxShadow(
-              color: Colors.white.withOpacity(0.2),
-              blurRadius: 10,
-              offset: const Offset(0, 5),
+      child: AspectRatio(
+        aspectRatio: 1 / 1.6,
+      // child: ConstrainedBox(
+      //   constraints: BoxConstraints(
+      //     maxHeight: 600,
+      //   ),
+        child: Container(
+          decoration: BoxDecoration(
+            color: theme.colorScheme.surface,
+            // gradient: LinearGradient(
+            //   begin: Alignment.topLeft,
+            //   end: Alignment.bottomRight,
+            //   colors: [
+            //     theme.colorScheme.primary,
+            //   ],
+            // ),
+            // borderRadius: BorderRadius.circular(borderRadius),
+            border: Border.all(
+              color: theme.colorScheme.onSurface.withOpacity(0.1),
+              width: 2,
             ),
-          ],
-        ),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Stack(
-              children: [
-                Container(
-                  height: 200,
-                  decoration: BoxDecoration(
-                    image: DecorationImage(
-                      image: user.profilePicture.fold(
-                        () => getDefaultImage(Option.of(user.id)),
-                        CachedNetworkImageProvider.new,
-                      ),
-                      fit: BoxFit.cover,
-                    ),
-                  ),
-                ),
-                Container(
-                  height: 200,
-                  decoration: BoxDecoration(
-                    gradient: LinearGradient(
-                      begin: Alignment.topCenter,
-                      end: Alignment.bottomCenter,
-                      colors: [
-                        Colors.transparent,
-                        Colors.black.withOpacity(0.5),
-                      ],
-                    ),
-                  ),
-                ),
-                Positioned(
-                  top: 6,
-                  left: 6,
-                  child: Image.asset(
-                    'assets/icon_1024.png',
-                    height: 22,
-                    width: 22,
-                  ),
-                ),
-                Positioned(
-                  left: 6,
-                  bottom: 6,
-                  child: Text(
-                    user.displayName,
-                    maxLines: 2,
-                    overflow: TextOverflow.ellipsis,
-                    style: GoogleFonts.manrope(
-                      fontSize: switch (user.displayName.length) {
-                        < 12 => 36,
-                        < 20 => 32,
-                        < 30 => 28,
-                        _ => 24,
-                      },
-                      fontWeight: FontWeight.w900,
-                      color: Colors.white,
-                    ),
-                  ),
-                ),
-              ],
-            ),
-            const SizedBox(height: 10),
-            Padding(
-              padding: const EdgeInsets.symmetric(
-                horizontal: 20,
+            boxShadow: [
+              BoxShadow(
+                color: Colors.white.withOpacity(0.2),
+                blurRadius: 10,
+                offset: const Offset(0, 5),
               ),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  switch (category) {
-                    None() => const SizedBox.shrink(),
-                    Some(:final value) => Column(
+            ],
+          ),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Expanded(
+                child: Stack(
+                  children: [
+                    Container(
+                      height: double.infinity,
+                      decoration: BoxDecoration(
+                        image: DecorationImage(
+                          image: user.profilePicture.fold(
+                            () => getDefaultImage(Option.of(user.id)),
+                            CachedNetworkImageProvider.new,
+                          ),
+                          fit: BoxFit.cover,
+                        ),
+                      ),
+                    ),
+                    Container(
+                      height: double.infinity,
+                      decoration: BoxDecoration(
+                        gradient: LinearGradient(
+                          begin: Alignment.topCenter,
+                          end: Alignment.bottomCenter,
+                          colors: [
+                            Colors.transparent,
+                            Colors.black.withOpacity(0.5),
+                          ],
+                        ),
+                      ),
+                    ),
+                    Positioned(
+                      top: 6,
+                      left: 6,
+                      child: Image.asset(
+                        'assets/icon_1024.png',
+                        height: 22,
+                        width: 22,
+                      ),
+                    ),
+                    Positioned(
+                      left: 6,
+                      bottom: 6,
+                      child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
-                            value.formattedName.toLowerCase(),
-                            style: TextStyle(
-                              fontSize: 18,
-                              color: value.color,
-                              fontWeight: FontWeight.w800,
+                            user.displayName,
+                            maxLines: 2,
+                            overflow: TextOverflow.ellipsis,
+                            style: GoogleFonts.manrope(
+                              fontSize: switch (user.displayName.length) {
+                                < 12 => 36,
+                                < 20 => 32,
+                                < 30 => 28,
+                                _ => 24,
+                              },
+                              fontWeight: FontWeight.w900,
+                              color: Colors.white,
                             ),
                           ),
-                          const Text(
-                            'performer',
-                            style: TextStyle(
-                              fontSize: 10,
-                              fontWeight: FontWeight.w200,
-                            ),
-                          ),
+                          switch (category) {
+                            None() => const SizedBox.shrink(),
+                            Some(:final value) => Text(
+                                '${value.formattedName.toLowerCase()} performer',
+                                style: TextStyle(
+                                  fontSize: 16,
+                                  color: value.color,
+                                  fontWeight: FontWeight.w300,
+                                ),
+                              ),
+                          },
                         ],
                       ),
-                  },
-                  switch (reviewCount) {
+                    ),
+                  ],
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.only(
+                  top: 10,
+                  left: 20,
+                  right: 20,
+                ),
+                child: Text(
+                  user.bio,
+                  maxLines: 3,
+                  style: const TextStyle(
+                    fontSize: 14,
+                    fontWeight: FontWeight.w200,
+                  ),
+                ),
+              ),
+              CupertinoListSection.insetGrouped(
+                backgroundColor: Colors.transparent,
+                decoration: BoxDecoration(
+                  color: theme.colorScheme.onSurface.withOpacity(0.1),
+                  border: Border(
+                    bottom: BorderSide(
+                      color: theme.colorScheme.onBackground.withOpacity(0.1),
+                      width: 0.5,
+                    ),
+                  ),
+                ),
+                margin: const EdgeInsets.symmetric(
+                  horizontal: 20,
+                  vertical: 10,
+                ),
+                children: [
+                  switch (user.location) {
                     None() => const SizedBox.shrink(),
-                    Some(:final value) => Column(
-                        children: [
-                          Text(
-                            value.toString(),
-                            style: const TextStyle(
-                              fontSize: 18,
-                              fontWeight: FontWeight.w800,
-                            ),
+                    Some(:final value) => FutureBuilder<Option<PlaceData>>(
+                        future: context.places.getPlaceById(value.placeId),
+                        builder: (context, snapshot) {
+                          final place = snapshot.data;
+
+                          return switch (place) {
+                            null => const CupertinoActivityIndicator(),
+                            None() => const SizedBox.shrink(),
+                            Some(:final value) => CupertinoListTile(
+                                leading: const Icon(
+                                  Icons.location_on,
+                                ),
+                                title: Text(
+                                  getAddressComponent(
+                                    value.addressComponents,
+                                  ).toLowerCase(),
+                                  style: TextStyle(
+                                    color: theme.colorScheme.onSurface,
+                                  ),
+                                ),
+                              ),
+                          };
+                        },
+                      ),
+                  },
+                  switch (genres.isNotEmpty) {
+                    false => const SizedBox.shrink(),
+                    true => CupertinoListTile(
+                        leading: const Icon(
+                          Icons.music_note,
+                        ),
+                        title: Text(
+                          genres.length > 3
+                              ? genres.sublist(0, 3).join(', ').toLowerCase()
+                              : genres.join(', ').toLowerCase(),
+                          style: TextStyle(
+                            color: theme.colorScheme.onSurface,
                           ),
-                          const Text(
-                            'reviews',
-                            style: TextStyle(
-                              fontSize: 10,
-                              fontWeight: FontWeight.w200,
-                            ),
+                        ),
+                      ),
+                  },
+                  switch (label) {
+                    None() => const SizedBox.shrink(),
+                    Some(:final value) => CupertinoListTile(
+                        leading: const Icon(
+                          Icons.label,
+                        ),
+                        title: Text(
+                          value.toLowerCase(),
+                          style: TextStyle(
+                            color: theme.colorScheme.onSurface,
                           ),
-                        ],
+                        ),
                       ),
                   },
                   switch (rating) {
                     None() => const SizedBox.shrink(),
-                    Some(:final value) => Column(
-                        children: [
-                          Text(
-                            value.toString(),
-                            style: const TextStyle(
-                              fontSize: 18,
-                              fontWeight: FontWeight.w800,
-                            ),
+                    Some(:final value) => CupertinoListTile(
+                        leading: const Icon(
+                          CupertinoIcons.star_circle,
+                        ),
+                        title: RatingBarIndicator(
+                          rating: value,
+                          itemBuilder: (context, index) => const Icon(
+                            Icons.star,
+                            color: Colors.amber,
                           ),
-                          const Text(
-                            'rating',
-                            style: TextStyle(
-                              fontSize: 10,
-                              fontWeight: FontWeight.w200,
-                            ),
-                          ),
-                        ],
-                      ),
-                  },
-                  switch (audience) {
-                    0 => const SizedBox.shrink(),
-                    final value => Column(
-                        children: [
-                          Text(
-                            NumberFormat.compact().format(value),
-                            style: const TextStyle(
-                              fontSize: 18,
-                              fontWeight: FontWeight.w800,
-                            ),
-                          ),
-                          const Text(
-                            'followers',
-                            style: TextStyle(
-                              fontSize: 10,
-                              fontWeight: FontWeight.w200,
-                            ),
-                          ),
-                        ],
+                          itemSize: 20,
+                        ),
+                        subtitle: const Text(
+                          'rating on tapped.ai',
+                        ),
                       ),
                   },
                 ],
               ),
-            ),
-            // Text(
-            //   user.bio,
-            //   maxLines: 3,
-            //   style: const TextStyle(
-            //     fontSize: 14,
-            //     fontWeight: FontWeight.w200,
-            //   ),
-            // ),
-            CupertinoListSection.insetGrouped(
-              backgroundColor: Colors.transparent,
-              decoration: BoxDecoration(
-                color: theme.colorScheme.onSurface.withOpacity(0.1),
-                border: Border(
-                  bottom: BorderSide(
-                    color: theme.colorScheme.onBackground.withOpacity(0.1),
-                    width: 0.5,
-                  ),
+              Padding(
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 20,
+                  vertical: 5,
                 ),
-              ),
-              children: [
-                switch (user.location) {
-                  None() => const SizedBox.shrink(),
-                  Some(:final value) => FutureBuilder<Option<PlaceData>>(
-                      future: context.places.getPlaceById(value.placeId),
-                      builder: (context, snapshot) {
-                        final place = snapshot.data;
-
-                        return switch (place) {
-                          null => const CupertinoActivityIndicator(),
-                          None() => const SizedBox.shrink(),
-                          Some(:final value) => CupertinoListTile(
-                              leading: const Icon(
-                                Icons.location_on,
-                              ),
-                              title: Text(
-                                getAddressComponent(
-                                  value.addressComponents,
-                                ).toLowerCase(),
-                                style: TextStyle(
-                                  color: theme.colorScheme.onSurface,
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    switch (socialFollowing.tiktokHandle) {
+                      None() => null,
+                      Some(:final value) => Container(
+                        decoration: BoxDecoration(
+                          // color:
+                          // theme.colorScheme.onBackground.withOpacity(0.1),
+                          borderRadius: BorderRadius.circular(15),
+                        ),
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 6,
+                          vertical: 3,
+                        ),
+                        child: Row(
+                          children: [
+                            const Icon(FontAwesomeIcons.tiktok, size: 20),
+                            if (socialFollowing.tiktokFollowers > 0)
+                              Padding(
+                                padding: const EdgeInsets.only(left: 5),
+                                child: Text(
+                                  numberFormat.format(
+                                    socialFollowing.tiktokFollowers,
+                                  ),
                                 ),
                               ),
+                          ],
+                        ),
+                      ),
+                    },
+                    switch (socialFollowing.instagramHandle) {
+                      None() => null,
+                      Some(:final value) => Container(
+                        decoration: BoxDecoration(
+                          // color:
+                          // theme.colorScheme.onBackground.withOpacity(0.1),
+                          borderRadius: BorderRadius.circular(15),
+                        ),
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 6,
+                          vertical: 3,
+                        ),
+                        child: Row(
+                          children: [
+                            const Icon(
+                              FontAwesomeIcons.instagram,
+                              size: 20,
                             ),
-                        };
-                      },
-                    ),
-                },
-                switch (rating) {
-                  None() => const SizedBox.shrink(),
-                  Some(:final value) => CupertinoListTile(
-                      leading: const Icon(
-                        CupertinoIcons.star_circle,
-                      ),
-                      title: RatingBarIndicator(
-                        rating: value,
-                        itemBuilder: (context, index) => const Icon(
-                          Icons.star,
-                          color: Colors.amber,
-                        ),
-                        itemSize: 20,
-                      ),
-                    ),
-                },
-                switch (socialFollowing.instagramHandle) {
-                  None() => const SizedBox.shrink(),
-                  Some(:final value) => CupertinoListTile(
-                      leading: const Icon(
-                        FontAwesomeIcons.instagram,
-                      ),
-                      title: Text(
-                        value,
-                        style: TextStyle(
-                          color: theme.colorScheme.onSurface,
-                        ),
-                      ),
-                      trailing: socialFollowing.instagramFollowers > 0
-                          ? Text(
-                              numberFormat.format(
-                                socialFollowing.instagramFollowers,
+                            if (socialFollowing.instagramFollowers > 0)
+                              Padding(
+                                padding: const EdgeInsets.only(left: 5),
+                                child: Text(
+                                  numberFormat.format(
+                                    socialFollowing.instagramFollowers,
+                                  ),
+                                ),
                               ),
-                            )
-                          : null,
-                    ),
-                },
-                switch (socialFollowing.twitterHandle) {
-                  None() => const SizedBox.shrink(),
-                  Some(:final value) => CupertinoListTile(
-                      leading: const Icon(
-                        FontAwesomeIcons.xTwitter,
-                      ),
-                      title: Text(
-                        value,
-                        style: TextStyle(
-                          color: theme.colorScheme.onSurface,
+                          ],
                         ),
                       ),
-                      trailing: socialFollowing.twitterFollowers > 0
-                          ? Text(
-                              numberFormat
-                                  .format(socialFollowing.twitterFollowers),
-                            )
-                          : null,
-                    ),
-                },
-                // switch (socialFollowing.facebookHandle) {
-                //   None() => const SizedBox.shrink(),
-                //   Some(:final value) => CupertinoListTile(
-                //       leading: const Icon(FontAwesomeIcons.facebook),
-                //       title: Text(value),
-                //       trailing: socialFollowing.facebookFollowers > 0
-                //           ? Text(
-                //               numberFormat.format(
-                //                   socialFollowing.facebookFollowers),
-                //             )
-                //           : null,
-                //     ),
-                // },
-                switch (socialFollowing.tiktokHandle) {
-                  None() => const SizedBox.shrink(),
-                  Some(:final value) => CupertinoListTile(
-                      leading: const Icon(
-                        FontAwesomeIcons.tiktok,
-                      ),
-                      title: Text(
-                        value,
-                        style: TextStyle(
-                          color: theme.colorScheme.onSurface,
+                    },
+                    switch (socialFollowing.twitterHandle) {
+                      None() => null,
+                      Some(:final value) => Container(
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(15),
+                        ),
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 5,
+                          vertical: 2,
+                        ),
+                        child: Row(
+                          children: [
+                            const Icon(
+                              FontAwesomeIcons.xTwitter,
+                              size: 20,
+                            ),
+                            if (socialFollowing.twitterFollowers > 0)
+                              Padding(
+                                padding: const EdgeInsets.only(left: 5),
+                                child: Text(
+                                  numberFormat.format(
+                                    socialFollowing.twitterFollowers,
+                                  ),
+                                ),
+                              ),
+                          ],
                         ),
                       ),
-                      subtitle: socialFollowing.tiktokFollowers > 0
-                          ? Text(
-                              numberFormat
-                                  .format(socialFollowing.tiktokFollowers),
-                            )
-                          : null,
-                    ),
-                },
-                // switch (socialFollowing.youtubeHandle) {
-                //   None() => const SizedBox.shrink(),
-                //   Some(:final value) => CupertinoListTile(
-                //       leading: const Icon(FontAwesomeIcons.youtube),
-                //       title: Text(value),
-                //     ),
-                // },
-                // switch (socialFollowing.twitchHandle) {
-                //   None() => const SizedBox.shrink(),
-                //   Some(:final value) => CupertinoListTile(
-                //       leading: const Icon(FontAwesomeIcons.twitch),
-                //       title: Text(value),
-                //     ),
-                // },
-                switch (socialFollowing.soundcloudHandle) {
-                  None() => const SizedBox.shrink(),
-                  Some(:final value) => CupertinoListTile(
-                      leading: const Icon(
-                        FontAwesomeIcons.soundcloud,
-                      ),
-                      title: Text(
-                        value,
-                        style: TextStyle(
-                          color: theme.colorScheme.onSurface,
+                    },
+                    switch (socialFollowing.facebookHandle) {
+                      None() => null,
+                      Some(:final value) => Container(
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(15),
+                        ),
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 5,
+                          vertical: 2,
+                        ),
+                        child: Row(
+                          children: [
+                            const Icon(FontAwesomeIcons.facebook, size: 20),
+                            if (socialFollowing.facebookFollowers > 0)
+                              Padding(
+                                padding: const EdgeInsets.only(left: 5),
+                                child: Text(
+                                  numberFormat.format(
+                                    socialFollowing.facebookFollowers,
+                                  ),
+                                ),
+                              ),
+                          ],
                         ),
                       ),
-                    ),
-                },
-              ],
-            ),
-            const Spacer(),
-            Padding(
-              padding: const EdgeInsets.symmetric(
-                vertical: 10,
+                    },
+                    switch (socialFollowing.youtubeHandle) {
+                      None() => null,
+                      Some(:final value) => Container(
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(15),
+                        ),
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 5,
+                          vertical: 2,
+                        ),
+                        child: const Icon(FontAwesomeIcons.youtube, size: 20),
+                      ),
+                    },
+                    switch (socialFollowing.twitchHandle) {
+                      None() => null,
+                      Some(:final value) => Container(
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(15),
+                        ),
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 5,
+                          vertical: 2,
+                        ),
+                        child: const Icon(FontAwesomeIcons.twitch, size: 20),
+                      ),
+                    },
+                    switch (socialFollowing.soundcloudHandle) {
+                      None() => null,
+                      Some(:final value) => Container(
+                        decoration: BoxDecoration(
+                          // color:
+                          // theme.colorScheme.onBackground.withOpacity(0.1),
+                          borderRadius: BorderRadius.circular(15),
+                        ),
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 5,
+                          vertical: 2,
+                        ),
+                        child:
+                        const Icon(FontAwesomeIcons.soundcloud, size: 20),
+                      ),
+                    },
+                  ].whereType<Widget>().toList(),
+                ),
               ),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Text(
-                    'contact - ${user.email}',
-                    style: const TextStyle(
-                      fontSize: 10,
-                      fontWeight: FontWeight.w200,
-                    ),
+              if (user.email.isNotEmpty && !user.email.contains('@tapped.ai'))
+                Padding(
+                  padding: const EdgeInsets.only(
+                    bottom: 10,
                   ),
-                ],
-              ),
-            ),
-          ],
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Text(
+                        'contact - ${user.email}',
+                        style: const TextStyle(
+                          fontSize: 10,
+                          fontWeight: FontWeight.w200,
+                        ),
+                      ),
+                    ],
+                  ),
+                )
+              else
+                Padding(
+                  padding: const EdgeInsets.symmetric(
+                    vertical: 10,
+                  ),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Text(
+                        'contact - https://tapped.ai/${user.username}',
+                        style: const TextStyle(
+                          fontSize: 10,
+                          fontWeight: FontWeight.w200,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+            ],
+          ),
         ),
       ),
     );

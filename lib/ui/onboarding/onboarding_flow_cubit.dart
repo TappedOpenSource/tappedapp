@@ -151,6 +151,8 @@ class OnboardingFlowCubit extends Cubit<OnboardingFlowState> {
 
       await databaseRepository.createUser(currentUser);
 
+      await Future.delayed(const Duration(seconds: 2));
+
       onboardingBloc.add(FinishOnboarding(user: currentUser));
       emit(state.copyWith(status: FormzSubmissionStatus.success));
     } catch (e, s) {

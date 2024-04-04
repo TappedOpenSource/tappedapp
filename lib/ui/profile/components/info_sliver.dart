@@ -15,6 +15,7 @@ import 'package:intheloopapp/domains/navigation_bloc/tapped_route.dart';
 import 'package:intheloopapp/ui/profile/components/category_gauge.dart';
 import 'package:intheloopapp/ui/profile/components/more_options_button.dart';
 import 'package:intheloopapp/ui/profile/profile_cubit.dart';
+import 'package:intheloopapp/ui/share_profile/share_profile_view.dart';
 import 'package:intheloopapp/utils/app_logger.dart';
 import 'package:intheloopapp/utils/bloc_utils.dart';
 import 'package:intheloopapp/utils/current_user_builder.dart';
@@ -23,6 +24,7 @@ import 'package:intheloopapp/utils/geohash.dart';
 import 'package:intheloopapp/utils/premium_builder.dart';
 import 'package:intl/intl.dart';
 import 'package:maps_launcher/maps_launcher.dart';
+import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class InfoSliver extends StatelessWidget {
@@ -55,9 +57,6 @@ class InfoSliver extends StatelessWidget {
         );
         final label = performerInfo.map((t) => t.label).getOrElse(() => 'None');
         final bookingAgency = performerInfo.flatMap((t) => t.bookingAgency);
-        final pressKitUrl = performerInfo
-            .map((t) => t.pressKitUrl)
-            .getOrElse(() => const None());
         final currPlace = state.place;
         final idealPerformerProfile =
             state.visitedUser.venueInfo.flatMap((t) => t.idealPerformerProfile);
@@ -169,37 +168,35 @@ class InfoSliver extends StatelessWidget {
                                   ),
                                 ),
                               ),
-                            if (isAdmin || isBooker)
-                              switch (averagePerformerTicketPrice) {
-                                None() => const SizedBox.shrink(),
-                                Some(:final value) => CupertinoListTile(
-                                    leading: const Icon(
-                                      CupertinoIcons.money_dollar,
-                                    ),
-                                    title: Text(
-                                      '$value avg. ticket price',
-                                      style: TextStyle(
-                                        color: theme.colorScheme.onSurface,
-                                      ),
+                            switch (averagePerformerTicketPrice) {
+                              None() => const SizedBox.shrink(),
+                              Some(:final value) => CupertinoListTile(
+                                  leading: const Icon(
+                                    CupertinoIcons.money_dollar,
+                                  ),
+                                  title: Text(
+                                    '$value avg. ticket price',
+                                    style: TextStyle(
+                                      color: theme.colorScheme.onSurface,
                                     ),
                                   ),
-                              },
-                            if (isAdmin || isBooker)
-                              switch ((venueInfo, averageAttendance)) {
-                                (Some(), _) => const SizedBox.shrink(),
-                                (_, None()) => const SizedBox.shrink(),
-                                (_, Some(:final value)) => CupertinoListTile(
-                                    leading: const Icon(
-                                      CupertinoIcons.person_3_fill,
-                                    ),
-                                    title: Text(
-                                      '${formatted.format(value)} person ticket sale avg.',
-                                      style: TextStyle(
-                                        color: theme.colorScheme.onSurface,
-                                      ),
+                                ),
+                            },
+                            switch ((venueInfo, averageAttendance)) {
+                              (Some(), _) => const SizedBox.shrink(),
+                              (_, None()) => const SizedBox.shrink(),
+                              (_, Some(:final value)) => CupertinoListTile(
+                                  leading: const Icon(
+                                    CupertinoIcons.person_3_fill,
+                                  ),
+                                  title: Text(
+                                    '${formatted.format(value)} person ticket sale avg.',
+                                    style: TextStyle(
+                                      color: theme.colorScheme.onSurface,
                                     ),
                                   ),
-                              },
+                                ),
+                            },
                             if (isPremium && bookingEmail != null)
                               GestureDetector(
                                 onLongPress: () async {
@@ -297,7 +294,7 @@ class InfoSliver extends StatelessWidget {
                                   ),
                                 ),
                             },
-                            switch (pressKitUrl) {
+                            switch (performerInfo) {
                               None() => const SizedBox.shrink(),
                               Some(:final value) => CupertinoListTile.notched(
                                   leading: const Icon(
@@ -312,8 +309,22 @@ class InfoSliver extends StatelessWidget {
                                   trailing: const Icon(
                                     CupertinoIcons.chevron_forward,
                                   ),
-                                  onTap: () async {
-                                    await launchUrl(Uri.parse(value));
+                                  onTap: switch (value.pressKitUrl) {
+                                    None() => () {
+                                        showCupertinoModalBottomSheet(
+                                          context: context,
+                                          builder: (context) {
+                                            return ShareProfileView(
+                                              userId: state.visitedUser.id,
+                                              user:
+                                                  Option.of(state.visitedUser),
+                                            );
+                                          },
+                                        );
+                                      },
+                                    Some(:final value) => () async {
+                                        await launchUrl(Uri.parse(value));
+                                      },
                                   },
                                 ),
                             },

@@ -31,6 +31,7 @@ mixin _$SocialFollowing {
   Option<String> get facebookHandle => throw _privateConstructorUsedError;
   int get facebookFollowers => throw _privateConstructorUsedError;
   Option<String> get spotifyUrl => throw _privateConstructorUsedError;
+  int get spotifyMonthlyListeners => throw _privateConstructorUsedError;
   Option<String> get soundcloudHandle => throw _privateConstructorUsedError;
   int get soundcloudFollowers => throw _privateConstructorUsedError;
   Option<String> get audiusHandle => throw _privateConstructorUsedError;
@@ -62,6 +63,7 @@ abstract class $SocialFollowingCopyWith<$Res> {
       Option<String> facebookHandle,
       int facebookFollowers,
       Option<String> spotifyUrl,
+      int spotifyMonthlyListeners,
       Option<String> soundcloudHandle,
       int soundcloudFollowers,
       Option<String> audiusHandle,
@@ -94,6 +96,7 @@ class _$SocialFollowingCopyWithImpl<$Res, $Val extends SocialFollowing>
     Object? facebookHandle = null,
     Object? facebookFollowers = null,
     Object? spotifyUrl = null,
+    Object? spotifyMonthlyListeners = null,
     Object? soundcloudHandle = null,
     Object? soundcloudFollowers = null,
     Object? audiusHandle = null,
@@ -146,6 +149,10 @@ class _$SocialFollowingCopyWithImpl<$Res, $Val extends SocialFollowing>
           ? _value.spotifyUrl
           : spotifyUrl // ignore: cast_nullable_to_non_nullable
               as Option<String>,
+      spotifyMonthlyListeners: null == spotifyMonthlyListeners
+          ? _value.spotifyMonthlyListeners
+          : spotifyMonthlyListeners // ignore: cast_nullable_to_non_nullable
+              as int,
       soundcloudHandle: null == soundcloudHandle
           ? _value.soundcloudHandle
           : soundcloudHandle // ignore: cast_nullable_to_non_nullable
@@ -194,6 +201,7 @@ abstract class _$$SocialFollowingImplCopyWith<$Res>
       Option<String> facebookHandle,
       int facebookFollowers,
       Option<String> spotifyUrl,
+      int spotifyMonthlyListeners,
       Option<String> soundcloudHandle,
       int soundcloudFollowers,
       Option<String> audiusHandle,
@@ -224,6 +232,7 @@ class __$$SocialFollowingImplCopyWithImpl<$Res>
     Object? facebookHandle = null,
     Object? facebookFollowers = null,
     Object? spotifyUrl = null,
+    Object? spotifyMonthlyListeners = null,
     Object? soundcloudHandle = null,
     Object? soundcloudFollowers = null,
     Object? audiusHandle = null,
@@ -276,6 +285,10 @@ class __$$SocialFollowingImplCopyWithImpl<$Res>
           ? _value.spotifyUrl
           : spotifyUrl // ignore: cast_nullable_to_non_nullable
               as Option<String>,
+      spotifyMonthlyListeners: null == spotifyMonthlyListeners
+          ? _value.spotifyMonthlyListeners
+          : spotifyMonthlyListeners // ignore: cast_nullable_to_non_nullable
+              as int,
       soundcloudHandle: null == soundcloudHandle
           ? _value.soundcloudHandle
           : soundcloudHandle // ignore: cast_nullable_to_non_nullable
@@ -319,6 +332,7 @@ class _$SocialFollowingImpl implements _SocialFollowing {
       this.facebookHandle = const None(),
       this.facebookFollowers = 0,
       this.spotifyUrl = const None(),
+      this.spotifyMonthlyListeners = 0,
       this.soundcloudHandle = const None(),
       this.soundcloudFollowers = 0,
       this.audiusHandle = const None(),
@@ -364,6 +378,9 @@ class _$SocialFollowingImpl implements _SocialFollowing {
   final Option<String> spotifyUrl;
   @override
   @JsonKey()
+  final int spotifyMonthlyListeners;
+  @override
+  @JsonKey()
   final Option<String> soundcloudHandle;
   @override
   @JsonKey()
@@ -383,7 +400,7 @@ class _$SocialFollowingImpl implements _SocialFollowing {
 
   @override
   String toString() {
-    return 'SocialFollowing(youtubeChannelId: $youtubeChannelId, youtubeHandle: $youtubeHandle, tiktokHandle: $tiktokHandle, tiktokFollowers: $tiktokFollowers, instagramHandle: $instagramHandle, instagramFollowers: $instagramFollowers, twitterHandle: $twitterHandle, twitterFollowers: $twitterFollowers, facebookHandle: $facebookHandle, facebookFollowers: $facebookFollowers, spotifyUrl: $spotifyUrl, soundcloudHandle: $soundcloudHandle, soundcloudFollowers: $soundcloudFollowers, audiusHandle: $audiusHandle, audiusFollowers: $audiusFollowers, twitchHandle: $twitchHandle, twitchFollowers: $twitchFollowers)';
+    return 'SocialFollowing(youtubeChannelId: $youtubeChannelId, youtubeHandle: $youtubeHandle, tiktokHandle: $tiktokHandle, tiktokFollowers: $tiktokFollowers, instagramHandle: $instagramHandle, instagramFollowers: $instagramFollowers, twitterHandle: $twitterHandle, twitterFollowers: $twitterFollowers, facebookHandle: $facebookHandle, facebookFollowers: $facebookFollowers, spotifyUrl: $spotifyUrl, spotifyMonthlyListeners: $spotifyMonthlyListeners, soundcloudHandle: $soundcloudHandle, soundcloudFollowers: $soundcloudFollowers, audiusHandle: $audiusHandle, audiusFollowers: $audiusFollowers, twitchHandle: $twitchHandle, twitchFollowers: $twitchFollowers)';
   }
 
   @override
@@ -413,6 +430,9 @@ class _$SocialFollowingImpl implements _SocialFollowing {
                 other.facebookFollowers == facebookFollowers) &&
             (identical(other.spotifyUrl, spotifyUrl) ||
                 other.spotifyUrl == spotifyUrl) &&
+            (identical(
+                    other.spotifyMonthlyListeners, spotifyMonthlyListeners) ||
+                other.spotifyMonthlyListeners == spotifyMonthlyListeners) &&
             (identical(other.soundcloudHandle, soundcloudHandle) ||
                 other.soundcloudHandle == soundcloudHandle) &&
             (identical(other.soundcloudFollowers, soundcloudFollowers) ||
@@ -442,6 +462,7 @@ class _$SocialFollowingImpl implements _SocialFollowing {
       facebookHandle,
       facebookFollowers,
       spotifyUrl,
+      spotifyMonthlyListeners,
       soundcloudHandle,
       soundcloudFollowers,
       audiusHandle,
@@ -477,6 +498,7 @@ abstract class _SocialFollowing implements SocialFollowing {
       final Option<String> facebookHandle,
       final int facebookFollowers,
       final Option<String> spotifyUrl,
+      final int spotifyMonthlyListeners,
       final Option<String> soundcloudHandle,
       final int soundcloudFollowers,
       final Option<String> audiusHandle,
@@ -509,6 +531,8 @@ abstract class _SocialFollowing implements SocialFollowing {
   int get facebookFollowers;
   @override
   Option<String> get spotifyUrl;
+  @override
+  int get spotifyMonthlyListeners;
   @override
   Option<String> get soundcloudHandle;
   @override

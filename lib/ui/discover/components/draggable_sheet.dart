@@ -12,11 +12,13 @@ import 'package:intheloopapp/ui/discover/components/user_slider.dart';
 import 'package:intheloopapp/ui/discover/discover_cubit.dart';
 import 'package:intheloopapp/ui/profile/components/feedback_button.dart';
 import 'package:intheloopapp/ui/profile/components/opportunities_list.dart';
+import 'package:intheloopapp/ui/share_profile/share_profile_view.dart';
 import 'package:intheloopapp/ui/user_avatar.dart';
 import 'package:intheloopapp/ui/user_tile.dart';
 import 'package:intheloopapp/utils/bloc_utils.dart';
 import 'package:intheloopapp/utils/current_user_builder.dart';
 import 'package:intheloopapp/utils/custom_claims_builder.dart';
+import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class DraggableSheet extends StatelessWidget {
@@ -201,6 +203,38 @@ class DraggableSheet extends StatelessWidget {
                                 ],
                               ),
                             ),
+                            Padding(
+                              padding: const EdgeInsets.symmetric(
+                                vertical: 8,
+                                horizontal: 20,
+                              ),
+                              child: Row(
+                                children: [
+                                  Expanded(
+                                    child: CupertinoButton(
+                                      onPressed: () =>
+                                          showCupertinoModalBottomSheet(
+                                        context: context,
+                                        builder: (context) => ShareProfileView(
+                                          userId: currentUser.id,
+                                          user: Option.of(currentUser),
+                                        ),
+                                      ),
+                                      borderRadius: BorderRadius.circular(15),
+                                      color: Colors.orange.withOpacity(0.1),
+                                      child: const Text(
+                                        'press kit',
+                                        style: TextStyle(
+                                          fontSize: 17,
+                                          color: Colors.orange,
+                                          fontWeight: FontWeight.bold,
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
                             CustomClaimsBuilder(
                               builder: (context, claims) {
                                 final isAdmin =
@@ -211,7 +245,6 @@ class DraggableSheet extends StatelessWidget {
                                   false => const SizedBox.shrink(),
                                   true => Padding(
                                       padding: const EdgeInsets.symmetric(
-                                        vertical: 8,
                                         horizontal: 20,
                                       ),
                                       child: SizedBox(
