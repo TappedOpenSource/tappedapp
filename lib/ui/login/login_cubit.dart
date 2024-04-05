@@ -46,10 +46,6 @@ class LoginCubit extends Cubit<LoginState> {
         state.copyWith(status: FormzSubmissionStatus.success),
       );
     } catch (e) {
-      // print(e);
-      emit(
-        state.copyWith(status: FormzSubmissionStatus.failure),
-      );
       rethrow;
     }
   }
@@ -73,10 +69,6 @@ class LoginCubit extends Cubit<LoginState> {
         throw Exception('Failed to create user');
       }
     } catch (e) {
-      // print(e);
-      emit(
-        state.copyWith(status: FormzSubmissionStatus.failure),
-      );
       rethrow;
     }
     emit(
@@ -95,10 +87,6 @@ class LoginCubit extends Cubit<LoginState> {
         state.copyWith(status: FormzSubmissionStatus.success),
       );
     } catch (e) {
-      // print(e);
-      emit(
-        state.copyWith(status: FormzSubmissionStatus.failure),
-      );
       rethrow;
     }
   }
@@ -113,9 +101,6 @@ class LoginCubit extends Cubit<LoginState> {
         state.copyWith(status: FormzSubmissionStatus.success),
       );
     } catch (e) {
-      emit(
-        state.copyWith(status: FormzSubmissionStatus.failure),
-      );
       rethrow;
     }
   }

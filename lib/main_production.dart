@@ -56,23 +56,16 @@ Future<void> main() async {
   // StreamVideo.init('xyk6dwdsp422');
   final navigatorKey = GlobalKey<NavigatorState>();
 
-  runZonedGuarded(
-    () => runApp(
-      BetterFeedback(
-        child: App(
-          repositories: buildRepositories(streamChatClient: client),
-          blocs: buildBlocs(
-            navigatorKey: navigatorKey,
-          ),
-          streamClient: client,
+  runApp(
+    BetterFeedback(
+      child: App(
+        repositories: buildRepositories(streamChatClient: client),
+        blocs: buildBlocs(
           navigatorKey: navigatorKey,
         ),
+        streamClient: client,
+        navigatorKey: navigatorKey,
       ),
-    ),
-    (error, stackTrace) => logger.error(
-      'uncaught error',
-      error: error,
-      stackTrace: stackTrace,
     ),
   );
 }
