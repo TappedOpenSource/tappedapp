@@ -1,4 +1,5 @@
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
@@ -45,6 +46,13 @@ class _ShareProfileViewState extends State<ShareProfileView> {
       _shareLoading = true;
     });
     try {
+      await FirebaseAnalytics.instance.logEvent(
+        name: 'share_profile',
+        parameters: {
+          'user_id': widget.userId,
+        },
+      );
+
       final image = await _screenshotController.capture();
       if (image == null) {
         logger.debug('image is null');
