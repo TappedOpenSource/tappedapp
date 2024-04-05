@@ -1,3 +1,4 @@
+import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -94,6 +95,15 @@ class MoreOptionsButton extends StatelessWidget {
             ),
           CupertinoActionSheetAction(
             onPressed: () {
+
+              FirebaseAnalytics.instance.logEvent(
+                name: 'share_profile',
+                parameters: {
+                  'user_id': user.id,
+                  'type': 'link',
+                },
+              );
+
               Share.share('https://tapped.ai/${user.username}')
                   .onError((error, stackTrace) {
                 logger.error(
