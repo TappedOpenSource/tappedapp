@@ -74,7 +74,6 @@ class HeaderSliver extends StatelessWidget {
                   width: double.infinity,
                   child: RequestToBookButton(
                     user: state.visitedUser,
-                    service: const None(),
                   ),
                 ),
             ],

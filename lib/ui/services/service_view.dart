@@ -144,7 +144,7 @@ class ServiceView extends StatelessWidget {
                                 width: double.infinity,
                                 child: RequestToBookButton(
                                   user: value,
-                                  service: Option.of(service),
+                                  // service: Option.of(service),
                                 ),
                               );
                             }(),

@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:bloc/bloc.dart';
+import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:fpdart/fpdart.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:intheloopapp/data/database_repository.dart';
@@ -158,6 +159,15 @@ class AddPastBookingCubit extends Cubit<AddPastBookingState> {
     );
 
     logger.i(booking.toString());
+
+    await FirebaseAnalytics.instance.logEvent(
+      name: 'add_past_booking',
+      parameters: {
+        'event_name': eventName.getOrElse(() => ''),
+        'amount_paid': amountPaid,
+        'genres': genres.map((e) => e.toString()).toList(),
+      },
+    );
 
     await database.createBooking(booking);
   }

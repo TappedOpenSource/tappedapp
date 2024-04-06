@@ -370,9 +370,9 @@ class ProfileView extends StatelessWidget {
         const SliverToBoxAdapter(
           child: ReviewsSliver(),
         ),
-        const SliverToBoxAdapter(
-          child: ServicesSliver(),
-        ),
+        // const SliverToBoxAdapter(
+        //   child: ServicesSliver(),
+        // ),
         const SliverToBoxAdapter(
           child: BioSliver(),
         ),

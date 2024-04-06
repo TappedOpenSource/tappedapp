@@ -273,9 +273,9 @@ class _CreateBookingFormState extends State<CreateBookingForm> {
                     }
                   },
                   borderRadius: BorderRadius.circular(15),
-                  child: const Text(
-                    'confirm booking',
-                    style: TextStyle(
+                  child: Text(
+                    state.totalCost > 0 ? 'purchase' : 'request performer',
+                    style: const TextStyle(
                       fontWeight: FontWeight.w700,
                       color: Colors.white,
                     ),
