@@ -3,6 +3,7 @@ part of 'settings_cubit.dart';
 @freezed
 class SettingsState with _$SettingsState {
   const factory SettingsState({
+    @Default(true) bool isPerformer,
     @Default('') String username,
     @Default('') String artistName,
     @Default('') String bio,

@@ -51,33 +51,6 @@ class SettingsForm extends StatelessWidget {
                     context.read<SettingsCubit>().changeBio(value ?? ''),
                 initialValue: state.bio,
               ),
-              // OccupationSelection(
-              //   initialValue: state.occupations,
-              //   onConfirm: (values) {
-              //     context.read<SettingsCubit>().changeOccupations(
-              //           values
-              //               .where(
-              //                 (element) => element != null,
-              //               )
-              //               .whereType<String>()
-              //               .toList(),
-              //         );
-              //   },
-              // ),
-              const LabelSelection(),
-              GenreSelection(
-                initialValue: state.genres,
-                onConfirm: (values) {
-                  context.read<SettingsCubit>().changeGenres(
-                        values
-                            .where(
-                              (element) => element != null,
-                            )
-                            .whereType<Genre>()
-                            .toList(),
-                      );
-                },
-              ),
               LocationTextField(
                 onChanged: (place, placeId) =>
                     context.read<SettingsCubit>().changePlace(place, placeId),
@@ -137,11 +110,50 @@ class SettingsForm extends StatelessWidget {
               const SizedBox(height: 15),
               const ThemeSwitch(),
               const SizedBox(height: 15),
-              const EPKButton(),
-              if (state.status.isInProgress)
-                const CircularProgressIndicator(
-                  valueColor: AlwaysStoppedAnimation(tappedAccent),
-                ),
+              Row(
+                children: [
+                  const Text(
+                    'performer info',
+                    style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 22,
+                    ),
+                  ),
+                  const SizedBox(width: 10),
+                  Switch(
+                    value: state.isPerformer,
+                    onChanged: (value) {
+                      context.read<SettingsCubit>().changeIsPerformer(value);
+                    },
+                  ),
+                ],
+              ),
+              ...switch (state.isPerformer) {
+                false => [],
+                true => [
+                    const SizedBox(height: 10),
+                    const LabelSelection(),
+                    GenreSelection(
+                      initialValue: state.genres,
+                      onConfirm: (values) {
+                        context.read<SettingsCubit>().changeGenres(
+                              values
+                                  .where(
+                                    (element) => element != null,
+                                  )
+                                  .whereType<Genre>()
+                                  .toList(),
+                            );
+                      },
+                    ),
+                    const SizedBox(height: 15),
+                    const EPKButton(),
+                    if (state.status.isInProgress)
+                      const CircularProgressIndicator(
+                        valueColor: AlwaysStoppedAnimation(tappedAccent),
+                      ),
+                  ],
+              },
             ],
           ),
         );

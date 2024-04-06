@@ -23,7 +23,7 @@ class EPKButton extends StatelessWidget {
               final uri = Uri.parse(value);
               launchUrl(uri);
             },
-            child: const Text('View Current EPK'),
+            child: const Text('view current epk'),
           ),
         ),
     };
@@ -62,7 +62,7 @@ class EPKButton extends StatelessWidget {
                       ),
                       const SizedBox(width: 16),
                       Text(
-                        'Upload New EPK',
+                        'upload new epk',
                         style: TextStyle(
                           color: theme.colorScheme.onSurface.withOpacity(0.5),
                         ),

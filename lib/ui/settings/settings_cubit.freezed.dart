@@ -16,6 +16,7 @@ final _privateConstructorUsedError = UnsupportedError(
 
 /// @nodoc
 mixin _$SettingsState {
+  bool get isPerformer => throw _privateConstructorUsedError;
   String get username => throw _privateConstructorUsedError;
   String get artistName => throw _privateConstructorUsedError;
   String get bio => throw _privateConstructorUsedError;
@@ -56,7 +57,8 @@ abstract class $SettingsStateCopyWith<$Res> {
       _$SettingsStateCopyWithImpl<$Res, SettingsState>;
   @useResult
   $Res call(
-      {String username,
+      {bool isPerformer,
+      String username,
       String artistName,
       String bio,
       List<Genre> genres,
@@ -97,6 +99,7 @@ class _$SettingsStateCopyWithImpl<$Res, $Val extends SettingsState>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
+    Object? isPerformer = null,
     Object? username = null,
     Object? artistName = null,
     Object? bio = null,
@@ -125,6 +128,10 @@ class _$SettingsStateCopyWithImpl<$Res, $Val extends SettingsState>
     Object? formKey = null,
   }) {
     return _then(_value.copyWith(
+      isPerformer: null == isPerformer
+          ? _value.isPerformer
+          : isPerformer // ignore: cast_nullable_to_non_nullable
+              as bool,
       username: null == username
           ? _value.username
           : username // ignore: cast_nullable_to_non_nullable
@@ -242,7 +249,8 @@ abstract class _$$SettingsStateImplCopyWith<$Res>
   @override
   @useResult
   $Res call(
-      {String username,
+      {bool isPerformer,
+      String username,
       String artistName,
       String bio,
       List<Genre> genres,
@@ -281,6 +289,7 @@ class __$$SettingsStateImplCopyWithImpl<$Res>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
+    Object? isPerformer = null,
     Object? username = null,
     Object? artistName = null,
     Object? bio = null,
@@ -309,6 +318,10 @@ class __$$SettingsStateImplCopyWithImpl<$Res>
     Object? formKey = null,
   }) {
     return _then(_$SettingsStateImpl(
+      isPerformer: null == isPerformer
+          ? _value.isPerformer
+          : isPerformer // ignore: cast_nullable_to_non_nullable
+              as bool,
       username: null == username
           ? _value.username
           : username // ignore: cast_nullable_to_non_nullable
@@ -418,7 +431,8 @@ class __$$SettingsStateImplCopyWithImpl<$Res>
 
 class _$SettingsStateImpl implements _SettingsState {
   const _$SettingsStateImpl(
-      {this.username = '',
+      {this.isPerformer = true,
+      this.username = '',
       this.artistName = '',
       this.bio = '',
       final List<Genre> genres = const [],
@@ -446,6 +460,9 @@ class _$SettingsStateImpl implements _SettingsState {
       required this.formKey})
       : _genres = genres;
 
+  @override
+  @JsonKey()
+  final bool isPerformer;
   @override
   @JsonKey()
   final String username;
@@ -521,7 +538,7 @@ class _$SettingsStateImpl implements _SettingsState {
 
   @override
   String toString() {
-    return 'SettingsState(username: $username, artistName: $artistName, bio: $bio, genres: $genres, label: $label, occupations: $occupations, placeId: $placeId, twitterHandle: $twitterHandle, twitterFollowers: $twitterFollowers, instagramHandle: $instagramHandle, instagramFollowers: $instagramFollowers, tiktokHandle: $tiktokHandle, tiktokFollowers: $tiktokFollowers, soundcloudHandle: $soundcloudHandle, audiusHandle: $audiusHandle, spotifyUrl: $spotifyUrl, youtubeHandle: $youtubeHandle, profileImage: $profileImage, pressKitFile: $pressKitFile, status: $status, pushNotificationsDirectMessages: $pushNotificationsDirectMessages, emailNotificationsAppReleases: $emailNotificationsAppReleases, email: $email, password: $password, place: $place, formKey: $formKey)';
+    return 'SettingsState(isPerformer: $isPerformer, username: $username, artistName: $artistName, bio: $bio, genres: $genres, label: $label, occupations: $occupations, placeId: $placeId, twitterHandle: $twitterHandle, twitterFollowers: $twitterFollowers, instagramHandle: $instagramHandle, instagramFollowers: $instagramFollowers, tiktokHandle: $tiktokHandle, tiktokFollowers: $tiktokFollowers, soundcloudHandle: $soundcloudHandle, audiusHandle: $audiusHandle, spotifyUrl: $spotifyUrl, youtubeHandle: $youtubeHandle, profileImage: $profileImage, pressKitFile: $pressKitFile, status: $status, pushNotificationsDirectMessages: $pushNotificationsDirectMessages, emailNotificationsAppReleases: $emailNotificationsAppReleases, email: $email, password: $password, place: $place, formKey: $formKey)';
   }
 
   @override
@@ -529,6 +546,8 @@ class _$SettingsStateImpl implements _SettingsState {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$SettingsStateImpl &&
+            (identical(other.isPerformer, isPerformer) ||
+                other.isPerformer == isPerformer) &&
             (identical(other.username, username) ||
                 other.username == username) &&
             (identical(other.artistName, artistName) ||
@@ -582,6 +601,7 @@ class _$SettingsStateImpl implements _SettingsState {
   @override
   int get hashCode => Object.hashAll([
         runtimeType,
+        isPerformer,
         username,
         artistName,
         bio,
@@ -619,7 +639,8 @@ class _$SettingsStateImpl implements _SettingsState {
 
 abstract class _SettingsState implements SettingsState {
   const factory _SettingsState(
-      {final String username,
+      {final bool isPerformer,
+      final String username,
       final String artistName,
       final String bio,
       final List<Genre> genres,
@@ -646,6 +667,8 @@ abstract class _SettingsState implements SettingsState {
       final Option<PlaceData> place,
       required final GlobalKey<FormState> formKey}) = _$SettingsStateImpl;
 
+  @override
+  bool get isPerformer;
   @override
   String get username;
   @override

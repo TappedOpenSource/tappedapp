@@ -91,7 +91,7 @@ class SettingsView extends StatelessWidget {
                       PaymentSettingsForm(),
                       SizedBox(height: 20),
                       Text(
-                        'Preferences',
+                        'preferences',
                         style: TextStyle(
                           fontWeight: FontWeight.bold,
                           fontSize: 22,
@@ -101,7 +101,7 @@ class SettingsView extends StatelessWidget {
                       SettingsForm(),
                       SizedBox(height: 30),
                       Text(
-                        'Notifications',
+                        'notifications',
                         style: TextStyle(
                           fontWeight: FontWeight.bold,
                           fontSize: 22,
@@ -111,7 +111,7 @@ class SettingsView extends StatelessWidget {
                       NotificationSettingsForm(),
                       SizedBox(height: 30),
                       Text(
-                        'More Options',
+                        'more options',
                         style: TextStyle(
                           fontWeight: FontWeight.bold,
                           fontSize: 22,

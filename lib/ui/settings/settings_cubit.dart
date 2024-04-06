@@ -56,6 +56,7 @@ class SettingsCubit extends Cubit<SettingsState> {
   void initUserData() {
     emit(
       state.copyWith(
+        isPerformer: currentUser.performerInfo.isSome(),
         username: currentUser.username.toString(),
         artistName: currentUser.artistName,
         bio: currentUser.bio,
@@ -238,6 +239,14 @@ class SettingsCubit extends Cubit<SettingsState> {
     );
   }
 
+  void changeIsPerformer(bool value) {
+    emit(
+      state.copyWith(
+        isPerformer: value,
+      ),
+    );
+  }
+
   Future<void> saveProfile() async {
     // print(state.formKey);
     if (state.formKey.currentState == null) {
@@ -310,7 +319,7 @@ class SettingsCubit extends Cubit<SettingsState> {
           username: Username.fromString(state.username),
           artistName: state.artistName,
           bio: state.bio,
-          performerInfo: Option.of(newPerformerInfo),
+          performerInfo: state.isPerformer ? Option.of(newPerformerInfo) : None(),
           socialFollowing: currentUser.socialFollowing.copyWith(
             twitterHandle: Option.fromNullable(state.twitterHandle),
             twitterFollowers: state.twitterFollowers ?? 0,
