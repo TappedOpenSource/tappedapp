@@ -1,4 +1,6 @@
 import 'package:badges/badges.dart' as badges;
+import 'package:firebase_analytics/firebase_analytics.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -66,6 +68,10 @@ class DiscoverView extends StatelessWidget {
                     context,
                     icon: CupertinoIcons.location,
                     onPressed: () {
+                      FirebaseAnalytics.instance.logEvent(
+                        name: 'discover_seek_home',
+                      );
+
                       mapController.move(
                         LatLng(state.userLat, state.userLng),
                         13,
@@ -77,6 +83,11 @@ class DiscoverView extends StatelessWidget {
                     context,
                     icon: Icons.layers,
                     onPressed: () {
+
+                      FirebaseAnalytics.instance.logEvent(
+                        name: 'discover_change_overlay',
+                      );
+
                       showModalBottomSheet<void>(
                         context: context,
                         showDragHandle: true,
@@ -150,6 +161,14 @@ class DiscoverView extends StatelessWidget {
             final selected = state.genreFilters.contains(genre);
             return InkWell(
               onTap: () {
+                FirebaseAnalytics.instance.logEvent(
+                  name: 'discover_change_overlay',
+                  parameters: {
+                    'genre': genre.formattedName,
+                    'is_premium': isPremium,
+                  },
+                );
+
                 if (!isPremium) {
                   context.push(PaywallPage());
                   return;
@@ -160,7 +179,7 @@ class DiscoverView extends StatelessWidget {
               child: Card(
                 color: selected
                     ? theme.colorScheme.primary
-                    : theme.colorScheme.surface,
+                    : theme.colorScheme.background,
                 child: Padding(
                   padding: const EdgeInsets.symmetric(
                     horizontal: 16,
