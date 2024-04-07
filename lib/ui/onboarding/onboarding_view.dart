@@ -16,7 +16,7 @@ class OnboardingView extends StatelessWidget {
     return BlocBuilder<AuthenticationBloc, AuthenticationState>(
       builder: (context, state) {
         if (state is! Authenticated) {
-          logger.info('user is authenticated');
+          logger.warning('user is not authenticated');
         }
 
         final user = switch (state) {

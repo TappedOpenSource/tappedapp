@@ -108,7 +108,7 @@ class OnboardingFlowCubit extends Cubit<OnboardingFlowState> {
     }
 
     if (!state.eula) {
-      throw Exception('You must agree to the EULA');
+      throw Exception('you must agree to the EULA');
     }
 
     emit(state.copyWith(status: FormzSubmissionStatus.inProgress));
@@ -151,10 +151,9 @@ class OnboardingFlowCubit extends Cubit<OnboardingFlowState> {
 
       await databaseRepository.createUser(currentUser);
 
-      await Future.delayed(const Duration(seconds: 2));
+      await Future<void>.delayed(const Duration(seconds: 2));
 
       onboardingBloc.add(FinishOnboarding(user: currentUser));
-      emit(state.copyWith(status: FormzSubmissionStatus.success));
     } catch (e, s) {
       logger.error('error finishing onboarding', error: e, stackTrace: s);
       emit(state.copyWith(status: FormzSubmissionStatus.failure));

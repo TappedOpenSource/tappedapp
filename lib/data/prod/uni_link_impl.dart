@@ -88,6 +88,23 @@ class UniLinkImpl extends DeepLinkRepository {
           userId: user.id,
           user:Option.of(user),
         );
+      case 'map':
+        final linkParameters = uri.queryParameters;
+        final userId = linkParameters['user_id'];
+        if (userId == null) {
+          return null;
+        }
+
+        final userRef = await _usersRef.doc(userId).get();
+        if (!userRef.exists) {
+          return null;
+        }
+
+        final user = UserModel.fromDoc(userRef);
+        return ShareProfileDeepLink(
+          userId: userId,
+          user: Option.of(user),
+        );
       case 'opportunity':
         if (segments.length < 2) {
           return null;
@@ -135,7 +152,7 @@ class UniLinkImpl extends DeepLinkRepository {
         final user = UserModel.fromDoc(userRef.docs.first);
         return ShareProfileDeepLink(
           userId: user.id,
-          user:Option.of(user),
+          user: Option.of(user),
         );
     }
   }

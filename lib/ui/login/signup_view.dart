@@ -56,7 +56,7 @@ class SignUpView extends StatelessWidget {
                         height: 10,
                       ),
                       PasswordTextField(
-                        labelText: 'Confirm Password',
+                        labelText: 'confirm password',
                         onChanged: (input) => context
                             .read<LoginCubit>()
                             .updateConfirmPassword(input ?? ''),
@@ -140,7 +140,7 @@ class SignUpView extends StatelessWidget {
                         children: [
                           TextButton(
                             child: const Text(
-                              'Privacy Policy',
+                              'privacy policy',
                               style: TextStyle(
                                 color: tappedAccent,
                               ),
@@ -154,7 +154,7 @@ class SignUpView extends StatelessWidget {
                           ),
                           TextButton(
                             child: const Text(
-                              'Terms of Service',
+                              'terms of service',
                               style: TextStyle(
                                 color: tappedAccent,
                               ),

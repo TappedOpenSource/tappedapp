@@ -112,6 +112,7 @@ class FirebaseAuthImpl extends AuthRepository {
       await _analytics.logEvent(
         name: 'sign_in',
       );
+      logger.info('sign in with credentials');
 
       if (uid == null) {
         return const None();
@@ -126,7 +127,7 @@ class FirebaseAuthImpl extends AuthRepository {
       );
     } catch (e, s) {
       logger.error(
-        'Error signing in with credentials',
+        'error signing in with credentials',
         error: e,
         stackTrace: s,
       );
@@ -161,8 +162,9 @@ class FirebaseAuthImpl extends AuthRepository {
 
       await _analytics.setUserId(id: uid);
       await _analytics.logEvent(
-        name: 'sign_in',
+        name: 'sign_up',
       );
+      logger.info('sign up with credentials');
 
       if (uid == null) {
         return const None();
@@ -221,6 +223,7 @@ class FirebaseAuthImpl extends AuthRepository {
         name: 'sign_in',
         parameters: {'provider': 'Google'},
       );
+      logger.info('sign in with google');
 
       return Option.of(
         SignInPayload(
@@ -321,6 +324,7 @@ class FirebaseAuthImpl extends AuthRepository {
       name: 'sign_in',
       parameters: {'provider': 'Apple'},
     );
+    logger.info('sign in with apple');
 
     final fixDisplayNameFromApple = [
       appleCredential.givenName ?? '',

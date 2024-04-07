@@ -5,7 +5,7 @@ class PasswordTextField extends StatefulWidget {
     super.key,
     this.onSaved,
     this.onChanged,
-    this.labelText = 'Password',
+    this.labelText = 'password',
   });
 
   final void Function(String?)? onSaved;

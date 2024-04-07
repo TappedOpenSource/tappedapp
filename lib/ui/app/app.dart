@@ -58,7 +58,6 @@ class App extends StatelessWidget {
     );
     context.read<DeepLinkBloc>().add(MonitorDeepLinks());
 
-    FlutterNativeSplash.remove();
     return BlocBuilder<OnboardingBloc, OnboardingState>(
       builder: (context, onboardState) {
         return switch (onboardState) {
@@ -92,7 +91,6 @@ class App extends StatelessWidget {
         child: BlocBuilder<PremiumThemeCubit, bool>(
           builder: (context, isPremium) {
             // final accentColor = isPremium ? Colors.purple : tappedAccent;
-            const accentColor = tappedAccent;
             return BlocBuilder<AppThemeCubit, bool>(
               builder: (context, isDark) {
                 final appTheme = isDark ? buildDarkTheme() : buildLightTheme();
@@ -103,7 +101,7 @@ class App extends StatelessWidget {
 
                 return MaterialApp(
                   debugShowCheckedModeBanner: false,
-                  title: 'Tapped',
+                  title: 'tapped',
                   theme: appTheme,
                   navigatorObservers: <NavigatorObserver>[_observer],
                   navigatorKey: navigatorKey,
@@ -134,6 +132,7 @@ class App extends StatelessWidget {
                           return const DownForMainenanceView();
                         }
 
+                        FlutterNativeSplash.remove();
                         return BlocBuilder<AuthenticationBloc,
                             AuthenticationState>(
                           builder: (
@@ -142,18 +141,12 @@ class App extends StatelessWidget {
                           ) {
                             try {
                               return switch (authState) {
-                                Uninitialized() => (() {
-                                    FlutterNativeSplash.remove();
-                                    return const LoadingView();
-                                  })(),
+                                Uninitialized() => const LoadingView(),
                                 Authenticated() => _authenticated(
                                     context,
                                     authState.currentAuthUser.uid,
                                   ),
-                                Unauthenticated() => (() {
-                                    FlutterNativeSplash.remove();
-                                    return const SplashView();
-                                  })(),
+                                Unauthenticated() => const SplashView(),
                               };
                             } catch (e, s) {
                               FirebaseCrashlytics.instance.recordError(

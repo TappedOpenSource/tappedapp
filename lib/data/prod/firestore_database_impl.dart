@@ -76,9 +76,12 @@ class FirestoreDatabaseImpl extends DatabaseRepository {
       final buildNumber = packageInfo.buildNumber;
       final latestAppVersion = '$version+$buildNumber';
 
-      await _usersRef.doc(currentUserId).update({
-        'latestAppVersion': latestAppVersion,
-      });
+      await _usersRef.doc(currentUserId).set(
+        {
+          'latestAppVersion': latestAppVersion,
+        },
+        SetOptions(merge: true),
+      );
 
       return latestAppVersion;
     } catch (e, s) {
@@ -1307,7 +1310,8 @@ class FirestoreDatabaseImpl extends DatabaseRepository {
   }) async {
     try {
       logger.debug(
-          'applyForOpportunity, userId: $userId, opportunity: $opportunity',);
+        'applyForOpportunity, userId: $userId, opportunity: $opportunity',
+      );
       await _analytics.logEvent(
         name: 'apply_for_opportunity',
         parameters: {

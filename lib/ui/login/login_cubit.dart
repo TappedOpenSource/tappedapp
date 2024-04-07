@@ -37,14 +37,20 @@ class LoginCubit extends Cubit<LoginState> {
       );
 
   Future<void> signInWithCredentials() async {
+    emit(
+      state.copyWith(status: FormzSubmissionStatus.inProgress),
+    );
+
     try {
       final uid = await auth.signInWithCredentials(
         state.email,
         state.password,
       );
-      emit(
-        state.copyWith(status: FormzSubmissionStatus.success),
-      );
+
+      if (uid.isNone()) {
+        throw Exception('failed to create user');
+      }
+
     } catch (e) {
       rethrow;
     }
@@ -52,13 +58,9 @@ class LoginCubit extends Cubit<LoginState> {
 
   Future<void> signUpWithCredentials() async {
     if (state.password != state.confirmPassword) {
-      emit(
-        state.copyWith(
-          status: FormzSubmissionStatus.failure,
-        ),
-      );
-      throw Exception('Passwords do not match');
+      throw Exception('passwords do not match');
     }
+
     try {
       final uid = await auth.signUpWithCredentials(
         state.email,
@@ -66,14 +68,11 @@ class LoginCubit extends Cubit<LoginState> {
       );
 
       if (uid.isNone()) {
-        throw Exception('Failed to create user');
+        throw Exception('failed to create user');
       }
     } catch (e) {
       rethrow;
     }
-    emit(
-      state.copyWith(status: FormzSubmissionStatus.success),
-    );
     nav.pop();
   }
 
@@ -82,10 +81,12 @@ class LoginCubit extends Cubit<LoginState> {
       state.copyWith(status: FormzSubmissionStatus.inProgress),
     );
     try {
-      final _ = await auth.signInWithApple();
-      emit(
-        state.copyWith(status: FormzSubmissionStatus.success),
-      );
+      final uid = await auth.signInWithApple();
+
+      if (uid.isNone()) {
+        throw Exception('failed to create user');
+      }
+
     } catch (e) {
       rethrow;
     }
@@ -96,10 +97,11 @@ class LoginCubit extends Cubit<LoginState> {
       state.copyWith(status: FormzSubmissionStatus.inProgress),
     );
     try {
-      await auth.signInWithGoogle();
-      emit(
-        state.copyWith(status: FormzSubmissionStatus.success),
-      );
+      final uid = await auth.signInWithGoogle();
+
+      if (uid.isNone()) {
+        throw Exception('failed to create user');
+      }
     } catch (e) {
       rethrow;
     }

@@ -60,7 +60,7 @@ class _TappedFormState extends State<TappedForm> {
             widget.onSubmit?.call();
           } catch (e, s) {
             logger.error(
-              'Error submitting form',
+              'error submitting form',
               error: e,
               stackTrace: s,
             );

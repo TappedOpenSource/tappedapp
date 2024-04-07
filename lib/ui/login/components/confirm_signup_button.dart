@@ -13,24 +13,29 @@ class ConfirmSignUpButton extends StatelessWidget {
     final nav = context.nav;
     return BlocBuilder<LoginCubit, LoginState>(
       builder: (context, state) {
+        final scaffoldMessenger = ScaffoldMessenger.of(context);
         return CupertinoButton.filled(
           borderRadius: BorderRadius.circular(15),
-          onPressed: () async {
-            try {
-              await context.read<LoginCubit>().signUpWithCredentials();
-              nav.pop();
-            } catch (e) {
-              ScaffoldMessenger.of(context).showSnackBar(
+          onPressed: () {
+            context
+                .read<LoginCubit>()
+                .signUpWithCredentials()
+                .onError((error, stackTrace) {
+              scaffoldMessenger.showSnackBar(
                 SnackBar(
-                  content: Text(e.toString()),
+                  behavior: SnackBarBehavior.floating,
+                  backgroundColor: Colors.red,
+                  content: Text(error.toString()),
                 ),
               );
-            }
+            });
+            context.pop();
           },
           child: const Text(
-            'Sign Up',
+            'sign up',
             style: TextStyle(
               fontWeight: FontWeight.w700,
+              color: Colors.white,
             ),
           ),
         );
