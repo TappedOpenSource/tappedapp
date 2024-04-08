@@ -47,7 +47,9 @@ class RequestToBookButton extends StatelessWidget {
 
         return CustomClaimsBuilder(
           builder: (context, claims) {
-            if (!claims.contains(CustomClaim.booker)) {
+            final isBooker = claims.contains(CustomClaim.booker);
+            final isAdmin = claims.contains(CustomClaim.admin);
+            if (!isBooker && !isAdmin) {
               return const SizedBox.shrink();
             }
 
