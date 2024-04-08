@@ -91,7 +91,7 @@ class DraggableSheet extends StatelessWidget {
               });
             return DraggableScrollableSheet(
               expand: false,
-              initialChildSize: 0.11,
+              initialChildSize: 0.5,
               minChildSize: 0.11,
               snap: true,
               snapSizes: const [0.11, 0.5, 1],

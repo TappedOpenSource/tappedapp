@@ -41,8 +41,8 @@ class BookingCard extends StatelessWidget {
         final heroTag = const Uuid().v4();
 
         final titleText = booking.name.fold(
-          () => user.map((t) => t.displayName),
-          Option.of,
+          () => user.fold(() => 'booking', (t) => t.displayName),
+          (t) => t,
         );
         return InkWell(
           onTap: () {
@@ -82,19 +82,24 @@ class BookingCard extends StatelessWidget {
                     ),
                   ),
                 ),
-                switch (titleText) {
-                  None() => const SizedBox.shrink(),
-                  Some(:final value) => value.isNotEmpty
-                      ? Text(
-                          value,
-                          overflow: TextOverflow.ellipsis,
-                          style: const TextStyle(
-                            fontSize: 14,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        )
-                      : const SizedBox.shrink(),
-                },
+                if (titleText.isNotEmpty)
+                  Text(
+                    titleText,
+                    overflow: TextOverflow.ellipsis,
+                    style: const TextStyle(
+                      fontSize: 14,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  )
+                else
+                  const Text(
+                    'booking',
+                    overflow: TextOverflow.ellipsis,
+                    style: const TextStyle(
+                      fontSize: 14,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
                 Text(
                   formatted,
                   style: const TextStyle(

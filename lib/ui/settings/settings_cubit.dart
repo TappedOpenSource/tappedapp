@@ -221,6 +221,15 @@ class SettingsCubit extends Cubit<SettingsState> {
         return;
       }
 
+      final user = currentUser.copyWith(
+        performerInfo: currentUser.performerInfo.map(
+          (t) => t.copyWith(
+            pressKitUrl: Option.of(path),
+          ),
+        ),
+      );
+      onboardingBloc.add(UpdateOnboardedUser(user: user));
+
       emit(
         state.copyWith(
           pressKitFile: Option.of(File(path)),

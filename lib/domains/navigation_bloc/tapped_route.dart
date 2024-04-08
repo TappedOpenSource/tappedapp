@@ -14,6 +14,7 @@ import 'package:intheloopapp/ui/advanced_search/advanced_search_view.dart';
 import 'package:intheloopapp/ui/badge/badge_view.dart';
 import 'package:intheloopapp/ui/badge/badges_view.dart';
 import 'package:intheloopapp/ui/booking/booking_view.dart';
+import 'package:intheloopapp/ui/booking_history/booking_history_view.dart';
 import 'package:intheloopapp/ui/bookings/user_bookings_feed.dart';
 import 'package:intheloopapp/ui/create_booking/booking_confirmation_view.dart';
 import 'package:intheloopapp/ui/create_booking/create_booking_view.dart';
@@ -572,4 +573,17 @@ final class ShareProfilePage extends TappedRoute {
 
   final String userId;
   final Option<UserModel> user;
+}
+
+final class BookingHistoryPage extends TappedRoute {
+  BookingHistoryPage({
+    required this.user,
+  }) : super(
+          routeName: '/history/${user.id}',
+          view: BookingHistoryView(
+            user: user,
+          ),
+        );
+
+  final UserModel user;
 }

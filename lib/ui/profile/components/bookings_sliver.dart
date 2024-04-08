@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:fpdart/fpdart.dart';
 import 'package:intheloopapp/domains/models/booking.dart';
 import 'package:intheloopapp/domains/models/user_model.dart';
 import 'package:intheloopapp/domains/navigation_bloc/navigation_bloc.dart';
@@ -106,6 +107,7 @@ class BookingsSliver extends StatelessWidget {
       builder: (context, state) {
         final latestBookings = state.latestBookings;
         final isCurrentUser = state.isCurrentUser;
+        final isVenue = state.visitedUser.venueInfo.isSome();
         return switch ((latestBookings.isNotEmpty, isCurrentUser)) {
           (false, false) => const SizedBox.shrink(),
           (_, _) => () {
@@ -122,13 +124,22 @@ class BookingsSliver extends StatelessWidget {
                       ),
                       child: GestureDetector(
                         onTap: () {
-                          showCupertinoModalBottomSheet<void>(
-                            context: context,
-                            builder: (context) {
-                              return UserBookingsFeed(
-                                userId: state.visitedUser.id,
-                              );
-                            },
+                          if (isVenue) {
+                            showCupertinoModalBottomSheet<void>(
+                              context: context,
+                              builder: (context) {
+                                return UserBookingsFeed(
+                                  userId: state.visitedUser.id,
+                                );
+                              },
+                            );
+                            return;
+                          }
+
+                          context.push(
+                            BookingHistoryPage(
+                              user: state.visitedUser,
+                            ),
                           );
                         },
                         child: const Row(

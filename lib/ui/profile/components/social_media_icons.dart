@@ -115,7 +115,7 @@ class SocialMediaIcons extends StatelessWidget {
             switch (socialFollowing.youtubeHandle) {
               None() => (() {
                   return switch (socialFollowing.youtubeChannelId) {
-                    None() => const SizedBox.shrink(),
+                    None() => null,
                     Some(:final value) => _socialMediaIcon(
                         color: Colors.red,
                         icon: Icon(

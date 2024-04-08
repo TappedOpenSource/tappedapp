@@ -79,8 +79,12 @@ class MapBase extends StatelessWidget {
                           const VenueMarkerLayer(),
                         ],
                       MapOverlay.userBookings => [
-                          const BookingsPolygonLayer(),
-                          const BookingsMarkerLayer(),
+                          BookingsPolygonLayer(
+                            bookings: state.userBookings,
+                          ),
+                          BookingsMarkerLayer(
+                            bookings: state.userBookings,
+                          ),
                         ],
                       MapOverlay.bookings => [
                           BookingsHeatmapLayer(),
