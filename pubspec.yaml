@@ -1,7 +1,7 @@
 name: intheloopapp
-version: 1.2.97+110
+version: 1.2.98+111
 publish_to: none
-description: Mobile app for Tapped.
+description: mobile app for tapped.
 environment: 
   sdk: '>=3.0.0 <4.0.0'
 
