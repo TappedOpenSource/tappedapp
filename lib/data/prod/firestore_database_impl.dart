@@ -661,6 +661,28 @@ class FirestoreDatabaseImpl extends DatabaseRepository {
   }
 
   @override
+  Future<void> verifyUser(String userId) async {
+    try {
+      await _analytics.logEvent(
+        name: 'user_verified',
+        parameters: {
+          'user_id': userId,
+        },
+      );
+
+      await _badgesSentRef
+          .doc(userId)
+          .collection('badges')
+          .doc(verifiedBadgeId)
+          .set({
+        'badgeId': verifiedBadgeId,
+        'timestamp': Timestamp.now(),
+      });
+    } catch (e, s) {
+      logger.error('verifyUser', error: e, stackTrace: s);
+  }
+
+  @override
   Stream<Badge> userBadgesObserver(
     String userId, {
     int limit = 30,

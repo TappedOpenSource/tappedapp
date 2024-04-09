@@ -93,9 +93,23 @@ class MoreOptionsButton extends StatelessWidget {
               },
               child: Text('userId ${user.id}'),
             ),
+          if (isAdmin)
+            CupertinoActionSheetAction(
+              onPressed: () {
+                database.verifyUser(user.id).then((value) {
+                  scaffoldMessenger.showSnackBar(
+                    const SnackBar(
+                      behavior: SnackBarBehavior.floating,
+                      backgroundColor: tappedAccent,
+                      content: Text('user verified'),
+                    ),
+                  );
+                });
+              },
+              child: Text('verify ${user.username}'),
+            ),
           CupertinoActionSheetAction(
             onPressed: () {
-
               FirebaseAnalytics.instance.logEvent(
                 name: 'share_profile',
                 parameters: {

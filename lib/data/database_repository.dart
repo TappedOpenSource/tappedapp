@@ -69,6 +69,8 @@ abstract class DatabaseRepository {
   // Badge related stuff
   Future<bool> isVerified(String userId);
 
+  Future<void> verifyUser(String userId);
+
   Stream<Badge> userBadgesObserver(
     String userId, {
     int limit = 100,
