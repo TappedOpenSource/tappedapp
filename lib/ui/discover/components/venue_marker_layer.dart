@@ -12,6 +12,7 @@ import 'package:intheloopapp/ui/discover/discover_cubit.dart';
 import 'package:intheloopapp/ui/profile/profile_view.dart';
 import 'package:intheloopapp/ui/user_avatar.dart';
 import 'package:intheloopapp/utils/current_user_builder.dart';
+import 'package:intheloopapp/utils/premium_builder.dart';
 import 'package:intl/intl.dart';
 import 'package:latlong2/latlong.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
@@ -46,102 +47,110 @@ class VenueMarkerLayer extends StatelessWidget {
     final formatter = NumberFormat.compact(locale: 'en');
     return CurrentUserBuilder(
       builder: (context, currentUser) {
-        return BlocBuilder<DiscoverCubit, DiscoverState>(
-          builder: (context, state) {
-            return MarkerClusterLayerWidget(
-              options: MarkerClusterLayerOptions(
-                maxClusterRadius: 40,
-                size: const Size(40, 40),
-                // polygonOptions: PolygonOptions(
-                //   borderColor: tappedAccent,
-                //   color: tappedAccent.withOpacity(0.5),
-                //   borderStrokeWidth: 3,
-                // ),
-                markers: [
-                  ...state.venueHits.map((venue) {
-                    final isGoodFit = _isVenueGoodFit(
-                      currentUser,
-                      venue,
-                    );
-                    return switch (venue.location) {
-                      None() => null,
-                      Some(:final value) => Marker(
-                          width: 100,
-                          height: 100,
-                          point: LatLng(value.lat, value.lng),
-                          child: Row(
-                            children: [
-                              GestureDetector(
-                                onTap: () {
-                                  showCupertinoModalBottomSheet<void>(
-                                    context: context,
-                                    builder: (context) {
-                                      return ProfileView(
-                                        visitedUserId: venue.id,
-                                        visitedUser: Option.of(venue),
+        return PremiumBuilder(
+          builder: (context, isPremium) {
+            return BlocBuilder<DiscoverCubit, DiscoverState>(
+              builder: (context, state) {
+
+                return MarkerClusterLayerWidget(
+                  options: MarkerClusterLayerOptions(
+                    maxClusterRadius: 40,
+                    size: const Size(40, 40),
+                    // polygonOptions: PolygonOptions(
+                    //   borderColor: tappedAccent,
+                    //   color: tappedAccent.withOpacity(0.5),
+                    //   borderStrokeWidth: 3,
+                    // ),
+                    markers: [
+                      ...state.venueHits.map((venue) {
+                        final isGoodFit = _isVenueGoodFit(
+                          currentUser,
+                          venue,
+                        );
+                        final markerColor = switch ((isGoodFit, isPremium)) {
+                          (_, false) => Colors.white,
+                          (true, _) => Colors.green,
+                          (false, _) => Colors.red,
+                        };
+                        return switch (venue.location) {
+                          None() => null,
+                          Some(:final value) => Marker(
+                              width: 100,
+                              height: 100,
+                              point: LatLng(value.lat, value.lng),
+                              child: Row(
+                                children: [
+                                  GestureDetector(
+                                    onTap: () {
+                                      showCupertinoModalBottomSheet<void>(
+                                        context: context,
+                                        builder: (context) {
+                                          return ProfileView(
+                                            visitedUserId: venue.id,
+                                            visitedUser: Option.of(venue),
+                                          );
+                                        },
                                       );
                                     },
-                                  );
-                                },
-                                child: Card(
-                                  child: Padding(
-                                    padding: const EdgeInsets.symmetric(
-                                      horizontal: 6,
-                                      vertical: 6,
-                                    ),
-                                    child: Row(
-                                      children: [
-                                        UserAvatar(
-                                          pushUser: Option.of(venue),
-                                          pushId: Option.of(venue.id),
-                                          imageUrl: venue.profilePicture,
-                                          radius: 10,
+                                    child: Card(
+                                      child: Padding(
+                                        padding: const EdgeInsets.symmetric(
+                                          horizontal: 6,
+                                          vertical: 6,
                                         ),
-                                        switch (venue.venueInfo
-                                            .flatMap((t) => t.capacity)) {
-                                          None() => const SizedBox.shrink(),
-                                          Some(:final value) => Padding(
-                                              padding: const EdgeInsets.only(
-                                                left: 5,
-                                              ),
-                                              child: Text(
-                                                formatter.format(value),
-                                                style: TextStyle(
-                                                  fontSize: 12,
-                                                  fontWeight: FontWeight.bold,
-                                                  color: isGoodFit
-                                                      ? Colors.green
-                                                      : Colors.red,
-                                                ),
-                                              ),
+                                        child: Row(
+                                          children: [
+                                            UserAvatar(
+                                              pushUser: Option.of(venue),
+                                              pushId: Option.of(venue.id),
+                                              imageUrl: venue.profilePicture,
+                                              radius: 10,
                                             ),
-                                        },
-                                      ],
+                                            switch (venue.venueInfo
+                                                .flatMap((t) => t.capacity)) {
+                                              None() => const SizedBox.shrink(),
+                                              Some(:final value) => Padding(
+                                                  padding: const EdgeInsets.only(
+                                                    left: 5,
+                                                  ),
+                                                  child: Text(
+                                                    formatter.format(value),
+                                                    style: TextStyle(
+                                                      fontSize: 12,
+                                                      fontWeight: FontWeight.bold,
+                                                      color: markerColor,
+                                                    ),
+                                                  ),
+                                                ),
+                                            },
+                                          ],
+                                        ),
+                                      ),
                                     ),
                                   ),
-                                ),
+                                ],
                               ),
-                            ],
-                          ),
-                        ),
-                    };
-                  }).whereType<Marker>(),
-                ],
-                builder: (context, markers) {
-                  // random int
-                  final random = Random().nextInt(999).toString();
-                  final index = markers.first.key
-                      .toString()
-                      .replaceAll(RegExp('[^0-9]'), random);
-                  final clusterKey = 'map-badge-$index-len-${markers.length}';
+                            ),
+                        };
+                      }).whereType<Marker>(),
+                    ],
+                    builder: (context, markers) {
+                      // random int
+                      final random = Random().nextInt(999).toString();
+                      final index = markers.first.key
+                          .toString()
+                          .replaceAll(RegExp('[^0-9]'), random);
+                      final clusterKey = 'map-badge-$index-len-${markers.length}';
 
-                  return FloatingActionButton(
-                    heroTag: clusterKey,
-                    onPressed: null,
-                    child: Text(markers.length.toString()),
-                  );
-                },
-              ),
+                      return FloatingActionButton(
+                        heroTag: clusterKey,
+                        onPressed: null,
+                        child: Text(markers.length.toString()),
+                      );
+                    },
+                  ),
+                );
+              },
             );
           },
         );
