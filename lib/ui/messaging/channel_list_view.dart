@@ -139,16 +139,16 @@ class _ChannelListViewState extends State<ChannelListView> {
               onRefresh: _controller.refresh,
               child: StreamChannelListView(
                 controller: _controller,
-                emptyBuilder: _buildEmptyFeed,
+                // emptyBuilder: _buildEmptyFeed,
                 itemBuilder: (
                   BuildContext context,
                   List<Channel> channels,
                   int index,
                   StreamChannelListTile defaultChannelTile,
                 ) {
-                  final channel = channels[index];
-
-                  return ChannelPreview(channel: channel);
+                  // final channel = channels[index];
+                  // return ChannelPreview(channel: channel);
+                  return defaultChannelTile;
                 },
                 onChannelTap: (channel) {
                   context.push(StreamChannelPage(channel: channel));
