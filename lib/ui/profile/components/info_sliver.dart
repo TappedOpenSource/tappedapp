@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import 'package:feedback/feedback.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -174,10 +176,38 @@ class InfoSliver extends StatelessWidget {
                                   leading: const Icon(
                                     CupertinoIcons.money_dollar,
                                   ),
-                                  title: Text(
-                                    '$value avg. ticket price',
-                                    style: TextStyle(
-                                      color: theme.colorScheme.onSurface,
+                                  title: RichText(
+                                    text: TextSpan(
+                                      children: [
+                                        if (isPremium)
+                                          TextSpan(
+                                            text: '\$$value',
+                                            style: TextStyle(
+                                              color:
+                                                  theme.colorScheme.onSurface,
+                                            ),
+                                          )
+                                        else
+                                          WidgetSpan(
+                                            child: ImageFiltered(
+                                              imageFilter: ImageFilter.blur(
+                                                  sigmaX: 10, sigmaY: 10),
+                                              child: Text(
+                                                '\$???',
+                                                style: TextStyle(
+                                                  color: theme
+                                                      .colorScheme.onSurface,
+                                                ),
+                                              ),
+                                            ),
+                                          ),
+                                        TextSpan(
+                                          text: ' avg. ticket price',
+                                          style: TextStyle(
+                                            color: theme.colorScheme.onSurface,
+                                          ),
+                                        ),
+                                      ],
                                     ),
                                   ),
                                 ),
@@ -189,12 +219,39 @@ class InfoSliver extends StatelessWidget {
                                   leading: const Icon(
                                     CupertinoIcons.person_3_fill,
                                   ),
-                                  title: Text(
-                                    '${formatted.format(value)} person ticket sale avg.',
-                                    style: TextStyle(
-                                      color: theme.colorScheme.onSurface,
+                                  title: RichText(
+                                    text: TextSpan(
+                                      children: [
+                                        if (isPremium)
+                                        TextSpan(
+                                          text: '${formatted.format(value)}',
+                                          style: TextStyle(
+                                            color: theme.colorScheme.onSurface,
+                                          ),
+                                        )
+                                        else WidgetSpan(
+                                          child: ImageFiltered(
+                                            imageFilter: ImageFilter.blur(
+                                                sigmaX: 10, sigmaY: 10),
+                                            child: Text(
+                                              '???',
+                                              style: TextStyle(
+                                                color: theme.colorScheme.onSurface,
+                                              ),
+                                            ),
+                                          ),
+
+                                        ),
+                                        TextSpan(
+                                          text: ' avg. attendance',
+                                          style: TextStyle(
+                                            color: theme.colorScheme.onSurface,
+                                          ),
+                                        ),
+                                      ],
                                     ),
                                   ),
+
                                 ),
                             },
                             if (isPremium && bookingEmail != null)
