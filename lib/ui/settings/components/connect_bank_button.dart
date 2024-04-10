@@ -35,97 +35,108 @@ class _ConnectBankButtonState extends State<ConnectBankButton> {
     final onboarding = context.onboarding;
     final nav = context.nav;
     final onSurfaceColor = Theme.of(context).colorScheme.onSurface;
-    return CupertinoButton.filled(
-      onPressed: () async {
-        try {
-          if (loading) {
-            return;
-          }
+    return Column(
+      children: [
+        CupertinoButton.filled(
+          onPressed: () async {
+            try {
+              if (loading) {
+                return;
+              }
 
-          setState(() {
-            loading = true;
-          });
+              setState(() {
+                loading = true;
+              });
 
-          final place = await switch (currentUser.location) {
-            None() => Future<Option<PlaceData>>.value(const None()),
-            Some(:final value) => (() async {
-                return await places.getPlaceById(value.placeId);
-              })(),
-          };
+              final place = await switch (currentUser.location) {
+                None() => Future<Option<PlaceData>>.value(const None()),
+                Some(:final value) => (() async {
+                    return await places.getPlaceById(value.placeId);
+                  })(),
+              };
 
-          final addressComponents = place.map((e) => e.addressComponents).getOrElse(() => []);
-          final countryCode = addressComponents
-              .where(
-                (element) => element.types.contains('country'),
-              )
-              .firstOrNull
-              ?.shortName;
+              final addressComponents = place.map((e) => e.addressComponents).getOrElse(() => []);
+              final countryCode = addressComponents
+                  .where(
+                    (element) => element.types.contains('country'),
+                  )
+                  .firstOrNull
+                  ?.shortName;
 
-          // create connected account
-          final res = await payments.createConnectedAccount(
-            accountId: accountId,
-            countryCode: countryCode,
-          );
+              // create connected account
+              final res = await payments.createConnectedAccount(
+                accountId: accountId,
+                countryCode: countryCode,
+              );
 
-          if (!res.success) {
-            throw Exception('create connected account failed');
-          }
+              if (!res.success) {
+                throw Exception('create connected account failed');
+              }
 
-          logger.info('connecting account : accountId ${res.accountId}');
-          if (res.accountId != null || res.accountId != '') {
-            final updatedUser = currentUser.copyWith(
-              stripeConnectedAccountId: Option.fromNullable(res.accountId),
-            );
+              logger.info('connecting account : accountId ${res.accountId}');
+              if (res.accountId != null || res.accountId != '') {
+                final updatedUser = currentUser.copyWith(
+                  stripeConnectedAccountId: Option.fromNullable(res.accountId),
+                );
 
-            onboarding.add(
-              UpdateOnboardedUser(
-                user: updatedUser,
-              ),
-            );
-          }
+                onboarding.add(
+                  UpdateOnboardedUser(
+                    user: updatedUser,
+                  ),
+                );
+              }
 
-          nav.pop();
+              nav.pop();
 
-          await launchUrl(
-            Uri.parse(res.url),
-            mode: LaunchMode.externalApplication,
-          );
+              await launchUrl(
+                Uri.parse(res.url),
+                mode: LaunchMode.externalApplication,
+              );
 
-          setState(() {
-            loading = false;
-          });
-        } catch (e, s) {
-          logger.error(
-            'error connecting bank account',
-            error: e,
-            stackTrace: s,
-          );
-          setState(() {
-            loading = false;
-          });
-          ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(
-              behavior: SnackBarBehavior.floating,
-              backgroundColor: Colors.red,
-              content: Text(
-                'Error connecting bank account',
-              ),
-            ),
-          );
-        }
-      },
-      borderRadius: BorderRadius.circular(15),
-      child: loading
-          ? CupertinoActivityIndicator(
-              color: onSurfaceColor,
-            )
-          : Text(
-              'Connect Bank Account',
-              style: TextStyle(
-                color: onSurfaceColor,
-                fontWeight: FontWeight.w700,
-              ),
-            ),
+              setState(() {
+                loading = false;
+              });
+            } catch (e, s) {
+              logger.error(
+                'error connecting bank account',
+                error: e,
+                stackTrace: s,
+              );
+              setState(() {
+                loading = false;
+              });
+              ScaffoldMessenger.of(context).showSnackBar(
+                const SnackBar(
+                  behavior: SnackBarBehavior.floating,
+                  backgroundColor: Colors.red,
+                  content: Text(
+                    'Error connecting bank account',
+                  ),
+                ),
+              );
+            }
+          },
+          borderRadius: BorderRadius.circular(15),
+          child: loading
+              ? CupertinoActivityIndicator(
+                  color: onSurfaceColor,
+                )
+              : Text(
+                  'Connect Bank Account',
+                  style: TextStyle(
+                    color: onSurfaceColor,
+                    fontWeight: FontWeight.w700,
+                  ),
+                ),
+        ),
+        Text(
+          'so talent buyers can pay you directly on the app',
+          style: TextStyle(
+            color: onSurfaceColor.withOpacity(0.5),
+            fontSize: 12,
+          ),
+        ),
+      ],
     );
   }
 
