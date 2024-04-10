@@ -11,6 +11,7 @@ import 'package:intheloopapp/domains/navigation_bloc/tapped_route.dart';
 import 'package:intheloopapp/domains/search_bloc/search_bloc.dart';
 import 'package:intheloopapp/ui/loading/logo_wave.dart';
 import 'package:intheloopapp/ui/profile/components/opportunity_card.dart';
+import 'package:intheloopapp/ui/user_card.dart';
 import 'package:intheloopapp/ui/user_tile.dart';
 import 'package:intheloopapp/utils/bloc_utils.dart';
 import 'package:intheloopapp/utils/custom_claims_builder.dart';
@@ -39,6 +40,7 @@ class _TappedSearchBarState extends State<TappedSearchBar> {
   late final FocusNode _searchFocusNode;
   late final SearchController _searchController;
   late final ScrollController _scrollController = ScrollController();
+  var _loadingSuggestions = true;
 
   void _search() {
     final query = _searchController.text;
@@ -60,9 +62,10 @@ class _TappedSearchBarState extends State<TappedSearchBar> {
     ]);
 
     final featuredOps = await database.getFeaturedOpportunities();
-    final sortedOps = featuredOps..sort(
-      (a, b) => a.startTime.compareTo(b.startTime),
-    );
+    final sortedOps = featuredOps
+      ..sort(
+        (a, b) => a.startTime.compareTo(b.startTime),
+      );
 
     final combined = [...suggestedUsers, ...venuesNearby]..sort(
         (a, b) => a.displayName.compareTo(b.displayName),
@@ -162,7 +165,7 @@ class _TappedSearchBarState extends State<TappedSearchBar> {
       viewBuilder: (suggestions) {
         return BlocBuilder<SearchBloc, SearchState>(
           builder: (context, state) {
-            if (state.loading) {
+            if (_loadingSuggestions || state.loading) {
               return const Center(
                 child: LogoWave(),
               );
@@ -170,30 +173,62 @@ class _TappedSearchBarState extends State<TappedSearchBar> {
 
             if (suggestions.isNotEmpty && state.searchTerm.isEmpty) {
               final sugList = suggestions.toList();
-              final ops = sugList.whereType<OpportunityCard>();
-              final users = sugList.whereType<UserTile>();
+              final ops = sugList.whereType<OpportunityCard>().toList();
+              final restUsers = sugList.whereType<UserTile>();
 
               return ListView(
                 controller: _scrollController,
                 children: [
                   if (ops.isNotEmpty)
-                    SizedBox(
-                      height: 300,
-                      child: ListView.builder(
-                        scrollDirection: Axis.horizontal,
-                        itemCount: ops.length,
-                        itemBuilder: (context, index) {
-                          final opWidget = sugList[index];
-                          return Padding(
-                            padding: const EdgeInsets.symmetric(
-                              horizontal: 8,
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        const Padding(
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: 16,
+                            vertical: 8,
+                          ),
+                          child: Text(
+                            'apply to perform',
+                            style: TextStyle(
+                              fontSize: 24,
+                              fontWeight: FontWeight.bold,
                             ),
-                            child: opWidget,
-                          );
-                        },
+                          ),
+                        ),
+                        SizedBox(
+                          height: 300,
+                          child: ListView.builder(
+                            scrollDirection: Axis.horizontal,
+                            itemCount: ops.length,
+                            itemBuilder: (context, index) {
+                              final opWidget = ops[index];
+                              return Padding(
+                                padding: const EdgeInsets.symmetric(
+                                  horizontal: 8,
+                                ),
+                                child: opWidget,
+                              );
+                            },
+                          ),
+                        ),
+                      ],
+                    ),
+                  if (restUsers.isNotEmpty)
+                    const Padding(
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 16,
+                        vertical: 8,
+                      ),
+                      child: Text(
+                        'suggestions',
+                        style: TextStyle(
+                          fontSize: 24,
+                          fontWeight: FontWeight.bold,
+                        ),
                       ),
                     ),
-                  ...users,
+                  ...restUsers,
                 ],
               );
             }
@@ -222,6 +257,10 @@ class _TappedSearchBarState extends State<TappedSearchBar> {
           database: database,
           searchRepo: searchRepo,
         );
+
+        setState(() {
+          _loadingSuggestions = false;
+        });
 
         return suggestions;
       },

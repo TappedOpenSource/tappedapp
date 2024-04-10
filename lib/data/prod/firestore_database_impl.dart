@@ -680,6 +680,7 @@ class FirestoreDatabaseImpl extends DatabaseRepository {
       });
     } catch (e, s) {
       logger.error('verifyUser', error: e, stackTrace: s);
+    }
   }
 
   @override
