@@ -130,7 +130,7 @@ class _ConnectBankButtonState extends State<ConnectBankButton> {
                 ),
         ),
         Text(
-          'so talent buyers can pay you directly on the app',
+          'so bookers can pay you directly on the app',
           style: TextStyle(
             color: onSurfaceColor.withOpacity(0.5),
             fontSize: 12,

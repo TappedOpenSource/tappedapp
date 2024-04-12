@@ -161,7 +161,7 @@ class ProfileView extends StatelessWidget {
         )
           ..getLatestBookings()
           ..getLatestReview()
-          ..initServices()
+          // ..initServices()
           ..initOpportunities()
           ..loadIsBlocked()
           ..loadIsVerified(visitedUser.id)
@@ -227,7 +227,7 @@ class ProfileView extends StatelessWidget {
               HapticFeedback.mediumImpact(),
               cubit.getLatestBookings(),
               cubit.getLatestReview(),
-              cubit.initServices(),
+              // cubit.initServices(),
               cubit.initOpportunities(),
               cubit.refetchVisitedUser(),
               cubit.loadIsVerified(visitedUser.id),

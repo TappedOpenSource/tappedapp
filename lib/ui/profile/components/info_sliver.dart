@@ -173,6 +173,12 @@ class InfoSliver extends StatelessWidget {
                             switch (averagePerformerTicketPrice) {
                               None() => const SizedBox.shrink(),
                               Some(:final value) => CupertinoListTile(
+                                  onTap: () {
+                                    if (!isPremium) {
+                                      context.push(PaywallPage());
+                                      return;
+                                    }
+                                  },
                                   leading: const Icon(
                                     CupertinoIcons.money_dollar,
                                   ),
@@ -216,6 +222,12 @@ class InfoSliver extends StatelessWidget {
                               (Some(), _) => const SizedBox.shrink(),
                               (_, None()) => const SizedBox.shrink(),
                               (_, Some(:final value)) => CupertinoListTile(
+                                  onTap: () {
+                                    if (!isPremium) {
+                                      context.push(PaywallPage());
+                                      return;
+                                    }
+                                  },
                                   leading: const Icon(
                                     CupertinoIcons.person_3_fill,
                                   ),
@@ -223,25 +235,27 @@ class InfoSliver extends StatelessWidget {
                                     text: TextSpan(
                                       children: [
                                         if (isPremium)
-                                        TextSpan(
-                                          text: '${formatted.format(value)}',
-                                          style: TextStyle(
-                                            color: theme.colorScheme.onSurface,
-                                          ),
-                                        )
-                                        else WidgetSpan(
-                                          child: ImageFiltered(
-                                            imageFilter: ImageFilter.blur(
-                                                sigmaX: 10, sigmaY: 10),
-                                            child: Text(
-                                              '???',
-                                              style: TextStyle(
-                                                color: theme.colorScheme.onSurface,
+                                          TextSpan(
+                                            text: '${formatted.format(value)}',
+                                            style: TextStyle(
+                                              color:
+                                                  theme.colorScheme.onSurface,
+                                            ),
+                                          )
+                                        else
+                                          WidgetSpan(
+                                            child: ImageFiltered(
+                                              imageFilter: ImageFilter.blur(
+                                                  sigmaX: 10, sigmaY: 10),
+                                              child: Text(
+                                                '???',
+                                                style: TextStyle(
+                                                  color: theme
+                                                      .colorScheme.onSurface,
+                                                ),
                                               ),
                                             ),
                                           ),
-
-                                        ),
                                         TextSpan(
                                           text: ' avg. attendance',
                                           style: TextStyle(
@@ -251,7 +265,6 @@ class InfoSliver extends StatelessWidget {
                                       ],
                                     ),
                                   ),
-
                                 ),
                             },
                             if (isPremium && bookingEmail != null)
