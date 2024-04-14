@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fpdart/fpdart.dart';
 import 'package:intheloopapp/domains/models/genre.dart';
@@ -49,179 +50,186 @@ class GigSearchFormView extends StatelessWidget {
                       ),
                       child: CurrentUserBuilder(
                         builder: (context, currentUser) {
-                          return Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              const Text(
-                                'reach out to thousands of venues in a matter of seconds to get booked for a show',
-                                textAlign: TextAlign.center,
-                                style: TextStyle(
-                                  color: Colors.grey,
-                                ),
-                              ),
-                              const Text(
-                                'who',
-                                style: TextStyle(
-                                  fontWeight: FontWeight.w700,
-                                  fontSize: 20,
-                                ),
-                              ),
-                              UserTile(
-                                userId: currentUser.id,
-                                user: Option.of(currentUser),
-                              ),
-                              const SizedBox(height: 20),
-                              const Text(
-                                'where',
-                                style: TextStyle(
-                                  fontWeight: FontWeight.w700,
-                                  fontSize: 20,
-                                ),
-                              ),
-                              LocationTextField(
-                                initialPlace: state.place,
-                                onChanged: (placeData, _) {
-                                  try {
-                                    context
-                                        .read<GigSearchCubit>()
-                                        .updateLocation(placeData);
-                                  } catch (e, s) {
-                                    logger.e(
-                                      'Error updating location',
-                                      error: e,
-                                      stackTrace: s,
-                                    );
-                                  }
-                                },
-                              ),
-                              const SizedBox(height: 20),
-                              const Text(
-                                'genres',
-                                style: TextStyle(
-                                  fontWeight: FontWeight.w700,
-                                  fontSize: 20,
-                                ),
-                              ),
-                              GenreSelection(
-                                initialValue: state.genres,
-                                onConfirm: (genres) {
-                                  context.read<GigSearchCubit>().updateGenres(
-                                      genres.whereType<Genre>().toList(),);
-                                },
-                              ),
-                              const SizedBox(height: 20),
-                              const Text(
-                                'capacity',
-                                style: TextStyle(
-                                  fontWeight: FontWeight.w700,
-                                  fontSize: 20,
-                                ),
-                              ),
-                              Row(
-                                children: [
-                                  Text(state.capacityRangeStart.toString()),
-                                  Expanded(
-                                    child: RangeSlider(
-                                      values: state.capacityRange,
-                                      max: maxCapacity,
-                                      onChanged: (values) {
-                                        context
-                                            .read<GigSearchCubit>()
-                                            .updateCapacity(values);
-                                      },
-                                      activeColor: theme.colorScheme.primary,
-                                      inactiveColor: theme.colorScheme.onSurface
-                                          .withOpacity(0.4),
-                                      divisions: maxCapacity.toInt(),
-                                      labels: RangeLabels(
-                                        state.capacityRangeStart.toString(),
-                                        state.capacityRangeEnd.toString(),
+                          return CustomScrollView(
+                            slivers: [
+                              SliverFillRemaining(
+                                hasScrollBody: false,
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    const Text(
+                                      'reach out to thousands of venues in a matter of seconds to get booked for a show',
+                                      textAlign: TextAlign.center,
+                                      style: TextStyle(
+                                        color: Colors.grey,
                                       ),
                                     ),
-                                  ),
-                                  Text(
-                                    state.capacityRangeEnd == maxCapacity
-                                        ? '${maxCapacity.round()}+'
-                                        : state.capacityRangeEnd.toString(),
-                                  ),
-                                ],
-                              ),
-                              Text(
-                                'we have the capacity range defaulted to numbers that align with your previous booking history',
-                                textAlign: TextAlign.center,
-                                style: TextStyle(
-                                  color:
-                                  theme.colorScheme.onSurface.withOpacity(0.6),
-                                ),
-                              ),
-                              // const SizedBox(height: 20),
-                              // const Text(
-                              //   'when',
-                              //   style: TextStyle(
-                              //     fontWeight: FontWeight.w700,
-                              //     fontSize: 20,
-                              //   ),
-                              // ),
-                              // const Row(
-                              //   children: [
-                              //     Card(
-                              //       child: Padding(
-                              //         padding: EdgeInsets.all(8),
-                              //         child: Text('date'),
-                              //       ),
-                              //     ),
-                              //     Card(
-                              //       child: Padding(
-                              //         padding: EdgeInsets.all(8),
-                              //         child: Text('flexible'),
-                              //       ),
-                              //     ),
-                              //   ],
-                              // ),
-                              const Spacer(),
-                              Row(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  Expanded(
-                                    child: CupertinoButton.filled(
-                                      onPressed: () {
-                                        if (!isPremium) {
-                                          context.push(
-                                            PaywallPage(),
+                                    const Text(
+                                      'who',
+                                      style: TextStyle(
+                                        fontWeight: FontWeight.w700,
+                                        fontSize: 20,
+                                      ),
+                                    ),
+                                    UserTile(
+                                      userId: currentUser.id,
+                                      user: Option.of(currentUser),
+                                    ),
+                                    const SizedBox(height: 20),
+                                    const Text(
+                                      'where',
+                                      style: TextStyle(
+                                        fontWeight: FontWeight.w700,
+                                        fontSize: 20,
+                                      ),
+                                    ),
+                                    LocationTextField(
+                                      initialPlace: state.place,
+                                      onChanged: (placeData, _) {
+                                        try {
+                                          context
+                                              .read<GigSearchCubit>()
+                                              .updateLocation(placeData);
+                                        } catch (e, s) {
+                                          logger.e(
+                                            'Error updating location',
+                                            error: e,
+                                            stackTrace: s,
                                           );
-                                          return;
                                         }
-
-                                        context
-                                            .read<GigSearchCubit>()
-                                            .searchVenues()
-                                            .catchError((error) {
-                                          ScaffoldMessenger.of(context)
-                                              .showSnackBar(
-                                            SnackBar(
-                                              backgroundColor: Colors.redAccent,
-                                              shape: RoundedRectangleBorder(
-                                                borderRadius:
-                                                BorderRadius.circular(15),
-                                              ),
-                                              content: Text(
-                                                error.toString(),
+                                      },
+                                    ),
+                                    const SizedBox(height: 20),
+                                    const Text(
+                                      'genres',
+                                      style: TextStyle(
+                                        fontWeight: FontWeight.w700,
+                                        fontSize: 20,
+                                      ),
+                                    ),
+                                    GenreSelection(
+                                      initialValue: state.genres,
+                                      onConfirm: (genres) {
+                                        context.read<GigSearchCubit>().updateGenres(
+                                            genres.whereType<Genre>().toList(),);
+                                      },
+                                    ),
+                                    const SizedBox(height: 20),
+                                    const Text(
+                                      'capacity',
+                                      style: TextStyle(
+                                        fontWeight: FontWeight.w700,
+                                        fontSize: 20,
+                                      ),
+                                    ),
+                                    Row(
+                                      children: [
+                                        Text(state.capacityRangeStart.toString()),
+                                        Expanded(
+                                          child: RangeSlider(
+                                            values: state.capacityRange,
+                                            max: maxCapacity,
+                                            onChanged: (values) {
+                                              context
+                                                  .read<GigSearchCubit>()
+                                                  .updateCapacity(values);
+                                            },
+                                            activeColor: theme.colorScheme.primary,
+                                            inactiveColor: theme.colorScheme.onSurface
+                                                .withOpacity(0.4),
+                                            divisions: maxCapacity.toInt(),
+                                            labels: RangeLabels(
+                                              state.capacityRangeStart.toString(),
+                                              state.capacityRangeEnd.toString(),
+                                            ),
+                                          ),
+                                        ),
+                                        Text(
+                                          state.capacityRangeEnd == maxCapacity
+                                              ? '${maxCapacity.round()}+'
+                                              : state.capacityRangeEnd.toString(),
+                                        ),
+                                      ],
+                                    ),
+                                    Text(
+                                      'we have the capacity range defaulted to numbers that align with your previous booking history',
+                                      textAlign: TextAlign.center,
+                                      style: TextStyle(
+                                        color:
+                                        theme.colorScheme.onSurface.withOpacity(0.6),
+                                      ),
+                                    ),
+                                    // const SizedBox(height: 20),
+                                    // const Text(
+                                    //   'when',
+                                    //   style: TextStyle(
+                                    //     fontWeight: FontWeight.w700,
+                                    //     fontSize: 20,
+                                    //   ),
+                                    // ),
+                                    // const Row(
+                                    //   children: [
+                                    //     Card(
+                                    //       child: Padding(
+                                    //         padding: EdgeInsets.all(8),
+                                    //         child: Text('date'),
+                                    //       ),
+                                    //     ),
+                                    //     Card(
+                                    //       child: Padding(
+                                    //         padding: EdgeInsets.all(8),
+                                    //         child: Text('flexible'),
+                                    //       ),
+                                    //     ),
+                                    //   ],
+                                    // ),
+                                    const Spacer(),
+                                    Row(
+                                      mainAxisAlignment: MainAxisAlignment.center,
+                                      children: [
+                                        Expanded(
+                                          child: CupertinoButton.filled(
+                                            onPressed: () {
+                                              if (!isPremium) {
+                                                context.push(
+                                                  PaywallPage(),
+                                                );
+                                                return;
+                                              }
+                                
+                                              context
+                                                  .read<GigSearchCubit>()
+                                                  .searchVenues()
+                                                  .catchError((error) {
+                                                ScaffoldMessenger.of(context)
+                                                    .showSnackBar(
+                                                  SnackBar(
+                                                    backgroundColor: Colors.redAccent,
+                                                    shape: RoundedRectangleBorder(
+                                                      borderRadius:
+                                                      BorderRadius.circular(15),
+                                                    ),
+                                                    content: Text(
+                                                      error.toString(),
+                                                    ),
+                                                  ),
+                                                );
+                                              });
+                                            },
+                                            borderRadius: BorderRadius.circular(15),
+                                            child: const Text(
+                                              'search',
+                                              style: TextStyle(
+                                                fontWeight: FontWeight.w700,
+                                                color: Colors.white,
                                               ),
                                             ),
-                                          );
-                                        });
-                                      },
-                                      borderRadius: BorderRadius.circular(15),
-                                      child: const Text(
-                                        'search',
-                                        style: TextStyle(
-                                          fontWeight: FontWeight.w700,
-                                          color: Colors.white,
+                                          ),
                                         ),
-                                      ),
+                                      ],
                                     ),
-                                  ),
-                                ],
+                                  ],
+                                ),
                               ),
                             ],
                           );
