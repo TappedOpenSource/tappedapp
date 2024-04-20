@@ -32,7 +32,6 @@ mixin _$SettingsState {
   int? get tiktokFollowers => throw _privateConstructorUsedError;
   String? get soundcloudHandle => throw _privateConstructorUsedError;
   String? get audiusHandle => throw _privateConstructorUsedError;
-  String? get spotifyUrl => throw _privateConstructorUsedError;
   String? get youtubeHandle => throw _privateConstructorUsedError;
   Option<File> get profileImage => throw _privateConstructorUsedError;
   Option<File> get pressKitFile => throw _privateConstructorUsedError;
@@ -73,7 +72,6 @@ abstract class $SettingsStateCopyWith<$Res> {
       int? tiktokFollowers,
       String? soundcloudHandle,
       String? audiusHandle,
-      String? spotifyUrl,
       String? youtubeHandle,
       Option<File> profileImage,
       Option<File> pressKitFile,
@@ -115,7 +113,6 @@ class _$SettingsStateCopyWithImpl<$Res, $Val extends SettingsState>
     Object? tiktokFollowers = freezed,
     Object? soundcloudHandle = freezed,
     Object? audiusHandle = freezed,
-    Object? spotifyUrl = freezed,
     Object? youtubeHandle = freezed,
     Object? profileImage = null,
     Object? pressKitFile = null,
@@ -192,10 +189,6 @@ class _$SettingsStateCopyWithImpl<$Res, $Val extends SettingsState>
           ? _value.audiusHandle
           : audiusHandle // ignore: cast_nullable_to_non_nullable
               as String?,
-      spotifyUrl: freezed == spotifyUrl
-          ? _value.spotifyUrl
-          : spotifyUrl // ignore: cast_nullable_to_non_nullable
-              as String?,
       youtubeHandle: freezed == youtubeHandle
           ? _value.youtubeHandle
           : youtubeHandle // ignore: cast_nullable_to_non_nullable
@@ -265,7 +258,6 @@ abstract class _$$SettingsStateImplCopyWith<$Res>
       int? tiktokFollowers,
       String? soundcloudHandle,
       String? audiusHandle,
-      String? spotifyUrl,
       String? youtubeHandle,
       Option<File> profileImage,
       Option<File> pressKitFile,
@@ -305,7 +297,6 @@ class __$$SettingsStateImplCopyWithImpl<$Res>
     Object? tiktokFollowers = freezed,
     Object? soundcloudHandle = freezed,
     Object? audiusHandle = freezed,
-    Object? spotifyUrl = freezed,
     Object? youtubeHandle = freezed,
     Object? profileImage = null,
     Object? pressKitFile = null,
@@ -379,10 +370,6 @@ class __$$SettingsStateImplCopyWithImpl<$Res>
           ? _value.audiusHandle
           : audiusHandle // ignore: cast_nullable_to_non_nullable
               as String?,
-      spotifyUrl: freezed == spotifyUrl
-          ? _value.spotifyUrl
-          : spotifyUrl // ignore: cast_nullable_to_non_nullable
-              as String?,
       youtubeHandle: freezed == youtubeHandle
           ? _value.youtubeHandle
           : youtubeHandle // ignore: cast_nullable_to_non_nullable
@@ -447,7 +434,6 @@ class _$SettingsStateImpl implements _SettingsState {
       this.tiktokFollowers,
       this.soundcloudHandle,
       this.audiusHandle,
-      this.spotifyUrl,
       this.youtubeHandle,
       this.profileImage = const None(),
       this.pressKitFile = const None(),
@@ -506,8 +492,6 @@ class _$SettingsStateImpl implements _SettingsState {
   @override
   final String? audiusHandle;
   @override
-  final String? spotifyUrl;
-  @override
   final String? youtubeHandle;
   @override
   @JsonKey()
@@ -538,7 +522,7 @@ class _$SettingsStateImpl implements _SettingsState {
 
   @override
   String toString() {
-    return 'SettingsState(isPerformer: $isPerformer, username: $username, artistName: $artistName, bio: $bio, genres: $genres, label: $label, occupations: $occupations, placeId: $placeId, twitterHandle: $twitterHandle, twitterFollowers: $twitterFollowers, instagramHandle: $instagramHandle, instagramFollowers: $instagramFollowers, tiktokHandle: $tiktokHandle, tiktokFollowers: $tiktokFollowers, soundcloudHandle: $soundcloudHandle, audiusHandle: $audiusHandle, spotifyUrl: $spotifyUrl, youtubeHandle: $youtubeHandle, profileImage: $profileImage, pressKitFile: $pressKitFile, status: $status, pushNotificationsDirectMessages: $pushNotificationsDirectMessages, emailNotificationsAppReleases: $emailNotificationsAppReleases, email: $email, password: $password, place: $place, formKey: $formKey)';
+    return 'SettingsState(isPerformer: $isPerformer, username: $username, artistName: $artistName, bio: $bio, genres: $genres, label: $label, occupations: $occupations, placeId: $placeId, twitterHandle: $twitterHandle, twitterFollowers: $twitterFollowers, instagramHandle: $instagramHandle, instagramFollowers: $instagramFollowers, tiktokHandle: $tiktokHandle, tiktokFollowers: $tiktokFollowers, soundcloudHandle: $soundcloudHandle, audiusHandle: $audiusHandle, youtubeHandle: $youtubeHandle, profileImage: $profileImage, pressKitFile: $pressKitFile, status: $status, pushNotificationsDirectMessages: $pushNotificationsDirectMessages, emailNotificationsAppReleases: $emailNotificationsAppReleases, email: $email, password: $password, place: $place, formKey: $formKey)';
   }
 
   @override
@@ -574,8 +558,6 @@ class _$SettingsStateImpl implements _SettingsState {
                 other.soundcloudHandle == soundcloudHandle) &&
             (identical(other.audiusHandle, audiusHandle) ||
                 other.audiusHandle == audiusHandle) &&
-            (identical(other.spotifyUrl, spotifyUrl) ||
-                other.spotifyUrl == spotifyUrl) &&
             (identical(other.youtubeHandle, youtubeHandle) ||
                 other.youtubeHandle == youtubeHandle) &&
             (identical(other.profileImage, profileImage) ||
@@ -617,7 +599,6 @@ class _$SettingsStateImpl implements _SettingsState {
         tiktokFollowers,
         soundcloudHandle,
         audiusHandle,
-        spotifyUrl,
         youtubeHandle,
         profileImage,
         pressKitFile,
@@ -655,7 +636,6 @@ abstract class _SettingsState implements SettingsState {
       final int? tiktokFollowers,
       final String? soundcloudHandle,
       final String? audiusHandle,
-      final String? spotifyUrl,
       final String? youtubeHandle,
       final Option<File> profileImage,
       final Option<File> pressKitFile,
@@ -699,8 +679,6 @@ abstract class _SettingsState implements SettingsState {
   String? get soundcloudHandle;
   @override
   String? get audiusHandle;
-  @override
-  String? get spotifyUrl;
   @override
   String? get youtubeHandle;
   @override

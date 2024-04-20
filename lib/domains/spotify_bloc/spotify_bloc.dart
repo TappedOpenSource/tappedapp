@@ -36,6 +36,14 @@ class SpotifyBloc extends Bloc<SpotifyEvent, SpotifyState> {
         Some(:final value) => _setSpotifyUser(emit, event.currentUserId, value),
       };
     });
+    on<RefreshConnection>((event, emit) async {
+      final currentUserId = event.currentUserId;
+      return switch (state) {
+        SpotifyAuthenticated(:final credentials) =>
+          _setSpotifyUser(emit, currentUserId, credentials),
+        _ => null,
+      };
+    });
   }
 
   Future<void> _setSpotifyUser(
@@ -43,6 +51,7 @@ class SpotifyBloc extends Bloc<SpotifyEvent, SpotifyState> {
     String userId,
     SpotifyCredentials credentials,
   ) async {
+    emit(SpotifyAuthenticated(credentials: credentials));
     await spotify.setAccessToken(
       userId,
       credentials,
@@ -69,7 +78,6 @@ class SpotifyBloc extends Bloc<SpotifyEvent, SpotifyState> {
     );
 
     onboarding.add(UpdateOnboardedUser(user: currentUser));
-    emit(SpotifyAuthenticated(credentials: credentials));
   }
 
   final OnboardingBloc onboarding;

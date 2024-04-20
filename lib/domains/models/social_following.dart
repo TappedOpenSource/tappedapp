@@ -4,11 +4,11 @@ import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:intheloopapp/domains/models/spotify_user.dart';
 
 part 'social_following.freezed.dart';
-
 part 'social_following.g.dart';
 
 @freezed
 class SocialFollowing with _$SocialFollowing {
+  @JsonSerializable(explicitToJson: true)
   const factory SocialFollowing({
     @Default(None()) Option<String> youtubeChannelId,
     @Default(None()) Option<String> youtubeHandle,

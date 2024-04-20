@@ -20,3 +20,11 @@ final class UpdateCredentials extends SpotifyEvent {
   final String currentUserId;
   final Option<SpotifyCredentials> credentials;
 }
+
+final class RefreshConnection extends SpotifyEvent {
+  RefreshConnection({
+    required this.currentUserId,
+  });
+
+  final String currentUserId;
+}

@@ -4,6 +4,7 @@ import 'package:flutter_svg/svg.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:fpdart/fpdart.dart';
 import 'package:intheloopapp/ui/profile/profile_cubit.dart';
+import 'package:intheloopapp/utils/app_logger.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class SocialMediaIcons extends StatelessWidget {
@@ -40,6 +41,9 @@ class SocialMediaIcons extends StatelessWidget {
     return BlocBuilder<ProfileCubit, ProfileState>(
       builder: (context, state) {
         final socialFollowing = state.visitedUser.socialFollowing;
+        final spotifyUrl = socialFollowing.spotifyUser.flatMap((t) {
+          return Option.fromNullable(t.external_urls?.spotify);
+        });
         return SliverGrid.count(
           crossAxisCount: 4,
           children: [
@@ -149,7 +153,7 @@ class SocialMediaIcons extends StatelessWidget {
                   },
                 ),
             },
-            switch (socialFollowing.spotifyUrl) {
+            switch (spotifyUrl) {
               None() => null,
               Some(:final value) => _socialMediaIcon(
                   color: Colors.green,
@@ -159,10 +163,7 @@ class SocialMediaIcons extends StatelessWidget {
                   ),
                   onTap: () {
                     launchUrl(
-                      Uri(
-                        scheme: 'https',
-                        path: value,
-                      ),
+                      Uri.parse(value),
                     );
                   },
                 ),
@@ -207,10 +208,12 @@ class SocialMediaIcons extends StatelessWidget {
               None() => null,
               Some(:final value) => _socialMediaIcon(
                   color: Colors.purpleAccent,
-                  icon: SvgPicture.asset('assets/audius_logo.svg',
-                      colorFilter:
-                          const ColorFilter.mode(Colors.purple, BlendMode.srcIn),
-                      semanticsLabel: 'Audius Logo',),
+                  icon: SvgPicture.asset(
+                    'assets/audius_logo.svg',
+                    colorFilter:
+                        const ColorFilter.mode(Colors.purple, BlendMode.srcIn),
+                    semanticsLabel: 'Audius Logo',
+                  ),
                   onTap: () {
                     launchUrl(
                       Uri(

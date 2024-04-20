@@ -19,7 +19,6 @@ class SettingsState with _$SettingsState {
     int? tiktokFollowers,
     String? soundcloudHandle,
     String? audiusHandle,
-    String? spotifyUrl,
     String? youtubeHandle,
     @Default(None()) Option<File> profileImage,
     @Default(None()) Option<File> pressKitFile,

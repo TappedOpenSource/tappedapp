@@ -4,7 +4,8 @@ part 'spotify_user.freezed.dart';
 part 'spotify_user.g.dart';
 
 @freezed
-abstract class SpotifyUser with _$SpotifyUser {
+class SpotifyUser with _$SpotifyUser {
+  @JsonSerializable(explicitToJson: true)
   const factory SpotifyUser({
     required String? country,
     required String? display_name,
@@ -25,7 +26,7 @@ abstract class SpotifyUser with _$SpotifyUser {
 }
 
 @freezed
-abstract class ExplicitContent with _$ExplicitContent {
+class ExplicitContent with _$ExplicitContent {
   const factory ExplicitContent({
     required bool filter_enabled,
     required bool filter_locked,
@@ -36,7 +37,7 @@ abstract class ExplicitContent with _$ExplicitContent {
 }
 
 @freezed
-abstract class ExternalUrls with _$ExternalUrls {
+class ExternalUrls with _$ExternalUrls {
   const factory ExternalUrls({
     required String? spotify,
   }) = _ExternalUrls;

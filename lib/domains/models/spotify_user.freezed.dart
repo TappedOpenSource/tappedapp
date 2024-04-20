@@ -287,7 +287,8 @@ class __$$SpotifyUserImplCopyWithImpl<$Res>
 }
 
 /// @nodoc
-@JsonSerializable()
+
+@JsonSerializable(explicitToJson: true)
 class _$SpotifyUserImpl implements _SpotifyUser {
   const _$SpotifyUserImpl(
       {required this.country,
