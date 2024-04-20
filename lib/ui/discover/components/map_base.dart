@@ -84,6 +84,7 @@ class MapBase extends StatelessWidget {
                           ),
                           BookingsMarkerLayer(
                             bookings: state.userBookings,
+                            showFliers: true,
                           ),
                         ],
                       MapOverlay.bookings => [

@@ -17,11 +17,13 @@ import 'package:intheloopapp/data/prod/firestore_database_impl.dart';
 import 'package:intheloopapp/data/prod/google_places_impl.dart';
 import 'package:intheloopapp/data/prod/image_picker_impl.dart';
 import 'package:intheloopapp/data/prod/remote_config_impl.dart';
+import 'package:intheloopapp/data/prod/spotify_impl.dart';
 import 'package:intheloopapp/data/prod/stream_impl.dart';
 import 'package:intheloopapp/data/prod/stripe_payment_impl.dart';
 import 'package:intheloopapp/data/prod/uni_link_impl.dart';
 import 'package:intheloopapp/data/remote_config_repository.dart';
 import 'package:intheloopapp/data/search_repository.dart';
+import 'package:intheloopapp/data/spotify_repository.dart';
 import 'package:intheloopapp/data/storage_repository.dart';
 import 'package:intheloopapp/data/stream_repository.dart';
 // import 'package:intheloopapp/domains/activity_bloc/activity_bloc.dart';
@@ -34,6 +36,7 @@ import 'package:intheloopapp/domains/navigation_bloc/navigation_bloc.dart';
 import 'package:intheloopapp/domains/onboarding_bloc/onboarding_bloc.dart';
 import 'package:intheloopapp/domains/opportunity_bloc/opportunity_bloc.dart';
 import 'package:intheloopapp/domains/search_bloc/search_bloc.dart';
+import 'package:intheloopapp/domains/spotify_bloc/spotify_bloc.dart';
 import 'package:intheloopapp/domains/subscription_bloc/subscription_bloc.dart';
 import 'package:intheloopapp/ui/app_theme_cubit.dart';
 import 'package:intheloopapp/ui/premium_theme_cubit.dart';
@@ -86,6 +89,9 @@ List<RepositoryProvider<Object>> buildRepositories({
     RepositoryProvider<AudioRepository>(
       create: (_) => AudioServiceImpl()..initAudioService(),
     ),
+    RepositoryProvider<SpotifyRepository>(
+      create: (_) => SpotifyImpl(),
+    ),
   ];
 }
 
@@ -127,6 +133,11 @@ List<BlocProvider> buildBlocs({
         databaseRepository: context.database,
       ),
     ),
+    BlocProvider<SpotifyBloc>(
+      create: (context) => SpotifyBloc(
+        spotify: context.read<SpotifyRepository>(),
+      ),
+    ),
     BlocProvider<DeepLinkBloc>(
       //Depreciated
       create: (context) => DeepLinkBloc(
@@ -134,6 +145,8 @@ List<BlocProvider> buildBlocs({
         nav: context.nav,
         deepLinks: context.read<DeepLinkRepository>(),
         database: context.database,
+        spotify: context.read<SpotifyRepository>(),
+        spotifyBloc: context.read<SpotifyBloc>(),
       ),
     ),
     BlocProvider<DownForMaintenanceBloc>(
@@ -169,5 +182,6 @@ List<BlocProvider> buildBlocs({
         places: context.places,
       ),
     ),
+
   ];
 }

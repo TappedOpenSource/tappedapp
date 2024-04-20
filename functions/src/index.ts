@@ -31,6 +31,7 @@ export * from "./lib/places";
 export * from "./lib/user_feedback";
 export * from "./lib/venue_contacting";
 export * from "./lib/notifications";
+export * from "./lib/spotify";
 
 const _deleteUser = async (data: { id: string }) => {
   // Checking attribute.

@@ -5,7 +5,6 @@ import 'package:intheloopapp/domains/navigation_bloc/navigation_bloc.dart';
 import 'package:intheloopapp/domains/navigation_bloc/tapped_route.dart';
 import 'package:intheloopapp/ui/common/easter_egg_placeholder.dart';
 import 'package:intheloopapp/ui/loading/loading_view.dart';
-import 'package:intheloopapp/ui/messaging/channel_preview.dart';
 import 'package:intheloopapp/utils/bloc_utils.dart';
 import 'package:intheloopapp/utils/current_user_builder.dart';
 import 'package:intheloopapp/utils/premium_builder.dart';

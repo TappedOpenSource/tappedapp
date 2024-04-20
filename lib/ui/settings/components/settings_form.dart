@@ -16,6 +16,7 @@ import 'package:intheloopapp/ui/forms/twitter_text_field.dart';
 import 'package:intheloopapp/ui/forms/username_text_field.dart';
 import 'package:intheloopapp/ui/forms/youtube_text_field.dart';
 import 'package:intheloopapp/ui/profile/components/epk_button.dart';
+import 'package:intheloopapp/ui/settings/components/connect_spotify_button.dart';
 import 'package:intheloopapp/ui/settings/components/genre_selection.dart';
 import 'package:intheloopapp/ui/settings/components/label_selection.dart';
 import 'package:intheloopapp/ui/settings/components/theme_switch.dart';
@@ -92,11 +93,11 @@ class SettingsForm extends StatelessWidget {
                           value,
                         ),
               ),
-              SpotifyTextField(
-                initialValue: state.spotifyUrl,
-                onChanged: (value) =>
-                    context.read<SettingsCubit>().changeSpotify(value),
-              ),
+              // SpotifyTextField(
+              //   initialValue: state.spotifyUrl,
+              //   onChanged: (value) =>
+              //       context.read<SettingsCubit>().changeSpotify(value),
+              // ),
               YoutubeTextField(
                 initialValue: state.youtubeHandle,
                 onChanged: (value) =>
@@ -107,6 +108,8 @@ class SettingsForm extends StatelessWidget {
                 onChanged: (value) =>
                     context.read<SettingsCubit>().changeSoundcloud(value),
               ),
+              const SizedBox(height: 15),
+              ConnectSpotifyButton(),
               const SizedBox(height: 15),
               const ThemeSwitch(),
               const SizedBox(height: 15),

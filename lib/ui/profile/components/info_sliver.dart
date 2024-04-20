@@ -1,6 +1,7 @@
 import 'dart:ui';
 
 import 'package:feedback/feedback.dart';
+import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -187,7 +188,7 @@ class InfoSliver extends StatelessWidget {
                                       children: [
                                         if (isPremium)
                                           TextSpan(
-                                            text: '\$$value',
+                                            text: value,
                                             style: TextStyle(
                                               color:
                                                   theme.colorScheme.onSurface,
@@ -197,9 +198,11 @@ class InfoSliver extends StatelessWidget {
                                           WidgetSpan(
                                             child: ImageFiltered(
                                               imageFilter: ImageFilter.blur(
-                                                  sigmaX: 10, sigmaY: 10),
+                                                sigmaX: 10,
+                                                sigmaY: 10,
+                                              ),
                                               child: Text(
-                                                '\$???',
+                                                r'$???',
                                                 style: TextStyle(
                                                   color: theme
                                                       .colorScheme.onSurface,
@@ -411,6 +414,14 @@ class InfoSliver extends StatelessWidget {
                                     CupertinoIcons.chevron_forward,
                                   ),
                                   onTap: () {
+                                    FirebaseAnalytics.instance.logEvent(
+                                      name: 'ideal_performer_profile',
+                                      parameters: {
+                                        'venue_id': state.visitedUser.id,
+                                        'is_premium': isPremium,
+                                      },
+                                    );
+
                                     if (!isPremium) {
                                       context.push(PaywallPage());
                                       return;

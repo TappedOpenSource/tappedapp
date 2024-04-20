@@ -135,6 +135,16 @@ class UniLinkImpl extends DeepLinkRepository {
         return ConnectStripeRedirectDeepLink(
           id: accountId,
         );
+      case 'spotify':
+        final linkParameters = uri.queryParameters;
+        final code = linkParameters['code'];
+        if (code == null) {
+          return null;
+        }
+
+        return SpotifyRedirectDeepLink(
+          code: code,
+        );
       default:
         final username = segments.first;
 

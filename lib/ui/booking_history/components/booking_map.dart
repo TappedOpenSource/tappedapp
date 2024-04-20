@@ -46,7 +46,7 @@ class BookingMap extends StatelessWidget {
                 final theme = isDark ? mapboxDarkStyle : mapboxLightStyle;
                 return TileLayer(
                   urlTemplate:
-                  'https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token={accessToken}',
+                      'https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token={accessToken}',
                   additionalOptions: {
                     'accessToken': defaultMapboxToken,
                     'id': theme,
@@ -56,8 +56,10 @@ class BookingMap extends StatelessWidget {
               },
             ),
             BookingsPolygonLayer(bookings: state.bookings),
-            if (state.showFlierMarkers)
-              BookingsMarkerLayer(bookings: state.bookings),
+            BookingsMarkerLayer(
+              bookings: state.bookings,
+              showFliers: state.showFlierMarkers,
+            ),
             RichAttributionWidget(
               animationConfig: const ScaleRAWA(),
               // Or `FadeRAWA` as is default
@@ -65,12 +67,11 @@ class BookingMap extends StatelessWidget {
               attributions: [
                 TextSourceAttribution(
                   'OpenStreetMap contributors',
-                  onTap: () =>
-                      launchUrl(
-                        Uri.parse(
-                          'https://openstreetmap.org/copyright',
-                        ),
-                      ),
+                  onTap: () => launchUrl(
+                    Uri.parse(
+                      'https://openstreetmap.org/copyright',
+                    ),
+                  ),
                 ),
               ],
             ),

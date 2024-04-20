@@ -126,6 +126,7 @@ dependencies:
   modal_bottom_sheet: 3.0.0
   screenshot: ^2.3.0
   qr_flutter: ^4.1.0
+  dio: ^5.4.3+1
 
 dev_dependencies: 
   build_runner: ^2.4.8

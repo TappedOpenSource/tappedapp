@@ -53,6 +53,7 @@ export const opportunityFeedsRef = db.collection("opportunityFeeds");
 export const googlePlacesCacheRef = db.collection("googlePlacesCache");
 export const contactVenuesRef = db.collection("contactVenues");
 export const orphanEmailsRef = db.collection("orphanEmails");
+export const spotifyAccessTokenRef = db.collection("spotifyAccessToken");
 
 // const loopLikesSubcollection = "loopLikes";
 // const loopCommentsSubcollection = "loopComments";
@@ -84,6 +85,8 @@ export const GOOGLE_PLACES_API_KEY = defineSecret("GOOGLE_PLACES_API_KEY");
 export const SENDGRID_API_KEY = defineSecret("SENDGRID_API_KEY");
 export const POSTMARK_SERVER_ID = defineSecret("POSTMARK_SERVER_ID");
 export const SLACK_WEBHOOK_URL = defineSecret("SLACK_WEBHOOK_URL");
+export const SPOTIFY_CLIENT_ID = defineSecret("SPOTIFY_CLIENT_ID");
+export const SPOTIFY_CLIENT_SECRET = defineSecret("SPOTIFY_CLIENT_SECRET");
 
 export const starterCreditsTestPriceId = "price_1OE2ptDYybu1wznEqHNMGZax";
 export const basicCreditsTestPriceId = "price_1OE2rrDYybu1wznEqv4mmjoK";
@@ -114,7 +117,6 @@ export const verifiedBotUuid = "1c0d9380-873c-493a-a3f8-1283d5408673";
 export const verifyUserBadgeId = "0aa46576-1fbe-4312-8b69-e2fef3269083";
 
 export const projectId = app.options.projectId;
-
 
 export const getSecretValue = async (secretName: string): Promise<string | null> => {
   const fullName = `projects/${projectId}/secrets/${secretName}/versions/latest`;

@@ -12,6 +12,7 @@ enum DeepLinkType {
   settings,
   connectStripeRedirect,
   connectStripeRefresh,
+  spotify,
 }
 
 sealed class DeepLinkRedirect {
@@ -55,4 +56,12 @@ final class ConnectStripeRedirectDeepLink extends DeepLinkRedirect {
         );
       
   final String id;
+}
+
+final class SpotifyRedirectDeepLink extends DeepLinkRedirect {
+  const SpotifyRedirectDeepLink({
+    required this.code,
+  }) : super(type: DeepLinkType.spotify);
+
+  final String code;
 }

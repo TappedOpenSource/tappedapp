@@ -110,7 +110,7 @@ class _ConnectBankButtonState extends State<ConnectBankButton> {
                   behavior: SnackBarBehavior.floating,
                   backgroundColor: Colors.red,
                   content: Text(
-                    'Error connecting bank account',
+                    'error connecting bank account',
                   ),
                 ),
               );
@@ -122,7 +122,7 @@ class _ConnectBankButtonState extends State<ConnectBankButton> {
                   color: onSurfaceColor,
                 )
               : Text(
-                  'Connect Bank Account',
+                  'connect bank account',
                   style: TextStyle(
                     color: onSurfaceColor,
                     fontWeight: FontWeight.w700,
