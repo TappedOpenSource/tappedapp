@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:formz/formz.dart';
+import 'package:intheloopapp/data/spotify_repository.dart';
 import 'package:intheloopapp/domains/models/genre.dart';
+import 'package:intheloopapp/domains/spotify_bloc/spotify_bloc.dart';
 import 'package:intheloopapp/ui/forms/artist_name_text_field.dart';
 import 'package:intheloopapp/ui/forms/bio_text_field.dart';
 import 'package:intheloopapp/ui/forms/instagram_followers_text_field.dart';
@@ -22,6 +24,7 @@ import 'package:intheloopapp/ui/settings/components/label_selection.dart';
 import 'package:intheloopapp/ui/settings/components/theme_switch.dart';
 import 'package:intheloopapp/ui/settings/settings_cubit.dart';
 import 'package:intheloopapp/ui/themes.dart';
+import 'package:intheloopapp/utils/app_logger.dart';
 
 class SettingsForm extends StatelessWidget {
   const SettingsForm({super.key});
@@ -109,7 +112,6 @@ class SettingsForm extends StatelessWidget {
                     context.read<SettingsCubit>().changeSoundcloud(value),
               ),
               const SizedBox(height: 15),
-              ConnectSpotifyButton(),
               const SizedBox(height: 15),
               const ThemeSwitch(),
               const SizedBox(height: 15),
@@ -134,6 +136,29 @@ class SettingsForm extends StatelessWidget {
               ...switch (state.isPerformer) {
                 false => [],
                 true => [
+                    const SizedBox(height: 10),
+                    const ConnectSpotifyButton(),
+                    BlocBuilder<SpotifyBloc, SpotifyState>(
+                      builder: (context, state) {
+                        final spotifyRepo = context.read<SpotifyRepository>();
+                        return switch (state) {
+                          SpotifyInitial() => const SizedBox(),
+                          SpotifyUnauthenticated() => const SizedBox(),
+                          SpotifyAuthenticated(:final credentials) =>
+                            FilledButton(
+                              onPressed: () {
+                                logger.info('creds are: $credentials');
+                                spotifyRepo
+                                    .getMe(credentials.accessToken)
+                                    .then((value) {
+                                  print(value);
+                                });
+                              },
+                              child: Text('shit'),
+                            ),
+                        };
+                      },
+                    ),
                     const SizedBox(height: 10),
                     const LabelSelection(),
                     GenreSelection(

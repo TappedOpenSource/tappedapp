@@ -6,12 +6,12 @@ import 'package:intheloopapp/data/spotify_repository.dart';
 import 'package:intheloopapp/domains/models/spotify_credentials.dart';
 import 'package:intheloopapp/domains/models/spotify_user.dart';
 import 'package:intheloopapp/utils/app_logger.dart';
-import 'package:stream_chat_flutter/stream_chat_flutter.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 final dio = Dio();
 final _firestore = FirebaseFirestore.instance;
 final _spotifyAccessTokensRef = _firestore.collection('spotifyAccessTokens');
+const clientId = '3d6a0acb461948e5ad9a133720103445';
 
 class SpotifyImpl extends SpotifyRepository {
   @override
@@ -36,13 +36,43 @@ class SpotifyImpl extends SpotifyRepository {
         'code': code,
       });
 
-      final creds =
-          SpotifyCredentials.fromJson(res.data);
+      final creds = SpotifyCredentials.fromJson(res.data);
       return Option.of(creds);
     } catch (e, s) {
       logger.error('spotifyAuthorizeCodeGrant error', error: e, stackTrace: s);
       return const None();
     }
+  }
+
+  @override
+  Future<Option<SpotifyCredentials>> refreshAccessToken(
+    String userId,
+    String refreshToken,
+  ) async {
+    const url = 'https://accounts.spotify.com/api/token';
+
+    final res = await dio.post<Map<String, dynamic>>(
+      url,
+      options: Options(
+        headers: {'Content-Type': 'application/x-www-form-urlencoded'},
+      ),
+      data: {
+        'grant_type': 'refresh_token',
+        'refresh_token': refreshToken,
+        'client_id': clientId,
+      },
+    );
+
+    final body = res.data;
+    if (res.statusCode != 200 || body == null) {
+      logger.error('refreshAccessToken error');
+      return const None();
+    }
+
+    final creds = SpotifyCredentials.fromJson(body);
+    await setAccessToken(userId, creds);
+
+    return Option.of(creds);
   }
 
   @override
@@ -77,26 +107,37 @@ class SpotifyImpl extends SpotifyRepository {
   ///
   /// cURL
   /// curl --request GET \
-  //   --url https://api.spotify.com/v1/me \
-  //   --header 'Authorization: Bearer 1POdFZRZbvb...qqillRxMr2z'
+  ///   --url https://api.spotify.com/v1/me \
+  ///   --header 'Authorization: Bearer 1POdFZRZbvb...qqillRxMr2z'
   @override
   Future<Option<SpotifyUser>> getMe(String accessToken) async {
-    // get user info from spotify api with access token
+    // refresh token if expired
 
-    final res = await dio.get(
+    // get user info from spotify api with access token
+    final res = await dio.get<Map<String, dynamic>>(
       'https://api.spotify.com/v1/me',
       options: Options(
         headers: {
-          'Authorization ': 'Bearer $accessToken',
+          'Authorization': ' Bearer $accessToken',
         },
       ),
     );
 
-    if (res.statusCode != 200) {
+    if (res.statusCode == 401) {
+      logger.error('getMe error: 401');
+      // refresh token
+
+      // retry
       return const None();
     }
 
-    final t = SpotifyUser.fromJson(res.data as Map<String, dynamic>);
+    final body = res.data;
+    if (res.statusCode != 200 || body == null) {
+      logger.error('getMe error');
+      return const None();
+    }
+
+    final t = SpotifyUser.fromJson(body);
 
     return Option.of(t);
   }

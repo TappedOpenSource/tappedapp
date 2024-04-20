@@ -69,6 +69,9 @@ export const spotifyAuthorizeCodeGrant = onCall(
 
     const accessToken = body["access_token"];
     const refreshToken = body["refresh_token"];
+    const expiresIn = body["expires_in"];
+    const scope = body["scope"];
+    const tokenType = body["token_type"];
 
     info(
       "received access token:",
@@ -77,7 +80,10 @@ export const spotifyAuthorizeCodeGrant = onCall(
     spotifyClient.setAccessToken(accessToken);
 
     return {
-      accessToken: accessToken,
-      refreshToken: refreshToken,
+      accessToken,
+      refreshToken,
+      expiresIn,
+      scope,
+      tokenType,
     };
   });

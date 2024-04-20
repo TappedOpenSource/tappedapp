@@ -6,17 +6,17 @@ part 'spotify_user.g.dart';
 @freezed
 abstract class SpotifyUser with _$SpotifyUser {
   const factory SpotifyUser({
-    required String country,
-    required String display_name,
-    required String email,
-    required ExplicitContent explicit_content,
-    required ExternalUrls external_urls,
-    required Followers followers,
-    required String href,
-    required String id,
+    required String? country,
+    required String? display_name,
+    required String? email,
+    required ExplicitContent? explicit_content,
+    required ExternalUrls? external_urls,
+    required Followers? followers,
+    required String? href,
+    required String? id,
     required List<Image> images,
-    required String product,
-    required String type,
+    required String? product,
+    required String? type,
     required String uri,
   }) = _SpotifyUser;
 
@@ -38,7 +38,7 @@ abstract class ExplicitContent with _$ExplicitContent {
 @freezed
 abstract class ExternalUrls with _$ExternalUrls {
   const factory ExternalUrls({
-    required String spotify,
+    required String? spotify,
   }) = _ExternalUrls;
 
   factory ExternalUrls.fromJson(Map<String, dynamic> json) =>
@@ -48,8 +48,8 @@ abstract class ExternalUrls with _$ExternalUrls {
 @freezed
 abstract class Followers with _$Followers {
   const factory Followers({
-    required String href,
-    required int total,
+    required String? href,
+    required int? total,
   }) = _Followers;
 
   factory Followers.fromJson(Map<String, dynamic> json) =>
@@ -59,9 +59,9 @@ abstract class Followers with _$Followers {
 @freezed
 abstract class Image with _$Image {
   const factory Image({
-    required String url,
-    required int height,
-    required int width,
+    required String? url,
+    required int? height,
+    required int? width,
   }) = _Image;
 
   factory Image.fromJson(Map<String, dynamic> json) => _$ImageFromJson(json);

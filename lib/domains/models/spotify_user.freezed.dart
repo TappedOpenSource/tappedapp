@@ -20,17 +20,17 @@ SpotifyUser _$SpotifyUserFromJson(Map<String, dynamic> json) {
 
 /// @nodoc
 mixin _$SpotifyUser {
-  String get country => throw _privateConstructorUsedError;
-  String get display_name => throw _privateConstructorUsedError;
-  String get email => throw _privateConstructorUsedError;
-  ExplicitContent get explicit_content => throw _privateConstructorUsedError;
-  ExternalUrls get external_urls => throw _privateConstructorUsedError;
-  Followers get followers => throw _privateConstructorUsedError;
-  String get href => throw _privateConstructorUsedError;
-  String get id => throw _privateConstructorUsedError;
+  String? get country => throw _privateConstructorUsedError;
+  String? get display_name => throw _privateConstructorUsedError;
+  String? get email => throw _privateConstructorUsedError;
+  ExplicitContent? get explicit_content => throw _privateConstructorUsedError;
+  ExternalUrls? get external_urls => throw _privateConstructorUsedError;
+  Followers? get followers => throw _privateConstructorUsedError;
+  String? get href => throw _privateConstructorUsedError;
+  String? get id => throw _privateConstructorUsedError;
   List<Image> get images => throw _privateConstructorUsedError;
-  String get product => throw _privateConstructorUsedError;
-  String get type => throw _privateConstructorUsedError;
+  String? get product => throw _privateConstructorUsedError;
+  String? get type => throw _privateConstructorUsedError;
   String get uri => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
@@ -46,22 +46,22 @@ abstract class $SpotifyUserCopyWith<$Res> {
       _$SpotifyUserCopyWithImpl<$Res, SpotifyUser>;
   @useResult
   $Res call(
-      {String country,
-      String display_name,
-      String email,
-      ExplicitContent explicit_content,
-      ExternalUrls external_urls,
-      Followers followers,
-      String href,
-      String id,
+      {String? country,
+      String? display_name,
+      String? email,
+      ExplicitContent? explicit_content,
+      ExternalUrls? external_urls,
+      Followers? followers,
+      String? href,
+      String? id,
       List<Image> images,
-      String product,
-      String type,
+      String? product,
+      String? type,
       String uri});
 
-  $ExplicitContentCopyWith<$Res> get explicit_content;
-  $ExternalUrlsCopyWith<$Res> get external_urls;
-  $FollowersCopyWith<$Res> get followers;
+  $ExplicitContentCopyWith<$Res>? get explicit_content;
+  $ExternalUrlsCopyWith<$Res>? get external_urls;
+  $FollowersCopyWith<$Res>? get followers;
 }
 
 /// @nodoc
@@ -77,64 +77,64 @@ class _$SpotifyUserCopyWithImpl<$Res, $Val extends SpotifyUser>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? country = null,
-    Object? display_name = null,
-    Object? email = null,
-    Object? explicit_content = null,
-    Object? external_urls = null,
-    Object? followers = null,
-    Object? href = null,
-    Object? id = null,
+    Object? country = freezed,
+    Object? display_name = freezed,
+    Object? email = freezed,
+    Object? explicit_content = freezed,
+    Object? external_urls = freezed,
+    Object? followers = freezed,
+    Object? href = freezed,
+    Object? id = freezed,
     Object? images = null,
-    Object? product = null,
-    Object? type = null,
+    Object? product = freezed,
+    Object? type = freezed,
     Object? uri = null,
   }) {
     return _then(_value.copyWith(
-      country: null == country
+      country: freezed == country
           ? _value.country
           : country // ignore: cast_nullable_to_non_nullable
-              as String,
-      display_name: null == display_name
+              as String?,
+      display_name: freezed == display_name
           ? _value.display_name
           : display_name // ignore: cast_nullable_to_non_nullable
-              as String,
-      email: null == email
+              as String?,
+      email: freezed == email
           ? _value.email
           : email // ignore: cast_nullable_to_non_nullable
-              as String,
-      explicit_content: null == explicit_content
+              as String?,
+      explicit_content: freezed == explicit_content
           ? _value.explicit_content
           : explicit_content // ignore: cast_nullable_to_non_nullable
-              as ExplicitContent,
-      external_urls: null == external_urls
+              as ExplicitContent?,
+      external_urls: freezed == external_urls
           ? _value.external_urls
           : external_urls // ignore: cast_nullable_to_non_nullable
-              as ExternalUrls,
-      followers: null == followers
+              as ExternalUrls?,
+      followers: freezed == followers
           ? _value.followers
           : followers // ignore: cast_nullable_to_non_nullable
-              as Followers,
-      href: null == href
+              as Followers?,
+      href: freezed == href
           ? _value.href
           : href // ignore: cast_nullable_to_non_nullable
-              as String,
-      id: null == id
+              as String?,
+      id: freezed == id
           ? _value.id
           : id // ignore: cast_nullable_to_non_nullable
-              as String,
+              as String?,
       images: null == images
           ? _value.images
           : images // ignore: cast_nullable_to_non_nullable
               as List<Image>,
-      product: null == product
+      product: freezed == product
           ? _value.product
           : product // ignore: cast_nullable_to_non_nullable
-              as String,
-      type: null == type
+              as String?,
+      type: freezed == type
           ? _value.type
           : type // ignore: cast_nullable_to_non_nullable
-              as String,
+              as String?,
       uri: null == uri
           ? _value.uri
           : uri // ignore: cast_nullable_to_non_nullable
@@ -144,24 +144,36 @@ class _$SpotifyUserCopyWithImpl<$Res, $Val extends SpotifyUser>
 
   @override
   @pragma('vm:prefer-inline')
-  $ExplicitContentCopyWith<$Res> get explicit_content {
-    return $ExplicitContentCopyWith<$Res>(_value.explicit_content, (value) {
+  $ExplicitContentCopyWith<$Res>? get explicit_content {
+    if (_value.explicit_content == null) {
+      return null;
+    }
+
+    return $ExplicitContentCopyWith<$Res>(_value.explicit_content!, (value) {
       return _then(_value.copyWith(explicit_content: value) as $Val);
     });
   }
 
   @override
   @pragma('vm:prefer-inline')
-  $ExternalUrlsCopyWith<$Res> get external_urls {
-    return $ExternalUrlsCopyWith<$Res>(_value.external_urls, (value) {
+  $ExternalUrlsCopyWith<$Res>? get external_urls {
+    if (_value.external_urls == null) {
+      return null;
+    }
+
+    return $ExternalUrlsCopyWith<$Res>(_value.external_urls!, (value) {
       return _then(_value.copyWith(external_urls: value) as $Val);
     });
   }
 
   @override
   @pragma('vm:prefer-inline')
-  $FollowersCopyWith<$Res> get followers {
-    return $FollowersCopyWith<$Res>(_value.followers, (value) {
+  $FollowersCopyWith<$Res>? get followers {
+    if (_value.followers == null) {
+      return null;
+    }
+
+    return $FollowersCopyWith<$Res>(_value.followers!, (value) {
       return _then(_value.copyWith(followers: value) as $Val);
     });
   }
@@ -176,25 +188,25 @@ abstract class _$$SpotifyUserImplCopyWith<$Res>
   @override
   @useResult
   $Res call(
-      {String country,
-      String display_name,
-      String email,
-      ExplicitContent explicit_content,
-      ExternalUrls external_urls,
-      Followers followers,
-      String href,
-      String id,
+      {String? country,
+      String? display_name,
+      String? email,
+      ExplicitContent? explicit_content,
+      ExternalUrls? external_urls,
+      Followers? followers,
+      String? href,
+      String? id,
       List<Image> images,
-      String product,
-      String type,
+      String? product,
+      String? type,
       String uri});
 
   @override
-  $ExplicitContentCopyWith<$Res> get explicit_content;
+  $ExplicitContentCopyWith<$Res>? get explicit_content;
   @override
-  $ExternalUrlsCopyWith<$Res> get external_urls;
+  $ExternalUrlsCopyWith<$Res>? get external_urls;
   @override
-  $FollowersCopyWith<$Res> get followers;
+  $FollowersCopyWith<$Res>? get followers;
 }
 
 /// @nodoc
@@ -208,64 +220,64 @@ class __$$SpotifyUserImplCopyWithImpl<$Res>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? country = null,
-    Object? display_name = null,
-    Object? email = null,
-    Object? explicit_content = null,
-    Object? external_urls = null,
-    Object? followers = null,
-    Object? href = null,
-    Object? id = null,
+    Object? country = freezed,
+    Object? display_name = freezed,
+    Object? email = freezed,
+    Object? explicit_content = freezed,
+    Object? external_urls = freezed,
+    Object? followers = freezed,
+    Object? href = freezed,
+    Object? id = freezed,
     Object? images = null,
-    Object? product = null,
-    Object? type = null,
+    Object? product = freezed,
+    Object? type = freezed,
     Object? uri = null,
   }) {
     return _then(_$SpotifyUserImpl(
-      country: null == country
+      country: freezed == country
           ? _value.country
           : country // ignore: cast_nullable_to_non_nullable
-              as String,
-      display_name: null == display_name
+              as String?,
+      display_name: freezed == display_name
           ? _value.display_name
           : display_name // ignore: cast_nullable_to_non_nullable
-              as String,
-      email: null == email
+              as String?,
+      email: freezed == email
           ? _value.email
           : email // ignore: cast_nullable_to_non_nullable
-              as String,
-      explicit_content: null == explicit_content
+              as String?,
+      explicit_content: freezed == explicit_content
           ? _value.explicit_content
           : explicit_content // ignore: cast_nullable_to_non_nullable
-              as ExplicitContent,
-      external_urls: null == external_urls
+              as ExplicitContent?,
+      external_urls: freezed == external_urls
           ? _value.external_urls
           : external_urls // ignore: cast_nullable_to_non_nullable
-              as ExternalUrls,
-      followers: null == followers
+              as ExternalUrls?,
+      followers: freezed == followers
           ? _value.followers
           : followers // ignore: cast_nullable_to_non_nullable
-              as Followers,
-      href: null == href
+              as Followers?,
+      href: freezed == href
           ? _value.href
           : href // ignore: cast_nullable_to_non_nullable
-              as String,
-      id: null == id
+              as String?,
+      id: freezed == id
           ? _value.id
           : id // ignore: cast_nullable_to_non_nullable
-              as String,
+              as String?,
       images: null == images
           ? _value._images
           : images // ignore: cast_nullable_to_non_nullable
               as List<Image>,
-      product: null == product
+      product: freezed == product
           ? _value.product
           : product // ignore: cast_nullable_to_non_nullable
-              as String,
-      type: null == type
+              as String?,
+      type: freezed == type
           ? _value.type
           : type // ignore: cast_nullable_to_non_nullable
-              as String,
+              as String?,
       uri: null == uri
           ? _value.uri
           : uri // ignore: cast_nullable_to_non_nullable
@@ -296,21 +308,21 @@ class _$SpotifyUserImpl implements _SpotifyUser {
       _$$SpotifyUserImplFromJson(json);
 
   @override
-  final String country;
+  final String? country;
   @override
-  final String display_name;
+  final String? display_name;
   @override
-  final String email;
+  final String? email;
   @override
-  final ExplicitContent explicit_content;
+  final ExplicitContent? explicit_content;
   @override
-  final ExternalUrls external_urls;
+  final ExternalUrls? external_urls;
   @override
-  final Followers followers;
+  final Followers? followers;
   @override
-  final String href;
+  final String? href;
   @override
-  final String id;
+  final String? id;
   final List<Image> _images;
   @override
   List<Image> get images {
@@ -320,9 +332,9 @@ class _$SpotifyUserImpl implements _SpotifyUser {
   }
 
   @override
-  final String product;
+  final String? product;
   @override
-  final String type;
+  final String? type;
   @override
   final String uri;
 
@@ -387,44 +399,44 @@ class _$SpotifyUserImpl implements _SpotifyUser {
 
 abstract class _SpotifyUser implements SpotifyUser {
   const factory _SpotifyUser(
-      {required final String country,
-      required final String display_name,
-      required final String email,
-      required final ExplicitContent explicit_content,
-      required final ExternalUrls external_urls,
-      required final Followers followers,
-      required final String href,
-      required final String id,
+      {required final String? country,
+      required final String? display_name,
+      required final String? email,
+      required final ExplicitContent? explicit_content,
+      required final ExternalUrls? external_urls,
+      required final Followers? followers,
+      required final String? href,
+      required final String? id,
       required final List<Image> images,
-      required final String product,
-      required final String type,
+      required final String? product,
+      required final String? type,
       required final String uri}) = _$SpotifyUserImpl;
 
   factory _SpotifyUser.fromJson(Map<String, dynamic> json) =
       _$SpotifyUserImpl.fromJson;
 
   @override
-  String get country;
+  String? get country;
   @override
-  String get display_name;
+  String? get display_name;
   @override
-  String get email;
+  String? get email;
   @override
-  ExplicitContent get explicit_content;
+  ExplicitContent? get explicit_content;
   @override
-  ExternalUrls get external_urls;
+  ExternalUrls? get external_urls;
   @override
-  Followers get followers;
+  Followers? get followers;
   @override
-  String get href;
+  String? get href;
   @override
-  String get id;
+  String? get id;
   @override
   List<Image> get images;
   @override
-  String get product;
+  String? get product;
   @override
-  String get type;
+  String? get type;
   @override
   String get uri;
   @override
@@ -597,7 +609,7 @@ ExternalUrls _$ExternalUrlsFromJson(Map<String, dynamic> json) {
 
 /// @nodoc
 mixin _$ExternalUrls {
-  String get spotify => throw _privateConstructorUsedError;
+  String? get spotify => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
@@ -611,7 +623,7 @@ abstract class $ExternalUrlsCopyWith<$Res> {
           ExternalUrls value, $Res Function(ExternalUrls) then) =
       _$ExternalUrlsCopyWithImpl<$Res, ExternalUrls>;
   @useResult
-  $Res call({String spotify});
+  $Res call({String? spotify});
 }
 
 /// @nodoc
@@ -627,13 +639,13 @@ class _$ExternalUrlsCopyWithImpl<$Res, $Val extends ExternalUrls>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? spotify = null,
+    Object? spotify = freezed,
   }) {
     return _then(_value.copyWith(
-      spotify: null == spotify
+      spotify: freezed == spotify
           ? _value.spotify
           : spotify // ignore: cast_nullable_to_non_nullable
-              as String,
+              as String?,
     ) as $Val);
   }
 }
@@ -646,7 +658,7 @@ abstract class _$$ExternalUrlsImplCopyWith<$Res>
       __$$ExternalUrlsImplCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call({String spotify});
+  $Res call({String? spotify});
 }
 
 /// @nodoc
@@ -660,13 +672,13 @@ class __$$ExternalUrlsImplCopyWithImpl<$Res>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? spotify = null,
+    Object? spotify = freezed,
   }) {
     return _then(_$ExternalUrlsImpl(
-      spotify: null == spotify
+      spotify: freezed == spotify
           ? _value.spotify
           : spotify // ignore: cast_nullable_to_non_nullable
-              as String,
+              as String?,
     ));
   }
 }
@@ -680,7 +692,7 @@ class _$ExternalUrlsImpl implements _ExternalUrls {
       _$$ExternalUrlsImplFromJson(json);
 
   @override
-  final String spotify;
+  final String? spotify;
 
   @override
   String toString() {
@@ -714,14 +726,14 @@ class _$ExternalUrlsImpl implements _ExternalUrls {
 }
 
 abstract class _ExternalUrls implements ExternalUrls {
-  const factory _ExternalUrls({required final String spotify}) =
+  const factory _ExternalUrls({required final String? spotify}) =
       _$ExternalUrlsImpl;
 
   factory _ExternalUrls.fromJson(Map<String, dynamic> json) =
       _$ExternalUrlsImpl.fromJson;
 
   @override
-  String get spotify;
+  String? get spotify;
   @override
   @JsonKey(ignore: true)
   _$$ExternalUrlsImplCopyWith<_$ExternalUrlsImpl> get copyWith =>
@@ -734,8 +746,8 @@ Followers _$FollowersFromJson(Map<String, dynamic> json) {
 
 /// @nodoc
 mixin _$Followers {
-  String get href => throw _privateConstructorUsedError;
-  int get total => throw _privateConstructorUsedError;
+  String? get href => throw _privateConstructorUsedError;
+  int? get total => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
@@ -748,7 +760,7 @@ abstract class $FollowersCopyWith<$Res> {
   factory $FollowersCopyWith(Followers value, $Res Function(Followers) then) =
       _$FollowersCopyWithImpl<$Res, Followers>;
   @useResult
-  $Res call({String href, int total});
+  $Res call({String? href, int? total});
 }
 
 /// @nodoc
@@ -764,18 +776,18 @@ class _$FollowersCopyWithImpl<$Res, $Val extends Followers>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? href = null,
-    Object? total = null,
+    Object? href = freezed,
+    Object? total = freezed,
   }) {
     return _then(_value.copyWith(
-      href: null == href
+      href: freezed == href
           ? _value.href
           : href // ignore: cast_nullable_to_non_nullable
-              as String,
-      total: null == total
+              as String?,
+      total: freezed == total
           ? _value.total
           : total // ignore: cast_nullable_to_non_nullable
-              as int,
+              as int?,
     ) as $Val);
   }
 }
@@ -788,7 +800,7 @@ abstract class _$$FollowersImplCopyWith<$Res>
       __$$FollowersImplCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call({String href, int total});
+  $Res call({String? href, int? total});
 }
 
 /// @nodoc
@@ -802,18 +814,18 @@ class __$$FollowersImplCopyWithImpl<$Res>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? href = null,
-    Object? total = null,
+    Object? href = freezed,
+    Object? total = freezed,
   }) {
     return _then(_$FollowersImpl(
-      href: null == href
+      href: freezed == href
           ? _value.href
           : href // ignore: cast_nullable_to_non_nullable
-              as String,
-      total: null == total
+              as String?,
+      total: freezed == total
           ? _value.total
           : total // ignore: cast_nullable_to_non_nullable
-              as int,
+              as int?,
     ));
   }
 }
@@ -827,9 +839,9 @@ class _$FollowersImpl implements _Followers {
       _$$FollowersImplFromJson(json);
 
   @override
-  final String href;
+  final String? href;
   @override
-  final int total;
+  final int? total;
 
   @override
   String toString() {
@@ -865,15 +877,16 @@ class _$FollowersImpl implements _Followers {
 
 abstract class _Followers implements Followers {
   const factory _Followers(
-      {required final String href, required final int total}) = _$FollowersImpl;
+      {required final String? href,
+      required final int? total}) = _$FollowersImpl;
 
   factory _Followers.fromJson(Map<String, dynamic> json) =
       _$FollowersImpl.fromJson;
 
   @override
-  String get href;
+  String? get href;
   @override
-  int get total;
+  int? get total;
   @override
   @JsonKey(ignore: true)
   _$$FollowersImplCopyWith<_$FollowersImpl> get copyWith =>
@@ -886,9 +899,9 @@ Image _$ImageFromJson(Map<String, dynamic> json) {
 
 /// @nodoc
 mixin _$Image {
-  String get url => throw _privateConstructorUsedError;
-  int get height => throw _privateConstructorUsedError;
-  int get width => throw _privateConstructorUsedError;
+  String? get url => throw _privateConstructorUsedError;
+  int? get height => throw _privateConstructorUsedError;
+  int? get width => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
@@ -900,7 +913,7 @@ abstract class $ImageCopyWith<$Res> {
   factory $ImageCopyWith(Image value, $Res Function(Image) then) =
       _$ImageCopyWithImpl<$Res, Image>;
   @useResult
-  $Res call({String url, int height, int width});
+  $Res call({String? url, int? height, int? width});
 }
 
 /// @nodoc
@@ -916,23 +929,23 @@ class _$ImageCopyWithImpl<$Res, $Val extends Image>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? url = null,
-    Object? height = null,
-    Object? width = null,
+    Object? url = freezed,
+    Object? height = freezed,
+    Object? width = freezed,
   }) {
     return _then(_value.copyWith(
-      url: null == url
+      url: freezed == url
           ? _value.url
           : url // ignore: cast_nullable_to_non_nullable
-              as String,
-      height: null == height
+              as String?,
+      height: freezed == height
           ? _value.height
           : height // ignore: cast_nullable_to_non_nullable
-              as int,
-      width: null == width
+              as int?,
+      width: freezed == width
           ? _value.width
           : width // ignore: cast_nullable_to_non_nullable
-              as int,
+              as int?,
     ) as $Val);
   }
 }
@@ -944,7 +957,7 @@ abstract class _$$ImageImplCopyWith<$Res> implements $ImageCopyWith<$Res> {
       __$$ImageImplCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call({String url, int height, int width});
+  $Res call({String? url, int? height, int? width});
 }
 
 /// @nodoc
@@ -958,23 +971,23 @@ class __$$ImageImplCopyWithImpl<$Res>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? url = null,
-    Object? height = null,
-    Object? width = null,
+    Object? url = freezed,
+    Object? height = freezed,
+    Object? width = freezed,
   }) {
     return _then(_$ImageImpl(
-      url: null == url
+      url: freezed == url
           ? _value.url
           : url // ignore: cast_nullable_to_non_nullable
-              as String,
-      height: null == height
+              as String?,
+      height: freezed == height
           ? _value.height
           : height // ignore: cast_nullable_to_non_nullable
-              as int,
-      width: null == width
+              as int?,
+      width: freezed == width
           ? _value.width
           : width // ignore: cast_nullable_to_non_nullable
-              as int,
+              as int?,
     ));
   }
 }
@@ -989,11 +1002,11 @@ class _$ImageImpl implements _Image {
       _$$ImageImplFromJson(json);
 
   @override
-  final String url;
+  final String? url;
   @override
-  final int height;
+  final int? height;
   @override
-  final int width;
+  final int? width;
 
   @override
   String toString() {
@@ -1030,18 +1043,18 @@ class _$ImageImpl implements _Image {
 
 abstract class _Image implements Image {
   const factory _Image(
-      {required final String url,
-      required final int height,
-      required final int width}) = _$ImageImpl;
+      {required final String? url,
+      required final int? height,
+      required final int? width}) = _$ImageImpl;
 
   factory _Image.fromJson(Map<String, dynamic> json) = _$ImageImpl.fromJson;
 
   @override
-  String get url;
+  String? get url;
   @override
-  int get height;
+  int? get height;
   @override
-  int get width;
+  int? get width;
   @override
   @JsonKey(ignore: true)
   _$$ImageImplCopyWith<_$ImageImpl> get copyWith =>

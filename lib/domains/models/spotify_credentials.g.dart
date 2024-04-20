@@ -11,6 +11,9 @@ _$SpotifyCredentialsImpl _$$SpotifyCredentialsImplFromJson(
     _$SpotifyCredentialsImpl(
       accessToken: json['accessToken'] as String,
       refreshToken: json['refreshToken'] as String,
+      expiresIn: json['expiresIn'] as int,
+      tokenType: json['tokenType'] as String,
+      scope: json['scope'] as String,
     );
 
 Map<String, dynamic> _$$SpotifyCredentialsImplToJson(
@@ -18,4 +21,7 @@ Map<String, dynamic> _$$SpotifyCredentialsImplToJson(
     <String, dynamic>{
       'accessToken': instance.accessToken,
       'refreshToken': instance.refreshToken,
+      'expiresIn': instance.expiresIn,
+      'tokenType': instance.tokenType,
+      'scope': instance.scope,
     };
