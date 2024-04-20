@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:cloud_functions/cloud_functions.dart';
 import 'package:dio/dio.dart';
+import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:fpdart/fpdart.dart';
 import 'package:intheloopapp/data/spotify_repository.dart';
 import 'package:intheloopapp/domains/models/spotify_credentials.dart';
@@ -16,8 +17,13 @@ const clientId = '3d6a0acb461948e5ad9a133720103445';
 class SpotifyImpl extends SpotifyRepository {
   @override
   Future<void> signInWithSpotify() async {
+    await FirebaseAnalytics.instance.logEvent(
+      name: 'signInWithSpotify',
+    );
+
     final spotifyRedirectUri = Uri.parse(
-        'https://us-central1-in-the-loop-306520.cloudfunctions.net/spotifyRedirect');
+      'https://us-central1-in-the-loop-306520.cloudfunctions.net/spotifyRedirect',
+    );
     await launchUrl(
       spotifyRedirectUri,
       mode: LaunchMode.externalApplication,
@@ -49,6 +55,13 @@ class SpotifyImpl extends SpotifyRepository {
     String userId,
     String refreshToken,
   ) async {
+    await FirebaseAnalytics.instance.logEvent(
+      name: 'refreshAccessToken',
+      parameters: {
+        'userId': userId,
+      },
+    );
+
     final callable = FirebaseFunctions.instance.httpsCallable(
       'spotifyRefreshToken',
     );
@@ -67,6 +80,12 @@ class SpotifyImpl extends SpotifyRepository {
 
   @override
   Future<Option<SpotifyCredentials>> getAccessToken(String userId) async {
+    await FirebaseAnalytics.instance.logEvent(
+      name: 'getAccessToken',
+      parameters: {
+        'userId': userId,
+      },
+    );
     // check if code is in local storage
 
     final tokenSnap = await _spotifyAccessTokensRef.doc(userId).get();
@@ -81,6 +100,12 @@ class SpotifyImpl extends SpotifyRepository {
 
   @override
   Future<void> setAccessToken(String userId, SpotifyCredentials creds) async {
+    await FirebaseAnalytics.instance.logEvent(
+      name: 'setAccessToken',
+      parameters: {
+        'userId': userId,
+      },
+    );
     // save token to local storage
 
     // save token to firestore
@@ -104,7 +129,12 @@ class SpotifyImpl extends SpotifyRepository {
     String userId,
     SpotifyCredentials credentials,
   ) async {
-    // refresh token if expired
+    await FirebaseAnalytics.instance.logEvent(
+      name: 'getMe',
+      parameters: {
+        'userId': userId,
+      },
+    );
 
     // get user info from spotify api with access token
     final res = await dio.get<Map<String, dynamic>>(
