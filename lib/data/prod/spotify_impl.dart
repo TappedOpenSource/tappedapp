@@ -49,26 +49,16 @@ class SpotifyImpl extends SpotifyRepository {
     String userId,
     String refreshToken,
   ) async {
-    const url = 'https://accounts.spotify.com/api/token';
-
-    final res = await dio.post<Map<String, dynamic>>(
-      url,
-      options: Options(
-        headers: {'Content-Type': 'application/x-www-form-urlencoded'},
-      ),
-      data: {
-        'grant_type': 'refresh_token',
-        'refresh_token': refreshToken,
-        'client_id': clientId,
-      },
+    final callable = FirebaseFunctions.instance.httpsCallable(
+      'spotifyRefreshToken',
     );
 
-    final body = res.data;
-    if (res.statusCode != 200 || body == null) {
-      logger.error('refreshAccessToken error');
-      return const None();
-    }
+    final res = await callable.call<Map<String, dynamic>>({
+      'refreshToken': refreshToken,
+    });
 
+    final body = res.data;
+    logger.info('refreshAccessToken body: $body');
     final creds = SpotifyCredentials.fromJson(body);
     await setAccessToken(userId, creds);
 
@@ -110,15 +100,19 @@ class SpotifyImpl extends SpotifyRepository {
   ///   --url https://api.spotify.com/v1/me \
   ///   --header 'Authorization: Bearer 1POdFZRZbvb...qqillRxMr2z'
   @override
-  Future<Option<SpotifyUser>> getMe(String accessToken) async {
+  Future<Option<SpotifyUser>> getMe(
+    String userId,
+    SpotifyCredentials credentials,
+  ) async {
     // refresh token if expired
 
     // get user info from spotify api with access token
     final res = await dio.get<Map<String, dynamic>>(
       'https://api.spotify.com/v1/me',
       options: Options(
+        validateStatus: (status) => status == 200 || status == 401,
         headers: {
-          'Authorization': ' Bearer $accessToken',
+          'Authorization': ' Bearer ${credentials.accessToken}',
         },
       ),
     );
@@ -126,9 +120,15 @@ class SpotifyImpl extends SpotifyRepository {
     if (res.statusCode == 401) {
       logger.error('getMe error: 401');
       // refresh token
+      final newCreds = await refreshAccessToken(
+        userId,
+        credentials.refreshToken,
+      );
 
-      // retry
-      return const None();
+      return switch (newCreds) {
+        None() => Future.value(const None()),
+        Some(:final value) => getMe(userId, value),
+      };
     }
 
     final body = res.data;

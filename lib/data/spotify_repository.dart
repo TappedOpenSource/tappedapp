@@ -18,5 +18,8 @@ abstract class SpotifyRepository {
 
   Future<void> clearAccessToken(String userId);
 
-  Future<Option<SpotifyUser>> getMe(String accessToken);
+  Future<Option<SpotifyUser>> getMe(
+    String currentUserId,
+    SpotifyCredentials credentials,
+  );
 }

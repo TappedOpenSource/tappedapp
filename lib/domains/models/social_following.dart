@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:fpdart/fpdart.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
+import 'package:intheloopapp/domains/models/spotify_user.dart';
 
 part 'social_following.freezed.dart';
 
@@ -19,7 +20,7 @@ class SocialFollowing with _$SocialFollowing {
     @Default(0) int twitterFollowers,
     @Default(None()) Option<String> facebookHandle,
     @Default(0) int facebookFollowers,
-    @Default(None()) Option<String> spotifyUrl,
+    @Default(None()) Option<SpotifyUser> spotifyUser,
     @Default(0) int spotifyMonthlyListeners,
     @Default(None()) Option<String> soundcloudHandle,
     @Default(0) int soundcloudFollowers,

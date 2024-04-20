@@ -87,3 +87,51 @@ export const spotifyAuthorizeCodeGrant = onCall(
       tokenType,
     };
   });
+
+export const spotifyRefreshToken = onCall(
+  { secrets: [ SPOTIFY_CLIENT_ID, SPOTIFY_CLIENT_SECRET ] },
+  async (request) => {
+    const spotifyClient = new SpotifyWebApi({
+      clientId: SPOTIFY_CLIENT_ID.value(),
+      clientSecret: SPOTIFY_CLIENT_SECRET.value(),
+      redirectUri: "https://tapped.ai/spotify",
+    });
+
+    const { refreshToken } = request.data as { refreshToken: string };
+
+    const res = await fetch(
+      "https://accounts.spotify.com/api/token",
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/x-www-form-urlencoded",
+          Authorization: "Basic " + Buffer.from(SPOTIFY_CLIENT_ID.value() + ":" + SPOTIFY_CLIENT_SECRET.value()).toString("base64"),
+        },
+        body: new URLSearchParams({
+          grant_type: "refresh_token",
+          refresh_token: refreshToken,
+        }),
+      }
+    );
+
+    const body = await res.json();
+    info({ body });
+    const accessToken = body["access_token"];
+    const expiresIn = body["expires_in"];
+    const tokenType = body["token_type"];
+    const scope = body["scope"];
+
+    info(
+      "received access token:",
+      accessToken,
+    );
+    spotifyClient.setAccessToken(accessToken);
+
+    return {
+      accessToken,
+      expiresIn,
+      tokenType,
+      scope,
+      refreshToken,
+    };
+  });
