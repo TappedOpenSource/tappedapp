@@ -125,6 +125,7 @@ class MoreOptionsButton extends StatelessWidget {
                     parameters: {
                       'user_id': user.id,
                       'type': 'link',
+                      'from': 'profile_page',
                     },
                   );
 

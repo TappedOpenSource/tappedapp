@@ -51,6 +51,7 @@ class _ShareProfileViewState extends State<ShareProfileView> {
         parameters: {
           'user_id': widget.userId,
           'type': 'image',
+          'from': 'profile_share_page',
         },
       );
 
