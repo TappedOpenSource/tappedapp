@@ -9,7 +9,6 @@ import 'package:intheloopapp/data/spotify_repository.dart';
 import 'package:intheloopapp/domains/navigation_bloc/navigation_bloc.dart';
 import 'package:intheloopapp/domains/navigation_bloc/tapped_route.dart';
 import 'package:intheloopapp/domains/onboarding_bloc/onboarding_bloc.dart';
-import 'package:intheloopapp/domains/spotify_bloc/spotify_bloc.dart';
 import 'package:intheloopapp/utils/app_logger.dart';
 
 part 'deep_link_event.dart';
@@ -22,8 +21,6 @@ class DeepLinkBloc extends Bloc<DeepLinkEvent, DeepLinkState> {
     required this.nav,
     required this.deepLinks,
     required this.database,
-    required this.spotify,
-    required this.spotifyBloc,
   }) : super(DeepLinkInitial()) {
     on<MonitorDeepLinks>((event, emit) {
       logger.debug('monitoring deep links');
@@ -88,22 +85,6 @@ class DeepLinkBloc extends Bloc<DeepLinkEvent, DeepLinkState> {
         //   if (event.id != null) {
         //     // resend the create account request?
         //   }
-        case SpotifyRedirectDeepLink():
-          if (onboardingBloc.state is! Onboarded) {
-            break;
-          }
-
-          final code = event.code;
-          final currentUser = (onboardingBloc.state as Onboarded).currentUser;
-          final userId = currentUser.id;
-
-          final credentials = await spotify.authorizeCodeGrant(code);
-          spotifyBloc.add(
-            UpdateCredentials(
-              currentUserId: userId,
-              credentials: credentials,
-            ),
-          );
       }
     } catch (e, s) {
       logger.error('deep link error', error: e, stackTrace: s);
@@ -122,7 +103,5 @@ class DeepLinkBloc extends Bloc<DeepLinkEvent, DeepLinkState> {
   final OnboardingBloc onboardingBloc;
   final DeepLinkRepository deepLinks;
   final DatabaseRepository database;
-  final SpotifyRepository spotify;
-  final SpotifyBloc spotifyBloc;
   StreamSubscription<DeepLinkRedirect>? streamSub;
 }

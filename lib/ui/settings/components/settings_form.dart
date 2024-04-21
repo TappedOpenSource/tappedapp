@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:formz/formz.dart';
-import 'package:intheloopapp/data/spotify_repository.dart';
 import 'package:intheloopapp/domains/models/genre.dart';
-import 'package:intheloopapp/domains/spotify_bloc/spotify_bloc.dart';
 import 'package:intheloopapp/ui/forms/artist_name_text_field.dart';
 import 'package:intheloopapp/ui/forms/bio_text_field.dart';
 import 'package:intheloopapp/ui/forms/instagram_followers_text_field.dart';
@@ -18,13 +16,11 @@ import 'package:intheloopapp/ui/forms/twitter_text_field.dart';
 import 'package:intheloopapp/ui/forms/username_text_field.dart';
 import 'package:intheloopapp/ui/forms/youtube_text_field.dart';
 import 'package:intheloopapp/ui/profile/components/epk_button.dart';
-import 'package:intheloopapp/ui/settings/components/connect_spotify_button.dart';
 import 'package:intheloopapp/ui/settings/components/genre_selection.dart';
 import 'package:intheloopapp/ui/settings/components/label_selection.dart';
 import 'package:intheloopapp/ui/settings/components/theme_switch.dart';
 import 'package:intheloopapp/ui/settings/settings_cubit.dart';
 import 'package:intheloopapp/ui/themes.dart';
-import 'package:intheloopapp/utils/app_logger.dart';
 import 'package:intheloopapp/utils/current_user_builder.dart';
 
 class SettingsForm extends StatelessWidget {
@@ -99,11 +95,11 @@ class SettingsForm extends StatelessWidget {
                               value,
                             ),
                   ),
-                  // SpotifyTextField(
-                  //   initialValue: state.spotifyUrl,
-                  //   onChanged: (value) =>
-                  //       context.read<SettingsCubit>().changeSpotify(value),
-                  // ),
+                  SpotifyTextField(
+                    initialValue: state.spotifyUrl,
+                    onChanged: (value) =>
+                        context.read<SettingsCubit>().changeSpotify(value),
+                  ),
                   YoutubeTextField(
                     initialValue: state.youtubeHandle,
                     onChanged: (value) =>
@@ -139,8 +135,8 @@ class SettingsForm extends StatelessWidget {
                   ...switch (state.isPerformer) {
                     false => [],
                     true => [
-                        const SizedBox(height: 10),
-                        const ConnectSpotifyButton(),
+                        // const SizedBox(height: 10),
+                        // const ConnectSpotifyButton(),
                         const SizedBox(height: 10),
                         const LabelSelection(),
                         GenreSelection(

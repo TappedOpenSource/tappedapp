@@ -41,9 +41,9 @@ class SocialMediaIcons extends StatelessWidget {
     return BlocBuilder<ProfileCubit, ProfileState>(
       builder: (context, state) {
         final socialFollowing = state.visitedUser.socialFollowing;
-        final spotifyUrl = socialFollowing.spotifyUser.flatMap((t) {
-          return Option.fromNullable(t.external_urls?.spotify);
-        });
+        final spotifyUrl = socialFollowing.spotifyId.map(
+          (spotifyId) => 'https://open.spotify.com/artist/$spotifyId',
+        );
         return SliverGrid.count(
           crossAxisCount: 4,
           children: [

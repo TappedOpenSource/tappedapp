@@ -80,6 +80,7 @@ class SettingsCubit extends Cubit<SettingsState> {
         soundcloudHandle:
             currentUser.socialFollowing.soundcloudHandle.toNullable(),
         audiusHandle: currentUser.socialFollowing.audiusHandle.toNullable(),
+        spotifyUrl: currentUser.socialFollowing.spotifyId.map((t) => 'https://open.spotify.com/artist/$t').toNullable(),
         pushNotificationsDirectMessages:
             currentUser.pushNotifications.directMessages,
       ),
@@ -128,6 +129,9 @@ class SettingsCubit extends Cubit<SettingsState> {
 
   void changeSoundcloud(String value) =>
       emit(state.copyWith(soundcloudHandle: value));
+
+  void changeSpotify(String value) =>
+      emit(state.copyWith(spotifyUrl: value));
 
   void changePlace(Option<PlaceData> place, String placeId) {
     emit(
@@ -321,6 +325,9 @@ class SettingsCubit extends Cubit<SettingsState> {
             ),
         };
 
+        final spotifyId = state.spotifyUrl == null
+          ? const None()
+          : Uri.parse(state.spotifyUrl!).pathSegments.lastOption;
         final user = currentUser.copyWith(
           username: Username.fromString(state.username),
           artistName: state.artistName,
@@ -335,6 +342,7 @@ class SettingsCubit extends Cubit<SettingsState> {
             tiktokFollowers: state.tiktokFollowers ?? 0,
             youtubeHandle: Option.fromNullable(state.youtubeHandle),
             soundcloudHandle: Option.fromNullable(state.soundcloudHandle),
+            spotifyId: spotifyId,
           ),
           pushNotifications: currentUser.pushNotifications.copyWith(
             directMessages: state.pushNotificationsDirectMessages,

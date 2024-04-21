@@ -37,10 +37,10 @@ _$SocialFollowingImpl _$$SocialFollowingImplFromJson(
           : Option<String>.fromJson(
               json['facebookHandle'], (value) => value as String),
       facebookFollowers: json['facebookFollowers'] as int? ?? 0,
-      spotifyUser: json['spotifyUser'] == null
+      spotifyId: json['spotifyId'] == null
           ? const None()
-          : Option<SpotifyUser>.fromJson(json['spotifyUser'],
-              (value) => SpotifyUser.fromJson(value as Map<String, dynamic>)),
+          : Option<String>.fromJson(
+              json['spotifyId'], (value) => value as String),
       spotifyMonthlyListeners: json['spotifyMonthlyListeners'] as int? ?? 0,
       soundcloudHandle: json['soundcloudHandle'] == null
           ? const None()
@@ -84,8 +84,8 @@ Map<String, dynamic> _$$SocialFollowingImplToJson(
         (value) => value,
       ),
       'facebookFollowers': instance.facebookFollowers,
-      'spotifyUser': instance.spotifyUser.toJson(
-        (value) => value.toJson(),
+      'spotifyId': instance.spotifyId.toJson(
+        (value) => value,
       ),
       'spotifyMonthlyListeners': instance.spotifyMonthlyListeners,
       'soundcloudHandle': instance.soundcloudHandle.toJson(

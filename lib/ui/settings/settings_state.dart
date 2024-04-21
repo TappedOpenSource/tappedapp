@@ -20,6 +20,7 @@ class SettingsState with _$SettingsState {
     String? soundcloudHandle,
     String? audiusHandle,
     String? youtubeHandle,
+    String? spotifyUrl,
     @Default(None()) Option<File> profileImage,
     @Default(None()) Option<File> pressKitFile,
     @Default(FormzSubmissionStatus.initial) FormzSubmissionStatus status,

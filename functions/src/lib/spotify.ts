@@ -9,6 +9,40 @@ import * as crypto from "crypto";
 // Scopes to request.
 const OAUTH_SCOPES = [ "user-read-email" ];
 
+async function getSpotifyAccessToken({ clientId, clientSecret }: {
+  clientId: string;
+  clientSecret: string;
+}): Promise<{
+  accessToken: string;
+  refreshToken: string;
+  expiresIn: number;
+  scope: string;
+  tokenType: string;
+}> {
+  const res = await fetch(
+    "https://accounts.spotify.com/api/token",
+    {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/x-www-form-urlencoded",
+        Authorization: "Basic " + Buffer.from(clientId + ":" + clientSecret).toString("base64"),
+      },
+      body: new URLSearchParams({
+        grant_type: "client_credentials",
+      }),
+    }
+  );
+
+  const body = await res.json();
+  return {
+    accessToken: body["access_token"],
+    refreshToken: body["refresh_token"],
+    expiresIn: body["expires_in"],
+    scope: body["scope"],
+    tokenType: body["token_type"],
+  };
+}
+
 /**
  * Redirects the User to the Spotify authentication consent screen. Also the 'state' cookie is set for later state
  * verification.
@@ -135,3 +169,4 @@ export const spotifyRefreshToken = onCall(
       refreshToken,
     };
   });
+

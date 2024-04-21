@@ -20,7 +20,7 @@ class SocialFollowing with _$SocialFollowing {
     @Default(0) int twitterFollowers,
     @Default(None()) Option<String> facebookHandle,
     @Default(0) int facebookFollowers,
-    @Default(None()) Option<SpotifyUser> spotifyUser,
+    @Default(None()) Option<String> spotifyId,
     @Default(0) int spotifyMonthlyListeners,
     @Default(None()) Option<String> soundcloudHandle,
     @Default(0) int soundcloudFollowers,

@@ -10,7 +10,6 @@ import 'package:intheloopapp/domains/deep_link_bloc/deep_link_bloc.dart';
 import 'package:intheloopapp/domains/down_for_maintenance_bloc/down_for_maintenance_bloc.dart';
 import 'package:intheloopapp/domains/onboarding_bloc/onboarding_bloc.dart';
 import 'package:intheloopapp/domains/opportunity_bloc/opportunity_bloc.dart';
-import 'package:intheloopapp/domains/spotify_bloc/spotify_bloc.dart';
 import 'package:intheloopapp/domains/subscription_bloc/subscription_bloc.dart'
     hide Uninitialized;
 import 'package:intheloopapp/ui/app_theme_cubit.dart';
@@ -58,11 +57,6 @@ class App extends StatelessWidget {
       ),
     );
     context.read<DeepLinkBloc>().add(MonitorDeepLinks());
-    context.read<SpotifyBloc>().add(
-          InitSpotify(
-            currentUserId: currentAuthUserId,
-          ),
-        );
 
     return BlocBuilder<OnboardingBloc, OnboardingState>(
       builder: (context, onboardState) {

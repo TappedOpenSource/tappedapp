@@ -38,7 +38,6 @@ import 'package:intheloopapp/domains/navigation_bloc/navigation_bloc.dart';
 import 'package:intheloopapp/domains/onboarding_bloc/onboarding_bloc.dart';
 import 'package:intheloopapp/domains/opportunity_bloc/opportunity_bloc.dart';
 import 'package:intheloopapp/domains/search_bloc/search_bloc.dart';
-import 'package:intheloopapp/domains/spotify_bloc/spotify_bloc.dart';
 import 'package:intheloopapp/domains/subscription_bloc/subscription_bloc.dart';
 import 'package:intheloopapp/ui/app_theme_cubit.dart';
 import 'package:intheloopapp/ui/premium_theme_cubit.dart';
@@ -138,13 +137,6 @@ List<BlocProvider> buildBlocs({
         databaseRepository: context.database,
       ),
     ),
-    BlocProvider<SpotifyBloc>(
-      create: (context) => SpotifyBloc(
-        spotify: context.read<SpotifyRepository>(),
-        onboarding: context.onboarding,
-        chartmetric: context.read<ChartmetricRepository>(),
-      ),
-    ),
     BlocProvider<DeepLinkBloc>(
       //Depreciated
       create: (context) => DeepLinkBloc(
@@ -152,8 +144,6 @@ List<BlocProvider> buildBlocs({
         nav: context.nav,
         deepLinks: context.read<DeepLinkRepository>(),
         database: context.database,
-        spotify: context.read<SpotifyRepository>(),
-        spotifyBloc: context.read<SpotifyBloc>(),
       ),
     ),
     BlocProvider<DownForMaintenanceBloc>(
