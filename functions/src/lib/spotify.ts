@@ -170,3 +170,26 @@ export const spotifyRefreshToken = onCall(
     };
   });
 
+
+export const getArtistBySpotifyId = onCall(
+  { secrets: [ SPOTIFY_CLIENT_ID, SPOTIFY_CLIENT_SECRET ] },
+  async (request) => {
+    const { spotifyId } = request.data as { spotifyId: string; };
+
+    const { accessToken } = await getSpotifyAccessToken({
+      clientId: SPOTIFY_CLIENT_ID.value(),
+      clientSecret: SPOTIFY_CLIENT_SECRET.value(),
+    });
+
+    info({ spotifyId, accessToken });
+
+    const res = await fetch(`https://api.spotify.com/v1/artists/${spotifyId}`, {
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+      },
+    });
+
+    const data = await res.json();
+
+    return data;
+  });
