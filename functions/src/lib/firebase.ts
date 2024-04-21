@@ -87,6 +87,7 @@ export const POSTMARK_SERVER_ID = defineSecret("POSTMARK_SERVER_ID");
 export const SLACK_WEBHOOK_URL = defineSecret("SLACK_WEBHOOK_URL");
 export const SPOTIFY_CLIENT_ID = defineSecret("SPOTIFY_CLIENT_ID");
 export const SPOTIFY_CLIENT_SECRET = defineSecret("SPOTIFY_CLIENT_SECRET");
+export const CHARTMETRIC_REFRESH_TOKEN = defineSecret("CHARTMETRIC_REFRESH_TOKEN");
 
 export const starterCreditsTestPriceId = "price_1OE2ptDYybu1wznEqHNMGZax";
 export const basicCreditsTestPriceId = "price_1OE2rrDYybu1wznEqv4mmjoK";
