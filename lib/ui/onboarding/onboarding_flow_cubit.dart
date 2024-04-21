@@ -84,8 +84,9 @@ class OnboardingFlowCubit extends Cubit<OnboardingFlowState> {
 
   Future<void> handleImageFromGallery() async {
     try {
+      final picker = ImagePicker();
       final imageFile =
-          await state.picker.pickImage(source: ImageSource.gallery);
+          await picker.pickImage(source: ImageSource.gallery);
       if (imageFile != null) {
         emit(
           state.copyWith(

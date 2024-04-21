@@ -22,6 +22,7 @@ import 'package:intheloopapp/ui/settings/components/theme_switch.dart';
 import 'package:intheloopapp/ui/settings/settings_cubit.dart';
 import 'package:intheloopapp/ui/themes.dart';
 import 'package:intheloopapp/utils/current_user_builder.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class SettingsForm extends StatelessWidget {
   const SettingsForm({super.key});
@@ -45,8 +46,9 @@ class SettingsForm extends StatelessWidget {
                     },
                   ),
                   ArtistNameTextField(
-                    onChanged: (input) =>
-                        context.read<SettingsCubit>().changeArtistName(input ?? ''),
+                    onChanged: (input) => context
+                        .read<SettingsCubit>()
+                        .changeArtistName(input ?? ''),
                     initialValue: state.artistName,
                   ),
                   BioTextField(
@@ -55,8 +57,9 @@ class SettingsForm extends StatelessWidget {
                     initialValue: state.bio,
                   ),
                   LocationTextField(
-                    onChanged: (place, placeId) =>
-                        context.read<SettingsCubit>().changePlace(place, placeId),
+                    onChanged: (place, placeId) => context
+                        .read<SettingsCubit>()
+                        .changePlace(place, placeId),
                     initialPlace: state.place,
                   ),
                   TwitterTextField(
@@ -95,11 +98,6 @@ class SettingsForm extends StatelessWidget {
                               value,
                             ),
                   ),
-                  SpotifyTextField(
-                    initialValue: state.spotifyUrl,
-                    onChanged: (value) =>
-                        context.read<SettingsCubit>().changeSpotify(value),
-                  ),
                   YoutubeTextField(
                     initialValue: state.youtubeHandle,
                     onChanged: (value) =>
@@ -110,7 +108,41 @@ class SettingsForm extends StatelessWidget {
                     onChanged: (value) =>
                         context.read<SettingsCubit>().changeSoundcloud(value),
                   ),
-                  const SizedBox(height: 15),
+                  SpotifyTextField(
+                    initialValue: state.spotifyUrl,
+                    onChanged: (value) =>
+                        context.read<SettingsCubit>().changeSpotify(value),
+                  ),
+                  GestureDetector(
+                    onTap: () => launchUrl(
+                      Uri.parse(
+                        'https://tappedapp.notion.site/how-do-i-get-my-spotify-url-2d1250547a044071becbe43763a77583',
+                      ),
+                    ),
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(
+                        vertical: 5,
+                      ),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        children: [
+                          const Text(
+                            'how do I find my spotify artist url?',
+                            style: TextStyle(
+                              color: Colors.blue,
+                              fontSize: 12,
+                            ),
+                          ),
+                          const SizedBox(width: 5),
+                          Icon(
+                            Icons.open_in_new,
+                            color: Colors.blue,
+                            size: 12,
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
                   const SizedBox(height: 15),
                   const ThemeSwitch(),
                   const SizedBox(height: 15),
@@ -127,7 +159,9 @@ class SettingsForm extends StatelessWidget {
                       Switch(
                         value: state.isPerformer,
                         onChanged: (value) {
-                          context.read<SettingsCubit>().changeIsPerformer(value);
+                          context
+                              .read<SettingsCubit>()
+                              .changeIsPerformer(value);
                         },
                       ),
                     ],

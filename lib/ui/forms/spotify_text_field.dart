@@ -18,6 +18,7 @@ class SpotifyTextField extends StatelessWidget {
       decoration: const InputDecoration(
         prefixIcon: Icon(FontAwesomeIcons.spotify),
         labelText: 'spotify url',
+        hintText: 'https://open.spotify.com/artist/4tZwfgrHOc3mvqYlEYSvVi',
       ),
       onChanged: (input) {
         onChanged?.call(input);

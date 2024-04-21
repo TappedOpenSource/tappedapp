@@ -22,6 +22,7 @@ import 'package:intheloopapp/domains/models/username.dart';
 import 'package:intheloopapp/domains/navigation_bloc/navigation_bloc.dart';
 import 'package:intheloopapp/domains/onboarding_bloc/onboarding_bloc.dart';
 import 'package:intheloopapp/utils/app_logger.dart';
+import 'package:intheloopapp/utils/spotify_utils.dart';
 import 'package:permission_handler/permission_handler.dart';
 
 part 'settings_state.dart';
@@ -257,6 +258,7 @@ class SettingsCubit extends Cubit<SettingsState> {
     );
   }
 
+
   Future<void> saveProfile() async {
     // print(state.formKey);
     if (state.formKey.currentState == null) {
@@ -274,7 +276,13 @@ class SettingsCubit extends Cubit<SettingsState> {
         );
 
         if (!available) {
-          throw HandleAlreadyExistsException('Username already exists');
+          throw HandleAlreadyExistsException('username already exists');
+        }
+
+        if (state.spotifyUrl != null) {
+          if (!isValidSpotifyUrl(state.spotifyUrl!)) {
+            throw InvalidSpotifyUrlException('invalid spotify url');
+          }
         }
 
         final profilePictureUrl = await switch (state.profileImage) {

@@ -4,6 +4,7 @@ import 'package:intheloopapp/data/prod/firestore_database_impl.dart';
 import 'package:intheloopapp/ui/settings/settings_cubit.dart';
 import 'package:intheloopapp/ui/themes.dart';
 import 'package:intheloopapp/utils/app_logger.dart';
+import 'package:intheloopapp/utils/spotify_utils.dart';
 
 class SaveButton extends StatelessWidget {
   const SaveButton({super.key});
@@ -28,6 +29,18 @@ class SaveButton extends StatelessWidget {
                   backgroundColor: Colors.red,
                 ),
               );
+            } on InvalidSpotifyUrlException {
+              messenger.showSnackBar(
+                const SnackBar(
+                  behavior: SnackBarBehavior.floating,
+                  content: Text(
+                    'invalid spotify URL',
+                    style: TextStyle(color: Colors.white),
+                  ),
+                  backgroundColor: Colors.red,
+                ),
+              );
+
             } catch (e, s) {
               logger.error('error saving profile', error: e, stackTrace: s);
               messenger.showSnackBar(

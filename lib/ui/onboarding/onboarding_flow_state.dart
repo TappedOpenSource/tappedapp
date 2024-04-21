@@ -4,6 +4,7 @@ class OnboardingFlowState extends Equatable with FormzMixin {
   OnboardingFlowState({
     required this.currentUserId,
     this.username = const UsernameInput.pure(),
+    this.spotifyUrl = '',
     this.tiktokHandle = '',
     this.tiktokFollowers = 0,
     this.instagramHandle = '',
@@ -11,15 +12,14 @@ class OnboardingFlowState extends Equatable with FormzMixin {
     this.eula = false,
     this.pickedPhoto = const None(),
     this.status = FormzSubmissionStatus.initial,
-    ImagePicker? picker,
     GlobalKey<FormState>? formKey,
   }) {
-    this.picker = picker ?? ImagePicker();
     this.formKey = formKey ?? GlobalKey<FormState>(debugLabel: 'onboarding');
   }
 
   final String currentUserId;
   final UsernameInput username;
+  final String spotifyUrl;
   final String tiktokHandle;
   final int tiktokFollowers;
   final String instagramHandle;
@@ -28,7 +28,6 @@ class OnboardingFlowState extends Equatable with FormzMixin {
   final Option<File> pickedPhoto;
 
   final FormzSubmissionStatus status;
-  late final ImagePicker picker;
   late final GlobalKey<FormState> formKey;
 
   @override
@@ -47,6 +46,7 @@ class OnboardingFlowState extends Equatable with FormzMixin {
 
   OnboardingFlowState copyWith({
     UsernameInput? username,
+    String? spotifyUrl,
     String? tiktokHandle,
     int? tiktokFollowers,
     String? instagramHandle,
@@ -58,6 +58,7 @@ class OnboardingFlowState extends Equatable with FormzMixin {
     return OnboardingFlowState(
       currentUserId: currentUserId,
       username: username ?? this.username,
+      spotifyUrl: spotifyUrl ?? this.spotifyUrl,
       tiktokHandle: tiktokHandle ?? this.tiktokHandle,
       tiktokFollowers: tiktokFollowers ?? this.tiktokFollowers,
       instagramHandle: instagramHandle ?? this.instagramHandle,
@@ -65,7 +66,6 @@ class OnboardingFlowState extends Equatable with FormzMixin {
       eula: eula ?? this.eula,
       pickedPhoto: pickedPhoto ?? this.pickedPhoto,
       status: status ?? this.status,
-      picker: picker,
       formKey: formKey,
     );
   }
