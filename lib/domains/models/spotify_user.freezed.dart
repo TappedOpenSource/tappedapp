@@ -27,7 +27,7 @@ mixin _$SpotifyUser {
   ExternalUrls? get external_urls => throw _privateConstructorUsedError;
   Followers? get followers => throw _privateConstructorUsedError;
   String? get href => throw _privateConstructorUsedError;
-  String? get id => throw _privateConstructorUsedError;
+  String get id => throw _privateConstructorUsedError;
   List<Image> get images => throw _privateConstructorUsedError;
   String? get product => throw _privateConstructorUsedError;
   String? get type => throw _privateConstructorUsedError;
@@ -53,7 +53,7 @@ abstract class $SpotifyUserCopyWith<$Res> {
       ExternalUrls? external_urls,
       Followers? followers,
       String? href,
-      String? id,
+      String id,
       List<Image> images,
       String? product,
       String? type,
@@ -84,7 +84,7 @@ class _$SpotifyUserCopyWithImpl<$Res, $Val extends SpotifyUser>
     Object? external_urls = freezed,
     Object? followers = freezed,
     Object? href = freezed,
-    Object? id = freezed,
+    Object? id = null,
     Object? images = null,
     Object? product = freezed,
     Object? type = freezed,
@@ -119,10 +119,10 @@ class _$SpotifyUserCopyWithImpl<$Res, $Val extends SpotifyUser>
           ? _value.href
           : href // ignore: cast_nullable_to_non_nullable
               as String?,
-      id: freezed == id
+      id: null == id
           ? _value.id
           : id // ignore: cast_nullable_to_non_nullable
-              as String?,
+              as String,
       images: null == images
           ? _value.images
           : images // ignore: cast_nullable_to_non_nullable
@@ -195,7 +195,7 @@ abstract class _$$SpotifyUserImplCopyWith<$Res>
       ExternalUrls? external_urls,
       Followers? followers,
       String? href,
-      String? id,
+      String id,
       List<Image> images,
       String? product,
       String? type,
@@ -227,7 +227,7 @@ class __$$SpotifyUserImplCopyWithImpl<$Res>
     Object? external_urls = freezed,
     Object? followers = freezed,
     Object? href = freezed,
-    Object? id = freezed,
+    Object? id = null,
     Object? images = null,
     Object? product = freezed,
     Object? type = freezed,
@@ -262,10 +262,10 @@ class __$$SpotifyUserImplCopyWithImpl<$Res>
           ? _value.href
           : href // ignore: cast_nullable_to_non_nullable
               as String?,
-      id: freezed == id
+      id: null == id
           ? _value.id
           : id // ignore: cast_nullable_to_non_nullable
-              as String?,
+              as String,
       images: null == images
           ? _value._images
           : images // ignore: cast_nullable_to_non_nullable
@@ -323,7 +323,7 @@ class _$SpotifyUserImpl implements _SpotifyUser {
   @override
   final String? href;
   @override
-  final String? id;
+  final String id;
   final List<Image> _images;
   @override
   List<Image> get images {
@@ -407,7 +407,7 @@ abstract class _SpotifyUser implements SpotifyUser {
       required final ExternalUrls? external_urls,
       required final Followers? followers,
       required final String? href,
-      required final String? id,
+      required final String id,
       required final List<Image> images,
       required final String? product,
       required final String? type,
@@ -431,7 +431,7 @@ abstract class _SpotifyUser implements SpotifyUser {
   @override
   String? get href;
   @override
-  String? get id;
+  String get id;
   @override
   List<Image> get images;
   @override

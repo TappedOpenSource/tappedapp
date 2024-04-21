@@ -46,6 +46,10 @@ _$PerformerInfoImpl _$$PerformerInfoImplFromJson(Map<String, dynamic> json) =>
           ? const None()
           : Option<String>.fromJson(
               json['bookingEmail'], (value) => value as String),
+      chartmetricId: json['chartmetricId'] == null
+          ? const None()
+          : Option<String>.fromJson(
+              json['chartmetricId'], (value) => value as String),
     );
 
 Map<String, dynamic> _$$PerformerInfoImplToJson(_$PerformerInfoImpl instance) =>
@@ -72,6 +76,9 @@ Map<String, dynamic> _$$PerformerInfoImplToJson(_$PerformerInfoImpl instance) =>
         (value) => value,
       ),
       'bookingEmail': instance.bookingEmail.toJson(
+        (value) => value,
+      ),
+      'chartmetricId': instance.chartmetricId.toJson(
         (value) => value,
       ),
     };

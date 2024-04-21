@@ -142,6 +142,7 @@ List<BlocProvider> buildBlocs({
       create: (context) => SpotifyBloc(
         spotify: context.read<SpotifyRepository>(),
         onboarding: context.onboarding,
+        chartmetric: context.read<ChartmetricRepository>(),
       ),
     ),
     BlocProvider<DeepLinkBloc>(

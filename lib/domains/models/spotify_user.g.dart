@@ -23,7 +23,7 @@ _$SpotifyUserImpl _$$SpotifyUserImplFromJson(Map<String, dynamic> json) =>
           ? null
           : Followers.fromJson(json['followers'] as Map<String, dynamic>),
       href: json['href'] as String?,
-      id: json['id'] as String?,
+      id: json['id'] as String,
       images: (json['images'] as List<dynamic>)
           .map((e) => Image.fromJson(e as Map<String, dynamic>))
           .toList(),

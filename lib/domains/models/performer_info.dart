@@ -22,6 +22,7 @@ class PerformerInfo with _$PerformerInfo {
     @Default(None()) Option<int> averageTicketPrice,
     @Default(None()) Option<int> averageAttendance,
     @Default(None()) Option<String> bookingEmail,
+    @Default(None()) Option<String> chartmetricId,
   }) = _PerformerInfo;
 
   // fromJson

@@ -14,7 +14,7 @@ class SpotifyUser with _$SpotifyUser {
     required ExternalUrls? external_urls,
     required Followers? followers,
     required String? href,
-    required String? id,
+    required String id,
     required List<Image> images,
     required String? product,
     required String? type,

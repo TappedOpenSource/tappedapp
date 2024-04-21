@@ -1,6 +1,8 @@
 import 'package:bloc/bloc.dart';
 import 'package:fpdart/fpdart.dart';
+import 'package:intheloopapp/data/chartmetric_repository.dart';
 import 'package:intheloopapp/data/spotify_repository.dart';
+import 'package:intheloopapp/domains/models/performer_info.dart';
 import 'package:intheloopapp/domains/models/spotify_credentials.dart';
 import 'package:intheloopapp/domains/onboarding_bloc/onboarding_bloc.dart';
 import 'package:intheloopapp/utils/app_logger.dart';
@@ -12,6 +14,7 @@ part 'spotify_state.dart';
 
 class SpotifyBloc extends Bloc<SpotifyEvent, SpotifyState> {
   SpotifyBloc({
+    required this.chartmetric,
     required this.spotify,
     required this.onboarding,
   }) : super(SpotifyInitial()) {
@@ -71,15 +74,35 @@ class SpotifyBloc extends Bloc<SpotifyEvent, SpotifyState> {
       return;
     }
 
-    final currentUser = onboardingState.currentUser.copyWith(
+    final spotifyId = spotifyUser.id;
+    final artistData = await chartmetric.getArtistBySpotifyId(spotifyId);
+
+    final withSpotifyUser = onboardingState.currentUser.copyWith(
       socialFollowing: onboardingState.currentUser.socialFollowing.copyWith(
         spotifyUser: Option.of(spotifyUser),
       ),
     );
+
+    final currentUser = switch (artistData) {
+      None() => withSpotifyUser,
+      Some(:final value) => withSpotifyUser.copyWith(
+          performerInfo: Option.of(
+            withSpotifyUser.performerInfo.fold(
+              () => PerformerInfo(
+                chartmetricId: Option.of(value.id),
+              ),
+              (performerInfo) => performerInfo.copyWith(
+                chartmetricId: Option.of(value.id),
+              ),
+            ),
+          ),
+        ),
+    };
 
     onboarding.add(UpdateOnboardedUser(user: currentUser));
   }
 
   final OnboardingBloc onboarding;
   final SpotifyRepository spotify;
+  final ChartmetricRepository chartmetric;
 }
