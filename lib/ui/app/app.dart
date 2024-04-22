@@ -71,8 +71,7 @@ class App extends StatelessWidget {
               context.bookings.add(FetchBookings());
               context.database.publishLatestAppVersion(currentAuthUserId);
 
-              // return const ShellView();
-            return const OnboardingView();
+              return const ShellView();
             }(),
           Onboarding() => const OnboardingView(),
           Unonboarded() => const LoadingView(),
