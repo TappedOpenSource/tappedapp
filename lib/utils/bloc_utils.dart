@@ -7,6 +7,7 @@ import 'package:intheloopapp/data/payment_repository.dart';
 import 'package:intheloopapp/data/places_repository.dart';
 import 'package:intheloopapp/data/remote_config_repository.dart';
 import 'package:intheloopapp/data/search_repository.dart';
+import 'package:intheloopapp/data/spotify_repository.dart';
 import 'package:intheloopapp/data/storage_repository.dart';
 import 'package:intheloopapp/data/stream_repository.dart';
 import 'package:intheloopapp/domains/authentication_bloc/authentication_bloc.dart';
@@ -28,6 +29,7 @@ extension BlocUtils on BuildContext {
   NotificationRepository get notifications => read<NotificationRepository>();
   RemoteConfigRepository get remote => read<RemoteConfigRepository>();
   SearchRepository get searchRepo => read<SearchRepository>();
+  SpotifyRepository get spotify => read<SpotifyRepository>();
 
   NavigationBloc get nav => read<NavigationBloc>();
   AuthenticationBloc get authentication => read<AuthenticationBloc>();

@@ -8,22 +8,26 @@ import 'package:formz/formz.dart';
 import 'package:fpdart/fpdart.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:intheloopapp/data/database_repository.dart';
+import 'package:intheloopapp/data/spotify_repository.dart';
 import 'package:intheloopapp/data/storage_repository.dart';
 import 'package:intheloopapp/domains/authentication_bloc/authentication_bloc.dart';
 import 'package:intheloopapp/domains/models/performer_info.dart';
 import 'package:intheloopapp/domains/models/social_following.dart';
+import 'package:intheloopapp/domains/models/spotify_artist.dart';
 import 'package:intheloopapp/domains/models/user_model.dart';
 import 'package:intheloopapp/domains/models/username.dart';
 import 'package:intheloopapp/domains/navigation_bloc/navigation_bloc.dart';
 import 'package:intheloopapp/domains/onboarding_bloc/onboarding_bloc.dart';
 import 'package:intheloopapp/ui/onboarding/username_input.dart';
 import 'package:intheloopapp/utils/app_logger.dart';
+import 'package:intheloopapp/utils/sanitize_username.dart';
 
 part 'onboarding_flow_state.dart';
 
 class OnboardingFlowCubit extends Cubit<OnboardingFlowState> {
   OnboardingFlowCubit({
     required this.currentAuthUser,
+    required this.spotify,
     required this.onboardingBloc,
     required this.navigationBloc,
     required this.authenticationBloc,
@@ -38,12 +42,25 @@ class OnboardingFlowCubit extends Cubit<OnboardingFlowState> {
           ),
         );
 
+  final SpotifyRepository spotify;
   final OnboardingBloc onboardingBloc;
   final NavigationBloc navigationBloc;
   final AuthenticationBloc authenticationBloc;
   final StorageRepository storageRepository;
   final DatabaseRepository databaseRepository;
   final User currentAuthUser;
+
+  void spotifyUrlChange(String input) => input.isEmpty
+      ? emit(
+          state.copyWith(
+            spotifyUrl: const None(),
+          ),
+        )
+      : emit(
+          state.copyWith(
+            spotifyUrl: Option.of(input),
+          ),
+        );
 
   void usernameChange(String input) => emit(
         state.copyWith(
@@ -82,11 +99,62 @@ class OnboardingFlowCubit extends Cubit<OnboardingFlowState> {
         ),
       );
 
+  Future<void> fetchSpotifyInfo() async {
+    emit(
+      state.copyWith(
+        username: const UsernameInput.pure(),
+        photoUrl: const None(),
+      ),
+    );
+
+    final res = await switch (state.spotifyUrl) {
+      None() => Future<Option<SpotifyArtist>>.value(const None()),
+      Some(:final value) => (() async {
+          final spotifyId = Uri.parse(value).pathSegments.last;
+          final spotifyArtist = await spotify.getArtistById(spotifyId);
+          return spotifyArtist;
+        })(),
+    };
+
+    // get username from santitized spotify artist name
+    final artistName = res.map((a) => a.name ?? '');
+    final usernameCandidate = artistName.fold(
+      () => '',
+      sanitizeUsername,
+    );
+
+    // check if username exists, if it does add a number to the end
+    final usernameAvailable =
+        await databaseRepository.checkUsernameAvailability(
+      usernameCandidate,
+      currentAuthUser.uid,
+    );
+
+    final sinceEpoch = DateTime.now().millisecondsSinceEpoch.toString();
+    final lastFour = sinceEpoch.substring(sinceEpoch.length - 4);
+    final username =
+        usernameAvailable ? usernameCandidate : '$usernameCandidate$lastFour';
+
+    // get profile picture from spotify artist images
+    final profilePicture = res.fold(
+      () => const None(),
+      (a) => a.images.isNotEmpty ? Option.of(a.images.first.url) : const None(),
+    );
+
+    print('username: $username');
+
+    emit(
+      state.copyWith(
+        photoUrl: profilePicture,
+        username: UsernameInput.dirty(value: username),
+      ),
+    );
+  }
+
   Future<void> handleImageFromGallery() async {
     try {
       final picker = ImagePicker();
-      final imageFile =
-          await picker.pickImage(source: ImageSource.gallery);
+      final imageFile = await picker.pickImage(source: ImageSource.gallery);
       if (imageFile != null) {
         emit(
           state.copyWith(

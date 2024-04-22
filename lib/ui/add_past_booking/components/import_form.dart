@@ -23,26 +23,25 @@ class ImportForm extends StatelessWidget {
         return TappedForm(
           cancelButton: true,
           questions: [
-            (const EventDateField(), () => state.duration != Duration.zero),
-            (
-              const EventLocationField(),
-              () => state.place.isSome() || state.venue.isSome(),
+            FormQuestion(
+              validator: () => state.duration != Duration.zero,
+              child: const EventDateField(),
             ),
-            (
-              AmountPaidField(),
-              () => true,
+            FormQuestion(
+              child: const EventLocationField(),
+              validator: () => state.place.isSome() || state.venue.isSome(),
             ),
-            (
-              const EventNameField(),
-              () => true,
+            FormQuestion(
+              child: AmountPaidField(),
             ),
-            (
-              const UploadFlierField(),
-              () => true,
+            const FormQuestion(
+              child: EventNameField(),
             ),
-            (
-              const ImportSummary(),
-              () => true,
+            const FormQuestion(
+              child: UploadFlierField(),
+            ),
+            const FormQuestion(
+              child: ImportSummary(),
             ),
           ],
           onSubmit: () async {

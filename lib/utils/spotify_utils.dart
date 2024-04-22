@@ -2,7 +2,7 @@
 bool isValidSpotifyUrl(String url) {
   // Regular expression to match Spotify URLs
   RegExp regExp = RegExp(
-      r'^https:\/\/open\.spotify\.com\/(track|album|artist)\/[a-zA-Z0-9]+([?/].*)?$');
+      r'^https:\/\/open\.spotify\.com\/(artist)\/[a-zA-Z0-9]+([?/].*)?$');
 
   return regExp.hasMatch(url);
 }

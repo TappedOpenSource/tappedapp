@@ -37,9 +37,8 @@ class ProfilePictureUploader extends StatelessWidget {
         return BlocBuilder<OnboardingFlowCubit, OnboardingFlowState>(
           builder: (context, state) {
             return GestureDetector(
-              onTap: () => context
-                  .read<OnboardingFlowCubit>()
-                  .handleImageFromGallery(),
+              onTap: () =>
+                  context.read<OnboardingFlowCubit>().handleImageFromGallery(),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
@@ -47,10 +46,14 @@ class ProfilePictureUploader extends StatelessWidget {
                     children: [
                       CircleAvatar(
                         radius: 45,
-                        backgroundImage: displayProfileImage(
-                          state.pickedPhoto,
-                          const None(),
-                        ),
+                        backgroundImage: switch (state.photoUrl) {
+                          None() => displayProfileImage(
+                              state.pickedPhoto,
+                              const None(),
+                            ),
+                          Some(:final value) =>
+                            CachedNetworkImageProvider(value),
+                        },
                       ),
                       const CircleAvatar(
                         radius: 45,

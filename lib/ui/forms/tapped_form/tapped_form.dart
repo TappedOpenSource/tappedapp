@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:intheloopapp/ui/themes.dart';
 import 'package:intheloopapp/utils/app_logger.dart';
 
@@ -15,7 +16,7 @@ class TappedForm extends StatefulWidget {
     super.key,
   });
 
-  final List<(Widget, FutureOr<bool> Function())> questions;
+  final List<FormQuestion> questions;
   final bool cancelButton;
   final FutureOr<void> Function()? onNext;
   final FutureOr<void> Function()? onPrevious;
@@ -27,62 +28,69 @@ class TappedForm extends StatefulWidget {
 
 class _TappedFormState extends State<TappedForm> {
   int _index = 0;
+
   int get _numQuestions => widget.questions.length;
 
-  Widget get _currQuestion => widget.questions[_index].$1;
+  Widget get _currQuestion => widget.questions[_index].child;
 
-  FutureOr<bool> Function() get _currValidator => widget.questions[_index].$2;
+  FutureOr<bool> Function() get _currValidator =>
+      widget.questions[_index].validator ?? () => true;
 
   Widget _buildNextButton() {
     final isLast = _index == _numQuestions - 1;
+    final localOnNext = widget.questions[_index].onNext;
 
     return switch (isLast) {
       false => CupertinoButton(
-        onPressed: () {
-          setState(() {
-            _index++;
-          });
-          widget.onNext?.call();
-        },
-        borderRadius: BorderRadius.circular(12),
-        color: tappedAccent,
-        child: const Text(
-          'next',
-          style: TextStyle(
-            color: Colors.white,
-            fontWeight: FontWeight.w700,
+          onPressed: () async {
+            await EasyLoading.show();
+            await localOnNext?.call();
+            await widget.onNext?.call();
+
+            setState(() {
+              _index++;
+            });
+            await EasyLoading.dismiss();
+          },
+          borderRadius: BorderRadius.circular(12),
+          color: tappedAccent,
+          child: const Text(
+            'next',
+            style: TextStyle(
+              color: Colors.white,
+              fontWeight: FontWeight.w700,
+            ),
           ),
         ),
-      ),
       true => CupertinoButton(
-        onPressed: () {
-          try {
-            widget.onSubmit?.call();
-          } catch (e, s) {
-            logger.error(
-              'error submitting form',
-              error: e,
-              stackTrace: s,
-            );
-            ScaffoldMessenger.of(context).showSnackBar(
-              const SnackBar(
-                behavior: SnackBarBehavior.floating,
-                backgroundColor: Colors.red,
-                content: Text('something went wrong'),
-              ),
-            );
-          }
-        },
-        borderRadius: BorderRadius.circular(12),
-        color: tappedAccent,
-        child: const Text(
-          'finish',
-          style: TextStyle(
-            color: Colors.white,
-            fontWeight: FontWeight.w700,
+          onPressed: () {
+            try {
+              widget.onSubmit?.call();
+            } catch (e, s) {
+              logger.error(
+                'error submitting form',
+                error: e,
+                stackTrace: s,
+              );
+              ScaffoldMessenger.of(context).showSnackBar(
+                const SnackBar(
+                  behavior: SnackBarBehavior.floating,
+                  backgroundColor: Colors.red,
+                  content: Text('something went wrong'),
+                ),
+              );
+            }
+          },
+          borderRadius: BorderRadius.circular(12),
+          color: tappedAccent,
+          child: const Text(
+            'finish',
+            style: TextStyle(
+              color: Colors.white,
+              fontWeight: FontWeight.w700,
+            ),
           ),
         ),
-      ),
     };
   }
 
@@ -182,4 +190,16 @@ class _TappedFormState extends State<TappedForm> {
       ),
     );
   }
+}
+
+class FormQuestion {
+  const FormQuestion({
+    required this.child,
+    this.validator,
+    this.onNext,
+  });
+
+  final Widget child;
+  final FutureOr<bool> Function()? validator;
+  final FutureOr<void> Function()? onNext;
 }

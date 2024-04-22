@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:formz/formz.dart';
 import 'package:intheloopapp/data/database_repository.dart';
 import 'package:intheloopapp/ui/forms/tapped_form/tapped_form.dart';
+import 'package:intheloopapp/ui/onboarding/components/onboard_with_spotify_view.dart';
 import 'package:intheloopapp/ui/onboarding/components/onboarding_complete_view.dart';
 import 'package:intheloopapp/ui/onboarding/components/onboarding_init_view.dart';
 import 'package:intheloopapp/ui/onboarding/components/onboarding_profile_picture_view.dart';
@@ -25,13 +26,17 @@ class OnboardingForm extends StatelessWidget {
         return TappedForm(
           onSubmit: context.read<OnboardingFlowCubit>().finishOnboarding,
           questions: [
-            (
-              const OnboardingInitView(),
-              () => true,
+            const FormQuestion(
+              child: OnboardingInitView(),
             ),
-            (
-              const OnboardingUsernameView(),
-              () async {
+            FormQuestion(
+              child: const OnboardWithSpotifyView(),
+              onNext: () async {
+                await context.read<OnboardingFlowCubit>().fetchSpotifyInfo();
+              },
+            ),
+            FormQuestion(
+              validator: () async {
                 final currentUserId =
                     context.read<OnboardingFlowCubit>().state.currentUserId;
                 final username =
@@ -45,18 +50,17 @@ class OnboardingForm extends StatelessWidget {
 
                 return usernameIsValid && usernameIsAvailable;
               },
+              child: const OnboardingUsernameView(),
             ),
-            (
-              const OnboardingProfilePictureView(),
-              () => true,
+            const FormQuestion(
+              child: OnboardingProfilePictureView(),
             ),
-            (
-              const OnboardingSocialMediaView(),
-              () => true,
+            const FormQuestion(
+              child: OnboardingSocialMediaView(),
             ),
-            (
-              const OnboardingCompleteView(),
-              () => context.read<OnboardingFlowCubit>().state.eula,
+            FormQuestion(
+              validator: () => context.read<OnboardingFlowCubit>().state.eula,
+              child: const OnboardingCompleteView(),
             ),
           ],
         );

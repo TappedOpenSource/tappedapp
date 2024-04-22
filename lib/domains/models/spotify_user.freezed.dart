@@ -610,7 +610,7 @@ ExternalUrls _$ExternalUrlsFromJson(Map<String, dynamic> json) {
 
 /// @nodoc
 mixin _$ExternalUrls {
-  String? get spotify => throw _privateConstructorUsedError;
+  String get spotify => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
@@ -624,7 +624,7 @@ abstract class $ExternalUrlsCopyWith<$Res> {
           ExternalUrls value, $Res Function(ExternalUrls) then) =
       _$ExternalUrlsCopyWithImpl<$Res, ExternalUrls>;
   @useResult
-  $Res call({String? spotify});
+  $Res call({String spotify});
 }
 
 /// @nodoc
@@ -640,13 +640,13 @@ class _$ExternalUrlsCopyWithImpl<$Res, $Val extends ExternalUrls>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? spotify = freezed,
+    Object? spotify = null,
   }) {
     return _then(_value.copyWith(
-      spotify: freezed == spotify
+      spotify: null == spotify
           ? _value.spotify
           : spotify // ignore: cast_nullable_to_non_nullable
-              as String?,
+              as String,
     ) as $Val);
   }
 }
@@ -659,7 +659,7 @@ abstract class _$$ExternalUrlsImplCopyWith<$Res>
       __$$ExternalUrlsImplCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call({String? spotify});
+  $Res call({String spotify});
 }
 
 /// @nodoc
@@ -673,13 +673,13 @@ class __$$ExternalUrlsImplCopyWithImpl<$Res>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? spotify = freezed,
+    Object? spotify = null,
   }) {
     return _then(_$ExternalUrlsImpl(
-      spotify: freezed == spotify
+      spotify: null == spotify
           ? _value.spotify
           : spotify // ignore: cast_nullable_to_non_nullable
-              as String?,
+              as String,
     ));
   }
 }
@@ -693,7 +693,7 @@ class _$ExternalUrlsImpl implements _ExternalUrls {
       _$$ExternalUrlsImplFromJson(json);
 
   @override
-  final String? spotify;
+  final String spotify;
 
   @override
   String toString() {
@@ -727,14 +727,14 @@ class _$ExternalUrlsImpl implements _ExternalUrls {
 }
 
 abstract class _ExternalUrls implements ExternalUrls {
-  const factory _ExternalUrls({required final String? spotify}) =
+  const factory _ExternalUrls({required final String spotify}) =
       _$ExternalUrlsImpl;
 
   factory _ExternalUrls.fromJson(Map<String, dynamic> json) =
       _$ExternalUrlsImpl.fromJson;
 
   @override
-  String? get spotify;
+  String get spotify;
   @override
   @JsonKey(ignore: true)
   _$$ExternalUrlsImplCopyWith<_$ExternalUrlsImpl> get copyWith =>
@@ -900,9 +900,9 @@ Image _$ImageFromJson(Map<String, dynamic> json) {
 
 /// @nodoc
 mixin _$Image {
-  String? get url => throw _privateConstructorUsedError;
-  int? get height => throw _privateConstructorUsedError;
-  int? get width => throw _privateConstructorUsedError;
+  String get url => throw _privateConstructorUsedError;
+  int get height => throw _privateConstructorUsedError;
+  int get width => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
@@ -914,7 +914,7 @@ abstract class $ImageCopyWith<$Res> {
   factory $ImageCopyWith(Image value, $Res Function(Image) then) =
       _$ImageCopyWithImpl<$Res, Image>;
   @useResult
-  $Res call({String? url, int? height, int? width});
+  $Res call({String url, int height, int width});
 }
 
 /// @nodoc
@@ -930,23 +930,23 @@ class _$ImageCopyWithImpl<$Res, $Val extends Image>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? url = freezed,
-    Object? height = freezed,
-    Object? width = freezed,
+    Object? url = null,
+    Object? height = null,
+    Object? width = null,
   }) {
     return _then(_value.copyWith(
-      url: freezed == url
+      url: null == url
           ? _value.url
           : url // ignore: cast_nullable_to_non_nullable
-              as String?,
-      height: freezed == height
+              as String,
+      height: null == height
           ? _value.height
           : height // ignore: cast_nullable_to_non_nullable
-              as int?,
-      width: freezed == width
+              as int,
+      width: null == width
           ? _value.width
           : width // ignore: cast_nullable_to_non_nullable
-              as int?,
+              as int,
     ) as $Val);
   }
 }
@@ -958,7 +958,7 @@ abstract class _$$ImageImplCopyWith<$Res> implements $ImageCopyWith<$Res> {
       __$$ImageImplCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call({String? url, int? height, int? width});
+  $Res call({String url, int height, int width});
 }
 
 /// @nodoc
@@ -972,23 +972,23 @@ class __$$ImageImplCopyWithImpl<$Res>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? url = freezed,
-    Object? height = freezed,
-    Object? width = freezed,
+    Object? url = null,
+    Object? height = null,
+    Object? width = null,
   }) {
     return _then(_$ImageImpl(
-      url: freezed == url
+      url: null == url
           ? _value.url
           : url // ignore: cast_nullable_to_non_nullable
-              as String?,
-      height: freezed == height
+              as String,
+      height: null == height
           ? _value.height
           : height // ignore: cast_nullable_to_non_nullable
-              as int?,
-      width: freezed == width
+              as int,
+      width: null == width
           ? _value.width
           : width // ignore: cast_nullable_to_non_nullable
-              as int?,
+              as int,
     ));
   }
 }
@@ -1003,11 +1003,11 @@ class _$ImageImpl implements _Image {
       _$$ImageImplFromJson(json);
 
   @override
-  final String? url;
+  final String url;
   @override
-  final int? height;
+  final int height;
   @override
-  final int? width;
+  final int width;
 
   @override
   String toString() {
@@ -1044,18 +1044,18 @@ class _$ImageImpl implements _Image {
 
 abstract class _Image implements Image {
   const factory _Image(
-      {required final String? url,
-      required final int? height,
-      required final int? width}) = _$ImageImpl;
+      {required final String url,
+      required final int height,
+      required final int width}) = _$ImageImpl;
 
   factory _Image.fromJson(Map<String, dynamic> json) = _$ImageImpl.fromJson;
 
   @override
-  String? get url;
+  String get url;
   @override
-  int? get height;
+  int get height;
   @override
-  int? get width;
+  int get width;
   @override
   @JsonKey(ignore: true)
   _$$ImageImplCopyWith<_$ImageImpl> get copyWith =>

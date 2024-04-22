@@ -1,7 +1,7 @@
 /* eslint-disable import/no-unresolved */
 import { HttpsError, onCall, onRequest } from "firebase-functions/v2/https";
 import { SPOTIFY_CLIENT_ID, SPOTIFY_CLIENT_SECRET } from "./firebase";
-import { info } from "firebase-functions/logger";
+import { debug, error, info } from "firebase-functions/logger";
 import SpotifyWebApi from "spotify-web-api-node";
 import cookieParser from "cookie-parser";
 import * as crypto from "crypto";
@@ -189,7 +189,16 @@ export const getArtistBySpotifyId = onCall(
       },
     });
 
+    if (res.status !== 200) {
+      error("something went wrong", res.status);
+      throw new HttpsError("not-found", "artist not found");
+    }
+
     const data = await res.json();
 
-    return data;
+    debug({ data });
+
+    return {
+      ...data,
+    };
   });

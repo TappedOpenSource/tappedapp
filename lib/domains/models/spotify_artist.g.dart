@@ -8,29 +8,36 @@ part of 'spotify_artist.dart';
 
 _$SpotifyArtistImpl _$$SpotifyArtistImplFromJson(Map<String, dynamic> json) =>
     _$SpotifyArtistImpl(
-      externalUrls: json['externalUrls'] == null
-          ? null
-          : ExternalUrls.fromJson(json['externalUrls'] as Map<String, dynamic>),
+      external_urls: json['external_urls'] == null
+          ? const None()
+          : Option<ExternalUrls>.fromJson(json['external_urls'],
+              (value) => ExternalUrls.fromJson(value as Map<String, dynamic>)),
       followers: json['followers'] == null
-          ? null
-          : Followers.fromJson(json['followers'] as Map<String, dynamic>),
+          ? const None()
+          : Option<Followers>.fromJson(json['followers'],
+              (value) => Followers.fromJson(value as Map<String, dynamic>)),
       genres:
-          (json['genres'] as List<dynamic>).map((e) => e as String).toList(),
+          (json['genres'] as List<dynamic>?)?.map((e) => e as String).toList(),
       href: json['href'] as String?,
-      id: json['id'] as String?,
-      images: (json['images'] as List<dynamic>)
-          .map((e) => ArtistImage.fromJson(e as Map<String, dynamic>))
-          .toList(),
+      id: json['id'] as String,
+      images: (json['images'] as List<dynamic>?)
+              ?.map((e) => ArtistImage.fromJson(e as Map<String, dynamic>))
+              .toList() ??
+          const [],
       name: json['name'] as String?,
       popularity: json['popularity'] as int?,
-      type: json['type'] as String,
+      type: json['type'] as String?,
       uri: json['uri'] as String,
     );
 
 Map<String, dynamic> _$$SpotifyArtistImplToJson(_$SpotifyArtistImpl instance) =>
     <String, dynamic>{
-      'externalUrls': instance.externalUrls?.toJson(),
-      'followers': instance.followers?.toJson(),
+      'external_urls': instance.external_urls.toJson(
+        (value) => value.toJson(),
+      ),
+      'followers': instance.followers.toJson(
+        (value) => value.toJson(),
+      ),
       'genres': instance.genres,
       'href': instance.href,
       'id': instance.id,

@@ -39,7 +39,7 @@ class ExplicitContent with _$ExplicitContent {
 @freezed
 class ExternalUrls with _$ExternalUrls {
   const factory ExternalUrls({
-    required String? spotify,
+    required String spotify,
   }) = _ExternalUrls;
 
   factory ExternalUrls.fromJson(Map<String, dynamic> json) =>
@@ -47,7 +47,7 @@ class ExternalUrls with _$ExternalUrls {
 }
 
 @freezed
-abstract class Followers with _$Followers {
+class Followers with _$Followers {
   const factory Followers({
     required String? href,
     required int? total,
@@ -58,11 +58,11 @@ abstract class Followers with _$Followers {
 }
 
 @freezed
-abstract class Image with _$Image {
+class Image with _$Image {
   const factory Image({
-    required String? url,
-    required int? height,
-    required int? width,
+    required String url,
+    required int height,
+    required int width,
   }) = _Image;
 
   factory Image.fromJson(Map<String, dynamic> json) => _$ImageFromJson(json);

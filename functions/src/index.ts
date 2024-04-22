@@ -32,7 +32,7 @@ export * from "./lib/user_feedback";
 export * from "./lib/venue_contacting";
 export * from "./lib/notifications";
 export * from "./lib/spotify";
-export * from "./lib/chartmetric";
+// export * from "./lib/chartmetric";
 
 const _deleteUser = async (data: { id: string }) => {
   // Checking attribute.

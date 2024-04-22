@@ -35,6 +35,7 @@ class OnboardingView extends StatelessWidget {
                 authenticationBloc: context.authentication,
                 storageRepository: context.storage,
                 databaseRepository: context.database,
+                spotify: context.spotify,
               ),
               // ..initFollowRecommendations(),
               child: const OnboardingForm(),

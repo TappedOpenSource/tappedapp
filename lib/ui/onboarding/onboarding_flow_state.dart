@@ -4,12 +4,13 @@ class OnboardingFlowState extends Equatable with FormzMixin {
   OnboardingFlowState({
     required this.currentUserId,
     this.username = const UsernameInput.pure(),
-    this.spotifyUrl = '',
+    this.spotifyUrl = const None(),
     this.tiktokHandle = '',
     this.tiktokFollowers = 0,
     this.instagramHandle = '',
     this.instagramFollowers = 0,
     this.eula = false,
+    this.photoUrl = const None(),
     this.pickedPhoto = const None(),
     this.status = FormzSubmissionStatus.initial,
     GlobalKey<FormState>? formKey,
@@ -19,12 +20,13 @@ class OnboardingFlowState extends Equatable with FormzMixin {
 
   final String currentUserId;
   final UsernameInput username;
-  final String spotifyUrl;
+  final Option<String> spotifyUrl;
   final String tiktokHandle;
   final int tiktokFollowers;
   final String instagramHandle;
   final int instagramFollowers;
   final bool eula;
+  final Option<String> photoUrl;
   final Option<File> pickedPhoto;
 
   final FormzSubmissionStatus status;
@@ -46,12 +48,13 @@ class OnboardingFlowState extends Equatable with FormzMixin {
 
   OnboardingFlowState copyWith({
     UsernameInput? username,
-    String? spotifyUrl,
+    Option<String>? spotifyUrl,
     String? tiktokHandle,
     int? tiktokFollowers,
     String? instagramHandle,
     int? instagramFollowers,
     bool? eula,
+    Option<String>? photoUrl,
     Option<File>? pickedPhoto,
     FormzSubmissionStatus? status,
   }) {
@@ -64,6 +67,7 @@ class OnboardingFlowState extends Equatable with FormzMixin {
       instagramHandle: instagramHandle ?? this.instagramHandle,
       instagramFollowers: instagramFollowers ?? this.instagramFollowers,
       eula: eula ?? this.eula,
+      photoUrl: photoUrl ?? this.photoUrl,
       pickedPhoto: pickedPhoto ?? this.pickedPhoto,
       status: status ?? this.status,
       formKey: formKey,
