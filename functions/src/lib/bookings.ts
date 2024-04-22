@@ -138,14 +138,17 @@ export const notifyFoundersOnBookings = functions
     const addedByUser = booking.addedByUser ?? false;
     if (addedByUser) {
       debug("booking added by user, not sending notification");
-      return;
-    }
 
-    if (booking.serviceId === undefined) {
-      throw new HttpsError(
-        "failed-precondition",
-        `booking ${data.id} does not have a serviceId`
-      );
+      if (booking.requesterId !== undefined) {
+        return;
+      }
+
+      await slackNotification({
+        title: "booking without location",
+        body: `booking ${data.id} has no venue: (${booking.location?.lat}, ${booking.location?.lng})`,
+        slackWebhookUrl: SLACK_WEBHOOK_URL.value(),
+      });
+      return;
     }
 
     const serviceSnapshot = await servicesRef

@@ -149,10 +149,7 @@ export type Booking = {
   startTime: firestore.Timestamp;
   endTime: firestore.Timestamp;
   timestamp: firestore.Timestamp;
-  placeId: string;
-  geohash: string;
-  lat: number;
-  lng: number;
+  location?: Location;
 };
 
 export type Activity = {
