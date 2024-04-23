@@ -57,13 +57,13 @@ class FeedbackButton extends StatelessWidget {
               }
             });
           },
-          color: theme.colorScheme.onSurface.withOpacity(0.1),
-          padding: const EdgeInsets.all(12),
+          color: Colors.deepOrange.withOpacity(0.1),
+          borderRadius: BorderRadius.circular(15),
           child: Text(
             'feedback',
             style: TextStyle(
               fontSize: 17,
-              color: theme.colorScheme.primary,
+              color: Colors.deepOrange,
               fontWeight: FontWeight.bold,
             ),
           ),

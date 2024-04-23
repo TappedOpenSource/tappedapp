@@ -203,34 +203,15 @@ class DraggableSheet extends StatelessWidget {
                                 ],
                               ),
                             ),
-                            Padding(
-                              padding: const EdgeInsets.symmetric(
+                            const Padding(
+                              padding: EdgeInsets.symmetric(
                                 vertical: 8,
                                 horizontal: 20,
                               ),
                               child: Row(
                                 children: [
                                   Expanded(
-                                    child: CupertinoButton(
-                                      onPressed: () =>
-                                          showCupertinoModalBottomSheet(
-                                        context: context,
-                                        builder: (context) => ShareProfileView(
-                                          userId: currentUser.id,
-                                          user: Option.of(currentUser),
-                                        ),
-                                      ),
-                                      borderRadius: BorderRadius.circular(15),
-                                      color: Colors.orange.withOpacity(0.1),
-                                      child: const Text(
-                                        'press kit',
-                                        style: TextStyle(
-                                          fontSize: 17,
-                                          color: Colors.orange,
-                                          fontWeight: FontWeight.bold,
-                                        ),
-                                      ),
-                                    ),
+                                    child: FeedbackButton(),
                                   ),
                                 ],
                               ),
