@@ -20,6 +20,7 @@ class ContactVenueRequest with _$ContactVenueRequest {
     @Default(None()) Option<String> latestMessageId,
     @Default(None()) Option<String> subject,
     @Default([]) List<String> allEmails,
+    @Default([]) List<UserModel> collaborators,
   }) = _ContactVenueRequest;
 
   factory ContactVenueRequest.fromJson(Map<String, dynamic> json) =>

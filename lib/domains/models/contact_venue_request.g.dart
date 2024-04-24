@@ -31,6 +31,10 @@ _$ContactVenueRequestImpl _$$ContactVenueRequestImplFromJson(
               ?.map((e) => e as String)
               .toList() ??
           const [],
+      collaborators: (json['collaborators'] as List<dynamic>?)
+              ?.map((e) => UserModel.fromJson(e as Map<String, dynamic>))
+              .toList() ??
+          const [],
     );
 
 Map<String, dynamic> _$$ContactVenueRequestImplToJson(
@@ -51,4 +55,5 @@ Map<String, dynamic> _$$ContactVenueRequestImplToJson(
         (value) => value,
       ),
       'allEmails': instance.allEmails,
+      'collaborators': instance.collaborators.map((e) => e.toJson()).toList(),
     };

@@ -24,6 +24,7 @@ class GigSearchResultsView extends StatelessWidget {
                     context.push(
                       RequestToPerformPage(
                         venues: state.selectedResults,
+                        collaborators: state.collaborators,
                       ),
                     );
                   },

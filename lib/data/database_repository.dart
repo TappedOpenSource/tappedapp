@@ -272,6 +272,7 @@ abstract class DatabaseRepository {
     required UserModel venue,
     required String note,
     required String bookingEmail,
+    required List<UserModel> collaborators,
   });
 
   Future<bool> hasUserSentContactRequest({

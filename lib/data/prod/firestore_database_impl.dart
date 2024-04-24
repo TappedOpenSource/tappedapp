@@ -2012,6 +2012,7 @@ class FirestoreDatabaseImpl extends DatabaseRepository {
     required UserModel venue,
     required String note,
     required String bookingEmail,
+    required List<UserModel> collaborators,
   }) async {
     try {
       // already contacted?
@@ -2041,6 +2042,7 @@ class FirestoreDatabaseImpl extends DatabaseRepository {
         allEmails: [bookingEmail],
         note: note,
         timestamp: DateTime.now(),
+        collaborators: collaborators,
       );
 
       logger.info('contactVenueRequest $contactVenueRequest');

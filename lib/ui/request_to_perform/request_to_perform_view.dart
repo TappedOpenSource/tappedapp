@@ -20,10 +20,12 @@ import 'package:intheloopapp/utils/current_user_builder.dart';
 class RequestToPerformView extends StatefulWidget {
   const RequestToPerformView({
     required this.venues,
+    required this.collaborators,
     super.key,
   });
 
   final List<UserModel> venues;
+  final List<UserModel> collaborators;
 
   @override
   State<RequestToPerformView> createState() => _RequestToPerformViewState();
@@ -33,6 +35,7 @@ class _RequestToPerformViewState extends State<RequestToPerformView> {
   String _note = '';
 
   List<UserModel> get _venues => widget.venues;
+  List<UserModel> get _collaborators => widget.collaborators;
 
   @override
   void initState() {
@@ -109,6 +112,7 @@ class _RequestToPerformViewState extends State<RequestToPerformView> {
                                 venue: venue,
                                 note: _note,
                                 bookingEmail: email,
+                                collaborators: _collaborators,
                               );
                             },
                           );

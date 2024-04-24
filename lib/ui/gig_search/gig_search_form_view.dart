@@ -51,7 +51,8 @@ class GigSearchFormView extends StatelessWidget {
                 }
 
                 context.read<GigSearchCubit>().searchVenues().catchError((
-                    error) {
+                  error,
+                ) {
                   ScaffoldMessenger.of(context).showSnackBar(
                     SnackBar(
                       backgroundColor: Colors.redAccent,
