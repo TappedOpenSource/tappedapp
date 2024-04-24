@@ -20,16 +20,16 @@ SpotifyArtist _$SpotifyArtistFromJson(Map<String, dynamic> json) {
 
 /// @nodoc
 mixin _$SpotifyArtist {
-  Option<ExternalUrls> get external_urls => throw _privateConstructorUsedError;
-  Option<Followers> get followers => throw _privateConstructorUsedError;
   List<String>? get genres => throw _privateConstructorUsedError;
   String? get href => throw _privateConstructorUsedError;
   String get id => throw _privateConstructorUsedError;
-  List<ArtistImage> get images => throw _privateConstructorUsedError;
   String? get name => throw _privateConstructorUsedError;
   int? get popularity => throw _privateConstructorUsedError;
   String? get type => throw _privateConstructorUsedError;
   String get uri => throw _privateConstructorUsedError;
+  Option<ExternalUrls> get external_urls => throw _privateConstructorUsedError;
+  Option<Followers> get followers => throw _privateConstructorUsedError;
+  List<ArtistImage> get images => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
@@ -44,16 +44,16 @@ abstract class $SpotifyArtistCopyWith<$Res> {
       _$SpotifyArtistCopyWithImpl<$Res, SpotifyArtist>;
   @useResult
   $Res call(
-      {Option<ExternalUrls> external_urls,
-      Option<Followers> followers,
-      List<String>? genres,
+      {List<String>? genres,
       String? href,
       String id,
-      List<ArtistImage> images,
       String? name,
       int? popularity,
       String? type,
-      String uri});
+      String uri,
+      Option<ExternalUrls> external_urls,
+      Option<Followers> followers,
+      List<ArtistImage> images});
 }
 
 /// @nodoc
@@ -69,26 +69,18 @@ class _$SpotifyArtistCopyWithImpl<$Res, $Val extends SpotifyArtist>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? external_urls = null,
-    Object? followers = null,
     Object? genres = freezed,
     Object? href = freezed,
     Object? id = null,
-    Object? images = null,
     Object? name = freezed,
     Object? popularity = freezed,
     Object? type = freezed,
     Object? uri = null,
+    Object? external_urls = null,
+    Object? followers = null,
+    Object? images = null,
   }) {
     return _then(_value.copyWith(
-      external_urls: null == external_urls
-          ? _value.external_urls
-          : external_urls // ignore: cast_nullable_to_non_nullable
-              as Option<ExternalUrls>,
-      followers: null == followers
-          ? _value.followers
-          : followers // ignore: cast_nullable_to_non_nullable
-              as Option<Followers>,
       genres: freezed == genres
           ? _value.genres
           : genres // ignore: cast_nullable_to_non_nullable
@@ -101,10 +93,6 @@ class _$SpotifyArtistCopyWithImpl<$Res, $Val extends SpotifyArtist>
           ? _value.id
           : id // ignore: cast_nullable_to_non_nullable
               as String,
-      images: null == images
-          ? _value.images
-          : images // ignore: cast_nullable_to_non_nullable
-              as List<ArtistImage>,
       name: freezed == name
           ? _value.name
           : name // ignore: cast_nullable_to_non_nullable
@@ -121,6 +109,18 @@ class _$SpotifyArtistCopyWithImpl<$Res, $Val extends SpotifyArtist>
           ? _value.uri
           : uri // ignore: cast_nullable_to_non_nullable
               as String,
+      external_urls: null == external_urls
+          ? _value.external_urls
+          : external_urls // ignore: cast_nullable_to_non_nullable
+              as Option<ExternalUrls>,
+      followers: null == followers
+          ? _value.followers
+          : followers // ignore: cast_nullable_to_non_nullable
+              as Option<Followers>,
+      images: null == images
+          ? _value.images
+          : images // ignore: cast_nullable_to_non_nullable
+              as List<ArtistImage>,
     ) as $Val);
   }
 }
@@ -134,16 +134,16 @@ abstract class _$$SpotifyArtistImplCopyWith<$Res>
   @override
   @useResult
   $Res call(
-      {Option<ExternalUrls> external_urls,
-      Option<Followers> followers,
-      List<String>? genres,
+      {List<String>? genres,
       String? href,
       String id,
-      List<ArtistImage> images,
       String? name,
       int? popularity,
       String? type,
-      String uri});
+      String uri,
+      Option<ExternalUrls> external_urls,
+      Option<Followers> followers,
+      List<ArtistImage> images});
 }
 
 /// @nodoc
@@ -157,26 +157,18 @@ class __$$SpotifyArtistImplCopyWithImpl<$Res>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? external_urls = null,
-    Object? followers = null,
     Object? genres = freezed,
     Object? href = freezed,
     Object? id = null,
-    Object? images = null,
     Object? name = freezed,
     Object? popularity = freezed,
     Object? type = freezed,
     Object? uri = null,
+    Object? external_urls = null,
+    Object? followers = null,
+    Object? images = null,
   }) {
     return _then(_$SpotifyArtistImpl(
-      external_urls: null == external_urls
-          ? _value.external_urls
-          : external_urls // ignore: cast_nullable_to_non_nullable
-              as Option<ExternalUrls>,
-      followers: null == followers
-          ? _value.followers
-          : followers // ignore: cast_nullable_to_non_nullable
-              as Option<Followers>,
       genres: freezed == genres
           ? _value._genres
           : genres // ignore: cast_nullable_to_non_nullable
@@ -189,10 +181,6 @@ class __$$SpotifyArtistImplCopyWithImpl<$Res>
           ? _value.id
           : id // ignore: cast_nullable_to_non_nullable
               as String,
-      images: null == images
-          ? _value._images
-          : images // ignore: cast_nullable_to_non_nullable
-              as List<ArtistImage>,
       name: freezed == name
           ? _value.name
           : name // ignore: cast_nullable_to_non_nullable
@@ -209,6 +197,18 @@ class __$$SpotifyArtistImplCopyWithImpl<$Res>
           ? _value.uri
           : uri // ignore: cast_nullable_to_non_nullable
               as String,
+      external_urls: null == external_urls
+          ? _value.external_urls
+          : external_urls // ignore: cast_nullable_to_non_nullable
+              as Option<ExternalUrls>,
+      followers: null == followers
+          ? _value.followers
+          : followers // ignore: cast_nullable_to_non_nullable
+              as Option<Followers>,
+      images: null == images
+          ? _value._images
+          : images // ignore: cast_nullable_to_non_nullable
+              as List<ArtistImage>,
     ));
   }
 }
@@ -218,28 +218,22 @@ class __$$SpotifyArtistImplCopyWithImpl<$Res>
 @JsonSerializable(explicitToJson: true)
 class _$SpotifyArtistImpl implements _SpotifyArtist {
   const _$SpotifyArtistImpl(
-      {this.external_urls = const None(),
-      this.followers = const None(),
-      required final List<String>? genres,
+      {required final List<String>? genres,
       required this.href,
       required this.id,
-      final List<ArtistImage> images = const [],
       required this.name,
       required this.popularity,
       required this.type,
-      required this.uri})
+      required this.uri,
+      this.external_urls = const None(),
+      this.followers = const None(),
+      final List<ArtistImage> images = const []})
       : _genres = genres,
         _images = images;
 
   factory _$SpotifyArtistImpl.fromJson(Map<String, dynamic> json) =>
       _$$SpotifyArtistImplFromJson(json);
 
-  @override
-  @JsonKey()
-  final Option<ExternalUrls> external_urls;
-  @override
-  @JsonKey()
-  final Option<Followers> followers;
   final List<String>? _genres;
   @override
   List<String>? get genres {
@@ -254,6 +248,20 @@ class _$SpotifyArtistImpl implements _SpotifyArtist {
   final String? href;
   @override
   final String id;
+  @override
+  final String? name;
+  @override
+  final int? popularity;
+  @override
+  final String? type;
+  @override
+  final String uri;
+  @override
+  @JsonKey()
+  final Option<ExternalUrls> external_urls;
+  @override
+  @JsonKey()
+  final Option<Followers> followers;
   final List<ArtistImage> _images;
   @override
   @JsonKey()
@@ -264,17 +272,8 @@ class _$SpotifyArtistImpl implements _SpotifyArtist {
   }
 
   @override
-  final String? name;
-  @override
-  final int? popularity;
-  @override
-  final String? type;
-  @override
-  final String uri;
-
-  @override
   String toString() {
-    return 'SpotifyArtist(external_urls: $external_urls, followers: $followers, genres: $genres, href: $href, id: $id, images: $images, name: $name, popularity: $popularity, type: $type, uri: $uri)';
+    return 'SpotifyArtist(genres: $genres, href: $href, id: $id, name: $name, popularity: $popularity, type: $type, uri: $uri, external_urls: $external_urls, followers: $followers, images: $images)';
   }
 
   @override
@@ -282,35 +281,35 @@ class _$SpotifyArtistImpl implements _SpotifyArtist {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$SpotifyArtistImpl &&
-            (identical(other.external_urls, external_urls) ||
-                other.external_urls == external_urls) &&
-            (identical(other.followers, followers) ||
-                other.followers == followers) &&
             const DeepCollectionEquality().equals(other._genres, _genres) &&
             (identical(other.href, href) || other.href == href) &&
             (identical(other.id, id) || other.id == id) &&
-            const DeepCollectionEquality().equals(other._images, _images) &&
             (identical(other.name, name) || other.name == name) &&
             (identical(other.popularity, popularity) ||
                 other.popularity == popularity) &&
             (identical(other.type, type) || other.type == type) &&
-            (identical(other.uri, uri) || other.uri == uri));
+            (identical(other.uri, uri) || other.uri == uri) &&
+            (identical(other.external_urls, external_urls) ||
+                other.external_urls == external_urls) &&
+            (identical(other.followers, followers) ||
+                other.followers == followers) &&
+            const DeepCollectionEquality().equals(other._images, _images));
   }
 
   @JsonKey(ignore: true)
   @override
   int get hashCode => Object.hash(
       runtimeType,
-      external_urls,
-      followers,
       const DeepCollectionEquality().hash(_genres),
       href,
       id,
-      const DeepCollectionEquality().hash(_images),
       name,
       popularity,
       type,
-      uri);
+      uri,
+      external_urls,
+      followers,
+      const DeepCollectionEquality().hash(_images));
 
   @JsonKey(ignore: true)
   @override
@@ -328,32 +327,26 @@ class _$SpotifyArtistImpl implements _SpotifyArtist {
 
 abstract class _SpotifyArtist implements SpotifyArtist {
   const factory _SpotifyArtist(
-      {final Option<ExternalUrls> external_urls,
-      final Option<Followers> followers,
-      required final List<String>? genres,
+      {required final List<String>? genres,
       required final String? href,
       required final String id,
-      final List<ArtistImage> images,
       required final String? name,
       required final int? popularity,
       required final String? type,
-      required final String uri}) = _$SpotifyArtistImpl;
+      required final String uri,
+      final Option<ExternalUrls> external_urls,
+      final Option<Followers> followers,
+      final List<ArtistImage> images}) = _$SpotifyArtistImpl;
 
   factory _SpotifyArtist.fromJson(Map<String, dynamic> json) =
       _$SpotifyArtistImpl.fromJson;
 
-  @override
-  Option<ExternalUrls> get external_urls;
-  @override
-  Option<Followers> get followers;
   @override
   List<String>? get genres;
   @override
   String? get href;
   @override
   String get id;
-  @override
-  List<ArtistImage> get images;
   @override
   String? get name;
   @override
@@ -362,6 +355,12 @@ abstract class _SpotifyArtist implements SpotifyArtist {
   String? get type;
   @override
   String get uri;
+  @override
+  Option<ExternalUrls> get external_urls;
+  @override
+  Option<Followers> get followers;
+  @override
+  List<ArtistImage> get images;
   @override
   @JsonKey(ignore: true)
   _$$SpotifyArtistImplCopyWith<_$SpotifyArtistImpl> get copyWith =>

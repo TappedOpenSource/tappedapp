@@ -9,6 +9,7 @@ abstract class SearchRepository {
     List<String>? genres,
     List<String>? venueGenres,
     List<String>? occupations,
+    bool? unclaimed,
     int? minCapacity,
     int? maxCapacity,
     double? lat,

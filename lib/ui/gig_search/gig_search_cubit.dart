@@ -72,6 +72,26 @@ class GigSearchCubit extends Cubit<GigSearchState> {
     );
   }
 
+  void addCollaborator(UserModel collaborator) {
+    if (state.collaborators.contains(collaborator)) {
+      return;
+    }
+
+    emit(
+      state.copyWith(
+        collaborators: [...state.collaborators, collaborator],
+      ),
+    );
+  }
+
+  void removeCollaborator(UserModel collaborator) {
+    emit(
+      state.copyWith(
+        collaborators: state.collaborators.where((c) => c.id != collaborator.id).toList(),
+      ),
+    );
+  }
+
   Future<void> searchVenues() async {
     if (state.genres.isEmpty) {
       throw Exception('Please select at least one genre');

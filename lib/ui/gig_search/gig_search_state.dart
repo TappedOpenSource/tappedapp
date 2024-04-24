@@ -12,6 +12,7 @@ class GigSearchState with _$GigSearchState {
     @Default(RangeValues(0, 200)) RangeValues capacityRange,
     @Default(DateRangeType.fixed) DateRangeType dateRangeType,
     @Default([]) List<SelectableResult> results,
+    @Default([]) List<UserModel> collaborators,
     @Default(FormzSubmissionStatus.initial) FormzSubmissionStatus formStatus,
   }) = _GigSearchState;
 }

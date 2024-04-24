@@ -23,6 +23,7 @@ mixin _$GigSearchState {
   RangeValues get capacityRange => throw _privateConstructorUsedError;
   DateRangeType get dateRangeType => throw _privateConstructorUsedError;
   List<SelectableResult> get results => throw _privateConstructorUsedError;
+  List<UserModel> get collaborators => throw _privateConstructorUsedError;
   FormzSubmissionStatus get formStatus => throw _privateConstructorUsedError;
 
   @JsonKey(ignore: true)
@@ -44,6 +45,7 @@ abstract class $GigSearchStateCopyWith<$Res> {
       RangeValues capacityRange,
       DateRangeType dateRangeType,
       List<SelectableResult> results,
+      List<UserModel> collaborators,
       FormzSubmissionStatus formStatus});
 }
 
@@ -67,6 +69,7 @@ class _$GigSearchStateCopyWithImpl<$Res, $Val extends GigSearchState>
     Object? capacityRange = null,
     Object? dateRangeType = null,
     Object? results = null,
+    Object? collaborators = null,
     Object? formStatus = null,
   }) {
     return _then(_value.copyWith(
@@ -98,6 +101,10 @@ class _$GigSearchStateCopyWithImpl<$Res, $Val extends GigSearchState>
           ? _value.results
           : results // ignore: cast_nullable_to_non_nullable
               as List<SelectableResult>,
+      collaborators: null == collaborators
+          ? _value.collaborators
+          : collaborators // ignore: cast_nullable_to_non_nullable
+              as List<UserModel>,
       formStatus: null == formStatus
           ? _value.formStatus
           : formStatus // ignore: cast_nullable_to_non_nullable
@@ -122,6 +129,7 @@ abstract class _$$GigSearchStateImplCopyWith<$Res>
       RangeValues capacityRange,
       DateRangeType dateRangeType,
       List<SelectableResult> results,
+      List<UserModel> collaborators,
       FormzSubmissionStatus formStatus});
 }
 
@@ -143,6 +151,7 @@ class __$$GigSearchStateImplCopyWithImpl<$Res>
     Object? capacityRange = null,
     Object? dateRangeType = null,
     Object? results = null,
+    Object? collaborators = null,
     Object? formStatus = null,
   }) {
     return _then(_$GigSearchStateImpl(
@@ -174,6 +183,10 @@ class __$$GigSearchStateImplCopyWithImpl<$Res>
           ? _value._results
           : results // ignore: cast_nullable_to_non_nullable
               as List<SelectableResult>,
+      collaborators: null == collaborators
+          ? _value._collaborators
+          : collaborators // ignore: cast_nullable_to_non_nullable
+              as List<UserModel>,
       formStatus: null == formStatus
           ? _value.formStatus
           : formStatus // ignore: cast_nullable_to_non_nullable
@@ -193,11 +206,13 @@ class _$GigSearchStateImpl implements _GigSearchState {
       this.capacityRange = const RangeValues(0, 200),
       this.dateRangeType = DateRangeType.fixed,
       final List<SelectableResult> results = const [],
+      final List<UserModel> collaborators = const [],
       this.formStatus = FormzSubmissionStatus.initial})
       : _genres = genres,
         _startDate = startDate,
         _endDate = endDate,
-        _results = results;
+        _results = results,
+        _collaborators = collaborators;
 
   @override
   @JsonKey()
@@ -244,13 +259,22 @@ class _$GigSearchStateImpl implements _GigSearchState {
     return EqualUnmodifiableListView(_results);
   }
 
+  final List<UserModel> _collaborators;
+  @override
+  @JsonKey()
+  List<UserModel> get collaborators {
+    if (_collaborators is EqualUnmodifiableListView) return _collaborators;
+    // ignore: implicit_dynamic_type
+    return EqualUnmodifiableListView(_collaborators);
+  }
+
   @override
   @JsonKey()
   final FormzSubmissionStatus formStatus;
 
   @override
   String toString() {
-    return 'GigSearchState(place: $place, genres: $genres, startDate: $startDate, endDate: $endDate, capacityRange: $capacityRange, dateRangeType: $dateRangeType, results: $results, formStatus: $formStatus)';
+    return 'GigSearchState(place: $place, genres: $genres, startDate: $startDate, endDate: $endDate, capacityRange: $capacityRange, dateRangeType: $dateRangeType, results: $results, collaborators: $collaborators, formStatus: $formStatus)';
   }
 
   @override
@@ -268,6 +292,8 @@ class _$GigSearchStateImpl implements _GigSearchState {
             (identical(other.dateRangeType, dateRangeType) ||
                 other.dateRangeType == dateRangeType) &&
             const DeepCollectionEquality().equals(other._results, _results) &&
+            const DeepCollectionEquality()
+                .equals(other._collaborators, _collaborators) &&
             (identical(other.formStatus, formStatus) ||
                 other.formStatus == formStatus));
   }
@@ -282,6 +308,7 @@ class _$GigSearchStateImpl implements _GigSearchState {
       capacityRange,
       dateRangeType,
       const DeepCollectionEquality().hash(_results),
+      const DeepCollectionEquality().hash(_collaborators),
       formStatus);
 
   @JsonKey(ignore: true)
@@ -301,6 +328,7 @@ abstract class _GigSearchState implements GigSearchState {
       final RangeValues capacityRange,
       final DateRangeType dateRangeType,
       final List<SelectableResult> results,
+      final List<UserModel> collaborators,
       final FormzSubmissionStatus formStatus}) = _$GigSearchStateImpl;
 
   @override
@@ -317,6 +345,8 @@ abstract class _GigSearchState implements GigSearchState {
   DateRangeType get dateRangeType;
   @override
   List<SelectableResult> get results;
+  @override
+  List<UserModel> get collaborators;
   @override
   FormzSubmissionStatus get formStatus;
   @override

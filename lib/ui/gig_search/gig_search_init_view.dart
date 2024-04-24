@@ -43,7 +43,7 @@ class GigSearchInitView extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               const Text(
-                'Find the Right Venues for Your Sound!',
+                'find the right venues for your sound!',
                 style: TextStyle(
                   fontSize: 32,
                   fontWeight: FontWeight.w700,
@@ -52,22 +52,22 @@ class GigSearchInitView extends StatelessWidget {
               const SizedBox(height: 36),
               _buildItem(
                 icon: CupertinoIcons.search,
-                label: 'Discover ideal stages effortlessly.',
+                label: 'discover ideal stages effortlessly.',
               ),
               const SizedBox(height: 24),
               _buildItem(
                 icon: CupertinoIcons.star,
-                label: 'Connect with diverse venues.',
+                label: 'connect with diverse venues.',
               ),
               const SizedBox(height: 24),
               _buildItem(
                 icon: CupertinoIcons.bell,
-                label: 'Get notified when new gigs are available.',
+                label: 'get notified when new gigs are available.',
               ),
               const SizedBox(height: 24),
               _buildItem(
                 icon: CupertinoIcons.arrow_up,
-                label: 'Elevate your music career!',
+                label: 'elevate your music career!',
               ),
               const SizedBox(height: 24),
               const Text(

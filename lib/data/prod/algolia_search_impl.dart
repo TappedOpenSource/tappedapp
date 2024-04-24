@@ -48,6 +48,7 @@ class AlgoliaSearchImpl extends SearchRepository {
     List<String>? genres,
     List<String>? venueGenres,
     List<String>? occupations,
+    bool? unclaimed,
     int? minCapacity,
     int? maxCapacity,
     double? lat,
@@ -70,6 +71,8 @@ class AlgoliaSearchImpl extends SearchRepository {
     final formattedVenueGenreFilter = venueGenres != null
         ? '(${venueGenres.map((e) => "venueInfo.genres:'$e'").join(' OR ')})'
         : null;
+    final formattedUnclaimedFilter =
+        unclaimed != null ? 'unclaimed:$unclaimed' : null;
 
     final filters = [
       formattedIsDeletedFilter,
@@ -77,6 +80,7 @@ class AlgoliaSearchImpl extends SearchRepository {
       formattedGenreFilter,
       formattedOccupationFilter,
       formattedVenueGenreFilter,
+      formattedUnclaimedFilter,
     ]..removeWhere((element) => element == null);
 
     final formattedLocationFilter =

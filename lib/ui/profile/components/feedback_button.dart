@@ -59,7 +59,7 @@ class FeedbackButton extends StatelessWidget {
           },
           color: Colors.deepOrange.withOpacity(0.1),
           borderRadius: BorderRadius.circular(15),
-          child: Text(
+          child: const Text(
             'feedback',
             style: TextStyle(
               fontSize: 17,
