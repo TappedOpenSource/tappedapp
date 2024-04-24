@@ -85,6 +85,13 @@ class VenueFilterForm extends StatelessWidget {
                                       }
                                     },
                                   ),
+                                  if (state.place.isNone())
+                                    const Text(
+                                      'please select a city',
+                                      style: TextStyle(
+                                        color: Colors.red,
+                                      ),
+                                    ),
                                   const SizedBox(height: 20),
                                   const Text(
                                     'genres',
@@ -195,51 +202,6 @@ class VenueFilterForm extends StatelessWidget {
                                   //     ),
                                   //   ],
                                   // ),
-                                  const Spacer(),
-                                  Row(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    children: [
-                                      Expanded(
-                                        child: CupertinoButton.filled(
-                                          onPressed: () {
-                                            if (!isPremium) {
-                                              context.push(
-                                                PaywallPage(),
-                                              );
-                                              return;
-                                            }
-
-                                            context
-                                                .read<GigSearchCubit>()
-                                                .searchVenues()
-                                                .catchError((error) {
-                                              ScaffoldMessenger.of(context)
-                                                  .showSnackBar(
-                                                SnackBar(
-                                                  backgroundColor: Colors.redAccent,
-                                                  shape: RoundedRectangleBorder(
-                                                    borderRadius:
-                                                    BorderRadius.circular(15),
-                                                  ),
-                                                  content: Text(
-                                                    error.toString(),
-                                                  ),
-                                                ),
-                                              );
-                                            });
-                                          },
-                                          borderRadius: BorderRadius.circular(15),
-                                          child: const Text(
-                                            'search',
-                                            style: TextStyle(
-                                              fontWeight: FontWeight.w700,
-                                              color: Colors.white,
-                                            ),
-                                          ),
-                                        ),
-                                      ),
-                                    ],
-                                  ),
                                 ],
                               ),
                             ),

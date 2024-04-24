@@ -22,7 +22,6 @@ import 'package:intheloopapp/ui/create_service/create_service_view.dart';
 import 'package:intheloopapp/ui/discover/components/search_view.dart';
 import 'package:intheloopapp/ui/discover/discover_view.dart';
 import 'package:intheloopapp/ui/forms/location_form/location_form_view.dart';
-import 'package:intheloopapp/ui/gig_search/gig_search_init_view.dart';
 import 'package:intheloopapp/ui/gig_search/gig_search_view.dart';
 import 'package:intheloopapp/ui/login/forgot_password_view.dart';
 import 'package:intheloopapp/ui/login/login_view.dart';
@@ -419,14 +418,6 @@ final class GigSearchPage extends TappedRoute {
       : super(
           routeName: '/gig_search',
           view: const GigSearchView(),
-        );
-}
-
-final class GigSearchInitPage extends TappedRoute {
-  GigSearchInitPage()
-      : super(
-          routeName: '/gig_search_init',
-          view: const GigSearchInitView(),
         );
 }
 

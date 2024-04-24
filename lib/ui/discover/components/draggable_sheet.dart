@@ -186,7 +186,7 @@ class DraggableSheet extends StatelessWidget {
                                   Expanded(
                                     child: CupertinoButton(
                                       onPressed: () => context.push(
-                                        GigSearchInitPage(),
+                                        GigSearchPage(),
                                       ),
                                       borderRadius: BorderRadius.circular(15),
                                       color: theme.colorScheme.primary
