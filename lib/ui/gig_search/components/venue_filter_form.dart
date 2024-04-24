@@ -4,8 +4,6 @@ import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fpdart/fpdart.dart';
 import 'package:intheloopapp/domains/models/genre.dart';
-import 'package:intheloopapp/domains/navigation_bloc/navigation_bloc.dart';
-import 'package:intheloopapp/domains/navigation_bloc/tapped_route.dart';
 import 'package:intheloopapp/ui/app_theme_cubit.dart';
 import 'package:intheloopapp/ui/forms/location_text_field.dart';
 import 'package:intheloopapp/ui/gig_search/gig_search_cubit.dart';
@@ -120,7 +118,7 @@ class VenueFilterForm extends StatelessWidget {
                                       const SizedBox(width: 8),
                                       GestureDetector(
                                         onTap: () {
-                                          showCupertinoDialog(
+                                          showCupertinoDialog<void>(
                                             context: context,
                                             builder: (context) {
                                               return CupertinoAlertDialog(

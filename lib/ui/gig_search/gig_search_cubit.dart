@@ -8,6 +8,7 @@ import 'package:intheloopapp/data/database_repository.dart';
 import 'package:intheloopapp/data/places_repository.dart';
 import 'package:intheloopapp/data/search_repository.dart';
 import 'package:intheloopapp/domains/models/genre.dart';
+import 'package:intheloopapp/domains/models/location.dart';
 import 'package:intheloopapp/domains/models/performer_info.dart';
 import 'package:intheloopapp/domains/models/user_model.dart';
 import 'package:intheloopapp/utils/app_logger.dart';
@@ -19,13 +20,13 @@ part 'gig_search_cubit.freezed.dart';
 class GigSearchCubit extends Cubit<GigSearchState> {
   GigSearchCubit({
     required this.database,
-    required this.initialPlace,
-    required this.initialGenres,
+    required this.places,
     required this.search,
+    required this.initialLocation,
+    required this.initialGenres,
     required this.category,
   }) : super(
           GigSearchState(
-            place: initialPlace,
             genres: initialGenres,
             capacityRange: RangeValues(
               0,
@@ -36,9 +37,29 @@ class GigSearchCubit extends Cubit<GigSearchState> {
 
   final DatabaseRepository database;
   final SearchRepository search;
-  final Option<PlaceData> initialPlace;
+  final PlacesRepository places;
+  final Option<Location> initialLocation;
   final List<Genre> initialGenres;
   final PerformerCategory category;
+
+
+  Future<void> initPlace() async {
+    final trace = logger.createTrace('initPlace');
+    await trace.start();
+    try {
+      final place = await switch (initialLocation) {
+        None() => Future<Option<PlaceData>>.value(const None()),
+        Some(:final value) => (() {
+          return places.getPlaceById(value.placeId);
+        })(),
+      };
+      emit(state.copyWith(place: place));
+    } catch (e, s) {
+      logger.error('initPlace error', error: e, stackTrace: s);
+    } finally {
+      await trace.stop();
+    }
+  }
 
   void resetForm() {
     emit(
@@ -87,7 +108,8 @@ class GigSearchCubit extends Cubit<GigSearchState> {
   void removeCollaborator(UserModel collaborator) {
     emit(
       state.copyWith(
-        collaborators: state.collaborators.where((c) => c.id != collaborator.id).toList(),
+        collaborators:
+            state.collaborators.where((c) => c.id != collaborator.id).toList(),
       ),
     );
   }
@@ -118,7 +140,8 @@ class GigSearchCubit extends Cubit<GigSearchState> {
     );
 
     final minCap = state.capacityRangeStart;
-    final maxCap = state.capacityRangeEnd == maxCapacity ? 100000 : state.capacityRangeEnd;
+    final maxCap =
+        state.capacityRangeEnd == maxCapacity ? 100000 : state.capacityRangeEnd;
 
     final hits = await search.queryUsers(
       '',
@@ -131,10 +154,12 @@ class GigSearchCubit extends Cubit<GigSearchState> {
       limit: 150,
     );
 
-    final potentialUsers = await Future.wait(hits.map((hit) async {
-      final user = await database.getUserById(hit.id);
-      return user;
-    }),);
+    final potentialUsers = await Future.wait(
+      hits.map((hit) async {
+        final user = await database.getUserById(hit.id);
+        return user;
+      }),
+    );
 
     final users = potentialUsers
         .whereType<Some<UserModel>>()

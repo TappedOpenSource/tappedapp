@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:formz/formz.dart';
 import 'package:fpdart/fpdart.dart';
 import 'package:intheloopapp/data/database_repository.dart';
+import 'package:intheloopapp/data/places_repository.dart';
 import 'package:intheloopapp/data/search_repository.dart';
 import 'package:intheloopapp/domains/models/genre.dart';
 import 'package:intheloopapp/domains/models/performer_info.dart';
@@ -40,12 +41,13 @@ class GigSearchView extends StatelessWidget {
           create: (context) => GigSearchCubit(
             database: context.read<DatabaseRepository>(),
             search: context.read<SearchRepository>(),
+            places: context.read<PlacesRepository>(),
             initialGenres: fromStrings(
               currentUser.performerInfo
                   .map((info) => info.genres)
                   .getOrElse(() => []),
             ),
-            initialPlace: const None(),
+            initialLocation: currentUser.location,
             category: currentUser.performerInfo
                 .map(
                   (t) => t.category,
@@ -53,7 +55,7 @@ class GigSearchView extends StatelessWidget {
                 .getOrElse(
                   () => PerformerCategory.undiscovered,
                 ),
-          ),
+          )..initPlace(),
           child: _viewSelector(),
         );
       },
