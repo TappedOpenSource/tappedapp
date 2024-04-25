@@ -3,6 +3,7 @@ import 'package:avatar_stack/positions.dart';
 import 'package:cloud_functions/cloud_functions.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:fpdart/fpdart.dart' hide State;
@@ -35,6 +36,7 @@ class _RequestToPerformViewState extends State<RequestToPerformView> {
   String _note = '';
 
   List<UserModel> get _venues => widget.venues;
+
   List<UserModel> get _collaborators => widget.collaborators;
 
   @override
@@ -159,7 +161,65 @@ class _RequestToPerformViewState extends State<RequestToPerformView> {
       builder: (context, currentUser) {
         return Scaffold(
           backgroundColor: theme.colorScheme.background,
-          appBar: AppBar(),
+          appBar: AppBar(
+            actions: [
+              IconButton(
+                onPressed: () {
+                  showModalBottomSheet<void>(
+                    context: context,
+                    showDragHandle: true,
+                    builder: (context) {
+                      return Padding(
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 16,
+                          vertical: 12,
+                        ),
+                        child: SingleChildScrollView(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              const SizedBox(height: 12),
+                              Text(
+                                currentUser.displayName,
+                                style: const TextStyle(
+                                  fontSize: 24,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                              const SizedBox(height: 12),
+                              const Text(
+                                'Socials',
+                                style: TextStyle(
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                              SocialFollowingMenu(
+                                user: currentUser,
+                              ),
+                              const SizedBox(height: 12),
+                              const Text(
+                                'Booking History',
+                                style: TextStyle(
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                              PastBookingsSlider(
+                                user: currentUser,
+                              ),
+                              const SizedBox(height: 12),
+                            ],
+                          ),
+                        ),
+                      );
+                    },
+                  );
+                },
+                icon: const Icon(Icons.info_outline),
+              ),
+            ],
+          ),
           body: SafeArea(
             child: Padding(
               padding: const EdgeInsets.symmetric(
@@ -225,67 +285,93 @@ class _RequestToPerformViewState extends State<RequestToPerformView> {
                       });
                     },
                   ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      CupertinoButton(
-                        onPressed: () {
-                          showModalBottomSheet<void>(
-                            context: context,
-                            showDragHandle: true,
-                            builder: (context) {
-                              return Padding(
-                                padding: const EdgeInsets.symmetric(
-                                  horizontal: 16,
-                                  vertical: 12,
-                                ),
-                                child: SingleChildScrollView(
-                                  child: Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      const SizedBox(height: 12),
-                                      Text(
-                                        currentUser.displayName,
-                                        style: const TextStyle(
-                                          fontSize: 24,
-                                          fontWeight: FontWeight.bold,
-                                        ),
-                                      ),
-                                      const SizedBox(height: 12),
-                                      const Text(
-                                        'Socials',
-                                        style: TextStyle(
-                                          fontSize: 16,
-                                          fontWeight: FontWeight.bold,
-                                        ),
-                                      ),
-                                      SocialFollowingMenu(
-                                        user: currentUser,
-                                      ),
-                                      const SizedBox(height: 12),
-                                      const Text(
-                                        'Booking History',
-                                        style: TextStyle(
-                                          fontSize: 16,
-                                          fontWeight: FontWeight.bold,
-                                        ),
-                                      ),
-                                      PastBookingsSlider(
-                                        user: currentUser,
-                                      ),
-                                      const SizedBox(height: 12),
-                                    ],
-                                  ),
-                                ),
-                              );
-                            },
-                          );
-                        },
-                        child: const Text('what info are we sending?'),
-                      ),
-                    ],
+                  GestureDetector(
+                    onTap: () {
+                      context.push(
+                        AddCollaboratorsPage(
+                          initialCollaborators: _collaborators,
+                          onCollaboratorAdded: (collaborator) {
+                            setState(() {
+                              _collaborators.add(collaborator);
+                            });
+                          },
+                          onCollaboratorRemoved: (collaborator) {
+                            setState(() {
+                              _collaborators.remove(collaborator);
+                            });
+                          },
+                        ),
+                      );
+                    },
+                    child: Row(
+                      children: [
+                        Icon(
+                          Icons.add,
+                          color: theme.colorScheme.primary,
+                        ),
+                        const SizedBox(width: 8),
+                        Text(
+                          'add collaborators',
+                          style: TextStyle(
+                            color: theme.colorScheme.primary,
+                          ),
+                        ),
+                      ],
+                    ),
                   ),
+                  const SizedBox(height: 12),
+                  if (_collaborators.isNotEmpty)
+                    Wrap(
+                      spacing: 8,
+                      runSpacing: 8,
+                      children: _collaborators
+                          .map(
+                            (collaborator) => Chip(
+                          avatar: UserAvatar(
+                            pushId: Option.of(collaborator.id),
+                            pushUser: Option.of(collaborator),
+                            imageUrl: collaborator.profilePicture,
+                          ),
+                          label: Text(collaborator.displayName),
+                          onDeleted: () {
+                            setState(() {
+                              _collaborators.remove(collaborator);
+                            });
+                          },
+                        ),
+                      )
+                          .toList(),
+                    ),
+                    // SizedBox(
+                    //   height: 50,
+                    //   child: WidgetStack(
+                    //     positions: RestrictedPositions(
+                    //       infoIndent: 5,
+                    //     ),
+                    //     stackedWidgets: _collaborators
+                    //         .map(
+                    //           (collaborator) => UserAvatar(
+                    //             pushUser: Option.of(collaborator),
+                    //             pushId: Option.of(collaborator.id),
+                    //             imageUrl: collaborator.profilePicture,
+                    //             radius: 25,
+                    //           ),
+                    //         )
+                    //         .toList(),
+                    //     buildInfoWidget: (surplus) {
+                    //       return CircleAvatar(
+                    //         radius: 25,
+                    //         child: Text(
+                    //           '+$surplus',
+                    //           style: TextStyle(
+                    //             color: theme.colorScheme.onSurface,
+                    //             fontWeight: FontWeight.bold,
+                    //           ),
+                    //         ),
+                    //       );
+                    //     },
+                    //   ),
+                    // ),
                   const Spacer(),
                   _buildSendButton(
                     context,

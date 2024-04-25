@@ -7,6 +7,7 @@ import 'package:intheloopapp/data/places_repository.dart';
 import 'package:intheloopapp/data/search_repository.dart';
 import 'package:intheloopapp/domains/models/genre.dart';
 import 'package:intheloopapp/domains/models/performer_info.dart';
+import 'package:intheloopapp/ui/gig_search/components/venue_filter_form.dart';
 import 'package:intheloopapp/ui/gig_search/gig_search_cubit.dart';
 import 'package:intheloopapp/ui/gig_search/gig_search_form_view.dart';
 import 'package:intheloopapp/ui/gig_search/gig_search_results_view.dart';
@@ -21,13 +22,13 @@ class GigSearchView extends StatelessWidget {
     return BlocBuilder<GigSearchCubit, GigSearchState>(
       builder: (context, state) {
         return switch (state.formStatus) {
-          FormzSubmissionStatus.initial => const GigSearchFormView(),
+          FormzSubmissionStatus.initial => const VenueFilterForm(),
           FormzSubmissionStatus.inProgress => const Center(
               child: CupertinoActivityIndicator(),
             ),
           FormzSubmissionStatus.success => const GigSearchResultsView(),
-          FormzSubmissionStatus.failure => const GigSearchFormView(),
-          FormzSubmissionStatus.canceled => const GigSearchFormView(),
+          FormzSubmissionStatus.failure => const VenueFilterForm(),
+          FormzSubmissionStatus.canceled => const VenueFilterForm(),
         };
       },
     );

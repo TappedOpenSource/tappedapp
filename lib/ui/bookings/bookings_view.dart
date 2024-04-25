@@ -269,7 +269,7 @@ class BookingsView extends StatelessWidget {
                       ),
                       onPressed: () =>
                           context.push(
-                            GigSearchInitPage(),
+                            GigSearchPage(),
                           ),
                     ),
                   ],

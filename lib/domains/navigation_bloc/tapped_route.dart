@@ -22,6 +22,7 @@ import 'package:intheloopapp/ui/create_service/create_service_view.dart';
 import 'package:intheloopapp/ui/discover/components/search_view.dart';
 import 'package:intheloopapp/ui/discover/discover_view.dart';
 import 'package:intheloopapp/ui/forms/location_form/location_form_view.dart';
+import 'package:intheloopapp/ui/gig_search/components/add_collaborators_view.dart';
 import 'package:intheloopapp/ui/gig_search/gig_search_view.dart';
 import 'package:intheloopapp/ui/login/forgot_password_view.dart';
 import 'package:intheloopapp/ui/login/login_view.dart';
@@ -580,4 +581,26 @@ final class BookingHistoryPage extends TappedRoute {
         );
 
   final UserModel user;
+}
+
+final class AddCollaboratorsPage extends TappedRoute {
+  AddCollaboratorsPage({
+    this.maxCollaborators = 5,
+    this.onCollaboratorAdded,
+    this.onCollaboratorRemoved,
+    this.initialCollaborators = const [],
+  }) : super(
+          routeName: '/add_collaborators',
+          view: AddCollaboratorsView(
+            maxCollaborators: maxCollaborators,
+            onCollaboratorAdded: onCollaboratorAdded,
+            onCollaboratorRemoved: onCollaboratorRemoved,
+            initialCollaborators: initialCollaborators,
+          ),
+        );
+
+  final int maxCollaborators;
+  final void Function(UserModel)? onCollaboratorAdded;
+  final void Function(UserModel)? onCollaboratorRemoved;
+  final List<UserModel> initialCollaborators;
 }

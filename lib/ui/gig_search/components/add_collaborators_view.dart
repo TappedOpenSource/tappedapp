@@ -1,24 +1,49 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:fpdart/fpdart.dart';
+import 'package:fpdart/fpdart.dart' hide State;
 import 'package:intheloopapp/domains/models/user_model.dart';
 import 'package:intheloopapp/ui/common/performer_search_bar.dart';
-import 'package:intheloopapp/ui/gig_search/gig_search_cubit.dart';
 import 'package:intheloopapp/ui/user_avatar.dart';
 import 'package:intheloopapp/utils/current_user_builder.dart';
 
-const maxCollaborators = 5;
+class AddCollaboratorsView extends StatefulWidget {
+  const AddCollaboratorsView({
+    super.key,
+    this.maxCollaborators = 5,
+    this.onCollaboratorAdded,
+    this.onCollaboratorRemoved,
+    this.initialCollaborators = const [],
+  });
 
-class AddCollaboratorsForm extends StatelessWidget {
-  const AddCollaboratorsForm({super.key});
+  final int maxCollaborators;
+  final void Function(UserModel)? onCollaboratorAdded;
+  final void Function(UserModel)? onCollaboratorRemoved;
+  final List<UserModel> initialCollaborators;
+
+  @override
+  State<AddCollaboratorsView> createState() => _AddCollaboratorsViewState();
+}
+
+class _AddCollaboratorsViewState extends State<AddCollaboratorsView> {
+  var _collaborators = <UserModel>[];
+  int get _maxCollaborators => widget.maxCollaborators;
+
+  @override
+  void initState() {
+    super.initState();
+    _collaborators = List.from(widget.initialCollaborators);
+  }
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
     return CurrentUserBuilder(
       builder: (context, currentUser) {
-        return BlocBuilder<GigSearchCubit, GigSearchState>(
-          builder: (context, state) {
-            return Padding(
+        return Scaffold(
+          backgroundColor: theme.colorScheme.background,
+          appBar: AppBar(),
+          body: SafeArea(
+            child: Padding(
               padding: const EdgeInsets.symmetric(
                 horizontal: 20,
                 vertical: 12,
@@ -38,16 +63,16 @@ class AddCollaboratorsForm extends StatelessWidget {
                     "you're more likely to get gigs if you're part of a larger bill of performers",
                   ),
                   const SizedBox(height: 16),
-                  if (state.collaborators.length >= maxCollaborators)
+                  if (_collaborators.length >= widget.maxCollaborators)
                     Text(
-                      'you can only add up to $maxCollaborators collaborators',
-                      style: TextStyle(
+                      'you can only add up to ${widget.maxCollaborators} collaborators',
+                      style: const TextStyle(
                         color: Colors.red,
                       ),
                     ),
                   PerformerSearchBar(
                     onSelected: (user) {
-                      if (state.collaborators.length >= maxCollaborators) {
+                      if (_collaborators.length >= _maxCollaborators) {
                         return;
                       }
 
@@ -55,15 +80,22 @@ class AddCollaboratorsForm extends StatelessWidget {
                         return;
                       }
 
-                      context.read<GigSearchCubit>().addCollaborator(user);
+                      if (_collaborators.contains(user)) {
+                        return;
+                      }
+
+                      widget.onCollaboratorAdded?.call(user);
+                      setState(() {
+                        _collaborators.add(user);
+                      });
                     },
                   ),
                   const SizedBox(height: 16),
-                  if (state.collaborators.isNotEmpty)
+                  if (_collaborators.isNotEmpty)
                     Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text(
+                        const Text(
                           'bill',
                           style: TextStyle(
                             fontSize: 18,
@@ -74,7 +106,7 @@ class AddCollaboratorsForm extends StatelessWidget {
                         Wrap(
                           spacing: 8,
                           runSpacing: 8,
-                          children: state.collaborators
+                          children: _collaborators
                               .map(
                                 (collaborator) => Chip(
                                   avatar: UserAvatar(
@@ -84,11 +116,12 @@ class AddCollaboratorsForm extends StatelessWidget {
                                   ),
                                   label: Text(collaborator.displayName),
                                   onDeleted: () {
-                                    context
-                                        .read<GigSearchCubit>()
-                                        .removeCollaborator(
-                                          collaborator,
-                                        );
+                                    widget.onCollaboratorRemoved
+                                        ?.call(collaborator);
+
+                                    setState(() {
+                                      _collaborators.remove(collaborator);
+                                    });
                                   },
                                 ),
                               )
@@ -96,10 +129,30 @@ class AddCollaboratorsForm extends StatelessWidget {
                         ),
                       ],
                     ),
+                  const Spacer(),
+                  Row(
+                    children: [
+                      Expanded(
+                        child: CupertinoButton.filled(
+                          onPressed: () {
+                            Navigator.of(context).pop();
+                          },
+                          borderRadius: BorderRadius.circular(15),
+                          child: const Text(
+                            'done',
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
                 ],
               ),
-            );
-          },
+            ),
+          ),
         );
       },
     );
