@@ -6,6 +6,7 @@ import 'package:intheloopapp/ui/app_theme_cubit.dart';
 import 'package:intheloopapp/ui/discover/components/bookings_heatmap_layer.dart';
 import 'package:intheloopapp/ui/discover/components/bookings_marker_layer.dart';
 import 'package:intheloopapp/ui/discover/components/bookings_polygon_layer.dart';
+import 'package:intheloopapp/ui/discover/components/current_location_layer.dart';
 import 'package:intheloopapp/ui/discover/components/opportunities_heatmap_layer.dart';
 import 'package:intheloopapp/ui/discover/components/venue_marker_layer.dart';
 import 'package:intheloopapp/ui/discover/discover_cubit.dart';
@@ -94,6 +95,7 @@ class MapBase extends StatelessWidget {
                           const OpportunitiesHeatmapLayer(),
                         ],
                     },
+                    CurrentLocationLayer(),
                     RichAttributionWidget(
                       animationConfig: const ScaleRAWA(),
                       // Or `FadeRAWA` as is default

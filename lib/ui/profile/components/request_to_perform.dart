@@ -34,6 +34,7 @@ class RequestToPerform extends StatelessWidget {
               context.push(
                 RequestToPerformPage(
                   venues: [venue],
+                  collaborators: [],
                 ),
               );
             },

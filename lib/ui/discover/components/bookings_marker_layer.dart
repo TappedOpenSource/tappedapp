@@ -24,7 +24,8 @@ class BookingsMarkerLayer extends StatelessWidget {
   final List<Booking> bookings;
   final bool showFliers;
 
-  Marker buildMarker(BuildContext context, {
+  Marker buildMarker(
+    BuildContext context, {
     required Booking booking,
     required Location location,
     required HeroImage heroImage,
@@ -37,7 +38,7 @@ class BookingsMarkerLayer extends StatelessWidget {
         child: const Icon(
           Icons.location_on,
           color: Colors.white,
-          size: 35,
+          size: 15,
         ),
       );
     }
@@ -76,17 +77,18 @@ class BookingsMarkerLayer extends StatelessWidget {
       markers: [
         ...bookings.map((booking) {
           final heroImage = HeroImage(
-            imageProvider: booking.getBookingImage(const None()),
+            imageProvider:
+                booking.getBookingImage(const None()),
             heroTag: booking.id,
           );
           return switch (booking.location) {
             None() => null,
             Some(:final value) => buildMarker(
-              context,
-              booking: booking,
-              location: value,
-              heroImage: heroImage,
-            ),
+                context,
+                booking: booking,
+                location: value,
+                heroImage: heroImage,
+              ),
           };
         }).whereType<Marker>(),
       ],
