@@ -250,7 +250,41 @@ class DraggableSheet extends StatelessWidget {
                               },
                             ),
                             ...sortedVenueHits
+                                .take(3)
                                 .map((venue) => _venueTile(currentUser, venue)),
+                            if (sortedVenueHits.length > 3)
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  GestureDetector(
+                                    onTap: () => showCupertinoModalBottomSheet<void>(
+                                      context: context,
+                                      builder: (context) => Container(
+                                        padding: const EdgeInsets.symmetric(
+                                          vertical: 16,
+                                        ),
+                                        decoration: BoxDecoration(
+                                          color: theme.colorScheme.surface,
+                                        ),
+                                        child: ListView.builder(
+                                          itemCount: sortedVenueHits.length,
+                                          itemBuilder: (context, index) {
+                                            final venue = sortedVenueHits[index];
+                                            return _venueTile(currentUser, venue);
+                                          },
+                                        ),
+                                      ),
+                                    ),
+                                    child: Text(
+                                      'view all',
+                                      style: TextStyle(
+                                        color: theme.colorScheme.primary,
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
                             const Padding(
                               padding: EdgeInsets.symmetric(
                                 vertical: 16,

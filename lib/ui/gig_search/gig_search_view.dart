@@ -9,7 +9,6 @@ import 'package:intheloopapp/domains/models/genre.dart';
 import 'package:intheloopapp/domains/models/performer_info.dart';
 import 'package:intheloopapp/ui/gig_search/components/venue_filter_form.dart';
 import 'package:intheloopapp/ui/gig_search/gig_search_cubit.dart';
-import 'package:intheloopapp/ui/gig_search/gig_search_form_view.dart';
 import 'package:intheloopapp/ui/gig_search/gig_search_results_view.dart';
 import 'package:intheloopapp/utils/current_user_builder.dart';
 

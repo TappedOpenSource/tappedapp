@@ -34,14 +34,14 @@ class RequestToPerformView extends StatefulWidget {
 
 class _RequestToPerformViewState extends State<RequestToPerformView> {
   String _note = '';
+  List<UserModel> _collaborators = [];
 
   List<UserModel> get _venues => widget.venues;
-
-  List<UserModel> get _collaborators => widget.collaborators;
 
   @override
   void initState() {
     super.initState();
+    _collaborators = List.from(widget.collaborators);
   }
 
   Widget _buildSendButton(
