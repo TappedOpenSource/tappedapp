@@ -257,21 +257,29 @@ class DraggableSheet extends StatelessWidget {
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
                                   GestureDetector(
-                                    onTap: () => showCupertinoModalBottomSheet<void>(
+                                    onTap: () =>
+                                        showCupertinoModalBottomSheet<void>(
                                       context: context,
-                                      builder: (context) => Container(
-                                        padding: const EdgeInsets.symmetric(
-                                          vertical: 16,
+                                      builder: (context) => Scaffold(
+                                        appBar: AppBar(
+                                          title: const Text('venues'),
                                         ),
-                                        decoration: BoxDecoration(
-                                          color: theme.colorScheme.surface,
-                                        ),
-                                        child: ListView.builder(
-                                          itemCount: sortedVenueHits.length,
-                                          itemBuilder: (context, index) {
-                                            final venue = sortedVenueHits[index];
-                                            return _venueTile(currentUser, venue);
-                                          },
+                                        body: Container(
+                                          padding: const EdgeInsets.symmetric(
+                                            vertical: 16,
+                                          ),
+                                          decoration: BoxDecoration(
+                                            color: theme.colorScheme.background,
+                                          ),
+                                          child: ListView.builder(
+                                            itemCount: sortedVenueHits.length,
+                                            itemBuilder: (context, index) {
+                                              final venue =
+                                                  sortedVenueHits[index];
+                                              return _venueTile(
+                                                  currentUser, venue);
+                                            },
+                                          ),
                                         ),
                                       ),
                                     ),
