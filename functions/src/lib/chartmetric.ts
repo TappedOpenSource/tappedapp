@@ -37,3 +37,9 @@ export const getChartmetricIdBySpotifyId = onCall(
     const data = await response.json();
     return data;
   });
+
+export const getTopArtistsByCity = onCall(
+  { secrets: [ CHARTMETRIC_REFRESH_TOKEN ] },
+  async (request) => {
+    // blah 
+  });
