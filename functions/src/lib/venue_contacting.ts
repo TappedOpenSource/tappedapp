@@ -42,6 +42,20 @@ async function sendAsEmail({
   userId: string;
   venue: UserModel;
 }) {
+  const collaboratorIds = venueContactData.collaborators ?? [];
+  const collaborators = (await Promise.all(
+    collaboratorIds.map(async (id: string) => {
+      const snap = await usersRef.doc(id).get();
+      if (!snap.exists) {
+        error("no user found");
+        return null;
+      }
+
+      return snap.data() as UserModel;
+    }),
+  )).filter((u) => u !== null) as UserModel[];
+  console.log({ collaborators });
+
   const bookingEmail = venueContactData.bookingEmail;
   if (!bookingEmail) {
     error("no bookingEmail found");
@@ -79,6 +93,7 @@ async function sendAsEmail({
 
   const { text, html } = contactVenueTemplate({
     performer: user,
+    collaborators,
     emailText: body,
   });
 

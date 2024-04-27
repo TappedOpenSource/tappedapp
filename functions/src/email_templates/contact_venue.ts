@@ -1,7 +1,8 @@
 import { SocialFollowing, UserModel } from "../types/models";
 
-export const contactVenueTemplate = ({ performer, emailText }: {
+export const contactVenueTemplate = ({ performer, collaborators, emailText }: {
   performer: UserModel,
+  collaborators: UserModel[],
   emailText: string,
 }): { html: string; text: string } => {
   const username = performer.username;
@@ -17,6 +18,8 @@ export const contactVenueTemplate = ({ performer, emailText }: {
     <p>You can check my past booking history on my here <a href="https://tapped.ai/${username}">https://tapped.ai/${username}</a></p>
 
     ${formatPressKit(performer)}
+
+    ${formatCollaborators(collaborators)}
   
   <p>If you require any additional information or wish to discuss this opportunity further please email me back and let me know.<p>
   
@@ -36,6 +39,8 @@ export const contactVenueTemplate = ({ performer, emailText }: {
     Past Bookings:  You can check my past booking history on my here https://tapped.ai/${username}
 
     ${formatPressKitText(performer)}
+
+    ${formatCollaboratorsText(collaborators)}
 
     If you require any additional information or wish to discuss this opportunity further please email me back and let me know.
 
@@ -145,4 +150,44 @@ const formatPressKitText = (performer: UserModel): string => {
     return "";
   }
   return `my press kit: ${pressKitUrl}`;
+}
+
+const formatCollaborators = (collaborators: UserModel[]): string => {
+  if (collaborators.length === 0) {
+    return "";
+  }
+
+  const collaboratorsText = collaborators.map((collaborator) => {
+    const instagramHandle = collaborator.socialFollowing?.instagramHandle;
+    const spotifyUrl = collaborator.socialFollowing?.spotifyUrl;
+
+    const href = instagramHandle ? `https://instagram.com/${instagramHandle}` : spotifyUrl;
+
+    return `<a href=${href}>${collaborator.artistName || collaborator.username}</a>`;
+  });
+
+  const collaboratorsTextString = `<p>here are some other performers I can play with: ${collaboratorsText.join("")}</p>`
+
+  return collaboratorsTextString;
+}
+
+const formatCollaboratorsText = (collaborators: UserModel[]): string => {
+  if (collaborators.length === 0) {
+    return "";
+  }
+
+  const collaboratorsText = collaborators.map((collaborator) => {
+    const instagramHandle = collaborator.socialFollowing?.instagramHandle;
+    const spotifyUrl = collaborator.socialFollowing?.spotifyUrl;
+
+    const href = instagramHandle ? `https://instagram.com/${instagramHandle}` : spotifyUrl;
+
+    return `
+      ${collaborator.artistName || collaborator.username} (${href})
+    `;
+  });
+
+  const collaboratorsTextString = `here are some other performers I can play with: ${collaboratorsText.join(", ")}`
+
+  return collaboratorsTextString;
 }

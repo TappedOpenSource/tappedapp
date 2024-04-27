@@ -38,8 +38,8 @@ export const getChartmetricIdBySpotifyId = onCall(
     return data;
   });
 
-export const getTopArtistsByCity = onCall(
-  { secrets: [ CHARTMETRIC_REFRESH_TOKEN ] },
-  async (request) => {
-    // blah 
-  });
+// export const getTopArtistsByCity = onCall(
+//   { secrets: [ CHARTMETRIC_REFRESH_TOKEN ] },
+//   async (request) => {
+//     // blah 
+//   });
