@@ -198,7 +198,13 @@ export const sendBookingRequestSentEmailOnBooking = functions
   .document("bookings/{bookingId}")
   .onCreate(async (data) => {
     const booking = data.data() as Booking;
-    const requesterSnapshot = await usersRef.doc(booking.requesterId).get();
+    const requesterId = booking.requesterId;
+    if (requesterId === null) {
+      info("requesterId is null, skipping email");
+      return;
+    }
+
+    const requesterSnapshot = await usersRef.doc(requesterId).get();
     const requester = requesterSnapshot.data();
     const requesterEmail = requester?.email;
     const unclaimed = requester?.unclaimed ?? false;
@@ -321,7 +327,13 @@ export const sendBookingNotificationsOnBookingConfirmed = functions
       return;
     }
 
-    const requesterSnapshot = await usersRef.doc(booking.requesterId).get();
+    const requesterId = booking.requesterId;
+    if (requesterId === null) {
+      info("requesterId is null, skipping email");
+      return;
+    }
+
+    const requesterSnapshot = await usersRef.doc(requesterId).get();
     const requester = requesterSnapshot.data();
     const requesterEmail = requester?.email;
     const requesterUnclaimed = requester?.unclaimed ?? false;

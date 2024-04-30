@@ -19,6 +19,7 @@ export const storage = getStorage(app);
 export const fcm = getMessaging(app);
 export const remote = getRemoteConfig(app);
 
+
 export const usersRef = db.collection("users");
 export const loopsRef = db.collection("loops");
 export const activitiesRef = db.collection("activities");
@@ -54,6 +55,7 @@ export const googlePlacesCacheRef = db.collection("googlePlacesCache");
 export const contactVenuesRef = db.collection("contactVenues");
 export const orphanEmailsRef = db.collection("orphanEmails");
 export const spotifyAccessTokenRef = db.collection("spotifyAccessToken");
+export const crawlerRef = db.collection("crawler");
 
 // const loopLikesSubcollection = "loopLikes";
 // const loopCommentsSubcollection = "loopComments";
@@ -117,7 +119,8 @@ export const bookingBotUuid = "90dc0775-3a0d-4e92-8573-9c7aa6832d94";
 export const verifiedBotUuid = "1c0d9380-873c-493a-a3f8-1283d5408673";
 export const verifyUserBadgeId = "0aa46576-1fbe-4312-8b69-e2fef3269083";
 
-export const projectId = app.options.projectId;
+export const projectId = "in-the-loop-306520";
+export const bucket = storage.bucket(`${projectId}.appspot.com`);
 
 export const getSecretValue = async (secretName: string): Promise<string | null> => {
   const fullName = `projects/${projectId}/secrets/${secretName}/versions/latest`;

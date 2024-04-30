@@ -1,43 +1,7 @@
 import type { Timestamp } from "firebase-admin/firestore";
 import { firestore } from "firebase-admin";
 
-export type Option<T> = T | null | undefined;
-
-export type OldUserModel = {
-  id: string;
-  email?: string;
-  username?: string;
-  artistName?: string;
-  bio?: string;
-  profilePicture?: string;
-  location?: string;
-  genres?: Array<string>;
-  onboarded?: boolean;
-  loopsCount?: number;
-  badgesCount?: number;
-  reviewCount?: number;
-  placeId?: string;
-  geohash?: string;
-  lat?: number;
-  lng?: number;
-  deleted?: boolean;
-  overallRating?: number;
-  shadowBanned?: boolean;
-  twitterHandle?: string;
-  instagramHandle?: string;
-  tiktokHandle?: string;
-  soundcloudHandle?: string;
-  youtubeChannelId?: string;
-  pushNotificationsLikes?: boolean;
-  pushNotificationsComments?: boolean;
-  pushNotificationsFollows?: boolean;
-  pushNotificationsDirectMessages?: boolean;
-  pushNotificationsITLUpdates?: boolean;
-  emailNotificationsAppReleases?: boolean;
-  emailNotificationsITLUpdates?: boolean;
-  stripeConnectedAccountId?: string;
-  stripeCustomerId?: string;
-};
+export type Option<T> = T | null ;
 
 export type Location = {
   placeId: string;
@@ -80,7 +44,9 @@ export type PerformerInfo = {
 };
 
 export type VenueInfo = {
+  genres?: Option<string[]>;
   bookingEmail?: Option<string>;
+  websiteUrl?: Option<string>;
   autoReply?: Option<string>;
   capacity?: Option<number>;
   idealArtistProfile?: Option<string>;
@@ -138,18 +104,30 @@ export type Badge = {
 export type Booking = {
   id: string;
   calendarEventId?: string;
-  addedByUser?: boolean;
-  serviceId: string;
+  serviceId: string | null;
+  addedByUser: boolean;
   name: string;
   note: string;
-  requesterId: string;
+  requesterId: Option<string>;
   requesteeId: string;
-  status: string;
+  status: "pending" | "confirmed" | "cancelled";
+  genres: string[];
   rate: number;
-  startTime: firestore.Timestamp;
-  endTime: firestore.Timestamp;
-  timestamp: firestore.Timestamp;
-  location?: Location;
+  startTime: Timestamp;
+  endTime: Timestamp;
+  timestamp: Timestamp;
+  location?: Option<Location>;
+  flierUrl?: Option<string>;
+  eventUrl?: Option<string>;
+  crawlerInfo?: {
+    runId: string;
+    timestamp: Timestamp;
+    encodedLink: string;
+  };
+  scraperInfo?: {
+    scraperId: string;
+    runId: string;
+  }
 };
 
 export type Activity = {
@@ -294,4 +272,22 @@ export type VenueContactRequest = {
   subject: Option<string>;
   allEmails: string[];
   collaborators: string[];
+};
+
+export type EventData = {
+  crawlerInfo: {
+    runId: string;
+    timestamp: Timestamp;
+  };
+  venue: UserModel;
+  isMusicEvent: boolean;
+  url: Option<string>;
+  title: Option<string>;
+  description: Option<string>;
+  performers: string[];
+  ticketPrice: Option<number>;
+  doorPrice: Option<number>;
+  startTime: Timestamp;
+  endTime: Timestamp;
+  flierUrl: Option<string>;
 };

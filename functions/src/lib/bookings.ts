@@ -4,14 +4,14 @@ import { HttpsError } from "firebase-functions/v2/https";
 import * as functions from "firebase-functions";
 import {
   bookingsRef,
-  servicesRef,
+  // servicesRef,
   usersRef,
   bookerReviewsSubcollection,
   performerReviewsSubcollection,
   SLACK_WEBHOOK_URL,
 } from "./firebase";
-import { Booking, BookingStatus } from "../types/models";
-import { createActivity } from "./activities";
+import { Booking } from "../types/models";
+// import { createActivity } from "./activities";
 import { FieldValue } from "firebase-admin/firestore";
 import { debug } from "firebase-functions/logger";
 import { slackNotification } from "./notifications";
@@ -64,63 +64,63 @@ const _updateBookerRating = async ({
   );
 };
 
-export const addActivityOnBooking = functions.firestore
-  .document("bookings/{bookingId}")
-  .onCreate(async (snapshot, context) => {
-    const booking = snapshot.data() as Booking;
-    if (booking === undefined) {
-      throw new HttpsError(
-        "failed-precondition",
-        `booking ${context.params.bookingId} does not exist`
-      );
-    }
+// export const addActivityOnBooking = functions.firestore
+//   .document("bookings/{bookingId}")
+//   .onCreate(async (snapshot, context) => {
+//     const booking = snapshot.data() as Booking;
+//     if (booking === undefined) {
+//       throw new HttpsError(
+//         "failed-precondition",
+//         `booking ${context.params.bookingId} does not exist`
+//       );
+//     }
 
-    const addedByUser = booking.addedByUser ?? false;
-    if (addedByUser === true) {
-      debug("booking added by user, not creating activity");
-      return;
-    }
+//     const addedByUser = booking.addedByUser ?? false;
+//     if (addedByUser === true) {
+//       debug("booking added by user, not creating activity");
+//       return;
+//     }
 
-    createActivity({
-      fromUserId: booking.requesterId,
-      type: "bookingRequest",
-      toUserId: booking.requesteeId,
-      bookingId: context.params.bookingId,
-    });
-  });
+//     createActivity({
+//       fromUserId: booking.requesterId,
+//       type: "bookingRequest",
+//       toUserId: booking.requesteeId,
+//       bookingId: context.params.bookingId,
+//     });
+//   });
 
-export const addActivityOnBookingUpdate = functions.firestore
-  .document("bookings/{bookingId}")
-  .onUpdate(async (change, context) => {
-    const booking = change.after.data() as Booking;
-    if (booking === undefined) {
-      throw new HttpsError(
-        "failed-precondition",
-        `booking ${context.params.bookingId} does not exist`
-      );
-    }
+// export const addActivityOnBookingUpdate = functions.firestore
+//   .document("bookings/{bookingId}")
+//   .onUpdate(async (change, context) => {
+//     const booking = change.after.data() as Booking;
+//     if (booking === undefined) {
+//       throw new HttpsError(
+//         "failed-precondition",
+//         `booking ${context.params.bookingId} does not exist`
+//       );
+//     }
 
-    const status = booking.status as BookingStatus;
+//     const status = booking.status as BookingStatus;
 
-    const uid = context.auth?.uid;
+//     const uid = context.auth?.uid;
 
-    if (uid === undefined || uid === null) {
-      throw new HttpsError("unauthenticated", "user is not authenticated");
-    }
+//     if (uid === undefined || uid === null) {
+//       throw new HttpsError("unauthenticated", "user is not authenticated");
+//     }
 
-    for (const userId of [ booking.requesterId, booking.requesteeId ]) {
-      if (userId === uid) {
-        continue;
-      }
-      await createActivity({
-        fromUserId: uid,
-        type: "bookingUpdate",
-        toUserId: userId,
-        bookingId: context.params.bookingId,
-        status: status,
-      });
-    }
-  });
+//     for (const userId of [ booking.requesterId, booking.requesteeId ]) {
+//       if (userId === uid) {
+//         continue;
+//       }
+//       await createActivity({
+//         fromUserId: uid,
+//         type: "bookingUpdate",
+//         toUserId: userId,
+//         bookingId: context.params.bookingId,
+//         status: status,
+//       });
+//     }
+//   });
 
 export const notifyFoundersOnBookings = functions
   .runWith({ secrets: [ SLACK_WEBHOOK_URL ] })
@@ -139,25 +139,28 @@ export const notifyFoundersOnBookings = functions
     if (addedByUser) {
       debug("booking added by user, not sending notification");
 
-      if (booking.requesterId !== undefined) {
+      if (booking.requesterId === undefined || booking.requesterId === null) {
+        await slackNotification({
+          title: "booking without location",
+          body: `booking ${data.id} has no venue: (${booking.location?.lat}, ${booking.location?.lng})`,
+          slackWebhookUrl: SLACK_WEBHOOK_URL.value(),
+        });
+
         return;
       }
 
+
+      return;
+    }
+
+    if (booking.requesterId === null) {
       await slackNotification({
-        title: "booking without location",
-        body: `booking ${data.id} has no venue: (${booking.location?.lat}, ${booking.location?.lng})`,
+        title: "booking without requester",
+        body: `booking ${data.id} has no requester`,
         slackWebhookUrl: SLACK_WEBHOOK_URL.value(),
       });
       return;
     }
-
-    const serviceSnapshot = await servicesRef
-      .doc(booking.requesteeId)
-      .collection("userServices")
-      .doc(booking.serviceId)
-      .get();
-
-    const service = serviceSnapshot.data();
 
     const requesterSnapshot = await usersRef.doc(booking.requesterId).get();
     const requester = requesterSnapshot.data();
@@ -169,7 +172,7 @@ export const notifyFoundersOnBookings = functions
       title: "NEW TAPPED BOOKING!!!",
       body: `${requester?.artistName ?? "<UNKNOWN>"} booked ${
         requestee?.artistName ?? "<UNKNOWN>"
-      } for service ${service?.title ?? "<UNKNOWN>"}`,
+      }`,
     };
     await slackNotification({
       ...msg,

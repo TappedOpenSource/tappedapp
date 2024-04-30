@@ -66,9 +66,11 @@ export const incrementServiceCountOnBooking = functions
       throw new HttpsError("failed-precondition", `booking ${context.params.bookingId} does not have a serviceId`,);
     }
 
-    await servicesRef
-      .doc(booking.serviceId)
-      .update({ bookingCount: FieldValue.increment(1) });
+    const serviceId = booking.serviceId;
+    if (serviceId !== null)
+      await servicesRef
+        .doc(serviceId)
+        .update({ bookingCount: FieldValue.increment(1) });
   });
 
 // TODO: on user created, add a few services for them by default
