@@ -21,6 +21,7 @@ VenueInfo _$VenueInfoFromJson(Map<String, dynamic> json) {
 /// @nodoc
 mixin _$VenueInfo {
   Option<String> get bookingEmail => throw _privateConstructorUsedError;
+  Option<String> get websiteUrl => throw _privateConstructorUsedError;
   Option<String> get autoReply => throw _privateConstructorUsedError;
   Option<int> get capacity => throw _privateConstructorUsedError;
   Option<String> get idealPerformerProfile =>
@@ -49,6 +50,7 @@ abstract class $VenueInfoCopyWith<$Res> {
   @useResult
   $Res call(
       {Option<String> bookingEmail,
+      Option<String> websiteUrl,
       Option<String> autoReply,
       Option<int> capacity,
       Option<String> idealPerformerProfile,
@@ -78,6 +80,7 @@ class _$VenueInfoCopyWithImpl<$Res, $Val extends VenueInfo>
   @override
   $Res call({
     Object? bookingEmail = null,
+    Object? websiteUrl = null,
     Object? autoReply = null,
     Object? capacity = null,
     Object? idealPerformerProfile = null,
@@ -96,6 +99,10 @@ class _$VenueInfoCopyWithImpl<$Res, $Val extends VenueInfo>
       bookingEmail: null == bookingEmail
           ? _value.bookingEmail
           : bookingEmail // ignore: cast_nullable_to_non_nullable
+              as Option<String>,
+      websiteUrl: null == websiteUrl
+          ? _value.websiteUrl
+          : websiteUrl // ignore: cast_nullable_to_non_nullable
               as Option<String>,
       autoReply: null == autoReply
           ? _value.autoReply
@@ -163,6 +170,7 @@ abstract class _$$VenueInfoImplCopyWith<$Res>
   @useResult
   $Res call(
       {Option<String> bookingEmail,
+      Option<String> websiteUrl,
       Option<String> autoReply,
       Option<int> capacity,
       Option<String> idealPerformerProfile,
@@ -190,6 +198,7 @@ class __$$VenueInfoImplCopyWithImpl<$Res>
   @override
   $Res call({
     Object? bookingEmail = null,
+    Object? websiteUrl = null,
     Object? autoReply = null,
     Object? capacity = null,
     Object? idealPerformerProfile = null,
@@ -208,6 +217,10 @@ class __$$VenueInfoImplCopyWithImpl<$Res>
       bookingEmail: null == bookingEmail
           ? _value.bookingEmail
           : bookingEmail // ignore: cast_nullable_to_non_nullable
+              as Option<String>,
+      websiteUrl: null == websiteUrl
+          ? _value.websiteUrl
+          : websiteUrl // ignore: cast_nullable_to_non_nullable
               as Option<String>,
       autoReply: null == autoReply
           ? _value.autoReply
@@ -270,6 +283,7 @@ class __$$VenueInfoImplCopyWithImpl<$Res>
 class _$VenueInfoImpl implements _VenueInfo {
   const _$VenueInfoImpl(
       {this.bookingEmail = const None(),
+      this.websiteUrl = const None(),
       this.autoReply = const None(),
       this.capacity = const None(),
       this.idealPerformerProfile = const None(),
@@ -293,6 +307,9 @@ class _$VenueInfoImpl implements _VenueInfo {
   @override
   @JsonKey()
   final Option<String> bookingEmail;
+  @override
+  @JsonKey()
+  final Option<String> websiteUrl;
   @override
   @JsonKey()
   final Option<String> autoReply;
@@ -352,7 +369,7 @@ class _$VenueInfoImpl implements _VenueInfo {
 
   @override
   String toString() {
-    return 'VenueInfo(bookingEmail: $bookingEmail, autoReply: $autoReply, capacity: $capacity, idealPerformerProfile: $idealPerformerProfile, genres: $genres, venuePhotos: $venuePhotos, productionInfo: $productionInfo, frontOfHouse: $frontOfHouse, monitors: $monitors, microphones: $microphones, lights: $lights, type: $type, averageTicketPrice: $averageTicketPrice, topPerformerIds: $topPerformerIds)';
+    return 'VenueInfo(bookingEmail: $bookingEmail, websiteUrl: $websiteUrl, autoReply: $autoReply, capacity: $capacity, idealPerformerProfile: $idealPerformerProfile, genres: $genres, venuePhotos: $venuePhotos, productionInfo: $productionInfo, frontOfHouse: $frontOfHouse, monitors: $monitors, microphones: $microphones, lights: $lights, type: $type, averageTicketPrice: $averageTicketPrice, topPerformerIds: $topPerformerIds)';
   }
 
   @override
@@ -362,6 +379,8 @@ class _$VenueInfoImpl implements _VenueInfo {
             other is _$VenueInfoImpl &&
             (identical(other.bookingEmail, bookingEmail) ||
                 other.bookingEmail == bookingEmail) &&
+            (identical(other.websiteUrl, websiteUrl) ||
+                other.websiteUrl == websiteUrl) &&
             (identical(other.autoReply, autoReply) ||
                 other.autoReply == autoReply) &&
             (identical(other.capacity, capacity) ||
@@ -392,6 +411,7 @@ class _$VenueInfoImpl implements _VenueInfo {
   int get hashCode => Object.hash(
       runtimeType,
       bookingEmail,
+      websiteUrl,
       autoReply,
       capacity,
       idealPerformerProfile,
@@ -423,6 +443,7 @@ class _$VenueInfoImpl implements _VenueInfo {
 abstract class _VenueInfo implements VenueInfo {
   const factory _VenueInfo(
       {final Option<String> bookingEmail,
+      final Option<String> websiteUrl,
       final Option<String> autoReply,
       final Option<int> capacity,
       final Option<String> idealPerformerProfile,
@@ -442,6 +463,8 @@ abstract class _VenueInfo implements VenueInfo {
 
   @override
   Option<String> get bookingEmail;
+  @override
+  Option<String> get websiteUrl;
   @override
   Option<String> get autoReply;
   @override

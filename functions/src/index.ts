@@ -33,6 +33,7 @@ export * from "./lib/venue_contacting";
 export * from "./lib/notifications";
 export * from "./lib/spotify";
 export * from "./lib/chartmetric";
+export * from "./lib/crawler";
 
 const _deleteUser = async (data: { id: string }) => {
   // Checking attribute.

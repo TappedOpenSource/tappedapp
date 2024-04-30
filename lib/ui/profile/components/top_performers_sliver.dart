@@ -3,7 +3,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fpdart/fpdart.dart';
 import 'package:intheloopapp/ui/profile/profile_cubit.dart';
 import 'package:intheloopapp/ui/user_card.dart';
-import 'package:intheloopapp/ui/user_tile.dart';
 import 'package:intheloopapp/utils/bloc_utils.dart';
 
 class TopPerformersSliver extends StatelessWidget {

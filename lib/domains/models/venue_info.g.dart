@@ -12,6 +12,10 @@ _$VenueInfoImpl _$$VenueInfoImplFromJson(Map<String, dynamic> json) =>
           ? const None()
           : Option<String>.fromJson(
               json['bookingEmail'], (value) => value as String),
+      websiteUrl: json['websiteUrl'] == null
+          ? const None()
+          : Option<String>.fromJson(
+              json['websiteUrl'], (value) => value as String),
       autoReply: json['autoReply'] == null
           ? const None()
           : Option<String>.fromJson(
@@ -65,6 +69,9 @@ _$VenueInfoImpl _$$VenueInfoImplFromJson(Map<String, dynamic> json) =>
 Map<String, dynamic> _$$VenueInfoImplToJson(_$VenueInfoImpl instance) =>
     <String, dynamic>{
       'bookingEmail': instance.bookingEmail.toJson(
+        (value) => value,
+      ),
+      'websiteUrl': instance.websiteUrl.toJson(
         (value) => value,
       ),
       'autoReply': instance.autoReply.toJson(
