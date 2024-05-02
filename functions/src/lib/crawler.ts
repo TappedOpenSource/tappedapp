@@ -7,6 +7,7 @@ import { auth, bookingsRef, bucket, crawlerRef, usersRef } from "./firebase";
 import { Option, Booking, EventData } from "../types/models";
 // import fetch from "node-fetch";
 import { sanitizeUsername } from "./utils";
+import { getDownloadURL } from "firebase-admin/storage";
 
 export async function getOrCreatePerformer({
   // location,
@@ -93,31 +94,39 @@ export async function convertToSignedUrl({
 }: {
     url: string;
   }): Promise<string | null> {
-  const filename = url.split("/").pop() ?? "flier.jpg";
-  const extension = filename.split(".").pop();
-  const imageRes = await fetch(url);
-  
-  const buf = await imageRes.arrayBuffer();
-  const theBuf = Buffer.from(buf);
+  try {
 
-  const fileRef = bucket.file(`bookings/${filename}`);
-  await fileRef.save(theBuf, {
-    contentType: `image/${extension}`,
-  });
+    const filename = url.split("/").pop() ?? "flier.jpg";
+    const extension = filename.split(".").pop();
+    const imageRes = await fetch(url);
   
-  const res = await fileRef.getSignedUrl({
-    action: "read",
-    expires: "03-09-2491",
-  });
-  const downloadURL = res[0];
+    const buf = await imageRes.arrayBuffer();
+    const theBuf = Buffer.from(buf);
+
+    const fileRef = bucket.file(`bookings/${filename}`);
+    await fileRef.save(theBuf, {
+      contentType: `image/${extension}`,
+    });
+
   
-  return downloadURL;
+    const downloadUrl = await getDownloadURL(fileRef);
+
+    return downloadUrl;
+  } catch (e) {
+    console.error(`[!!!] failed to convert to signed url: ${url} - ${e}`);
+    return null;
+  }
 }
   
 export async function createBookingsFromEvent(
   encodedLink: string,
   data: EventData,
 ): Promise<void> {
+  if (data.isMusicEvent === false) {
+    console.log(`[+] skipping non-music event: ${data.title}`);
+    return;
+  }
+
   const venue = data.venue;
   const venueLocation = venue.location;
   const genres = venue.venueInfo?.genres ?? [];
@@ -181,6 +190,10 @@ export async function createBookingsFromEvent(
     //     performerId: booking.requesteeId,
     //   });
     // }
+
+    await crawlerRef.doc(encodedLink).set({
+      bookingId: booking.id,
+    }, { merge: true })
   }
 }
   
@@ -215,6 +228,16 @@ export const createBookingOnEventCrawled = onDocumentCreated(
       return;
     }
 
-    const link = decodeURIComponent(snapshot.id);
+    const encodedLink = snapshot.id;
+    const link = decodeURIComponent(encodedLink);
     console.log(link);
+
+    const eventData = snapshot.data() as EventData;
+
+    if (!eventData.isMusicEvent) {
+      console.log(`[+] skipping non-music event: ${eventData.title}`);
+      return;
+    }
+
+    await createBookingsFromEvent(encodedLink, eventData);
   });

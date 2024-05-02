@@ -135,6 +135,11 @@ export const notifyFoundersOnBookings = functions
       );
     }
 
+    if (booking.scraperInfo !== null || booking.crawlerInfo !== null) {
+      debug("booking added by scraper, not sending notification");
+      return;
+    }
+
     const addedByUser = booking.addedByUser ?? false;
     if (addedByUser) {
       debug("booking added by user, not sending notification");

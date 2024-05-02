@@ -117,10 +117,16 @@ class OnboardingFlowCubit extends Cubit<OnboardingFlowState> {
     };
 
     // get username from santitized spotify artist name
-    final artistName = res.map((a) => a.name ?? '');
+    final artistName = res.map((a) => a.name);
     final usernameCandidate = artistName.fold(
       () => '',
-      sanitizeUsername,
+      (e) {
+        if (e == null) {
+          return '';
+        }
+
+        return sanitizeUsername(e);
+      },
     );
 
     // check if username exists, if it does add a number to the end
