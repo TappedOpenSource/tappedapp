@@ -130,16 +130,22 @@ class OnboardingFlowCubit extends Cubit<OnboardingFlowState> {
     );
 
     // check if username exists, if it does add a number to the end
-    final usernameAvailable =
-        await databaseRepository.checkUsernameAvailability(
-      usernameCandidate,
-      currentAuthUser.uid,
-    );
+    final username = await switch (usernameCandidate.isEmpty) {
+      true => Future.value(''),
+      false => (() async {
+          final usernameAvailable =
+              await databaseRepository.checkUsernameAvailability(
+            usernameCandidate,
+            currentAuthUser.uid,
+          );
 
-    final sinceEpoch = DateTime.now().millisecondsSinceEpoch.toString();
-    final lastFour = sinceEpoch.substring(sinceEpoch.length - 4);
-    final username =
-        usernameAvailable ? usernameCandidate : '$usernameCandidate$lastFour';
+          final sinceEpoch = DateTime.now().millisecondsSinceEpoch.toString();
+          final lastFour = sinceEpoch.substring(sinceEpoch.length - 4);
+          return usernameAvailable
+              ? usernameCandidate
+              : '$usernameCandidate$lastFour';
+        })(),
+    };
 
     // get profile picture from spotify artist images
     final profilePicture = res.fold(
@@ -147,14 +153,19 @@ class OnboardingFlowCubit extends Cubit<OnboardingFlowState> {
       (a) => a.images.isNotEmpty ? Option.of(a.images.first.url) : const None(),
     );
 
-    print('username: $username');
-
     emit(
       state.copyWith(
         photoUrl: profilePicture,
-        username: UsernameInput.dirty(value: username),
       ),
     );
+
+    if (username.isNotEmpty) {
+      emit(
+        state.copyWith(
+          username: UsernameInput.dirty(value: username),
+        ),
+      );
+    }
   }
 
   Future<void> handleImageFromGallery() async {
