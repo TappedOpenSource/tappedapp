@@ -1,13 +1,26 @@
 /* eslint-disable import/no-unresolved */
 import { v4 as uuidv4 } from "uuid";
 import { Timestamp } from "firebase-admin/firestore";
-import { error } from "firebase-functions/logger";
+import { error, info, warn } from "firebase-functions/logger";
 import { onDocumentCreated } from "firebase-functions/v2/firestore";
 import { auth, bookingsRef, bucket, crawlerRef, usersRef } from "./firebase";
 import { Option, Booking, EventData } from "../types/models";
 // import fetch from "node-fetch";
 import { sanitizeUsername } from "./utils";
 import { getDownloadURL } from "firebase-admin/storage";
+
+async function getBookingBySimilarity(booking: Booking): Promise<Booking | null>{
+  const bookingSnaps = await bookingsRef
+    .where("requesteeId", "==", booking.requesteeId)
+    .where("requesterId", "==", booking.requesterId)
+    .where("startTime", "==", booking.startTime)
+    .get();
+  if (bookingSnaps.empty) {
+    return null;
+  }
+
+  return bookingSnaps.docs[0].data() as Booking;
+}
 
 export async function getOrCreatePerformer({
   // location,
@@ -177,14 +190,14 @@ export async function createBookingsFromEvent(
     };
   
     // check if booking like this exists already
-    // const candidateBooking = await getBookingBySimilarity(booking);
-    // if (candidateBooking !== null) {
-    //   console.log(`[!!!] booking like this exists already: ${candidateBooking.id}`);
-    //   return;
-    // }
+    const candidateBooking = await getBookingBySimilarity(booking);
+    if (candidateBooking === null) {
+      await bookingsRef.doc(booking.id).set(booking);
+      info(`created booking: ${booking.name}`);
+    } else {
+      warn(`booking like this exists already: ${candidateBooking.id}`);
+    }
   
-    await bookingsRef.doc(booking.id).set(booking);
-    console.log(`[+] created booking: ${booking.name}`);
   
     // const bookingStartTime = booking.startTime.toDate();
     // if (bookingStartTime.getTime() < Date.now()) {
@@ -196,8 +209,9 @@ export async function createBookingsFromEvent(
     //   });
     // }
 
+    const bookingId = candidateBooking?.id ?? booking.id;
     await crawlerRef.doc(encodedLink).set({
-      bookingId: booking.id,
+      bookingId,
     }, { merge: true })
   }
 }
