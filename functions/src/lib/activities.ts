@@ -42,37 +42,6 @@ export const sendToDevice = functions.firestore
     };
 
     switch (activityType) {
-    case "comment":
-      if (!user["pushNotificationsComments"]) return;
-
-      payload = {
-        notification: {
-          title: "New Comment",
-          body: "Someone commented on your loop 👀",
-          clickAction: "FLUTTER_NOTIFICATION_CLICK",
-        },
-      };
-      break;
-    case "like":
-      if (!user["pushNotificationsLikes"]) return;
-      payload = {
-        notification: {
-          title: "New Like",
-          body: "Someone liked your loops 👍",
-          clickAction: "FLUTTER_NOTIFICATION_CLICK",
-        },
-      };
-      break;
-    case "follow":
-      if (!user["pushNotificationsFollows"]) return;
-      payload = {
-        notification: {
-          title: "New Follower",
-          body: "You just got a new follower 🔥",
-          clickAction: "FLUTTER_NOTIFICATION_CLICK",
-        },
-      };
-      break;
     case "bookingRequest":
       payload = {
         notification: {
@@ -87,24 +56,6 @@ export const sendToDevice = functions.firestore
         notification: {
           title: "Booking Update",
           body: "There was an update to one of your bookings",
-          clickAction: "FLUTTER_NOTIFICATION_CLICK",
-        },
-      };
-      break;
-    case "loopMention":
-      payload = {
-        notification: {
-          title: "Mention",
-          body: "Someone mentioned you in a loop",
-          clickAction: "FLUTTER_NOTIFICATION_CLICK",
-        },
-      };
-      break;
-    case "commentMention":
-      payload = {
-        notification: {
-          title: "Mention",
-          body: "Someone mentioned you in a comment",
           clickAction: "FLUTTER_NOTIFICATION_CLICK",
         },
       };
@@ -175,14 +126,8 @@ export const createActivity = async (
   }
 
   const allowedActivityTypes = [
-    "follow",
-    "like",
-    "comment",
     "bookingRequest",
     "bookingUpdate",
-    "loopMention",
-    "commentMention",
-    "commentLike",
     "opportunityInterest",
     "bookingReminder",
     "searchAppearance",

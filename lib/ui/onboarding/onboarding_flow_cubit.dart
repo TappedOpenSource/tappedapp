@@ -110,11 +110,19 @@ class OnboardingFlowCubit extends Cubit<OnboardingFlowState> {
     final res = await switch (state.spotifyUrl) {
       None() => Future<Option<SpotifyArtist>>.value(const None()),
       Some(:final value) => (() async {
+          if (value.isEmpty) {
+            return const None();
+          }
+
           final spotifyId = Uri.parse(value).pathSegments.last;
           final spotifyArtist = await spotify.getArtistById(spotifyId);
           return spotifyArtist;
         })(),
     };
+
+    if (res.isNone()) {
+      return;
+    }
 
     // get username from santitized spotify artist name
     final artistName = res.map((a) => a.name);

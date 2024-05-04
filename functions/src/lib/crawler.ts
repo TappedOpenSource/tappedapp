@@ -133,6 +133,11 @@ export async function createBookingsFromEvent(
   for (const performerName of data.performers) {
     const id = uuidv4();
     const requesterId = venue.id;
+    if (performerName === "") {
+      console.log("[!!!] performer name is empty");
+      return;
+    }
+
     const requesteeId = await getOrCreatePerformer({
       performerName,
       bio: "",
