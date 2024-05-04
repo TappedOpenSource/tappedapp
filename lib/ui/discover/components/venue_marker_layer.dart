@@ -52,15 +52,15 @@ class VenueMarkerLayer extends StatelessWidget {
             return BlocBuilder<DiscoverCubit, DiscoverState>(
               builder: (context, state) {
 
-                return MarkerClusterLayerWidget(
-                  options: MarkerClusterLayerOptions(
-                    maxClusterRadius: 40,
-                    size: const Size(40, 40),
-                    // polygonOptions: PolygonOptions(
-                    //   borderColor: tappedAccent,
-                    //   color: tappedAccent.withOpacity(0.5),
-                    //   borderStrokeWidth: 3,
-                    // ),
+                return MarkerLayer(
+                  // options: MarkerClusterLayerOptions(
+                  //   maxClusterRadius: 40,
+                  //   size: const Size(40, 40),
+                  //   // polygonOptions: PolygonOptions(
+                  //   //   borderColor: tappedAccent,
+                  //   //   color: tappedAccent.withOpacity(0.5),
+                  //   //   borderStrokeWidth: 3,
+                  //   // ),
                     markers: [
                       ...state.venueHits.map((venue) {
                         final isGoodFit = _isVenueGoodFit(
@@ -134,22 +134,22 @@ class VenueMarkerLayer extends StatelessWidget {
                         };
                       }).whereType<Marker>(),
                     ],
-                    builder: (context, markers) {
-                      // random int
-                      final random = Random().nextInt(999).toString();
-                      final index = markers.first.key
-                          .toString()
-                          .replaceAll(RegExp('[^0-9]'), random);
-                      final clusterKey = 'map-badge-$index-len-${markers.length}';
-
-                      return FloatingActionButton(
-                        heroTag: clusterKey,
-                        onPressed: null,
-                        child: Text(markers.length.toString()),
-                      );
-                    },
-                  ),
-                );
+                    // builder: (context, markers) {
+                    //   // random int
+                    //   final random = Random().nextInt(999).toString();
+                    //   final index = markers.first.key
+                    //       .toString()
+                    //       .replaceAll(RegExp('[^0-9]'), random);
+                    //   final clusterKey = 'map-badge-$index-len-${markers.length}';
+                    //
+                    //   return FloatingActionButton(
+                    //     heroTag: clusterKey,
+                    //     onPressed: null,
+                    //     child: Text(markers.length.toString()),
+                    //   );
+                    // },
+                  );
+                // );
               },
             );
           },

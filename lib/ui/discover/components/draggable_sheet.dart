@@ -6,6 +6,7 @@ import 'package:fpdart/fpdart.dart';
 import 'package:intheloopapp/data/auth_repository.dart';
 import 'package:intheloopapp/domains/models/performer_info.dart';
 import 'package:intheloopapp/domains/models/user_model.dart';
+import 'package:intheloopapp/domains/models/venue_info.dart';
 import 'package:intheloopapp/domains/navigation_bloc/navigation_bloc.dart';
 import 'package:intheloopapp/domains/navigation_bloc/tapped_route.dart';
 import 'package:intheloopapp/ui/discover/components/user_slider.dart';
@@ -299,7 +300,47 @@ class DraggableSheet extends StatelessWidget {
                                 horizontal: 8,
                               ),
                               child: Text(
-                                'top performers',
+                                'top performers in area',
+                                style: TextStyle(
+                                  fontSize: 28,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                            ),
+                            FutureBuilder<List<UserModel>>(
+                              future: (() async {
+                                final performerIds =
+                                    sortedVenueHits.flatMap((v) {
+                                  return v.venueInfo.fold(
+                                    () => <String>[],
+                                    (t) => t.topPerformerIds,
+                                  );
+                                });
+
+                                final performers = (await Future.wait(
+                                  performerIds.map(database.getUserById),
+                                ))
+                                    .whereType<Some<UserModel>>()
+                                    .map((e) => e.value)
+                                    .toList();
+
+                                return performers;
+                              })(),
+                              builder: (context, snapshot) {
+                                final performers = snapshot.data ?? [];
+                                return UserSlider(
+                                  users: performers,
+                                  sort: true,
+                                );
+                              },
+                            ),
+                            const Padding(
+                              padding: EdgeInsets.symmetric(
+                                vertical: 16,
+                                horizontal: 8,
+                              ),
+                              child: Text(
+                                'app leaders',
                                 style: TextStyle(
                                   fontSize: 28,
                                   fontWeight: FontWeight.bold,
