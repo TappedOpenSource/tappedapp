@@ -96,6 +96,12 @@ class DraggableSheet extends StatelessWidget {
                       return 0;
                     }
                   });
+                final topPerformerIds = sortedVenueHits.flatMap((v) {
+                  return v.venueInfo.fold(
+                    () => <String>[],
+                    (t) => t.topPerformerIds,
+                  );
+                });
                 return DraggableScrollableSheet(
                   expand: false,
                   initialChildSize: 0.5,
@@ -306,48 +312,45 @@ class DraggableSheet extends StatelessWidget {
                                       ),
                                     ],
                                   ),
-                                const Padding(
-                                  padding: EdgeInsets.symmetric(
-                                    vertical: 16,
-                                    horizontal: 8,
-                                  ),
-                                  child: Text(
-                                    'top performers in area',
-                                    style: TextStyle(
-                                      fontSize: 28,
-                                      fontWeight: FontWeight.bold,
+                                if (topPerformerIds.isNotEmpty)
+                                  const Padding(
+                                    padding: EdgeInsets.symmetric(
+                                      vertical: 16,
+                                      horizontal: 8,
+                                    ),
+                                    child: Text(
+                                      'top performers in area',
+                                      style: TextStyle(
+                                        fontSize: 28,
+                                        fontWeight: FontWeight.bold,
+                                      ),
                                     ),
                                   ),
-                                ),
-                                FutureBuilder<List<UserModel>>(
-                                  future: (() async {
-                                    final performerIds =
-                                        sortedVenueHits.flatMap((v) {
-                                      return v.venueInfo.fold(
-                                        () => <String>[],
-                                        (t) => t.topPerformerIds,
+                                if (topPerformerIds.isNotEmpty)
+                                  FutureBuilder<List<UserModel>>(
+                                    future: (() async {
+                                      final performers = (await Future.wait(
+                                        topPerformerIds
+                                            .map(database.getUserById),
+                                      ))
+                                          .whereType<Some<UserModel>>()
+                                          .map((e) => e.value)
+                                          .toList();
+
+                                      return performers;
+                                    })(),
+                                    builder: (context, snapshot) {
+                                      final performers = snapshot.data ?? [];
+                                      return UserSlider(
+                                        users: performers,
+                                        sort: true,
+                                        blur: !isPremium,
+                                        onTap: isPremium
+                                            ? null
+                                            : () => context.push(PaywallPage()),
                                       );
-                                    });
-
-                                    final performers = (await Future.wait(
-                                      performerIds.map(database.getUserById),
-                                    ))
-                                        .whereType<Some<UserModel>>()
-                                        .map((e) => e.value)
-                                        .toList();
-
-                                    return performers;
-                                  })(),
-                                  builder: (context, snapshot) {
-                                    final performers = snapshot.data ?? [];
-                                    return UserSlider(
-                                      users: performers,
-                                      sort: true,
-                                      blur: !isPremium,
-                                      onTap: isPremium ? null : () => context.push(PaywallPage()),
-                                    );
-                                  },
-                                ),
+                                    },
+                                  ),
                                 const Padding(
                                   padding: EdgeInsets.symmetric(
                                     vertical: 16,
