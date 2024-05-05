@@ -1,6 +1,9 @@
+import 'dart:ui';
+
 import 'package:flutter/material.dart';
 import 'package:intheloopapp/domains/models/performer_info.dart';
 import 'package:intheloopapp/domains/models/user_model.dart';
+import 'package:intheloopapp/ui/conditional_parent_widget.dart';
 import 'package:intheloopapp/ui/user_card.dart';
 import 'package:scroll_snap_list/scroll_snap_list.dart';
 
@@ -8,11 +11,15 @@ class UserSlider extends StatelessWidget {
   const UserSlider({
     required this.users,
     this.sort = false,
+    this.blur = false,
+    this.onTap,
     super.key,
   });
 
   final List<UserModel> users;
   final bool sort;
+  final bool blur;
+  final void Function()? onTap;
 
   @override
   Widget build(BuildContext context) {
@@ -43,7 +50,11 @@ class UserSlider extends StatelessWidget {
             padding: const EdgeInsets.symmetric(
               horizontal: 8,
             ),
-            child: UserCard(user: users[index]),
+            child: UserCard(
+              blur: blur,
+              user: users[index],
+              onTap: onTap,
+            ),
           );
         },
       ),
