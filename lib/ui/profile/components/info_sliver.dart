@@ -270,9 +270,14 @@ class InfoSliver extends StatelessWidget {
                                   ),
                                 ),
                             },
-                            if (isPremium && bookingEmail != null)
+                            if (bookingEmail != null)
                               GestureDetector(
-                                onLongPress: () async {
+                                onTap: () async {
+                                  if (!isPremium) {
+                                    context.push(PaywallPage());
+                                    return;
+                                  }
+
                                   await Clipboard.setData(
                                     ClipboardData(text: bookingEmail),
                                   );
@@ -289,7 +294,7 @@ class InfoSliver extends StatelessWidget {
                                   title: SingleChildScrollView(
                                     scrollDirection: Axis.horizontal,
                                     child: Text(
-                                      bookingEmail,
+                                      isPremium ? bookingEmail : '*****@email.com',
                                       style: TextStyle(
                                         color: theme.colorScheme.onSurface,
                                       ),
@@ -297,11 +302,15 @@ class InfoSliver extends StatelessWidget {
                                   ),
                                 ),
                               ),
-                            if (isPremium)
                               switch (state.visitedUser.phoneNumber) {
                                 None() => const SizedBox.shrink(),
                                 Some(:final value) => GestureDetector(
                                     onTap: () async {
+                                      if (!isPremium) {
+                                        context.push(PaywallPage());
+                                        return;
+                                      }
+
                                       await Clipboard.setData(
                                         ClipboardData(text: value),
                                       );
@@ -317,7 +326,7 @@ class InfoSliver extends StatelessWidget {
                                         CupertinoIcons.phone,
                                       ),
                                       title: Text(
-                                        value,
+                                        isPremium ? value : '***-***-****',
                                         style: TextStyle(
                                           color: theme.colorScheme.onSurface,
                                         ),
