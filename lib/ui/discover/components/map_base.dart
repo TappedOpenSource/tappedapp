@@ -95,7 +95,7 @@ class MapBase extends StatelessWidget {
                           const OpportunitiesHeatmapLayer(),
                         ],
                     },
-                    CurrentLocationLayer(),
+                    const CurrentLocationLayer(),
                     RichAttributionWidget(
                       animationConfig: const ScaleRAWA(),
                       // Or `FadeRAWA` as is default

@@ -32,13 +32,20 @@ class BookingsMarkerLayer extends StatelessWidget {
   }) {
     if (!showFliers) {
       return Marker(
-        width: 35,
-        height: 35,
+        width: 6,
+        height: 6,
         point: LatLng(location.lat, location.lng),
-        child: const Icon(
-          Icons.location_on,
-          color: Colors.white,
-          size: 15,
+        child: Container(
+          height: 6,
+          width: 6,
+          decoration: BoxDecoration(
+            color: Colors.blue,
+            shape: BoxShape.circle,
+            border: Border.all(
+              color: Colors.white,
+              width: 1,
+            ),
+          ),
         ),
       );
     }
@@ -48,7 +55,7 @@ class BookingsMarkerLayer extends StatelessWidget {
       height: 35,
       point: LatLng(location.lat, location.lng),
       child: InkWell(
-        onTap: () => showCupertinoModalBottomSheet(
+        onTap: () => showCupertinoModalBottomSheet<void>(
           context: context,
           builder: (context) => BookingView(
             booking: booking,

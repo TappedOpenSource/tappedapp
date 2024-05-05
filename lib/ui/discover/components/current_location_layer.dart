@@ -14,13 +14,20 @@ class CurrentLocationLayer extends StatelessWidget {
         return MarkerLayer(
           markers: [
             Marker(
-              width: 80.0,
-              height: 80.0,
+              width: 12,
+              height: 12,
               point: LatLng(state.userLat, state.userLng),
-              child: const Icon(
-                Icons.location_on,
-                color: Colors.blue,
-                size: 25.0,
+              child: Container(
+                height: 12,
+                width: 12,
+                decoration: BoxDecoration(
+                  color: Colors.blue,
+                  shape: BoxShape.circle,
+                  border: Border.all(
+                    color: Colors.white,
+                    width: 1,
+                  ),
+                ),
               ),
             ),
           ],
