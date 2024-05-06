@@ -52,12 +52,14 @@ class InfoSliver extends StatelessWidget {
             );
         final averagePerformerTicketPrice =
             performerInfo.map((t) => t.formattedPriceRange);
-        final averageAttendance = performerInfo.map(
-          (t) => t.averageAttendance.fold(
-            () => (audience / 250).round(),
-            (attendance) => attendance,
-          ),
-        ).getOrElse(() => 0);
+        final averageAttendance = performerInfo
+            .map(
+              (t) => t.averageAttendance.fold(
+                () => (audience / 250).round(),
+                (attendance) => attendance,
+              ),
+            )
+            .getOrElse(() => 0);
         final label = performerInfo.map((t) => t.label).getOrElse(() => 'None');
         final bookingAgency = performerInfo.flatMap((t) => t.bookingAgency);
         final currPlace = state.place;
@@ -223,7 +225,7 @@ class InfoSliver extends StatelessWidget {
                             },
                             switch ((venueInfo, averageAttendance)) {
                               (Some(), _) => const SizedBox.shrink(),
-                              (_, <=0) => const SizedBox.shrink(),
+                              (_, <= 0) => const SizedBox.shrink(),
                               (_, _) => CupertinoListTile(
                                   onTap: () {
                                     if (!isPremium) {
@@ -239,7 +241,8 @@ class InfoSliver extends StatelessWidget {
                                       children: [
                                         if (isPremium)
                                           TextSpan(
-                                            text: formatted.format(averageAttendance),
+                                            text: formatted
+                                                .format(averageAttendance),
                                             style: TextStyle(
                                               color:
                                                   theme.colorScheme.onSurface,
@@ -249,7 +252,9 @@ class InfoSliver extends StatelessWidget {
                                           WidgetSpan(
                                             child: ImageFiltered(
                                               imageFilter: ImageFilter.blur(
-                                                  sigmaX: 10, sigmaY: 10),
+                                                sigmaX: 10,
+                                                sigmaY: 10,
+                                              ),
                                               child: Text(
                                                 '???',
                                                 style: TextStyle(
@@ -294,7 +299,9 @@ class InfoSliver extends StatelessWidget {
                                   title: SingleChildScrollView(
                                     scrollDirection: Axis.horizontal,
                                     child: Text(
-                                      isPremium ? bookingEmail : '*****@email.com',
+                                      isPremium
+                                          ? bookingEmail
+                                          : '*****@email.com',
                                       style: TextStyle(
                                         color: theme.colorScheme.onSurface,
                                       ),
@@ -302,38 +309,38 @@ class InfoSliver extends StatelessWidget {
                                   ),
                                 ),
                               ),
-                              switch (state.visitedUser.phoneNumber) {
-                                None() => const SizedBox.shrink(),
-                                Some(:final value) => GestureDetector(
-                                    onTap: () async {
-                                      if (!isPremium) {
-                                        context.push(PaywallPage());
-                                        return;
-                                      }
+                            switch (state.visitedUser.phoneNumber) {
+                              None() => const SizedBox.shrink(),
+                              Some(:final value) => GestureDetector(
+                                  onTap: () async {
+                                    if (!isPremium) {
+                                      context.push(PaywallPage());
+                                      return;
+                                    }
 
-                                      await Clipboard.setData(
-                                        ClipboardData(text: value),
-                                      );
-                                      await HapticFeedback.mediumImpact();
-                                      await EasyLoading.showSuccess(
-                                        'copied phone',
-                                        duration:
-                                            const Duration(milliseconds: 500),
-                                      );
-                                    },
-                                    child: CupertinoListTile(
-                                      leading: const Icon(
-                                        CupertinoIcons.phone,
-                                      ),
-                                      title: Text(
-                                        isPremium ? value : '***-***-****',
-                                        style: TextStyle(
-                                          color: theme.colorScheme.onSurface,
-                                        ),
+                                    await Clipboard.setData(
+                                      ClipboardData(text: value),
+                                    );
+                                    await HapticFeedback.mediumImpact();
+                                    await EasyLoading.showSuccess(
+                                      'copied phone',
+                                      duration:
+                                          const Duration(milliseconds: 500),
+                                    );
+                                  },
+                                  child: CupertinoListTile(
+                                    leading: const Icon(
+                                      CupertinoIcons.phone,
+                                    ),
+                                    title: Text(
+                                      isPremium ? value : '***-***-****',
+                                      style: TextStyle(
+                                        color: theme.colorScheme.onSurface,
                                       ),
                                     ),
                                   ),
-                              },
+                                ),
+                            },
                             if (label != 'None')
                               CupertinoListTile(
                                 leading: const Icon(
