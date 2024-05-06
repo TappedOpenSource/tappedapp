@@ -455,7 +455,7 @@ class DraggableSheet extends StatelessWidget {
                                             horizontal: 20,
                                           ),
                                           child: Column(
-                                            children: [
+                                              children: [
                                               const Row(
                                                 children: [
                                                   Expanded(

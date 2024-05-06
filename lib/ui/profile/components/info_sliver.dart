@@ -57,7 +57,7 @@ class InfoSliver extends StatelessWidget {
             () => (audience / 250).round(),
             (attendance) => attendance,
           ),
-        );
+        ).getOrElse(() => 0);
         final label = performerInfo.map((t) => t.label).getOrElse(() => 'None');
         final bookingAgency = performerInfo.flatMap((t) => t.bookingAgency);
         final currPlace = state.place;
@@ -223,8 +223,8 @@ class InfoSliver extends StatelessWidget {
                             },
                             switch ((venueInfo, averageAttendance)) {
                               (Some(), _) => const SizedBox.shrink(),
-                              (_, None()) => const SizedBox.shrink(),
-                              (_, Some(:final value)) => CupertinoListTile(
+                              (_, <=0) => const SizedBox.shrink(),
+                              (_, _) => CupertinoListTile(
                                   onTap: () {
                                     if (!isPremium) {
                                       context.push(PaywallPage());
@@ -239,7 +239,7 @@ class InfoSliver extends StatelessWidget {
                                       children: [
                                         if (isPremium)
                                           TextSpan(
-                                            text: '${formatted.format(value)}',
+                                            text: formatted.format(averageAttendance),
                                             style: TextStyle(
                                               color:
                                                   theme.colorScheme.onSurface,
