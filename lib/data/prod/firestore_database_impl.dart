@@ -465,7 +465,7 @@ class FirestoreDatabaseImpl extends DatabaseRepository {
   }
 
   @override
-  @cached
+  @Cached(ttl: 60 * 5) // 5 minute
   Future<List<Opportunity>> getFeaturedOpportunities() async {
     final leadersSnapshot = await _leadersRef.doc('leaders').get();
     final leadingOps =
