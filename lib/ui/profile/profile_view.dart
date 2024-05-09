@@ -41,7 +41,7 @@ class ProfileView extends StatelessWidget {
     this.expandedBarHeight = 300.0,
     super.key,
     ScrollController? scrollController,
-  }): scrollController = scrollController ?? ScrollController();
+  }) : scrollController = scrollController ?? ScrollController();
 
   final String visitedUserId;
   final double collapsedBarHeight;
@@ -234,15 +234,13 @@ class ProfileView extends StatelessWidget {
               cubit.loadIsVerified(visitedUser.id),
             ]);
           },
-          actions: [
-            IconButton(
-              onPressed: onQuit ?? () => context.pop(),
-              icon: Icon(
-                CupertinoIcons.xmark_circle_fill,
-                color: Colors.white.withOpacity(0.8),
-              ),
+          leading: IconButton(
+            onPressed: onQuit ?? () => context.pop(),
+            icon: Icon(
+              CupertinoIcons.xmark_circle_fill,
+              color: Colors.white.withOpacity(0.8),
             ),
-          ],
+          ),
           flexibleSpace: FlexibleSpaceBar(
             stretchModes: const [
               StretchMode.zoomBackground,

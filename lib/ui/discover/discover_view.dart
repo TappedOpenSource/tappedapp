@@ -165,7 +165,7 @@ class DiscoverView extends StatelessWidget {
                   name: 'discover_change_overlay',
                   parameters: {
                     'genre': genre.formattedName,
-                    'is_premium': isPremium,
+                    'is_premium': isPremium ? 1 : 0,
                   },
                 );
 
