@@ -122,7 +122,7 @@ class _TappedSearchBarState extends State<TappedSearchBar> {
             elevation: const MaterialStatePropertyAll(0),
             controller: searchController,
             focusNode: _searchFocusNode,
-            hintText: 'search...',
+            hintText: 'search tapped...',
             leading: IconButton(
               onPressed: () {},
               icon: const Icon(Icons.search),

@@ -115,6 +115,37 @@ extension DiscoverStateX on DiscoverState {
       });
   }
 
+  Iterable<MapEntry<String, int>> get genreCounts {
+    final venueGenres = venueHits
+        .map(
+          (e) => e.venueInfo
+              .map(
+                (t) => t.genres,
+              )
+              .getOrElse(() => [])
+              .map(
+                (t) => t,
+              ),
+        )
+        .expand((element) => element)
+        .toList();
+
+    final genreMap = venueGenres.fold<Map<String, int>>(
+      {},
+      (previousValue, element) {
+        if (previousValue.containsKey(element)) {
+          previousValue[element] = previousValue[element]! + 1;
+        } else {
+          previousValue[element] = 1;
+        }
+        return previousValue;
+      },
+    );
+
+    final sortedGenreMap = genreMap.entries.toList()..sort((a, b) => b.value.compareTo(a.value));
+
+    return sortedGenreMap;
+  }
   // List<PieChartSectionData> get genrePieData {
   //   final genreMap = {for (final e in Genre.values) e: genreList(e).length};
   //

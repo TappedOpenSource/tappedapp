@@ -8,15 +8,12 @@ import 'package:fpdart/fpdart.dart';
 import 'package:intheloopapp/data/auth_repository.dart';
 import 'package:intheloopapp/domains/models/performer_info.dart';
 import 'package:intheloopapp/domains/models/user_model.dart';
-import 'package:intheloopapp/domains/models/venue_info.dart';
 import 'package:intheloopapp/domains/navigation_bloc/navigation_bloc.dart';
 import 'package:intheloopapp/domains/navigation_bloc/tapped_route.dart';
-import 'package:intheloopapp/ui/conditional_parent_widget.dart';
 import 'package:intheloopapp/ui/discover/components/user_slider.dart';
 import 'package:intheloopapp/ui/discover/discover_cubit.dart';
 import 'package:intheloopapp/ui/profile/components/feedback_button.dart';
 import 'package:intheloopapp/ui/profile/components/opportunities_list.dart';
-import 'package:intheloopapp/ui/share_profile/share_profile_view.dart';
 import 'package:intheloopapp/ui/user_avatar.dart';
 import 'package:intheloopapp/ui/user_tile.dart';
 import 'package:intheloopapp/utils/bloc_utils.dart';
@@ -38,9 +35,9 @@ class DraggableSheet extends StatelessWidget {
   bool _isVenueGoodFit(UserModel currentUser, UserModel venue) {
     final category = currentUser.performerInfo.map((t) => t.category);
     final userGenres =
-    currentUser.performerInfo.map((t) => t.genres).getOrElse(() => []);
+        currentUser.performerInfo.map((t) => t.genres).getOrElse(() => []);
     final goodCapFit =
-    venue.venueInfo.flatMap((t) => t.capacity).map2(category, (cap, cat) {
+        venue.venueInfo.flatMap((t) => t.capacity).map2(category, (cap, cat) {
       return cat.suggestedMaxCapacity >= cap;
     }).getOrElse(() => false);
     final genreFit = venue.venueInfo.map((t) {
@@ -62,13 +59,13 @@ class DraggableSheet extends StatelessWidget {
       user: Option.of(venue),
       trailing: isGoodFit
           ? const Text(
-        'for you',
-        style: TextStyle(
-          color: Colors.green,
-          fontWeight: FontWeight.bold,
-          fontSize: 16,
-        ),
-      )
+              'for you',
+              style: TextStyle(
+                color: Colors.green,
+                fontWeight: FontWeight.bold,
+                fontSize: 16,
+              ),
+            )
           : null,
     );
   }
@@ -98,32 +95,40 @@ class DraggableSheet extends StatelessWidget {
                   });
                 final topPerformerIds = sortedVenueHits.flatMap((v) {
                   return v.venueInfo.fold(
-                        () => <String>[],
-                        (t) => t.topPerformerIds,
+                    () => <String>[],
+                    (t) => t.topPerformerIds,
                   );
                 });
                 return FutureBuilder(
                   future: database.getFeaturedOpportunities(),
                   builder: (context, snapshot) {
-                    final featuredOpportunities =
-                        snapshot.data ?? [];
-                    return DraggableScrollableSheet(
-                      expand: false,
-                      initialChildSize: 0.5,
-                      minChildSize: 0.11,
-                      snap: true,
-                      snapSizes: const [0.11, 0.5, 1],
-                      controller: dragController,
-                      builder: (ctx, scrollController) =>
-                          DecoratedBox(
+                    final featuredOpportunities = snapshot.data ?? [];
+                    return FutureBuilder(
+                      future: (() async {
+                        final performers = (await Future.wait(
+                          topPerformerIds.map(database.getUserById),
+                        ))
+                            .whereType<Some<UserModel>>()
+                            .map((e) => e.value)
+                            .toList();
+
+                        return performers;
+                      })(),
+                      builder: (context, snapshot) {
+                        final performers = snapshot.data ?? [];
+                        return DraggableScrollableSheet(
+                          expand: false,
+                          initialChildSize: 0.5,
+                          minChildSize: 0.11,
+                          snap: true,
+                          snapSizes: const [0.11, 0.5, 1],
+                          controller: dragController,
+                          builder: (ctx, scrollController) => DecoratedBox(
                             decoration: BoxDecoration(
                               borderRadius: const BorderRadius.vertical(
                                 top: Radius.circular(12),
                               ),
-                              color: Theme
-                                  .of(context)
-                                  .colorScheme
-                                  .background,
+                              color: Theme.of(context).colorScheme.background,
                             ),
                             child: Column(
                               children: [
@@ -132,8 +137,8 @@ class DraggableSheet extends StatelessWidget {
                                     controller: scrollController,
                                     physics: const ClampingScrollPhysics(),
                                     child: Column(
-                                      crossAxisAlignment: CrossAxisAlignment
-                                          .start,
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
                                       children: [
                                         Container(
                                           decoration: const BoxDecoration(
@@ -143,8 +148,8 @@ class DraggableSheet extends StatelessWidget {
                                           ),
                                           child: Center(
                                             child: Padding(
-                                              padding: const EdgeInsets
-                                                  .symmetric(
+                                              padding:
+                                                  const EdgeInsets.symmetric(
                                                 vertical: 32 / 2 - 4 / 2,
                                               ),
                                               child: Container(
@@ -152,9 +157,9 @@ class DraggableSheet extends StatelessWidget {
                                                 width: 42,
                                                 decoration: BoxDecoration(
                                                   borderRadius:
-                                                  BorderRadius.circular(2),
-                                                  color: theme.colorScheme
-                                                      .onSurface
+                                                      BorderRadius.circular(2),
+                                                  color: theme
+                                                      .colorScheme.onSurface
                                                       .withOpacity(0.15),
                                                 ),
                                               ),
@@ -169,26 +174,19 @@ class DraggableSheet extends StatelessWidget {
                                           ),
                                           child: Row(
                                             mainAxisAlignment:
-                                            MainAxisAlignment.spaceBetween,
+                                                MainAxisAlignment.spaceBetween,
                                             children: [
                                               const SizedBox(width: 35),
                                               Row(
                                                 mainAxisAlignment:
-                                                MainAxisAlignment.center,
+                                                    MainAxisAlignment.center,
                                                 children: [
                                                   Text(
-                                                    '${state.venueHits
-                                                        .length}${state
-                                                        .venueHits.length >= 150
-                                                        ? '+'
-                                                        : ''} ${state.venueHits
-                                                        .length == 1
-                                                        ? 'venue'
-                                                        : 'venues'}',
+                                                    '${state.venueHits.length}${state.venueHits.length >= 150 ? '+' : ''} ${state.venueHits.length == 1 ? 'venue' : 'venues'}',
                                                     style: const TextStyle(
                                                       fontSize: 16,
-                                                      fontWeight: FontWeight
-                                                          .w700,
+                                                      fontWeight:
+                                                          FontWeight.w700,
                                                     ),
                                                   ),
                                                 ],
@@ -196,23 +194,23 @@ class DraggableSheet extends StatelessWidget {
                                               Container(
                                                 height: 35,
                                                 width: 35,
-                                                padding: const EdgeInsets.all(
-                                                    1),
+                                                padding:
+                                                    const EdgeInsets.all(1),
                                                 decoration: BoxDecoration(
-                                                  color: theme.colorScheme
-                                                      .primary,
+                                                  color:
+                                                      theme.colorScheme.primary,
                                                   borderRadius:
-                                                  BorderRadius.circular(
-                                                      35.0 / 2),
+                                                      BorderRadius.circular(
+                                                          35.0 / 2),
                                                 ),
                                                 child: UserAvatar(
                                                   radius: 45,
                                                   imageUrl: currentUser
                                                       .profilePicture,
-                                                  pushUser: Option.of(
-                                                      currentUser),
-                                                  pushId: Option.of(
-                                                      currentUser.id),
+                                                  pushUser:
+                                                      Option.of(currentUser),
+                                                  pushId:
+                                                      Option.of(currentUser.id),
                                                 ),
                                               ),
                                             ],
@@ -226,22 +224,21 @@ class DraggableSheet extends StatelessWidget {
                                             children: [
                                               Expanded(
                                                 child: CupertinoButton(
-                                                  onPressed: () =>
-                                                      context.push(
-                                                        GigSearchPage(),
-                                                      ),
+                                                  onPressed: () => context.push(
+                                                    GigSearchPage(),
+                                                  ),
                                                   borderRadius:
-                                                  BorderRadius.circular(15),
-                                                  color: theme.colorScheme
-                                                      .primary
+                                                      BorderRadius.circular(15),
+                                                  color: theme
+                                                      .colorScheme.primary
                                                       .withOpacity(0.1),
                                                   child: Text(
                                                     'mass outreach',
                                                     style: TextStyle(
-                                                      fontWeight: FontWeight
-                                                          .bold,
-                                                      color: theme.colorScheme
-                                                          .primary,
+                                                      fontWeight:
+                                                          FontWeight.bold,
+                                                      color: theme
+                                                          .colorScheme.primary,
                                                     ),
                                                   ),
                                                 ),
@@ -264,103 +261,135 @@ class DraggableSheet extends StatelessWidget {
                                         ),
                                         CustomClaimsBuilder(
                                           builder: (context, claims) {
-                                            final isAdmin =
-                                            claims.contains(CustomClaim.admin);
-                                            final isBooker =
-                                            claims.contains(CustomClaim.booker);
-                                            return switch (isAdmin ||
-                                                isBooker) {
+                                            final isAdmin = claims
+                                                .contains(CustomClaim.admin);
+                                            final isBooker = claims
+                                                .contains(CustomClaim.booker);
+                                            return switch (
+                                                isAdmin || isBooker) {
                                               false => const SizedBox.shrink(),
-                                              true =>
-                                                  Padding(
-                                                    padding: const EdgeInsets
-                                                        .symmetric(
-                                                      horizontal: 20,
-                                                    ),
-                                                    child: SizedBox(
-                                                      width: double.infinity,
-                                                      child: CupertinoButton(
-                                                        onPressed: () =>
-                                                            context.push(
-                                                                AdminPage()),
-                                                        color:
-                                                        Colors.red.withOpacity(
-                                                            0.1),
-                                                        borderRadius:
-                                                        BorderRadius.circular(
-                                                            15),
-                                                        child: const Text(
-                                                          'add opportunity',
-                                                          style: TextStyle(
-                                                            color: Colors.red,
-                                                            fontWeight: FontWeight
-                                                                .bold,
-                                                          ),
+                                              true => Padding(
+                                                  padding: const EdgeInsets
+                                                      .symmetric(
+                                                    horizontal: 20,
+                                                  ),
+                                                  child: SizedBox(
+                                                    width: double.infinity,
+                                                    child: CupertinoButton(
+                                                      onPressed: () => context
+                                                          .push(AdminPage()),
+                                                      color: Colors.red
+                                                          .withOpacity(0.1),
+                                                      borderRadius:
+                                                          BorderRadius.circular(
+                                                              15),
+                                                      child: const Text(
+                                                        'add opportunity',
+                                                        style: TextStyle(
+                                                          color: Colors.red,
+                                                          fontWeight:
+                                                              FontWeight.bold,
                                                         ),
                                                       ),
                                                     ),
                                                   ),
+                                                ),
                                             };
                                           },
                                         ),
                                         ...sortedVenueHits.take(3).map(
-                                                (venue) =>
+                                            (venue) =>
                                                 _venueTile(currentUser, venue)),
                                         if (sortedVenueHits.length > 3)
                                           Row(
-                                            mainAxisAlignment: MainAxisAlignment
-                                                .center,
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.center,
                                             children: [
                                               GestureDetector(
                                                 onTap: () =>
                                                     showCupertinoModalBottomSheet<
                                                         void>(
-                                                      context: context,
-                                                      builder: (context) =>
-                                                          Scaffold(
-                                                            appBar: AppBar(
-                                                              title: const Text(
-                                                                  'venues'),
-                                                            ),
-                                                            body: Container(
-                                                              padding:
-                                                              const EdgeInsets
-                                                                  .symmetric(
-                                                                vertical: 16,
-                                                              ),
-                                                              decoration: BoxDecoration(
-                                                                color: theme
-                                                                    .colorScheme
-                                                                    .background,
-                                                              ),
-                                                              child: ListView
-                                                                  .builder(
-                                                                itemCount:
-                                                                sortedVenueHits
-                                                                    .length,
-                                                                itemBuilder: (
-                                                                    context,
-                                                                    index) {
-                                                                  final venue =
-                                                                  sortedVenueHits[index];
-                                                                  return _venueTile(
-                                                                      currentUser,
-                                                                      venue);
-                                                                },
-                                                              ),
-                                                            ),
-                                                          ),
+                                                  context: context,
+                                                  builder: (context) =>
+                                                      Scaffold(
+                                                    appBar: AppBar(
+                                                      title:
+                                                          const Text('venues'),
                                                     ),
+                                                    body: Container(
+                                                      padding: const EdgeInsets
+                                                          .symmetric(
+                                                        vertical: 16,
+                                                      ),
+                                                      decoration: BoxDecoration(
+                                                        color: theme.colorScheme
+                                                            .background,
+                                                      ),
+                                                      child: ListView.builder(
+                                                        itemCount:
+                                                            sortedVenueHits
+                                                                .length,
+                                                        itemBuilder:
+                                                            (context, index) {
+                                                          final venue =
+                                                              sortedVenueHits[
+                                                                  index];
+                                                          return _venueTile(
+                                                              currentUser,
+                                                              venue);
+                                                        },
+                                                      ),
+                                                    ),
+                                                  ),
+                                                ),
                                                 child: Text(
                                                   'view all',
                                                   style: TextStyle(
-                                                    color: theme.colorScheme
-                                                        .primary,
+                                                    color: theme
+                                                        .colorScheme.primary,
                                                     fontWeight: FontWeight.bold,
                                                   ),
                                                 ),
                                               ),
                                             ],
+                                          ),
+                                        const Padding(
+                                          padding: EdgeInsets.symmetric(
+                                            vertical: 16,
+                                            horizontal: 8,
+                                          ),
+                                          child: Text(
+                                            'top genres in area',
+                                            style: TextStyle(
+                                              fontSize: 28,
+                                              fontWeight: FontWeight.bold,
+                                            ),
+                                          ),
+                                        ),
+                                        if (topPerformerIds.isNotEmpty)
+                                          SingleChildScrollView(
+                                            scrollDirection: Axis.horizontal,
+                                            child: Row(
+                                              children: state.genreCounts
+                                                  .map(
+                                                    (e) => Padding(
+                                                      padding: const EdgeInsets
+                                                          .symmetric(
+                                                        horizontal: 4,
+                                                      ),
+                                                      child: Chip(
+                                                        label: Text(
+                                                          e.key,
+                                                          style:
+                                                              const TextStyle(
+                                                            color: Colors.white,
+                                                          ),
+                                                        ),
+                                                      ),
+                                                    ),
+                                                  )
+                                                  .toList(),
+                                            ),
                                           ),
                                         if (topPerformerIds.isNotEmpty)
                                           const Padding(
@@ -377,32 +406,14 @@ class DraggableSheet extends StatelessWidget {
                                             ),
                                           ),
                                         if (topPerformerIds.isNotEmpty)
-                                          FutureBuilder<List<UserModel>>(
-                                            future: (() async {
-                                              final performers = (await Future
-                                                  .wait(
-                                                topPerformerIds
-                                                    .map(database.getUserById),
-                                              ))
-                                                  .whereType<Some<UserModel>>()
-                                                  .map((e) => e.value)
-                                                  .toList();
-
-                                              return performers;
-                                            })(),
-                                            builder: (context, snapshot) {
-                                              final performers = snapshot
-                                                  .data ?? [];
-                                              return UserSlider(
-                                                users: performers,
-                                                sort: true,
-                                                blur: !isPremium,
-                                                onTap: isPremium
-                                                    ? null
-                                                    : () =>
+                                          UserSlider(
+                                            users: performers,
+                                            sort: true,
+                                            blur: !isPremium,
+                                            onTap: isPremium
+                                                ? null
+                                                : () =>
                                                     context.push(PaywallPage()),
-                                              );
-                                            },
                                           ),
                                         const Padding(
                                           padding: EdgeInsets.symmetric(
@@ -422,12 +433,13 @@ class DraggableSheet extends StatelessWidget {
                                           builder: (context, snapshot) {
                                             if (!snapshot.hasData) {
                                               return const Center(
-                                                child: CupertinoActivityIndicator(),
+                                                child:
+                                                    CupertinoActivityIndicator(),
                                               );
                                             }
 
-                                            final bookingLeaders = snapshot
-                                                .data ?? [];
+                                            final bookingLeaders =
+                                                snapshot.data ?? [];
                                             return UserSlider(
                                                 users: bookingLeaders);
                                           },
@@ -455,7 +467,7 @@ class DraggableSheet extends StatelessWidget {
                                             horizontal: 20,
                                           ),
                                           child: Column(
-                                              children: [
+                                            children: [
                                               const Row(
                                                 children: [
                                                   Expanded(
@@ -474,17 +486,18 @@ class DraggableSheet extends StatelessWidget {
                                                         );
                                                         launchUrl(uri);
                                                       },
-                                                      color: theme.colorScheme
-                                                          .onSurface
+                                                      color: theme
+                                                          .colorScheme.onSurface
                                                           .withOpacity(0.1),
-                                                      padding: const EdgeInsets
-                                                          .all(12),
+                                                      padding:
+                                                          const EdgeInsets.all(
+                                                              12),
                                                       child: const Text(
                                                         'want a job?',
                                                         style: TextStyle(
                                                           color: Colors.white,
-                                                          fontWeight: FontWeight
-                                                              .bold,
+                                                          fontWeight:
+                                                              FontWeight.bold,
                                                         ),
                                                       ),
                                                     ),
@@ -504,6 +517,8 @@ class DraggableSheet extends StatelessWidget {
                               ],
                             ),
                           ),
+                        );
+                      },
                     );
                   },
                 );
