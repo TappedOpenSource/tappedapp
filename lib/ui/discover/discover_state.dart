@@ -124,7 +124,7 @@ extension DiscoverStateX on DiscoverState {
               )
               .getOrElse(() => [])
               .map(
-                (t) => t,
+                (t) => t.toLowerCase(),
               ),
         )
         .expand((element) => element)
