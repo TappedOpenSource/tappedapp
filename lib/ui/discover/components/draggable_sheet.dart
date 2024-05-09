@@ -298,8 +298,11 @@ class DraggableSheet extends StatelessWidget {
                                           },
                                         ),
                                         ...sortedVenueHits.take(3).map(
-                                            (venue) =>
-                                                _venueTile(currentUser, venue)),
+                                              (venue) => _venueTile(
+                                                currentUser,
+                                                venue,
+                                              ),
+                                            ),
                                         if (sortedVenueHits.length > 3)
                                           Row(
                                             mainAxisAlignment:
@@ -366,31 +369,29 @@ class DraggableSheet extends StatelessWidget {
                                             ),
                                           ),
                                         ),
-                                        if (topPerformerIds.isNotEmpty)
-                                          SingleChildScrollView(
-                                            scrollDirection: Axis.horizontal,
-                                            child: Row(
-                                              children: state.genreCounts
-                                                  .map(
-                                                    (e) => Padding(
-                                                      padding: const EdgeInsets
-                                                          .symmetric(
-                                                        horizontal: 4,
-                                                      ),
-                                                      child: Chip(
-                                                        label: Text(
-                                                          e.key,
-                                                          style:
-                                                              const TextStyle(
-                                                            color: Colors.white,
-                                                          ),
+                                        SingleChildScrollView(
+                                          scrollDirection: Axis.horizontal,
+                                          child: Row(
+                                            children: state.genreCounts
+                                                .map(
+                                                  (e) => Padding(
+                                                    padding: const EdgeInsets
+                                                        .symmetric(
+                                                      horizontal: 4,
+                                                    ),
+                                                    child: Chip(
+                                                      label: Text(
+                                                        e.key,
+                                                        style: const TextStyle(
+                                                          color: Colors.white,
                                                         ),
                                                       ),
                                                     ),
-                                                  )
-                                                  .toList(),
-                                            ),
+                                                  ),
+                                                )
+                                                .toList(),
                                           ),
+                                        ),
                                         if (topPerformerIds.isNotEmpty)
                                           const Padding(
                                             padding: EdgeInsets.symmetric(
@@ -441,7 +442,8 @@ class DraggableSheet extends StatelessWidget {
                                             final bookingLeaders =
                                                 snapshot.data ?? [];
                                             return UserSlider(
-                                                users: bookingLeaders);
+                                              users: bookingLeaders,
+                                            );
                                           },
                                         ),
                                         const Padding(
