@@ -11,7 +11,6 @@ import 'package:intheloopapp/domains/navigation_bloc/tapped_route.dart';
 import 'package:intheloopapp/domains/search_bloc/search_bloc.dart';
 import 'package:intheloopapp/ui/loading/logo_wave.dart';
 import 'package:intheloopapp/ui/profile/components/opportunity_card.dart';
-import 'package:intheloopapp/ui/user_card.dart';
 import 'package:intheloopapp/ui/user_tile.dart';
 import 'package:intheloopapp/utils/bloc_utils.dart';
 import 'package:intheloopapp/utils/custom_claims_builder.dart';
@@ -184,7 +183,7 @@ class _TappedSearchBarState extends State<TappedSearchBar> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         const Padding(
-                          padding: const EdgeInsets.symmetric(
+                          padding: EdgeInsets.symmetric(
                             horizontal: 16,
                             vertical: 8,
                           ),
@@ -216,7 +215,7 @@ class _TappedSearchBarState extends State<TappedSearchBar> {
                     ),
                   if (restUsers.isNotEmpty)
                     const Padding(
-                      padding: const EdgeInsets.symmetric(
+                      padding: EdgeInsets.symmetric(
                         horizontal: 16,
                         vertical: 8,
                       ),

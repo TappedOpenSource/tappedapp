@@ -13,7 +13,7 @@ class PerformerInfo with _$PerformerInfo {
     @Default(None()) Option<String> pressKitUrl,
     @Default([]) List<String> genres,
     @Default([]) List<String> subgenres,
-    @Default(Option.of(5.0)) Option<double> rating,
+    @Default(Option.of(5)) Option<double> rating,
     @Default(0) int reviewCount,
     @Default(0) int bookingCount,
     @Default('Independent') String label,

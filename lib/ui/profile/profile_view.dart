@@ -234,13 +234,15 @@ class ProfileView extends StatelessWidget {
               cubit.loadIsVerified(visitedUser.id),
             ]);
           },
-          leading: IconButton(
-            onPressed: onQuit ?? () => context.pop(),
-            icon: Icon(
-              CupertinoIcons.xmark_circle_fill,
-              color: Colors.white.withOpacity(0.8),
+          actions: [
+            IconButton(
+              onPressed: onQuit ?? () => context.pop(),
+              icon: Icon(
+                CupertinoIcons.xmark_circle_fill,
+                color: Colors.white.withOpacity(0.8),
+              ),
             ),
-          ),
+          ],
           flexibleSpace: FlexibleSpaceBar(
             stretchModes: const [
               StretchMode.zoomBackground,

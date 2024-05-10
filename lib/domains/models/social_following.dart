@@ -1,7 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:fpdart/fpdart.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
-import 'package:intheloopapp/domains/models/spotify_user.dart';
 
 part 'social_following.freezed.dart';
 part 'social_following.g.dart';

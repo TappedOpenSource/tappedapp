@@ -1,15 +1,10 @@
-import 'dart:math';
 
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_map/flutter_map.dart';
-import 'package:flutter_map_marker_cluster/flutter_map_marker_cluster.dart';
 import 'package:fpdart/fpdart.dart';
 import 'package:intheloopapp/domains/models/booking.dart';
 import 'package:intheloopapp/domains/models/location.dart';
 import 'package:intheloopapp/ui/booking/booking_view.dart';
-import 'package:intheloopapp/ui/discover/discover_cubit.dart';
 import 'package:intheloopapp/utils/hero_image.dart';
 import 'package:latlong2/latlong.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
@@ -43,7 +38,6 @@ class BookingsMarkerLayer extends StatelessWidget {
             shape: BoxShape.circle,
             border: Border.all(
               color: Colors.white,
-              width: 1,
             ),
           ),
         ),

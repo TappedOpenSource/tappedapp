@@ -16,6 +16,7 @@ final _privateConstructorUsedError = UnsupportedError(
 
 /// @nodoc
 mixin _$SettingsState {
+  GlobalKey<FormState> get formKey => throw _privateConstructorUsedError;
   bool get isPerformer => throw _privateConstructorUsedError;
   String get username => throw _privateConstructorUsedError;
   String get artistName => throw _privateConstructorUsedError;
@@ -43,7 +44,6 @@ mixin _$SettingsState {
   String get email => throw _privateConstructorUsedError;
   String get password => throw _privateConstructorUsedError;
   Option<PlaceData> get place => throw _privateConstructorUsedError;
-  GlobalKey<FormState> get formKey => throw _privateConstructorUsedError;
 
   @JsonKey(ignore: true)
   $SettingsStateCopyWith<SettingsState> get copyWith =>
@@ -57,7 +57,8 @@ abstract class $SettingsStateCopyWith<$Res> {
       _$SettingsStateCopyWithImpl<$Res, SettingsState>;
   @useResult
   $Res call(
-      {bool isPerformer,
+      {GlobalKey<FormState> formKey,
+      bool isPerformer,
       String username,
       String artistName,
       String bio,
@@ -82,8 +83,7 @@ abstract class $SettingsStateCopyWith<$Res> {
       bool emailNotificationsAppReleases,
       String email,
       String password,
-      Option<PlaceData> place,
-      GlobalKey<FormState> formKey});
+      Option<PlaceData> place});
 }
 
 /// @nodoc
@@ -99,6 +99,7 @@ class _$SettingsStateCopyWithImpl<$Res, $Val extends SettingsState>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
+    Object? formKey = null,
     Object? isPerformer = null,
     Object? username = null,
     Object? artistName = null,
@@ -125,9 +126,12 @@ class _$SettingsStateCopyWithImpl<$Res, $Val extends SettingsState>
     Object? email = null,
     Object? password = null,
     Object? place = null,
-    Object? formKey = null,
   }) {
     return _then(_value.copyWith(
+      formKey: null == formKey
+          ? _value.formKey
+          : formKey // ignore: cast_nullable_to_non_nullable
+              as GlobalKey<FormState>,
       isPerformer: null == isPerformer
           ? _value.isPerformer
           : isPerformer // ignore: cast_nullable_to_non_nullable
@@ -232,10 +236,6 @@ class _$SettingsStateCopyWithImpl<$Res, $Val extends SettingsState>
           ? _value.place
           : place // ignore: cast_nullable_to_non_nullable
               as Option<PlaceData>,
-      formKey: null == formKey
-          ? _value.formKey
-          : formKey // ignore: cast_nullable_to_non_nullable
-              as GlobalKey<FormState>,
     ) as $Val);
   }
 }
@@ -249,7 +249,8 @@ abstract class _$$SettingsStateImplCopyWith<$Res>
   @override
   @useResult
   $Res call(
-      {bool isPerformer,
+      {GlobalKey<FormState> formKey,
+      bool isPerformer,
       String username,
       String artistName,
       String bio,
@@ -274,8 +275,7 @@ abstract class _$$SettingsStateImplCopyWith<$Res>
       bool emailNotificationsAppReleases,
       String email,
       String password,
-      Option<PlaceData> place,
-      GlobalKey<FormState> formKey});
+      Option<PlaceData> place});
 }
 
 /// @nodoc
@@ -289,6 +289,7 @@ class __$$SettingsStateImplCopyWithImpl<$Res>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
+    Object? formKey = null,
     Object? isPerformer = null,
     Object? username = null,
     Object? artistName = null,
@@ -315,9 +316,12 @@ class __$$SettingsStateImplCopyWithImpl<$Res>
     Object? email = null,
     Object? password = null,
     Object? place = null,
-    Object? formKey = null,
   }) {
     return _then(_$SettingsStateImpl(
+      formKey: null == formKey
+          ? _value.formKey
+          : formKey // ignore: cast_nullable_to_non_nullable
+              as GlobalKey<FormState>,
       isPerformer: null == isPerformer
           ? _value.isPerformer
           : isPerformer // ignore: cast_nullable_to_non_nullable
@@ -419,10 +423,6 @@ class __$$SettingsStateImplCopyWithImpl<$Res>
           ? _value.place
           : place // ignore: cast_nullable_to_non_nullable
               as Option<PlaceData>,
-      formKey: null == formKey
-          ? _value.formKey
-          : formKey // ignore: cast_nullable_to_non_nullable
-              as GlobalKey<FormState>,
     ));
   }
 }
@@ -431,7 +431,8 @@ class __$$SettingsStateImplCopyWithImpl<$Res>
 
 class _$SettingsStateImpl implements _SettingsState {
   const _$SettingsStateImpl(
-      {this.isPerformer = true,
+      {required this.formKey,
+      this.isPerformer = true,
       this.username = '',
       this.artistName = '',
       this.bio = '',
@@ -456,10 +457,11 @@ class _$SettingsStateImpl implements _SettingsState {
       this.emailNotificationsAppReleases = true,
       this.email = '',
       this.password = '',
-      this.place = const None(),
-      required this.formKey})
+      this.place = const None()})
       : _genres = genres;
 
+  @override
+  final GlobalKey<FormState> formKey;
   @override
   @JsonKey()
   final bool isPerformer;
@@ -533,12 +535,10 @@ class _$SettingsStateImpl implements _SettingsState {
   @override
   @JsonKey()
   final Option<PlaceData> place;
-  @override
-  final GlobalKey<FormState> formKey;
 
   @override
   String toString() {
-    return 'SettingsState(isPerformer: $isPerformer, username: $username, artistName: $artistName, bio: $bio, genres: $genres, label: $label, occupations: $occupations, placeId: $placeId, twitterHandle: $twitterHandle, twitterFollowers: $twitterFollowers, instagramHandle: $instagramHandle, instagramFollowers: $instagramFollowers, tiktokHandle: $tiktokHandle, tiktokFollowers: $tiktokFollowers, soundcloudHandle: $soundcloudHandle, audiusHandle: $audiusHandle, youtubeHandle: $youtubeHandle, spotifyUrl: $spotifyUrl, profileImage: $profileImage, pressKitFile: $pressKitFile, status: $status, pushNotificationsDirectMessages: $pushNotificationsDirectMessages, emailNotificationsAppReleases: $emailNotificationsAppReleases, email: $email, password: $password, place: $place, formKey: $formKey)';
+    return 'SettingsState(formKey: $formKey, isPerformer: $isPerformer, username: $username, artistName: $artistName, bio: $bio, genres: $genres, label: $label, occupations: $occupations, placeId: $placeId, twitterHandle: $twitterHandle, twitterFollowers: $twitterFollowers, instagramHandle: $instagramHandle, instagramFollowers: $instagramFollowers, tiktokHandle: $tiktokHandle, tiktokFollowers: $tiktokFollowers, soundcloudHandle: $soundcloudHandle, audiusHandle: $audiusHandle, youtubeHandle: $youtubeHandle, spotifyUrl: $spotifyUrl, profileImage: $profileImage, pressKitFile: $pressKitFile, status: $status, pushNotificationsDirectMessages: $pushNotificationsDirectMessages, emailNotificationsAppReleases: $emailNotificationsAppReleases, email: $email, password: $password, place: $place)';
   }
 
   @override
@@ -546,6 +546,7 @@ class _$SettingsStateImpl implements _SettingsState {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$SettingsStateImpl &&
+            (identical(other.formKey, formKey) || other.formKey == formKey) &&
             (identical(other.isPerformer, isPerformer) ||
                 other.isPerformer == isPerformer) &&
             (identical(other.username, username) ||
@@ -594,13 +595,13 @@ class _$SettingsStateImpl implements _SettingsState {
             (identical(other.email, email) || other.email == email) &&
             (identical(other.password, password) ||
                 other.password == password) &&
-            (identical(other.place, place) || other.place == place) &&
-            (identical(other.formKey, formKey) || other.formKey == formKey));
+            (identical(other.place, place) || other.place == place));
   }
 
   @override
   int get hashCode => Object.hashAll([
         runtimeType,
+        formKey,
         isPerformer,
         username,
         artistName,
@@ -626,8 +627,7 @@ class _$SettingsStateImpl implements _SettingsState {
         emailNotificationsAppReleases,
         email,
         password,
-        place,
-        formKey
+        place
       ]);
 
   @JsonKey(ignore: true)
@@ -639,7 +639,8 @@ class _$SettingsStateImpl implements _SettingsState {
 
 abstract class _SettingsState implements SettingsState {
   const factory _SettingsState(
-      {final bool isPerformer,
+      {required final GlobalKey<FormState> formKey,
+      final bool isPerformer,
       final String username,
       final String artistName,
       final String bio,
@@ -664,9 +665,10 @@ abstract class _SettingsState implements SettingsState {
       final bool emailNotificationsAppReleases,
       final String email,
       final String password,
-      final Option<PlaceData> place,
-      required final GlobalKey<FormState> formKey}) = _$SettingsStateImpl;
+      final Option<PlaceData> place}) = _$SettingsStateImpl;
 
+  @override
+  GlobalKey<FormState> get formKey;
   @override
   bool get isPerformer;
   @override
@@ -719,8 +721,6 @@ abstract class _SettingsState implements SettingsState {
   String get password;
   @override
   Option<PlaceData> get place;
-  @override
-  GlobalKey<FormState> get formKey;
   @override
   @JsonKey(ignore: true)
   _$$SettingsStateImplCopyWith<_$SettingsStateImpl> get copyWith =>

@@ -119,21 +119,20 @@ class SettingsForm extends StatelessWidget {
                         'https://tappedapp.notion.site/how-do-i-get-my-spotify-url-2d1250547a044071becbe43763a77583',
                       ),
                     ),
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(
+                    child: const Padding(
+                      padding: EdgeInsets.symmetric(
                         vertical: 5,
                       ),
                       child: Row(
-                        mainAxisAlignment: MainAxisAlignment.start,
                         children: [
-                          const Text(
+                          Text(
                             'how do I find my spotify artist url?',
                             style: TextStyle(
                               color: Colors.blue,
                               fontSize: 12,
                             ),
                           ),
-                          const SizedBox(width: 5),
+                          SizedBox(width: 5),
                           Icon(
                             Icons.open_in_new,
                             color: Colors.blue,

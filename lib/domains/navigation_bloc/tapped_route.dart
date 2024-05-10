@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:fpdart/fpdart.dart';
 import 'package:intheloopapp/data/places_repository.dart';
@@ -439,11 +438,16 @@ final class RequestToPerformPage extends TappedRoute {
 }
 
 final class RequestToPerformConfirmationPage extends TappedRoute {
-  RequestToPerformConfirmationPage()
-      : super(
+  RequestToPerformConfirmationPage({
+    required this.venues,
+  }) : super(
           routeName: '/request_to_perform_confirmation',
-          view: const RequestToPerformConfirmationView(),
+          view: RequestToPerformConfirmationView(
+            venues: venues,
+          ),
         );
+
+  final List<UserModel> venues;
 }
 
 final class AddPastBookingPage extends TappedRoute {
@@ -463,18 +467,18 @@ final class ImagePage extends TappedRoute {
             builder: (context) {
               return Scaffold(
                 appBar: AppBar(
-                  // actions: [
-                  //   IconButton(
-                  //     onPressed: () {
-                  //       _saveImage(
-                  //         context,
-                  //         heroImage,
-                  //       );
-                  //     },
-                  //     icon: const Icon(Icons.download_rounded),
-                  //   ),
-                  // ],
-                ),
+                    // actions: [
+                    //   IconButton(
+                    //     onPressed: () {
+                    //       _saveImage(
+                    //         context,
+                    //         heroImage,
+                    //       );
+                    //     },
+                    //     icon: const Icon(Icons.download_rounded),
+                    //   ),
+                    // ],
+                    ),
                 body: PhotoView(
                   imageProvider: heroImage.imageProvider,
                   heroAttributes:

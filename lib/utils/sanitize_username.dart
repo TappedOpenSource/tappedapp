@@ -6,7 +6,7 @@ String sanitizeUsername(String artistName) {
   final underscores = trimmed.replaceAll(RegExp(r'\s+'), '_');
 
   // Remove disallowed characters (only keep letters, numbers, hyphens, and underscores)
-  final username = underscores.replaceAll(RegExp(r'[^a-z0-9_]'), '');
+  final username = underscores.replaceAll(RegExp('[^a-z0-9_]'), '');
 
   return username;
 }

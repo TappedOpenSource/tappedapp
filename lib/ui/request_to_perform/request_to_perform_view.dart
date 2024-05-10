@@ -3,7 +3,6 @@ import 'package:avatar_stack/positions.dart';
 import 'package:cloud_functions/cloud_functions.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:fpdart/fpdart.dart' hide State;
@@ -65,7 +64,7 @@ class _RequestToPerformViewState extends State<RequestToPerformView> {
                       const SnackBar(
                         backgroundColor: Colors.red,
                         content: Text(
-                          'No venues selected',
+                          'no venues selected',
                         ),
                       ),
                     );
@@ -77,18 +76,22 @@ class _RequestToPerformViewState extends State<RequestToPerformView> {
                       const SnackBar(
                         backgroundColor: Colors.red,
                         content: Text(
-                          'Message cannot be empty',
+                          'message cannot be empty',
                         ),
                       ),
                     );
                     return;
                   }
 
-                  await EasyLoading.show(status: 'Sending Request');
+                  await EasyLoading.show(status: 'sending request');
                   if (safeModeOn) {
                     await Future.delayed(const Duration(seconds: 1));
                     await EasyLoading.dismiss();
-                    nav.push(RequestToPerformConfirmationPage());
+                    nav.push(
+                      RequestToPerformConfirmationPage(
+                        venues: _venues,
+                      ),
+                    );
                     return;
                   }
 
@@ -122,7 +125,7 @@ class _RequestToPerformViewState extends State<RequestToPerformView> {
                       ],
                     );
                     await EasyLoading.dismiss();
-                    nav.push(RequestToPerformConfirmationPage());
+                    nav.push(RequestToPerformConfirmationPage(venues: _venues));
                   } catch (error, stackTrace) {
                     await EasyLoading.dismiss();
                     logger.error(
@@ -139,8 +142,12 @@ class _RequestToPerformViewState extends State<RequestToPerformView> {
                   }
                 },
                 borderRadius: BorderRadius.circular(15),
+                padding: const EdgeInsets.symmetric(
+                  vertical: 16,
+                  horizontal: 12,
+                ),
                 child: Text(
-                  safeModeOn ? 'Send Request (safe mode on)' : 'Send Request',
+                  safeModeOn ? 'send request (safe mode on)' : 'send request',
                   style: const TextStyle(
                     fontWeight: FontWeight.bold,
                     color: Colors.white,
@@ -327,51 +334,51 @@ class _RequestToPerformViewState extends State<RequestToPerformView> {
                       children: _collaborators
                           .map(
                             (collaborator) => Chip(
-                          avatar: UserAvatar(
-                            pushId: Option.of(collaborator.id),
-                            pushUser: Option.of(collaborator),
-                            imageUrl: collaborator.profilePicture,
-                          ),
-                          label: Text(collaborator.displayName),
-                          onDeleted: () {
-                            setState(() {
-                              _collaborators.remove(collaborator);
-                            });
-                          },
-                        ),
-                      )
+                              avatar: UserAvatar(
+                                pushId: Option.of(collaborator.id),
+                                pushUser: Option.of(collaborator),
+                                imageUrl: collaborator.profilePicture,
+                              ),
+                              label: Text(collaborator.displayName),
+                              onDeleted: () {
+                                setState(() {
+                                  _collaborators.remove(collaborator);
+                                });
+                              },
+                            ),
+                          )
                           .toList(),
                     ),
-                    // SizedBox(
-                    //   height: 50,
-                    //   child: WidgetStack(
-                    //     positions: RestrictedPositions(
-                    //       infoIndent: 5,
-                    //     ),
-                    //     stackedWidgets: _collaborators
-                    //         .map(
-                    //           (collaborator) => UserAvatar(
-                    //             pushUser: Option.of(collaborator),
-                    //             pushId: Option.of(collaborator.id),
-                    //             imageUrl: collaborator.profilePicture,
-                    //             radius: 25,
-                    //           ),
-                    //         )
-                    //         .toList(),
-                    //     buildInfoWidget: (surplus) {
-                    //       return CircleAvatar(
-                    //         radius: 25,
-                    //         child: Text(
-                    //           '+$surplus',
-                    //           style: TextStyle(
-                    //             color: theme.colorScheme.onSurface,
-                    //             fontWeight: FontWeight.bold,
-                    //           ),
-                    //         ),
-                    //       );
-                    //     },
-                    //   ),
-                    // ),
+                  // SizedBox(
+                  //   height: 50,
+                  //   child: WidgetStack(
+                  //     positions: RestrictedPositions(
+                  //       infoIndent: 5,
+                  //     ),
+                  //     stackedWidgets: _collaborators
+                  //         .map(
+                  //           (collaborator) => UserAvatar(
+                  //             pushUser: Option.of(collaborator),
+                  //             pushId: Option.of(collaborator.id),
+                  //             imageUrl: collaborator.profilePicture,
+                  //             radius: 25,
+                  //           ),
+                  //         )
+                  //         .toList(),
+                  //     buildInfoWidget: (surplus) {
+                  //       return CircleAvatar(
+                  //         radius: 25,
+                  //         child: Text(
+                  //           '+$surplus',
+                  //           style: TextStyle(
+                  //             color: theme.colorScheme.onSurface,
+                  //             fontWeight: FontWeight.bold,
+                  //           ),
+                  //         ),
+                  //       );
+                  //     },
+                  //   ),
+                  // ),
                   const Spacer(),
                   _buildSendButton(
                     context,

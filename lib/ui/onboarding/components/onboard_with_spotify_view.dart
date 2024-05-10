@@ -16,7 +16,7 @@ class OnboardWithSpotifyView extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             const Text(
-              "onboard with spotify? (optional)",
+              'onboard with spotify? (optional)',
               style: TextStyle(
                 fontSize: 18,
                 fontFamily: 'Rubik One',
@@ -45,7 +45,6 @@ class OnboardWithSpotifyView extends StatelessWidget {
                   vertical: 5,
                 ),
                 child: Row(
-                  mainAxisAlignment: MainAxisAlignment.start,
                   children: [
                     Text(
                       'how do I find my spotify artist url?',

@@ -245,7 +245,7 @@ class VenueFilterForm extends StatelessWidget {
                                                     shape: RoundedRectangleBorder(
                                                       borderRadius:
                                                           BorderRadius.circular(
-                                                              15),
+                                                              15,),
                                                     ),
                                                     content: Text(
                                                       error.toString(),

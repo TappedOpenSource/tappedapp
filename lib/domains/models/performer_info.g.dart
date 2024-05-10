@@ -21,7 +21,7 @@ _$PerformerInfoImpl _$$PerformerInfoImplFromJson(Map<String, dynamic> json) =>
               .toList() ??
           const [],
       rating: json['rating'] == null
-          ? const Option.of(5.0)
+          ? const Option.of(5)
           : Option<double>.fromJson(
               json['rating'], (value) => (value as num).toDouble()),
       reviewCount: json['reviewCount'] as int? ?? 0,

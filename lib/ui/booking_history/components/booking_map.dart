@@ -7,8 +7,8 @@ import 'package:intheloopapp/ui/app_theme_cubit.dart';
 import 'package:intheloopapp/ui/booking_history/booking_history_cubit.dart';
 import 'package:intheloopapp/ui/discover/components/bookings_marker_layer.dart';
 import 'package:intheloopapp/ui/discover/components/bookings_polygon_layer.dart';
-import 'package:url_launcher/url_launcher.dart';
 import 'package:latlong2/latlong.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 const defaultMapboxToken =
     'pk.eyJ1Ijoiam9uYXlsb3I4OSIsImEiOiJjbHJvNGdsemswNjl3MnFtdHNieXEyaWphIn0.gwc31X7uTzjxeDm6vcGzCg';

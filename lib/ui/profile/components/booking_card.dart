@@ -95,7 +95,7 @@ class BookingCard extends StatelessWidget {
                   const Text(
                     'booking',
                     overflow: TextOverflow.ellipsis,
-                    style: const TextStyle(
+                    style: TextStyle(
                       fontSize: 14,
                       fontWeight: FontWeight.bold,
                     ),

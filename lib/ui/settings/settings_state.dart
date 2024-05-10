@@ -3,7 +3,7 @@ part of 'settings_cubit.dart';
 @freezed
 class SettingsState with _$SettingsState {
   const factory SettingsState({
-    @Default(true) bool isPerformer,
+    required GlobalKey<FormState> formKey, @Default(true) bool isPerformer,
     @Default('') String username,
     @Default('') String artistName,
     @Default('') String bio,
@@ -29,6 +29,5 @@ class SettingsState with _$SettingsState {
     @Default('') String email,
     @Default('') String password,
     @Default(None()) Option<PlaceData> place,
-    required GlobalKey<FormState> formKey,
   }) = _SettingsState;
 }

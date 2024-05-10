@@ -1,4 +1,3 @@
-import 'dart:ui';
 
 import 'package:cached_annotation/cached_annotation.dart';
 import 'package:flutter/cupertino.dart';
@@ -118,7 +117,6 @@ class DraggableSheet extends StatelessWidget {
                         final performers = snapshot.data ?? [];
                         return DraggableScrollableSheet(
                           expand: false,
-                          initialChildSize: 0.5,
                           minChildSize: 0.11,
                           snap: true,
                           snapSizes: const [0.11, 0.5, 1],
@@ -201,7 +199,7 @@ class DraggableSheet extends StatelessWidget {
                                                       theme.colorScheme.primary,
                                                   borderRadius:
                                                       BorderRadius.circular(
-                                                          35.0 / 2),
+                                                          35.0 / 2,),
                                                 ),
                                                 child: UserAvatar(
                                                   radius: 45,
@@ -282,7 +280,7 @@ class DraggableSheet extends StatelessWidget {
                                                           .withOpacity(0.1),
                                                       borderRadius:
                                                           BorderRadius.circular(
-                                                              15),
+                                                              15,),
                                                       child: const Text(
                                                         'add opportunity',
                                                         style: TextStyle(
@@ -339,7 +337,7 @@ class DraggableSheet extends StatelessWidget {
                                                                   index];
                                                           return _venueTile(
                                                               currentUser,
-                                                              venue);
+                                                              venue,);
                                                         },
                                                       ),
                                                     ),
@@ -382,9 +380,6 @@ class DraggableSheet extends StatelessWidget {
                                                     child: Chip(
                                                       label: Text(
                                                         e.key,
-                                                        style: const TextStyle(
-                                                          color: Colors.white,
-                                                        ),
                                                       ),
                                                     ),
                                                   ),
@@ -493,7 +488,7 @@ class DraggableSheet extends StatelessWidget {
                                                           .withOpacity(0.1),
                                                       padding:
                                                           const EdgeInsets.all(
-                                                              12),
+                                                              12,),
                                                       child: const Text(
                                                         'want a job?',
                                                         style: TextStyle(

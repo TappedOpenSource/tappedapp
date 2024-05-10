@@ -5,7 +5,6 @@ import 'package:equatable/equatable.dart';
 import 'package:fpdart/fpdart.dart';
 import 'package:intheloopapp/data/database_repository.dart';
 import 'package:intheloopapp/data/deep_link_repository.dart';
-import 'package:intheloopapp/data/spotify_repository.dart';
 import 'package:intheloopapp/domains/navigation_bloc/navigation_bloc.dart';
 import 'package:intheloopapp/domains/navigation_bloc/tapped_route.dart';
 import 'package:intheloopapp/domains/onboarding_bloc/onboarding_bloc.dart';
@@ -62,7 +61,6 @@ class DeepLinkBloc extends Bloc<DeepLinkEvent, DeepLinkState> {
           );
         case SettingsDeepLink():
           nav.push(SettingsPage());
-          break;
         case ConnectStripeRedirectDeepLink(:final id):
           // add accountId to the users data
           if (onboardingBloc.state is! Onboarded) {

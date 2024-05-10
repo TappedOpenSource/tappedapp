@@ -57,7 +57,7 @@ class MoreOptionsButton extends StatelessWidget {
                               behavior: SnackBarBehavior.floating,
                               backgroundColor: tappedAccent,
                               content: Text(
-                                  'latest app version copied to clipboard'),
+                                  'latest app version copied to clipboard',),
                             ),
                           );
                         });

@@ -46,6 +46,10 @@ _$BookingImpl _$$BookingImplFromJson(Map<String, dynamic> json) =>
           ? const None()
           : Option<Location>.fromJson(json['location'],
               (value) => Location.fromJson(value as Map<String, dynamic>)),
+      socialMediaLinks: (json['socialMediaLinks'] as List<dynamic>?)
+              ?.map((e) => e as String)
+              .toList() ??
+          const [],
     );
 
 Map<String, dynamic> _$$BookingImplToJson(_$BookingImpl instance) =>
@@ -78,6 +82,7 @@ Map<String, dynamic> _$$BookingImplToJson(_$BookingImpl instance) =>
       'location': instance.location.toJson(
         (value) => value.toJson(),
       ),
+      'socialMediaLinks': instance.socialMediaLinks,
     };
 
 const _$BookingStatusEnumMap = {

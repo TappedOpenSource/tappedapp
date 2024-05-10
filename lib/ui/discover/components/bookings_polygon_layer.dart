@@ -6,8 +6,7 @@ import 'package:latlong2/latlong.dart';
 
 class BookingsPolygonLayer extends StatelessWidget {
   const BookingsPolygonLayer({
-    super.key,
-    required this.bookings,
+    required this.bookings, super.key,
   });
 
   final List<Booking> bookings;

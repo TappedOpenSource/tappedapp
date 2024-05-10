@@ -259,7 +259,7 @@ class _$PerformerInfoImpl implements _PerformerInfo {
       {this.pressKitUrl = const None(),
       final List<String> genres = const [],
       final List<String> subgenres = const [],
-      this.rating = const Option.of(5.0),
+      this.rating = const Option.of(5),
       this.reviewCount = 0,
       this.bookingCount = 0,
       this.label = 'Independent',

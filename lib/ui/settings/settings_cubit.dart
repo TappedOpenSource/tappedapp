@@ -281,7 +281,7 @@ class SettingsCubit extends Cubit<SettingsState> {
 
         if (state.spotifyUrl != null) {
           if (!isValidSpotifyUrl(state.spotifyUrl!)) {
-            throw InvalidSpotifyUrlException('invalid spotify url');
+            throw const InvalidSpotifyUrlException('invalid spotify url');
           }
         }
 
@@ -340,7 +340,7 @@ class SettingsCubit extends Cubit<SettingsState> {
           username: Username.fromString(state.username),
           artistName: state.artistName,
           bio: state.bio,
-          performerInfo: state.isPerformer ? Option.of(newPerformerInfo) : None(),
+          performerInfo: state.isPerformer ? Option.of(newPerformerInfo) : const None(),
           socialFollowing: currentUser.socialFollowing.copyWith(
             twitterHandle: Option.fromNullable(state.twitterHandle),
             twitterFollowers: state.twitterFollowers ?? 0,

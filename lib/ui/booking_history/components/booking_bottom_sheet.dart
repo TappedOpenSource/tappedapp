@@ -1,6 +1,5 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intheloopapp/domains/models/user_model.dart';
 import 'package:intheloopapp/ui/booking_history/booking_history_cubit.dart';
@@ -101,7 +100,7 @@ class BookingBottomSheet extends StatelessWidget {
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
-                            Text(
+                            const Text(
                               'bookings',
                               style: TextStyle(
                                 fontSize: 17,
@@ -125,7 +124,7 @@ class BookingBottomSheet extends StatelessWidget {
                                 ),
                               ],
                             ),
-                          ]
+                          ],
                         ),
                       ),
                       if (state.gridView)

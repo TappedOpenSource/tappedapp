@@ -32,6 +32,7 @@ class Booking with _$Booking {
     @Default(None()) Option<String> eventUrl,
     @Default([]) List<String> genres,
     @Default(None()) Option<Location> location,
+    @Default([]) List<String> socialMediaLinks,
   }) = _Booking;
 
   factory Booking.fromJson(Map<String, dynamic> json) =>

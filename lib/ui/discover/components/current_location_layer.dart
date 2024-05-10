@@ -25,7 +25,6 @@ class CurrentLocationLayer extends StatelessWidget {
                   shape: BoxShape.circle,
                   border: Border.all(
                     color: Colors.white,
-                    width: 1,
                   ),
                 ),
               ),
