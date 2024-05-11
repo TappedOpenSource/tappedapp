@@ -215,14 +215,15 @@ export const getTopTracksByArtistId = onCall(
 
     info({ spotifyId, accessToken });
 
-    const res = await fetch(`https://api.spotify.com/v1/artists/${spotifyId}/topTracks`, {
+    const url = `https://api.spotify.com/v1/artists/${spotifyId}/top-tracks`;
+    const res = await fetch(url, {
       headers: {
         Authorization: `Bearer ${accessToken}`,
       },
     });
 
     if (res.status !== 200) {
-      error("something went wrong", res.status);
+      error("something went wrong", url, res.status);
       throw new HttpsError("not-found", "artist not found");
     }
 
