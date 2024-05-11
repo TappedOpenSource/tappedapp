@@ -7,10 +7,12 @@ import 'package:fpdart/fpdart.dart';
 import 'package:hydrated_bloc/hydrated_bloc.dart';
 import 'package:intheloopapp/data/database_repository.dart';
 import 'package:intheloopapp/data/places_repository.dart';
+import 'package:intheloopapp/data/spotify_repository.dart';
 import 'package:intheloopapp/domains/models/booking.dart';
 import 'package:intheloopapp/domains/models/opportunity.dart';
 import 'package:intheloopapp/domains/models/review.dart';
 import 'package:intheloopapp/domains/models/service.dart';
+import 'package:intheloopapp/domains/models/spotify_track.dart';
 import 'package:intheloopapp/domains/models/user_model.dart';
 import 'package:intheloopapp/utils/app_logger.dart';
 
@@ -20,6 +22,7 @@ class ProfileCubit extends Cubit<ProfileState> {
   ProfileCubit({
     required this.database,
     required this.places,
+    required this.spotify,
     required this.currentUser,
     required this.visitedUser,
   }) : super(
@@ -28,6 +31,7 @@ class ProfileCubit extends Cubit<ProfileState> {
             visitedUser: visitedUser,
           ),
         );
+  final SpotifyRepository spotify;
   final DatabaseRepository database;
   final PlacesRepository places;
   final UserModel currentUser;
@@ -270,6 +274,29 @@ class ProfileCubit extends Cubit<ProfileState> {
     } finally {
       await trace.stop();
     }
+  }
+
+  Future<void> initTopSpotifyTracks() async {
+    final spotifyId = visitedUser.socialFollowing.spotifyId;
+
+    return switch (spotifyId) {
+      None() => Future<void>.value(),
+      Some(:final value) => (() async {
+          final trace = logger.createTrace('initSpotifyTopTracks');
+          await trace.start();
+          try {
+            logger.d(
+              'initSpotifyTopTracks ${value}',
+            );
+            final topTracks = await spotify.getTopTracks(value);
+            emit(state.copyWith(topTracks: topTracks));
+          } catch (e, s) {
+            logger.error('initSpotifyTopTracks error', error: e, stackTrace: s);
+          } finally {
+            await trace.stop();
+          }
+        })(),
+    };
   }
 
   Future<void> fetchMoreOpportunities() async {

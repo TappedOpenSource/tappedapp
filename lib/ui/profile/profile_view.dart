@@ -7,6 +7,7 @@ import 'package:fpdart/fpdart.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intheloopapp/data/database_repository.dart';
 import 'package:intheloopapp/data/places_repository.dart';
+import 'package:intheloopapp/data/spotify_repository.dart';
 import 'package:intheloopapp/domains/models/user_model.dart';
 import 'package:intheloopapp/domains/navigation_bloc/navigation_bloc.dart';
 import 'package:intheloopapp/domains/navigation_bloc/tapped_route.dart';
@@ -24,8 +25,10 @@ import 'package:intheloopapp/ui/profile/components/opportunities_sliver.dart';
 import 'package:intheloopapp/ui/profile/components/reviews_sliver.dart';
 import 'package:intheloopapp/ui/profile/components/social_media_icons.dart';
 import 'package:intheloopapp/ui/profile/components/top_performers_sliver.dart';
+import 'package:intheloopapp/ui/profile/components/top_tracks_sliver.dart';
 import 'package:intheloopapp/ui/profile/profile_cubit.dart';
 import 'package:intheloopapp/ui/themes.dart';
+import 'package:intheloopapp/utils/bloc_utils.dart';
 import 'package:intheloopapp/utils/default_image.dart';
 import 'package:intheloopapp/utils/hero_image.dart';
 import 'package:intheloopapp/utils/premium_builder.dart';
@@ -152,9 +155,11 @@ class ProfileView extends StatelessWidget {
     UserModel visitedUser,
     DatabaseRepository databaseRepository,
     PlacesRepository places,
+    SpotifyRepository spotify,
   ) =>
       BlocProvider(
         create: (context) => ProfileCubit(
+          spotify: spotify,
           places: places,
           database: databaseRepository,
           currentUser: currentUser,
@@ -164,6 +169,7 @@ class ProfileView extends StatelessWidget {
           ..getLatestReview()
           // ..initServices()
           ..initOpportunities()
+          ..initTopSpotifyTracks()
           ..loadIsBlocked()
           ..loadIsVerified(visitedUser.id)
           ..initPlace(),
@@ -230,6 +236,7 @@ class ProfileView extends StatelessWidget {
               cubit.getLatestReview(),
               // cubit.initServices(),
               cubit.initOpportunities(),
+              cubit.initTopSpotifyTracks(),
               cubit.refetchVisitedUser(),
               cubit.loadIsVerified(visitedUser.id),
             ]);
@@ -368,6 +375,12 @@ class ProfileView extends StatelessWidget {
           child: SizedBox(height: 12),
         ),
         const SliverToBoxAdapter(
+          child: TopTracksSliver(),
+        ),
+        const SliverToBoxAdapter(
+          child: SizedBox(height: 12),
+        ),
+        const SliverToBoxAdapter(
           child: BookingsSliver(),
         ),
         const SliverToBoxAdapter(
@@ -411,6 +424,7 @@ class ProfileView extends StatelessWidget {
               cubit.getLatestBookings(),
               cubit.initServices(),
               cubit.initOpportunities(),
+              cubit.initTopSpotifyTracks(),
               cubit.refetchVisitedUser(),
               cubit.loadIsVerified(visitedUser.id),
             ]);
@@ -483,10 +497,9 @@ class ProfileView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final databaseRepository =
-        RepositoryProvider.of<DatabaseRepository>(context);
-    final places = RepositoryProvider.of<PlacesRepository>(context);
-
+    final database = context.database;
+    final places = context.places;
+    final spotify = context.spotify;
     return Scaffold(
       backgroundColor: Theme.of(context).colorScheme.background,
       body: BlocBuilder<OnboardingBloc, OnboardingState>(
@@ -508,11 +521,12 @@ class ProfileView extends StatelessWidget {
             (_, true) => _profilePage(
                 currentUser,
                 currentUser,
-                databaseRepository,
+                database,
                 places,
+                spotify,
               ),
             (None(), false) => FutureBuilder<Option<UserModel>>(
-                future: databaseRepository.getUserById(visitedUserId),
+                future: database.getUserById(visitedUserId),
                 builder: (context, snapshot) {
                   final user = snapshot.data;
 
@@ -522,8 +536,9 @@ class ProfileView extends StatelessWidget {
                     Some(:final value) => _profilePage(
                         currentUser,
                         value,
-                        databaseRepository,
+                        database,
                         places,
+                        spotify,
                       ),
                   };
                 },
@@ -531,8 +546,9 @@ class ProfileView extends StatelessWidget {
             (Some(:final value), false) => _profilePage(
                 currentUser,
                 value,
-                databaseRepository,
+                database,
                 places,
+                spotify,
               ),
           };
         },

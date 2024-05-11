@@ -223,8 +223,8 @@ export const getTopTracksByArtistId = onCall(
     });
 
     if (res.status !== 200) {
-      error("something went wrong", url, res.status);
-      throw new HttpsError("not-found", "artist not found");
+      error("something went wrong", url, res.status, { res });
+      throw new HttpsError("internal", "something went wrong");
     }
 
     const data = await res.json();

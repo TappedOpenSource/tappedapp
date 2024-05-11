@@ -1,4 +1,3 @@
-
 import 'package:cached_annotation/cached_annotation.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -199,7 +198,8 @@ class DraggableSheet extends StatelessWidget {
                                                       theme.colorScheme.primary,
                                                   borderRadius:
                                                       BorderRadius.circular(
-                                                          35.0 / 2,),
+                                                    35.0 / 2,
+                                                  ),
                                                 ),
                                                 child: UserAvatar(
                                                   radius: 45,
@@ -280,7 +280,8 @@ class DraggableSheet extends StatelessWidget {
                                                           .withOpacity(0.1),
                                                       borderRadius:
                                                           BorderRadius.circular(
-                                                              15,),
+                                                        15,
+                                                      ),
                                                       child: const Text(
                                                         'add opportunity',
                                                         style: TextStyle(
@@ -336,8 +337,9 @@ class DraggableSheet extends StatelessWidget {
                                                               sortedVenueHits[
                                                                   index];
                                                           return _venueTile(
-                                                              currentUser,
-                                                              venue,);
+                                                            currentUser,
+                                                            venue,
+                                                          );
                                                         },
                                                       ),
                                                     ),
@@ -354,39 +356,41 @@ class DraggableSheet extends StatelessWidget {
                                               ),
                                             ],
                                           ),
-                                        const Padding(
-                                          padding: EdgeInsets.symmetric(
-                                            vertical: 16,
-                                            horizontal: 8,
-                                          ),
-                                          child: Text(
-                                            'top genres in area',
-                                            style: TextStyle(
-                                              fontSize: 28,
-                                              fontWeight: FontWeight.bold,
+                                        if (state.genreCounts.isNotEmpty)
+                                          const Padding(
+                                            padding: EdgeInsets.symmetric(
+                                              vertical: 16,
+                                              horizontal: 8,
+                                            ),
+                                            child: Text(
+                                              'top genres in area',
+                                              style: TextStyle(
+                                                fontSize: 28,
+                                                fontWeight: FontWeight.bold,
+                                              ),
                                             ),
                                           ),
-                                        ),
-                                        SingleChildScrollView(
-                                          scrollDirection: Axis.horizontal,
-                                          child: Row(
-                                            children: state.genreCounts
-                                                .map(
-                                                  (e) => Padding(
-                                                    padding: const EdgeInsets
-                                                        .symmetric(
-                                                      horizontal: 4,
-                                                    ),
-                                                    child: Chip(
-                                                      label: Text(
-                                                        e.key,
+                                        if (state.genreCounts.isNotEmpty)
+                                          SingleChildScrollView(
+                                            scrollDirection: Axis.horizontal,
+                                            child: Row(
+                                              children: state.genreCounts
+                                                  .map(
+                                                    (e) => Padding(
+                                                      padding: const EdgeInsets
+                                                          .symmetric(
+                                                        horizontal: 4,
+                                                      ),
+                                                      child: Chip(
+                                                        label: Text(
+                                                          e.key,
+                                                        ),
                                                       ),
                                                     ),
-                                                  ),
-                                                )
-                                                .toList(),
+                                                  )
+                                                  .toList(),
+                                            ),
                                           ),
-                                        ),
                                         if (topPerformerIds.isNotEmpty)
                                           const Padding(
                                             padding: EdgeInsets.symmetric(
@@ -488,7 +492,8 @@ class DraggableSheet extends StatelessWidget {
                                                           .withOpacity(0.1),
                                                       padding:
                                                           const EdgeInsets.all(
-                                                              12,),
+                                                        12,
+                                                      ),
                                                       child: const Text(
                                                         'want a job?',
                                                         style: TextStyle(

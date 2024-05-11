@@ -11,6 +11,7 @@ class ProfileState extends Equatable {
     this.latestReview = const None(),
     this.services = const [],
     this.opportunities = const [],
+    this.topTracks = const [],
     this.hasReachedMaxOpportunities = false,
     this.opportunityStatus = OpportunitiesStatus.initial,
     this.isCollapsed = false,
@@ -23,6 +24,7 @@ class ProfileState extends Equatable {
   final bool isVerified;
   final List<Service> services;
   final List<Opportunity> opportunities;
+  final List<SpotifyTrack> topTracks;
 
   final List<Booking> latestBookings;
   final Option<Review> latestReview;
@@ -49,6 +51,7 @@ class ProfileState extends Equatable {
         opportunityStatus,
         services,
         opportunities,
+        topTracks,
         visitedUser,
         currentUser,
         place,
@@ -64,6 +67,7 @@ class ProfileState extends Equatable {
     OpportunitiesStatus? opportunityStatus,
     List<Service>? services,
     List<Opportunity>? opportunities,
+    List<SpotifyTrack>? topTracks,
     UserModel? currentUser,
     UserModel? visitedUser,
     Option<PlaceData>? place,
@@ -80,6 +84,7 @@ class ProfileState extends Equatable {
       opportunityStatus: opportunityStatus ?? this.opportunityStatus,
       services: services ?? this.services,
       opportunities: opportunities ?? this.opportunities,
+      topTracks: topTracks ?? this.topTracks,
       currentUser: currentUser ?? this.currentUser,
       visitedUser: visitedUser ?? this.visitedUser,
       place: place ?? this.place,
