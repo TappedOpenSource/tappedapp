@@ -202,3 +202,35 @@ export const getArtistBySpotifyId = onCall(
       ...data,
     };
   });
+
+export const getTopTracksByArtistId = onCall(
+  { secrets: [ SPOTIFY_CLIENT_ID, SPOTIFY_CLIENT_SECRET ] },
+  async (request) => {
+    const { spotifyId } = request.data as { spotifyId: string; };
+
+    const { accessToken } = await getSpotifyAccessToken({
+      clientId: SPOTIFY_CLIENT_ID.value(),
+      clientSecret: SPOTIFY_CLIENT_SECRET.value(),
+    });
+
+    info({ spotifyId, accessToken });
+
+    const res = await fetch(`https://api.spotify.com/v1/artists/${spotifyId}/topTracks`, {
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+      },
+    });
+
+    if (res.status !== 200) {
+      error("something went wrong", res.status);
+      throw new HttpsError("not-found", "artist not found");
+    }
+
+    const data = await res.json();
+
+    debug({ data });
+
+    return {
+      ...data,
+    };
+  });
