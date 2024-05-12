@@ -111,8 +111,8 @@ class BookingsSliver extends StatelessWidget {
           (false, false) => const SizedBox.shrink(),
           (_, _) => () {
               return Padding(
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 20,
+                padding: const EdgeInsets.only(
+                  left: 20,
                 ),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,

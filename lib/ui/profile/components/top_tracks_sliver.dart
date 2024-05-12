@@ -21,7 +21,8 @@ class TopTracksSliver extends StatelessWidget {
         ? CachedNetworkImageProvider(trackImage.url)
         : getDefaultImage(Option.of(track.id));
 
-    final aspectRatio = (trackImage?.width ?? 240) / (trackImage?.height ?? 240);
+    final aspectRatio =
+        (trackImage?.width ?? 240) / (trackImage?.height ?? 240);
 
     return GestureDetector(
       onTap: () {
@@ -115,30 +116,34 @@ class TopTracksSliver extends StatelessWidget {
           return const SizedBox.shrink();
         }
 
-        return Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            const Padding(
-              padding: EdgeInsets.symmetric(
-                horizontal: 16,
-                vertical: 8,
-              ),
-              child: Text(
-                'top tracks',
-                style: TextStyle(
-                  fontSize: 24,
-                  fontWeight: FontWeight.bold,
+        return Padding(
+          padding: const EdgeInsets.only(
+            left: 20,
+          ),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              const Padding(
+                padding: EdgeInsets.symmetric(
+                  vertical: 8,
+                ),
+                child: Text(
+                  'top tracks',
+                  style: TextStyle(
+                    fontSize: 24,
+                    fontWeight: FontWeight.bold,
+                  ),
                 ),
               ),
-            ),
-            SingleChildScrollView(
-              scrollDirection: Axis.horizontal,
-              child: Row(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: state.topTracks.map(_buildTrack).toList(),
+              SingleChildScrollView(
+                scrollDirection: Axis.horizontal,
+                child: Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: state.topTracks.map(_buildTrack).toList(),
+                ),
               ),
-            ),
-          ],
+            ],
+          ),
         );
       },
     );
