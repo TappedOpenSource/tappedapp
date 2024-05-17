@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:intheloopapp/ui/common/tapped_app_bar.dart';
-import 'package:intheloopapp/ui/messaging/channel_list_view.dart';
+import 'package:intheloopapp/ui/messaging/test_channel_list_view.dart';
 import 'package:stream_chat_flutter/stream_chat_flutter.dart';
 
 class MessagingChannelListView extends StatelessWidget {
@@ -8,16 +7,23 @@ class MessagingChannelListView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final client = StreamChat.of(context).client;
     return Scaffold(
       backgroundColor: Theme.of(context).colorScheme.background,
-      extendBodyBehindAppBar: true,
-      appBar: const TappedAppBar(
-        title: 'messages',
+      appBar: AppBar(
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back),
+          onPressed: () {
+            Navigator.pop(context);
+          },
+        ),
+        title: const Text(
+          'messages',
+        ),
       ),
-      body: ChannelListView(
-        client: client,
-      ),
+      // body: ChannelListView(
+      //   client: client,
+      // ),
+      body: const SafeArea(child: ChannelList()),
     );
   }
 }

@@ -10,31 +10,6 @@ class ChannelView extends StatelessWidget {
     super.key,
   });
 
-  // void _startCall(BuildContext context) async {
-  //   final currentUser = StreamChat.of(context).currentUser;
-  //   final channel = StreamChannel.of(context).channel;
-  //   final stream = context.stream;
-
-  //   final call = stream.makeVideoCall(
-  //     participantIds: [],
-  //   );
-
-  //   await channel.sendMessage(
-  //     Message(
-  //       attachments: [
-  //         Attachment(
-  //           type: 'custom',
-  //           authorName: currentUser?.name ?? '',
-  //           uploadState: const UploadState.success(),
-  //           extraData: {
-  //             'callCid': call.callCid,
-  //           },
-  //         ),
-  //       ],
-  //     ),
-  //   );
-  // }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(

@@ -15,29 +15,33 @@ class OpportunitiesSliver extends StatelessWidget {
           return const SizedBox.shrink();
         }
 
-        return Column(
-          children: [
-            const Padding(
-              padding: EdgeInsets.symmetric(
-                vertical: 8,
-                horizontal: 16,
-              ),
-              child: Row(
-                children: [
-                  Text(
-                    'gig opportunities',
-                    style: TextStyle(
-                      fontSize: 24,
-                      fontWeight: FontWeight.bold,
+        return Padding(
+          padding: const EdgeInsets.only(
+            left: 20,
+          ),
+          child: Column(
+            children: [
+              const Padding(
+                padding: EdgeInsets.symmetric(
+                  vertical: 8,
+                ),
+                child: Row(
+                  children: [
+                    Text(
+                      'gig opportunities',
+                      style: TextStyle(
+                        fontSize: 24,
+                        fontWeight: FontWeight.bold,
+                      ),
                     ),
-                  ),
-                ],
+                  ],
+                ),
               ),
-            ),
-            OpportunitiesList(
-              opportunities: state.opportunities,
-            ),
-          ],
+              OpportunitiesList(
+                opportunities: state.opportunities,
+              ),
+            ],
+          ),
         );
       },
     );

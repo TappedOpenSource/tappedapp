@@ -468,69 +468,6 @@ export const sendEmailOnPremiumWaitlist = onDocumentCreated(
     });
   });
 
-// send email on subscription purchase
-export const sendEmailOnSubscriptionPurchase = onRequest(
-  { secrets: [ RESEND_API_KEY ] },
-  async (req, res) => {
-    info("sendEmailOnSubscriptionPurchase", req.body);
-    const resend = new Resend(RESEND_API_KEY.value());
-    const { event } = req.body;
-    const { app_user_id } = event;
-
-    const userSnap = await usersRef.doc(app_user_id).get();
-    if (!userSnap.exists) {
-      error(`user does not exist ${app_user_id}`)
-      res.sendStatus(500);
-      return;
-    }
-
-    const user = userSnap.data() as UserModel;
-    const email = user.email;
-
-    if (email === undefined || email === null || email === "") {
-      throw new Error(`email is undefined, null or empty: ${email}`);
-    }
-
-    await resend.emails.send({
-      from: "no-reply@tapped.ai",
-      to: [ email ],
-      subject: "thank you for subscribing!",
-      html: `<div style="white-space: pre;">${subscriptionPurchase}</div>`,
-    });
-
-    res.sendStatus(200);
-  });
-
-export const sendEmailOnSubscriptionExpiration = onRequest(
-  { secrets: [ RESEND_API_KEY ] },
-  async (req, res) => {
-    info("sendEmailOnSubscriptionExpiration", req.body);
-    const resend = new Resend(RESEND_API_KEY.value());
-    const { event } = req.body;
-    const { app_user_id } = event;
-
-    const userSnap = await usersRef.doc(app_user_id).get();
-    if (!userSnap.exists) {
-      error(`user does not exist ${app_user_id}`)
-      res.sendStatus(500);
-      return;
-    }
-
-    const user = userSnap.data() as UserModel;
-    const email = user.email;
-
-    if (email === undefined || email === null || email === "") {
-      throw new Error(`email is undefined, null or empty: ${email}`);
-    }
-
-    await resend.emails.send({
-      from: "no-reply@tapped.ai",
-      to: [ email ],
-      subject: "your subscription has expired!",
-      html: `<div style="white-space: pre;">${subscriptionExpiration}</div>`,
-    });
-  });
-
 export const sendEmailOnVenueContacting = onCall(
   { secrets: [ RESEND_API_KEY ] },
   async (req) => {
@@ -558,3 +495,56 @@ export const sendEmailOnVenueContacting = onCall(
       html: `<div style="white-space: pre;">${venueContacted}</div>`,
     });
   });
+
+export async function sendEmailSubscriptionPurchase(
+  resendApiKey: string, 
+  userId: string,
+): Promise<void> {
+  const resend = new Resend(resendApiKey);
+
+  const userSnap = await usersRef.doc(userId).get();
+  if (!userSnap.exists) {
+    error(`user does not exist ${userId}`)
+    throw new Error(`user does not exist ${userId}`);
+  }
+
+  const user = userSnap.data() as UserModel;
+  const email = user.email;
+
+  if (email === undefined || email === null || email === "") {
+    throw new Error(`email is undefined, null or empty: ${email}`);
+  }
+
+  await resend.emails.send({
+    from: "no-reply@tapped.ai",
+    to: [ email ],
+    subject: "thank you for subscribing!",
+    html: `<div style="white-space: pre;">${subscriptionPurchase}</div>`,
+  });
+
+}
+
+export async function sendEmailSubscriptionExpiration(
+  resendApiKey: string, 
+  userId: string,
+): Promise<void> {
+  const resend = new Resend(resendApiKey);
+  const userSnap = await usersRef.doc(userId).get();
+  if (!userSnap.exists) {
+    throw new Error(`user does not exist ${userId}`)
+  }
+
+  const user = userSnap.data() as UserModel;
+  const email = user.email;
+
+  if (email === undefined || email === null || email === "") {
+    throw new Error(`email is undefined, null or empty: ${email}`);
+  }
+
+  await resend.emails.send({
+    from: "no-reply@tapped.ai",
+    to: [ email ],
+    subject: "your subscription has expired!",
+    html: `<div style="white-space: pre;">${subscriptionExpiration}</div>`,
+  });
+}
