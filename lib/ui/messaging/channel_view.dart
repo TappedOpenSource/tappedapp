@@ -18,31 +18,58 @@ class ChannelView extends StatelessWidget {
           final channel = StreamChannel.of(context).channel;
           final currentUserId = StreamChat.of(context).currentUser?.id;
 
-          if (currentUserId == null) {
-            return;
-          }
-
-          final memberCount = channel.memberCount ?? 0;
-          if (memberCount > 2) {
-            return;
-          }
-
-          final otherMember = channel.state?.members
-              .where((member) => member.userId != currentUserId)
-              .first;
-
-          final otherUserId = otherMember?.userId;
-          if (otherUserId == null) {
-            return;
-          }
-
-          showCupertinoModalBottomSheet<void>(
+          showChannelInfoModalBottomSheet<void>(
             context: context,
-            builder: (context) {
-              return ProfileView(
-                visitedUserId: otherUserId,
-                visitedUser: const None(),
+            channel: channel,
+            onMemberTap: (member) {
+              final userId = member.user?.id;
+              if (userId == null) {
+                Navigator.pop(context);
+                return;
+              }
+
+              showCupertinoModalBottomSheet<void>(
+                context: context,
+                builder: (context) {
+                  return ProfileView(
+                    visitedUserId: userId,
+                    visitedUser: const None(),
+                  );
+                },
               );
+            },
+            onViewInfoTap: () {
+              if (currentUserId == null) {
+                Navigator.pop(context);
+                return;
+              }
+
+              final memberCount = channel.memberCount ?? 0;
+              if (memberCount > 2) {
+                Navigator.pop(context);
+                return;
+              }
+
+              final otherMember = channel.state?.members
+                  .where((member) => member.userId != currentUserId)
+                  .first;
+
+              final otherUserId = otherMember?.userId;
+              if (otherUserId == null) {
+                Navigator.pop(context);
+                return;
+              }
+
+              showCupertinoModalBottomSheet<void>(
+                context: context,
+                builder: (context) {
+                  return ProfileView(
+                    visitedUserId: otherUserId,
+                    visitedUser: const None(),
+                  );
+                },
+              );
+              // Navigate to info screen
             },
           );
         },
