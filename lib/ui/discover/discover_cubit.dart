@@ -253,7 +253,7 @@ class DiscoverCubit extends Cubit<DiscoverState> {
               swLongitude: bounds.southWest.longitude,
               neLatitude: bounds.northEast.latitude,
               neLongitude: bounds.northEast.longitude,
-              limit: 250,
+              limit: 100,
             );
             emit(state.copyWith(venueHits: hits));
           },
