@@ -244,7 +244,7 @@ class DraggableSheet extends StatelessWidget {
                                             ],
                                           ),
                                         ),
-                                        const Padding(
+                                        Padding(
                                           padding: EdgeInsets.symmetric(
                                             vertical: 8,
                                             horizontal: 20,
@@ -252,7 +252,25 @@ class DraggableSheet extends StatelessWidget {
                                           child: Row(
                                             children: [
                                               Expanded(
-                                                child: FeedbackButton(),
+                                                child: CupertinoButton(
+                                                  onPressed: () {
+                                                    final uri = Uri.parse(
+                                                      'https://tapped.tolt.io',
+                                                    );
+                                                    launchUrl(uri);
+                                                  },
+                                                  borderRadius: BorderRadius.circular(15),
+                                                  color: Colors.purple
+                                                      .withOpacity(0.1),
+                                                  child: Text(
+                                                    'become affiliate',
+                                                    style: TextStyle(
+                                                      fontWeight:
+                                                      FontWeight.bold,
+                                                      color: Colors.purple,
+                                                    ),
+                                                  ),
+                                                ),
                                               ),
                                             ],
                                           ),
