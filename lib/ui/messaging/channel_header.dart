@@ -1,12 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-// import 'package:flutter_bloc/flutter_bloc.dart';
-// import 'package:intheloopapp/data/stream_repository.dart';
-// import 'package:intheloopapp/domains/navigation_bloc/navigation_bloc.dart';
-// import 'package:intheloopapp/domains/navigation_bloc/tapped_route.dart';
 import 'package:intheloopapp/ui/messaging/channel_name.dart';
 import 'package:stream_chat_flutter/stream_chat_flutter.dart' hide ChannelName;
-// import 'package:stream_video_flutter/stream_video_flutter.dart';
 
 /// ![screenshot](https://raw.githubusercontent.com/GetStream/stream-chat-flutter/master/screenshots/channel_header.png)
 /// ![screenshot](https://raw.githubusercontent.com/GetStream/stream-chat-flutter/master/screenshots/channel_header_paint.png)
@@ -170,21 +165,6 @@ class ChannelHeader extends StatelessWidget implements PreferredSizeWidget {
             leading: leadingWidget,
             actions: actions ??
                 [
-                  const IconButton(
-                    onPressed: null,
-                    // onPressed: () {
-                    //   final call = _startCall(context);
-                    //   context.push(
-                    //     VideoCallPage(
-                    //       call: call,
-                    //     ),
-                    //   );
-                    // },
-                    icon: Icon(
-                      CupertinoIcons.video_camera,
-                      size: 30,
-                    ),
-                  ),
                   Padding(
                     padding: const EdgeInsets.only(right: 10),
                     child: Center(
