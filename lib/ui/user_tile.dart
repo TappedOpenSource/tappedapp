@@ -86,6 +86,49 @@ class _UserTileState extends State<UserTile> {
           future: database.isVerified(widget.userId),
           builder: (context, snapshot) {
             final verified = snapshot.data ?? false;
+            final isNew = user.timestamp.fold(
+              () => false,
+              (timestamp) => timestamp.isAfter(
+                DateTime.now().subtract(
+                  const Duration(days: 7),
+                ),
+              ),
+            );
+            final isNewWidget = Padding(
+              padding: const EdgeInsets.symmetric(
+                horizontal: 4,
+              ),
+              child: Container(
+                width: 40,
+                decoration: BoxDecoration(
+                  color: Colors.deepPurpleAccent,
+                  borderRadius: BorderRadius.circular(15),
+                ),
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 5,
+                  vertical: 2,
+                ),
+                child: const Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Icon(
+                      Icons.new_releases,
+                      color: Colors.white,
+                      size: 8,
+                    ),
+                    SizedBox(width: 2),
+                    Text(
+                      'new',
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 8,
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            );
             final overallRatingWidgets = switch (user.overallRating) {
               None() => [
                   const WidgetSpan(
@@ -119,6 +162,15 @@ class _UserTileState extends State<UserTile> {
                     color: Theme.of(context).colorScheme.onSurface,
                   ),
                   children: [
+                    if (isNew) ...[
+                      const WidgetSpan(
+                        child: SizedBox(width: 4),
+                      ),
+                      WidgetSpan(
+                        child: isNewWidget,
+                      ),
+                    ]
+                    else
                     ...overallRatingWidgets,
                   ],
                 ),

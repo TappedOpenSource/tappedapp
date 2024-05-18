@@ -184,6 +184,14 @@ class BookingControlsSliver extends StatelessWidget {
     final theme = Theme.of(context);
     return BlocBuilder<BookingsBloc, BookingsState>(
       builder: (context, state) {
+        final anyBookings = state.pendingBookings.isNotEmpty ||
+            state.upcomingBookings.isNotEmpty ||
+            state.canceledBookings.isNotEmpty;
+
+        if (!anyBookings) {
+          return const SizedBox.shrink();
+        }
+
         return CurrentUserBuilder(
           builder: (context, currentUser) {
             return CustomClaimsBuilder(
@@ -206,90 +214,94 @@ class BookingControlsSliver extends StatelessWidget {
                             ),
                           ),
                           children: [
-                            CupertinoListTile.notched(
-                              leading: const Icon(CupertinoIcons.clock_fill),
-                              title: Text(
-                                'booking requests (${state.pendingBookings.length})',
-                                style: TextStyle(
-                                  color: theme.colorScheme.onSurface,
+                            if (state.pendingBookings.isNotEmpty)
+                              CupertinoListTile.notched(
+                                leading: const Icon(CupertinoIcons.clock_fill),
+                                title: Text(
+                                  'booking requests (${state.pendingBookings.length})',
+                                  style: TextStyle(
+                                    color: theme.colorScheme.onSurface,
+                                  ),
+                                ),
+                                trailing:
+                                    const Icon(CupertinoIcons.chevron_forward),
+                                onTap: () => showModalBottomSheet(
+                                  context: context,
+                                  showDragHandle: true,
+                                  builder: (context) {
+                                    return _buildPendingBookingsSheet(
+                                      context,
+                                      pendingBookings: state.pendingBookings,
+                                    );
+                                  },
                                 ),
                               ),
-                              trailing:
-                                  const Icon(CupertinoIcons.chevron_forward),
-                              onTap: () => showModalBottomSheet(
-                                context: context,
-                                showDragHandle: true,
-                                builder: (context) {
-                                  return _buildPendingBookingsSheet(
-                                    context,
-                                    pendingBookings: state.pendingBookings,
-                                  );
-                                },
-                              ),
-                            ),
-                            CupertinoListTile.notched(
-                              leading: const Icon(CupertinoIcons.calendar),
-                              title: Text(
-                                'upcoming bookings (${state.upcomingBookings.length})',
-                                style: TextStyle(
-                                  color: theme.colorScheme.onSurface,
+                            if (state.upcomingBookings.isNotEmpty)
+                              CupertinoListTile.notched(
+                                leading: const Icon(CupertinoIcons.calendar),
+                                title: Text(
+                                  'upcoming bookings (${state.upcomingBookings.length})',
+                                  style: TextStyle(
+                                    color: theme.colorScheme.onSurface,
+                                  ),
+                                ),
+                                trailing:
+                                    const Icon(CupertinoIcons.chevron_forward),
+                                onTap: () => showModalBottomSheet(
+                                  context: context,
+                                  showDragHandle: true,
+                                  builder: (context) {
+                                    return _buildUpcomingBookingsSheet(
+                                      context,
+                                      upcomingBookings: state.upcomingBookings,
+                                    );
+                                  },
                                 ),
                               ),
-                              trailing:
-                                  const Icon(CupertinoIcons.chevron_forward),
-                              onTap: () => showModalBottomSheet(
-                                context: context,
-                                showDragHandle: true,
-                                builder: (context) {
-                                  return _buildUpcomingBookingsSheet(
-                                    context,
-                                    upcomingBookings: state.upcomingBookings,
-                                  );
-                                },
-                              ),
-                            ),
-                            CupertinoListTile.notched(
-                              leading: const Icon(CupertinoIcons.xmark),
-                              title: Text(
-                                'canceled bookings (${state.canceledBookings.length})',
-                                style: TextStyle(
-                                  color: theme.colorScheme.onSurface,
+                            if (state.canceledBookings.isNotEmpty)
+                              CupertinoListTile.notched(
+                                leading: const Icon(CupertinoIcons.xmark),
+                                title: Text(
+                                  'canceled bookings (${state.canceledBookings.length})',
+                                  style: TextStyle(
+                                    color: theme.colorScheme.onSurface,
+                                  ),
+                                ),
+                                trailing:
+                                    const Icon(CupertinoIcons.chevron_forward),
+                                onTap: () => showModalBottomSheet(
+                                  context: context,
+                                  showDragHandle: true,
+                                  builder: (context) {
+                                    return _buildCanceledBookingsSheet(
+                                      context,
+                                      canceledBookings: state.canceledBookings,
+                                    );
+                                  },
                                 ),
                               ),
-                              trailing:
-                                  const Icon(CupertinoIcons.chevron_forward),
-                              onTap: () => showModalBottomSheet(
-                                context: context,
-                                showDragHandle: true,
-                                builder: (context) {
-                                  return _buildCanceledBookingsSheet(
-                                    context,
-                                    canceledBookings: state.canceledBookings,
-                                  );
-                                },
-                              ),
-                            ),
-                            CupertinoListTile.notched(
-                              leading: const Icon(CupertinoIcons.chat_bubble),
-                              title: Text(
-                                'contacted venues',
-                                style: TextStyle(
-                                  color: theme.colorScheme.onSurface,
+                            if (isPremium)
+                              CupertinoListTile.notched(
+                                leading: const Icon(CupertinoIcons.chat_bubble),
+                                title: Text(
+                                  'contacted venues',
+                                  style: TextStyle(
+                                    color: theme.colorScheme.onSurface,
+                                  ),
+                                ),
+                                trailing:
+                                    const Icon(CupertinoIcons.chevron_forward),
+                                onTap: () => showModalBottomSheet(
+                                  context: context,
+                                  showDragHandle: true,
+                                  builder: (context) {
+                                    return _buildVenuesContactedSheet(
+                                      context,
+                                      currentUserId: currentUser.id,
+                                    );
+                                  },
                                 ),
                               ),
-                              trailing:
-                                  const Icon(CupertinoIcons.chevron_forward),
-                              onTap: () => showModalBottomSheet(
-                                context: context,
-                                showDragHandle: true,
-                                builder: (context) {
-                                  return _buildVenuesContactedSheet(
-                                    context,
-                                    currentUserId: currentUser.id,
-                                  );
-                                },
-                              ),
-                            ),
                             CupertinoListTile.notched(
                               leading: const Icon(CupertinoIcons.tickets),
                               title: Text(
