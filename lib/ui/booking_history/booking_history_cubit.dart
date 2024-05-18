@@ -20,6 +20,7 @@ class BookingHistoryCubit extends Cubit<BookingHistoryState> {
     emit(state.copyWith(loadingBookings: true));
     final bookings = await database.getBookingsByRequestee(
       userId,
+      status: BookingStatus.confirmed,
       limit: 250,
     );
     emit(state.copyWith(bookings: bookings, loadingBookings: false));
