@@ -18,8 +18,8 @@ class TappedForm extends StatefulWidget {
 
   final List<FormQuestion> questions;
   final bool cancelButton;
-  final FutureOr<void> Function()? onNext;
-  final FutureOr<void> Function()? onPrevious;
+  final FutureOr<void> Function(int)? onNext;
+  final FutureOr<void> Function(int)? onPrevious;
   final FutureOr<void> Function()? onSubmit;
 
   @override
@@ -45,7 +45,7 @@ class _TappedFormState extends State<TappedForm> {
           onPressed: () async {
             await EasyLoading.show();
             await localOnNext?.call();
-            await widget.onNext?.call();
+            await widget.onNext?.call(_index);
 
             setState(() {
               _index++;
@@ -155,7 +155,7 @@ class _TappedFormState extends State<TappedForm> {
                             setState(() {
                               _index--;
                             });
-                            widget.onPrevious?.call();
+                            widget.onPrevious?.call(_index);
                           },
                           child: const Text(
                             'back',

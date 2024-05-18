@@ -25,6 +25,7 @@ class OnboardingForm extends StatelessWidget {
 
         return TappedForm(
           onSubmit: context.read<OnboardingFlowCubit>().finishOnboarding,
+          onNext: context.read<OnboardingFlowCubit>().nextQuestion,
           questions: [
             const FormQuestion(
               child: OnboardingInitView(),

@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
+import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:formz/formz.dart';
@@ -190,6 +191,15 @@ class OnboardingFlowCubit extends Cubit<OnboardingFlowState> {
     } catch (e) {
       // print(error);
     }
+  }
+
+  Future<void> nextQuestion(int index) async {
+    await FirebaseAnalytics.instance.logEvent(
+      name: 'onboarding_next_question',
+      parameters: {
+        'index': index,
+      },
+    );
   }
 
   Future<void> finishOnboarding() async {

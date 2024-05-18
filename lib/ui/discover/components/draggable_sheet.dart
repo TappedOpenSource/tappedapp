@@ -262,7 +262,7 @@ class DraggableSheet extends StatelessWidget {
                                                   borderRadius: BorderRadius.circular(15),
                                                   color: Colors.purple
                                                       .withOpacity(0.1),
-                                                  child: Text(
+                                                  child: const Text(
                                                     'become affiliate',
                                                     style: TextStyle(
                                                       fontWeight:
