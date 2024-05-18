@@ -263,7 +263,7 @@ class DraggableSheet extends StatelessWidget {
                                                   color: Colors.purple
                                                       .withOpacity(0.1),
                                                   child: const Text(
-                                                    'become affiliate',
+                                                    'join the team',
                                                     style: TextStyle(
                                                       fontWeight:
                                                       FontWeight.bold,

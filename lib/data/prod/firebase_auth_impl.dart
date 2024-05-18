@@ -191,7 +191,7 @@ class FirebaseAuthImpl extends AuthRepository {
   Future<Option<SignInPayload>> signInWithGoogle() async {
     try {
       // Trigger the authentication flow
-      final googleUser = await GoogleSignIn().signIn();
+      final googleUser = await GoogleSignIn().signIn()
 
       if (googleUser == null) {
         throw Exception('Google sign in failed');
