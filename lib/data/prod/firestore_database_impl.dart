@@ -98,19 +98,7 @@ class FirestoreDatabaseImpl extends DatabaseRepository {
   ) async {
     final blacklist = ['anonymous', '*deleted*'];
 
-    final reserverd = [
-      'mictheplug',
-      'bobbyshmurda',
-      'aboogie',
-      'teegrizley',
-      'loganpaul',
-      'mikemajlak',
-      'keyglock',
-      'mrbeast',
-      'keemokazi',
-    ];
-
-    if (blacklist.contains(username) || reserverd.contains(username)) {
+    if (blacklist.contains(username)) {
       // print('''
       //   username check for blacklisted item:
       //     userId: ${data.userId},
