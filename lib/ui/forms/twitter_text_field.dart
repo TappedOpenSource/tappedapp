@@ -21,7 +21,7 @@ class TwitterTextField extends StatelessWidget {
       ],
       initialValue: initialValue,
       decoration: const InputDecoration(
-        prefixIcon: Icon(FontAwesomeIcons.twitter),
+        prefixIcon: Icon(FontAwesomeIcons.xTwitter),
         prefixText: '@ ',
         labelText: 'twitter',
       ),
