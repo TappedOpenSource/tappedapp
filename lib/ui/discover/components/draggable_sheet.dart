@@ -245,7 +245,7 @@ class DraggableSheet extends StatelessWidget {
                                           ),
                                         ),
                                         Padding(
-                                          padding: EdgeInsets.symmetric(
+                                          padding: const EdgeInsets.symmetric(
                                             vertical: 8,
                                             horizontal: 20,
                                           ),

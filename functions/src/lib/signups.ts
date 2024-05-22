@@ -38,7 +38,7 @@ export const notifyFoundersOnUserOnboarded = onDocumentCreated(
       
     slackNotification({
       title: "user onboarded \uD83D\uDE0E",
-      body: `${user?.email} just onboarded -> https://tapped.ai/${username}`,
+      body: `${user?.email} just onboarded -> https://app.tapped.ai/${username}`,
       slackWebhookUrl: SLACK_WEBHOOK_URL.value(),
     });
   });

@@ -53,7 +53,7 @@ export const spotifyRedirect = onRequest(
     const spotifyClient = new SpotifyWebApi({
       clientId: SPOTIFY_CLIENT_ID.value(),
       clientSecret: SPOTIFY_CLIENT_SECRET.value(),
-      redirectUri: "https://tapped.ai/spotify",
+      redirectUri: "https://app.tapped.ai/spotify",
     });
 
 
@@ -88,7 +88,7 @@ export const spotifyAuthorizeCodeGrant = onCall(
     const spotifyClient = new SpotifyWebApi({
       clientId: SPOTIFY_CLIENT_ID.value(),
       clientSecret: SPOTIFY_CLIENT_SECRET.value(),
-      redirectUri: "https://tapped.ai/spotify",
+      redirectUri: "https://app.tapped.ai/spotify",
     });
 
     const { code } = request.data as { code: string };
@@ -128,7 +128,7 @@ export const spotifyRefreshToken = onCall(
     const spotifyClient = new SpotifyWebApi({
       clientId: SPOTIFY_CLIENT_ID.value(),
       clientSecret: SPOTIFY_CLIENT_SECRET.value(),
-      redirectUri: "https://tapped.ai/spotify",
+      redirectUri: "https://app.tapped.ai/spotify",
     });
 
     const { refreshToken } = request.data as { refreshToken: string };

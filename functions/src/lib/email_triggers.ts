@@ -57,7 +57,7 @@ export const sendWelcomeEmailOnUserCreated = functions
     await resend.emails.send({
       from: "no-reply@tapped.ai",
       to: [ email ],
-      subject: "welcome to Tapped!",
+      subject: "welcome to tapped!",
       html: `<div style="white-space: pre;">${welcomeTemplate}</div>`,
     });
   });
