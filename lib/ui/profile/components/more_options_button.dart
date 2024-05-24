@@ -57,7 +57,8 @@ class MoreOptionsButton extends StatelessWidget {
                               behavior: SnackBarBehavior.floating,
                               backgroundColor: tappedAccent,
                               content: Text(
-                                  'latest app version copied to clipboard',),
+                                'latest app version copied to clipboard',
+                              ),
                             ),
                           );
                         });
@@ -168,6 +169,25 @@ class MoreOptionsButton extends StatelessWidget {
                   },
                   child: const Text('report user'),
                 ),
+              if (isAdmin && user.unclaimed)
+                CupertinoActionSheetAction(
+                  onPressed: () {
+                    nav.pop();
+                    context
+                        .read<ProfileCubit>()
+                        .deleteUser()
+                        .then((value) {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(
+                          behavior: SnackBarBehavior.floating,
+                          backgroundColor: Colors.red,
+                          content: Text('user deleted'),
+                        ),
+                      );
+                    });
+                  },
+                  child: const Text('delete unclaimed user'),
+                ),
               if (user.id != currentUser.id)
                 CupertinoActionSheetAction(
                   /// This parameter indicates the action would perform
@@ -181,7 +201,7 @@ class MoreOptionsButton extends StatelessWidget {
                         const SnackBar(
                           behavior: SnackBarBehavior.floating,
                           backgroundColor: Colors.red,
-                          content: Text('User Blocked'),
+                          content: Text('user blocked'),
                         ),
                       );
                     });

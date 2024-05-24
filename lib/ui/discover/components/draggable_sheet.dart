@@ -179,7 +179,7 @@ class DraggableSheet extends StatelessWidget {
                                                     MainAxisAlignment.center,
                                                 children: [
                                                   Text(
-                                                    '${state.venueHits.length}${state.venueHits.length >= 150 ? '+' : ''} ${state.venueHits.length == 1 ? 'venue' : 'venues'}',
+                                                    '${state.venueHits.length}${state.venueHits.length >= 75 ? '+' : ''} ${state.venueHits.length == 1 ? 'venue' : 'venues'}',
                                                     style: const TextStyle(
                                                       fontSize: 16,
                                                       fontWeight:

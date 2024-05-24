@@ -362,6 +362,17 @@ class ProfileCubit extends Cubit<ProfileState> {
     }
   }
 
+ Future<void> deleteUser() async {
+    try {
+      logger.debug('delete user ${state.visitedUser.id}');
+      await database.deleteUser(
+       state.visitedUser.id,
+      );
+    } catch (e, s) {
+      logger.error('delete user error', error: e, stackTrace: s);
+    }
+ }
+
   Future<void> loadIsBlocked() async {
     try {
       final isBlocked = await database.isBlocked(

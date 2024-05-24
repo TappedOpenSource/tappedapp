@@ -16,6 +16,8 @@ abstract class DatabaseRepository {
 
   Future<void> createUser(UserModel user);
 
+  Future<void> deleteUser(String userId);
+
   Future<Option<UserModel>> getUserByUsername(String? username);
 
   Future<Option<UserModel>> getUserById(String userId);

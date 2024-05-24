@@ -165,6 +165,18 @@ class FirestoreDatabaseImpl extends DatabaseRepository {
   }
 
   @override
+  Future<void> deleteUser(String userId) async {
+    try {
+      await _analytics.logEvent(name: 'delete_user', parameters: {
+        'user_id': userId,
+      });
+      await _usersRef.doc(userId).delete();
+    } catch (e, s) {
+      logger.error('deleteUser', error: e, stackTrace: s);
+    }
+  }
+
+  @override
   @Cached(ttl: 60) // 1 minute
   Future<Option<UserModel>> getUserByUsername(String? username) async {
     if (username == null) return const None();
