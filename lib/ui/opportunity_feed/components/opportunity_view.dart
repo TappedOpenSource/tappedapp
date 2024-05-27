@@ -158,7 +158,7 @@ class OpportunityView extends StatelessWidget {
                         child: CupertinoButton(
                           onPressed: () {
                             final link =
-                                'https://tapped.ai/opportunity/${op.id}';
+                                'https://app.tapped.ai/opportunity/${op.id}';
                             Share.share(link);
                           },
                           color: theme.colorScheme.onSurface.withOpacity(0.1),

@@ -65,7 +65,7 @@ class UniLinkImpl extends DeepLinkRepository {
     final firstSegment = segments.first;
 
     switch (firstSegment) {
-      case 'b':
+      case 'u':
         if (segments.length < 2) {
           return null;
         }
@@ -202,8 +202,8 @@ class UniLinkImpl extends DeepLinkRepository {
 
 //   final parameters = DynamicLinkParameters(
 //     //TODO change this to the proper function
-//     uriPrefix: 'https://tapped.ai',
-//     link: Uri.parse('https://tapped.ai/opportunity/${opportunity.id}'),
+//     uriPrefix: 'https://app.tapped.ai',
+//     link: Uri.parse('https://app.tapped.ai/opportunity/${opportunity.id}'),
 //     androidParameters: const AndroidParameters(
 //       packageName: 'com.intheloopstudio',
 //     ),
