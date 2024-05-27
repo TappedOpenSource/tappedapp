@@ -130,7 +130,7 @@ class MoreOptionsButton extends StatelessWidget {
                     },
                   );
 
-                  Share.share('https://tapped.ai/${user.username}')
+                  Share.share('https://app.tapped.ai/u/${user.username}')
                       .onError((error, stackTrace) {
                     logger.error(
                       'Error sharing profile',

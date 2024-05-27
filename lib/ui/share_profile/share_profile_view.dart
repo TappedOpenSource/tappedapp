@@ -507,7 +507,7 @@ class _ShareProfileViewState extends State<ShareProfileView> {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       Text(
-                        'contact - https://tapped.ai/${user.username}',
+                        'contact - https://app.tapped.ai/u/${user.username}',
                         style: const TextStyle(
                           fontSize: 10,
                           fontWeight: FontWeight.w200,

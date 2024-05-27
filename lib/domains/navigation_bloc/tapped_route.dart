@@ -62,7 +62,7 @@ final class ProfilePage extends TappedRoute {
     HeroImage? heroImage,
     String? titleHeroTag,
   }) : super(
-          routeName: '/$userId',
+          routeName: '/user/$userId',
           view: ProfileView(
             visitedUserId: userId,
             visitedUser: user,
