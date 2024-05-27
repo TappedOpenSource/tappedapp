@@ -152,15 +152,18 @@ class _UserReviewsFeedState extends State<UserReviewsFeed> {
 
   Widget _buildUserReviewFeed(UserModel user) => switch (_reviewsStatus) {
         ReviewsStatus.initial => const Center(
-            child: Text('Waiting for New Reviews...'),
+            child: Text('waiting for new reviews...'),
           ),
         ReviewsStatus.failure => const Center(
             child: Text('failed to fetch reviews'),
           ),
         ReviewsStatus.success => () {
             if (_userReviews.isEmpty || user.deleted) {
-              return const Center(
-                child: Text('No reviews yet...'),
+              return Scaffold(
+                appBar: AppBar(),
+                body: const Center(
+                  child: Text('no reviews yet...'),
+                ),
               );
             }
 
@@ -224,7 +227,7 @@ class _UserReviewsFeedState extends State<UserReviewsFeed> {
           final user = snapshot.data;
           return switch (user) {
             null => const Center(child: CircularProgressIndicator()),
-            None() => const Center(child: Text('User not found')),
+            None() => const Center(child: Text('user not found')),
             Some(:final value) => _buildUserReviewFeed(value),
           };
         },

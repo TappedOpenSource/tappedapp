@@ -173,6 +173,23 @@ class InfoSliver extends StatelessWidget {
                                   ),
                                 ),
                               ),
+                            switch (performerInfo) {
+                              None() => const SizedBox.shrink(),
+                              Some(:final value) => CupertinoListTile(
+                                  leading: const Icon(
+                                    CupertinoIcons.person_2_alt,
+                                  ),
+                                  title: Text(
+                                    '${NumberFormat.compactCurrency(
+                                      decimalDigits: 0,
+                                      symbol: '',
+                                    ).format(audience)} followers',
+                                    style: TextStyle(
+                                      color: theme.colorScheme.onSurface,
+                                    ),
+                                  ),
+                                ),
+                            },
                             switch (averagePerformerTicketPrice) {
                               None() => const SizedBox.shrink(),
                               Some(:final value) => CupertinoListTile(

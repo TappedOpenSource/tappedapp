@@ -16,7 +16,6 @@ class HeaderSliver extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
     return Padding(
       padding: const EdgeInsets.symmetric(
         horizontal: 16,
@@ -24,19 +23,25 @@ class HeaderSliver extends StatelessWidget {
       child: BlocBuilder<ProfileCubit, ProfileState>(
         builder: (context, state) {
           final isCurrentUser = state.currentUser.id == state.visitedUser.id;
+          final performerReviews =
+              state.visitedUser.performerInfo.toNullable()?.reviewCount ?? 0;
+          final bookerReviews =
+              state.visitedUser.bookerInfo.toNullable()?.reviewCount ?? 0;
+          final allReviewCount = performerReviews + bookerReviews;
           return Column(
             children: [
-              const SizedBox(height: 18),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceAround,
-                children: [
-                  if (state.visitedUser.socialFollowing.audienceSize > 0 ||
-                      isCurrentUser)
-                    const FollowerCount(),
-                  const ReviewCount(),
-                  const StarRating(),
-                ],
-              ),
+              if (allReviewCount > 0) const SizedBox(height: 18),
+              if (allReviewCount > 0)
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  children: [
+                    if (state.visitedUser.socialFollowing.audienceSize > 0 ||
+                        isCurrentUser)
+                      const FollowerCount(),
+                    const ReviewCount(),
+                    const StarRating(),
+                  ],
+                ),
               const SizedBox(height: 12),
               if (!isCurrentUser && !state.visitedUser.unclaimed)
                 const Row(
