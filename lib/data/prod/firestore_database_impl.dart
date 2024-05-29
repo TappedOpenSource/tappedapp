@@ -464,6 +464,35 @@ class FirestoreDatabaseImpl extends DatabaseRepository {
     }
   }
 
+
+  @override
+  @cached
+  Future<List<UserModel>> getFeaturedPerformers() async {
+    try {
+      final leadersSnapshot = await _leadersRef.doc('leaders').get();
+
+      final leadingUsernames =
+      leadersSnapshot.getOrElse('featuredPerformers', <dynamic>[]);
+
+      final leaders = await Future.wait(
+        leadingUsernames.map(
+              (username) async {
+            final user = await getUserByUsername(username as String);
+            return user;
+          },
+        ),
+      );
+
+      return leaders
+          .whereType<Some<UserModel>>()
+          .map((e) => e.toNullable())
+          .toList();
+    } catch (e, s) {
+      logger.error('getFeaturedPerformers', error: e, stackTrace: s);
+      return [];
+    }
+  }
+
   @override
   @Cached(ttl: 60 * 5) // 5 minute
   Future<List<Opportunity>> getFeaturedOpportunities() async {

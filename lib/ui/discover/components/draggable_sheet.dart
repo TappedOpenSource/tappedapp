@@ -439,7 +439,7 @@ class DraggableSheet extends StatelessWidget {
                                             horizontal: 8,
                                           ),
                                           child: Text(
-                                            'app leaders',
+                                            'emerging risers',
                                             style: TextStyle(
                                               fontSize: 28,
                                               fontWeight: FontWeight.bold,
@@ -460,6 +460,43 @@ class DraggableSheet extends StatelessWidget {
                                                 snapshot.data ?? [];
                                             return UserSlider(
                                               users: bookingLeaders,
+                                            );
+                                          },
+                                        ),
+
+                                        const Padding(
+                                          padding: EdgeInsets.symmetric(
+                                            vertical: 16,
+                                            horizontal: 8,
+                                          ),
+                                          child: Text(
+                                            'the greats',
+                                            style: TextStyle(
+                                              fontSize: 28,
+                                              fontWeight: FontWeight.bold,
+                                            ),
+                                          ),
+                                        ),
+                                        FutureBuilder(
+                                          future: database.getFeaturedPerformers(),
+                                          builder: (context, snapshot) {
+                                            if (!snapshot.hasData) {
+                                              return const Center(
+                                                child:
+                                                CupertinoActivityIndicator(),
+                                              );
+                                            }
+
+                                            final bookingLeaders =
+                                                snapshot.data ?? [];
+                                            return UserSlider(
+                                              users: bookingLeaders,
+                                              sort: true,
+                                              blur: !isPremium,
+                                              onTap: isPremium
+                                                  ? null
+                                                  : () =>
+                                                  context.push(PaywallPage()),
                                             );
                                           },
                                         ),

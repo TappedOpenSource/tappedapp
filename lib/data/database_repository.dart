@@ -46,6 +46,8 @@ abstract class DatabaseRepository {
 
   Future<List<UserModel>> getBookerLeaders();
 
+  Future<List<UserModel>> getFeaturedPerformers();
+
   Future<List<Opportunity>> getFeaturedOpportunities();
 
   // Activity related stuff
