@@ -36,7 +36,7 @@ export const contactVenueTemplate = ({ performer, collaborators, emailText }: {
 
     ${formatSocialLinksText(performer.socialFollowing)}
 
-    Past Bookings:  You can check my past booking history on my here https://app.tapped.ai/${username}
+    Past Bookings:  You can check my past booking history on my here https://app.tapped.ai/u/${username}
 
     ${formatPressKitText(performer)}
 
