@@ -154,7 +154,6 @@ export const notifyFoundersOnBookings = functions
         return;
       }
 
-
       return;
     }
 
