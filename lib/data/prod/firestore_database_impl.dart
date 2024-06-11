@@ -1179,7 +1179,6 @@ class FirestoreDatabaseImpl extends DatabaseRepository {
     try {
       await _analytics.logEvent(
         name: 'service_updated',
-        parameters: service.toJson(),
       );
       await _servicesRef
           .doc(service.userId)

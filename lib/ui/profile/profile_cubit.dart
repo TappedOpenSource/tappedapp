@@ -84,7 +84,7 @@ class ProfileCubit extends Cubit<ProfileState> {
     }
   }
 
-  Future<void> getLatestBookings() async {
+  Future<void> getTopBookings() async {
     final trace = logger.createTrace('getLatestBooking');
     await trace.start();
     try {

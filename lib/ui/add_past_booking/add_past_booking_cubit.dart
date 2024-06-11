@@ -156,6 +156,7 @@ class AddPastBookingCubit extends Cubit<AddPastBookingState> {
       flierUrl: flierUrl,
       genres: genres.map((e) => e.toString()).toList(),
       location: location,
+      verified: true,
     );
 
     logger.i(booking.toString());

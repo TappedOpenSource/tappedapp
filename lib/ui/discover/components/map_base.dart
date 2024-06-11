@@ -70,8 +70,8 @@ class MapBase extends StatelessWidget {
                             'accessToken': defaultMapboxToken,
                             'id': theme,
                           },
-                          tileProvider:
-                              FMTC.instance('mapStore').getTileProvider(),
+                          tileProvider: const FMTCStore('mapStore')
+                              .getTileProvider(),
                         );
                       },
                     ),

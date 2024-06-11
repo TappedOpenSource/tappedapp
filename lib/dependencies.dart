@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:intheloopapp/data/audio_repository.dart';
 import 'package:intheloopapp/data/auth_repository.dart';
 import 'package:intheloopapp/data/chartmetric_repository.dart';
 import 'package:intheloopapp/data/database_repository.dart';
@@ -10,7 +9,6 @@ import 'package:intheloopapp/data/notification_repository.dart';
 import 'package:intheloopapp/data/payment_repository.dart';
 import 'package:intheloopapp/data/places_repository.dart';
 import 'package:intheloopapp/data/prod/algolia_search_impl.dart';
-import 'package:intheloopapp/data/prod/audio_service_impl.dart';
 import 'package:intheloopapp/data/prod/chartmetric_impl.dart';
 import 'package:intheloopapp/data/prod/cloud_messaging_impl.dart';
 import 'package:intheloopapp/data/prod/firebase_auth_impl.dart';
@@ -28,7 +26,6 @@ import 'package:intheloopapp/data/search_repository.dart';
 import 'package:intheloopapp/data/spotify_repository.dart';
 import 'package:intheloopapp/data/storage_repository.dart';
 import 'package:intheloopapp/data/stream_repository.dart';
-// import 'package:intheloopapp/domains/activity_bloc/activity_bloc.dart';
 import 'package:intheloopapp/domains/authentication_bloc/authentication_bloc.dart';
 import 'package:intheloopapp/domains/bookings_bloc/bookings_bloc.dart';
 import 'package:intheloopapp/domains/confirm_email_bloc/confirm_email_bloc.dart';
@@ -86,9 +83,6 @@ List<RepositoryProvider<Object>> buildRepositories({
     ),
     RepositoryProvider<PlacesRepository>(
       create: (_) => GooglePlacesImpl(),
-    ),
-    RepositoryProvider<AudioRepository>(
-      create: (_) => AudioServiceImpl()..initAudioService(),
     ),
     RepositoryProvider<SpotifyRepository>(
       create: (_) => SpotifyImpl(),

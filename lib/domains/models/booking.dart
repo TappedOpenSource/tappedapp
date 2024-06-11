@@ -19,6 +19,7 @@ class Booking with _$Booking {
     required String id,
     required String requesteeId,
     required BookingStatus status,
+    @Default(false) bool verified,
     @DateTimeConverter() required DateTime startTime,
     @DateTimeConverter() required DateTime endTime,
     @DateTimeConverter() required DateTime timestamp,

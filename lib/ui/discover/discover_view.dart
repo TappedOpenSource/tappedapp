@@ -82,7 +82,6 @@ class DiscoverView extends StatelessWidget {
                     context,
                     icon: Icons.layers,
                     onPressed: () {
-
                       FirebaseAnalytics.instance.logEvent(
                         name: 'discover_change_overlay',
                       );
@@ -158,8 +157,8 @@ class DiscoverView extends StatelessWidget {
         return BlocBuilder<DiscoverCubit, DiscoverState>(
           builder: (context, state) {
             final selected = state.genreFilters.contains(genre);
-            return InkWell(
-              onTap: () {
+            return ChoiceChip(
+              onSelected: (_) {
                 FirebaseAnalytics.instance.logEvent(
                   name: 'discover_change_overlay',
                   parameters: {
@@ -175,35 +174,11 @@ class DiscoverView extends StatelessWidget {
 
                 context.read<DiscoverCubit>().toggleGenreFilter(genre);
               },
-              child: Card(
-                color: selected
-                    ? theme.colorScheme.primary
-                    : theme.colorScheme.background,
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 16,
-                    vertical: 4,
-                  ),
-                  child: Row(
-                    children: [
-                      const Icon(
-                        Icons.music_note_rounded,
-                        size: 12,
-                      ),
-                      const SizedBox(
-                        width: 6,
-                      ),
-                      Text(
-                        genre.formattedName.toLowerCase(),
-                        style: TextStyle(
-                          color: selected
-                              ? Colors.white
-                              : theme.colorScheme.onSurface,
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
+              selected: selected,
+              // ? theme.colorScheme.primary
+              // : theme.colorScheme.background,
+              label: Text(
+                genre.formattedName.toLowerCase(),
               ),
             );
           },
@@ -239,7 +214,8 @@ class DiscoverView extends StatelessWidget {
       builder: (context, state) {
         return SingleChildScrollView(
           scrollDirection: Axis.horizontal,
-          child: Row(
+          child: Wrap(
+            spacing: 5,
             children: _buildGenreFilterButtons(
               context,
               genreFilters: state.genreFilters,

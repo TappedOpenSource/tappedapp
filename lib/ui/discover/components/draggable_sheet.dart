@@ -439,7 +439,7 @@ class DraggableSheet extends StatelessWidget {
                                             horizontal: 8,
                                           ),
                                           child: Text(
-                                            'emerging risers',
+                                            'biggest risers',
                                             style: TextStyle(
                                               fontSize: 28,
                                               fontWeight: FontWeight.bold,

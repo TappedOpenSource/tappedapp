@@ -1,6 +1,7 @@
 import 'package:currency_text_input_formatter/currency_text_input_formatter.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:intl/intl.dart';
 
 class RateTextField extends StatelessWidget {
   RateTextField({
@@ -14,20 +15,20 @@ class RateTextField extends StatelessWidget {
   final void Function(int)? onSubmitted;
   final int initialValue;
 
-  final _formatter = CurrencyTextInputFormatter(
+  final _formatter = CurrencyTextInputFormatter.simpleCurrency(
     locale: 'en_US',
     decimalDigits: 2,
-    symbol: '',
+    enableNegative: false,
   );
 
   @override
   Widget build(BuildContext context) {
     return TextFormField(
-      initialValue: _formatter.format(initialValue.toString()),
+      initialValue: _formatter.format.format(initialValue.toString()),
       decoration: const InputDecoration(
         prefixIcon: Icon(Icons.attach_money),
         labelText: 'Price',
-        prefixText: r'$ ',
+        // prefixText: r'$ ',
       ),
       inputFormatters: <TextInputFormatter>[_formatter],
       keyboardType: TextInputType.number,

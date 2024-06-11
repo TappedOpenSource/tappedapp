@@ -21,8 +21,8 @@ import 'package:url_launcher/url_launcher.dart';
 Future<void> main() async {
   final widgetsBinding = WidgetsFlutterBinding.ensureInitialized();
   FlutterNativeSplash.preserve(widgetsBinding: widgetsBinding);
-  await FlutterMapTileCaching.initialise();
-  await FMTC.instance('mapStore').manage.createAsync();
+  await FMTCObjectBoxBackend().initialise();
+  await const FMTCStore('mapStore').manage.create();
 
   HydratedBloc.storage = await HydratedStorage.build(
     storageDirectory: kIsWeb
