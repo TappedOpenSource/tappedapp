@@ -156,7 +156,7 @@ const _incrementCoverArtCredits = async (
 const _giveUserCoverArtCredits = async (userId: string, amount: number) => {
   await creditsRef.doc(userId).set({
     coverArtCredits: FieldValue.increment(amount),
-  });
+  }, { merge: true });
 };
 
 const _emailMarketingPlan = async ({

@@ -15,6 +15,7 @@ import { Booking } from "../types/models";
 import { FieldValue } from "firebase-admin/firestore";
 import { debug } from "firebase-functions/logger";
 import { slackNotification } from "./notifications";
+import { isNullOrUndefined } from "./utils";
 
 const _updatePerformerRating = async ({
   userId,
@@ -135,7 +136,7 @@ export const notifyFoundersOnBookings = functions
       );
     }
 
-    if (booking.scraperInfo !== null || booking.crawlerInfo !== null) {
+    if (!isNullOrUndefined(booking.scraperInfo) || !isNullOrUndefined(booking.crawlerInfo)) {
       debug("booking added by scraper, not sending notification");
       return;
     }
@@ -145,9 +146,12 @@ export const notifyFoundersOnBookings = functions
       debug("booking added by user, not sending notification");
 
       if (booking.requesterId === undefined || booking.requesterId === null) {
+        const requesteeSnapshot = await usersRef.doc(booking.requesteeId).get();
+        const requestee = requesteeSnapshot.data();
+
         await slackNotification({
           title: "booking without location",
-          body: `booking ${data.id} has no venue: (${booking.location?.lat}, ${booking.location?.lng})`,
+          body: `booking https://app.tapped.ai/booking/${data.id} has no venue. added by ${requestee?.username ? "https://app.tapped.ai/u/" + requestee.username : "<UNKNOWN>"} and requested`,
           slackWebhookUrl: SLACK_WEBHOOK_URL.value(),
         });
 

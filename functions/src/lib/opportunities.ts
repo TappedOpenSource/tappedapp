@@ -282,7 +282,7 @@ const _setDailyOpportunityQuota = async () => {
     .get();
 
   await Promise.all(
-    usersSnap.docs.map(async (userDoc) => {
+    usersSnap.docs.map(async (userDoc): Promise<void> => {
       const userData = userDoc.data() as UserModel;
       const unclaimed = userData.unclaimed;
       if (unclaimed) {
@@ -293,7 +293,7 @@ const _setDailyOpportunityQuota = async () => {
       try {
         await creditsRef.doc(userDoc.id).set({
           opportunityQuota: 5,
-        });
+        }, { merge: true });
       } catch (e) {
         error("error setting daily opportunity quota", e);
       }
@@ -354,7 +354,7 @@ export const createOpportunityFeedOnUserCreated = functions
 
     await creditsRef.doc(user.uid).set({
       opportunityQuota: 5,
-    });
+    }, { merge: true });
 
     await Promise.all(
       opportunitiesSnap.docs.map(async (opDoc) => {

@@ -10,6 +10,10 @@ const founderIds = [
   "n4zIL6bOuPTqRC3dtsl6gyEBPQl1", // Ilias
 ];
 
+export const isNullOrUndefined = (value: any): boolean => {
+  return value === null || value === undefined;
+};
+
 export const getFileFromURL = (fileURL: string): string => {
   const fSlashes = fileURL.split("/");
   const fQuery = fSlashes[fSlashes.length - 1].split("?");
