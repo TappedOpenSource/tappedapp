@@ -75,7 +75,7 @@ Map<String, dynamic> _$$ExternalUrlsImplToJson(_$ExternalUrlsImpl instance) =>
 _$FollowersImpl _$$FollowersImplFromJson(Map<String, dynamic> json) =>
     _$FollowersImpl(
       href: json['href'] as String?,
-      total: json['total'] as int?,
+      total: (json['total'] as num?)?.toInt(),
     );
 
 Map<String, dynamic> _$$FollowersImplToJson(_$FollowersImpl instance) =>
@@ -86,8 +86,8 @@ Map<String, dynamic> _$$FollowersImplToJson(_$FollowersImpl instance) =>
 
 _$ImageImpl _$$ImageImplFromJson(Map<String, dynamic> json) => _$ImageImpl(
       url: json['url'] as String,
-      height: json['height'] as int,
-      width: json['width'] as int,
+      height: (json['height'] as num).toInt(),
+      width: (json['width'] as num).toInt(),
     );
 
 Map<String, dynamic> _$$ImageImplToJson(_$ImageImpl instance) =>

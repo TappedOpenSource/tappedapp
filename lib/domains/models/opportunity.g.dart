@@ -10,6 +10,7 @@ _$OpportunityImpl _$$OpportunityImplFromJson(Map<String, dynamic> json) =>
     _$OpportunityImpl(
       id: json['id'] as String,
       userId: json['userId'] as String,
+      location: Location.fromJson(json['location'] as Map<String, dynamic>),
       timestamp:
           const DateTimeConverter().fromJson(json['timestamp'] as Timestamp),
       startTime:
@@ -21,9 +22,6 @@ _$OpportunityImpl _$$OpportunityImplFromJson(Map<String, dynamic> json) =>
           ? const None()
           : Option<String>.fromJson(
               json['flierUrl'], (value) => value as String),
-      location: json['location'] == null
-          ? Location.nyc
-          : Location.fromJson(json['location'] as Map<String, dynamic>),
       isPaid: json['isPaid'] as bool? ?? false,
       touched: json['touched'] == null
           ? const None()
@@ -36,6 +34,7 @@ Map<String, dynamic> _$$OpportunityImplToJson(_$OpportunityImpl instance) =>
     <String, dynamic>{
       'id': instance.id,
       'userId': instance.userId,
+      'location': instance.location.toJson(),
       'timestamp': const DateTimeConverter().toJson(instance.timestamp),
       'startTime': const DateTimeConverter().toJson(instance.startTime),
       'endTime': const DateTimeConverter().toJson(instance.endTime),
@@ -44,7 +43,6 @@ Map<String, dynamic> _$$OpportunityImplToJson(_$OpportunityImpl instance) =>
       'flierUrl': instance.flierUrl.toJson(
         (value) => value,
       ),
-      'location': instance.location,
       'isPaid': instance.isPaid,
       'touched': instance.touched.toJson(
         (value) => _$OpportunityInteractionEnumMap[value]!,

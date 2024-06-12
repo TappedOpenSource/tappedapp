@@ -11,7 +11,7 @@ _$SpotifyCredentialsImpl _$$SpotifyCredentialsImplFromJson(
     _$SpotifyCredentialsImpl(
       accessToken: json['accessToken'] as String,
       refreshToken: json['refreshToken'] as String,
-      expiresIn: json['expiresIn'] as int,
+      expiresIn: (json['expiresIn'] as num).toInt(),
       tokenType: json['tokenType'] as String,
       scope: json['scope'] as String,
     );

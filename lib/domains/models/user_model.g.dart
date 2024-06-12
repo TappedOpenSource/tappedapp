@@ -36,7 +36,7 @@ _$UserModelImpl _$$UserModelImplFromJson(Map<String, dynamic> json) =>
           ? const None()
           : Option<Location>.fromJson(json['location'],
               (value) => Location.fromJson(value as Map<String, dynamic>)),
-      badgesCount: json['badgesCount'] as int? ?? 0,
+      badgesCount: (json['badgesCount'] as num?)?.toInt() ?? 0,
       performerInfo: json['performerInfo'] == null
           ? const None()
           : Option<PerformerInfo>.fromJson(json['performerInfo'],

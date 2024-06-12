@@ -22,6 +22,7 @@ Opportunity _$OpportunityFromJson(Map<String, dynamic> json) {
 mixin _$Opportunity {
   String get id => throw _privateConstructorUsedError;
   String get userId => throw _privateConstructorUsedError;
+  Location get location => throw _privateConstructorUsedError;
   @DateTimeConverter()
   DateTime get timestamp => throw _privateConstructorUsedError;
   @DateTimeConverter()
@@ -31,7 +32,6 @@ mixin _$Opportunity {
   String get title => throw _privateConstructorUsedError;
   String get description => throw _privateConstructorUsedError;
   Option<String> get flierUrl => throw _privateConstructorUsedError;
-  Location get location => throw _privateConstructorUsedError;
   bool get isPaid => throw _privateConstructorUsedError;
   Option<OpportunityInteraction> get touched =>
       throw _privateConstructorUsedError;
@@ -52,13 +52,13 @@ abstract class $OpportunityCopyWith<$Res> {
   $Res call(
       {String id,
       String userId,
+      Location location,
       @DateTimeConverter() DateTime timestamp,
       @DateTimeConverter() DateTime startTime,
       @DateTimeConverter() DateTime endTime,
       String title,
       String description,
       Option<String> flierUrl,
-      Location location,
       bool isPaid,
       Option<OpportunityInteraction> touched,
       bool deleted});
@@ -81,13 +81,13 @@ class _$OpportunityCopyWithImpl<$Res, $Val extends Opportunity>
   $Res call({
     Object? id = null,
     Object? userId = null,
+    Object? location = null,
     Object? timestamp = null,
     Object? startTime = null,
     Object? endTime = null,
     Object? title = null,
     Object? description = null,
     Object? flierUrl = null,
-    Object? location = null,
     Object? isPaid = null,
     Object? touched = null,
     Object? deleted = null,
@@ -101,6 +101,10 @@ class _$OpportunityCopyWithImpl<$Res, $Val extends Opportunity>
           ? _value.userId
           : userId // ignore: cast_nullable_to_non_nullable
               as String,
+      location: null == location
+          ? _value.location
+          : location // ignore: cast_nullable_to_non_nullable
+              as Location,
       timestamp: null == timestamp
           ? _value.timestamp
           : timestamp // ignore: cast_nullable_to_non_nullable
@@ -125,10 +129,6 @@ class _$OpportunityCopyWithImpl<$Res, $Val extends Opportunity>
           ? _value.flierUrl
           : flierUrl // ignore: cast_nullable_to_non_nullable
               as Option<String>,
-      location: null == location
-          ? _value.location
-          : location // ignore: cast_nullable_to_non_nullable
-              as Location,
       isPaid: null == isPaid
           ? _value.isPaid
           : isPaid // ignore: cast_nullable_to_non_nullable
@@ -164,13 +164,13 @@ abstract class _$$OpportunityImplCopyWith<$Res>
   $Res call(
       {String id,
       String userId,
+      Location location,
       @DateTimeConverter() DateTime timestamp,
       @DateTimeConverter() DateTime startTime,
       @DateTimeConverter() DateTime endTime,
       String title,
       String description,
       Option<String> flierUrl,
-      Location location,
       bool isPaid,
       Option<OpportunityInteraction> touched,
       bool deleted});
@@ -192,13 +192,13 @@ class __$$OpportunityImplCopyWithImpl<$Res>
   $Res call({
     Object? id = null,
     Object? userId = null,
+    Object? location = null,
     Object? timestamp = null,
     Object? startTime = null,
     Object? endTime = null,
     Object? title = null,
     Object? description = null,
     Object? flierUrl = null,
-    Object? location = null,
     Object? isPaid = null,
     Object? touched = null,
     Object? deleted = null,
@@ -212,6 +212,10 @@ class __$$OpportunityImplCopyWithImpl<$Res>
           ? _value.userId
           : userId // ignore: cast_nullable_to_non_nullable
               as String,
+      location: null == location
+          ? _value.location
+          : location // ignore: cast_nullable_to_non_nullable
+              as Location,
       timestamp: null == timestamp
           ? _value.timestamp
           : timestamp // ignore: cast_nullable_to_non_nullable
@@ -236,10 +240,6 @@ class __$$OpportunityImplCopyWithImpl<$Res>
           ? _value.flierUrl
           : flierUrl // ignore: cast_nullable_to_non_nullable
               as Option<String>,
-      location: null == location
-          ? _value.location
-          : location // ignore: cast_nullable_to_non_nullable
-              as Location,
       isPaid: null == isPaid
           ? _value.isPaid
           : isPaid // ignore: cast_nullable_to_non_nullable
@@ -257,18 +257,19 @@ class __$$OpportunityImplCopyWithImpl<$Res>
 }
 
 /// @nodoc
-@JsonSerializable()
+
+@JsonSerializable(explicitToJson: true)
 class _$OpportunityImpl implements _Opportunity {
   const _$OpportunityImpl(
       {required this.id,
       required this.userId,
+      required this.location,
       @DateTimeConverter() required this.timestamp,
       @DateTimeConverter() required this.startTime,
       @DateTimeConverter() required this.endTime,
       this.title = '',
       this.description = '',
       this.flierUrl = const None(),
-      this.location = Location.nyc,
       this.isPaid = false,
       this.touched = const None(),
       this.deleted = false});
@@ -280,6 +281,8 @@ class _$OpportunityImpl implements _Opportunity {
   final String id;
   @override
   final String userId;
+  @override
+  final Location location;
   @override
   @DateTimeConverter()
   final DateTime timestamp;
@@ -300,9 +303,6 @@ class _$OpportunityImpl implements _Opportunity {
   final Option<String> flierUrl;
   @override
   @JsonKey()
-  final Location location;
-  @override
-  @JsonKey()
   final bool isPaid;
   @override
   @JsonKey()
@@ -313,7 +313,7 @@ class _$OpportunityImpl implements _Opportunity {
 
   @override
   String toString() {
-    return 'Opportunity(id: $id, userId: $userId, timestamp: $timestamp, startTime: $startTime, endTime: $endTime, title: $title, description: $description, flierUrl: $flierUrl, location: $location, isPaid: $isPaid, touched: $touched, deleted: $deleted)';
+    return 'Opportunity(id: $id, userId: $userId, location: $location, timestamp: $timestamp, startTime: $startTime, endTime: $endTime, title: $title, description: $description, flierUrl: $flierUrl, isPaid: $isPaid, touched: $touched, deleted: $deleted)';
   }
 
   @override
@@ -323,6 +323,8 @@ class _$OpportunityImpl implements _Opportunity {
             other is _$OpportunityImpl &&
             (identical(other.id, id) || other.id == id) &&
             (identical(other.userId, userId) || other.userId == userId) &&
+            (identical(other.location, location) ||
+                other.location == location) &&
             (identical(other.timestamp, timestamp) ||
                 other.timestamp == timestamp) &&
             (identical(other.startTime, startTime) ||
@@ -333,8 +335,6 @@ class _$OpportunityImpl implements _Opportunity {
                 other.description == description) &&
             (identical(other.flierUrl, flierUrl) ||
                 other.flierUrl == flierUrl) &&
-            (identical(other.location, location) ||
-                other.location == location) &&
             (identical(other.isPaid, isPaid) || other.isPaid == isPaid) &&
             (identical(other.touched, touched) || other.touched == touched) &&
             (identical(other.deleted, deleted) || other.deleted == deleted));
@@ -346,13 +346,13 @@ class _$OpportunityImpl implements _Opportunity {
       runtimeType,
       id,
       userId,
+      location,
       timestamp,
       startTime,
       endTime,
       title,
       description,
       flierUrl,
-      location,
       isPaid,
       touched,
       deleted);
@@ -375,13 +375,13 @@ abstract class _Opportunity implements Opportunity {
   const factory _Opportunity(
       {required final String id,
       required final String userId,
+      required final Location location,
       @DateTimeConverter() required final DateTime timestamp,
       @DateTimeConverter() required final DateTime startTime,
       @DateTimeConverter() required final DateTime endTime,
       final String title,
       final String description,
       final Option<String> flierUrl,
-      final Location location,
       final bool isPaid,
       final Option<OpportunityInteraction> touched,
       final bool deleted}) = _$OpportunityImpl;
@@ -393,6 +393,8 @@ abstract class _Opportunity implements Opportunity {
   String get id;
   @override
   String get userId;
+  @override
+  Location get location;
   @override
   @DateTimeConverter()
   DateTime get timestamp;
@@ -408,8 +410,6 @@ abstract class _Opportunity implements Opportunity {
   String get description;
   @override
   Option<String> get flierUrl;
-  @override
-  Location get location;
   @override
   bool get isPaid;
   @override

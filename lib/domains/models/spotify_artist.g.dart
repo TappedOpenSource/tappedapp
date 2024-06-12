@@ -13,7 +13,7 @@ _$SpotifyArtistImpl _$$SpotifyArtistImplFromJson(Map<String, dynamic> json) =>
       href: json['href'] as String?,
       id: json['id'] as String,
       name: json['name'] as String?,
-      popularity: json['popularity'] as int?,
+      popularity: (json['popularity'] as num?)?.toInt(),
       type: json['type'] as String?,
       uri: json['uri'] as String,
       external_urls: json['external_urls'] == null
@@ -61,7 +61,7 @@ Map<String, dynamic> _$$ExternalUrlsImplToJson(_$ExternalUrlsImpl instance) =>
 _$FollowersImpl _$$FollowersImplFromJson(Map<String, dynamic> json) =>
     _$FollowersImpl(
       href: json['href'] as String?,
-      total: json['total'] as int?,
+      total: (json['total'] as num?)?.toInt(),
     );
 
 Map<String, dynamic> _$$FollowersImplToJson(_$FollowersImpl instance) =>
@@ -73,8 +73,8 @@ Map<String, dynamic> _$$FollowersImplToJson(_$FollowersImpl instance) =>
 _$ArtistImageImpl _$$ArtistImageImplFromJson(Map<String, dynamic> json) =>
     _$ArtistImageImpl(
       url: json['url'] as String,
-      height: json['height'] as int,
-      width: json['width'] as int,
+      height: (json['height'] as num).toInt(),
+      width: (json['width'] as num).toInt(),
     );
 
 Map<String, dynamic> _$$ArtistImageImplToJson(_$ArtistImageImpl instance) =>

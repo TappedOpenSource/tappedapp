@@ -24,8 +24,8 @@ _$PerformerInfoImpl _$$PerformerInfoImplFromJson(Map<String, dynamic> json) =>
           ? const Option.of(5)
           : Option<double>.fromJson(
               json['rating'], (value) => (value as num).toDouble()),
-      reviewCount: json['reviewCount'] as int? ?? 0,
-      bookingCount: json['bookingCount'] as int? ?? 0,
+      reviewCount: (json['reviewCount'] as num?)?.toInt() ?? 0,
+      bookingCount: (json['bookingCount'] as num?)?.toInt() ?? 0,
       label: json['label'] as String? ?? 'Independent',
       bookingAgency: json['bookingAgency'] == null
           ? const None()
@@ -37,11 +37,11 @@ _$PerformerInfoImpl _$$PerformerInfoImplFromJson(Map<String, dynamic> json) =>
       averageTicketPrice: json['averageTicketPrice'] == null
           ? const None()
           : Option<int>.fromJson(
-              json['averageTicketPrice'], (value) => value as int),
+              json['averageTicketPrice'], (value) => (value as num).toInt()),
       averageAttendance: json['averageAttendance'] == null
           ? const None()
           : Option<int>.fromJson(
-              json['averageAttendance'], (value) => value as int),
+              json['averageAttendance'], (value) => (value as num).toInt()),
       bookingEmail: json['bookingEmail'] == null
           ? const None()
           : Option<String>.fromJson(

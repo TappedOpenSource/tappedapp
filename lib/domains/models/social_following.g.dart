@@ -21,42 +21,43 @@ _$SocialFollowingImpl _$$SocialFollowingImplFromJson(
           ? const None()
           : Option<String>.fromJson(
               json['tiktokHandle'], (value) => value as String),
-      tiktokFollowers: json['tiktokFollowers'] as int? ?? 0,
+      tiktokFollowers: (json['tiktokFollowers'] as num?)?.toInt() ?? 0,
       instagramHandle: json['instagramHandle'] == null
           ? const None()
           : Option<String>.fromJson(
               json['instagramHandle'], (value) => value as String),
-      instagramFollowers: json['instagramFollowers'] as int? ?? 0,
+      instagramFollowers: (json['instagramFollowers'] as num?)?.toInt() ?? 0,
       twitterHandle: json['twitterHandle'] == null
           ? const None()
           : Option<String>.fromJson(
               json['twitterHandle'], (value) => value as String),
-      twitterFollowers: json['twitterFollowers'] as int? ?? 0,
+      twitterFollowers: (json['twitterFollowers'] as num?)?.toInt() ?? 0,
       facebookHandle: json['facebookHandle'] == null
           ? const None()
           : Option<String>.fromJson(
               json['facebookHandle'], (value) => value as String),
-      facebookFollowers: json['facebookFollowers'] as int? ?? 0,
+      facebookFollowers: (json['facebookFollowers'] as num?)?.toInt() ?? 0,
       spotifyId: json['spotifyId'] == null
           ? const None()
           : Option<String>.fromJson(
               json['spotifyId'], (value) => value as String),
-      spotifyMonthlyListeners: json['spotifyMonthlyListeners'] as int? ?? 0,
+      spotifyMonthlyListeners:
+          (json['spotifyMonthlyListeners'] as num?)?.toInt() ?? 0,
       soundcloudHandle: json['soundcloudHandle'] == null
           ? const None()
           : Option<String>.fromJson(
               json['soundcloudHandle'], (value) => value as String),
-      soundcloudFollowers: json['soundcloudFollowers'] as int? ?? 0,
+      soundcloudFollowers: (json['soundcloudFollowers'] as num?)?.toInt() ?? 0,
       audiusHandle: json['audiusHandle'] == null
           ? const None()
           : Option<String>.fromJson(
               json['audiusHandle'], (value) => value as String),
-      audiusFollowers: json['audiusFollowers'] as int? ?? 0,
+      audiusFollowers: (json['audiusFollowers'] as num?)?.toInt() ?? 0,
       twitchHandle: json['twitchHandle'] == null
           ? const None()
           : Option<String>.fromJson(
               json['twitchHandle'], (value) => value as String),
-      twitchFollowers: json['twitchFollowers'] as int? ?? 0,
+      twitchFollowers: (json['twitchFollowers'] as num?)?.toInt() ?? 0,
     );
 
 Map<String, dynamic> _$$SocialFollowingImplToJson(

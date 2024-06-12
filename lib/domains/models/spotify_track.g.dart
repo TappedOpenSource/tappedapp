@@ -25,10 +25,12 @@ _$SpotifyTrackImpl _$$SpotifyTrackImplFromJson(Map<String, dynamic> json) =>
           const [],
       discNumber: json['disc_number'] == null
           ? const None()
-          : Option<int>.fromJson(json['disc_number'], (value) => value as int),
+          : Option<int>.fromJson(
+              json['disc_number'], (value) => (value as num).toInt()),
       durationMs: json['duration_ms'] == null
           ? const None()
-          : Option<int>.fromJson(json['duration_ms'], (value) => value as int),
+          : Option<int>.fromJson(
+              json['duration_ms'], (value) => (value as num).toInt()),
       explicit: json['explicit'] as bool? ?? false,
       externalIds: json['external_ids'] == null
           ? const None()
@@ -52,14 +54,16 @@ _$SpotifyTrackImpl _$$SpotifyTrackImplFromJson(Map<String, dynamic> json) =>
               json['restrictions'], (value) => value as Map<String, dynamic>),
       popularity: json['popularity'] == null
           ? const None()
-          : Option<int>.fromJson(json['popularity'], (value) => value as int),
+          : Option<int>.fromJson(
+              json['popularity'], (value) => (value as num).toInt()),
       previewUrl: json['preview_url'] == null
           ? const None()
           : Option<String>.fromJson(
               json['preview_url'], (value) => value as String),
       trackNumber: json['track_number'] == null
           ? const None()
-          : Option<int>.fromJson(json['track_number'], (value) => value as int),
+          : Option<int>.fromJson(
+              json['track_number'], (value) => (value as num).toInt()),
       type: json['type'] == null
           ? const None()
           : Option<String>.fromJson(json['type'], (value) => value as String),
@@ -122,7 +126,7 @@ _$AlbumImpl _$$AlbumImplFromJson(Map<String, dynamic> json) => _$AlbumImpl(
           ? const None()
           : Option<String>.fromJson(
               json['album_type'], (value) => value as String),
-      totalTracks: json['total_tracks'] as int? ?? 0,
+      totalTracks: (json['total_tracks'] as num?)?.toInt() ?? 0,
       availableMarkets: (json['available_markets'] as List<dynamic>?)
               ?.map((e) => e as String)
               .toList() ??
@@ -194,8 +198,8 @@ Map<String, dynamic> _$$AlbumImplToJson(_$AlbumImpl instance) =>
 _$AlbumImageImpl _$$AlbumImageImplFromJson(Map<String, dynamic> json) =>
     _$AlbumImageImpl(
       url: json['url'] as String,
-      height: json['height'] as int,
-      width: json['width'] as int,
+      height: (json['height'] as num).toInt(),
+      width: (json['width'] as num).toInt(),
     );
 
 Map<String, dynamic> _$$AlbumImageImplToJson(_$AlbumImageImpl instance) =>

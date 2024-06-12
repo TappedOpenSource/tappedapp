@@ -22,7 +22,8 @@ _$VenueInfoImpl _$$VenueInfoImplFromJson(Map<String, dynamic> json) =>
               json['autoReply'], (value) => value as String),
       capacity: json['capacity'] == null
           ? const None()
-          : Option<int>.fromJson(json['capacity'], (value) => value as int),
+          : Option<int>.fromJson(
+              json['capacity'], (value) => (value as num).toInt()),
       idealPerformerProfile: json['idealPerformerProfile'] == null
           ? const None()
           : Option<String>.fromJson(
@@ -59,9 +60,13 @@ _$VenueInfoImpl _$$VenueInfoImplFromJson(Map<String, dynamic> json) =>
       averageTicketPrice: json['averageTicketPrice'] == null
           ? const None()
           : Option<int>.fromJson(
-              json['averageTicketPrice'], (value) => value as int),
+              json['averageTicketPrice'], (value) => (value as num).toInt()),
       topPerformerIds: (json['topPerformerIds'] as List<dynamic>?)
               ?.map((e) => e as String)
+              .toList() ??
+          const [],
+      bookingsByDayOfWeek: (json['bookingsByDayOfWeek'] as List<dynamic>?)
+              ?.map((e) => (e as num).toInt())
               .toList() ??
           const [],
     );
@@ -105,6 +110,7 @@ Map<String, dynamic> _$$VenueInfoImplToJson(_$VenueInfoImpl instance) =>
         (value) => value,
       ),
       'topPerformerIds': instance.topPerformerIds,
+      'bookingsByDayOfWeek': instance.bookingsByDayOfWeek,
     };
 
 const _$VenueTypeEnumMap = {

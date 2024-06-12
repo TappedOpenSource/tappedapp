@@ -25,7 +25,7 @@ _$BookingImpl _$$BookingImplFromJson(Map<String, dynamic> json) =>
           ? const None()
           : Option<String>.fromJson(json['name'], (value) => value as String),
       note: json['note'] as String? ?? '',
-      rate: json['rate'] as int? ?? 0,
+      rate: (json['rate'] as num?)?.toInt() ?? 0,
       serviceId: json['serviceId'] == null
           ? const None()
           : Option<String>.fromJson(

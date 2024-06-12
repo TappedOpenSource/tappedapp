@@ -12,10 +12,10 @@ _$ServiceImpl _$$ServiceImplFromJson(Map<String, dynamic> json) =>
       userId: json['userId'] as String,
       title: json['title'] as String? ?? '',
       description: json['description'] as String? ?? '',
-      rate: json['rate'] as int? ?? 0,
+      rate: (json['rate'] as num?)?.toInt() ?? 0,
       rateType: $enumDecodeNullable(_$RateTypeEnumMap, json['rateType']) ??
           RateType.fixed,
-      count: json['count'] as int? ?? 0,
+      count: (json['count'] as num?)?.toInt() ?? 0,
       deleted: json['deleted'] as bool? ?? false,
     );
 

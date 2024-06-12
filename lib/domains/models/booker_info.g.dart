@@ -12,7 +12,7 @@ _$BookerInfoImpl _$$BookerInfoImplFromJson(Map<String, dynamic> json) =>
           ? const None()
           : Option<double>.fromJson(
               json['rating'], (value) => (value as num).toDouble()),
-      reviewCount: json['reviewCount'] as int? ?? 0,
+      reviewCount: (json['reviewCount'] as num?)?.toInt() ?? 0,
     );
 
 Map<String, dynamic> _$$BookerInfoImplToJson(_$BookerInfoImpl instance) =>

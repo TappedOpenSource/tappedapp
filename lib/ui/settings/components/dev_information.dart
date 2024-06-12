@@ -65,8 +65,8 @@ class _DevInformationState extends State<DevInformation> {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Image.asset(
-                'assets/icon_1024.png',
-                scale: 15,
+                'assets/icon_512.png',
+                scale: 10,
               ),
               const SizedBox(width: 10),
               Column(

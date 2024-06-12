@@ -5,6 +5,7 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter_cache_manager/flutter_cache_manager.dart';
 import 'package:flutter_image_compress/flutter_image_compress.dart';
 import 'package:intheloopapp/data/storage_repository.dart';
+import 'package:intheloopapp/utils/app_logger.dart';
 import 'package:intheloopapp/utils/file_utils.dart';
 import 'package:path/path.dart' as p;
 import 'package:path_provider/path_provider.dart';
@@ -38,15 +39,22 @@ class FirebaseStorageImpl extends StorageRepository {
     final tempDirection = await getTemporaryDirectory();
     final path = tempDirection.path;
     final extension = p.extension(image.path);
-    final compressedImage = await FlutterImageCompress.compressAndGetFile(
-      image.absolute.path,
-      '$path/img_$photoId$extension',
-      quality: 70,
-    );
 
-    if (compressedImage == null) return image;
+    logger.d('compressing image $path with extension: $extension');
+    try {
+      final compressedImage = await FlutterImageCompress.compressAndGetFile(
+        image.absolute.path,
+        '$path/img_$photoId$extension',
+        quality: 70,
+      );
 
-    return File(compressedImage.path);
+      if (compressedImage == null) return image;
+
+      return File(compressedImage.path);
+    } catch (e) {
+      logger.e('error compressing image: $e');
+      return image;
+    }
   }
 
   @override

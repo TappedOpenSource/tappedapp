@@ -1339,12 +1339,18 @@ class FirestoreDatabaseImpl extends DatabaseRepository {
           .collection('interestedUsers')
           .get();
 
-      final interestedUsers = await Future.wait(
+      final interestedUsers = (await Future.wait(
         interestedUsersSnapshot.docs.map((doc) async {
+          try {
+
           final userSnapshot = await _usersRef.doc(doc.id).get();
           return UserModel.fromDoc(userSnapshot);
+          } catch (e, s) {
+            logger.error('getInterestedUsers', error: e, stackTrace: s);
+            return null;
+          }
         }),
-      );
+      )).whereType<UserModel>().toList();
 
       return interestedUsers;
     } catch (e, s) {
@@ -1546,6 +1552,7 @@ class FirestoreDatabaseImpl extends DatabaseRepository {
       await _opportunitiesRef.doc(op.id).set(op.toJson());
     } catch (e, s) {
       logger.error('createOpportunity', error: e, stackTrace: s);
+      rethrow;
     }
   }
 
