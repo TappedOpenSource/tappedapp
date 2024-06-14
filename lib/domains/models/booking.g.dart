@@ -51,6 +51,10 @@ _$BookingImpl _$$BookingImplFromJson(Map<String, dynamic> json) =>
               ?.map((e) => e as String)
               .toList() ??
           const [],
+      eventId: json['eventId'] == null
+          ? const None()
+          : Option<String>.fromJson(
+              json['eventId'], (value) => value as String),
     );
 
 Map<String, dynamic> _$$BookingImplToJson(_$BookingImpl instance) =>
@@ -85,6 +89,9 @@ Map<String, dynamic> _$$BookingImplToJson(_$BookingImpl instance) =>
         (value) => value.toJson(),
       ),
       'socialMediaLinks': instance.socialMediaLinks,
+      'eventId': instance.eventId.toJson(
+        (value) => value,
+      ),
     };
 
 const _$BookingStatusEnumMap = {

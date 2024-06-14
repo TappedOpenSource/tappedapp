@@ -92,7 +92,7 @@ class _ApplyButtonState extends State<ApplyButton> {
                     onPressed: null,
                     borderRadius: BorderRadius.circular(15),
                     child: const Text(
-                      'Applied',
+                      'applied',
                       style: TextStyle(
                         fontWeight: FontWeight.w700,
                         color: Colors.green,
@@ -129,7 +129,7 @@ class _ApplyButtonState extends State<ApplyButton> {
                   },
                   borderRadius: BorderRadius.circular(15),
                   child: const Text(
-                    'Apply',
+                    'apply',
                     style: TextStyle(
                       fontWeight: FontWeight.w700,
                       color: Colors.white,

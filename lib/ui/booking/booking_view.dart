@@ -280,7 +280,6 @@ class BookingView extends StatelessWidget {
                                           value.displayName,
                                           style: TextStyle(
                                             color: theme.colorScheme.primary,
-                                            fontWeight: FontWeight.bold,
                                           ),
                                         ),
                                       ),

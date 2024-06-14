@@ -13,7 +13,7 @@ import 'package:intheloopapp/domains/navigation_bloc/tapped_route.dart';
 import 'package:intheloopapp/domains/onboarding_bloc/onboarding_bloc.dart';
 import 'package:intheloopapp/ui/discover/components/draggable_sheet.dart';
 import 'package:intheloopapp/ui/discover/components/map_base.dart';
-import 'package:intheloopapp/ui/discover/components/map_config_slider.dart';
+import 'package:intheloopapp/ui/discover/components/overlay_changer.dart';
 import 'package:intheloopapp/ui/discover/components/tapped_search_bar.dart';
 import 'package:intheloopapp/ui/discover/discover_cubit.dart';
 import 'package:intheloopapp/utils/bloc_utils.dart';
@@ -44,7 +44,7 @@ class DiscoverView extends StatelessWidget {
       splashColor: Colors.transparent,
       child: Icon(
         icon,
-        color: theme.colorScheme.onBackground,
+        color: theme.colorScheme.onSurface,
       ),
     );
   }
@@ -63,6 +63,24 @@ class DiscoverView extends StatelessWidget {
               right: 10,
               child: Column(
                 children: [
+                  const OverlayChanger(),
+                  _buildMapButton(
+                    context,
+                    icon: Icons.settings,
+                    onPressed: () {
+                      showModalBottomSheet(
+                        context: context,
+                        showDragHandle: true,
+                        builder: (context) {
+                          return Container(
+                            height: 400,
+                            width: double.infinity,
+                          );
+                        },
+                      );
+                    },
+                    heroTag: 'map_settings',
+                  ),
                   _buildMapButton(
                     context,
                     icon: CupertinoIcons.location,
@@ -77,42 +95,6 @@ class DiscoverView extends StatelessWidget {
                       );
                     },
                     heroTag: 'seek-home',
-                  ),
-                  _buildMapButton(
-                    context,
-                    icon: Icons.layers,
-                    onPressed: () {
-                      FirebaseAnalytics.instance.logEvent(
-                        name: 'discover_change_overlay',
-                      );
-
-                      showModalBottomSheet<void>(
-                        context: context,
-                        showDragHandle: true,
-                        builder: (context) {
-                          return Padding(
-                            padding: const EdgeInsets.symmetric(
-                              vertical: 16,
-                              horizontal: 20,
-                            ),
-                            child: MapConfigSlider(
-                              initialOverlay: state.mapOverlay,
-                              onChange: (overlay, premiumOnly) {
-                                if (premiumOnly && !isPremium) {
-                                  context.push(PaywallPage());
-                                  return;
-                                }
-
-                                cubit.onMapOverlayChange(
-                                  overlay,
-                                );
-                              },
-                            ),
-                          );
-                        },
-                      );
-                    },
-                    heroTag: 'overlay',
                   ),
                   if (kDebugMode)
                     _buildMapButton(

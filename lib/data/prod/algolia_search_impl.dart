@@ -179,6 +179,7 @@ class AlgoliaSearchImpl extends SearchRepository {
     double? lat,
     double? lng,
     int radius = 50000,
+    DateTime? startTime,
   }) async {
     var results = <AlgoliaObjectSnapshot>[];
 
@@ -186,7 +187,15 @@ class AlgoliaSearchImpl extends SearchRepository {
         (lat != null && lng != null) ? '$lat, $lng' : null;
 
     try {
-      var query = algolia.index('prod_opportunities').query(input);
+      var query = algolia
+            .index('prod_opportunities')
+          .query(input)
+          .filters([
+            'deleted:false',
+            if (startTime != null)
+              'startTime:${startTime.toUtc().millisecondsSinceEpoch}',
+          ].join(' AND ')
+      );
 
       if (formattedLocationFilter != null) {
         query = query.setAroundLatLng(formattedLocationFilter);

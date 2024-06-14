@@ -12,7 +12,9 @@ import 'package:intheloopapp/domains/navigation_bloc/tapped_route.dart';
 import 'package:intheloopapp/domains/opportunity_bloc/opportunity_bloc.dart';
 import 'package:intheloopapp/ui/conditional_parent_widget.dart';
 import 'package:intheloopapp/ui/opportunities/interested_users_view.dart';
+import 'package:intheloopapp/ui/profile/profile_view.dart';
 import 'package:intheloopapp/ui/themes.dart';
+import 'package:intheloopapp/ui/user_avatar.dart';
 import 'package:intheloopapp/ui/user_tile.dart';
 import 'package:intheloopapp/utils/admin_builder.dart';
 import 'package:intheloopapp/utils/bloc_utils.dart';
@@ -25,6 +27,7 @@ import 'package:maps_launcher/maps_launcher.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:skeleton_text/skeleton_text.dart';
+import 'package:skeletons/skeletons.dart';
 
 class OpportunityView extends StatelessWidget {
   const OpportunityView({
@@ -82,6 +85,7 @@ class OpportunityView extends StatelessWidget {
     final hero = heroImage;
     final opBloc = context.opportunities;
     final places = context.places;
+    final database = context.database;
     final theme = Theme.of(context);
     return Scaffold(
       backgroundColor: theme.colorScheme.background,
@@ -260,41 +264,77 @@ class OpportunityView extends StatelessWidget {
                     },
                   ),
                   const SizedBox(height: 12),
-                  FutureBuilder<Option<PlaceData>>(
-                    future: places.getPlaceById(
-                      op.location.placeId,
-                    ),
-                    builder: (context, snapshot) {
-                      final placeData = snapshot.data;
-                      return switch (placeData) {
-                        null => const CupertinoActivityIndicator(),
-                        None() => const SizedBox.shrink(),
-                        Some(:final value) => GestureDetector(
-                            onTap: () => MapsLauncher.launchQuery(
-                              getAddressComponent(value.addressComponents),
-                            ),
-                            child: Row(
-                              children: [
-                                Icon(
-                                  CupertinoIcons.location_circle_fill,
-                                  color: theme.colorScheme.onSurface
-                                      .withOpacity(0.5),
+                  switch (op.venueId) {
+                    None() => FutureBuilder<Option<PlaceData>>(
+                        future: places.getPlaceById(
+                          op.location.placeId,
+                        ),
+                        builder: (context, snapshot) {
+                          final placeData = snapshot.data;
+                          return switch (placeData) {
+                            null => const CupertinoActivityIndicator(),
+                            None() => const SizedBox.shrink(),
+                            Some(:final value) => GestureDetector(
+                                onTap: () => MapsLauncher.launchQuery(
+                                  getAddressComponent(value.addressComponents),
                                 ),
-                                const SizedBox(width: 8),
-                                Text(
-                                  getAddressComponent(
-                                    value.addressComponents,
-                                  ),
-                                  style: const TextStyle(
-                                    color: tappedAccent,
+                                child: Row(
+                                  children: [
+                                    Icon(
+                                      CupertinoIcons.location_circle_fill,
+                                      color: theme.colorScheme.onSurface
+                                          .withOpacity(0.5),
+                                    ),
+                                    const SizedBox(width: 8),
+                                    Text(
+                                      getAddressComponent(
+                                        value.addressComponents,
+                                      ),
+                                      style: const TextStyle(
+                                        color: tappedAccent,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                          };
+                        },
+                      ),
+                    Some(:final value) => FutureBuilder<Option<UserModel>>(
+                      future: database.getUserById(value),
+                      builder: (context, snapshot) {
+                        final requester = snapshot.data;
+                        return switch (requester) {
+                          null => SkeletonListTile(),
+                          None() => SkeletonListTile(),
+                          Some(:final value) => GestureDetector(
+                            onTap: () =>
+                                showCupertinoModalBottomSheet<void>(
+                                  context: context,
+                                  builder: (context) => ProfileView(
+                                    visitedUserId: value.id,
+                                    visitedUser: Option.of(value),
                                   ),
                                 ),
-                              ],
+                            child: CupertinoListTile(
+                              leading: UserAvatar(
+                                pushId: Option.of(value.id),
+                                pushUser: Option.of(value),
+                                imageUrl: value.profilePicture,
+                                radius: 20,
+                              ),
+                              title: Text(
+                                value.displayName,
+                                style: TextStyle(
+                                  color: theme.colorScheme.primary,
+                                ),
+                              ),
                             ),
                           ),
-                      };
-                    },
-                  ),
+                        };
+                      },
+                    ),
+                  },
                   const SizedBox(height: 12),
                   Row(
                     children: [

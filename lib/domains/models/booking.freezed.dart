@@ -41,6 +41,7 @@ mixin _$Booking {
   List<String> get genres => throw _privateConstructorUsedError;
   Option<Location> get location => throw _privateConstructorUsedError;
   List<String> get socialMediaLinks => throw _privateConstructorUsedError;
+  Option<String> get eventId => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
@@ -70,7 +71,8 @@ abstract class $BookingCopyWith<$Res> {
       Option<String> eventUrl,
       List<String> genres,
       Option<Location> location,
-      List<String> socialMediaLinks});
+      List<String> socialMediaLinks,
+      Option<String> eventId});
 }
 
 /// @nodoc
@@ -104,6 +106,7 @@ class _$BookingCopyWithImpl<$Res, $Val extends Booking>
     Object? genres = null,
     Object? location = null,
     Object? socialMediaLinks = null,
+    Object? eventId = null,
   }) {
     return _then(_value.copyWith(
       id: null == id
@@ -178,6 +181,10 @@ class _$BookingCopyWithImpl<$Res, $Val extends Booking>
           ? _value.socialMediaLinks
           : socialMediaLinks // ignore: cast_nullable_to_non_nullable
               as List<String>,
+      eventId: null == eventId
+          ? _value.eventId
+          : eventId // ignore: cast_nullable_to_non_nullable
+              as Option<String>,
     ) as $Val);
   }
 }
@@ -207,7 +214,8 @@ abstract class _$$BookingImplCopyWith<$Res> implements $BookingCopyWith<$Res> {
       Option<String> eventUrl,
       List<String> genres,
       Option<Location> location,
-      List<String> socialMediaLinks});
+      List<String> socialMediaLinks,
+      Option<String> eventId});
 }
 
 /// @nodoc
@@ -239,6 +247,7 @@ class __$$BookingImplCopyWithImpl<$Res>
     Object? genres = null,
     Object? location = null,
     Object? socialMediaLinks = null,
+    Object? eventId = null,
   }) {
     return _then(_$BookingImpl(
       id: null == id
@@ -313,6 +322,10 @@ class __$$BookingImplCopyWithImpl<$Res>
           ? _value._socialMediaLinks
           : socialMediaLinks // ignore: cast_nullable_to_non_nullable
               as List<String>,
+      eventId: null == eventId
+          ? _value.eventId
+          : eventId // ignore: cast_nullable_to_non_nullable
+              as Option<String>,
     ));
   }
 }
@@ -339,7 +352,8 @@ class _$BookingImpl implements _Booking {
       this.eventUrl = const None(),
       final List<String> genres = const [],
       this.location = const None(),
-      final List<String> socialMediaLinks = const []})
+      final List<String> socialMediaLinks = const [],
+      this.eventId = const None()})
       : _genres = genres,
         _socialMediaLinks = socialMediaLinks;
 
@@ -411,8 +425,12 @@ class _$BookingImpl implements _Booking {
   }
 
   @override
+  @JsonKey()
+  final Option<String> eventId;
+
+  @override
   String toString() {
-    return 'Booking(id: $id, requesteeId: $requesteeId, status: $status, verified: $verified, startTime: $startTime, endTime: $endTime, timestamp: $timestamp, requesterId: $requesterId, name: $name, note: $note, rate: $rate, serviceId: $serviceId, addedByUser: $addedByUser, flierUrl: $flierUrl, eventUrl: $eventUrl, genres: $genres, location: $location, socialMediaLinks: $socialMediaLinks)';
+    return 'Booking(id: $id, requesteeId: $requesteeId, status: $status, verified: $verified, startTime: $startTime, endTime: $endTime, timestamp: $timestamp, requesterId: $requesterId, name: $name, note: $note, rate: $rate, serviceId: $serviceId, addedByUser: $addedByUser, flierUrl: $flierUrl, eventUrl: $eventUrl, genres: $genres, location: $location, socialMediaLinks: $socialMediaLinks, eventId: $eventId)';
   }
 
   @override
@@ -448,31 +466,34 @@ class _$BookingImpl implements _Booking {
             (identical(other.location, location) ||
                 other.location == location) &&
             const DeepCollectionEquality()
-                .equals(other._socialMediaLinks, _socialMediaLinks));
+                .equals(other._socialMediaLinks, _socialMediaLinks) &&
+            (identical(other.eventId, eventId) || other.eventId == eventId));
   }
 
   @JsonKey(ignore: true)
   @override
-  int get hashCode => Object.hash(
-      runtimeType,
-      id,
-      requesteeId,
-      status,
-      verified,
-      startTime,
-      endTime,
-      timestamp,
-      requesterId,
-      name,
-      note,
-      rate,
-      serviceId,
-      addedByUser,
-      flierUrl,
-      eventUrl,
-      const DeepCollectionEquality().hash(_genres),
-      location,
-      const DeepCollectionEquality().hash(_socialMediaLinks));
+  int get hashCode => Object.hashAll([
+        runtimeType,
+        id,
+        requesteeId,
+        status,
+        verified,
+        startTime,
+        endTime,
+        timestamp,
+        requesterId,
+        name,
+        note,
+        rate,
+        serviceId,
+        addedByUser,
+        flierUrl,
+        eventUrl,
+        const DeepCollectionEquality().hash(_genres),
+        location,
+        const DeepCollectionEquality().hash(_socialMediaLinks),
+        eventId
+      ]);
 
   @JsonKey(ignore: true)
   @override
@@ -507,7 +528,8 @@ abstract class _Booking implements Booking {
       final Option<String> eventUrl,
       final List<String> genres,
       final Option<Location> location,
-      final List<String> socialMediaLinks}) = _$BookingImpl;
+      final List<String> socialMediaLinks,
+      final Option<String> eventId}) = _$BookingImpl;
 
   factory _Booking.fromJson(Map<String, dynamic> json) = _$BookingImpl.fromJson;
 
@@ -550,6 +572,8 @@ abstract class _Booking implements Booking {
   Option<Location> get location;
   @override
   List<String> get socialMediaLinks;
+  @override
+  Option<String> get eventId;
   @override
   @JsonKey(ignore: true)
   _$$BookingImplCopyWith<_$BookingImpl> get copyWith =>

@@ -7,7 +7,7 @@ import 'package:intheloopapp/ui/discover/components/bookings_heatmap_layer.dart'
 import 'package:intheloopapp/ui/discover/components/bookings_marker_layer.dart';
 import 'package:intheloopapp/ui/discover/components/bookings_polygon_layer.dart';
 import 'package:intheloopapp/ui/discover/components/current_location_layer.dart';
-import 'package:intheloopapp/ui/discover/components/opportunities_heatmap_layer.dart';
+import 'package:intheloopapp/ui/discover/components/opportunities_cluster_layer.dart';
 import 'package:intheloopapp/ui/discover/components/venue_marker_layer.dart';
 import 'package:intheloopapp/ui/discover/discover_cubit.dart';
 import 'package:latlong2/latlong.dart';
@@ -92,7 +92,7 @@ class MapBase extends StatelessWidget {
                           BookingsHeatmapLayer(),
                         ],
                       MapOverlay.opportunities => [
-                          const OpportunitiesHeatmapLayer(),
+                          const OpportunitiesClusterLayer(),
                         ],
                     },
                     const CurrentLocationLayer(),

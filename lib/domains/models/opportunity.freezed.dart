@@ -36,6 +36,7 @@ mixin _$Opportunity {
   Option<OpportunityInteraction> get touched =>
       throw _privateConstructorUsedError;
   bool get deleted => throw _privateConstructorUsedError;
+  Option<String> get venueId => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
@@ -61,7 +62,8 @@ abstract class $OpportunityCopyWith<$Res> {
       Option<String> flierUrl,
       bool isPaid,
       Option<OpportunityInteraction> touched,
-      bool deleted});
+      bool deleted,
+      Option<String> venueId});
 
   $LocationCopyWith<$Res> get location;
 }
@@ -91,6 +93,7 @@ class _$OpportunityCopyWithImpl<$Res, $Val extends Opportunity>
     Object? isPaid = null,
     Object? touched = null,
     Object? deleted = null,
+    Object? venueId = null,
   }) {
     return _then(_value.copyWith(
       id: null == id
@@ -141,6 +144,10 @@ class _$OpportunityCopyWithImpl<$Res, $Val extends Opportunity>
           ? _value.deleted
           : deleted // ignore: cast_nullable_to_non_nullable
               as bool,
+      venueId: null == venueId
+          ? _value.venueId
+          : venueId // ignore: cast_nullable_to_non_nullable
+              as Option<String>,
     ) as $Val);
   }
 
@@ -173,7 +180,8 @@ abstract class _$$OpportunityImplCopyWith<$Res>
       Option<String> flierUrl,
       bool isPaid,
       Option<OpportunityInteraction> touched,
-      bool deleted});
+      bool deleted,
+      Option<String> venueId});
 
   @override
   $LocationCopyWith<$Res> get location;
@@ -202,6 +210,7 @@ class __$$OpportunityImplCopyWithImpl<$Res>
     Object? isPaid = null,
     Object? touched = null,
     Object? deleted = null,
+    Object? venueId = null,
   }) {
     return _then(_$OpportunityImpl(
       id: null == id
@@ -252,6 +261,10 @@ class __$$OpportunityImplCopyWithImpl<$Res>
           ? _value.deleted
           : deleted // ignore: cast_nullable_to_non_nullable
               as bool,
+      venueId: null == venueId
+          ? _value.venueId
+          : venueId // ignore: cast_nullable_to_non_nullable
+              as Option<String>,
     ));
   }
 }
@@ -272,7 +285,8 @@ class _$OpportunityImpl implements _Opportunity {
       this.flierUrl = const None(),
       this.isPaid = false,
       this.touched = const None(),
-      this.deleted = false});
+      this.deleted = false,
+      this.venueId = const None()});
 
   factory _$OpportunityImpl.fromJson(Map<String, dynamic> json) =>
       _$$OpportunityImplFromJson(json);
@@ -310,10 +324,13 @@ class _$OpportunityImpl implements _Opportunity {
   @override
   @JsonKey()
   final bool deleted;
+  @override
+  @JsonKey()
+  final Option<String> venueId;
 
   @override
   String toString() {
-    return 'Opportunity(id: $id, userId: $userId, location: $location, timestamp: $timestamp, startTime: $startTime, endTime: $endTime, title: $title, description: $description, flierUrl: $flierUrl, isPaid: $isPaid, touched: $touched, deleted: $deleted)';
+    return 'Opportunity(id: $id, userId: $userId, location: $location, timestamp: $timestamp, startTime: $startTime, endTime: $endTime, title: $title, description: $description, flierUrl: $flierUrl, isPaid: $isPaid, touched: $touched, deleted: $deleted, venueId: $venueId)';
   }
 
   @override
@@ -337,7 +354,8 @@ class _$OpportunityImpl implements _Opportunity {
                 other.flierUrl == flierUrl) &&
             (identical(other.isPaid, isPaid) || other.isPaid == isPaid) &&
             (identical(other.touched, touched) || other.touched == touched) &&
-            (identical(other.deleted, deleted) || other.deleted == deleted));
+            (identical(other.deleted, deleted) || other.deleted == deleted) &&
+            (identical(other.venueId, venueId) || other.venueId == venueId));
   }
 
   @JsonKey(ignore: true)
@@ -355,7 +373,8 @@ class _$OpportunityImpl implements _Opportunity {
       flierUrl,
       isPaid,
       touched,
-      deleted);
+      deleted,
+      venueId);
 
   @JsonKey(ignore: true)
   @override
@@ -384,7 +403,8 @@ abstract class _Opportunity implements Opportunity {
       final Option<String> flierUrl,
       final bool isPaid,
       final Option<OpportunityInteraction> touched,
-      final bool deleted}) = _$OpportunityImpl;
+      final bool deleted,
+      final Option<String> venueId}) = _$OpportunityImpl;
 
   factory _Opportunity.fromJson(Map<String, dynamic> json) =
       _$OpportunityImpl.fromJson;
@@ -416,6 +436,8 @@ abstract class _Opportunity implements Opportunity {
   Option<OpportunityInteraction> get touched;
   @override
   bool get deleted;
+  @override
+  Option<String> get venueId;
   @override
   @JsonKey(ignore: true)
   _$$OpportunityImplCopyWith<_$OpportunityImpl> get copyWith =>

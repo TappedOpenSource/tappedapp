@@ -23,6 +23,7 @@ class Opportunity with _$Opportunity {
     @Default(false) bool isPaid,
     @Default(None()) Option<OpportunityInteraction> touched,
     @Default(false) bool deleted,
+    @Default(None()) Option<String> venueId,
   }) = _Opportunity;
 
   factory Opportunity.fromJson(Map<String, dynamic> json) =>
