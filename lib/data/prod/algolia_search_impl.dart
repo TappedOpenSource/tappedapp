@@ -6,6 +6,7 @@ import 'package:intheloopapp/data/search_repository.dart';
 import 'package:intheloopapp/domains/models/booking.dart';
 import 'package:intheloopapp/domains/models/opportunity.dart';
 import 'package:intheloopapp/domains/models/user_model.dart';
+import 'package:intheloopapp/utils/app_logger.dart';
 
 final _analytics = FirebaseAnalytics.instance;
 final _fireStore = FirebaseFirestore.instance;
@@ -194,10 +195,8 @@ class AlgoliaSearchImpl extends SearchRepository {
 
       if (startTime != null) {
         final formattedStartTime = startTime.millisecondsSinceEpoch;
-        query =
-            query.setNumericFilter(
-              'startTime>$formattedStartTime'
-            );
+        logger.info('startTime>$formattedStartTime');
+        query = query.setNumericFilter('startTime>$formattedStartTime');
       }
 
       if (formattedLocationFilter != null) {
@@ -351,11 +350,12 @@ class AlgoliaSearchImpl extends SearchRepository {
     required double neLatitude,
     required double neLongitude,
     int limit = 100,
+    DateTime? startTime,
   }) async {
     var results = <AlgoliaObjectSnapshot>[];
 
     try {
-      final query = algolia
+      var query = algolia
           .index('prod_opportunities')
           .query(input)
           .setInsideBoundingBox([
@@ -366,6 +366,12 @@ class AlgoliaSearchImpl extends SearchRepository {
           p2Lng: neLongitude,
         ),
       ]).setHitsPerPage(limit);
+
+      if (startTime != null) {
+        final formattedStartTime = startTime.millisecondsSinceEpoch;
+        query = query.setNumericFilter('startTime>$formattedStartTime');
+      }
+
       final snap = await query.getObjects();
 
       await _analytics.logSearch(searchTerm: input);

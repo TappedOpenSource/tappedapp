@@ -67,5 +67,6 @@ abstract class SearchRepository {
     required double neLatitude,
     required double neLongitude,
     int limit = 100,
+    DateTime? startTime,
   });
 }

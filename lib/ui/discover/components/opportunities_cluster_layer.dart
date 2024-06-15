@@ -9,6 +9,7 @@ import 'package:intheloopapp/ui/discover/discover_cubit.dart';
 import 'package:intl/intl.dart';
 import 'package:latlong2/latlong.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
+import 'package:uuid/uuid.dart';
 
 class OpportunitiesClusterLayer extends StatelessWidget {
   const OpportunitiesClusterLayer({
@@ -58,7 +59,7 @@ class OpportunitiesClusterLayer extends StatelessWidget {
                     builder: (context) {
                       return Scaffold(
                         appBar: AppBar(
-                          leading: SizedBox.shrink(),
+                          leading: const SizedBox.shrink(),
                           actions: const [],
                           bottom: PreferredSize(
                             preferredSize: const Size.fromHeight(50),
@@ -110,7 +111,8 @@ class OpportunitiesClusterLayer extends StatelessWidget {
                                   .format(op.startTime);
                               return ListTile(
                                 leading: switch (op.flierUrl) {
-                                  None() => const Icon(Icons.image_not_supported),
+                                  None() =>
+                                    const Icon(Icons.image_not_supported),
                                   Some(:final value) => CachedNetworkImage(
                                       imageUrl: value,
                                       width: 50,
@@ -143,8 +145,11 @@ class OpportunitiesClusterLayer extends StatelessWidget {
                     },
                   );
                 },
-                child: const Icon(Icons.attach_money),
+                heroTag: const Uuid().v4(),
                 backgroundColor: Colors.green,
+                child: const Icon(
+                  Icons.attach_money,
+                ),
               );
             },
           ),
