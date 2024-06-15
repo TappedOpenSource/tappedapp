@@ -149,7 +149,7 @@ class DiscoverView extends StatelessWidget {
           padding: const EdgeInsets.symmetric(vertical: 8),
           child: Container(
             decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(8),
+              borderRadius: BorderRadius.circular(15),
               gradient: LinearGradient(
                 colors: [
                   Colors.red.shade800.withOpacity(0.8),
