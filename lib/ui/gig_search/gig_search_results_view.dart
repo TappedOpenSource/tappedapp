@@ -28,7 +28,7 @@ class GigSearchResultsView extends StatelessWidget {
                       ),
                     );
                   },
-                  label: const Text('Confirm'),
+                  label: const Text('confirm'),
                   icon: const Icon(Icons.check),
                 )
               : null,

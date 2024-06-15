@@ -1,8 +1,6 @@
-import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:intheloopapp/ui/discover/components/map_config_slider.dart';
 import 'package:intheloopapp/ui/discover/discover_cubit.dart';
 
 class OverlayChanger extends StatelessWidget {

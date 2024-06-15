@@ -13,6 +13,7 @@ import 'package:intheloopapp/domains/navigation_bloc/tapped_route.dart';
 import 'package:intheloopapp/domains/onboarding_bloc/onboarding_bloc.dart';
 import 'package:intheloopapp/ui/discover/components/draggable_sheet.dart';
 import 'package:intheloopapp/ui/discover/components/map_base.dart';
+import 'package:intheloopapp/ui/discover/components/map_settings.dart';
 import 'package:intheloopapp/ui/discover/components/overlay_changer.dart';
 import 'package:intheloopapp/ui/discover/components/tapped_search_bar.dart';
 import 'package:intheloopapp/ui/discover/discover_cubit.dart';
@@ -72,10 +73,7 @@ class DiscoverView extends StatelessWidget {
                         context: context,
                         showDragHandle: true,
                         builder: (context) {
-                          return Container(
-                            height: 400,
-                            width: double.infinity,
-                          );
+                          return MapSettings();
                         },
                       );
                     },
