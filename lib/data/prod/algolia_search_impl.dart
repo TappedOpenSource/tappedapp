@@ -236,6 +236,8 @@ class AlgoliaSearchImpl extends SearchRepository {
     List<String>? genres,
     List<String>? venueGenres,
     List<String>? occupations,
+    int? minCapacity,
+    int? maxCapacity,
     int limit = 100,
   }) async {
     var results = <AlgoliaObjectSnapshot>[];
@@ -262,9 +264,12 @@ class AlgoliaSearchImpl extends SearchRepository {
       formattedVenueGenreFilter,
     ]..removeWhere((element) => element == null);
 
+
+
+
     try {
       // print(filters.join(' AND '));
-      final query = algolia
+      var query = algolia
           .index('prod_users')
           .query(input)
           .filters(
@@ -278,6 +283,15 @@ class AlgoliaSearchImpl extends SearchRepository {
           p2Lng: neLongitude,
         ),
       ]).setHitsPerPage(limit);
+
+      if (minCapacity != null) {
+        query = query.setNumericFilter('venueInfo.capacity>=$minCapacity');
+      }
+
+      if (maxCapacity != null) {
+        query = query.setNumericFilter('venueInfo.capacity<=$maxCapacity');
+      }
+
       final snap = await query.getObjects();
 
       await _analytics.logSearch(searchTerm: input);

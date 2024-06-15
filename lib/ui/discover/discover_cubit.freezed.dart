@@ -219,7 +219,7 @@ class _$DiscoverStateImpl implements _DiscoverState {
       final List<Opportunity> opportunityHits = const [],
       this.mapOverlay = MapOverlay.venues,
       final List<Genre> genreFilters = const [],
-      this.capacityRange = const RangeValues(0, 15000),
+      this.capacityRange = const RangeValues(0, 1000),
       this.userLat = 37.5407246,
       this.userLng = -77.4360481,
       this.bounds})

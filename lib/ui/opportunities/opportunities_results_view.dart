@@ -98,6 +98,7 @@ class _OpportunitiesResultsViewState extends State<OpportunitiesResultsView> {
                   onPressed: () async {
                     await EasyLoading.show(
                       status: 'applying to opportunities...',
+                      maskType: EasyLoadingMaskType.black,
                     );
                     try {
                       for (final result in selectableResults) {
@@ -133,7 +134,7 @@ class _OpportunitiesResultsViewState extends State<OpportunitiesResultsView> {
                 ).format(op.startTime);
                 return ListTile(
                   onTap: () {
-                    showCupertinoModalBottomSheet(
+                    showCupertinoModalBottomSheet<void>(
                       context: context,
                       builder: (context) {
                         return OpportunityView(

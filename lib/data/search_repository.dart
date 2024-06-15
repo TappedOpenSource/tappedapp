@@ -50,6 +50,8 @@ abstract class SearchRepository {
     List<String>? genres,
     List<String>? venueGenres,
     List<String>? occupations,
+    int? minCapacity,
+    int? maxCapacity,
     int limit = 100,
   });
 

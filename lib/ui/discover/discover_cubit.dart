@@ -32,9 +32,11 @@ class DiscoverCubit extends Cubit<DiscoverState> {
     required this.initGenres,
     required this.onboardingBloc,
     required this.places,
+    this.suggestedMaxCapacity = 1000,
   }) : super(
           DiscoverState(
             genreFilters: initGenres,
+            capacityRange: RangeValues(0, suggestedMaxCapacity.toDouble()),
           ),
         );
 
@@ -44,6 +46,7 @@ class DiscoverCubit extends Cubit<DiscoverState> {
   final List<Genre> initGenres;
   final OnboardingBloc onboardingBloc;
   final PlacesRepository places;
+  final int suggestedMaxCapacity;
 
   final _debouncer = Debouncer(
     const Duration(milliseconds: 500),
@@ -141,6 +144,20 @@ class DiscoverCubit extends Cubit<DiscoverState> {
     );
 
     return (lat, lng);
+  }
+
+  void setGenreFilters(List<Genre> genres) {
+    onBoundsChange(
+      state.bounds,
+      overlay: state.mapOverlay,
+    );
+
+    emit(
+      state.copyWith(
+        genreFilters: genres,
+        mapOverlay: state.mapOverlay,
+      ),
+    );
   }
 
   void toggleGenreFilter(Genre genre) {
@@ -241,6 +258,9 @@ class DiscoverCubit extends Cubit<DiscoverState> {
       ),
     );
 
+    final maxCap =
+      state.capacityRangeEnd == 1000 ? 100000 : state.capacityRangeEnd;
+
     _debouncer.run(
       switch (mapType) {
         MapOverlay.venues => () async {
@@ -250,6 +270,8 @@ class DiscoverCubit extends Cubit<DiscoverState> {
               venueGenres: state.genreFilterStrings.isNotEmpty
                   ? state.genreFilterStrings
                   : null,
+              minCapacity: state.capacityRangeStart,
+              maxCapacity: maxCap,
               swLatitude: bounds.southWest.latitude,
               swLongitude: bounds.southWest.longitude,
               neLatitude: bounds.northEast.latitude,

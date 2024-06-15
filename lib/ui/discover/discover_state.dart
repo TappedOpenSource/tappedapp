@@ -9,7 +9,7 @@ class DiscoverState with _$DiscoverState {
     @Default([]) List<Opportunity> opportunityHits,
     @Default(MapOverlay.venues) MapOverlay mapOverlay,
     @Default([]) List<Genre> genreFilters,
-    @Default(RangeValues(0, 15000)) RangeValues capacityRange,
+    @Default(RangeValues(0, 1000)) RangeValues capacityRange,
     @Default(37.5407246) double userLat,
     @Default(-77.4360481) double userLng,
     // @Default(false) bool showCurrentUser,
@@ -160,4 +160,7 @@ extension DiscoverStateX on DiscoverState {
   //       )
   //       .toList();
   // }
+
+  int get capacityRangeStart => capacityRange.start.round();
+  int get capacityRangeEnd => capacityRange.end.round();
 }

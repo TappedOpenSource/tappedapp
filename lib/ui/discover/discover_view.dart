@@ -8,6 +8,7 @@ import 'package:flutter_map/flutter_map.dart';
 import 'package:fpdart/fpdart.dart';
 import 'package:intheloopapp/data/search_repository.dart';
 import 'package:intheloopapp/domains/models/genre.dart';
+import 'package:intheloopapp/domains/models/performer_info.dart';
 import 'package:intheloopapp/domains/navigation_bloc/navigation_bloc.dart';
 import 'package:intheloopapp/domains/navigation_bloc/tapped_route.dart';
 import 'package:intheloopapp/domains/onboarding_bloc/onboarding_bloc.dart';
@@ -64,21 +65,31 @@ class DiscoverView extends StatelessWidget {
               right: 10,
               child: Column(
                 children: [
+                  if (state.mapOverlay == MapOverlay.venues)
+                    _buildMapButton(
+                      context,
+                      icon: Icons.settings,
+                      onPressed: () {
+                        showModalBottomSheet<void>(
+                          context: context,
+                          showDragHandle: true,
+                          builder: (context) {
+                            return MapSettings(
+                              genreFilters: state.genreFilters,
+                              onConfirmGenreSelection: (genres) {
+                                cubit.setGenreFilters(
+                                  genres.whereType<Genre>().toList(),
+                                );
+                              },
+                              initialRange: state.capacityRange,
+                              onCapacityRangeChange: cubit.updateCapacityRange,
+                            );
+                          },
+                        );
+                      },
+                      heroTag: 'map_settings',
+                    ),
                   const OverlayChanger(),
-                  _buildMapButton(
-                    context,
-                    icon: Icons.settings,
-                    onPressed: () {
-                      showModalBottomSheet(
-                        context: context,
-                        showDragHandle: true,
-                        builder: (context) {
-                          return MapSettings();
-                        },
-                      );
-                    },
-                    heroTag: 'map_settings',
-                  ),
                   _buildMapButton(
                     context,
                     icon: CupertinoIcons.location,
@@ -127,78 +138,55 @@ class DiscoverView extends StatelessWidget {
     );
   }
 
-  Widget _buildGenreFilterButton(
-    BuildContext context, {
-    required Genre genre,
-  }) {
-    final theme = Theme.of(context);
+  Widget _buildPremiumBanner(BuildContext context) {
     return PremiumBuilder(
       builder: (context, isPremium) {
-        return BlocBuilder<DiscoverCubit, DiscoverState>(
-          builder: (context, state) {
-            final selected = state.genreFilters.contains(genre);
-            return ChoiceChip(
-              onSelected: (_) {
-                FirebaseAnalytics.instance.logEvent(
-                  name: 'discover_change_overlay',
-                  parameters: {
-                    'genre': genre.formattedName,
-                    'is_premium': isPremium ? 1 : 0,
-                  },
-                );
+        if (isPremium) {
+          return const SizedBox();
+        }
 
-                if (!isPremium) {
-                  context.push(PaywallPage());
-                  return;
-                }
-
-                context.read<DiscoverCubit>().toggleGenreFilter(genre);
-              },
-              selected: selected,
-              // ? theme.colorScheme.primary
-              // : theme.colorScheme.background,
-              label: Text(
-                genre.formattedName.toLowerCase(),
+        return Padding(
+          padding: const EdgeInsets.symmetric(vertical: 8),
+          child: Container(
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(8),
+              gradient: LinearGradient(
+                colors: [
+                  Colors.red.shade800.withOpacity(0.8),
+                  Colors.pink.withOpacity(0.8),
+                ],
               ),
-            );
-          },
-        );
-      },
-    );
-  }
-
-  List<Widget> _buildGenreFilterButtons(
-    BuildContext context, {
-    required List<Genre> genreFilters,
-  }) {
-    final genres = List<Genre>.from(Genre.values)
-      ..sort(
-        (a, b) {
-          final containsA = genreFilters.contains(a) ? 1 : 0;
-          final containsB = genreFilters.contains(b) ? 1 : 0;
-          return containsB - containsA;
-        },
-      );
-    return genres
-        .map(
-          (Genre e) => _buildGenreFilterButton(
-            context,
-            genre: e,
-          ),
-        )
-        .toList();
-  }
-
-  Widget _buildGenreList(BuildContext context) {
-    return BlocBuilder<DiscoverCubit, DiscoverState>(
-      builder: (context, state) {
-        return SingleChildScrollView(
-          scrollDirection: Axis.horizontal,
-          child: Wrap(
-            spacing: 5,
-            children: _buildGenreFilterButtons(
-              context,
-              genreFilters: state.genreFilters,
+            ),
+            child: Padding(
+              padding: const EdgeInsets.all(8),
+              child: Row(
+                children: [
+                  const Icon(
+                    Icons.star,
+                    color: Colors.white,
+                  ),
+                  const SizedBox(width: 8),
+                  const Expanded(
+                    child: Text(
+                      'try tapped premium to increase your chances of getting booked!',
+                      style: TextStyle(
+                        color: Colors.white,
+                      ),
+                    ),
+                  ),
+                  TextButton(
+                    onPressed: () {
+                      context.push(PaywallPage());
+                    },
+                    child: const Text(
+                      'upgrade',
+                      style: TextStyle(
+                        color: Colors.white,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
             ),
           ),
         );
@@ -228,6 +216,9 @@ class DiscoverView extends StatelessWidget {
                 initGenres: fromStrings(initGenres),
                 onboardingBloc: context.read<OnboardingBloc>(),
                 places: context.places,
+                suggestedMaxCapacity: currentUser.performerInfo
+                    .map((info) => info.category.suggestedMaxCapacity)
+                    .getOrElse(() => 1000),
               ),
               child: Scaffold(
                 body: LayoutBuilder(
@@ -291,8 +282,8 @@ class DiscoverView extends StatelessWidget {
                                               child: Icon(
                                                 CupertinoIcons
                                                     .chat_bubble_text_fill,
-                                                color: theme
-                                                    .colorScheme.onBackground,
+                                                color:
+                                                    theme.colorScheme.onSurface,
                                               ),
                                             ),
                                           ),
@@ -302,7 +293,7 @@ class DiscoverView extends StatelessWidget {
                                   ],
                                 ),
                                 const SizedBox(height: 4),
-                                _buildGenreList(context),
+                                _buildPremiumBanner(context),
                               ],
                             ),
                           ),
