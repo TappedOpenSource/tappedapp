@@ -75,14 +75,27 @@ class DiscoverView extends StatelessWidget {
                           showDragHandle: true,
                           builder: (context) {
                             return MapSettings(
-                              genreFilters: state.genreFilters,
+                              genreFilters: isPremium ? state.genreFilters : [],
                               onConfirmGenreSelection: (genres) {
+                                if (!isPremium) {
+                                  context.push(PaywallPage());
+                                  return;
+                                }
+
                                 cubit.setGenreFilters(
                                   genres.whereType<Genre>().toList(),
                                 );
                               },
-                              initialRange: state.capacityRange,
-                              onCapacityRangeChange: cubit.updateCapacityRange,
+                              initialRange:
+                                  isPremium ? state.capacityRange : null,
+                              onCapacityRangeChange: (ranges) {
+                                if (!isPremium) {
+                                  context.push(PaywallPage());
+                                  return;
+                                }
+
+                                cubit.updateCapacityRange(ranges);
+                              },
                             );
                           },
                         );

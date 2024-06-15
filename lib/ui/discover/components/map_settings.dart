@@ -8,7 +8,7 @@ class MapSettings extends StatefulWidget {
     required this.genreFilters,
     required this.onConfirmGenreSelection,
     required this.onCapacityRangeChange,
-    required this.initialRange,
+    this.initialRange,
     this.maxCapacity = 1000,
     super.key,
   });
@@ -16,7 +16,7 @@ class MapSettings extends StatefulWidget {
   final List<Genre> genreFilters;
   final void Function(List<Genre?>) onConfirmGenreSelection;
   final void Function(RangeValues) onCapacityRangeChange;
-  final RangeValues initialRange;
+  final RangeValues? initialRange;
 
   final int maxCapacity;
 
@@ -25,14 +25,19 @@ class MapSettings extends StatefulWidget {
 }
 
 class _MapSettingsState extends State<MapSettings> {
-
   late RangeValues capacityRange;
+
   int get capacityRangeStart => capacityRange.start.round();
+
   int get capacityRangeEnd => capacityRange.end.round();
 
   @override
   void initState() {
-    capacityRange = widget.initialRange;
+    capacityRange = widget.initialRange ??
+        RangeValues(
+          0,
+          widget.maxCapacity.toDouble(),
+        );
     super.initState();
   }
 
