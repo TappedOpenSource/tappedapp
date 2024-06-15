@@ -214,6 +214,7 @@ class DiscoverCubit extends Cubit<DiscoverState> {
       '',
       lat: lat,
       lng: lng,
+      startTime: DateTime.now(),
     );
     return hits;
   }

@@ -38,6 +38,7 @@ abstract class SearchRepository {
     double? lat,
     double? lng,
     int radius = 50000,
+    DateTime? startTime,
   });
 
   Future<List<UserModel>> queryUsersInBoundingBox(String input, {

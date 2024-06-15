@@ -55,7 +55,7 @@ class OverlayChanger extends StatelessWidget {
 
                   ScaffoldMessenger.of(context).showSnackBar(
                     SnackBar(
-                      content: const Text('showing gig opportunityies'),
+                      content: const Text('showing gig opportunities'),
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(15),
                       ),

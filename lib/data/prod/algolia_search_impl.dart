@@ -188,14 +188,17 @@ class AlgoliaSearchImpl extends SearchRepository {
 
     try {
       var query = algolia
-            .index('prod_opportunities')
+          .index('prod_opportunities')
           .query(input)
-          .filters([
-            'deleted:false',
-            if (startTime != null)
-              'startTime:${startTime.toUtc().millisecondsSinceEpoch}',
-          ].join(' AND ')
-      );
+          .filters('deleted:false');
+
+      if (startTime != null) {
+        final formattedStartTime = startTime.millisecondsSinceEpoch;
+        query =
+            query.setNumericFilter(
+              'startTime>$formattedStartTime'
+            );
+      }
 
       if (formattedLocationFilter != null) {
         query = query.setAroundLatLng(formattedLocationFilter);
