@@ -28,7 +28,7 @@ class BookingHistoryView extends StatelessWidget {
       elevation: 2,
       heroTag: heroTag,
       highlightElevation: 3,
-      backgroundColor: theme.colorScheme.background,
+      backgroundColor: theme.colorScheme.surface,
       mini: true,
       onPressed: onPressed,
       splashColor: Colors.transparent,

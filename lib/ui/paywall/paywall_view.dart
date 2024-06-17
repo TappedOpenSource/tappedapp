@@ -191,9 +191,9 @@ class PaywallView extends StatelessWidget {
             }).first;
 
             return Scaffold(
-              backgroundColor: theme.colorScheme.background,
+              backgroundColor: theme.colorScheme.surface,
               bottomNavigationBar: Container(
-                color: theme.colorScheme.background,
+                color: theme.colorScheme.surface,
                 height: 150,
                 padding: const EdgeInsets.symmetric(
                   horizontal: 20,
@@ -413,7 +413,7 @@ class PaywallView extends StatelessWidget {
                   //   bottom: 0,
                   //   left: 0,
                   //   child: Container(
-                  //     // color: theme.colorScheme.background,
+                  //     // color: theme.colorScheme.surface,
                   //     color: Colors.green,
                   //     child: Column(
                   //       children: [

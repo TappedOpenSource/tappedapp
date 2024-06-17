@@ -202,7 +202,7 @@ class BookingControlsSliver extends StatelessWidget {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         CupertinoListSection.insetGrouped(
-                          backgroundColor: theme.colorScheme.background,
+                          backgroundColor: theme.colorScheme.surface,
                           decoration: BoxDecoration(
                             color: theme.colorScheme.onSurface.withOpacity(0.1),
                             border: Border(

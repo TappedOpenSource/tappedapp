@@ -161,7 +161,7 @@ class _ShareProfileViewState extends State<ShareProfileView> {
                       top: 6,
                       left: 6,
                       child: Image.asset(
-                        'assets/icon_1024.png',
+                        'assets/icon_512.png',
                         height: 22,
                         width: 22,
                       ),

@@ -17,7 +17,7 @@ class GigSearchResultsView extends StatelessWidget {
     return BlocBuilder<GigSearchCubit, GigSearchState>(
       builder: (context, state) {
         return Scaffold(
-          backgroundColor: theme.colorScheme.background,
+          backgroundColor: theme.colorScheme.surface,
           floatingActionButton: state.selectedResults.isNotEmpty
               ? FloatingActionButton.extended(
                   onPressed: () {

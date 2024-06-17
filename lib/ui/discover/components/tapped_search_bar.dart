@@ -108,7 +108,7 @@ class _TappedSearchBarState extends State<TappedSearchBar> {
       searchController: _searchController,
       textCapitalization: TextCapitalization.none,
       textInputAction: TextInputAction.search,
-      viewBackgroundColor: theme.colorScheme.background,
+      viewBackgroundColor: theme.colorScheme.surface,
       viewElevation: 0,
       builder: (context, searchController) {
         return Hero(
@@ -116,7 +116,7 @@ class _TappedSearchBarState extends State<TappedSearchBar> {
           child: SearchBar(
             // elevation: const MaterialStatePropertyAll(0),
             backgroundColor: MaterialStatePropertyAll(
-              theme.colorScheme.background,
+              theme.colorScheme.surface,
             ),
             elevation: const MaterialStatePropertyAll(0),
             controller: searchController,

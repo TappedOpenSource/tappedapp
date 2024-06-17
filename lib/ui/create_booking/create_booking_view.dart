@@ -56,7 +56,7 @@ class CreateBookingView extends StatelessWidget {
                 payments: RepositoryProvider.of<PaymentRepository>(context),
               ),
               child: Scaffold(
-                backgroundColor: Theme.of(context).colorScheme.background,
+                backgroundColor: Theme.of(context).colorScheme.surface,
                 appBar: AppBar(
                   title: const Row(
                     children: [

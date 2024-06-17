@@ -28,7 +28,7 @@ class ChannelPreview extends StatelessWidget {
     // final opacity = (channel.state?.unreadCount ?? 0) > 0 ? 1.0 : 0.5;
 
     return ListTile(
-      tileColor: Theme.of(context).colorScheme.background,
+      tileColor: Theme.of(context).colorScheme.surface,
       onTap: () {
         context.push(StreamChannelPage(channel: channel));
       },

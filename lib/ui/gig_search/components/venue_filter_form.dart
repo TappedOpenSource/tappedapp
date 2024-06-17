@@ -29,7 +29,7 @@ class VenueFilterForm extends StatelessWidget {
                 return BlocBuilder<GigSearchCubit, GigSearchState>(
                   builder: (context, state) {
                     return Scaffold(
-                      backgroundColor: theme.colorScheme.background,
+                      backgroundColor: theme.colorScheme.surface,
                       appBar: AppBar(
                         title: isDark ?
                         Image.asset(

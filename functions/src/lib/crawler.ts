@@ -187,6 +187,7 @@ export async function createBookingsFromEvent(
       flierUrl: signedFlierUrl,
       eventUrl: data.url,
       genres,
+      referenceEventId: data.eventId,
     };
   
     // check if booking like this exists already

@@ -290,7 +290,7 @@ class _WaitlistViewState extends State<WaitlistView> {
     return CurrentUserBuilder(
       builder: (context, currentUser) {
         return Scaffold(
-          backgroundColor: theme.colorScheme.background,
+          backgroundColor: theme.colorScheme.surface,
           body: FutureBuilder(
             future: database.isOnPremiumWailist(currentUser.id),
             builder: (context, snapshot) {

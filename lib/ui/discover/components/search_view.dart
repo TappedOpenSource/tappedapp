@@ -54,7 +54,7 @@ class _SearchViewState extends State<SearchView> {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     return Scaffold(
-      backgroundColor: theme.colorScheme.background,
+      backgroundColor: theme.colorScheme.surface,
       appBar: AppBar(
         centerTitle: true,
         elevation: 0.5,

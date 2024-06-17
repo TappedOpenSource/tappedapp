@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fpdart/fpdart.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:intheloopapp/data/database_repository.dart';
 import 'package:intheloopapp/data/places_repository.dart';
 import 'package:intheloopapp/data/spotify_repository.dart';
@@ -42,6 +41,7 @@ class ProfileView extends StatelessWidget {
     this.onQuit,
     this.collapsedBarHeight = 60.0,
     this.expandedBarHeight = 300.0,
+    this.stretchable = false,
     super.key,
     ScrollController? scrollController,
   }) : scrollController = scrollController ?? ScrollController();
@@ -49,6 +49,7 @@ class ProfileView extends StatelessWidget {
   final String visitedUserId;
   final double collapsedBarHeight;
   final double expandedBarHeight;
+  final bool stretchable;
   final HeroImage? heroImage;
   final String? titleHeroTag;
   final void Function()? onQuit;
@@ -114,42 +115,6 @@ class ProfileView extends StatelessWidget {
     );
   }
 
-  // Widget _subheader(UserModel user) {
-  //   final capacity = user.venueInfo.flatMap((t) => t.capacity);
-  //   final socialFollowing = user.socialFollowing;
-  //   final category = user.performerInfo.map((t) => t.category);
-  //   return switch ((capacity, category)) {
-  //     (None(), None()) => socialFollowing.audienceSize == 0
-  //         ? const SizedBox.shrink()
-  //         : Text(
-  //             '${NumberFormat.compactCurrency(
-  //               decimalDigits: 0,
-  //               symbol: '',
-  //             ).format(socialFollowing.audienceSize)} followers',
-  //             style: const TextStyle(
-  //               color: Colors.white,
-  //               fontWeight: FontWeight.w400,
-  //               fontSize: 12,
-  //             ),
-  //           ),
-  //     (None(), Some(:final value)) => Text(
-  //         '${value.formattedName} performer'.toLowerCase(),
-  //         style: TextStyle(
-  //           color: value.color,
-  //           fontWeight: FontWeight.w400,
-  //           fontSize: 12,
-  //         ),
-  //       ),
-  //     (Some(:final value), _) => Text(
-  //         '$value capacity venue',
-  //         style: const TextStyle(
-  //           fontWeight: FontWeight.w400,
-  //           fontSize: 12,
-  //         ),
-  //       ),
-  //   };
-  // }
-
   Widget _profilePage(
     UserModel currentUser,
     UserModel visitedUser,
@@ -185,16 +150,24 @@ class ProfileView extends StatelessWidget {
                   }
                 }
               },
-              child: NotificationListener<ScrollNotification>(
-                onNotification: (notification) =>
-                    context.read<ProfileCubit>().onNotification(
-                          scrollController,
-                          expandedBarHeight,
-                          collapsedBarHeight,
-                        ),
+              child: ConditionalParentWidget(
+                condition: stretchable,
+                conditionalBuilder: ({required child}) {
+                  return NotificationListener<ScrollNotification>(
+                    onNotification: (notification) =>
+                        context.read<ProfileCubit>().onNotification(
+                              scrollController,
+                              expandedBarHeight,
+                              collapsedBarHeight,
+                            ),
+                    child: child,
+                  );
+                },
                 child: CustomScrollView(
                   controller: scrollController,
-                  physics: const BouncingScrollPhysics(),
+                  physics: stretchable
+                      ? const BouncingScrollPhysics()
+                      : const ClampingScrollPhysics(),
                   slivers: state.isBlocked
                       ? _blockedSlivers(
                           context,
@@ -222,25 +195,27 @@ class ProfileView extends StatelessWidget {
   ) =>
       [
         SliverAppBar(
-          backgroundColor: Theme.of(context).colorScheme.background,
+          backgroundColor: Theme.of(context).colorScheme.surface,
           expandedHeight: expandedBarHeight,
           collapsedHeight: collapsedBarHeight,
           automaticallyImplyLeading: false,
           pinned: true,
-          stretch: true,
-          onStretchTrigger: () async {
-            final cubit = context.read<ProfileCubit>();
-            await Future.wait([
-              HapticFeedback.mediumImpact(),
-              cubit.getTopBookings(),
-              cubit.getLatestReview(),
-              // cubit.initServices(),
-              cubit.initOpportunities(),
-              cubit.initTopSpotifyTracks(),
-              cubit.refetchVisitedUser(),
-              cubit.loadIsVerified(visitedUser.id),
-            ]);
-          },
+          stretch: stretchable,
+          onStretchTrigger: stretchable
+              ? () async {
+                  final cubit = context.read<ProfileCubit>();
+                  await Future.wait([
+                    HapticFeedback.mediumImpact(),
+                    cubit.getTopBookings(),
+                    cubit.getLatestReview(),
+                    // cubit.initServices(),
+                    cubit.initOpportunities(),
+                    cubit.initTopSpotifyTracks(),
+                    cubit.refetchVisitedUser(),
+                    cubit.loadIsVerified(visitedUser.id),
+                  ]);
+                }
+              : null,
           actions: [
             IconButton(
               onPressed: onQuit ?? () => context.pop(),
@@ -266,11 +241,6 @@ class ProfileView extends StatelessWidget {
                 return Text.rich(
                   TextSpan(
                     text: visitedUser.displayName,
-                    style: GoogleFonts.manrope(
-                      color: Colors.white,
-                      fontSize: 32,
-                      fontWeight: FontWeight.w900,
-                    ),
                     children: [
                       if (state.isVerified)
                         WidgetSpan(
@@ -342,6 +312,10 @@ class ProfileView extends StatelessWidget {
                   ),
                   overflow: TextOverflow.fade,
                   maxLines: 2,
+                  style: const TextStyle(
+                    fontSize: 32,
+                    fontWeight: FontWeight.w800,
+                  )
                 );
               },
             ),
@@ -416,19 +390,21 @@ class ProfileView extends StatelessWidget {
           expandedHeight: expandedBarHeight,
           collapsedHeight: collapsedBarHeight,
           pinned: true,
-          stretch: true,
-          backgroundColor: Theme.of(context).colorScheme.background,
-          onStretchTrigger: () async {
-            final cubit = context.read<ProfileCubit>();
-            await Future.wait([
-              cubit.getTopBookings(),
-              cubit.initServices(),
-              cubit.initOpportunities(),
-              cubit.initTopSpotifyTracks(),
-              cubit.refetchVisitedUser(),
-              cubit.loadIsVerified(visitedUser.id),
-            ]);
-          },
+          stretch: stretchable,
+          backgroundColor: Theme.of(context).colorScheme.surface,
+          onStretchTrigger: stretchable
+              ? () async {
+                  final cubit = context.read<ProfileCubit>();
+                  await Future.wait([
+                    cubit.getTopBookings(),
+                    cubit.initServices(),
+                    cubit.initOpportunities(),
+                    cubit.initTopSpotifyTracks(),
+                    cubit.refetchVisitedUser(),
+                    cubit.loadIsVerified(visitedUser.id),
+                  ]);
+                }
+              : null,
           flexibleSpace: FlexibleSpaceBar(
             stretchModes: const [
               StretchMode.zoomBackground,
@@ -501,7 +477,7 @@ class ProfileView extends StatelessWidget {
     final places = context.places;
     final spotify = context.spotify;
     return Scaffold(
-      backgroundColor: Theme.of(context).colorScheme.background,
+      backgroundColor: Theme.of(context).colorScheme.surface,
       body: BlocBuilder<OnboardingBloc, OnboardingState>(
         // selector: (state) => (state is Onboarded) ? state.currentUser : null,
         buildWhen: (previous, current) {

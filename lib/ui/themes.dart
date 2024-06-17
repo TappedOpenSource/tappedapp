@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
@@ -18,7 +19,7 @@ ThemeData buildLightTheme({
   final secondaryColor = accentColor;
 
   return ThemeData.light().copyWith(
-    textTheme: GoogleFonts.arimoTextTheme(
+    textTheme: GoogleFonts.titilliumWebTextTheme(
       ThemeData.light().textTheme,
     ),
 
@@ -28,7 +29,7 @@ ThemeData buildLightTheme({
     colorScheme: const ColorScheme.light().copyWith(
       primary: primaryColor,
       secondary: secondaryColor,
-      background: backgroundLightColor,
+      surface: backgroundLightColor,
     ),
 
     // floating action button
@@ -63,6 +64,16 @@ ThemeData buildLightTheme({
       thumbShape: RoundSliderThumbShape(enabledThumbRadius: 6),
       trackHeight: 2,
     ),
+
+    cupertinoOverrideTheme: const CupertinoThemeData(
+      scaffoldBackgroundColor: backgroundLightColor,
+      primaryColor: tappedAccent,
+      textTheme: CupertinoTextThemeData(
+        textStyle: TextStyle(
+          fontFamily: 'TitilliumWeb',
+        ),
+      ),
+    ),
   );
 }
 
@@ -73,7 +84,7 @@ ThemeData buildDarkTheme({
   final secondaryColor = accentColor;
 
   return ThemeData.dark().copyWith(
-    textTheme: GoogleFonts.arimoTextTheme(
+    textTheme: GoogleFonts.titilliumWebTextTheme(
       ThemeData.dark().textTheme,
     ),
 
@@ -82,7 +93,7 @@ ThemeData buildDarkTheme({
     colorScheme: const ColorScheme.dark().copyWith(
       primary: primaryColor,
       secondary: secondaryColor,
-      background: backgroundDarkColor,
+      surface: backgroundDarkColor,
     ),
     // floating action button
     floatingActionButtonTheme: FloatingActionButtonThemeData(
@@ -113,6 +124,16 @@ ThemeData buildDarkTheme({
       thumbColor: tappedAccent,
       thumbShape: RoundSliderThumbShape(enabledThumbRadius: 6),
       trackHeight: 2,
+    ),
+
+    cupertinoOverrideTheme: const CupertinoThemeData(
+      scaffoldBackgroundColor: backgroundDarkColor,
+      primaryColor: tappedAccent,
+      textTheme: CupertinoTextThemeData(
+        textStyle: TextStyle(
+          fontFamily: 'TitilliumWeb',
+        ),
+      ),
     ),
   );
 }

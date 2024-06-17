@@ -78,7 +78,7 @@ class ServiceView extends StatelessWidget {
     return CurrentUserBuilder(
       builder: (context, currentUser) {
         return Scaffold(
-          backgroundColor: theme.colorScheme.background,
+          backgroundColor: theme.colorScheme.surface,
           appBar: const TappedAppBar(
             title: 'Service',
           ),

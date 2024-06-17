@@ -99,7 +99,7 @@ class VenueMarkerLayer extends StatelessWidget {
                       //           borderRadius: BorderRadius.circular(5),
                       //           boxShadow: [
                       //             BoxShadow(
-                      //               color: theme.colorScheme.background,
+                      //               color: theme.colorScheme.surface,
                       //               blurRadius: 2,
                       //               offset: Offset(0, 2),
                       //             ),

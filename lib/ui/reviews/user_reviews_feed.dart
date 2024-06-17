@@ -220,7 +220,7 @@ class _UserReviewsFeedState extends State<UserReviewsFeed> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Theme.of(context).colorScheme.background,
+      backgroundColor: Theme.of(context).colorScheme.surface,
       body: FutureBuilder<Option<UserModel>>(
         future: _databaseRepository.getUserById(_userId),
         builder: (context, snapshot) {

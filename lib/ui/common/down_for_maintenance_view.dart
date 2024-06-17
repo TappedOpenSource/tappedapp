@@ -22,7 +22,7 @@ class DownForMainenanceView extends StatelessWidget {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Image.asset('assets/icon_1024.png', scale: 5),
+              Image.asset('assets/icon_512.png', scale: 5),
               const SizedBox(height: 20),
               const Center(
                 child: Text(

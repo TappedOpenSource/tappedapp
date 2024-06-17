@@ -22,7 +22,7 @@ class OpportunityFeedView extends StatelessWidget {
             database: database,
           )..initOpportunities(),
           child: Scaffold(
-            backgroundColor: theme.colorScheme.background,
+            backgroundColor: theme.colorScheme.surface,
             body: const OpportunityFeed(),
           ),
         );

@@ -51,6 +51,7 @@ class UserAvatar extends StatelessWidget {
                 context: context,
                 builder: (context) {
                   return ProfileView(
+                    scrollController: ModalScrollController.of(context),
                     visitedUserId: value,
                     visitedUser: const None(),
                   );

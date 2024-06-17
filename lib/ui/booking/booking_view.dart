@@ -83,7 +83,7 @@ class BookingView extends StatelessWidget {
         return AdminBuilder(
           builder: (context, isAdmin) {
             return Scaffold(
-              backgroundColor: Theme.of(context).colorScheme.background,
+              backgroundColor: Theme.of(context).colorScheme.surface,
               appBar: AppBar(
                 actions: [
                   if (isAdmin)
@@ -238,7 +238,7 @@ class BookingView extends StatelessWidget {
                     //     },
                     //   ),
                     CupertinoListSection.insetGrouped(
-                      backgroundColor: theme.colorScheme.background,
+                      backgroundColor: theme.colorScheme.surface,
                       decoration: BoxDecoration(
                         color: theme.colorScheme.onSurface.withOpacity(0.1),
                         border: Border(

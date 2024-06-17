@@ -40,7 +40,7 @@ class _AddCollaboratorsViewState extends State<AddCollaboratorsView> {
     return CurrentUserBuilder(
       builder: (context, currentUser) {
         return Scaffold(
-          backgroundColor: theme.colorScheme.background,
+          backgroundColor: theme.colorScheme.surface,
           appBar: AppBar(),
           body: SafeArea(
             child: Padding(

@@ -40,7 +40,7 @@ class RequestToPerform extends StatelessWidget {
             },
             color: theme.colorScheme.primary,
             child: const Text(
-              'Request to Perform',
+              'request to perform',
               style: TextStyle(
                 color: Colors.white,
                 fontWeight: FontWeight.bold,

@@ -19,7 +19,7 @@ class InterestedUsersView extends StatelessWidget {
   Widget build(BuildContext context) {
     final database = context.database;
     return Scaffold(
-      backgroundColor: context.theme.colorScheme.background,      
+      backgroundColor: context.theme.colorScheme.surface,      
       appBar: AppBar(
         title: Text(opportunity.title),
       ),

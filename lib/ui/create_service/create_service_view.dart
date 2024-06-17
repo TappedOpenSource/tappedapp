@@ -45,7 +45,7 @@ class CreateServiceView extends StatelessWidget {
             ownerId: ownerId,
           )..initFields(service),
           child: Scaffold(
-            backgroundColor: Theme.of(context).colorScheme.background,
+            backgroundColor: Theme.of(context).colorScheme.surface,
             appBar: AppBar(
               actions: [
                 switch (service) {

@@ -31,11 +31,11 @@ class LocationFormView extends StatelessWidget {
         navigationBloc: context.nav,
       ),
       child: Scaffold(
-        backgroundColor: theme.colorScheme.background,
+        backgroundColor: theme.colorScheme.surface,
         appBar: AppBar(
           centerTitle: true,
           elevation: 0.5,
-          backgroundColor: theme.colorScheme.background,
+          backgroundColor: theme.colorScheme.surface,
           title: LocationSearchBar(
             initialPlace: initialPlace,
           ),

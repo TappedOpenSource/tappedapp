@@ -256,7 +256,7 @@ class _UserBookingsFeedState extends State<UserBookingsFeed> {
       builder: (context, currentUser) {
         final isCurrentUser = currentUser.id == _userId;
         return Scaffold(
-          backgroundColor: Theme.of(context).colorScheme.background,
+          backgroundColor: Theme.of(context).colorScheme.surface,
           floatingActionButton: isCurrentUser
               ? FloatingActionButton.extended(
                   onPressed: () => context.push(

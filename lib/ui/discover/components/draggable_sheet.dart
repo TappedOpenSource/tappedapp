@@ -125,7 +125,7 @@ class DraggableSheet extends StatelessWidget {
                               borderRadius: const BorderRadius.vertical(
                                 top: Radius.circular(12),
                               ),
-                              color: Theme.of(context).colorScheme.background,
+                              color: Theme.of(context).colorScheme.surface,
                             ),
                             child: Column(
                               children: [
@@ -343,7 +343,7 @@ class DraggableSheet extends StatelessWidget {
                                                       ),
                                                       decoration: BoxDecoration(
                                                         color: theme.colorScheme
-                                                            .background,
+                                                            .surface,
                                                       ),
                                                       child: ListView.builder(
                                                         itemCount:

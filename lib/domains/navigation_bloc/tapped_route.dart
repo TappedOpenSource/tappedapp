@@ -68,6 +68,7 @@ final class ProfilePage extends TappedRoute {
             visitedUser: user,
             heroImage: heroImage,
             titleHeroTag: titleHeroTag,
+            stretchable: true,
           ),
         );
 }

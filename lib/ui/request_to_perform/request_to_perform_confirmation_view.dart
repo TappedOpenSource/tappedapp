@@ -29,7 +29,7 @@ class RequestToPerformConfirmationView extends StatelessWidget {
     final theme = Theme.of(context);
     final database = context.database;
     return Scaffold(
-      backgroundColor: theme.colorScheme.background,
+      backgroundColor: theme.colorScheme.surface,
       body: SafeArea(
         child: Padding(
           padding: const EdgeInsets.symmetric(

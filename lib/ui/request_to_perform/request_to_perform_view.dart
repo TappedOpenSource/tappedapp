@@ -167,7 +167,7 @@ class _RequestToPerformViewState extends State<RequestToPerformView> {
     return CurrentUserBuilder(
       builder: (context, currentUser) {
         return Scaffold(
-          backgroundColor: theme.colorScheme.background,
+          backgroundColor: theme.colorScheme.surface,
           appBar: AppBar(
             actions: [
               IconButton(

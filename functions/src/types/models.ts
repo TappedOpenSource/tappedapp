@@ -127,7 +127,8 @@ export type Booking = {
   scraperInfo?: {
     scraperId: string;
     runId: string;
-  }
+  };
+  referenceEventId: Option<string>;
 };
 
 export type Activity = {
@@ -279,6 +280,7 @@ export type EventData = {
     runId: string;
     timestamp: Timestamp;
   };
+  eventId: string;
   venue: UserModel;
   isMusicEvent: boolean;
   url: Option<string>;

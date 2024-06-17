@@ -150,6 +150,7 @@ class DiscoverCubit extends Cubit<DiscoverState> {
     onBoundsChange(
       state.bounds,
       overlay: state.mapOverlay,
+      genres: genres,
     );
 
     emit(
@@ -171,6 +172,7 @@ class DiscoverCubit extends Cubit<DiscoverState> {
     onBoundsChange(
       state.bounds,
       overlay: state.mapOverlay,
+      genres: genres,
     );
 
     emit(
@@ -236,10 +238,18 @@ class DiscoverCubit extends Cubit<DiscoverState> {
     return hits;
   }
 
-  void onMapOverlayChange(MapOverlay overlay) {
+  void onMapOverlayChange(
+    MapOverlay overlay, {
+    List<Genre>? genres,
+    int? minCapacity,
+    int? maxCapacity,
+  }) {
     onBoundsChange(
       state.bounds,
       overlay: overlay,
+      genres: genres,
+      minCapacity: minCapacity,
+      maxCapacity: maxCapacity,
     );
     emit(state.copyWith(mapOverlay: overlay));
   }
@@ -247,6 +257,9 @@ class DiscoverCubit extends Cubit<DiscoverState> {
   void onBoundsChange(
     LatLngBounds? bounds, {
     MapOverlay? overlay,
+    List<Genre>? genres,
+    int? minCapacity,
+    int? maxCapacity,
   }) {
     if (bounds == null) return;
 
@@ -258,8 +271,13 @@ class DiscoverCubit extends Cubit<DiscoverState> {
       ),
     );
 
-    final maxCap =
-      state.capacityRangeEnd == 1000 ? 100000 : state.capacityRangeEnd;
+    final maxCap = (maxCapacity ?? state.capacityRangeEnd) == 1000
+        ? 100000
+        : (maxCapacity ?? state.capacityRangeEnd);
+
+    final newGenres = genres != null
+        ? genres.map((e) => e.name).toList()
+        : state.genreFilterStrings;
 
     _debouncer.run(
       switch (mapType) {
@@ -267,10 +285,8 @@ class DiscoverCubit extends Cubit<DiscoverState> {
             final hits = await search.queryUsersInBoundingBox(
               '',
               occupations: ['Venue', 'venue'],
-              venueGenres: state.genreFilterStrings.isNotEmpty
-                  ? state.genreFilterStrings
-                  : null,
-              minCapacity: state.capacityRangeStart,
+              venueGenres: newGenres.isNotEmpty ? newGenres : null,
+              minCapacity: minCapacity ?? state.capacityRangeStart,
               maxCapacity: maxCap,
               swLatitude: bounds.southWest.latitude,
               swLongitude: bounds.southWest.longitude,
@@ -316,30 +332,30 @@ class DiscoverCubit extends Cubit<DiscoverState> {
     );
   }
 
-  // Future<void> viewCurrentUser(
-  //     DraggableScrollableController dragController) async {
-  //   emit(
-  //     state.copyWith(
-  //       showCurrentUser: true,
-  //       mapOverlay: MapOverlay.userBookings,
-  //     ),
-  //   );
-  //   onBoundsChange(
-  //     state.bounds,
-  //     overlay: MapOverlay.userBookings,
-  //   );
-  // }
-  //
-  // void quitCurrentUserView(DraggableScrollableController dragController) {
-  //   emit(
-  //     state.copyWith(
-  //       showCurrentUser: false,
-  //       mapOverlay: MapOverlay.venues,
-  //     ),
-  //   );
-  //   onBoundsChange(
-  //     state.bounds,
-  //     overlay: MapOverlay.venues,
-  //   );
-  // }
+// Future<void> viewCurrentUser(
+//     DraggableScrollableController dragController) async {
+//   emit(
+//     state.copyWith(
+//       showCurrentUser: true,
+//       mapOverlay: MapOverlay.userBookings,
+//     ),
+//   );
+//   onBoundsChange(
+//     state.bounds,
+//     overlay: MapOverlay.userBookings,
+//   );
+// }
+//
+// void quitCurrentUserView(DraggableScrollableController dragController) {
+//   emit(
+//     state.copyWith(
+//       showCurrentUser: false,
+//       mapOverlay: MapOverlay.venues,
+//     ),
+//   );
+//   onBoundsChange(
+//     state.bounds,
+//     overlay: MapOverlay.venues,
+//   );
+// }
 }

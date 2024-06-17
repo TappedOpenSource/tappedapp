@@ -55,7 +55,7 @@ class SocialFollowingMenu extends StatelessWidget {
     }
 
     return CupertinoListSection.insetGrouped(
-      backgroundColor: theme.colorScheme.background,
+      backgroundColor: theme.colorScheme.surface,
       decoration: BoxDecoration(
         color: theme.colorScheme.onSurface.withOpacity(0.1),
         border: Border(

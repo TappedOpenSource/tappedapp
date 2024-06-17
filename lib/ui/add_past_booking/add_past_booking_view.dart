@@ -24,7 +24,7 @@ class AddPastBookingView extends StatelessWidget {
             currentUserId: currentUser.id,
           ),
           child: Scaffold(
-            backgroundColor: theme.colorScheme.background,
+            backgroundColor: theme.colorScheme.surface,
             body: const ImportForm(),
           ),
         );

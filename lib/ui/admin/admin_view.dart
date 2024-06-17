@@ -22,7 +22,7 @@ class AdminView extends StatelessWidget {
             currentUserId: currentUser.id,
           ),
           child: Scaffold(
-            backgroundColor: theme.colorScheme.background,
+            backgroundColor: theme.colorScheme.surface,
             appBar: AppBar(),
             body: const CreateOpportunityForm(),
           ),

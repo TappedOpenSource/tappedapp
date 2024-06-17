@@ -40,7 +40,7 @@ class DiscoverView extends StatelessWidget {
       elevation: 2,
       heroTag: heroTag,
       highlightElevation: 3,
-      backgroundColor: theme.colorScheme.background,
+      backgroundColor: theme.colorScheme.surface,
       mini: true,
       onPressed: onPressed,
       splashColor: Colors.transparent,
@@ -229,9 +229,11 @@ class DiscoverView extends StatelessWidget {
                 initGenres: fromStrings(initGenres),
                 onboardingBloc: context.read<OnboardingBloc>(),
                 places: context.places,
-                suggestedMaxCapacity: currentUser.performerInfo
-                    .map((info) => info.category.suggestedMaxCapacity)
-                    .getOrElse(() => 1000),
+                suggestedMaxCapacity: isPremium
+                    ? currentUser.performerInfo
+                        .map((info) => info.category.suggestedMaxCapacity)
+                        .getOrElse(() => 1000)
+                    : 1000,
               ),
               child: Scaffold(
                 body: LayoutBuilder(
@@ -273,7 +275,7 @@ class DiscoverView extends StatelessWidget {
                                             snapshot.data ?? 0;
 
                                         return Card(
-                                          color: theme.colorScheme.background,
+                                          color: theme.colorScheme.surface,
                                           elevation: 0,
                                           shape: const CircleBorder(),
                                           child: IconButton(

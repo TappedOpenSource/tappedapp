@@ -110,7 +110,7 @@ class _TappedFormState extends State<TappedForm> {
         MediaQuery.of(context).size.width / numQuestions - (segmentPadding * 2);
 
     return Scaffold(
-      backgroundColor: theme.colorScheme.background,
+      backgroundColor: theme.colorScheme.surface,
       body: SafeArea(
         child: Padding(
           padding: const EdgeInsets.symmetric(
