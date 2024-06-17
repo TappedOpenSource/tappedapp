@@ -247,7 +247,7 @@ class PaywallView extends StatelessWidget {
                         TextButton(
                           onPressed: () => launchURL(
                             context,
-                            'https://tapped.ai/privacy',
+                            'https://app.tapped.ai/privacy',
                           ),
                           child: const Text(
                             'Privacy',
@@ -380,7 +380,7 @@ class PaywallView extends StatelessWidget {
                               //     TextButton(
                               //       onPressed: () => launchURL(
                               //         context,
-                              //         'https://tapped.ai/privacy',
+                              //         'https://app.tapped.ai/privacy',
                               //       ),
                               //       child: const Text(
                               //         'Privacy',
@@ -464,7 +464,7 @@ class PaywallView extends StatelessWidget {
                   //             TextButton(
                   //               onPressed: () => launchURL(
                   //                 context,
-                  //                 'https://tapped.ai/privacy',
+                  //                 'https://app.tapped.ai/privacy',
                   //               ),
                   //               child: const Text(
                   //                 'Privacy',

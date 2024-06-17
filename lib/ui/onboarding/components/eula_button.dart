@@ -24,7 +24,7 @@ class EULAButton extends StatelessWidget {
         GestureDetector(
           onTap: () {
             launchUrl(
-              Uri.parse('https://tapped.ai/eula'),
+              Uri.parse('https://app.tapped.ai/eula'),
             );
           },
           child: RichText(
