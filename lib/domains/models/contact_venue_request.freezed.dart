@@ -31,6 +31,7 @@ mixin _$ContactVenueRequest {
   Option<String> get subject => throw _privateConstructorUsedError;
   List<String> get allEmails => throw _privateConstructorUsedError;
   List<UserModel> get collaborators => throw _privateConstructorUsedError;
+  Option<String> get opportunityId => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
@@ -54,7 +55,8 @@ abstract class $ContactVenueRequestCopyWith<$Res> {
       Option<String> latestMessageId,
       Option<String> subject,
       List<String> allEmails,
-      List<UserModel> collaborators});
+      List<UserModel> collaborators,
+      Option<String> opportunityId});
 
   $UserModelCopyWith<$Res> get venue;
   $UserModelCopyWith<$Res> get user;
@@ -83,6 +85,7 @@ class _$ContactVenueRequestCopyWithImpl<$Res, $Val extends ContactVenueRequest>
     Object? subject = null,
     Object? allEmails = null,
     Object? collaborators = null,
+    Object? opportunityId = null,
   }) {
     return _then(_value.copyWith(
       venue: null == venue
@@ -125,6 +128,10 @@ class _$ContactVenueRequestCopyWithImpl<$Res, $Val extends ContactVenueRequest>
           ? _value.collaborators
           : collaborators // ignore: cast_nullable_to_non_nullable
               as List<UserModel>,
+      opportunityId: null == opportunityId
+          ? _value.opportunityId
+          : opportunityId // ignore: cast_nullable_to_non_nullable
+              as Option<String>,
     ) as $Val);
   }
 
@@ -163,7 +170,8 @@ abstract class _$$ContactVenueRequestImplCopyWith<$Res>
       Option<String> latestMessageId,
       Option<String> subject,
       List<String> allEmails,
-      List<UserModel> collaborators});
+      List<UserModel> collaborators,
+      Option<String> opportunityId});
 
   @override
   $UserModelCopyWith<$Res> get venue;
@@ -192,6 +200,7 @@ class __$$ContactVenueRequestImplCopyWithImpl<$Res>
     Object? subject = null,
     Object? allEmails = null,
     Object? collaborators = null,
+    Object? opportunityId = null,
   }) {
     return _then(_$ContactVenueRequestImpl(
       venue: null == venue
@@ -234,6 +243,10 @@ class __$$ContactVenueRequestImplCopyWithImpl<$Res>
           ? _value._collaborators
           : collaborators // ignore: cast_nullable_to_non_nullable
               as List<UserModel>,
+      opportunityId: null == opportunityId
+          ? _value.opportunityId
+          : opportunityId // ignore: cast_nullable_to_non_nullable
+              as Option<String>,
     ));
   }
 }
@@ -252,7 +265,8 @@ class _$ContactVenueRequestImpl implements _ContactVenueRequest {
       this.latestMessageId = const None(),
       this.subject = const None(),
       final List<String> allEmails = const [],
-      final List<UserModel> collaborators = const []})
+      final List<UserModel> collaborators = const [],
+      this.opportunityId = const None()})
       : _allEmails = allEmails,
         _collaborators = collaborators;
 
@@ -298,8 +312,12 @@ class _$ContactVenueRequestImpl implements _ContactVenueRequest {
   }
 
   @override
+  @JsonKey()
+  final Option<String> opportunityId;
+
+  @override
   String toString() {
-    return 'ContactVenueRequest(venue: $venue, user: $user, bookingEmail: $bookingEmail, note: $note, timestamp: $timestamp, originalMessageId: $originalMessageId, latestMessageId: $latestMessageId, subject: $subject, allEmails: $allEmails, collaborators: $collaborators)';
+    return 'ContactVenueRequest(venue: $venue, user: $user, bookingEmail: $bookingEmail, note: $note, timestamp: $timestamp, originalMessageId: $originalMessageId, latestMessageId: $latestMessageId, subject: $subject, allEmails: $allEmails, collaborators: $collaborators, opportunityId: $opportunityId)';
   }
 
   @override
@@ -322,7 +340,9 @@ class _$ContactVenueRequestImpl implements _ContactVenueRequest {
             const DeepCollectionEquality()
                 .equals(other._allEmails, _allEmails) &&
             const DeepCollectionEquality()
-                .equals(other._collaborators, _collaborators));
+                .equals(other._collaborators, _collaborators) &&
+            (identical(other.opportunityId, opportunityId) ||
+                other.opportunityId == opportunityId));
   }
 
   @JsonKey(ignore: true)
@@ -338,7 +358,8 @@ class _$ContactVenueRequestImpl implements _ContactVenueRequest {
       latestMessageId,
       subject,
       const DeepCollectionEquality().hash(_allEmails),
-      const DeepCollectionEquality().hash(_collaborators));
+      const DeepCollectionEquality().hash(_collaborators),
+      opportunityId);
 
   @JsonKey(ignore: true)
   @override
@@ -366,7 +387,8 @@ abstract class _ContactVenueRequest implements ContactVenueRequest {
       final Option<String> latestMessageId,
       final Option<String> subject,
       final List<String> allEmails,
-      final List<UserModel> collaborators}) = _$ContactVenueRequestImpl;
+      final List<UserModel> collaborators,
+      final Option<String> opportunityId}) = _$ContactVenueRequestImpl;
 
   factory _ContactVenueRequest.fromJson(Map<String, dynamic> json) =
       _$ContactVenueRequestImpl.fromJson;
@@ -392,6 +414,8 @@ abstract class _ContactVenueRequest implements ContactVenueRequest {
   List<String> get allEmails;
   @override
   List<UserModel> get collaborators;
+  @override
+  Option<String> get opportunityId;
   @override
   @JsonKey(ignore: true)
   _$$ContactVenueRequestImplCopyWith<_$ContactVenueRequestImpl> get copyWith =>
