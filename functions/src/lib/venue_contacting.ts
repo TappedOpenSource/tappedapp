@@ -42,6 +42,8 @@ async function sendAsEmail({
   userId: string;
   venue: UserModel;
 }) {
+  const opIds = venueContactData.opportunityIds ?? [];
+
   const collaboratorIds = venueContactData.collaborators ?? [];
   const collaborators = (await Promise.all(
     collaboratorIds.map(async (id: string) => {

@@ -35,10 +35,10 @@ _$ContactVenueRequestImpl _$$ContactVenueRequestImplFromJson(
               ?.map((e) => UserModel.fromJson(e as Map<String, dynamic>))
               .toList() ??
           const [],
-      opportunityId: json['opportunityId'] == null
-          ? const None()
-          : Option<String>.fromJson(
-              json['opportunityId'], (value) => value as String),
+      opportunityIds: (json['opportunityIds'] as List<dynamic>?)
+              ?.map((e) => e as String)
+              .toList() ??
+          const [],
     );
 
 Map<String, dynamic> _$$ContactVenueRequestImplToJson(
@@ -60,7 +60,5 @@ Map<String, dynamic> _$$ContactVenueRequestImplToJson(
       ),
       'allEmails': instance.allEmails,
       'collaborators': instance.collaborators.map((e) => e.toJson()).toList(),
-      'opportunityId': instance.opportunityId.toJson(
-        (value) => value,
-      ),
+      'opportunityIds': instance.opportunityIds,
     };

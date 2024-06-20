@@ -321,6 +321,11 @@ export const notifyVenueOnOpportunityInterest = functions
   .firestore
   .document("opportunities/{opportunityId}/interestedUsers/{userId}")
   .onCreate(async (data, context) => {
+    const interestData = data.data() as {
+      userId: string;
+      userComment: string;
+    };
+
     const opSnap = await opportunitiesRef.doc(context.params.opportunityId).get();
     const op = opSnap.data() as Opportunity;
     if (op.userId === context.params.userId) {
@@ -390,13 +395,14 @@ export const notifyVenueOnOpportunityInterest = functions
         user,
         bookingEmail: bookingEmail,
         attachments: [],
-        note: "",
+        note: interestData.userComment,
         timestamp: Timestamp.now(),
         originalMessageId: null,
         latestMessageId: null,
         subject: null,
         allEmails: [ bookingEmail ],
         collaborators: [],
+        opportunityIds: [ context.params.opportunityId ],
       }
 
       await contactVenuesRef
@@ -412,7 +418,7 @@ export const notifyVenueOnOpportunityInterest = functions
 
     // if there isn't create a new contactVenue request and include opportunityId
     // what to add to the object to change the prompt? 
-    
+     
   });
 
 export const copyOpportunityToFeedsOnCreate = onDocumentWritten(

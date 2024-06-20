@@ -276,6 +276,7 @@ export type VenueContactRequest = {
   subject: Option<string>;
   allEmails: string[];
   collaborators: string[];
+  opportunityIds: string[];
 };
 
 export type EventData = {
