@@ -90,6 +90,8 @@ export const SLACK_WEBHOOK_URL = defineSecret("SLACK_WEBHOOK_URL");
 export const SPOTIFY_CLIENT_ID = defineSecret("SPOTIFY_CLIENT_ID");
 export const SPOTIFY_CLIENT_SECRET = defineSecret("SPOTIFY_CLIENT_SECRET");
 export const CHARTMETRIC_REFRESH_TOKEN = defineSecret("CHARTMETRIC_REFRESH_TOKEN");
+export const MAILCHIMP_API_KEY = defineSecret("MAILCHIMP_API_KEY");
+export const MAILCHIMP_SERVER_PREFIX = defineSecret("MAILCHIMP_SERVER_PREFIX");
 
 export const starterCreditsTestPriceId = "price_1OE2ptDYybu1wznEqHNMGZax";
 export const basicCreditsTestPriceId = "price_1OE2rrDYybu1wznEqv4mmjoK";
@@ -121,6 +123,8 @@ export const verifyUserBadgeId = "0aa46576-1fbe-4312-8b69-e2fef3269083";
 
 export const projectId = "in-the-loop-306520";
 export const bucket = storage.bucket(`${projectId}.appspot.com`);
+
+
 
 export const getSecretValue = async (secretName: string): Promise<string | null> => {
   const fullName = `projects/${projectId}/secrets/${secretName}/versions/latest`;

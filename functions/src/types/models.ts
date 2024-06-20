@@ -255,6 +255,9 @@ export type Opportunity = {
   endTime: Date;
   isPaid: boolean;
   touched: "like" | "dislike" | null;
+  deleted?: boolean | null;
+  venueId?: string | null;
+  referenceEventId?: string | null;
 };
 
 export type OpportunityFeedItem = Opportunity & {

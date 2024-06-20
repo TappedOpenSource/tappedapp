@@ -6,8 +6,8 @@ import {
   onDocumentWritten,
 } from "firebase-functions/v2/firestore";
 import { createActivity } from "./activities";
-import { creditsRef, opportunitiesRef, opportunityFeedsRef, usersRef } from "./firebase";
-import { Opportunity, OpportunityFeedItem, UserModel } from "../types/models";
+import { bookingsRef, contactVenuesRef, creditsRef, opportunitiesRef, opportunityFeedsRef, usersRef } from "./firebase";
+import { Booking, Opportunity, OpportunityFeedItem, UserModel, VenueContactRequest } from "../types/models";
 import { Timestamp } from "firebase-admin/firestore";
 import { HttpsError } from "firebase-functions/v2/https";
 import { debug, error, info } from "firebase-functions/logger";
@@ -315,6 +315,104 @@ export const addActivityOnOpportunityInterest = functions
       type: "opportunityInterest",
       opportunityId: context.params.opportunityId,
     });
+  });
+
+export const notifyVenueOnOpportunityInterest = functions
+  .firestore
+  .document("opportunities/{opportunityId}/interestedUsers/{userId}")
+  .onCreate(async (data, context) => {
+    const opSnap = await opportunitiesRef.doc(context.params.opportunityId).get();
+    const op = opSnap.data() as Opportunity;
+    if (op.userId === context.params.userId) {
+      return;
+    }
+
+    // check if referenceEventId exists
+    if (op.referenceEventId === undefined || op.referenceEventId === null) {
+      debug(`no reference id for ${op.id}, skipping`);
+      return;
+    }
+
+    // get all bookings for that referenceEventId
+    const bookingsSnap = await bookingsRef
+      .where(
+        "referenceEventId",
+        "==",
+        op.referenceEventId,
+      )
+      .get();
+
+    const bookings = bookingsSnap.docs.map((doc) => doc.data() as Booking);
+    if (bookings.length <= 0) {
+      debug(`no bookings for event if ${op.referenceEventId}, skipping`)
+      return;
+    }
+
+    // get the venue (requesterId) from one of the bookings
+    const venueId = bookings[0].requesterId;
+    if (venueId === undefined || venueId === null) {
+      debug(`no venue id for ${op.id}, skipping`);
+      return;
+    }
+
+    const venueSnap = await usersRef.doc(venueId).get();
+    const venue = venueSnap.data() as UserModel;
+
+    // check if venue is unclaimed (and if not, return)
+    if (!venue.unclaimed) {
+      debug(`venue ${venue.id} is claimed, skipping`);
+      return;
+    }
+
+    // check if there is already a contactVenue email thread open
+    const contactVenueSnap = await contactVenuesRef
+      .doc(context.params.userId)
+      .collection("venuesContacted")
+      .doc(venue.id)
+      .get();
+
+    const venueContactedAlready = contactVenueSnap.exists;
+    debug(`venue ${venue.id} contacted already? ${venueContactedAlready}`);
+
+    // if there is, add to the thread with context on the performance opportunity
+    if (venueContactedAlready) {
+      const userSnap = await usersRef.doc(context.params.userId).get();
+      const user = userSnap.data() as UserModel;
+
+      const bookingEmail = venue.venueInfo?.bookingEmail;
+      if (bookingEmail === undefined || bookingEmail === null) {
+        debug(`no booking email for ${venue.id}, skipping`);
+        return;
+      }
+
+      const contactRequset: VenueContactRequest = {
+        venue,
+        user,
+        bookingEmail: bookingEmail,
+        attachments: [],
+        note: "",
+        timestamp: Timestamp.now(),
+        originalMessageId: null,
+        latestMessageId: null,
+        subject: null,
+        allEmails: [ bookingEmail ],
+        collaborators: [],
+      }
+
+      await contactVenuesRef
+        .doc(context.params.userId)
+        .collection("venuesContacted")
+        .doc(venue.id)
+        .set(contactRequset, { merge: true });
+
+      info(`venue ${venue.id} context request sent by user ${context.params.userId}`);
+
+      return;
+    }
+
+    // if there isn't create a new contactVenue request and include opportunityId
+    // what to add to the object to change the prompt? 
+    
   });
 
 export const copyOpportunityToFeedsOnCreate = onDocumentWritten(
