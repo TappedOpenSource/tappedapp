@@ -5,12 +5,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:fpdart/fpdart.dart';
 import 'package:intheloopapp/data/places_repository.dart';
+import 'package:intheloopapp/domains/models/booking.dart';
 import 'package:intheloopapp/domains/models/opportunity.dart';
 import 'package:intheloopapp/domains/models/user_model.dart';
 import 'package:intheloopapp/domains/navigation_bloc/navigation_bloc.dart';
 import 'package:intheloopapp/domains/navigation_bloc/tapped_route.dart';
 import 'package:intheloopapp/domains/opportunity_bloc/opportunity_bloc.dart';
 import 'package:intheloopapp/ui/conditional_parent_widget.dart';
+import 'package:intheloopapp/ui/discover/components/user_slider.dart';
 import 'package:intheloopapp/ui/opportunities/interested_users_view.dart';
 import 'package:intheloopapp/ui/profile/profile_view.dart';
 import 'package:intheloopapp/ui/themes.dart';
@@ -59,7 +61,8 @@ class OpportunityView extends StatelessWidget {
     return const None();
   }
 
-  Widget opImage(ImageProvider provider) => Container(
+  Widget opImage(ImageProvider provider) =>
+      Container(
         height: 400,
         width: double.infinity,
         decoration: BoxDecoration(
@@ -76,8 +79,7 @@ class OpportunityView extends StatelessWidget {
         ),
       );
 
-  Widget buildOpportunityView(
-    BuildContext context, {
+  Widget buildOpportunityView(BuildContext context, {
     required Opportunity op,
     required bool? isApplied,
     required UserModel currentUser,
@@ -121,11 +123,12 @@ class OpportunityView extends StatelessWidget {
               )
             else
               GestureDetector(
-                onTap: () => context.push(
-                  ImagePage(
-                    heroImage: hero,
-                  ),
-                ),
+                onTap: () =>
+                    context.push(
+                      ImagePage(
+                        heroImage: hero,
+                      ),
+                    ),
                 child: Hero(
                   tag: hero.heroTag,
                   child: opImage(hero.imageProvider),
@@ -141,10 +144,11 @@ class OpportunityView extends StatelessWidget {
                 children: [
                   ConditionalParentWidget(
                     condition: titleHeroTag != null,
-                    conditionalBuilder: ({required child}) => Hero(
-                      tag: titleHeroTag!,
-                      child: child,
-                    ),
+                    conditionalBuilder: ({required child}) =>
+                        Hero(
+                          tag: titleHeroTag!,
+                          child: child,
+                        ),
                     child: Text(
                       op.title,
                       style: const TextStyle(
@@ -168,7 +172,7 @@ class OpportunityView extends StatelessWidget {
                           color: theme.colorScheme.onSurface.withOpacity(0.1),
                           padding: const EdgeInsets.all(12),
                           child: Text(
-                            'Share',
+                            'share',
                             style: TextStyle(
                               fontSize: 17,
                               color: theme.colorScheme.onSurface,
@@ -182,48 +186,51 @@ class OpportunityView extends StatelessWidget {
                       ),
                       Expanded(
                         child: switch (isApplied) {
-                          null => const CupertinoButton(
-                              onPressed: null,
-                              child: CupertinoActivityIndicator(),
-                            ),
-                          false => CupertinoButton(
-                              onPressed: () {
-                                HapticFeedback.mediumImpact();
-                                final quota = opBloc.state.opQuota;
-                                opBloc.add(
-                                  ApplyForOpportunity(
-                                    opportunity: op,
-                                    userComment: '',
+                          null =>
+                          const CupertinoButton(
+                            onPressed: null,
+                            child: CupertinoActivityIndicator(),
+                          ),
+                          false =>
+                              CupertinoButton(
+                                onPressed: () {
+                                  HapticFeedback.mediumImpact();
+                                  final quota = opBloc.state.opQuota;
+                                  opBloc.add(
+                                    ApplyForOpportunity(
+                                      opportunity: op,
+                                      userComment: '',
+                                    ),
+                                  );
+                                  if (quota > 0) {
+                                    onApply?.call();
+                                  }
+                                },
+                                color: Colors.green.withOpacity(0.8),
+                                padding: const EdgeInsets.all(12),
+                                child: const Text(
+                                  'apply',
+                                  style: TextStyle(
+                                    fontSize: 17,
+                                    color: Colors.white,
+                                    fontWeight: FontWeight.bold,
                                   ),
-                                );
-                                if (quota > 0) {
-                                  onApply?.call();
-                                }
-                              },
-                              color: Colors.green.withOpacity(0.8),
-                              padding: const EdgeInsets.all(12),
-                              child: const Text(
-                                'Apply',
-                                style: TextStyle(
-                                  fontSize: 17,
-                                  color: Colors.white,
-                                  fontWeight: FontWeight.bold,
                                 ),
                               ),
-                            ),
-                          true => CupertinoButton(
-                              onPressed: null,
-                              color:
-                                  theme.colorScheme.onSurface.withOpacity(0.1),
-                              padding: const EdgeInsets.all(12),
-                              child: const Text(
-                                'Apply',
-                                style: TextStyle(
-                                  fontSize: 17,
-                                  fontWeight: FontWeight.bold,
+                          true =>
+                              CupertinoButton(
+                                onPressed: null,
+                                color:
+                                theme.colorScheme.onSurface.withOpacity(0.1),
+                                padding: const EdgeInsets.all(12),
+                                child: const Text(
+                                  'Apply',
+                                  style: TextStyle(
+                                    fontSize: 17,
+                                    fontWeight: FontWeight.bold,
+                                  ),
                                 ),
                               ),
-                            ),
                         },
                       ),
                     ],
@@ -233,107 +240,116 @@ class OpportunityView extends StatelessWidget {
                     builder: (context, isAdmin) {
                       return switch (op.userId == currentUser.id || isAdmin) {
                         false => const SizedBox.shrink(),
-                        true => Row(
-                            children: [
-                              Expanded(
-                                child: CupertinoButton(
-                                  onPressed: () {
-                                    showCupertinoModalBottomSheet(
-                                      context: context,
-                                      builder: (context) => InterestedUsersView(
-                                        opportunity: op,
+                        true =>
+                            Row(
+                              children: [
+                                Expanded(
+                                  child: CupertinoButton(
+                                    onPressed: () {
+                                      showCupertinoModalBottomSheet(
+                                        context: context,
+                                        builder: (context) =>
+                                            InterestedUsersView(
+                                              opportunity: op,
+                                            ),
+                                      );
+                                    },
+                                    color: theme.colorScheme.primary,
+                                    padding: const EdgeInsets.all(12),
+                                    // borderRadius: BorderRadius.circular(15),
+                                    child: const Text(
+                                      'see applicants',
+                                      style: TextStyle(
+                                        fontSize: 17,
+                                        color: Colors.white,
+                                        fontWeight: FontWeight.bold,
                                       ),
-                                    );
-                                  },
-                                  color: theme.colorScheme.primary,
-                                  padding: const EdgeInsets.all(12),
-                                  // borderRadius: BorderRadius.circular(15),
-                                  child: const Text(
-                                    'see applicants',
-                                    style: TextStyle(
-                                      fontSize: 17,
-                                      color: Colors.white,
-                                      fontWeight: FontWeight.bold,
                                     ),
                                   ),
                                 ),
-                              ),
-                            ],
-                          ),
+                              ],
+                            ),
                       };
                     },
                   ),
                   const SizedBox(height: 12),
                   switch (op.venueId) {
-                    None() => FutureBuilder<Option<PlaceData>>(
-                        future: places.getPlaceById(
-                          op.location.placeId,
-                        ),
-                        builder: (context, snapshot) {
-                          final placeData = snapshot.data;
-                          return switch (placeData) {
-                            null => const CupertinoActivityIndicator(),
-                            None() => const SizedBox.shrink(),
-                            Some(:final value) => GestureDetector(
-                                onTap: () => MapsLauncher.launchQuery(
-                                  getAddressComponent(value.addressComponents),
-                                ),
-                                child: Row(
-                                  children: [
-                                    Icon(
-                                      CupertinoIcons.location_circle_fill,
-                                      color: theme.colorScheme.onSurface
-                                          .withOpacity(0.5),
-                                    ),
-                                    const SizedBox(width: 8),
-                                    Text(
-                                      getAddressComponent(
-                                        value.addressComponents,
-                                      ),
-                                      style: const TextStyle(
-                                        color: tappedAccent,
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                          };
-                        },
-                      ),
-                    Some(:final value) => FutureBuilder<Option<UserModel>>(
-                      future: database.getUserById(value),
-                      builder: (context, snapshot) {
-                        final requester = snapshot.data;
-                        return switch (requester) {
-                          null => SkeletonListTile(),
-                          None() => SkeletonListTile(),
-                          Some(:final value) => GestureDetector(
-                            onTap: () =>
-                                showCupertinoModalBottomSheet<void>(
-                                  context: context,
-                                  builder: (context) => ProfileView(
-                                    visitedUserId: value.id,
-                                    visitedUser: Option.of(value),
-                                  ),
-                                ),
-                            child: CupertinoListTile(
-                              leading: UserAvatar(
-                                pushId: Option.of(value.id),
-                                pushUser: Option.of(value),
-                                imageUrl: value.profilePicture,
-                                radius: 20,
-                              ),
-                              title: Text(
-                                value.displayName,
-                                style: TextStyle(
-                                  color: theme.colorScheme.primary,
-                                ),
-                              ),
-                            ),
+                    None() =>
+                        FutureBuilder<Option<PlaceData>>(
+                          future: places.getPlaceById(
+                            op.location.placeId,
                           ),
-                        };
-                      },
-                    ),
+                          builder: (context, snapshot) {
+                            final placeData = snapshot.data;
+                            return switch (placeData) {
+                              null => const CupertinoActivityIndicator(),
+                              None() => const SizedBox.shrink(),
+                              Some(:final value) =>
+                                  GestureDetector(
+                                    onTap: () =>
+                                        MapsLauncher.launchQuery(
+                                          getAddressComponent(
+                                              value.addressComponents),
+                                        ),
+                                    child: Row(
+                                      children: [
+                                        Icon(
+                                          CupertinoIcons.location_circle_fill,
+                                          color: theme.colorScheme.onSurface
+                                              .withOpacity(0.5),
+                                        ),
+                                        const SizedBox(width: 8),
+                                        Text(
+                                          getAddressComponent(
+                                            value.addressComponents,
+                                          ),
+                                          style: const TextStyle(
+                                            color: tappedAccent,
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                            };
+                          },
+                        ),
+                    Some(:final value) =>
+                        FutureBuilder<Option<UserModel>>(
+                          future: database.getUserById(value),
+                          builder: (context, snapshot) {
+                            final requester = snapshot.data;
+                            return switch (requester) {
+                              null => SkeletonListTile(),
+                              None() => SkeletonListTile(),
+                              Some(:final value) =>
+                                  GestureDetector(
+                                    onTap: () =>
+                                        showCupertinoModalBottomSheet<void>(
+                                          context: context,
+                                          builder: (context) =>
+                                              ProfileView(
+                                                visitedUserId: value.id,
+                                                visitedUser: Option.of(value),
+                                              ),
+                                        ),
+                                    child: CupertinoListTile(
+                                      leading: UserAvatar(
+                                        pushId: Option.of(value.id),
+                                        pushUser: Option.of(value),
+                                        imageUrl: value.profilePicture,
+                                        radius: 20,
+                                      ),
+                                      title: Text(
+                                        value.displayName,
+                                        style: TextStyle(
+                                          color: theme.colorScheme.primary,
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                            };
+                          },
+                        ),
                   },
                   const SizedBox(height: 12),
                   Row(
@@ -366,6 +382,70 @@ class OpportunityView extends StatelessWidget {
                     op.description,
                   ),
                   const SizedBox(height: 12),
+                  const Divider(),
+                  switch (op.referenceEventId) {
+                    None() => const SizedBox.shrink(),
+                    Some(:final value) =>
+                        FutureBuilder<List<Booking>>(
+                          future: database.getBookingsByEventId(value),
+                          builder: (context, snapshot) {
+                            final bookings = snapshot.data;
+                            return switch (bookings?.isNotEmpty) {
+                              null => const SizedBox.shrink(),
+                              false => const SizedBox.shrink(),
+                              true =>
+                                  Column(
+                                    children: [
+                                      const SizedBox(height: 12),
+                                      Text(
+                                        'current bill',
+                                        style: TextStyle(
+                                          fontSize: 18,
+                                          color: theme.colorScheme.onSurface
+                                              .withOpacity(0.5),
+                                        ),
+                                      ),
+                                      const SizedBox(height: 12),
+                                      FutureBuilder(
+                                        future: Future.wait(
+                                          bookings!.map(
+                                                (booking) =>
+                                                database.getUserById(
+                                                  booking.requesteeId,
+                                                ),
+                                          ),
+                                        ),
+                                        builder: (context, snapshot) {
+                                          final users = snapshot.data;
+
+                                          if (users == null) {
+                                            return const CupertinoActivityIndicator();
+                                          }
+
+                                          return UserSlider(
+                                            users: users
+                                                .whereType<UserModel>()
+                                                .toList(),
+                                          );
+                                        },
+                                      ),
+                                      const SizedBox(height: 12),
+                                      const Divider(),
+                                    ],
+                                  ),
+                            };
+                          },
+                        ),
+                  },
+                  const SizedBox(height: 12),
+                  Text(
+                    'listing agent',
+                    style: TextStyle(
+                      fontSize: 18,
+                      color: theme.colorScheme.onSurface.withOpacity(0.5),
+                    ),
+                  ),
+                  const SizedBox(height: 12),
                   UserTile(
                     userId: op.userId,
                     user: const None(),
@@ -380,8 +460,7 @@ class OpportunityView extends StatelessWidget {
     );
   }
 
-  Widget buildFloatingActionButton(
-    context, {
+  Widget buildFloatingActionButton(context, {
     required Opportunity op,
     required OpportunityBloc opBloc,
     required bool? isApplied,
@@ -393,25 +472,27 @@ class OpportunityView extends StatelessWidget {
         }
 
         return switch (isApplied) {
-          null => const FloatingActionButton(
-              onPressed: null,
-              child: CupertinoActivityIndicator(),
-            ),
-          false => FloatingActionButton.extended(
-              onPressed: () {
-                opBloc.add(
-                  DislikeOpportunity(
-                    opportunity: op,
-                  ),
-                );
-                onDislike?.call();
-              },
-              backgroundColor: Colors.red,
-              icon: const Icon(
-                Icons.cancel,
+          null =>
+          const FloatingActionButton(
+            onPressed: null,
+            child: CupertinoActivityIndicator(),
+          ),
+          false =>
+              FloatingActionButton.extended(
+                onPressed: () {
+                  opBloc.add(
+                    DislikeOpportunity(
+                      opportunity: op,
+                    ),
+                  );
+                  onDislike?.call();
+                },
+                backgroundColor: Colors.red,
+                icon: const Icon(
+                  Icons.cancel,
+                ),
+                label: const Text('Not Interested'),
               ),
-              label: const Text('Not Interested'),
-            ),
           true => const SizedBox.shrink(),
         };
       },
@@ -426,39 +507,44 @@ class OpportunityView extends StatelessWidget {
         return FutureBuilder(
           future: isApplied == null
               ? database.isUserAppliedForOpportunity(
-                  opportunityId: opportunityId,
-                  userId: currentUser.id,
-                )
+            opportunityId: opportunityId,
+            userId: currentUser.id,
+          )
               : Future<bool>.value(isApplied),
           builder: (context, snapshot) {
             final isApplied = snapshot.data;
             return switch (opportunity) {
-              None() => FutureBuilder<Option<Opportunity>>(
-                  future: database.getOpportunityById(opportunityId),
-                  builder: (context, snapshot) {
-                    final op = snapshot.data;
-                    return switch (op) {
-                      null => const Center(
+              None() =>
+                  FutureBuilder<Option<Opportunity>>(
+                    future: database.getOpportunityById(opportunityId),
+                    builder: (context, snapshot) {
+                      final op = snapshot.data;
+                      return switch (op) {
+                        null =>
+                        const Center(
                           child: CupertinoActivityIndicator(),
                         ),
-                      None() => const Center(
+                        None() =>
+                        const Center(
                           child: Text('error'),
                         ),
-                      Some(:final value) => buildOpportunityView(
-                          context,
-                          op: value,
-                          isApplied: isApplied,
-                          currentUser: currentUser,
-                        ),
-                    };
-                  },
-                ),
-              Some(:final value) => buildOpportunityView(
-                  context,
-                  op: value,
-                  isApplied: isApplied,
-                  currentUser: currentUser,
-                ),
+                        Some(:final value) =>
+                            buildOpportunityView(
+                              context,
+                              op: value,
+                              isApplied: isApplied,
+                              currentUser: currentUser,
+                            ),
+                      };
+                    },
+                  ),
+              Some(:final value) =>
+                  buildOpportunityView(
+                    context,
+                    op: value,
+                    isApplied: isApplied,
+                    currentUser: currentUser,
+                  ),
             };
           },
         );

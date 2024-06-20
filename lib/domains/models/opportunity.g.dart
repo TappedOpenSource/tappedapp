@@ -32,6 +32,10 @@ _$OpportunityImpl _$$OpportunityImplFromJson(Map<String, dynamic> json) =>
           ? const None()
           : Option<String>.fromJson(
               json['venueId'], (value) => value as String),
+      referenceEventId: json['referenceEventId'] == null
+          ? const None()
+          : Option<String>.fromJson(
+              json['referenceEventId'], (value) => value as String),
     );
 
 Map<String, dynamic> _$$OpportunityImplToJson(_$OpportunityImpl instance) =>
@@ -53,6 +57,9 @@ Map<String, dynamic> _$$OpportunityImplToJson(_$OpportunityImpl instance) =>
       ),
       'deleted': instance.deleted,
       'venueId': instance.venueId.toJson(
+        (value) => value,
+      ),
+      'referenceEventId': instance.referenceEventId.toJson(
         (value) => value,
       ),
     };

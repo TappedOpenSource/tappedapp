@@ -95,6 +95,8 @@ abstract class DatabaseRepository {
     String bookRequestId,
   );
 
+  Future<List<Booking>> getBookingsByEventId(String eventId);
+
   Future<List<Booking>> getBookingsByRequesterRequestee(
     String requesterId,
     String requesteeId, {

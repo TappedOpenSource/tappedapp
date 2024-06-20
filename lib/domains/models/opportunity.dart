@@ -24,6 +24,7 @@ class Opportunity with _$Opportunity {
     @Default(None()) Option<OpportunityInteraction> touched,
     @Default(false) bool deleted,
     @Default(None()) Option<String> venueId,
+    @Default(None())  Option<String> referenceEventId,
   }) = _Opportunity;
 
   factory Opportunity.fromJson(Map<String, dynamic> json) =>

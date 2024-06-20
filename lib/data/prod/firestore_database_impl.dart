@@ -837,6 +837,18 @@ class FirestoreDatabaseImpl extends DatabaseRepository {
   }
 
   @override
+  @cached
+  Future<List<Booking>> getBookingsByEventId(String eventId) async {
+    final bookingSnapshot = await _bookingsRef
+        .where('referenceEventId', isEqualTo: eventId)
+        .get();
+
+    final bookingRequests = bookingSnapshot.docs.map(Booking.fromDoc).toList();
+
+    return bookingRequests;
+  }
+
+  @override
   @Cached(ttl: 60) // 1 minute
   Future<List<Booking>> getBookingsByRequesterRequestee(
     String requesterId,
