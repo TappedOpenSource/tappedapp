@@ -394,7 +394,12 @@ export const _appendNewContactRequestToThread = async({
   note: string;
   opportunityId: string | null;
 }) => {
-  
+  // get the current thread
+
+  // create response with chatgpt
+
+  // add email to thread from chatgpt
+
   return;
 }
 
@@ -805,6 +810,7 @@ export const genericContactVenues = onCall(
 
 
         const alreadyContacted = contactVenueSnap.exists;
+        const resend = new Resend(RESEND_API_KEY.value());
 
         // if not, create new email thread (make ContactVenueRequest)
         if (!alreadyContacted) {
@@ -825,6 +831,11 @@ export const genericContactVenues = onCall(
               subject: null,
             });
 
+          // send email to user that they've send the request
+          await _sendEmailOnVenueContacting({
+            resend,
+            userId,
+          });
           return;
         } 
 
@@ -839,13 +850,10 @@ export const genericContactVenues = onCall(
         });
 
         // send email to user that they've send the request
-        const resend = new Resend(RESEND_API_KEY.value());
         await _sendEmailOnVenueContacting({
           resend,
           userId,
         });
       }),
     );
-
-
   });

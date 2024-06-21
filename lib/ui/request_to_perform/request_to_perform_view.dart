@@ -85,7 +85,7 @@ class _RequestToPerformViewState extends State<RequestToPerformView> {
 
                   await EasyLoading.show(status: 'sending request');
                   if (safeModeOn) {
-                    await Future.delayed(const Duration(seconds: 1));
+                    await Future<void>.delayed(const Duration(seconds: 1));
                     await EasyLoading.dismiss();
                     nav.push(
                       RequestToPerformConfirmationPage(
@@ -98,32 +98,11 @@ class _RequestToPerformViewState extends State<RequestToPerformView> {
                   try {
                     final functions = FirebaseFunctions.instance;
                     final callable =
-                        functions.httpsCallable('sendEmailOnVenueContacting');
-                    await Future.wait(
-                      [
-                        callable<void>({
-                          'userId': currentUser.id,
-                        }),
-                        ..._venues.map((venue) async {
-                          final bookingEmail = venue.venueInfo.flatMap(
-                            (info) => info.bookingEmail,
-                          );
-
-                          await bookingEmail.fold(
-                            Future<void>.value,
-                            (email) async {
-                              await database.contactVenue(
-                                currentUser: currentUser,
-                                venue: venue,
-                                note: _note,
-                                bookingEmail: email,
-                                collaborators: _collaborators,
-                              );
-                            },
-                          );
-                        }),
-                      ],
-                    );
+                        functions.httpsCallable('genericContactVenues');
+                    await callable<void>({
+                      'userId': currentUser.id,
+                      'venueIds': _venues.map((venue) => venue.id).toList(),
+                    });
                     await EasyLoading.dismiss();
                     nav.push(RequestToPerformConfirmationPage(venues: _venues));
                   } catch (error, stackTrace) {

@@ -2054,62 +2054,6 @@ class FirestoreDatabaseImpl extends DatabaseRepository {
   }
 
   @override
-  Future<void> contactVenue({
-    required UserModel currentUser,
-    required UserModel venue,
-    required String note,
-    required String bookingEmail,
-    required List<UserModel> collaborators,
-  }) async {
-    try {
-      // already contacted?
-      final hasSentContactRequest = await hasUserSentContactRequest(
-        user: currentUser,
-        venue: venue,
-      );
-
-      if (hasSentContactRequest) {
-        return;
-      }
-
-      await _analytics.logEvent(
-        name: 'contact_venue',
-        parameters: {
-          'user_id': currentUser.id,
-          'venue_id': venue.id,
-          'booking_email': bookingEmail,
-          'note': note,
-        },
-      );
-
-      final contactVenueRequest = ContactVenueRequest(
-        venue: venue,
-        user: currentUser,
-        bookingEmail: bookingEmail,
-        allEmails: [bookingEmail],
-        note: note,
-        timestamp: DateTime.now(),
-        collaborators: collaborators,
-      );
-
-      logger.info('contactVenueRequest $contactVenueRequest');
-
-      await _contactVenuesRef
-          .doc(currentUser.id)
-          .collection('venuesContacted')
-          .doc(venue.id)
-          .set(contactVenueRequest.toJson());
-    } catch (e, s) {
-      logger.error(
-        "can't contact venue",
-        error: e,
-        stackTrace: s,
-      );
-      rethrow;
-    }
-  }
-
-  @override
   @Cached(where: _asyncShouldCache)
   Future<bool> hasUserSentContactRequest({
     required UserModel user,

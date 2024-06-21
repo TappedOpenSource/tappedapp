@@ -273,14 +273,6 @@ abstract class DatabaseRepository {
     String imageUrl,
   );
 
-  Future<void> contactVenue({
-    required UserModel currentUser,
-    required UserModel venue,
-    required String note,
-    required String bookingEmail,
-    required List<UserModel> collaborators,
-  });
-
   Future<bool> hasUserSentContactRequest({
     required UserModel user,
     required UserModel venue,
