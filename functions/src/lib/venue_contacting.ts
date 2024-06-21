@@ -20,7 +20,7 @@ import * as postmark from "postmark";
 import { onDocumentCreated } from "firebase-functions/v2/firestore";
 import { StreamChat, User } from "stream-chat";
 import { contactVenueTemplate } from "../email_templates/contact_venue";
-import { UserModel, VenueContactRequest } from "../types/models";
+import { Opportunity, UserModel, VenueContactRequest } from "../types/models";
 import { chatGpt } from "./openai";
 import { slackNotification } from "./notifications";
 import { Timestamp } from "firebase-admin/firestore";
@@ -362,7 +362,7 @@ async function writeEmailWithAi({
   Performer Name: ${displayName}
   ${genres !== "" ? `Perfomers Genres: ${genres}` : ""}
 
-  Note: ${note}
+  ${note !== "" ? `Note: ${note}` : ""}
 
   Given the information above, write an paragraph to send to venues to request a booking in the style
   of a musicians looking to perform there.
@@ -379,13 +379,94 @@ async function writeEmailWithAi({
   };
 }
 
+const writeAiEmailReply = async ({
+  opportunity,
+  collaborators,
+  note,
+  userData,
+  contactVenueData,
+  emailsSent,
+}: {
+  opportunity: Opportunity | null;
+  collaborators: string[];
+  note: string;
+  userData: UserModel;
+  contactVenueData: VenueContactRequest;
+  emailsSent: postmark.Message[];
+}): Promise<string> => {
+  const username = userData.username;
+  const displayName = userData.artistName || username;
+  const genres = userData.performerInfo?.genres?.join(", ") ?? "";
+
+  const venueName = contactVenueData.venue.artistName;
+  const emailsTextContent = emailsSent.map((e) => e.TextBody).join("\n--------------");
+
+  if (opportunity !== null) {
+    const opportunityName = opportunity.title;
+    const opportunityDescription = opportunity.description;
+    const opportunityStart = opportunity.startTime;
+    const opportunityDate = opportunityStart.toDate().toISOString().split("T")[0];
+
+    // write op reply
+    const res = chatGpt(`
+  Venue Name: ${venueName}
+  Performer Name: ${displayName}
+  ${genres !== "" ? `Perfomers Genres: ${genres}` : ""}
+
+  ${note !== "" ? `Note: ${note}` : ""}
+
+  Previous Conversations/Email Thread: 
+  ###
+  ${emailsTextContent}
+  ###
+
+  --------------------------
+  Given the information above, write an paragraph to send to venues to request to perform as part of ${opportunityName} on ${opportunityDate}. 
+  The description of ${opportunityName} is: ${opportunityDescription}.
+
+  The paragraph should be friendly, professional, and a little dry (i.e. straight to the point).
+  Be sure to mention that you were recommended to reach out be Tapped Ai.
+  Your response should ONLY use the information provider and assume that's all the information that's available.
+  Don't include any intro like "dear venue owner" or signature like "sincerly" or "thanks".
+  Be concise, to the point and keep it short.
+      `);
+    return res;
+  }
+
+
+  const res =  chatGpt(`
+  Venue Name: ${venueName}
+  Performer Name: ${displayName}
+  ${genres !== "" ? `Perfomers Genres: ${genres}` : ""}
+
+  ${note !== "" ? `Note: ${note}` : ""}
+
+  Previous Conversations/Email Thread: 
+  ###
+  ${emailsTextContent}
+  ###
+
+  --------------------------
+  Given the information above, write an paragraph to send to venues to request a booking in the style
+  of a musicians looking to perform there.
+  The paragraph should be friendly, professional, and a little dry (i.e. straight to the point).
+  Be sure to mention that you were recommended to reach out be Tapped Ai.
+  Your response should ONLY use the information provider and assume that's all the information that's available.
+  Don't include any intro like "dear venue owner" or signature like "sincerly" or "thanks".
+  Be concise, to the point and keep it short.
+    `);
+
+  return res;
+};
+
+
 export const _appendNewContactRequestToThread = async({
   userId,
   venueId,
-  bookingEmail,
   collaborators,
   note,
   opportunityId,
+  emailClient,
 } : {
   userId: string;
   venueId: string;
@@ -393,12 +474,116 @@ export const _appendNewContactRequestToThread = async({
   collaborators: string[];
   note: string;
   opportunityId: string | null;
-}) => {
+  emailClient: postmark.ServerClient;
+}): Promise<void> => {
   // get the current thread
+  const contactVenueSnap = await contactVenuesRef
+    .doc(userId)
+    .collection("venuesContacted")
+    .doc(venueId)
+    .get();
+  const contactVenueData = contactVenueSnap.data() as VenueContactRequest | undefined;
 
-  // create response with chatgpt
+  if (contactVenueData === undefined) {
+    error("no contactVenueData found");
+    return;
+  }
+
+  const userSnap = await usersRef.doc(userId).get();
+  const userData = userSnap.data() as UserModel;
+
+  if (userData === undefined) {
+    error("no userData found");
+    return;
+  }
+
+  const emailsSentSnap = await contactVenuesRef
+    .doc(userId)
+    .collection("venuesContacted")
+    .doc(venueId)
+    .collection("emailsSent")
+    .get();
+
+  const allEmails = emailsSentSnap.docs.map((d) => d.data() as postmark.Message);
+
+  const opportunity = await (async () => {
+    if (opportunityId === null) {
+      return null;
+    }
+    const opportunitySnap = await opportunitiesRef.doc(opportunityId).get();
+
+    if (!opportunitySnap.exists) {
+      error("no opportunity found");
+      return null;
+    }
+
+    return opportunitySnap.data() as Opportunity;
+  })();
+
+  const message = await writeAiEmailReply({
+    opportunity,
+    collaborators,
+    note,
+    userData,
+    contactVenueData,
+    emailsSent: allEmails,
+  });
+
+  if (contactVenueData.latestMessageId === null) {
+    error("no latestMessageId found");
+    return;
+  }
+
+  if (contactVenueData.subject === null) {
+    error("no subject found");
+    return;
+  }
 
   // add email to thread from chatgpt
+  const messageId = createEmailMessageId();
+
+  const emailObj: postmark.Message = {
+    From: `${userData.username}@booking.tapped.ai`,
+    To: allEmails.join(","),
+    Headers: [
+      {
+        Name: "Message-ID",
+        Value: messageId,
+      },
+      {
+        Name: "References",
+        Value: contactVenueData.latestMessageId,
+      },
+      {
+        Name: "In-Reply-To",
+        Value: contactVenueData.latestMessageId,
+      },
+    ],
+    Subject: contactVenueData.subject,
+    HtmlBody: message,
+    TextBody: message,
+    MessageStream: "outbound",
+  };
+
+  await contactVenuesRef
+    .doc(userId)
+    .collection("venuesContacted")
+    .doc(venueId)
+    .update({
+      latestMessageId: messageId,
+    });
+
+  // add email to emails collection
+  await contactVenuesRef
+    .doc(userId)
+    .collection("venuesContacted")
+    .doc(venueId)
+    .collection("emailsSent")
+    .add(emailObj);
+
+  // send email to venue
+  const emailRes = await emailClient.sendEmail(emailObj);
+  debug({ emailRes });
 
   return;
 }
@@ -768,7 +953,7 @@ export const setLatestContactRequest = onDocumentCreated(
   });
 
 export const genericContactVenues = onCall(
-  { secrets: [ RESEND_API_KEY ] },
+  { secrets: [ RESEND_API_KEY, POSTMARK_SERVER_ID ] },
   async (request) => {
     authenticatedRequest(request);
 
@@ -840,6 +1025,7 @@ export const genericContactVenues = onCall(
         } 
 
         // if so, add email to thread
+        const emailClient = new postmark.ServerClient(POSTMARK_SERVER_ID.value());
         await _appendNewContactRequestToThread({
           userId,
           venueId,
@@ -847,6 +1033,7 @@ export const genericContactVenues = onCall(
           collaborators,
           note,
           opportunityId: null,
+          emailClient,
         });
 
         // send email to user that they've send the request

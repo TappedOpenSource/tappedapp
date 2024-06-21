@@ -6,13 +6,22 @@ import {
   onDocumentWritten,
 } from "firebase-functions/v2/firestore";
 import { createActivity } from "./activities";
-import { bookingsRef, contactVenuesRef, creditsRef, opportunitiesRef, opportunityFeedsRef, usersRef } from "./firebase";
+import { 
+  POSTMARK_SERVER_ID, 
+  bookingsRef, 
+  contactVenuesRef, 
+  creditsRef, 
+  opportunitiesRef, 
+  opportunityFeedsRef, 
+  usersRef,
+} from "./firebase";
 import { Booking, Opportunity, OpportunityFeedItem, UserModel, VenueContactRequest } from "../types/models";
 import { Timestamp } from "firebase-admin/firestore";
 import { HttpsError } from "firebase-functions/v2/https";
 import { debug, error, info } from "firebase-functions/logger";
 import { onSchedule } from "firebase-functions/v2/scheduler";
 import { _appendNewContactRequestToThread } from "./venue_contacting";
+import * as postmark from "postmark";
 // import { v4 as uuidv4 } from "uuid";
 // import { llm } from "./openai";
 
@@ -319,6 +328,7 @@ export const addActivityOnOpportunityInterest = functions
   });
 
 export const notifyVenueOnOpportunityInterest = functions
+  .runWith({ secrets: [ POSTMARK_SERVER_ID ] })
   .firestore
   .document("opportunities/{opportunityId}/interestedUsers/{userId}")
   .onCreate(async (data, context) => {
@@ -419,6 +429,7 @@ export const notifyVenueOnOpportunityInterest = functions
     }
 
     // if there is, add to the thread with context on the performance opportunity
+    const emailClient = new postmark.ServerClient(POSTMARK_SERVER_ID.value());
     await _appendNewContactRequestToThread({
       userId: context.params.userId,
       venueId: venue.id,
@@ -426,6 +437,7 @@ export const notifyVenueOnOpportunityInterest = functions
       note: interestData.userComment,
       collaborators: [],
       bookingEmail,
+      emailClient,
     });
   });
 

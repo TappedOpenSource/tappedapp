@@ -250,9 +250,9 @@ export type Opportunity = {
   geohash: string;
   lat: number;
   lng: number;
-  timestamp: Date;
-  startTime: Date;
-  endTime: Date;
+  timestamp: Timestamp;
+  startTime: Timestamp;
+  endTime: Timestamp;
   isPaid: boolean;
   touched: "like" | "dislike" | null;
   deleted?: boolean | null;
