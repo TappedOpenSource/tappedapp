@@ -12,6 +12,7 @@ import { Timestamp } from "firebase-admin/firestore";
 import { HttpsError } from "firebase-functions/v2/https";
 import { debug, error, info } from "firebase-functions/logger";
 import { onSchedule } from "firebase-functions/v2/scheduler";
+import { _appendNewContactRequestToThread } from "./venue_contacting";
 // import { v4 as uuidv4 } from "uuid";
 // import { llm } from "./openai";
 
@@ -376,19 +377,20 @@ export const notifyVenueOnOpportunityInterest = functions
       .doc(venue.id)
       .get();
 
+    const bookingEmail = venue.venueInfo?.bookingEmail;
+    if (bookingEmail === undefined || bookingEmail === null) {
+      debug(`no booking email for ${venue.id}, skipping`);
+      return;
+    }
+
     const venueContactedAlready = contactVenueSnap.exists;
     debug(`venue ${venue.id} contacted already? ${venueContactedAlready}`);
 
-    // if there is, add to the thread with context on the performance opportunity
-    if (venueContactedAlready) {
+    // if there isn't, create a new contactVenue email thread
+    // what to add to the object to change the prompt? 
+    if (!venueContactedAlready) {
       const userSnap = await usersRef.doc(context.params.userId).get();
       const user = userSnap.data() as UserModel;
-
-      const bookingEmail = venue.venueInfo?.bookingEmail;
-      if (bookingEmail === undefined || bookingEmail === null) {
-        debug(`no booking email for ${venue.id}, skipping`);
-        return;
-      }
 
       const contactRequset: VenueContactRequest = {
         venue,
@@ -416,9 +418,15 @@ export const notifyVenueOnOpportunityInterest = functions
       return;
     }
 
-    // if there isn't create a new contactVenue request and include opportunityId
-    // what to add to the object to change the prompt? 
-     
+    // if there is, add to the thread with context on the performance opportunity
+    await _appendNewContactRequestToThread({
+      userId: context.params.userId,
+      venueId: venue.id,
+      opportunityId: context.params.opportunityId,
+      note: interestData.userComment,
+      collaborators: [],
+      bookingEmail,
+    });
   });
 
 export const copyOpportunityToFeedsOnCreate = onDocumentWritten(

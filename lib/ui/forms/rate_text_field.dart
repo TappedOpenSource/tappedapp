@@ -24,7 +24,7 @@ class RateTextField extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return TextFormField(
-      initialValue: _formatter.format.format(initialValue.toString()),
+      initialValue: _formatter.format.format(initialValue),
       decoration: const InputDecoration(
         prefixIcon: Icon(Icons.attach_money),
         labelText: 'Price',

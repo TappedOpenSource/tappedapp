@@ -1,11 +1,13 @@
 /* eslint-disable import/no-unresolved */
 
-import { onRequest } from "firebase-functions/v2/https";
+import { onRequest, onCall } from "firebase-functions/v2/https";
 import {
   contactVenuesRef,
   OPEN_AI_KEY,
+  opportunitiesRef,
   orphanEmailsRef,
   POSTMARK_SERVER_ID,
+  RESEND_API_KEY,
   SLACK_WEBHOOK_URL,
   streamKey,
   streamSecret,
@@ -22,6 +24,10 @@ import { UserModel, VenueContactRequest } from "../types/models";
 import { chatGpt } from "./openai";
 import { slackNotification } from "./notifications";
 import { Timestamp } from "firebase-admin/firestore";
+import { authenticatedRequest } from "./utils";
+import { Resend } from "resend";
+import _ from "lodash";
+import { _sendEmailOnVenueContacting } from "./email_triggers";
 
 function createEmailMessageId() {
   const currentTime = Date.now().toString(36);
@@ -371,6 +377,25 @@ async function writeEmailWithAi({
     subject,
     body: res,
   };
+}
+
+export const _appendNewContactRequestToThread = async({
+  userId,
+  venueId,
+  bookingEmail,
+  collaborators,
+  note,
+  opportunityId,
+} : {
+  userId: string;
+  venueId: string;
+  bookingEmail: string;
+  collaborators: string[];
+  note: string;
+  opportunityId: string | null;
+}) => {
+  
+  return;
 }
 
 export const notifyFoundersOnVenueContact = onDocumentCreated(
@@ -735,4 +760,92 @@ export const setLatestContactRequest = onDocumentCreated(
         latestContactRequest: documentData,
         timestamp: Timestamp.now(),
       }, { merge: true });
+  });
+
+export const genericContactVenues = onCall(
+  { secrets: [ RESEND_API_KEY ] },
+  async (request) => {
+    authenticatedRequest(request);
+
+    const userId = request.data.userId as string | undefined;
+    const venueIds = request.data.venueIds as string[] | undefined;
+    const note = request.data.note as string | undefined;
+    const bookingEmail = request.data.bookingEmail as string | undefined;
+    const collaborators = request.data.collaborators as string[] | undefined; 
+
+    if (!userId) {
+      throw new Error("no userId found");
+    }
+
+    if (!venueIds) {
+      throw new Error("no venueIds found");
+    }
+
+    if (!note) {
+      throw new Error("no note found");
+    }
+
+    if (!bookingEmail) {
+      throw new Error("no bookingEmail found");
+    }
+
+    if (!collaborators) {
+      throw new Error("no collaborators found");
+    }
+
+    await Promise.all(
+      venueIds.map(async (venueId) => {
+        // for each venueId, check if user has open email thread with venue
+
+        const contactVenueSnap = await contactVenuesRef
+          .doc(userId)
+          .collection("venuesContacted")
+          .doc(venueId)
+          .get();
+
+
+        const alreadyContacted = contactVenueSnap.exists;
+
+        // if not, create new email thread (make ContactVenueRequest)
+        if (!alreadyContacted) {
+          await contactVenuesRef
+            .doc(userId)
+            .collection("venuesContacted")
+            .doc(venueId)
+            .set({
+              opportunityIds: [],
+              collaborators,
+              note,
+              bookingEmail,
+              user: null,
+              venue: null,
+              allEmails: [ bookingEmail ],
+              latestMessageId: null,
+              originalMessageId: null,
+              subject: null,
+            });
+
+          return;
+        } 
+
+        // if so, add email to thread
+        await _appendNewContactRequestToThread({
+          userId,
+          venueId,
+          bookingEmail,
+          collaborators,
+          note,
+          opportunityId: null,
+        });
+
+        // send email to user that they've send the request
+        const resend = new Resend(RESEND_API_KEY.value());
+        await _sendEmailOnVenueContacting({
+          resend,
+          userId,
+        });
+      }),
+    );
+
+
   });

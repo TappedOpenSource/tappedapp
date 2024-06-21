@@ -468,31 +468,40 @@ export const sendEmailOnPremiumWaitlist = onDocumentCreated(
     });
   });
 
+export const _sendEmailOnVenueContacting = async ({ userId, resend }: {
+  userId: string;
+  resend: Resend;
+}): Promise<void> => {
+  const userSnap = await usersRef.doc(userId).get();
+  if (!userSnap.exists) {
+    error(`user does not exist ${userId}`)
+    return;
+  }
+    
+  const user = userSnap.data() as UserModel;
+  const email = user.email;
+
+  if (email === undefined || email === null || email === "") {
+    throw new Error(`${userId} does not have an email`);
+  }
+
+  await resend.emails.send({
+    from: "no-reply@tapped.ai",
+    to: [ email ],
+    subject: "performance request sent!",
+    html: `<div style="white-space: pre;">${venueContacted}</div>`,
+  });
+};
+
 export const sendEmailOnVenueContacting = onCall(
   { secrets: [ RESEND_API_KEY ] },
   async (req) => {
     const { userId } = req.data;
-
-    const userSnap = await usersRef.doc(userId).get();
-    if (!userSnap.exists) {
-      error(`user does not exist ${userId}`)
-      return;
-    }
-    
-    const user = userSnap.data() as UserModel;
-    const email = user.email;
-
-    if (email === undefined || email === null || email === "") {
-      throw new Error(`${userId} does not have an email`);
-    }
-
     const resend = new Resend(RESEND_API_KEY.value());
 
-    await resend.emails.send({
-      from: "no-reply@tapped.ai",
-      to: [ email ],
-      subject: "performance request sent!",
-      html: `<div style="white-space: pre;">${venueContacted}</div>`,
+    await _sendEmailOnVenueContacting({
+      userId,
+      resend,
     });
   });
 

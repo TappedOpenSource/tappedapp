@@ -18,7 +18,7 @@ class AmountPaidField extends StatelessWidget {
       builder: (context, state) {
         return TextFormField(
           initialValue: _formatter.format.format(
-            state.amountPaid.toString(),
+            state.amountPaid,
           ),
           keyboardType: TextInputType.number,
           decoration: const InputDecoration(
