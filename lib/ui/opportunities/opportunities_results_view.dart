@@ -124,16 +124,16 @@ class _OpportunitiesResultsViewState extends State<OpportunitiesResultsView> {
                     maskType: EasyLoadingMaskType.black,
                   );
                   try {
-                    for (final result in selectableResults) {
-                      if (result.selected) {
-                        opBloc.add(
-                          ApplyForOpportunity(
-                            opportunity: result.op,
-                            userComment: '',
-                          ),
-                        );
-                      }
-                    }
+                    opBloc.add(
+                      BatchApplyForOpportunities(
+                        opportunities: selectableResults.where(
+                          (result) => result.selected,
+                        ).map(
+                          (result) => result.op,
+                        ).toList(),
+                        userComment: '',
+                      ),
+                    );
                     nav.pop();
                   } catch (e, s) {
                     await EasyLoading.showError(e.toString());

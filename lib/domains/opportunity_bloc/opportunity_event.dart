@@ -48,3 +48,19 @@ final class ApplyForOpportunity extends OpportunityEvent {
         userComment,
       ];
 }
+
+final class BatchApplyForOpportunities extends OpportunityEvent {
+  const BatchApplyForOpportunities({
+    required this.opportunities,
+    required this.userComment,
+  });
+
+  final List<Opportunity> opportunities;
+  final String userComment;
+
+  @override
+  List<Object> get props => [
+    opportunities,
+    userComment,
+  ];
+}
