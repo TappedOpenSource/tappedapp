@@ -327,7 +327,7 @@ export const addActivityOnOpportunityInterest = functions
     });
   });
 
-export const notifyVenueOfInterestedOpportunties = onCall(
+export const notifyVenueOfInterestedOpportunities = onCall(
   { secrets: [ POSTMARK_SERVER_ID ] },
   async (request) => {
     // update update
