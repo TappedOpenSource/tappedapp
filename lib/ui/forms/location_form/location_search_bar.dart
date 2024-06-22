@@ -21,7 +21,7 @@ class LocationSearchBar extends StatelessWidget {
         return CupertinoSearchTextField(
           placeholder: switch (initialPlace) {
             None() => 'Search for a location',
-            Some(:final value) => getAddressComponent(value.addressComponents),
+            Some(:final value) => formattedShortAddress(value.addressComponents),
           },
           style: const TextStyle(
             color: Colors.white,

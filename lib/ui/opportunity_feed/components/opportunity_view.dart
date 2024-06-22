@@ -288,8 +288,8 @@ class OpportunityView extends StatelessWidget {
                                   GestureDetector(
                                     onTap: () =>
                                         MapsLauncher.launchQuery(
-                                          getAddressComponent(
-                                              value.addressComponents),
+                                          formattedShortAddress(
+                                              value.addressComponents,),
                                         ),
                                     child: Row(
                                       children: [
@@ -300,7 +300,7 @@ class OpportunityView extends StatelessWidget {
                                         ),
                                         const SizedBox(width: 8),
                                         Text(
-                                          getAddressComponent(
+                                          formattedFullAddress(
                                             value.addressComponents,
                                           ),
                                           style: const TextStyle(

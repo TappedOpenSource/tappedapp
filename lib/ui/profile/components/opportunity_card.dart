@@ -240,7 +240,7 @@ class _OpportunityCardState extends State<OpportunityCard> {
                                   null => const SkeletonLine(),
                                   None() => const SizedBox.shrink(),
                                   Some(:final value) => Text(
-                                      getAddressComponent(
+                                      formattedShortAddress(
                                         value.addressComponents,
                                       ),
                                       style: const TextStyle(

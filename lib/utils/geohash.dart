@@ -58,7 +58,7 @@ class GeoHashRange {
 String getAddressComponent(
   List<AddressComponent>? addressComponents, {
   PlaceType type = PlaceType.LOCALITY,
-  String defaultIdent = 'Unknown',
+  String defaultIdent = 'unknown',
   bool longName = false,
 }) {
   final typeString = EnumToString.convertToString(type).toLowerCase();
@@ -73,6 +73,56 @@ String getAddressComponent(
   }
 
   return addressComponent?.firstOrNull?.shortName ?? defaultIdent;
+}
+
+String formattedShortAddress(List<AddressComponent>? addressComponents) {
+  final political = getAddressComponent(
+    addressComponents,
+    type: PlaceType.POLITICAL,
+    defaultIdent: '',
+  );
+
+  if (political != '') {
+    return political;
+  }
+
+
+  final city = getAddressComponent(
+    addressComponents,
+    type: PlaceType.LOCALITY,
+    defaultIdent: '',
+  );
+
+  if (city != '') {
+    return city;
+  }
+
+  final am = getAddressComponent(
+    addressComponents,
+    type: PlaceType.ADMINISTRATIVE_AREA_LEVEL_1,
+    defaultIdent: '',
+  );
+
+  if (am != '') {
+    return am;
+  }
+
+  final country = getAddressComponent(
+    addressComponents,
+    type: PlaceType.COUNTRY,
+    defaultIdent: '',
+  );
+
+  if (country != '') {
+    return country;
+  }
+
+  final continent = getAddressComponent(
+    addressComponents,
+    type: PlaceType.CONTINENT,
+  );
+
+  return continent;
 }
 
 String formattedFullAddress(List<AddressComponent>? addressComponents) {

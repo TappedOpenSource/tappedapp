@@ -250,7 +250,7 @@ class _ShareProfileViewState extends State<ShareProfileView> {
                                   Icons.location_on,
                                 ),
                                 title: Text(
-                                  getAddressComponent(
+                                  formattedShortAddress(
                                     value.addressComponents,
                                   ).toLowerCase(),
                                   style: TextStyle(

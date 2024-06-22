@@ -48,7 +48,7 @@ class LocationTextField extends StatelessWidget {
                 Text(
                   initialPlace.match(
                     () => hintText,
-                    (t) => getAddressComponent(t.addressComponents),
+                    (t) => formattedShortAddress(t.addressComponents),
                   ),
                   overflow: TextOverflow.ellipsis,
                   style: const TextStyle(
