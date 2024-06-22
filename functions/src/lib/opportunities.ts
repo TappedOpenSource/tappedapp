@@ -17,7 +17,7 @@ import {
 } from "./firebase";
 import { Booking, Opportunity, OpportunityFeedItem, UserModel, VenueContactRequest } from "../types/models";
 import { Timestamp } from "firebase-admin/firestore";
-import { HttpsError } from "firebase-functions/v2/https";
+import { HttpsError, onCall } from "firebase-functions/v2/https";
 import { debug, error, info } from "firebase-functions/logger";
 import { onSchedule } from "firebase-functions/v2/scheduler";
 import { _appendNewContactRequestToThread } from "./venue_contacting";
@@ -327,119 +327,154 @@ export const addActivityOnOpportunityInterest = functions
     });
   });
 
-export const notifyVenueOnOpportunityInterest = functions
-  .runWith({ secrets: [ POSTMARK_SERVER_ID ] })
-  .firestore
-  .document("opportunities/{opportunityId}/interestedUsers/{userId}")
-  .onCreate(async (data, context) => {
-    const interestData = data.data() as {
-      userId: string;
-      userComment: string;
-    };
+export const notifyVenueOfInterestedOpportunties = onCall(
+  { secrets: [ POSTMARK_SERVER_ID ] },
+  async (request) => {
+    // update update
+    const { opportunityIds, userId, note } = request.data;
 
-    const opSnap = await opportunitiesRef.doc(context.params.opportunityId).get();
-    const op = opSnap.data() as Opportunity;
-    if (op.userId === context.params.userId) {
-      return;
+    const opportunities = (await Promise.all(
+      opportunityIds.map(async (opId: string) => {
+        const opSnap = await opportunitiesRef.doc(opId).get();
+        if (!opSnap.exists) {
+          return null;
+        }
+
+        return opSnap.data() as Opportunity;
+      }),
+    )).filter((op) => op !== null) as Opportunity[];
+
+    if (opportunities.length <= 0) {
+      throw new HttpsError("failed-precondition", "no opportunities found");
     }
 
-    // check if referenceEventId exists
-    if (op.referenceEventId === undefined || op.referenceEventId === null) {
-      debug(`no reference id for ${op.id}, skipping`);
-      return;
-    }
+    const fullOps = (await Promise.all(
+      opportunities.map(
+        async (op) => {
+          if (op.userId === userId) {
+            debug(`opportunity ${op.id} is owned by user ${userId}, skipping`);
+            return null;
+          }
 
-    // get all bookings for that referenceEventId
-    const bookingsSnap = await bookingsRef
-      .where(
-        "referenceEventId",
-        "==",
-        op.referenceEventId,
-      )
-      .get();
+          // check if referenceEventId exists
+          if (op.referenceEventId === undefined || op.referenceEventId === null) {
+            debug(`no reference id for ${op.id}, skipping`);
+            return;
+          }
 
-    const bookings = bookingsSnap.docs.map((doc) => doc.data() as Booking);
-    if (bookings.length <= 0) {
-      debug(`no bookings for event if ${op.referenceEventId}, skipping`)
-      return;
-    }
+          // get all bookings for that referenceEventId
+          const bookingsSnap = await bookingsRef
+            .where(
+              "referenceEventId",
+              "==",
+              op.referenceEventId,
+            )
+            .get();
 
-    // get the venue (requesterId) from one of the bookings
-    const venueId = bookings[0].requesterId;
-    if (venueId === undefined || venueId === null) {
-      debug(`no venue id for ${op.id}, skipping`);
-      return;
-    }
+          const bookings = bookingsSnap.docs.map((doc) => doc.data() as Booking);
+          return {
+            ...op,
+            referenceBookings: bookings,
+          };
+        }),
+    )).filter((op) => op !== null) as (Opportunity & { referenceBookings: Booking[] })[];
 
-    const venueSnap = await usersRef.doc(venueId).get();
-    const venue = venueSnap.data() as UserModel;
-
-    // check if venue is unclaimed (and if not, return)
-    if (!venue.unclaimed) {
-      debug(`venue ${venue.id} is claimed, skipping`);
-      return;
-    }
-
-    // check if there is already a contactVenue email thread open
-    const contactVenueSnap = await contactVenuesRef
-      .doc(context.params.userId)
-      .collection("venuesContacted")
-      .doc(venue.id)
-      .get();
-
-    const bookingEmail = venue.venueInfo?.bookingEmail;
-    if (bookingEmail === undefined || bookingEmail === null) {
-      debug(`no booking email for ${venue.id}, skipping`);
-      return;
-    }
-
-    const venueContactedAlready = contactVenueSnap.exists;
-    debug(`venue ${venue.id} contacted already? ${venueContactedAlready}`);
-
-    // if there isn't, create a new contactVenue email thread
-    // what to add to the object to change the prompt? 
-    if (!venueContactedAlready) {
-      const userSnap = await usersRef.doc(context.params.userId).get();
-      const user = userSnap.data() as UserModel;
-
-      const contactRequset: VenueContactRequest = {
-        venue,
-        user,
-        bookingEmail: bookingEmail,
-        attachments: [],
-        note: interestData.userComment,
-        timestamp: Timestamp.now(),
-        originalMessageId: null,
-        latestMessageId: null,
-        subject: null,
-        allEmails: [ bookingEmail ],
-        collaborators: [],
-        opportunityIds: [ context.params.opportunityId ],
+    const opsByVenue: Record<string, (Opportunity & { referenceBookings: Booking[] })[]> = {};
+    for (const op of fullOps) {
+      const refernceBookings = op.referenceBookings;
+      if (refernceBookings.length <= 0) {
+        debug(`no bookings for event if ${op.id}, skipping`)
+        continue;
       }
 
-      await contactVenuesRef
-        .doc(context.params.userId)
+      // get the venue (requesterId) from one of the bookings
+      const venueId = refernceBookings[0].requesterId;
+      if (venueId === undefined || venueId === null) {
+        debug(`no venue id for ${op.id}, skipping`);
+        continue;
+      }
+
+      if (opsByVenue[venueId] === undefined) {
+        opsByVenue[venueId] = [];
+      }
+
+      opsByVenue[venueId].push(op);
+    } 
+
+    for (const entries of Object.entries(opsByVenue)) {
+      const [ venueId, ops ] = entries;
+
+      const venueSnap = await usersRef.doc(venueId).get();
+      const venue = venueSnap.data() as UserModel;
+
+      // check if venue is unclaimed (and if not, return)
+      if (!venue.unclaimed) {
+        debug(`venue ${venue.id} is claimed, skipping`);
+        return;
+      }
+
+      // check if there is already a contactVenue email thread open
+      const contactVenueSnap = await contactVenuesRef
+        .doc(userId)
         .collection("venuesContacted")
         .doc(venue.id)
-        .set(contactRequset, { merge: true });
+        .get();
 
-      info(`venue ${venue.id} context request sent by user ${context.params.userId}`);
+      const bookingEmail = venue.venueInfo?.bookingEmail;
+      if (bookingEmail === undefined || bookingEmail === null) {
+        debug(`no booking email for ${venue.id}, skipping`);
+        return;
+      }
 
-      return;
+      const venueContactedAlready = contactVenueSnap.exists;
+      debug(`venue ${venue.id} contacted already? ${venueContactedAlready}`);
+
+      // if there isn't, create a new contactVenue email thread
+      // what to add to the object to change the prompt? 
+      if (!venueContactedAlready) {
+        const userSnap = await usersRef.doc(userId).get();
+        const user = userSnap.data() as UserModel;
+
+        const contactRequset: VenueContactRequest = {
+          venue,
+          user,
+          bookingEmail: bookingEmail,
+          attachments: [],
+          note,
+          timestamp: Timestamp.now(),
+          originalMessageId: null,
+          latestMessageId: null,
+          subject: null,
+          allEmails: [ bookingEmail ],
+          collaborators: [],
+          opportunityIds: ops.map((op) => op.id),
+        }
+
+        await contactVenuesRef
+          .doc(userId)
+          .collection("venuesContacted")
+          .doc(venue.id)
+          .set(contactRequset, { merge: true });
+
+        info(`venue ${venue.id} context request sent by user ${userId}`);
+
+        return;
+      }
+
+      // if there is, add to the thread with context on the performance opportunity
+      const emailClient = new postmark.ServerClient(POSTMARK_SERVER_ID.value());
+      await _appendNewContactRequestToThread({
+        userId: userId,
+        venueId: venue.id,
+        opportunityIds: ops.map((op) => op.id),
+        note,
+        collaboratorIds: [],
+        bookingEmail,
+        emailClient,
+      });
     }
-
-    // if there is, add to the thread with context on the performance opportunity
-    const emailClient = new postmark.ServerClient(POSTMARK_SERVER_ID.value());
-    await _appendNewContactRequestToThread({
-      userId: context.params.userId,
-      venueId: venue.id,
-      opportunityId: context.params.opportunityId,
-      note: interestData.userComment,
-      collaborators: [],
-      bookingEmail,
-      emailClient,
-    });
-  });
+  }
+);
 
 export const copyOpportunityToFeedsOnCreate = onDocumentWritten(
   { document: "opportunities/{opportunityId}" },

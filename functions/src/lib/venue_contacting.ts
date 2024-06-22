@@ -13,7 +13,6 @@ import {
   streamSecret,
   usersRef,
 } from "./firebase";
-// import sgMail from "@sendgrid/mail";
 import { debug, error, info } from "firebase-functions/logger";
 import * as postmark from "postmark";
 // import { getFoundersDeviceTokens } from "./utils";
@@ -26,7 +25,7 @@ import { slackNotification } from "./notifications";
 import { Timestamp } from "firebase-admin/firestore";
 import { authenticatedRequest } from "./utils";
 import { Resend } from "resend";
-import _ from "lodash";
+// import _ from "lodash";
 import { _sendEmailOnVenueContacting } from "./email_triggers";
 
 function createEmailMessageId() {
@@ -49,6 +48,17 @@ async function sendAsEmail({
   venue: UserModel;
 }) {
   const opIds = venueContactData.opportunityIds ?? [];
+  const opportunities = (await Promise.all(
+    opIds.map(async (id: string) => {
+      const snap = await opportunitiesRef.doc(id).get();
+      if (!snap.exists) {
+        error("no opportunity found");
+        return null;
+      }
+
+      return snap.data() as Opportunity;
+    })
+  )).filter((o) => o !== null) as Opportunity[];
 
   const collaboratorIds = venueContactData.collaborators ?? [];
   const collaborators = (await Promise.all(
@@ -97,6 +107,7 @@ async function sendAsEmail({
     performer: user,
     venue: venueContactData?.venue,
     note,
+    opportunities,
   });
 
   const { text, html } = contactVenueTemplate({
@@ -169,7 +180,7 @@ async function sendAsDirectMessage({
   // join channel
   const channel = streamClient.channel("messaging", {
     members: [ userId, venueId ],
-    created_by_id: venueId, 
+    created_by_id: venueId,
   });
   await channel.create();
 
@@ -201,7 +212,7 @@ async function dmAutoReply({
   // join channel
   const channel = streamClient.channel("messaging", {
     members: [ userId, venueId ],
-    created_by_id: venueId, 
+    created_by_id: venueId,
   });
   await channel.create();
 
@@ -235,7 +246,7 @@ async function sendStreamMessageFromEmail({
   // join channel
   const channel = streamClient.channel("messaging", {
     members: [ userId, venueId ],
-    created_by_id: venueId, 
+    created_by_id: venueId,
   });
   await channel.create();
 
@@ -342,10 +353,12 @@ async function writeEmailWithAi({
   performer,
   venue,
   note,
+  opportunities,
 }: {
   performer: UserModel;
   venue: UserModel;
   note: string;
+  opportunities: Opportunity[];
 }): Promise<{
   subject: string;
   body: string;
@@ -356,6 +369,43 @@ async function writeEmailWithAi({
 
   const venueName = venue.artistName;
   const subject = `Performance Inquiry from ${displayName}`;
+
+  if (opportunities.length > 0) {
+    const shortenedOps = opportunities.map((o) => {
+      return {
+        title: o.title,
+        description: o.description,
+        date: o.startTime.toDate().toISOString().split("T")[0],
+      };
+    });
+
+    const opportunitySnippet = shortenedOps.map((o) => {
+      return `${o.title} on ${o.date}. `;
+    }).join("\n");
+    // write op reply
+    const res = await chatGpt(`
+  Venue Name: ${venueName}
+  Performer Name: ${displayName}
+  ${genres !== "" ? `Perfomers Genres: ${genres}` : ""}
+
+  ${note !== "" ? `Note: ${note}` : ""}
+
+  --------------------------
+  Given the information above, write an paragraph to send that you're open to performing with this:
+  ${opportunitySnippet}
+  
+
+  The paragraph should be friendly, professional, and a little dry (i.e. straight to the point).
+  Be sure to mention that you were recommended to reach out be Tapped Ai.
+  Your response should ONLY use the information provider and assume that's all the information that's available.
+  Don't include any intro like "dear venue owner" or signature like "sincerly" or "thanks".
+  Be concise, to the point and keep it short.
+      `);
+    return {
+      subject,
+      body: res,
+    };
+  }
 
   const res = await chatGpt(`
   Venue Name: ${venueName}
@@ -380,15 +430,13 @@ async function writeEmailWithAi({
 }
 
 const writeAiEmailReply = async ({
-  opportunity,
-  collaborators,
+  opportunities,
   note,
   userData,
   contactVenueData,
   emailsSent,
 }: {
-  opportunity: Opportunity | null;
-  collaborators: string[];
+  opportunities: Opportunity[];
   note: string;
   userData: UserModel;
   contactVenueData: VenueContactRequest;
@@ -401,11 +449,19 @@ const writeAiEmailReply = async ({
   const venueName = contactVenueData.venue.artistName;
   const emailsTextContent = emailsSent.map((e) => e.TextBody).join("\n--------------");
 
-  if (opportunity !== null) {
-    const opportunityName = opportunity.title;
-    const opportunityDescription = opportunity.description;
-    const opportunityStart = opportunity.startTime;
-    const opportunityDate = opportunityStart.toDate().toISOString().split("T")[0];
+  if (opportunities.length > 0) {
+
+    const shortenedOps = opportunities.map((o) => {
+      return {
+        title: o.title,
+        description: o.description,
+        date: o.startTime.toDate().toISOString().split("T")[0],
+      };
+    });
+
+    const opportunitySnippet = shortenedOps.map((o) => {
+      return `${o.title} on ${o.date}. `;
+    }).join("\n");
 
     // write op reply
     const res = chatGpt(`
@@ -421,8 +477,9 @@ const writeAiEmailReply = async ({
   ###
 
   --------------------------
-  Given the information above, write an paragraph to send to venues to request to perform as part of ${opportunityName} on ${opportunityDate}. 
-  The description of ${opportunityName} is: ${opportunityDescription}.
+  Given the information above, write an paragraph to send that you're open to performing with this:
+  ${opportunitySnippet}
+  
 
   The paragraph should be friendly, professional, and a little dry (i.e. straight to the point).
   Be sure to mention that you were recommended to reach out be Tapped Ai.
@@ -434,7 +491,7 @@ const writeAiEmailReply = async ({
   }
 
 
-  const res =  chatGpt(`
+  const res = chatGpt(`
   Venue Name: ${venueName}
   Performer Name: ${displayName}
   ${genres !== "" ? `Perfomers Genres: ${genres}` : ""}
@@ -460,20 +517,20 @@ const writeAiEmailReply = async ({
 };
 
 
-export const _appendNewContactRequestToThread = async({
+export const _appendNewContactRequestToThread = async ({
   userId,
   venueId,
-  collaborators,
+  collaboratorIds,
   note,
-  opportunityId,
+  opportunityIds,
   emailClient,
-} : {
+}: {
   userId: string;
   venueId: string;
   bookingEmail: string;
-  collaborators: string[];
+  collaboratorIds: string[];
   note: string;
-  opportunityId: string | null;
+  opportunityIds: string[];
   emailClient: postmark.ServerClient;
 }): Promise<void> => {
   // get the current thread
@@ -506,27 +563,42 @@ export const _appendNewContactRequestToThread = async({
 
   const allEmails = emailsSentSnap.docs.map((d) => d.data() as postmark.Message);
 
-  const opportunity = await (async () => {
-    if (opportunityId === null) {
-      return null;
-    }
-    const opportunitySnap = await opportunitiesRef.doc(opportunityId).get();
+  const collaborators = (await Promise.all(
+    collaboratorIds.map(async (id: string) => {
+      const snap = await usersRef.doc(id).get();
+      if (!snap.exists) {
+        error("no collaborator found");
+        return null;
+      }
 
-    if (!opportunitySnap.exists) {
-      error("no opportunity found");
-      return null;
-    }
+      return snap.data() as UserModel;
+    }),
+  )).filter((u) => u !== null) as UserModel[];
 
-    return opportunitySnap.data() as Opportunity;
-  })();
+  const opportunities = (await Promise.all(
+    opportunityIds.map(async (id: string) => {
+      const snap = await opportunitiesRef.doc(id).get();
+      if (!snap.exists) {
+        error("no opportunity found");
+        return null;
+      }
+
+      return snap.data() as Opportunity;
+    })
+  )).filter((o) => o !== null) as Opportunity[];
 
   const message = await writeAiEmailReply({
-    opportunity,
-    collaborators,
+    opportunities,
     note,
     userData,
     contactVenueData,
     emailsSent: allEmails,
+  });
+
+  const { text, html } = contactVenueTemplate({
+    performer: userData,
+    collaborators,
+    emailText: message,
   });
 
   if (contactVenueData.latestMessageId === null) {
@@ -560,8 +632,8 @@ export const _appendNewContactRequestToThread = async({
       },
     ],
     Subject: contactVenueData.subject,
-    HtmlBody: message,
-    TextBody: message,
+    HtmlBody: html,
+    TextBody: text,
     MessageStream: "outbound",
   };
 
@@ -597,8 +669,8 @@ export const notifyFoundersOnVenueContact = onDocumentCreated(
     process.env.OPENAI_API_KEY = OPEN_AI_KEY.value();
     const snapshot = event.data;
     const venueContactData = snapshot?.data() as
-        | VenueContactRequest
-        | undefined;
+      | VenueContactRequest
+      | undefined;
 
     try {
       if (venueContactData === undefined) {
@@ -788,16 +860,16 @@ export const streamBeforeMessageWebhook = onRequest(
     const json = req.body as {
       user: User | undefined;
       message:
-        | {
-            text: string;
-          }
-        | undefined;
+      | {
+        text: string;
+      }
+      | undefined;
       members:
-        | {
-            user_id: string;
-            user: User;
-          }[]
-        | undefined;
+      | {
+        user_id: string;
+        user: User;
+      }[]
+      | undefined;
     };
     info({ json });
 
@@ -961,7 +1033,7 @@ export const genericContactVenues = onCall(
     const venueIds = request.data.venueIds as string[] | undefined;
     const note = request.data.note as string | undefined;
     const bookingEmail = request.data.bookingEmail as string | undefined;
-    const collaborators = request.data.collaborators as string[] | undefined; 
+    const collaborators = request.data.collaborators as string[] | undefined;
 
     if (!userId) {
       throw new Error("no userId found");
@@ -1022,7 +1094,7 @@ export const genericContactVenues = onCall(
             userId,
           });
           return;
-        } 
+        }
 
         // if so, add email to thread
         const emailClient = new postmark.ServerClient(POSTMARK_SERVER_ID.value());
@@ -1030,9 +1102,9 @@ export const genericContactVenues = onCall(
           userId,
           venueId,
           bookingEmail,
-          collaborators,
+          collaboratorIds: collaborators,
           note,
-          opportunityId: null,
+          opportunityIds: [],
           emailClient,
         });
 

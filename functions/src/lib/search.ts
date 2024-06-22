@@ -77,7 +77,7 @@ export const transformLocationPayloadForSearch = functions.https
 //     };
 //   })
 
-export const sendSearchAppearances = onSchedule("0 0/3 * * *", async (event) => {
+export const sendSearchAppearances = onSchedule("0 0/3 * * *", async () => {
   const min = 20;
   const max = 50;
   const randomNumber = Math.floor(Math.random() * (max - min)) + min;
