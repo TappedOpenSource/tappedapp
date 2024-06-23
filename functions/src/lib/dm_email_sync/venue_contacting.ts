@@ -12,31 +12,23 @@ import {
   streamKey,
   streamSecret,
   usersRef,
-} from "./firebase";
+} from "../firebase";
 import { debug, error, info } from "firebase-functions/logger";
 import * as postmark from "postmark";
 // import { getFoundersDeviceTokens } from "./utils";
 import { onDocumentCreated } from "firebase-functions/v2/firestore";
 import { StreamChat, User } from "stream-chat";
-import { contactVenueTemplate } from "../email_templates/contact_venue";
-import { Opportunity, UserModel, VenueContactRequest } from "../types/models";
-import { chatGpt } from "./openai";
-import { slackNotification } from "./notifications";
+import { contactVenueTemplate } from "../../email_templates/contact_venue";
+import { Opportunity, UserModel, VenueContactRequest } from "../../types/models";
+import { slackNotification } from "../notifications";
 import { Timestamp } from "firebase-admin/firestore";
-import { authenticatedRequest } from "./utils";
+import { authenticatedRequest } from "../utils";
 import { Resend } from "resend";
 // import _ from "lodash";
-import { _sendEmailOnVenueContacting } from "./email_triggers";
-
-function createEmailMessageId() {
-  const currentTime = Date.now().toString(36);
-  const randomPart = Math.floor(
-    Math.random() * Number.MAX_SAFE_INTEGER
-  ).toString(36);
-  const messageId = `<${currentTime}.${randomPart}@tapped.ai>`;
-
-  return messageId;
-}
+import { _sendEmailOnVenueContacting } from "../email_triggers";
+import { writeAiEmailReply, writeEmailWithAi } from "./compose_email";
+import { createEmailMessageId } from "./utils";
+import { dmAutoReply, sendStreamMessage } from "./messaging";
 
 async function sendAsEmail({
   venueContactData,
@@ -192,75 +184,6 @@ async function sendAsDirectMessage({
   });
 }
 
-async function dmAutoReply({
-  streamClient,
-  venueId,
-  userId,
-  autoReply,
-}: {
-  streamClient: StreamChat;
-  venueId: string;
-  userId: string;
-  autoReply: string | null;
-}) {
-  const defaultReply = `
-  Hey! Thanks for reaching out. We'll reach back out to you soon
-`
-  const text = autoReply ?? defaultReply;
-
-
-  // join channel
-  const channel = streamClient.channel("messaging", {
-    members: [ userId, venueId ],
-    created_by_id: venueId,
-  });
-  await channel.create();
-
-  // post msg
-  await channel.sendMessage({
-    text,
-    user_id: venueId,
-  });
-
-  const channelSnap = await channel.query({});
-  const isNew = channelSnap.channel.last_message_at === null;
-  if (isNew) {
-    await channel.updatePartial({
-      set: { frozen: true },
-    });
-  }
-}
-
-async function sendStreamMessageFromEmail({
-  streamClient,
-  userId,
-  venueId,
-  message,
-}: {
-  streamClient: StreamChat;
-  userId: string;
-  venueId: string;
-  message: string;
-}) {
-
-  // join channel
-  const channel = streamClient.channel("messaging", {
-    members: [ userId, venueId ],
-    created_by_id: venueId,
-  });
-  await channel.create();
-
-  await channel.updatePartial({
-    set: { frozen: false },
-  });
-
-  // post msg
-  await channel.sendMessage({
-    text: message,
-    user_id: venueId,
-  });
-}
-
 async function sendEmailFromStreamMessage({
   emailClient,
   user,
@@ -348,174 +271,6 @@ async function sendEmailFromStreamMessage({
 
   return;
 }
-
-async function writeEmailWithAi({
-  performer,
-  venue,
-  note,
-  opportunities,
-}: {
-  performer: UserModel;
-  venue: UserModel;
-  note: string;
-  opportunities: Opportunity[];
-}): Promise<{
-  subject: string;
-  body: string;
-}> {
-  const username = performer.username;
-  const displayName = performer.artistName || username;
-  const genres = performer.performerInfo?.genres?.join(", ") ?? "";
-
-  const venueName = venue.artistName;
-  const subject = `Performance Inquiry from ${displayName}`;
-
-  if (opportunities.length > 0) {
-    const shortenedOps = opportunities.map((o) => {
-      return {
-        title: o.title,
-        description: o.description,
-        date: o.startTime.toDate().toISOString().split("T")[0],
-      };
-    });
-
-    const opportunitySnippet = shortenedOps.map((o) => {
-      return `${o.title} on ${o.date}. `;
-    }).join("\n");
-    // write op reply
-    const res = await chatGpt(`
-  Venue Name: ${venueName}
-  Performer Name: ${displayName}
-  ${genres !== "" ? `Perfomers Genres: ${genres}` : ""}
-
-  ${note !== "" ? `Note: ${note}` : ""}
-
-  --------------------------
-  Given the information above, write an paragraph to send that you're open to performing with this:
-  ${opportunitySnippet}
-  
-
-  The paragraph should be friendly, professional, and a little dry (i.e. straight to the point).
-  Be sure to mention that you were recommended to reach out be Tapped Ai.
-  Your response should ONLY use the information provider and assume that's all the information that's available.
-  Don't include any intro like "dear venue owner" or signature like "sincerly" or "thanks".
-  Be concise, to the point and keep it short.
-      `);
-    return {
-      subject,
-      body: res,
-    };
-  }
-
-  const res = await chatGpt(`
-  Venue Name: ${venueName}
-  Performer Name: ${displayName}
-  ${genres !== "" ? `Perfomers Genres: ${genres}` : ""}
-
-  ${note !== "" ? `Note: ${note}` : ""}
-
-  Given the information above, write an paragraph to send to venues to request a booking in the style
-  of a musicians looking to perform there.
-  The paragraph should be friendly, professional, and a little dry (i.e. straight to the point).
-  Be sure to mention that you were recommended to reach out be Tapped Ai.
-  Your response should ONLY use the information provider and assume that's all the information that's available.
-  Don't include any intro like "dear venue owner" or signature like "sincerly" or "thanks".
-  Be concise, to the point and keep it short.
-  `);
-
-  return {
-    subject,
-    body: res,
-  };
-}
-
-const writeAiEmailReply = async ({
-  opportunities,
-  note,
-  userData,
-  contactVenueData,
-  emailsSent,
-}: {
-  opportunities: Opportunity[];
-  note: string;
-  userData: UserModel;
-  contactVenueData: VenueContactRequest;
-  emailsSent: postmark.Message[];
-}): Promise<string> => {
-  const username = userData.username;
-  const displayName = userData.artistName || username;
-  const genres = userData.performerInfo?.genres?.join(", ") ?? "";
-
-  const venueName = contactVenueData.venue.artistName;
-  const emailsTextContent = emailsSent.map((e) => e.TextBody).join("\n--------------");
-
-  if (opportunities.length > 0) {
-
-    const shortenedOps = opportunities.map((o) => {
-      return {
-        title: o.title,
-        description: o.description,
-        date: o.startTime.toDate().toISOString().split("T")[0],
-      };
-    });
-
-    const opportunitySnippet = shortenedOps.map((o) => {
-      return `${o.title} on ${o.date}. `;
-    }).join("\n");
-
-    // write op reply
-    const res = chatGpt(`
-  Venue Name: ${venueName}
-  Performer Name: ${displayName}
-  ${genres !== "" ? `Perfomers Genres: ${genres}` : ""}
-
-  ${note !== "" ? `Note: ${note}` : ""}
-
-  Previous Conversations/Email Thread: 
-  ###
-  ${emailsTextContent}
-  ###
-
-  --------------------------
-  Given the information above, write an paragraph to send that you're open to performing with this:
-  ${opportunitySnippet}
-  
-
-  The paragraph should be friendly, professional, and a little dry (i.e. straight to the point).
-  Be sure to mention that you were recommended to reach out be Tapped Ai.
-  Your response should ONLY use the information provider and assume that's all the information that's available.
-  Don't include any intro like "dear venue owner" or signature like "sincerly" or "thanks".
-  Be concise, to the point and keep it short.
-      `);
-    return res;
-  }
-
-
-  const res = chatGpt(`
-  Venue Name: ${venueName}
-  Performer Name: ${displayName}
-  ${genres !== "" ? `Perfomers Genres: ${genres}` : ""}
-
-  ${note !== "" ? `Note: ${note}` : ""}
-
-  Previous Conversations/Email Thread: 
-  ###
-  ${emailsTextContent}
-  ###
-
-  --------------------------
-  Given the information above, write an paragraph to send to venues to request a booking in the style
-  of a musicians looking to perform there.
-  The paragraph should be friendly, professional, and a little dry (i.e. straight to the point).
-  Be sure to mention that you were recommended to reach out be Tapped Ai.
-  Your response should ONLY use the information provider and assume that's all the information that's available.
-  Don't include any intro like "dear venue owner" or signature like "sincerly" or "thanks".
-  Be concise, to the point and keep it short.
-    `);
-
-  return res;
-};
-
 
 export const _appendNewContactRequestToThread = async ({
   userId,
@@ -804,10 +559,10 @@ export const inboundEmailWebhook = onRequest(
         streamKey.value(),
         streamSecret.value()
       );
-      await sendStreamMessageFromEmail({
+      await sendStreamMessage({
         streamClient: streamChat,
-        userId,
-        venueId,
+        receiverId: userId,
+        senderId: venueId,
         message: messageContent,
       });
 

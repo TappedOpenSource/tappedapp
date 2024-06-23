@@ -25,13 +25,13 @@ export * from "./lib/search";
 export * from "./lib/calendar";
 export * from "./lib/places";
 export * from "./lib/user_feedback";
-export * from "./lib/venue_contacting";
 export * from "./lib/notifications";
 export * from "./lib/spotify";
 export * from "./lib/chartmetric";
 export * from "./lib/crawler";
 export * from "./lib/users";
 export * from "./lib/mailchimp";
+export * from "./lib/dm_email_sync";
 
 const _deleteUser = async (user: UserModel, slackUrl: string) => {
   await slackNotification({
