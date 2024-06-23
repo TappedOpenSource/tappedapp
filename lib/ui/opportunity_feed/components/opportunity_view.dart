@@ -289,7 +289,8 @@ class OpportunityView extends StatelessWidget {
                                     onTap: () =>
                                         MapsLauncher.launchQuery(
                                           formattedShortAddress(
-                                              value.addressComponents,),
+                                              value.addressComponents,
+                                          ),
                                         ),
                                     child: Row(
                                       children: [
@@ -300,7 +301,7 @@ class OpportunityView extends StatelessWidget {
                                         ),
                                         const SizedBox(width: 8),
                                         Text(
-                                          formattedFullAddress(
+                                          formattedShortAddress(
                                             value.addressComponents,
                                           ),
                                           style: const TextStyle(
