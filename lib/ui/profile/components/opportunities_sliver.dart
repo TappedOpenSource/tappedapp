@@ -37,6 +37,7 @@ class OpportunitiesSliver extends StatelessWidget {
                   ],
                 ),
               ),
+
               OpportunitiesList(
                 opportunities: state.opportunities,
               ),

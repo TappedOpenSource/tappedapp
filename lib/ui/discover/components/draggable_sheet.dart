@@ -414,7 +414,7 @@ class DraggableSheet extends StatelessWidget {
                                                       opportunity: opportunity,
                                                     ),
                                                   ),
-                                              if (sortedVenueHits.length > 3)
+                                              if (state.opportunityHits.length > 3)
                                                 Row(
                                                   mainAxisAlignment:
                                                       MainAxisAlignment.center,
