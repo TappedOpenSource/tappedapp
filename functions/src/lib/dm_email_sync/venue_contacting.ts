@@ -52,19 +52,7 @@ async function sendAsEmail({
     })
   )).filter((o) => o !== null) as Opportunity[];
 
-  const collaboratorIds = venueContactData.collaborators ?? [];
-  const collaborators = (await Promise.all(
-    collaboratorIds.map(async (id: string) => {
-      const snap = await usersRef.doc(id).get();
-      if (!snap.exists) {
-        error("no user found");
-        return null;
-      }
-
-      return snap.data() as UserModel;
-    }),
-  )).filter((u) => u !== null) as UserModel[];
-  console.log({ collaborators });
+  const collaborators = venueContactData.collaborators ?? [];
 
   const bookingEmail = venueContactData.bookingEmail;
   if (!bookingEmail) {

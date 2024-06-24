@@ -275,7 +275,7 @@ export type VenueContactRequest = {
   latestMessageId: Option<string>;
   subject: Option<string>;
   allEmails: string[];
-  collaborators: string[];
+  collaborators: UserModel[];
   opportunityIds: string[];
 };
 
