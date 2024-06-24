@@ -37,6 +37,7 @@ mixin _$VenueInfo {
   Option<int> get averageTicketPrice => throw _privateConstructorUsedError;
   List<String> get topPerformerIds => throw _privateConstructorUsedError;
   List<int> get bookingsByDayOfWeek => throw _privateConstructorUsedError;
+  Option<double> get responseRate => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
@@ -65,7 +66,8 @@ abstract class $VenueInfoCopyWith<$Res> {
       VenueType type,
       Option<int> averageTicketPrice,
       List<String> topPerformerIds,
-      List<int> bookingsByDayOfWeek});
+      List<int> bookingsByDayOfWeek,
+      Option<double> responseRate});
 }
 
 /// @nodoc
@@ -97,6 +99,7 @@ class _$VenueInfoCopyWithImpl<$Res, $Val extends VenueInfo>
     Object? averageTicketPrice = null,
     Object? topPerformerIds = null,
     Object? bookingsByDayOfWeek = null,
+    Object? responseRate = null,
   }) {
     return _then(_value.copyWith(
       bookingEmail: null == bookingEmail
@@ -163,6 +166,10 @@ class _$VenueInfoCopyWithImpl<$Res, $Val extends VenueInfo>
           ? _value.bookingsByDayOfWeek
           : bookingsByDayOfWeek // ignore: cast_nullable_to_non_nullable
               as List<int>,
+      responseRate: null == responseRate
+          ? _value.responseRate
+          : responseRate // ignore: cast_nullable_to_non_nullable
+              as Option<double>,
     ) as $Val);
   }
 }
@@ -191,7 +198,8 @@ abstract class _$$VenueInfoImplCopyWith<$Res>
       VenueType type,
       Option<int> averageTicketPrice,
       List<String> topPerformerIds,
-      List<int> bookingsByDayOfWeek});
+      List<int> bookingsByDayOfWeek,
+      Option<double> responseRate});
 }
 
 /// @nodoc
@@ -221,6 +229,7 @@ class __$$VenueInfoImplCopyWithImpl<$Res>
     Object? averageTicketPrice = null,
     Object? topPerformerIds = null,
     Object? bookingsByDayOfWeek = null,
+    Object? responseRate = null,
   }) {
     return _then(_$VenueInfoImpl(
       bookingEmail: null == bookingEmail
@@ -287,6 +296,10 @@ class __$$VenueInfoImplCopyWithImpl<$Res>
           ? _value._bookingsByDayOfWeek
           : bookingsByDayOfWeek // ignore: cast_nullable_to_non_nullable
               as List<int>,
+      responseRate: null == responseRate
+          ? _value.responseRate
+          : responseRate // ignore: cast_nullable_to_non_nullable
+              as Option<double>,
     ));
   }
 }
@@ -310,7 +323,8 @@ class _$VenueInfoImpl implements _VenueInfo {
       this.type = VenueType.other,
       this.averageTicketPrice = const None(),
       final List<String> topPerformerIds = const [],
-      final List<int> bookingsByDayOfWeek = const []})
+      final List<int> bookingsByDayOfWeek = const [],
+      this.responseRate = const None()})
       : _genres = genres,
         _venuePhotos = venuePhotos,
         _topPerformerIds = topPerformerIds,
@@ -393,8 +407,12 @@ class _$VenueInfoImpl implements _VenueInfo {
   }
 
   @override
+  @JsonKey()
+  final Option<double> responseRate;
+
+  @override
   String toString() {
-    return 'VenueInfo(bookingEmail: $bookingEmail, websiteUrl: $websiteUrl, autoReply: $autoReply, capacity: $capacity, idealPerformerProfile: $idealPerformerProfile, genres: $genres, venuePhotos: $venuePhotos, productionInfo: $productionInfo, frontOfHouse: $frontOfHouse, monitors: $monitors, microphones: $microphones, lights: $lights, type: $type, averageTicketPrice: $averageTicketPrice, topPerformerIds: $topPerformerIds, bookingsByDayOfWeek: $bookingsByDayOfWeek)';
+    return 'VenueInfo(bookingEmail: $bookingEmail, websiteUrl: $websiteUrl, autoReply: $autoReply, capacity: $capacity, idealPerformerProfile: $idealPerformerProfile, genres: $genres, venuePhotos: $venuePhotos, productionInfo: $productionInfo, frontOfHouse: $frontOfHouse, monitors: $monitors, microphones: $microphones, lights: $lights, type: $type, averageTicketPrice: $averageTicketPrice, topPerformerIds: $topPerformerIds, bookingsByDayOfWeek: $bookingsByDayOfWeek, responseRate: $responseRate)';
   }
 
   @override
@@ -430,7 +448,9 @@ class _$VenueInfoImpl implements _VenueInfo {
             const DeepCollectionEquality()
                 .equals(other._topPerformerIds, _topPerformerIds) &&
             const DeepCollectionEquality()
-                .equals(other._bookingsByDayOfWeek, _bookingsByDayOfWeek));
+                .equals(other._bookingsByDayOfWeek, _bookingsByDayOfWeek) &&
+            (identical(other.responseRate, responseRate) ||
+                other.responseRate == responseRate));
   }
 
   @JsonKey(ignore: true)
@@ -452,7 +472,8 @@ class _$VenueInfoImpl implements _VenueInfo {
       type,
       averageTicketPrice,
       const DeepCollectionEquality().hash(_topPerformerIds),
-      const DeepCollectionEquality().hash(_bookingsByDayOfWeek));
+      const DeepCollectionEquality().hash(_bookingsByDayOfWeek),
+      responseRate);
 
   @JsonKey(ignore: true)
   @override
@@ -485,7 +506,8 @@ abstract class _VenueInfo implements VenueInfo {
       final VenueType type,
       final Option<int> averageTicketPrice,
       final List<String> topPerformerIds,
-      final List<int> bookingsByDayOfWeek}) = _$VenueInfoImpl;
+      final List<int> bookingsByDayOfWeek,
+      final Option<double> responseRate}) = _$VenueInfoImpl;
 
   factory _VenueInfo.fromJson(Map<String, dynamic> json) =
       _$VenueInfoImpl.fromJson;
@@ -522,6 +544,8 @@ abstract class _VenueInfo implements VenueInfo {
   List<String> get topPerformerIds;
   @override
   List<int> get bookingsByDayOfWeek;
+  @override
+  Option<double> get responseRate;
   @override
   @JsonKey(ignore: true)
   _$$VenueInfoImplCopyWith<_$VenueInfoImpl> get copyWith =>

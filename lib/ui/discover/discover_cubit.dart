@@ -296,26 +296,26 @@ class DiscoverCubit extends Cubit<DiscoverState> {
             );
             emit(state.copyWith(venueHits: hits));
           },
-        MapOverlay.userBookings => () async {
-            final bookings = await database.getBookingsByRequestee(
-              currentUser.id,
-              // "XhiKXyPSJNRREiACgZPS68DcFWv2",
-              limit: 250,
-            );
-
-            emit(state.copyWith(userBookings: bookings));
-          },
-        MapOverlay.bookings => () async {
-            final hits = await search.queryBookingsInBoundingBox(
-              '',
-              swLatitude: bounds.southWest.latitude,
-              swLongitude: bounds.southWest.longitude,
-              neLatitude: bounds.northEast.latitude,
-              neLongitude: bounds.northEast.longitude,
-              limit: 500,
-            );
-            emit(state.copyWith(bookingHits: hits));
-          },
+        // MapOverlay.userBookings => () async {
+        //     final bookings = await database.getBookingsByRequestee(
+        //       currentUser.id,
+        //       // "XhiKXyPSJNRREiACgZPS68DcFWv2",
+        //       limit: 250,
+        //     );
+        //
+        //     emit(state.copyWith(userBookings: bookings));
+        //   },
+        // MapOverlay.bookings => () async {
+        //     final hits = await search.queryBookingsInBoundingBox(
+        //       '',
+        //       swLatitude: bounds.southWest.latitude,
+        //       swLongitude: bounds.southWest.longitude,
+        //       neLatitude: bounds.northEast.latitude,
+        //       neLongitude: bounds.northEast.longitude,
+        //       limit: 500,
+        //     );
+        //     emit(state.copyWith(bookingHits: hits));
+        //   },
         MapOverlay.opportunities => () async {
             final hits = await search.queryOpportunitiesInBoundingBox(
               '',

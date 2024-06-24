@@ -35,9 +35,23 @@ class OpportunitiesClusterLayer extends StatelessWidget {
                       opportunity.location.lat,
                       opportunity.location.lng,
                     ),
-                    child: const Icon(
-                      Icons.location_on,
-                      color: Colors.red,
+                    child: FloatingActionButton(
+                      onPressed: () {
+                        // push page to select opportunities
+                        showCupertinoModalBottomSheet<void>(
+                          context: context,
+                          builder: (context) {
+                            return OpportunitiesResultsView(
+                              ops: [opportunity],
+                            );
+                          },
+                        );
+                      },
+                      heroTag: const Uuid().v4(),
+                      backgroundColor: Colors.green,
+                      child: const Icon(
+                        Icons.attach_money,
+                      ),
                     ),
                   ),
                 )
@@ -48,7 +62,6 @@ class OpportunitiesClusterLayer extends StatelessWidget {
               borderStrokeWidth: 3,
             ),
             builder: (context, markers) {
-              final theme = Theme.of(context);
               return FloatingActionButton(
                 onPressed: () {
                   // push page to select opportunities

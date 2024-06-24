@@ -20,8 +20,8 @@ class DiscoverState with _$DiscoverState {
 @JsonEnum()
 enum MapOverlay {
   venues,
-  userBookings,
-  bookings,
+  // userBookings,
+  // bookings,
   opportunities,
 }
 

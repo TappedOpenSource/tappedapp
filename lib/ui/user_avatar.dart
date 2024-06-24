@@ -18,6 +18,7 @@ class UserAvatar extends StatelessWidget {
     this.minRadius,
     this.maxRadius,
     this.verified = false,
+    this.square = false,
     this.onTap,
   });
 
@@ -28,6 +29,7 @@ class UserAvatar extends StatelessWidget {
   final double? radius;
   final double? minRadius;
   final double? maxRadius;
+  final bool square;
   final void Function()? onTap;
 
   Widget Function({
@@ -164,7 +166,50 @@ class UserAvatar extends StatelessWidget {
           shape: badges.BadgeShape.twitter,
           badgeColor: Colors.blue,
         ),
-        child: CircleAvatar(
+        child: square
+            ? Container(
+                width: (radius ?? 20) * 2,
+                height: (radius ?? 20) * 2,
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(3),
+                  image: DecorationImage(
+                    fit: BoxFit.cover,
+                    image: imageUrl.fold(
+                          () => getDefaultImage(pushId),
+                          (t) {
+                        if (t.isEmpty) {
+                          return getDefaultImage(pushId);
+                        }
+                        return CachedNetworkImageProvider(
+                          t,
+                          errorListener: (object) {
+                            return;
+                          },
+                        );
+                      },
+                    ),
+                  ),
+                ),
+                child: CircleAvatar(
+                  radius: radius,
+                  foregroundImage: imageUrl.fold(
+                    () => getDefaultImage(pushId),
+                    (t) {
+                      if (t.isEmpty) {
+                        return getDefaultImage(pushId);
+                      }
+                      return CachedNetworkImageProvider(
+                        t,
+                        errorListener: (object) {
+                          return;
+                        },
+                      );
+                    },
+                  ),
+                  backgroundColor: Colors.black,
+                ),
+              )
+        : CircleAvatar(
           radius: radius,
           minRadius: minRadius,
           maxRadius: maxRadius,

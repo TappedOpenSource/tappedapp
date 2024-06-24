@@ -71,7 +71,6 @@ class _UserTileState extends State<UserTile> {
     if (user.deleted) return const SizedBox.shrink();
 
     final database = context.database;
-    final nav = context.nav;
     return CurrentUserBuilder(
       errorWidget: const ListTile(
         leading: UserAvatar(
@@ -129,12 +128,17 @@ class _UserTileState extends State<UserTile> {
               ),
             );
 
+            final isVenue = user.venueInfo.fold(
+              () => false,
+              (venueInfo) => true,
+            );
             return ListTile(
               leading: UserAvatar(
                 radius: 25,
                 pushUser: Option.of(user),
                 imageUrl: user.profilePicture,
                 verified: verified,
+                square: isVenue,
               ),
               title: RichText(
                 maxLines: 2,

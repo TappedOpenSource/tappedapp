@@ -36,8 +36,15 @@ class OverlayChanger extends StatelessWidget {
                   ScaffoldMessenger.of(context).showSnackBar(
                     SnackBar(
                       content: const Text('showing venues'),
+                      dismissDirection: DismissDirection.up,
+                      behavior: SnackBarBehavior.floating,
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(15),
+                      ),
+                      margin: EdgeInsets.only(
+                        bottom: MediaQuery.of(context).size.height - 150,
+                        left: 10,
+                        right: 10,
                       ),
                     ),
                   );
@@ -54,8 +61,15 @@ class OverlayChanger extends StatelessWidget {
                   ScaffoldMessenger.of(context).showSnackBar(
                     SnackBar(
                       content: const Text('showing gig opportunities'),
+                      dismissDirection: DismissDirection.up,
+                      behavior: SnackBarBehavior.floating,
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(15),
+                      ),
+                      margin: EdgeInsets.only(
+                        bottom: MediaQuery.of(context).size.height - 150,
+                        left: 10,
+                        right: 10,
                       ),
                     ),
                   );

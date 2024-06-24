@@ -5,7 +5,7 @@ import 'package:intheloopapp/domains/bookings_bloc/bookings_bloc.dart';
 import 'package:intheloopapp/domains/models/booking.dart';
 import 'package:intheloopapp/ui/bookings/components/bookings_list.dart';
 import 'package:intheloopapp/ui/discover/components/venue_card.dart';
-import 'package:intheloopapp/ui/profile/components/opportunity_card.dart';
+import 'package:intheloopapp/ui/common/opportunity_card.dart';
 import 'package:intheloopapp/utils/bloc_utils.dart';
 import 'package:intheloopapp/utils/current_user_builder.dart';
 import 'package:intheloopapp/utils/custom_claims_builder.dart';

@@ -89,6 +89,10 @@ class OpportunityView extends StatelessWidget {
     final places = context.places;
     final database = context.database;
     final theme = Theme.of(context);
+
+    final applyButtonDisabled = isApplied == null
+          || isApplied == true
+          || currentUser.id == op.userId;
     return Scaffold(
       backgroundColor: theme.colorScheme.surface,
       appBar: showAppBar ? AppBar() : null,
@@ -185,7 +189,7 @@ class OpportunityView extends StatelessWidget {
                         width: 8,
                       ),
                       Expanded(
-                        child: switch (isApplied) {
+                        child: switch (applyButtonDisabled) {
                           null =>
                           const CupertinoButton(
                             onPressed: null,
@@ -224,7 +228,7 @@ class OpportunityView extends StatelessWidget {
                                 theme.colorScheme.onSurface.withOpacity(0.1),
                                 padding: const EdgeInsets.all(12),
                                 child: const Text(
-                                  'Apply',
+                                  'apply',
                                   style: TextStyle(
                                     fontSize: 17,
                                     fontWeight: FontWeight.bold,
@@ -285,31 +289,23 @@ class OpportunityView extends StatelessWidget {
                               null => const CupertinoActivityIndicator(),
                               None() => const SizedBox.shrink(),
                               Some(:final value) =>
-                                  GestureDetector(
-                                    onTap: () =>
-                                        MapsLauncher.launchQuery(
-                                          formattedShortAddress(
-                                              value.addressComponents,
-                                          ),
+                                  Row(
+                                    children: [
+                                      Icon(
+                                        CupertinoIcons.location_circle_fill,
+                                        color: theme.colorScheme.onSurface
+                                            .withOpacity(0.5),
+                                      ),
+                                      const SizedBox(width: 8),
+                                      Text(
+                                        formattedShortAddress(
+                                          value.addressComponents,
                                         ),
-                                    child: Row(
-                                      children: [
-                                        Icon(
-                                          CupertinoIcons.location_circle_fill,
-                                          color: theme.colorScheme.onSurface
-                                              .withOpacity(0.5),
-                                        ),
-                                        const SizedBox(width: 8),
-                                        Text(
-                                          formattedShortAddress(
-                                            value.addressComponents,
-                                          ),
-                                          style: const TextStyle(
-                                            color: tappedAccent,
-                                          ),
-                                        ),
-                                      ],
-                                    ),
+                                        style: const TextStyle(
+                                          color: tappedAccent,
+                                        )
+                                      ),
+                                    ],
                                   ),
                             };
                           },
@@ -409,7 +405,7 @@ class OpportunityView extends StatelessWidget {
                                       const SizedBox(height: 12),
                                       FutureBuilder(
                                         future: Future.wait(
-                                          bookings!.map(
+                                        (bookings ?? []).map(
                                                 (booking) =>
                                                 database.getUserById(
                                                   booking.requesteeId,
@@ -418,15 +414,27 @@ class OpportunityView extends StatelessWidget {
                                         ),
                                         builder: (context, snapshot) {
                                           final users = snapshot.data;
-
                                           if (users == null) {
                                             return const CupertinoActivityIndicator();
                                           }
 
+                                          final realUsers = users
+                                              .whereType<Some<UserModel>>()
+                                              .map((user) => user.value)
+                                              .toList();
+
+                                          if (realUsers.isEmpty) {
+                                            return Text(
+                                              'empty bill',
+                                              style: TextStyle(
+                                                color: theme.colorScheme.onSurface
+                                                    .withOpacity(0.5),
+                                              ),
+                                            );
+                                          }
+
                                           return UserSlider(
-                                            users: users
-                                                .whereType<UserModel>()
-                                                .toList(),
+                                            users: realUsers,
                                           );
                                         },
                                       ),
@@ -492,7 +500,7 @@ class OpportunityView extends StatelessWidget {
                 icon: const Icon(
                   Icons.cancel,
                 ),
-                label: const Text('Not Interested'),
+                label: const Text('not interested'),
               ),
           true => const SizedBox.shrink(),
         };

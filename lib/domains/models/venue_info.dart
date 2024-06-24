@@ -23,6 +23,7 @@ class VenueInfo with _$VenueInfo {
     @Default(None()) Option<int> averageTicketPrice,
     @Default([]) List<String> topPerformerIds,
     @Default([]) List<int> bookingsByDayOfWeek,
+    @Default(None()) Option<double> responseRate,
   }) = _VenueInfo;
 
   // fromJson

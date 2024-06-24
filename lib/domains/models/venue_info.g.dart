@@ -69,6 +69,10 @@ _$VenueInfoImpl _$$VenueInfoImplFromJson(Map<String, dynamic> json) =>
               ?.map((e) => (e as num).toInt())
               .toList() ??
           const [],
+      responseRate: json['responseRate'] == null
+          ? const None()
+          : Option<double>.fromJson(
+              json['responseRate'], (value) => (value as num).toDouble()),
     );
 
 Map<String, dynamic> _$$VenueInfoImplToJson(_$VenueInfoImpl instance) =>
@@ -111,6 +115,9 @@ Map<String, dynamic> _$$VenueInfoImplToJson(_$VenueInfoImpl instance) =>
       ),
       'topPerformerIds': instance.topPerformerIds,
       'bookingsByDayOfWeek': instance.bookingsByDayOfWeek,
+      'responseRate': instance.responseRate.toJson(
+        (value) => value,
+      ),
     };
 
 const _$VenueTypeEnumMap = {

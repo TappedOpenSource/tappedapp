@@ -10,7 +10,7 @@ import 'package:intheloopapp/domains/navigation_bloc/navigation_bloc.dart';
 import 'package:intheloopapp/domains/navigation_bloc/tapped_route.dart';
 import 'package:intheloopapp/domains/search_bloc/search_bloc.dart';
 import 'package:intheloopapp/ui/loading/logo_wave.dart';
-import 'package:intheloopapp/ui/profile/components/opportunity_card.dart';
+import 'package:intheloopapp/ui/common/opportunity_card.dart';
 import 'package:intheloopapp/ui/user_tile.dart';
 import 'package:intheloopapp/utils/bloc_utils.dart';
 import 'package:intheloopapp/utils/custom_claims_builder.dart';
@@ -195,22 +195,7 @@ class _TappedSearchBarState extends State<TappedSearchBar> {
                             ),
                           ),
                         ),
-                        SizedBox(
-                          height: 300,
-                          child: ListView.builder(
-                            scrollDirection: Axis.horizontal,
-                            itemCount: ops.length,
-                            itemBuilder: (context, index) {
-                              final opWidget = ops[index];
-                              return Padding(
-                                padding: const EdgeInsets.symmetric(
-                                  horizontal: 8,
-                                ),
-                                child: opWidget,
-                              );
-                            },
-                          ),
-                        ),
+                        ...ops,
                       ],
                     ),
                   if (restUsers.isNotEmpty)
@@ -233,7 +218,7 @@ class _TappedSearchBarState extends State<TappedSearchBar> {
             }
 
             return state.searchResults.isEmpty
-                ? const Center(child: Text('No users found'))
+                ? const Center(child: Text('nothing found'))
                 : ListView.builder(
                     itemCount: state.searchResults.length,
                     itemBuilder: (context, index) {

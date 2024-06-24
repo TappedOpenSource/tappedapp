@@ -79,18 +79,18 @@ class MapBase extends StatelessWidget {
                       MapOverlay.venues => [
                           const VenueMarkerLayer(),
                         ],
-                      MapOverlay.userBookings => [
-                          BookingsPolygonLayer(
-                            bookings: state.userBookings,
-                          ),
-                          BookingsMarkerLayer(
-                            bookings: state.userBookings,
-                            showFliers: true,
-                          ),
-                        ],
-                      MapOverlay.bookings => [
-                          BookingsHeatmapLayer(),
-                        ],
+                      // MapOverlay.userBookings => [
+                        //   BookingsPolygonLayer(
+                        //     bookings: state.userBookings,
+                        //   ),
+                        //   BookingsMarkerLayer(
+                        //     bookings: state.userBookings,
+                        //     showFliers: true,
+                        //   ),
+                        // ],
+                      // MapOverlay.bookings => [
+                      //     BookingsHeatmapLayer(),
+                      //   ],
                       MapOverlay.opportunities => [
                           const OpportunitiesClusterLayer(),
                         ],

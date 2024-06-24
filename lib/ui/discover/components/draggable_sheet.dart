@@ -8,10 +8,12 @@ import 'package:intheloopapp/domains/models/performer_info.dart';
 import 'package:intheloopapp/domains/models/user_model.dart';
 import 'package:intheloopapp/domains/navigation_bloc/navigation_bloc.dart';
 import 'package:intheloopapp/domains/navigation_bloc/tapped_route.dart';
+import 'package:intheloopapp/ui/common/opportunity_card.dart';
 import 'package:intheloopapp/ui/discover/components/user_slider.dart';
 import 'package:intheloopapp/ui/discover/discover_cubit.dart';
+import 'package:intheloopapp/ui/opportunities/opportunities_results_view.dart';
 import 'package:intheloopapp/ui/profile/components/feedback_button.dart';
-import 'package:intheloopapp/ui/profile/components/opportunities_list.dart';
+import 'package:intheloopapp/ui/common/opportunities_list.dart';
 import 'package:intheloopapp/ui/user_avatar.dart';
 import 'package:intheloopapp/ui/user_tile.dart';
 import 'package:intheloopapp/utils/bloc_utils.dart';
@@ -174,20 +176,38 @@ class DraggableSheet extends StatelessWidget {
                                                 MainAxisAlignment.spaceBetween,
                                             children: [
                                               const SizedBox(width: 35),
-                                              Row(
-                                                mainAxisAlignment:
-                                                    MainAxisAlignment.center,
-                                                children: [
-                                                  Text(
-                                                    '${state.venueHits.length}${state.venueHits.length >= 75 ? '+' : ''} ${state.venueHits.length == 1 ? 'venue' : 'venues'}',
-                                                    style: const TextStyle(
-                                                      fontSize: 16,
-                                                      fontWeight:
-                                                          FontWeight.w700,
-                                                    ),
+                                              switch (state.mapOverlay) {
+                                                MapOverlay.venues => Row(
+                                                    mainAxisAlignment:
+                                                        MainAxisAlignment
+                                                            .center,
+                                                    children: [
+                                                      Text(
+                                                        '${state.venueHits.length}${state.venueHits.length >= 75 ? '+' : ''} ${state.venueHits.length == 1 ? 'venue' : 'venues'}',
+                                                        style: const TextStyle(
+                                                          fontSize: 16,
+                                                          fontWeight:
+                                                              FontWeight.w700,
+                                                        ),
+                                                      ),
+                                                    ],
                                                   ),
-                                                ],
-                                              ),
+                                                MapOverlay.opportunities => Row(
+                                                    mainAxisAlignment:
+                                                        MainAxisAlignment
+                                                            .center,
+                                                    children: [
+                                                      Text(
+                                                        '${state.opportunityHits.length}${state.opportunityHits.length >= 75 ? '+' : ''} ${state.venueHits.length == 1 ? 'gig' : 'gigs'}',
+                                                        style: const TextStyle(
+                                                          fontSize: 16,
+                                                          fontWeight:
+                                                              FontWeight.w700,
+                                                        ),
+                                                      ),
+                                                    ],
+                                                  ),
+                                              },
                                               Container(
                                                 height: 35,
                                                 width: 35,
@@ -259,14 +279,15 @@ class DraggableSheet extends StatelessWidget {
                                                     );
                                                     launchUrl(uri);
                                                   },
-                                                  borderRadius: BorderRadius.circular(15),
+                                                  borderRadius:
+                                                      BorderRadius.circular(15),
                                                   color: Colors.purple
                                                       .withOpacity(0.1),
                                                   child: const Text(
                                                     'join the team',
                                                     style: TextStyle(
                                                       fontWeight:
-                                                      FontWeight.bold,
+                                                          FontWeight.bold,
                                                       color: Colors.purple,
                                                     ),
                                                   ),
@@ -314,66 +335,117 @@ class DraggableSheet extends StatelessWidget {
                                             };
                                           },
                                         ),
-                                        ...sortedVenueHits.take(3).map(
-                                              (venue) => _venueTile(
-                                                currentUser,
-                                                venue,
-                                              ),
-                                            ),
-                                        if (sortedVenueHits.length > 3)
-                                          Row(
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.center,
-                                            children: [
-                                              GestureDetector(
-                                                onTap: () =>
-                                                    showCupertinoModalBottomSheet<
-                                                        void>(
-                                                  context: context,
-                                                  builder: (context) =>
-                                                      Scaffold(
-                                                    appBar: AppBar(
-                                                      title:
-                                                          const Text('venues'),
+                                        ...switch (state.mapOverlay) {
+                                          MapOverlay.venues => [
+                                              ...sortedVenueHits.take(3).map(
+                                                    (venue) => _venueTile(
+                                                      currentUser,
+                                                      venue,
                                                     ),
-                                                    body: Container(
-                                                      padding: const EdgeInsets
-                                                          .symmetric(
-                                                        vertical: 16,
+                                                  ),
+                                              if (sortedVenueHits.length > 3)
+                                                Row(
+                                                  mainAxisAlignment:
+                                                      MainAxisAlignment.center,
+                                                  children: [
+                                                    GestureDetector(
+                                                      onTap: () =>
+                                                          showCupertinoModalBottomSheet<
+                                                              void>(
+                                                        context: context,
+                                                        builder: (context) =>
+                                                            Scaffold(
+                                                          appBar: AppBar(
+                                                            title: const Text(
+                                                                'venues'),
+                                                          ),
+                                                          body: Container(
+                                                            padding:
+                                                                const EdgeInsets
+                                                                    .symmetric(
+                                                              vertical: 16,
+                                                            ),
+                                                            decoration:
+                                                                BoxDecoration(
+                                                              color: theme
+                                                                  .colorScheme
+                                                                  .surface,
+                                                            ),
+                                                            child: ListView
+                                                                .builder(
+                                                              itemCount:
+                                                                  sortedVenueHits
+                                                                      .length,
+                                                              itemBuilder:
+                                                                  (context,
+                                                                      index) {
+                                                                final venue =
+                                                                    sortedVenueHits[
+                                                                        index];
+                                                                return _venueTile(
+                                                                  currentUser,
+                                                                  venue,
+                                                                );
+                                                              },
+                                                            ),
+                                                          ),
+                                                        ),
                                                       ),
-                                                      decoration: BoxDecoration(
-                                                        color: theme.colorScheme
-                                                            .surface,
+                                                      child: Text(
+                                                        'view all',
+                                                        style: TextStyle(
+                                                          color: theme
+                                                              .colorScheme
+                                                              .primary,
+                                                          fontWeight:
+                                                              FontWeight.bold,
+                                                        ),
                                                       ),
-                                                      child: ListView.builder(
-                                                        itemCount:
-                                                            sortedVenueHits
-                                                                .length,
-                                                        itemBuilder:
-                                                            (context, index) {
-                                                          final venue =
-                                                              sortedVenueHits[
-                                                                  index];
-                                                          return _venueTile(
-                                                            currentUser,
-                                                            venue,
+                                                    ),
+                                                  ],
+                                                ),
+                                            ],
+                                          MapOverlay.opportunities => [
+                                              ...state.opportunityHits
+                                                  .take(3)
+                                                  .map(
+                                                    (opportunity) =>
+                                                        OpportunityCard(
+                                                      opportunity: opportunity,
+                                                    ),
+                                                  ),
+                                              if (sortedVenueHits.length > 3)
+                                                Row(
+                                                  mainAxisAlignment:
+                                                      MainAxisAlignment.center,
+                                                  children: [
+                                                    GestureDetector(
+                                                      onTap: () =>
+                                                          showCupertinoModalBottomSheet<
+                                                              void>(
+                                                        context: context,
+                                                        builder: (context) {
+                                                          return OpportunitiesResultsView(
+                                                            ops: state
+                                                                .opportunityHits,
                                                           );
                                                         },
                                                       ),
+                                                      child: Text(
+                                                        'view all',
+                                                        style: TextStyle(
+                                                          color: theme
+                                                              .colorScheme
+                                                              .primary,
+                                                          fontWeight:
+                                                              FontWeight.bold,
+                                                        ),
+                                                      ),
                                                     ),
-                                                  ),
+                                                  ],
                                                 ),
-                                                child: Text(
-                                                  'view all',
-                                                  style: TextStyle(
-                                                    color: theme
-                                                        .colorScheme.primary,
-                                                    fontWeight: FontWeight.bold,
-                                                  ),
-                                                ),
-                                              ),
                                             ],
-                                          ),
+                                        },
                                         if (state.genreCounts.isNotEmpty)
                                           const Padding(
                                             padding: EdgeInsets.symmetric(
@@ -433,80 +505,80 @@ class DraggableSheet extends StatelessWidget {
                                                 : () =>
                                                     context.push(PaywallPage()),
                                           ),
+                                        // const Padding(
+                                        //   padding: EdgeInsets.symmetric(
+                                        //     vertical: 16,
+                                        //     horizontal: 8,
+                                        //   ),
+                                        //   child: Text(
+                                        //     'biggest risers',
+                                        //     style: TextStyle(
+                                        //       fontSize: 28,
+                                        //       fontWeight: FontWeight.bold,
+                                        //     ),
+                                        //   ),
+                                        // ),
+                                        // FutureBuilder(
+                                        //   future: database.getBookingLeaders(),
+                                        //   builder: (context, snapshot) {
+                                        //     if (!snapshot.hasData) {
+                                        //       return const Center(
+                                        //         child:
+                                        //             CupertinoActivityIndicator(),
+                                        //       );
+                                        //     }
+                                        //
+                                        //     final bookingLeaders =
+                                        //         snapshot.data ?? [];
+                                        //     return UserSlider(
+                                        //       users: bookingLeaders,
+                                        //     );
+                                        //   },
+                                        // ),
+                                        //
+                                        // const Padding(
+                                        //   padding: EdgeInsets.symmetric(
+                                        //     vertical: 16,
+                                        //     horizontal: 8,
+                                        //   ),
+                                        //   child: Text(
+                                        //     'the greats',
+                                        //     style: TextStyle(
+                                        //       fontSize: 28,
+                                        //       fontWeight: FontWeight.bold,
+                                        //     ),
+                                        //   ),
+                                        // ),
+                                        // FutureBuilder(
+                                        //   future: database.getFeaturedPerformers(),
+                                        //   builder: (context, snapshot) {
+                                        //     if (!snapshot.hasData) {
+                                        //       return const Center(
+                                        //         child:
+                                        //         CupertinoActivityIndicator(),
+                                        //       );
+                                        //     }
+                                        //
+                                        //     final bookingLeaders =
+                                        //         snapshot.data ?? [];
+                                        //     return UserSlider(
+                                        //       users: bookingLeaders,
+                                        //       sort: true,
+                                        //       blur: !isPremium,
+                                        //       onTap: isPremium
+                                        //           ? null
+                                        //           : () =>
+                                        //           context.push(PaywallPage()),
+                                        //     );
+                                        //   },
+                                        // ),
                                         const Padding(
                                           padding: EdgeInsets.symmetric(
                                             vertical: 16,
                                             horizontal: 8,
                                           ),
                                           child: Text(
-                                            'biggest risers',
-                                            style: TextStyle(
-                                              fontSize: 28,
-                                              fontWeight: FontWeight.bold,
-                                            ),
-                                          ),
-                                        ),
-                                        FutureBuilder(
-                                          future: database.getBookingLeaders(),
-                                          builder: (context, snapshot) {
-                                            if (!snapshot.hasData) {
-                                              return const Center(
-                                                child:
-                                                    CupertinoActivityIndicator(),
-                                              );
-                                            }
-
-                                            final bookingLeaders =
-                                                snapshot.data ?? [];
-                                            return UserSlider(
-                                              users: bookingLeaders,
-                                            );
-                                          },
-                                        ),
-
-                                        const Padding(
-                                          padding: EdgeInsets.symmetric(
-                                            vertical: 16,
-                                            horizontal: 8,
-                                          ),
-                                          child: Text(
-                                            'the greats',
-                                            style: TextStyle(
-                                              fontSize: 28,
-                                              fontWeight: FontWeight.bold,
-                                            ),
-                                          ),
-                                        ),
-                                        FutureBuilder(
-                                          future: database.getFeaturedPerformers(),
-                                          builder: (context, snapshot) {
-                                            if (!snapshot.hasData) {
-                                              return const Center(
-                                                child:
-                                                CupertinoActivityIndicator(),
-                                              );
-                                            }
-
-                                            final bookingLeaders =
-                                                snapshot.data ?? [];
-                                            return UserSlider(
-                                              users: bookingLeaders,
-                                              sort: true,
-                                              blur: !isPremium,
-                                              onTap: isPremium
-                                                  ? null
-                                                  : () =>
-                                                  context.push(PaywallPage()),
-                                            );
-                                          },
-                                        ),
-                                        const Padding(
-                                          padding: EdgeInsets.symmetric(
-                                            vertical: 16,
-                                            horizontal: 8,
-                                          ),
-                                          child: Text(
-                                            'apply to perform',
+                                            'featured',
                                             style: TextStyle(
                                               fontSize: 28,
                                               fontWeight: FontWeight.bold,
@@ -547,7 +619,7 @@ class DraggableSheet extends StatelessWidget {
                                                           .withOpacity(0.1),
                                                       padding:
                                                           const EdgeInsets.all(
-                                                        12,
+                                                        15,
                                                       ),
                                                       child: const Text(
                                                         'want a job?',
