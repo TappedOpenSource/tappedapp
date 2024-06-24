@@ -28,6 +28,10 @@ _$OpportunityImpl _$$OpportunityImplFromJson(Map<String, dynamic> json) =>
           : Option<OpportunityInteraction>.fromJson(json['touched'],
               (value) => $enumDecode(_$OpportunityInteractionEnumMap, value)),
       deleted: json['deleted'] as bool? ?? false,
+      genres: (json['genres'] as List<dynamic>?)
+              ?.map((e) => e as String)
+              .toList() ??
+          const [],
       venueId: json['venueId'] == null
           ? const None()
           : Option<String>.fromJson(
@@ -56,6 +60,7 @@ Map<String, dynamic> _$$OpportunityImplToJson(_$OpportunityImpl instance) =>
         (value) => _$OpportunityInteractionEnumMap[value]!,
       ),
       'deleted': instance.deleted,
+      'genres': instance.genres,
       'venueId': instance.venueId.toJson(
         (value) => value,
       ),

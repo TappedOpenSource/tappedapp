@@ -36,6 +36,7 @@ mixin _$Opportunity {
   Option<OpportunityInteraction> get touched =>
       throw _privateConstructorUsedError;
   bool get deleted => throw _privateConstructorUsedError;
+  List<String> get genres => throw _privateConstructorUsedError;
   Option<String> get venueId => throw _privateConstructorUsedError;
   Option<String> get referenceEventId => throw _privateConstructorUsedError;
 
@@ -64,6 +65,7 @@ abstract class $OpportunityCopyWith<$Res> {
       bool isPaid,
       Option<OpportunityInteraction> touched,
       bool deleted,
+      List<String> genres,
       Option<String> venueId,
       Option<String> referenceEventId});
 
@@ -95,6 +97,7 @@ class _$OpportunityCopyWithImpl<$Res, $Val extends Opportunity>
     Object? isPaid = null,
     Object? touched = null,
     Object? deleted = null,
+    Object? genres = null,
     Object? venueId = null,
     Object? referenceEventId = null,
   }) {
@@ -147,6 +150,10 @@ class _$OpportunityCopyWithImpl<$Res, $Val extends Opportunity>
           ? _value.deleted
           : deleted // ignore: cast_nullable_to_non_nullable
               as bool,
+      genres: null == genres
+          ? _value.genres
+          : genres // ignore: cast_nullable_to_non_nullable
+              as List<String>,
       venueId: null == venueId
           ? _value.venueId
           : venueId // ignore: cast_nullable_to_non_nullable
@@ -188,6 +195,7 @@ abstract class _$$OpportunityImplCopyWith<$Res>
       bool isPaid,
       Option<OpportunityInteraction> touched,
       bool deleted,
+      List<String> genres,
       Option<String> venueId,
       Option<String> referenceEventId});
 
@@ -218,6 +226,7 @@ class __$$OpportunityImplCopyWithImpl<$Res>
     Object? isPaid = null,
     Object? touched = null,
     Object? deleted = null,
+    Object? genres = null,
     Object? venueId = null,
     Object? referenceEventId = null,
   }) {
@@ -270,6 +279,10 @@ class __$$OpportunityImplCopyWithImpl<$Res>
           ? _value.deleted
           : deleted // ignore: cast_nullable_to_non_nullable
               as bool,
+      genres: null == genres
+          ? _value._genres
+          : genres // ignore: cast_nullable_to_non_nullable
+              as List<String>,
       venueId: null == venueId
           ? _value.venueId
           : venueId // ignore: cast_nullable_to_non_nullable
@@ -299,8 +312,10 @@ class _$OpportunityImpl implements _Opportunity {
       this.isPaid = false,
       this.touched = const None(),
       this.deleted = false,
+      final List<String> genres = const [],
       this.venueId = const None(),
-      this.referenceEventId = const None()});
+      this.referenceEventId = const None()})
+      : _genres = genres;
 
   factory _$OpportunityImpl.fromJson(Map<String, dynamic> json) =>
       _$$OpportunityImplFromJson(json);
@@ -338,6 +353,15 @@ class _$OpportunityImpl implements _Opportunity {
   @override
   @JsonKey()
   final bool deleted;
+  final List<String> _genres;
+  @override
+  @JsonKey()
+  List<String> get genres {
+    if (_genres is EqualUnmodifiableListView) return _genres;
+    // ignore: implicit_dynamic_type
+    return EqualUnmodifiableListView(_genres);
+  }
+
   @override
   @JsonKey()
   final Option<String> venueId;
@@ -347,7 +371,7 @@ class _$OpportunityImpl implements _Opportunity {
 
   @override
   String toString() {
-    return 'Opportunity(id: $id, userId: $userId, location: $location, timestamp: $timestamp, startTime: $startTime, endTime: $endTime, title: $title, description: $description, flierUrl: $flierUrl, isPaid: $isPaid, touched: $touched, deleted: $deleted, venueId: $venueId, referenceEventId: $referenceEventId)';
+    return 'Opportunity(id: $id, userId: $userId, location: $location, timestamp: $timestamp, startTime: $startTime, endTime: $endTime, title: $title, description: $description, flierUrl: $flierUrl, isPaid: $isPaid, touched: $touched, deleted: $deleted, genres: $genres, venueId: $venueId, referenceEventId: $referenceEventId)';
   }
 
   @override
@@ -372,6 +396,7 @@ class _$OpportunityImpl implements _Opportunity {
             (identical(other.isPaid, isPaid) || other.isPaid == isPaid) &&
             (identical(other.touched, touched) || other.touched == touched) &&
             (identical(other.deleted, deleted) || other.deleted == deleted) &&
+            const DeepCollectionEquality().equals(other._genres, _genres) &&
             (identical(other.venueId, venueId) || other.venueId == venueId) &&
             (identical(other.referenceEventId, referenceEventId) ||
                 other.referenceEventId == referenceEventId));
@@ -393,6 +418,7 @@ class _$OpportunityImpl implements _Opportunity {
       isPaid,
       touched,
       deleted,
+      const DeepCollectionEquality().hash(_genres),
       venueId,
       referenceEventId);
 
@@ -424,6 +450,7 @@ abstract class _Opportunity implements Opportunity {
       final bool isPaid,
       final Option<OpportunityInteraction> touched,
       final bool deleted,
+      final List<String> genres,
       final Option<String> venueId,
       final Option<String> referenceEventId}) = _$OpportunityImpl;
 
@@ -457,6 +484,8 @@ abstract class _Opportunity implements Opportunity {
   Option<OpportunityInteraction> get touched;
   @override
   bool get deleted;
+  @override
+  List<String> get genres;
   @override
   Option<String> get venueId;
   @override

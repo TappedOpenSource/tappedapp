@@ -23,6 +23,7 @@ class Opportunity with _$Opportunity {
     @Default(false) bool isPaid,
     @Default(None()) Option<OpportunityInteraction> touched,
     @Default(false) bool deleted,
+    @Default([]) List<String> genres,
     @Default(None()) Option<String> venueId,
     @Default(None())  Option<String> referenceEventId,
   }) = _Opportunity;

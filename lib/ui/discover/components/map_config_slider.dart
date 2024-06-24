@@ -96,25 +96,25 @@ class _MapConfigSliderState extends State<MapConfigSlider> {
               'assets/layers/venue_markers.png',
             ),
           ),
-          _buildMapOverlayButton(
-            context,
-            currentOverlay: _currentOverlay,
-            overlay: MapOverlay.userBookings,
-            label: 'my bookings',
-            image: const AssetImage(
-              'assets/layers/my_bookings_polygon.png',
-            ),
-          ),
-          _buildMapOverlayButton(
-            context,
-            currentOverlay: _currentOverlay,
-            overlay: MapOverlay.bookings,
-            label: 'bookings',
-            image: const AssetImage(
-              'assets/layers/booking_heatmap.png',
-            ),
-            premiumOnly: true,
-          ),
+          // _buildMapOverlayButton(
+          //   context,
+          //   currentOverlay: _currentOverlay,
+          //   overlay: MapOverlay.userBookings,
+          //   label: 'my bookings',
+          //   image: const AssetImage(
+          //     'assets/layers/my_bookings_polygon.png',
+          //   ),
+          // ),
+          // _buildMapOverlayButton(
+          //   context,
+          //   currentOverlay: _currentOverlay,
+          //   overlay: MapOverlay.bookings,
+          //   label: 'bookings',
+          //   image: const AssetImage(
+          //     'assets/layers/booking_heatmap.png',
+          //   ),
+          //   premiumOnly: true,
+          // ),
           _buildMapOverlayButton(
             context,
             currentOverlay: _currentOverlay,

@@ -12,9 +12,11 @@ import 'package:intheloopapp/ui/opportunity_feed/components/opportunity_view.dar
 import 'package:intheloopapp/utils/app_logger.dart';
 import 'package:intheloopapp/utils/bloc_utils.dart';
 import 'package:intheloopapp/utils/current_user_builder.dart';
+import 'package:intheloopapp/utils/opportunity_image.dart';
 import 'package:intheloopapp/utils/premium_builder.dart';
 import 'package:intl/intl.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
+import 'package:skeletons/skeletons.dart';
 
 class OpportunitiesResultsView extends StatefulWidget {
   const OpportunitiesResultsView({
@@ -171,79 +173,93 @@ class _OpportunitiesResultsViewState extends State<OpportunitiesResultsView> {
                           DateFormat.YEAR_ABBR_MONTH_WEEKDAY_DAY,
                         ).format(op.startTime);
                         return FutureBuilder(
-                          future: database.isUserAppliedForOpportunity(
-                            opportunityId: op.id,
-                            userId: currentUser.id,
-                          ),
+                          future: getOpImage(context, op),
                           builder: (context, snapshot) {
-                            final isApplied = snapshot.data;
-                            return ListTile(
-                              onTap: () {
-                                showCupertinoModalBottomSheet<void>(
-                                  context: context,
-                                  builder: (context) {
-                                    return OpportunityView(
-                                      opportunityId: op.id,
-                                      opportunity: Option.of(op),
-                                      onDislike: () {
-                                        context.pop();
+                            if (!snapshot.hasData) {
+                              return SkeletonListTile();
+                            }
+
+                            final provider = snapshot.data!;
+                            return FutureBuilder(
+                              future: database.isUserAppliedForOpportunity(
+                                opportunityId: op.id,
+                                userId: currentUser.id,
+                              ),
+                              builder: (context, snapshot) {
+                                final isApplied = snapshot.data;
+                                return ListTile(
+                                  onTap: () {
+                                    showCupertinoModalBottomSheet<void>(
+                                      context: context,
+                                      builder: (context) {
+                                        return OpportunityView(
+                                          opportunityId: op.id,
+                                          opportunity: Option.of(op),
+                                          onDislike: () {
+                                            context.pop();
+                                          },
+                                        );
                                       },
                                     );
                                   },
-                                );
-                              },
-                              leading: switch (op.flierUrl) {
-                                None() => const Icon(Icons.image_not_supported),
-                                Some(:final value) => CachedNetworkImage(
-                                    imageUrl: value,
+                                  leading: Container(
                                     width: 50,
                                     height: 50,
-                                    fit: BoxFit.cover,
-                                  ),
-                              },
-                              title: Text(
-                                op.title,
-                                maxLines: 2,
-                                overflow: TextOverflow.ellipsis,
-                                style: theme.textTheme.titleMedium,
-                              ),
-                              subtitle: Text(
-                                startTime,
-                              ),
-                              trailing: switch (isApplied) {
-                                null => CupertinoActivityIndicator(),
-                                false => Checkbox(
-                                    value: result.selected,
-                                    onChanged: (selected) {
-                                      setState(() {
-                                        selectableResults =
-                                            selectableResults.map((r) {
-                                          return r.op.id == op.id
-                                              ? SelectableResult(
-                                                  op: r.op,
-                                                  selected: selected ?? false,
-                                                )
-                                              : r;
-                                        }).toList();
-                                      });
-                                    },
-                                  ),
-                                true => Container(
-                                    padding: const EdgeInsets.symmetric(
-                                      horizontal: 8,
-                                      vertical: 4,
-                                    ),
                                     decoration: BoxDecoration(
-                                      color: Colors.green,
-                                      borderRadius: BorderRadius.circular(4),
-                                    ),
-                                    child: const Text(
-                                      'applied',
-                                      style: TextStyle(
-                                        color: Colors.white,
+                                      borderRadius: BorderRadius.circular(6),
+                                      image: DecorationImage(
+                                        image: provider,
+                                        fit: BoxFit.contain,
                                       ),
                                     ),
                                   ),
+                                  title: Text(
+                                    op.title,
+                                    maxLines: 2,
+                                    overflow: TextOverflow.ellipsis,
+                                    style: theme.textTheme.titleMedium,
+                                  ),
+                                  subtitle: Text(
+                                    startTime,
+                                  ),
+                                  trailing: switch (isApplied) {
+                                    null => CupertinoActivityIndicator(),
+                                    false => Checkbox(
+                                        value: result.selected,
+                                        onChanged: (selected) {
+                                          setState(() {
+                                            selectableResults =
+                                                selectableResults.map((r) {
+                                              return r.op.id == op.id
+                                                  ? SelectableResult(
+                                                      op: r.op,
+                                                      selected:
+                                                          selected ?? false,
+                                                    )
+                                                  : r;
+                                            }).toList();
+                                          });
+                                        },
+                                      ),
+                                    true => Container(
+                                        padding: const EdgeInsets.symmetric(
+                                          horizontal: 8,
+                                          vertical: 4,
+                                        ),
+                                        decoration: BoxDecoration(
+                                          color: Colors.green,
+                                          borderRadius:
+                                              BorderRadius.circular(4),
+                                        ),
+                                        child: const Text(
+                                          'applied',
+                                          style: TextStyle(
+                                            color: Colors.white,
+                                          ),
+                                        ),
+                                      ),
+                                  },
+                                );
                               },
                             );
                           },

@@ -65,6 +65,165 @@ class DiscoverView extends StatelessWidget {
               right: 10,
               child: Column(
                 children: [
+                  // const OverlayChanger(),
+                  _buildMapButton(
+                    context,
+                    heroTag: 'map_overlay',
+                    icon: Icons.layers,
+                    onPressed: () {
+                      showModalBottomSheet<void>(
+                        context: context,
+                        showDragHandle: true,
+                        builder: (context) {
+                          return SizedBox(
+                            height: MediaQuery.of(context).size.height * 0.3,
+                            width: double.infinity,
+                            child: Padding(
+                              padding: const EdgeInsets.symmetric(
+                                horizontal: 20,
+                              ),
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  const Padding(
+                                    padding: EdgeInsets.symmetric(
+                                      vertical: 8,
+                                    ),
+                                    child: Text(
+                                      'choose map',
+                                      style: TextStyle(
+                                        fontSize: 20,
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                    ),
+                                  ),
+                                  Row(
+                                    children: [
+                                      Expanded(
+                                        child: GestureDetector(
+                                          onTap: () {
+                                            cubit.onMapOverlayChange(
+                                              MapOverlay.venues,
+                                            );
+                                            context.pop();
+                                          },
+                                          child: Container(
+                                            decoration: BoxDecoration(
+                                              borderRadius: BorderRadius.circular(15),
+                                              border: Border.all(
+                                                width: state.mapOverlay == MapOverlay.venues
+                                                    ? 3
+                                                    : 0,
+                                                color: state.mapOverlay == MapOverlay.venues
+                                                    ? Colors.blue
+                                                    : Colors.grey,
+                                              ),
+                                            ),
+                                            child: Column(
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.start,
+                                              children: [
+                                                Container(
+                                                  height: 100,
+                                                  width: double.infinity,
+                                                  decoration: const BoxDecoration(
+                                                    borderRadius: BorderRadius.only(
+                                                      topLeft: Radius.circular(15),
+                                                      topRight: Radius.circular(15),
+                                                    ),
+                                                    image: DecorationImage(
+                                                      fit: BoxFit.cover,
+                                                      image: AssetImage(
+                                                        'assets/layers/venue_markers.png',
+                                                      ),
+                                                    ),
+                                                  ),
+                                                ),
+                                                const Padding(
+                                                  padding: EdgeInsets.symmetric(
+                                                    horizontal: 12,
+                                                    vertical: 6,
+                                                  ),
+                                                  child: Text(
+                                                    'venues',
+                                                    style: TextStyle(
+                                                      fontSize: 16,
+                                                    ),
+                                                  ),
+                                                ),
+                                              ]
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                      const SizedBox(width: 8),
+                                      Expanded(
+                                        child: GestureDetector(
+                                          onTap: () {
+                                            cubit.onMapOverlayChange(
+                                              MapOverlay.opportunities,
+                                            );
+                                            context.pop();
+                                          },
+                                          child: Container(
+                                            decoration: BoxDecoration(
+                                              borderRadius: BorderRadius.circular(15),
+                                              border: Border.all(
+                                                width: state.mapOverlay == MapOverlay.opportunities
+                                                    ? 3
+                                                    : 0,
+                                                color: state.mapOverlay == MapOverlay.opportunities
+                                                    ? Colors.blue
+                                                    : Colors.grey,
+                                              ),
+                                            ),
+                                            child: Column(
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.start,
+                                              children: [
+                                                Container(
+                                                  height: 100,
+                                                  width: double.infinity,
+                                                  decoration: const BoxDecoration(
+                                                    borderRadius: BorderRadius.only(
+                                                      topLeft: Radius.circular(15),
+                                                      topRight: Radius.circular(15),
+                                                    ),
+                                                    image: DecorationImage(
+                                                      fit: BoxFit.cover,
+                                                      image: AssetImage(
+                                                        'assets/layers/op_markers.png',
+                                                      ),
+                                                    ),
+                                                  ),
+                                                ),
+                                                const Padding(
+                                                  padding: EdgeInsets.symmetric(
+                                                    horizontal: 12,
+                                                    vertical: 6,
+                                                  ),
+                                                  child: Text(
+                                                    'gigs',
+                                                    style: TextStyle(
+                                                      fontSize: 16,
+                                                    ),
+                                                  ),
+                                                ),
+                                              ]
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ],
+                              ),
+                            ),
+                          );
+                        },
+                      );
+                    },
+                  ),
                   if (state.mapOverlay == MapOverlay.venues)
                     _buildMapButton(
                       context,
@@ -102,7 +261,6 @@ class DiscoverView extends StatelessWidget {
                       },
                       heroTag: 'map_settings',
                     ),
-                  const OverlayChanger(),
                   _buildMapButton(
                     context,
                     icon: CupertinoIcons.location,

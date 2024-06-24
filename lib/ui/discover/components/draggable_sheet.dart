@@ -8,12 +8,12 @@ import 'package:intheloopapp/domains/models/performer_info.dart';
 import 'package:intheloopapp/domains/models/user_model.dart';
 import 'package:intheloopapp/domains/navigation_bloc/navigation_bloc.dart';
 import 'package:intheloopapp/domains/navigation_bloc/tapped_route.dart';
+import 'package:intheloopapp/ui/common/opportunities_list.dart';
 import 'package:intheloopapp/ui/common/opportunity_card.dart';
 import 'package:intheloopapp/ui/discover/components/user_slider.dart';
 import 'package:intheloopapp/ui/discover/discover_cubit.dart';
 import 'package:intheloopapp/ui/opportunities/opportunities_results_view.dart';
 import 'package:intheloopapp/ui/profile/components/feedback_button.dart';
-import 'package:intheloopapp/ui/common/opportunities_list.dart';
 import 'package:intheloopapp/ui/user_avatar.dart';
 import 'package:intheloopapp/ui/user_tile.dart';
 import 'package:intheloopapp/utils/bloc_utils.dart';
@@ -118,6 +118,7 @@ class DraggableSheet extends StatelessWidget {
                         final performers = snapshot.data ?? [];
                         return DraggableScrollableSheet(
                           expand: false,
+                          initialChildSize: 0.11,
                           minChildSize: 0.11,
                           snap: true,
                           snapSizes: const [0.11, 0.5, 1],
@@ -198,7 +199,7 @@ class DraggableSheet extends StatelessWidget {
                                                             .center,
                                                     children: [
                                                       Text(
-                                                        '${state.opportunityHits.length}${state.opportunityHits.length >= 75 ? '+' : ''} ${state.venueHits.length == 1 ? 'gig' : 'gigs'}',
+                                                        '${state.opportunityHits.length}${state.opportunityHits.length >= 75 ? '+' : ''} ${state.opportunityHits.length == 1 ? 'gig' : 'gigs'}',
                                                         style: const TextStyle(
                                                           fontSize: 16,
                                                           fontWeight:
@@ -414,36 +415,34 @@ class DraggableSheet extends StatelessWidget {
                                                       opportunity: opportunity,
                                                     ),
                                                   ),
-                                              if (state.opportunityHits.length > 3)
-                                                Row(
-                                                  mainAxisAlignment:
-                                                      MainAxisAlignment.center,
-                                                  children: [
-                                                    GestureDetector(
-                                                      onTap: () =>
-                                                          showCupertinoModalBottomSheet<
-                                                              void>(
-                                                        context: context,
-                                                        builder: (context) {
-                                                          return OpportunitiesResultsView(
-                                                            ops: state
-                                                                .opportunityHits,
-                                                          );
-                                                        },
-                                                      ),
-                                                      child: Text(
-                                                        'view all',
-                                                        style: TextStyle(
-                                                          color: theme
-                                                              .colorScheme
-                                                              .primary,
-                                                          fontWeight:
-                                                              FontWeight.bold,
-                                                        ),
+                                              Row(
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment.center,
+                                                children: [
+                                                  GestureDetector(
+                                                    onTap: () =>
+                                                        showCupertinoModalBottomSheet<
+                                                            void>(
+                                                      context: context,
+                                                      builder: (context) {
+                                                        return OpportunitiesResultsView(
+                                                          ops: state
+                                                              .opportunityHits,
+                                                        );
+                                                      },
+                                                    ),
+                                                    child: Text(
+                                                      'view all',
+                                                      style: TextStyle(
+                                                        color: theme.colorScheme
+                                                            .primary,
+                                                        fontWeight:
+                                                            FontWeight.bold,
                                                       ),
                                                     ),
-                                                  ],
-                                                ),
+                                                  ),
+                                                ],
+                                              ),
                                             ],
                                         },
                                         if (state.genreCounts.isNotEmpty)
