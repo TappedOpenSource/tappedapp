@@ -1,6 +1,6 @@
 /* eslint-disable import/no-unresolved */
 import { HttpsError, onCall } from "firebase-functions/v2/https";
-import { POSTMARK_SERVER_ID, bookingsRef, contactVenuesRef, opportunitiesRef, usersRef } from "../firebase";
+import { OPEN_AI_KEY, POSTMARK_SERVER_ID, bookingsRef, contactVenuesRef, opportunitiesRef, usersRef } from "../firebase";
 import { Booking, Opportunity, UserModel, VenueContactRequest } from "../../types/models";
 import { debug, info } from "firebase-functions/logger";
 import { Timestamp } from "firebase-admin/firestore";
@@ -8,10 +8,11 @@ import { _appendNewContactRequestToThread } from "./venue_contacting";
 import * as postmark from "postmark";
 
 export const notifyVenueOfInterestedOpportunities = onCall(
-  { secrets: [ POSTMARK_SERVER_ID ] },
+  { secrets: [ POSTMARK_SERVER_ID, OPEN_AI_KEY ] },
   async (request) => {
     // update update
     const { opportunityIds, userId, note } = request.data;
+    process.env.OPENAI_API_KEY = OPEN_AI_KEY.value();
 
     const opportunities = (await Promise.all(
       opportunityIds.map(async (opId: string) => {

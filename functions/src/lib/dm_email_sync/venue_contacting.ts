@@ -301,6 +301,8 @@ export const _appendNewContactRequestToThread = async ({
     return;
   }
 
+  const allEmails = contactVenueData?.allEmails ?? [ contactVenueData.bookingEmail ];
+
   const userSnap = await usersRef.doc(userId).get();
   const userData = userSnap.data() as UserModel;
 
@@ -316,7 +318,7 @@ export const _appendNewContactRequestToThread = async ({
     .collection("emailsSent")
     .get();
 
-  const allEmails = emailsSentSnap.docs.map((d) => d.data() as postmark.Message);
+  const allEmailSents = emailsSentSnap.docs.map((d) => d.data() as postmark.Message);
 
   const collaborators = (await Promise.all(
     collaboratorIds.map(async (id: string) => {
@@ -347,7 +349,7 @@ export const _appendNewContactRequestToThread = async ({
     note,
     userData,
     contactVenueData,
-    emailsSent: allEmails,
+    emailsSent: allEmailSents,
   });
 
   const { text, html } = contactVenueTemplate({
@@ -418,7 +420,8 @@ export const _appendNewContactRequestToThread = async ({
 export const notifyFoundersOnVenueContact = onDocumentCreated(
   {
     document: "contactVenues/{userId}/venuesContacted/{venueId}",
-    secrets: [ POSTMARK_SERVER_ID, streamKey, streamSecret, OPEN_AI_KEY, SLACK_WEBHOOK_URL ],
+    secrets: [ 
+      POSTMARK_SERVER_ID, streamKey, streamSecret, OPEN_AI_KEY, SLACK_WEBHOOK_URL ],
   },
   async (event) => {
     process.env.OPENAI_API_KEY = OPEN_AI_KEY.value();
@@ -780,9 +783,10 @@ export const setLatestContactRequest = onDocumentCreated(
   });
 
 export const genericContactVenues = onCall(
-  { secrets: [ RESEND_API_KEY, POSTMARK_SERVER_ID ] },
+  { secrets: [ RESEND_API_KEY, POSTMARK_SERVER_ID, OPEN_AI_KEY ] },
   async (request) => {
     authenticatedRequest(request);
+    process.env.OPENAI_API_KEY = OPEN_AI_KEY.value();
 
     const userId = request.data.userId as string | undefined;
     const venueIds = request.data.venueIds as string[] | undefined;

@@ -1,4 +1,5 @@
-import { Opportunity, UserModel, VenueContactRequest } from "../../types/models";
+import { Booking, Opportunity, UserModel, VenueContactRequest } from "../../types/models";
+import { bookingsRef, usersRef } from "../firebase";
 import { chatGpt } from "../openai";
 import * as postmark from "postmark";
 
@@ -24,16 +25,44 @@ export async function writeEmailWithAi({
   const subject = `Performance Inquiry from ${displayName}`;
 
   if (opportunities.length > 0) {
-    const shortenedOps = opportunities.map((o) => {
-      return {
-        title: o.title,
-        description: o.description,
-        date: o.startTime.toDate().toISOString().split("T")[0],
-      };
-    });
+    const shortenedOps = await Promise.all(
+      opportunities.map(async (o) => {
+        const referenceEventId = o.referenceEventId;
+        if (!referenceEventId) {
+          return {
+            title: o.title,
+            description: o.description,
+            date: o.startTime.toDate().toISOString().split("T")[0],
+            otherOpPerformers: [],
+          };
+        }
+
+        const bookingsSnap = await bookingsRef
+          .where("referenceEventId", "==", referenceEventId)
+          .get();
+
+        const otherOpPerformers = await Promise.all(
+          bookingsSnap.docs.map(async (doc) => {
+            const booking = doc.data() as Booking;
+            const requesteeId = booking.requesteeId;
+            const requesteeDoc = await usersRef.doc(requesteeId).get();
+            const requestee = requesteeDoc.data() as UserModel;
+
+            return requestee.artistName ?? requestee.username;
+          }),
+        );
+
+        return {
+          title: o.title,
+          description: o.description,
+          date: o.startTime.toDate().toISOString().split("T")[0],
+          otherOpPerformers: otherOpPerformers,
+        };
+      }),
+    );
 
     const opportunitySnippet = shortenedOps.map((o) => {
-      return `${o.title} on ${o.date}. `;
+      return `${o.title} on ${o.date} with these other performers ${o.otherOpPerformers.join(",")}. `;
     }).join("\n");
     // write op reply
     const res = await chatGpt(`
@@ -103,17 +132,46 @@ export async function writeAiEmailReply({
   const emailsTextContent = emailsSent.map((e) => e.TextBody).join("\n--------------");
 
   if (opportunities.length > 0) {
+    const shortenedOps = await Promise.all(
+      opportunities.map(async (o) => {
+        const referenceEventId = o.referenceEventId;
+        if (!referenceEventId) {
+          return {
+            title: o.title,
+            description: o.description,
+            date: o.startTime.toDate().toISOString().split("T")[0],
+            otherOpPerformers: [],
+          };
+        }
 
-    const shortenedOps = opportunities.map((o) => {
-      return {
-        title: o.title,
-        description: o.description,
-        date: o.startTime.toDate().toISOString().split("T")[0],
-      };
-    });
+        const bookingsSnap = await bookingsRef
+          .where("referenceEventId", "==", referenceEventId)
+          .get();
+
+        const otherOpPerformers = await Promise.all(
+          bookingsSnap.docs.map(async (doc) => {
+            const booking = doc.data() as Booking;
+            const requesteeId = booking.requesteeId;
+            const requesteeDoc = await usersRef.doc(requesteeId).get();
+            const requestee = requesteeDoc.data() as UserModel;
+
+            return requestee.artistName ?? requestee.username;
+          }),
+        );
+
+        return {
+          title: o.title,
+          description: o.description,
+          date: o.startTime.toDate().toISOString().split("T")[0],
+          otherOpPerformers: otherOpPerformers,
+        };
+      }),
+    );
+
+
 
     const opportunitySnippet = shortenedOps.map((o) => {
-      return `${o.title} on ${o.date}. `;
+      return `${o.title} on ${o.date} with these other performers ${o.otherOpPerformers.join(",")}. `;
     }).join("\n");
 
     // write op reply

@@ -19,7 +19,6 @@ export const storage = getStorage(app);
 export const fcm = getMessaging(app);
 export const remote = getRemoteConfig(app);
 
-
 export const usersRef = db.collection("users");
 export const loopsRef = db.collection("loops");
 export const activitiesRef = db.collection("activities");
@@ -123,8 +122,6 @@ export const verifyUserBadgeId = "0aa46576-1fbe-4312-8b69-e2fef3269083";
 
 export const projectId = "in-the-loop-306520";
 export const bucket = storage.bucket(`${projectId}.appspot.com`);
-
-
 
 export const getSecretValue = async (secretName: string): Promise<string | null> => {
   const fullName = `projects/${projectId}/secrets/${secretName}/versions/latest`;
