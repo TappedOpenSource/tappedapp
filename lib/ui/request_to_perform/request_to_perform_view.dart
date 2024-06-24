@@ -174,7 +174,7 @@ class _RequestToPerformViewState extends State<RequestToPerformView> {
                               ),
                               const SizedBox(height: 12),
                               const Text(
-                                'Socials',
+                                'socials',
                                 style: TextStyle(
                                   fontSize: 16,
                                   fontWeight: FontWeight.bold,
@@ -185,7 +185,7 @@ class _RequestToPerformViewState extends State<RequestToPerformView> {
                               ),
                               const SizedBox(height: 12),
                               const Text(
-                                'Booking History',
+                                'booking history',
                                 style: TextStyle(
                                   fontSize: 16,
                                   fontWeight: FontWeight.bold,

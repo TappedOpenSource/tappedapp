@@ -61,11 +61,11 @@ class GigSearchResultsView extends StatelessWidget {
                           },
                         ),
                         const SizedBox(width: 4),
-                        const Text('Select All'),
+                        const Text('select all'),
                       ],
                     ),
                     Text(
-                      'Found ${state.results.length} venues',
+                      'found ${state.results.length} venues',
                       style: theme.textTheme.titleMedium,
                     ),
                   ],

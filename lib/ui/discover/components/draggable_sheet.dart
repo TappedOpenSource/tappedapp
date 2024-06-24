@@ -98,7 +98,7 @@ class DraggableSheet extends StatelessWidget {
                     () => <String>[],
                     (t) => t.topPerformerIds,
                   );
-                });
+                }).toSet().toList();
                 return FutureBuilder(
                   future: database.getFeaturedOpportunities(),
                   builder: (context, snapshot) {
