@@ -16,6 +16,7 @@ import 'package:intheloopapp/utils/opportunity_image.dart';
 import 'package:intheloopapp/utils/premium_builder.dart';
 import 'package:intl/intl.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
+import 'package:quiver/iterables.dart';
 import 'package:skeletons/skeletons.dart';
 
 class OpportunitiesResultsView extends StatefulWidget {
@@ -66,7 +67,7 @@ class _OpportunitiesResultsViewState extends State<OpportunitiesResultsView> {
                         selectableResults
                             .where(
                               (result) => result.selected,
-                            )
+                        )
                             .length;
                 return Scaffold(
                   backgroundColor: theme.colorScheme.surface,
@@ -91,11 +92,11 @@ class _OpportunitiesResultsViewState extends State<OpportunitiesResultsView> {
                                     setState(() {
                                       selectableResults =
                                           selectableResults.map((r) {
-                                        return SelectableResult(
-                                          op: r.op,
-                                          selected: selected ?? false,
-                                        );
-                                      }).toList();
+                                            return SelectableResult(
+                                              op: r.op,
+                                              selected: selected ?? false,
+                                            );
+                                          }).toList();
                                     });
                                   },
                                 ),
@@ -104,7 +105,8 @@ class _OpportunitiesResultsViewState extends State<OpportunitiesResultsView> {
                               ],
                             ),
                             Text(
-                              'found ${selectableResults.length} gig opportunities',
+                              'found ${selectableResults
+                                  .length} gig opportunities',
                               style: theme.textTheme.titleMedium,
                             ),
                           ],
@@ -114,60 +116,90 @@ class _OpportunitiesResultsViewState extends State<OpportunitiesResultsView> {
                   ),
                   floatingActionButton: anySelected
                       ? FloatingActionButton.extended(
-                          onPressed: () async {
-                            if (!hasEnoughQuota) {
-                              context
-                                ..pop()
-                                ..push(
-                                  PaywallPage(),
-                                );
-                              return;
-                            }
+                    onPressed: () async {
+                      if (!hasEnoughQuota) {
+                        context
+                          ..pop()
+                          ..push(
+                            PaywallPage(),
+                          );
+                        return;
+                      }
 
-                            await EasyLoading.show(
-                              status: 'applying to opportunities...',
-                              maskType: EasyLoadingMaskType.black,
-                            );
-                            try {
-                              opBloc.add(
-                                BatchApplyForOpportunities(
-                                  opportunities: selectableResults
-                                      .where(
-                                        (result) => result.selected,
-                                      )
-                                      .map(
-                                        (result) => result.op,
-                                      )
-                                      .toList(),
-                                  userComment: '',
-                                ),
-                              );
-                              nav.pop();
-                            } catch (e, s) {
-                              await EasyLoading.showError(e.toString());
-                              logger.error(
-                                'error applying to opportunities',
-                                error: e,
-                                stackTrace: s,
-                              );
-                            } finally {
-                              await EasyLoading.dismiss();
-                            }
-                          },
-                          backgroundColor: hasEnoughQuota
-                              ? theme.colorScheme.primary
-                              : Colors.grey.withOpacity(0.8),
-                          label: hasEnoughQuota
-                              ? const Text('apply')
-                              : const Text('upgrade'),
-                          icon: hasEnoughQuota
-                              ? const Icon(Icons.check)
-                              : const Icon(Icons.lock),
+                      final isAppliedBatch = await Future.wait(
+                        selectableResults
+                            .where(
+                              (result) => result.selected,
                         )
+                            .map(
+                              (result) =>
+                              database.isUserAppliedForOpportunity(
+                                opportunityId: result.op.id,
+                                userId: currentUser.id,
+                              ),
+                        )
+                            .toList(),
+                      );
+
+                      final zippedAppliedResults = zip([
+                        selectableResults
+                            .where(
+                              (result) => result.selected,
+                        )
+                            .toList(),
+                        isAppliedBatch,
+                      ]);
+
+                      final resultsToApply = zippedAppliedResults
+                          .where(
+                            (zipped) {
+                          final result = zipped[0] as SelectableResult;
+                          final isApplied = zipped[1] as bool;
+
+                          return !isApplied && result.selected;
+                        },
+                      )
+                          .map(
+                            (zipped) => (zipped[0] as SelectableResult).op,)
+                          .toList();
+
+                      await EasyLoading.show(
+                        status: 'applying to opportunities...',
+                        maskType: EasyLoadingMaskType.black,
+                      );
+                      try {
+                        opBloc.add(
+                          BatchApplyForOpportunities(
+                            opportunities: resultsToApply,
+                            userComment: '',
+                          ),
+                        );
+                        nav.pop();
+                      } catch (e, s) {
+                        await EasyLoading.showError(e.toString());
+                        logger.error(
+                          'error applying to opportunities',
+                          error: e,
+                          stackTrace: s,
+                        );
+                      } finally {
+                        await EasyLoading.dismiss();
+                      }
+                    },
+                    backgroundColor: hasEnoughQuota
+                        ? theme.colorScheme.primary
+                        : Colors.grey.withOpacity(0.8),
+                    label: hasEnoughQuota
+                        ? const Text('apply')
+                        : const Text('upgrade'),
+                    icon: hasEnoughQuota
+                        ? const Icon(Icons.check)
+                        : const Icon(Icons.lock),
+                  )
                       : null,
                   body: ListView(
                     children: selectableResults.map(
-                      (result) {
+                          (result) {
                         final op = result.op;
                         final startTime = DateFormat(
                           DateFormat.YEAR_ABBR_MONTH_WEEKDAY_DAY,
@@ -224,40 +256,42 @@ class _OpportunitiesResultsViewState extends State<OpportunitiesResultsView> {
                                   ),
                                   trailing: switch (isApplied) {
                                     null => CupertinoActivityIndicator(),
-                                    false => Checkbox(
-                                        value: result.selected,
-                                        onChanged: (selected) {
-                                          setState(() {
-                                            selectableResults =
-                                                selectableResults.map((r) {
-                                              return r.op.id == op.id
-                                                  ? SelectableResult(
+                                    false =>
+                                        Checkbox(
+                                          value: result.selected,
+                                          onChanged: (selected) {
+                                            setState(() {
+                                              selectableResults =
+                                                  selectableResults.map((r) {
+                                                    return r.op.id == op.id
+                                                        ? SelectableResult(
                                                       op: r.op,
                                                       selected:
-                                                          selected ?? false,
+                                                      selected ?? false,
                                                     )
-                                                  : r;
-                                            }).toList();
-                                          });
-                                        },
-                                      ),
-                                    true => Container(
-                                        padding: const EdgeInsets.symmetric(
-                                          horizontal: 8,
-                                          vertical: 4,
+                                                        : r;
+                                                  }).toList();
+                                            });
+                                          },
                                         ),
-                                        decoration: BoxDecoration(
-                                          color: Colors.green,
-                                          borderRadius:
-                                              BorderRadius.circular(4),
-                                        ),
-                                        child: const Text(
-                                          'applied',
-                                          style: TextStyle(
-                                            color: Colors.white,
+                                    true =>
+                                        Container(
+                                          padding: const EdgeInsets.symmetric(
+                                            horizontal: 8,
+                                            vertical: 4,
+                                          ),
+                                          decoration: BoxDecoration(
+                                            color: Colors.green,
+                                            borderRadius:
+                                            BorderRadius.circular(4),
+                                          ),
+                                          child: const Text(
+                                            'applied',
+                                            style: TextStyle(
+                                              color: Colors.white,
+                                            ),
                                           ),
                                         ),
-                                      ),
                                   },
                                 );
                               },
