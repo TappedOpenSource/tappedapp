@@ -40,7 +40,7 @@ export const notifyVenueOfInterestedOpportunities = onCall(
           // check if referenceEventId exists
           if (op.referenceEventId === undefined || op.referenceEventId === null) {
             debug(`no reference id for ${op.id}, skipping`);
-            return;
+            return null;
           }
 
           // get all bookings for that referenceEventId
@@ -58,7 +58,7 @@ export const notifyVenueOfInterestedOpportunities = onCall(
             referenceBookings: bookings,
           };
         }),
-    )).filter((op) => op !== null) as (Opportunity & { referenceBookings: Booking[] })[];
+    )).filter((op) => op !== null && op !== undefined) as (Opportunity & { referenceBookings: Booking[] })[];
 
     const opsByVenue: Record<string, (Opportunity & { referenceBookings: Booking[] })[]> = {};
     for (const op of fullOps) {
