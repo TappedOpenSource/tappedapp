@@ -404,6 +404,7 @@ class OpportunityView extends StatelessWidget {
                                 null => const SizedBox.shrink(),
                                 false => const SizedBox.shrink(),
                                 true => Column(
+                                    crossAxisAlignment: CrossAxisAlignment.start,
                                     children: [
                                       const SizedBox(height: 12),
                                       Text(

@@ -67,16 +67,16 @@ class SocialMediaIcons extends StatelessWidget {
             switch (socialFollowing.twitterHandle) {
               None() => null,
               Some(:final value) => _socialMediaIcon(
-                  color: Colors.blue,
+                  color: Colors.white,
                   icon: const Icon(
-                    FontAwesomeIcons.twitter,
-                    color: Colors.blue,
+                    FontAwesomeIcons.xTwitter,
+                    color: Colors.white,
                   ),
                   onTap: () {
                     launchUrl(
                       Uri(
                         scheme: 'https',
-                        path: 'twitter.com/$value',
+                        path: 'x.com/$value',
                       ),
                     );
                   },
