@@ -21,6 +21,13 @@ class DaysOfTheWeekChart extends StatelessWidget {
         final isVenue = state.visitedUser.venueInfo.isSome();
         if (!isVenue) return const SizedBox.shrink();
 
+        final empty = daysOfTheWeek.fold(
+          () => true,
+          (value) => value.every((element) => element == 0),
+        );
+
+        if (empty) return const SizedBox.shrink();
+
         final groupedData = daysOfTheWeek.map(
           (d) => normalize(d).asMap().entries.map<BarChartGroupData>((e) {
             return makeGroupData(e.key, e.value);
