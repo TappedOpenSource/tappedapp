@@ -90,8 +90,7 @@ class OpportunityView extends StatelessWidget {
     final database = context.database;
     final theme = Theme.of(context);
 
-    final applyButtonDisabled =
-        isApplied == null || isApplied == true || currentUser.id == op.userId;
+    final applyButtonDisabled = isApplied == null || isApplied == true;
     return AdminBuilder(
       builder: (context, isAdmin) {
         return Scaffold(
@@ -172,7 +171,8 @@ class OpportunityView extends StatelessWidget {
                                     'https://app.tapped.ai/opportunity/${op.id}';
                                 Share.share(link);
                               },
-                              color: theme.colorScheme.onSurface.withOpacity(0.1),
+                              color:
+                                  theme.colorScheme.onSurface.withOpacity(0.1),
                               padding: const EdgeInsets.all(12),
                               child: Text(
                                 'share',
@@ -184,55 +184,57 @@ class OpportunityView extends StatelessWidget {
                               ),
                             ),
                           ),
-                          const SizedBox(
-                            width: 8,
-                          ),
-                          Expanded(
-                            child: switch (applyButtonDisabled) {
-                              null => const CupertinoButton(
-                                  onPressed: null,
-                                  child: CupertinoActivityIndicator(),
-                                ),
-                              false => CupertinoButton(
-                                  onPressed: () {
-                                    HapticFeedback.mediumImpact();
-                                    final quota = opBloc.state.opQuota;
-                                    opBloc.add(
-                                      ApplyForOpportunity(
-                                        opportunity: op,
-                                        userComment: '',
+                          if (currentUser.id != op.userId)
+                            const SizedBox(
+                              width: 8,
+                            ),
+                          if (currentUser.id != op.userId)
+                            Expanded(
+                              child: switch (applyButtonDisabled) {
+                                null => const CupertinoButton(
+                                    onPressed: null,
+                                    child: CupertinoActivityIndicator(),
+                                  ),
+                                false => CupertinoButton(
+                                    onPressed: () {
+                                      HapticFeedback.mediumImpact();
+                                      final quota = opBloc.state.opQuota;
+                                      opBloc.add(
+                                        ApplyForOpportunity(
+                                          opportunity: op,
+                                          userComment: '',
+                                        ),
+                                      );
+                                      if (quota > 0) {
+                                        onApply?.call();
+                                      }
+                                    },
+                                    color: Colors.green.withOpacity(0.8),
+                                    padding: const EdgeInsets.all(12),
+                                    child: const Text(
+                                      'apply',
+                                      style: TextStyle(
+                                        fontSize: 17,
+                                        color: Colors.white,
+                                        fontWeight: FontWeight.bold,
                                       ),
-                                    );
-                                    if (quota > 0) {
-                                      onApply?.call();
-                                    }
-                                  },
-                                  color: Colors.green.withOpacity(0.8),
-                                  padding: const EdgeInsets.all(12),
-                                  child: const Text(
-                                    'apply',
-                                    style: TextStyle(
-                                      fontSize: 17,
-                                      color: Colors.white,
-                                      fontWeight: FontWeight.bold,
                                     ),
                                   ),
-                                ),
-                              true => CupertinoButton(
-                                  onPressed: null,
-                                  color:
-                                      theme.colorScheme.onSurface.withOpacity(0.1),
-                                  padding: const EdgeInsets.all(12),
-                                  child: const Text(
-                                    'apply',
-                                    style: TextStyle(
-                                      fontSize: 17,
-                                      fontWeight: FontWeight.bold,
+                                true => CupertinoButton(
+                                    onPressed: null,
+                                    color: theme.colorScheme.onSurface
+                                        .withOpacity(0.1),
+                                    padding: const EdgeInsets.all(12),
+                                    child: const Text(
+                                      'apply',
+                                      style: TextStyle(
+                                        fontSize: 17,
+                                        fontWeight: FontWeight.bold,
+                                      ),
                                     ),
                                   ),
-                                ),
-                            },
-                          ),
+                              },
+                            ),
                         ],
                       ),
                       const SizedBox(height: 6),
@@ -286,12 +288,13 @@ class OpportunityView extends StatelessWidget {
                                       ),
                                       const SizedBox(width: 8),
                                       Text(
-                                          formattedShortAddress(
-                                            value.addressComponents,
-                                          ),
-                                          style: const TextStyle(
-                                            color: tappedAccent,
-                                          ),),
+                                        formattedShortAddress(
+                                          value.addressComponents,
+                                        ),
+                                        style: const TextStyle(
+                                          color: tappedAccent,
+                                        ),
+                                      ),
                                     ],
                                   ),
                               };
@@ -358,8 +361,7 @@ class OpportunityView extends StatelessWidget {
                           ),
                         ],
                       ),
-                      if (isAdmin)
-                        const SizedBox(height: 12),
+                      if (isAdmin) const SizedBox(height: 12),
                       if (isAdmin)
                         GestureDetector(
                           onTap: () {
@@ -376,11 +378,12 @@ class OpportunityView extends StatelessWidget {
                             children: [
                               Icon(
                                 CupertinoIcons.link_circle_fill,
-                                color: theme.colorScheme.onSurface.withOpacity(0.5),
+                                color: theme.colorScheme.onSurface
+                                    .withOpacity(0.5),
                               ),
                               const SizedBox(width: 8),
                               Text(
-                                  op.id,
+                                op.id,
                                 style: TextStyle(
                                   color: theme.colorScheme.primary,
                                 ),
@@ -404,7 +407,8 @@ class OpportunityView extends StatelessWidget {
                                 null => const SizedBox.shrink(),
                                 false => const SizedBox.shrink(),
                                 true => Column(
-                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
                                     children: [
                                       const SizedBox(height: 12),
                                       Text(
@@ -439,7 +443,8 @@ class OpportunityView extends StatelessWidget {
                                             return Text(
                                               'empty bill',
                                               style: TextStyle(
-                                                color: theme.colorScheme.onSurface
+                                                color: theme
+                                                    .colorScheme.onSurface
                                                     .withOpacity(0.5),
                                               ),
                                             );

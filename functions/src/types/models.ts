@@ -257,6 +257,7 @@ export type Opportunity = {
   touched: "like" | "dislike" | null;
   deleted?: boolean | null;
   venueId?: string | null;
+  genres?: string[] | null;
   referenceEventId?: string | null;
 };
 
