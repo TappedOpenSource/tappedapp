@@ -220,11 +220,13 @@ class OpportunityView extends StatelessWidget {
                                     color: theme.colorScheme.onSurface
                                         .withOpacity(0.1),
                                     padding: const EdgeInsets.all(12),
-                                    child: const Text(
-                                      'apply',
+                                    child: Text(
+                                      'applied',
                                       style: TextStyle(
                                         fontSize: 17,
                                         fontWeight: FontWeight.bold,
+                                        color: theme.colorScheme.onSurface
+                                            .withOpacity(0.3),
                                       ),
                                     ),
                                   ),
