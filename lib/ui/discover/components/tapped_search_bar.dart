@@ -14,6 +14,7 @@ import 'package:intheloopapp/ui/common/opportunity_card.dart';
 import 'package:intheloopapp/ui/user_tile.dart';
 import 'package:intheloopapp/utils/bloc_utils.dart';
 import 'package:intheloopapp/utils/custom_claims_builder.dart';
+import 'package:intheloopapp/utils/premium_builder.dart';
 
 class TappedSearchBar extends StatefulWidget {
   const TappedSearchBar({
@@ -99,6 +100,63 @@ class _TappedSearchBarState extends State<TappedSearchBar> {
     _searchController.dispose();
   }
 
+
+  Widget _buildPremiumBanner(BuildContext context) {
+    return PremiumBuilder(
+      builder: (context, isPremium) {
+        if (isPremium) {
+          return const SizedBox();
+        }
+
+        return Padding(
+          padding: const EdgeInsets.symmetric(vertical: 8),
+          child: Container(
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(15),
+              gradient: LinearGradient(
+                colors: [
+                  Colors.red.shade800.withOpacity(0.8),
+                  Colors.pink.withOpacity(0.8),
+                ],
+              ),
+            ),
+            child: Padding(
+              padding: const EdgeInsets.all(8),
+              child: Row(
+                children: [
+                  const Icon(
+                    Icons.star,
+                    color: Colors.white,
+                  ),
+                  const SizedBox(width: 8),
+                  const Expanded(
+                    child: Text(
+                      'try tapped premium to increase your chances of getting booked!',
+                      style: TextStyle(
+                        color: Colors.white,
+                      ),
+                    ),
+                  ),
+                  TextButton(
+                    onPressed: () {
+                      context.push(PaywallPage());
+                    },
+                    child: const Text(
+                      'upgrade',
+                      style: TextStyle(
+                        color: Colors.white,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+        );
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
@@ -177,6 +235,7 @@ class _TappedSearchBarState extends State<TappedSearchBar> {
               return ListView(
                 controller: _scrollController,
                 children: [
+                  _buildPremiumBanner(context),
                   if (ops.isNotEmpty)
                     Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
