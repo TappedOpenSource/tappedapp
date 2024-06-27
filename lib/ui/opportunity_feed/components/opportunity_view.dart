@@ -25,7 +25,6 @@ import 'package:intheloopapp/utils/geohash.dart';
 import 'package:intheloopapp/utils/hero_image.dart';
 import 'package:intheloopapp/utils/opportunity_image.dart';
 import 'package:intl/intl.dart';
-import 'package:maps_launcher/maps_launcher.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:skeleton_text/skeleton_text.dart';
@@ -90,7 +89,6 @@ class OpportunityView extends StatelessWidget {
     final database = context.database;
     final theme = Theme.of(context);
 
-    final applyButtonDisabled = isApplied == null || isApplied == true;
     return AdminBuilder(
       builder: (context, isAdmin) {
         return Scaffold(
@@ -190,11 +188,8 @@ class OpportunityView extends StatelessWidget {
                             ),
                           if (currentUser.id != op.userId)
                             Expanded(
-                              child: switch (applyButtonDisabled) {
-                                null => const CupertinoButton(
-                                    onPressed: null,
-                                    child: CupertinoActivityIndicator(),
-                                  ),
+                              child: switch (isApplied) {
+                                null => const SizedBox.shrink(),
                                 false => CupertinoButton(
                                     onPressed: () {
                                       HapticFeedback.mediumImpact();
