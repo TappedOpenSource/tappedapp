@@ -102,7 +102,7 @@ class _TappedSearchBarState extends State<TappedSearchBar> {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final database = context.read<DatabaseRepository>();
+    final database = context.database;
     final searchRepo = context.read<SearchRepository>();
     return SearchAnchor(
       searchController: _searchController,
@@ -114,11 +114,10 @@ class _TappedSearchBarState extends State<TappedSearchBar> {
         return Hero(
           tag: 'searchBar',
           child: SearchBar(
-            // elevation: const MaterialStatePropertyAll(0),
-            backgroundColor: MaterialStatePropertyAll(
+            backgroundColor: WidgetStatePropertyAll(
               theme.colorScheme.surface,
             ),
-            elevation: const MaterialStatePropertyAll(0),
+            elevation: const WidgetStatePropertyAll(0),
             controller: searchController,
             focusNode: _searchFocusNode,
             hintText: 'search tapped...',

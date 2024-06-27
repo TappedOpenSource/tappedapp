@@ -408,7 +408,7 @@ class OpportunityView extends StatelessWidget {
                                     children: [
                                       const SizedBox(height: 12),
                                       Text(
-                                        'current bill',
+                                        'current lineup',
                                         style: TextStyle(
                                           fontSize: 18,
                                           color: theme.colorScheme.onSurface
@@ -460,7 +460,7 @@ class OpportunityView extends StatelessWidget {
                       },
                       const SizedBox(height: 12),
                       Text(
-                        'listing agent',
+                        'booker',
                         style: TextStyle(
                           fontSize: 18,
                           color: theme.colorScheme.onSurface.withOpacity(0.5),

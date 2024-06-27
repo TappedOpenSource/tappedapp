@@ -1,5 +1,5 @@
 /* eslint-disable import/no-unresolved */
-import { onCall, HttpsError } from "firebase-functions/v2/https";
+import { onRequest, onCall, HttpsError } from "firebase-functions/v2/https";
 import { encodeBase32 } from "geohashing";
 import { LRUCache } from "lru-cache";
 import {
@@ -126,6 +126,35 @@ export const getPlaceById = onCall(
     await googlePlacesCacheRef.doc(placeId).set(place);
 
     return place;
+  });
+
+export const fetchPlaceById = onRequest(
+  {
+    secrets: [ GOOGLE_PLACES_API_KEY ],
+  },
+  async (req, res) => {
+    const { placeId } = req.query;
+
+    if (placeId === undefined || placeId.length === 0) {
+      res.status(400).send("The query parameter 'placeId' cannot be empty");
+      return;
+    }
+
+    if (typeof placeId !== "string") {
+      res.status(400).send("The query parameter 'placeId' must be a string");
+      return;
+    }
+
+    const placeSnapshot = await googlePlacesCacheRef.doc(placeId).get();
+    if (placeSnapshot.exists) {
+      res.json(placeSnapshot.data());
+      return;
+    }
+
+    const place = await _getPlaceDetails(placeId);
+    await googlePlacesCacheRef.doc(placeId).set(place);
+
+    res.json(place);
   });
 
 const _getPlacePhotoUrlFromName = async (photoName: string, photoId: string): Promise<{
@@ -282,3 +311,33 @@ export const getPlaceIdByLatLng = onCall(
   
     return placeId;
   });
+
+export const autocompletePlaces = onCall(
+  {
+    secrets: [ GOOGLE_PLACES_API_KEY ],
+  },
+  async (request) => {
+    const data = request.data;
+  
+    if (data.query.length === 0) {
+      throw new HttpsError(
+        "invalid-argument",
+        "The function argument 'query' cannot be empty"
+      );
+    }
+  
+    const { query, types } = data;
+    const res = await fetch(
+      `https://maps.googleapis.com/maps/api/place/autocomplete/json?input=${query}&types=${(types ?? [ "(cities)" ])}&key=${GOOGLE_PLACES_API_KEY.value()}`,
+    );
+
+    const json = (await res.json()) as {
+      predictions: {
+        place_id: string;
+        description: { text: string };
+      }[];
+    };
+  
+    return json;
+  },
+);
