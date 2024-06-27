@@ -577,7 +577,7 @@ class DraggableSheet extends StatelessWidget {
                                             horizontal: 8,
                                           ),
                                           child: Text(
-                                            'featured',
+                                            'featured gigs',
                                             style: TextStyle(
                                               fontSize: 28,
                                               fontWeight: FontWeight.bold,
