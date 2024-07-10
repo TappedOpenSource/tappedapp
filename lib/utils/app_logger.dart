@@ -2,7 +2,10 @@ import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:firebase_performance/firebase_performance.dart';
 import 'package:flutter/foundation.dart';
+import 'package:fpdart/fpdart.dart';
+import 'package:intheloopapp/domains/models/user_model.dart';
 import 'package:logging/logging.dart';
+import 'package:posthog_flutter/posthog_flutter.dart';
 
 final logger = AppLogger();
 final analytics = FirebaseAnalytics.instance;
@@ -24,9 +27,28 @@ class AppLogger {
   final logger = Logger('Tapped');
   String? userId;
 
-  void setUserIdentifier(String? userId) {
+  void setUserIdentifier(String? userId, { UserModel?  user }) {
     this.userId = userId;
-    FirebaseCrashlytics.instance.setUserIdentifier(userId ?? '');
+    if (userId == null) {
+      FirebaseCrashlytics.instance.setUserIdentifier('');
+      Posthog().reset();
+      return;
+    }
+
+    FirebaseCrashlytics.instance.setUserIdentifier(userId);
+    if (user != null) {
+      Posthog().identify(
+        userId: userId,
+        userProperties: {
+          'email': user.email,
+          'displayName': user.displayName,
+          'username': user.username,
+        },
+      );
+    } else {
+    Posthog().identify(
+        userId: userId,
+    );
   }
 
   Future<void> reportPreviousSessionErrors() async {

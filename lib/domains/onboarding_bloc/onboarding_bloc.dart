@@ -17,7 +17,6 @@ class OnboardingBloc extends Bloc<OnboardingEvent, OnboardingState> {
         logger.debug('checking onboarding status');
         final userId = event.userId;
         final user = await databaseRepository.getUserById(userId);
-
         final _ = switch (user) {
           None() => () {
               emit(Onboarding());

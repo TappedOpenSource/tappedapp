@@ -4,6 +4,7 @@
     <application
         android:label="Tapped"
         android:icon="@mipmap/ic_launcher">
+
         <activity
             android:name="com.ryanheise.audioservice.AudioServiceActivity"
             android:launchMode="singleTop"
@@ -94,6 +95,10 @@
             android:name="flutterEmbedding"
             android:value="2" />
     </application>
+    <meta-data android:name="com.posthog.posthog.API_KEY" android:value="phc_MuGz46pQGEIxmaphCeSESEJZaqp1f4qAO9MSUW4D6b2" />
+    <meta-data android:name="com.posthog.posthog.POSTHOG_HOST" android:value="https://us.i.posthog.com" />  <!-- usually 'https://us.i.posthog.com' or 'https://eu.i.posthog.com' -->
+    <meta-data android:name="com.posthog.posthog.TRACK_APPLICATION_LIFECYCLE_EVENTS" android:value="true" />
+    <meta-data android:name="com.posthog.posthog.DEBUG" android:value="true" />
     <meta-data
         android:name="com.google.android.gms.wallet.api.enabled"
         android:value="true" />

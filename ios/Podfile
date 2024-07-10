@@ -45,7 +45,7 @@ post_install do |installer|
 #               flags.reject! { |flag| flag == '-GCC_WARN_INHIBIT_ALL_WARNINGS' }
 #               file.settings['COMPILER_FLAGS'] = flags.join(' ')
 #             end
-#           end
 #         end
+#     end
   end
 end

@@ -103,7 +103,10 @@ class App extends StatelessWidget {
                   debugShowCheckedModeBanner: false,
                   title: 'tapped',
                   theme: appTheme,
-                  navigatorObservers: <NavigatorObserver>[_observer],
+                  navigatorObservers: <NavigatorObserver>[
+                    _observer,
+                    PosthogObserver(),
+                  ],
                   navigatorKey: navigatorKey,
                   builder: EasyLoading.init(
                     builder: (context, widget) {

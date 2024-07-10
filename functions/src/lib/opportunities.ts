@@ -5,8 +5,8 @@ import {
   onDocumentUpdated,
   onDocumentWritten,
 } from "firebase-functions/v2/firestore";
-import { createActivity } from "./activities";
 import { 
+  SLACK_WEBHOOK_URL,
   creditsRef, 
   opportunitiesRef, 
   opportunityFeedsRef, 
@@ -17,6 +17,7 @@ import { Timestamp } from "firebase-admin/firestore";
 import { HttpsError } from "firebase-functions/v2/https";
 import { debug, error, info } from "firebase-functions/logger";
 import { onSchedule } from "firebase-functions/v2/scheduler";
+import { slackNotification } from "./notifications";
 // import { v4 as uuidv4 } from "uuid";
 // import { llm } from "./openai";
 
@@ -307,18 +308,24 @@ const _setDailyOpportunityQuota = async () => {
   info("daily opportunity quotas set");
 };
 
-export const addActivityOnOpportunityInterest = functions
+export const notifyFoundersOnOpportunityInterest = functions
+  .runWith({ secrets: [ SLACK_WEBHOOK_URL ] })
   .firestore
   .document("opportunities/{opportunityId}/interestedUsers/{userId}")
   .onCreate(async (data, context) => {
+    const { userComment } = data.data() as { userComment: string, timestamp: Timestamp };
+
     const opSnap = await opportunitiesRef.doc(context.params.opportunityId).get();
     const op = opSnap.data() as Opportunity;
 
-    createActivity({
-      toUserId: op.userId,
-      fromUserId: context.params.userId,
-      type: "opportunityInterest",
-      opportunityId: context.params.opportunityId,
+    const userSnap = await usersRef.doc(context.params.userId).get();
+    const user = userSnap.data() as UserModel;
+    const displayName = user.artistName || user.username;
+
+    await slackNotification({
+      slackWebhookUrl: SLACK_WEBHOOK_URL.value(),
+      title: `${displayName} applied for "${op.title}"`,
+      body: `https://app.tapped.ai/u/${user.username} applied for https://app.tapped.ai/opportunity/${op.id} with the comment  \n\n"${userComment}"`,
     });
   });
 
