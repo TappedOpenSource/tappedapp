@@ -61,6 +61,7 @@ export type EmailNotifications = {
   appReleases: boolean;
   tappedUpdates: boolean;
   bookingRequests: boolean;
+  directMessages: boolean;
 };
 
 export type PushNotifications = {

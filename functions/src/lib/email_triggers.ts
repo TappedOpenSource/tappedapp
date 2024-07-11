@@ -34,6 +34,7 @@ import { subscriptionPurchase } from "../email_templates/subscription_purchase";
 import { venueContacted } from "../email_templates/venue_contacted";
 import { subscriptionExpiration } from "../email_templates/subscription_expiration";
 import { welcomeTemplate } from "../email_templates/welcome";
+import { User } from "stream-chat";
 // import { venueContacted } from "../email_templates/venue_contacted";
 
 export const sendWelcomeEmailOnUserCreated = functions
@@ -555,5 +556,36 @@ export async function sendEmailSubscriptionExpiration(
     to: [ email ],
     subject: "your subscription has expired!",
     html: `<div style="white-space: pre;">${subscriptionExpiration}</div>`,
+  });
+}
+
+export async function sendEmailToPerformerFromStreamMessage({
+  msg,
+  receiverData,
+  senderUser,
+  resendApiKey,
+}: {
+  msg: string;
+  receiverData: UserModel;
+  senderUser: User;
+  resendApiKey: string;
+}): Promise<void> {
+  const resend = new Resend(resendApiKey);
+  const email = receiverData.email;
+
+  if (email === undefined || email === null || email === "") {
+    throw new Error(`email is undefined, null or empty: ${email}`);
+  }
+
+  if (receiverData.emailNotifications.directMessages === false) {
+    return;
+  }
+
+  await resend.emails.send({
+    from: "no-reply@tapped.ai",
+    to: [ email ],
+    subject: `new message from ${senderUser.name}`,
+    html: `<div style="white-space: pre;>${msg}</div>`,
+    text: msg,
   });
 }
