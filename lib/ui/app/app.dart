@@ -22,6 +22,7 @@ import 'package:intheloopapp/ui/splash/splash_view.dart';
 import 'package:intheloopapp/ui/themes.dart';
 import 'package:intheloopapp/utils/bloc_utils.dart';
 import 'package:intl/date_symbol_data_local.dart';
+import 'package:posthog_flutter/posthog_flutter.dart';
 import 'package:stream_chat_flutter/stream_chat_flutter.dart';
 import 'package:upgrader/upgrader.dart';
 

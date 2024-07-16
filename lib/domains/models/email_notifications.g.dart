@@ -12,6 +12,7 @@ _$EmailNotificationsImpl _$$EmailNotificationsImplFromJson(
       appReleases: json['appReleases'] as bool? ?? true,
       tappedUpdates: json['tappedUpdates'] as bool? ?? true,
       bookingRequests: json['bookingRequests'] as bool? ?? true,
+      directMessages: json['directMessages'] as bool? ?? true,
     );
 
 Map<String, dynamic> _$$EmailNotificationsImplToJson(
@@ -20,4 +21,5 @@ Map<String, dynamic> _$$EmailNotificationsImplToJson(
       'appReleases': instance.appReleases,
       'tappedUpdates': instance.tappedUpdates,
       'bookingRequests': instance.bookingRequests,
+      'directMessages': instance.directMessages,
     };

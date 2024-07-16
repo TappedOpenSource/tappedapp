@@ -35,6 +35,7 @@ import { venueContacted } from "../email_templates/venue_contacted";
 import { subscriptionExpiration } from "../email_templates/subscription_expiration";
 import { welcomeTemplate } from "../email_templates/welcome";
 import { User } from "stream-chat";
+import { newDirectMessage } from "../email_templates/new_dm";
 // import { venueContacted } from "../email_templates/venue_contacted";
 
 export const sendWelcomeEmailOnUserCreated = functions
@@ -581,11 +582,16 @@ export async function sendEmailToPerformerFromStreamMessage({
     return;
   }
 
+  const html = newDirectMessage({
+    msg,
+    senderDisplayName: senderUser.name ?? senderUser.username ?? "someone",
+  });
+
   await resend.emails.send({
     from: "no-reply@tapped.ai",
     to: [ email ],
     subject: `new message from ${senderUser.name}`,
-    html: `<div style="white-space: pre;>${msg}</div>`,
+    html: `<div style="white-space: pre;>${html}</div>`,
     text: msg,
   });
 }

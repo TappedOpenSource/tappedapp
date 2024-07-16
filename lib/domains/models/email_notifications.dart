@@ -10,6 +10,7 @@ class EmailNotifications with _$EmailNotifications  {
     @Default(true) bool appReleases,
     @Default(true) bool tappedUpdates,
     @Default(true) bool bookingRequests,
+    @Default(true) bool directMessages,
   }) = _EmailNotifications;
 
   // fromJson

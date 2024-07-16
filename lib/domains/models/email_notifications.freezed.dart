@@ -23,6 +23,7 @@ mixin _$EmailNotifications {
   bool get appReleases => throw _privateConstructorUsedError;
   bool get tappedUpdates => throw _privateConstructorUsedError;
   bool get bookingRequests => throw _privateConstructorUsedError;
+  bool get directMessages => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
@@ -36,7 +37,11 @@ abstract class $EmailNotificationsCopyWith<$Res> {
           EmailNotifications value, $Res Function(EmailNotifications) then) =
       _$EmailNotificationsCopyWithImpl<$Res, EmailNotifications>;
   @useResult
-  $Res call({bool appReleases, bool tappedUpdates, bool bookingRequests});
+  $Res call(
+      {bool appReleases,
+      bool tappedUpdates,
+      bool bookingRequests,
+      bool directMessages});
 }
 
 /// @nodoc
@@ -55,6 +60,7 @@ class _$EmailNotificationsCopyWithImpl<$Res, $Val extends EmailNotifications>
     Object? appReleases = null,
     Object? tappedUpdates = null,
     Object? bookingRequests = null,
+    Object? directMessages = null,
   }) {
     return _then(_value.copyWith(
       appReleases: null == appReleases
@@ -69,6 +75,10 @@ class _$EmailNotificationsCopyWithImpl<$Res, $Val extends EmailNotifications>
           ? _value.bookingRequests
           : bookingRequests // ignore: cast_nullable_to_non_nullable
               as bool,
+      directMessages: null == directMessages
+          ? _value.directMessages
+          : directMessages // ignore: cast_nullable_to_non_nullable
+              as bool,
     ) as $Val);
   }
 }
@@ -81,7 +91,11 @@ abstract class _$$EmailNotificationsImplCopyWith<$Res>
       __$$EmailNotificationsImplCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call({bool appReleases, bool tappedUpdates, bool bookingRequests});
+  $Res call(
+      {bool appReleases,
+      bool tappedUpdates,
+      bool bookingRequests,
+      bool directMessages});
 }
 
 /// @nodoc
@@ -98,6 +112,7 @@ class __$$EmailNotificationsImplCopyWithImpl<$Res>
     Object? appReleases = null,
     Object? tappedUpdates = null,
     Object? bookingRequests = null,
+    Object? directMessages = null,
   }) {
     return _then(_$EmailNotificationsImpl(
       appReleases: null == appReleases
@@ -112,6 +127,10 @@ class __$$EmailNotificationsImplCopyWithImpl<$Res>
           ? _value.bookingRequests
           : bookingRequests // ignore: cast_nullable_to_non_nullable
               as bool,
+      directMessages: null == directMessages
+          ? _value.directMessages
+          : directMessages // ignore: cast_nullable_to_non_nullable
+              as bool,
     ));
   }
 }
@@ -122,7 +141,8 @@ class _$EmailNotificationsImpl implements _EmailNotifications {
   const _$EmailNotificationsImpl(
       {this.appReleases = true,
       this.tappedUpdates = true,
-      this.bookingRequests = true});
+      this.bookingRequests = true,
+      this.directMessages = true});
 
   factory _$EmailNotificationsImpl.fromJson(Map<String, dynamic> json) =>
       _$$EmailNotificationsImplFromJson(json);
@@ -136,10 +156,13 @@ class _$EmailNotificationsImpl implements _EmailNotifications {
   @override
   @JsonKey()
   final bool bookingRequests;
+  @override
+  @JsonKey()
+  final bool directMessages;
 
   @override
   String toString() {
-    return 'EmailNotifications(appReleases: $appReleases, tappedUpdates: $tappedUpdates, bookingRequests: $bookingRequests)';
+    return 'EmailNotifications(appReleases: $appReleases, tappedUpdates: $tappedUpdates, bookingRequests: $bookingRequests, directMessages: $directMessages)';
   }
 
   @override
@@ -152,13 +175,15 @@ class _$EmailNotificationsImpl implements _EmailNotifications {
             (identical(other.tappedUpdates, tappedUpdates) ||
                 other.tappedUpdates == tappedUpdates) &&
             (identical(other.bookingRequests, bookingRequests) ||
-                other.bookingRequests == bookingRequests));
+                other.bookingRequests == bookingRequests) &&
+            (identical(other.directMessages, directMessages) ||
+                other.directMessages == directMessages));
   }
 
   @JsonKey(ignore: true)
   @override
-  int get hashCode =>
-      Object.hash(runtimeType, appReleases, tappedUpdates, bookingRequests);
+  int get hashCode => Object.hash(
+      runtimeType, appReleases, tappedUpdates, bookingRequests, directMessages);
 
   @JsonKey(ignore: true)
   @override
@@ -179,7 +204,8 @@ abstract class _EmailNotifications implements EmailNotifications {
   const factory _EmailNotifications(
       {final bool appReleases,
       final bool tappedUpdates,
-      final bool bookingRequests}) = _$EmailNotificationsImpl;
+      final bool bookingRequests,
+      final bool directMessages}) = _$EmailNotificationsImpl;
 
   factory _EmailNotifications.fromJson(Map<String, dynamic> json) =
       _$EmailNotificationsImpl.fromJson;
@@ -190,6 +216,8 @@ abstract class _EmailNotifications implements EmailNotifications {
   bool get tappedUpdates;
   @override
   bool get bookingRequests;
+  @override
+  bool get directMessages;
   @override
   @JsonKey(ignore: true)
   _$$EmailNotificationsImplCopyWith<_$EmailNotificationsImpl> get copyWith =>

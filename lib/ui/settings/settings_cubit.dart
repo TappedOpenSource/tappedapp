@@ -42,6 +42,9 @@ class SettingsCubit extends Cubit<SettingsState> {
   }) : super(
           SettingsState(
             formKey: GlobalKey<FormState>(debugLabel: 'settings'),
+            pushNotificationsDirectMessages: currentUser.pushNotifications.directMessages,
+            emailNotificationsAppReleases: currentUser.emailNotifications.appReleases,
+            emailNotificationsDirectMessages: currentUser.emailNotifications.directMessages,
           ),
         );
 
@@ -82,8 +85,6 @@ class SettingsCubit extends Cubit<SettingsState> {
             currentUser.socialFollowing.soundcloudHandle.toNullable(),
         audiusHandle: currentUser.socialFollowing.audiusHandle.toNullable(),
         spotifyUrl: currentUser.socialFollowing.spotifyId.map((t) => 'https://open.spotify.com/artist/$t').toNullable(),
-        pushNotificationsDirectMessages:
-            currentUser.pushNotifications.directMessages,
       ),
     );
   }
@@ -182,6 +183,9 @@ class SettingsCubit extends Cubit<SettingsState> {
 
   void changeAppReleaseEmail({required bool selected}) =>
       emit(state.copyWith(emailNotificationsAppReleases: selected));
+
+  void changeDirectMessagesEmail({required bool selected}) =>
+      emit(state.copyWith(emailNotificationsDirectMessages: selected));
 
   Future<void> handleImageFromGallery() async {
     try {
@@ -357,6 +361,7 @@ class SettingsCubit extends Cubit<SettingsState> {
           ),
           emailNotifications: currentUser.emailNotifications.copyWith(
             appReleases: state.emailNotificationsAppReleases,
+            directMessages: state.emailNotificationsDirectMessages,
           ),
           location: location,
           profilePicture: profilePictureUrl,

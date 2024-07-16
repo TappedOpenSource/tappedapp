@@ -26,6 +26,7 @@ class SettingsState with _$SettingsState {
     @Default(FormzSubmissionStatus.initial) FormzSubmissionStatus status,
     @Default(true) bool pushNotificationsDirectMessages,
     @Default(true) bool emailNotificationsAppReleases,
+    @Default(true) bool emailNotificationsDirectMessages,
     @Default('') String email,
     @Default('') String password,
     @Default(None()) Option<PlaceData> place,

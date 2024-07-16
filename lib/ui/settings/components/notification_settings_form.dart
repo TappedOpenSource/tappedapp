@@ -16,7 +16,7 @@ class NotificationSettingsForm extends StatelessWidget {
             const Row(
               children: [
                 Text(
-                  'Push Notifications',
+                  'push notifications',
                   style: TextStyle(
                     fontWeight: FontWeight.bold,
                     fontSize: 18,
@@ -25,7 +25,7 @@ class NotificationSettingsForm extends StatelessWidget {
               ],
             ),
             SettingsSwitch(
-              label: 'New DMs',
+              label: 'new direct messages',
               activated: state.pushNotificationsDirectMessages,
               onChanged: (selected) =>
                   context.read<SettingsCubit>().changeDirectMsgPush(
@@ -36,7 +36,7 @@ class NotificationSettingsForm extends StatelessWidget {
             const Row(
               children: [
                 Text(
-                  'Emails',
+                  'emails',
                   style: TextStyle(
                     fontWeight: FontWeight.bold,
                     fontSize: 18,
@@ -45,10 +45,17 @@ class NotificationSettingsForm extends StatelessWidget {
               ],
             ),
             SettingsSwitch(
-              label: 'New App Releases',
-              activated: state.emailNotificationsAppReleases,
+                label: 'new app releases',
+                activated: state.emailNotificationsAppReleases,
+                onChanged: (selected) =>
+                    context.read<SettingsCubit>().changeAppReleaseEmail(
+                          selected: selected,
+                        )),
+            SettingsSwitch(
+              label: 'new direct messages',
+              activated: state.emailNotificationsDirectMessages,
               onChanged: (selected) =>
-                  context.read<SettingsCubit>().changeAppReleaseEmail(
+                  context.read<SettingsCubit>().changeDirectMessagesEmail(
                         selected: selected,
                       ),
             ),

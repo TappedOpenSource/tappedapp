@@ -41,6 +41,8 @@ mixin _$SettingsState {
   bool get pushNotificationsDirectMessages =>
       throw _privateConstructorUsedError;
   bool get emailNotificationsAppReleases => throw _privateConstructorUsedError;
+  bool get emailNotificationsDirectMessages =>
+      throw _privateConstructorUsedError;
   String get email => throw _privateConstructorUsedError;
   String get password => throw _privateConstructorUsedError;
   Option<PlaceData> get place => throw _privateConstructorUsedError;
@@ -81,6 +83,7 @@ abstract class $SettingsStateCopyWith<$Res> {
       FormzSubmissionStatus status,
       bool pushNotificationsDirectMessages,
       bool emailNotificationsAppReleases,
+      bool emailNotificationsDirectMessages,
       String email,
       String password,
       Option<PlaceData> place});
@@ -123,6 +126,7 @@ class _$SettingsStateCopyWithImpl<$Res, $Val extends SettingsState>
     Object? status = null,
     Object? pushNotificationsDirectMessages = null,
     Object? emailNotificationsAppReleases = null,
+    Object? emailNotificationsDirectMessages = null,
     Object? email = null,
     Object? password = null,
     Object? place = null,
@@ -224,6 +228,10 @@ class _$SettingsStateCopyWithImpl<$Res, $Val extends SettingsState>
           ? _value.emailNotificationsAppReleases
           : emailNotificationsAppReleases // ignore: cast_nullable_to_non_nullable
               as bool,
+      emailNotificationsDirectMessages: null == emailNotificationsDirectMessages
+          ? _value.emailNotificationsDirectMessages
+          : emailNotificationsDirectMessages // ignore: cast_nullable_to_non_nullable
+              as bool,
       email: null == email
           ? _value.email
           : email // ignore: cast_nullable_to_non_nullable
@@ -273,6 +281,7 @@ abstract class _$$SettingsStateImplCopyWith<$Res>
       FormzSubmissionStatus status,
       bool pushNotificationsDirectMessages,
       bool emailNotificationsAppReleases,
+      bool emailNotificationsDirectMessages,
       String email,
       String password,
       Option<PlaceData> place});
@@ -313,6 +322,7 @@ class __$$SettingsStateImplCopyWithImpl<$Res>
     Object? status = null,
     Object? pushNotificationsDirectMessages = null,
     Object? emailNotificationsAppReleases = null,
+    Object? emailNotificationsDirectMessages = null,
     Object? email = null,
     Object? password = null,
     Object? place = null,
@@ -411,6 +421,10 @@ class __$$SettingsStateImplCopyWithImpl<$Res>
           ? _value.emailNotificationsAppReleases
           : emailNotificationsAppReleases // ignore: cast_nullable_to_non_nullable
               as bool,
+      emailNotificationsDirectMessages: null == emailNotificationsDirectMessages
+          ? _value.emailNotificationsDirectMessages
+          : emailNotificationsDirectMessages // ignore: cast_nullable_to_non_nullable
+              as bool,
       email: null == email
           ? _value.email
           : email // ignore: cast_nullable_to_non_nullable
@@ -455,6 +469,7 @@ class _$SettingsStateImpl implements _SettingsState {
       this.status = FormzSubmissionStatus.initial,
       this.pushNotificationsDirectMessages = true,
       this.emailNotificationsAppReleases = true,
+      this.emailNotificationsDirectMessages = true,
       this.email = '',
       this.password = '',
       this.place = const None()})
@@ -528,6 +543,9 @@ class _$SettingsStateImpl implements _SettingsState {
   final bool emailNotificationsAppReleases;
   @override
   @JsonKey()
+  final bool emailNotificationsDirectMessages;
+  @override
+  @JsonKey()
   final String email;
   @override
   @JsonKey()
@@ -538,7 +556,7 @@ class _$SettingsStateImpl implements _SettingsState {
 
   @override
   String toString() {
-    return 'SettingsState(formKey: $formKey, isPerformer: $isPerformer, username: $username, artistName: $artistName, bio: $bio, genres: $genres, label: $label, occupations: $occupations, placeId: $placeId, twitterHandle: $twitterHandle, twitterFollowers: $twitterFollowers, instagramHandle: $instagramHandle, instagramFollowers: $instagramFollowers, tiktokHandle: $tiktokHandle, tiktokFollowers: $tiktokFollowers, soundcloudHandle: $soundcloudHandle, audiusHandle: $audiusHandle, youtubeHandle: $youtubeHandle, spotifyUrl: $spotifyUrl, profileImage: $profileImage, pressKitFile: $pressKitFile, status: $status, pushNotificationsDirectMessages: $pushNotificationsDirectMessages, emailNotificationsAppReleases: $emailNotificationsAppReleases, email: $email, password: $password, place: $place)';
+    return 'SettingsState(formKey: $formKey, isPerformer: $isPerformer, username: $username, artistName: $artistName, bio: $bio, genres: $genres, label: $label, occupations: $occupations, placeId: $placeId, twitterHandle: $twitterHandle, twitterFollowers: $twitterFollowers, instagramHandle: $instagramHandle, instagramFollowers: $instagramFollowers, tiktokHandle: $tiktokHandle, tiktokFollowers: $tiktokFollowers, soundcloudHandle: $soundcloudHandle, audiusHandle: $audiusHandle, youtubeHandle: $youtubeHandle, spotifyUrl: $spotifyUrl, profileImage: $profileImage, pressKitFile: $pressKitFile, status: $status, pushNotificationsDirectMessages: $pushNotificationsDirectMessages, emailNotificationsAppReleases: $emailNotificationsAppReleases, emailNotificationsDirectMessages: $emailNotificationsDirectMessages, email: $email, password: $password, place: $place)';
   }
 
   @override
@@ -592,6 +610,10 @@ class _$SettingsStateImpl implements _SettingsState {
                     emailNotificationsAppReleases) ||
                 other.emailNotificationsAppReleases ==
                     emailNotificationsAppReleases) &&
+            (identical(other.emailNotificationsDirectMessages,
+                    emailNotificationsDirectMessages) ||
+                other.emailNotificationsDirectMessages ==
+                    emailNotificationsDirectMessages) &&
             (identical(other.email, email) || other.email == email) &&
             (identical(other.password, password) ||
                 other.password == password) &&
@@ -625,6 +647,7 @@ class _$SettingsStateImpl implements _SettingsState {
         status,
         pushNotificationsDirectMessages,
         emailNotificationsAppReleases,
+        emailNotificationsDirectMessages,
         email,
         password,
         place
@@ -663,6 +686,7 @@ abstract class _SettingsState implements SettingsState {
       final FormzSubmissionStatus status,
       final bool pushNotificationsDirectMessages,
       final bool emailNotificationsAppReleases,
+      final bool emailNotificationsDirectMessages,
       final String email,
       final String password,
       final Option<PlaceData> place}) = _$SettingsStateImpl;
@@ -715,6 +739,8 @@ abstract class _SettingsState implements SettingsState {
   bool get pushNotificationsDirectMessages;
   @override
   bool get emailNotificationsAppReleases;
+  @override
+  bool get emailNotificationsDirectMessages;
   @override
   String get email;
   @override

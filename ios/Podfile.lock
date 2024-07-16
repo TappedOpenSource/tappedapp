@@ -1432,6 +1432,11 @@ PODS:
   - photo_manager (2.0.0):
     - Flutter
     - FlutterMacOS
+  - PostHog (3.6.1)
+  - posthog_flutter (0.0.1):
+    - Flutter
+    - FlutterMacOS
+    - PostHog (~> 3.0)
   - PromisesObjC (2.4.0)
   - PromisesSwift (2.4.0):
     - PromisesObjC (= 2.4.0)
@@ -1552,6 +1557,7 @@ DEPENDENCIES:
   - path_provider_foundation (from `.symlinks/plugins/path_provider_foundation/darwin`)
   - permission_handler_apple (from `.symlinks/plugins/permission_handler_apple/ios`)
   - photo_manager (from `.symlinks/plugins/photo_manager/ios`)
+  - posthog_flutter (from `.symlinks/plugins/posthog_flutter/ios`)
   - purchases_flutter (from `.symlinks/plugins/purchases_flutter/ios`)
   - rive_common (from `.symlinks/plugins/rive_common/ios`)
   - screen_brightness_ios (from `.symlinks/plugins/screen_brightness_ios/ios`)
@@ -1610,6 +1616,7 @@ SPEC REPOS:
     - Mantle
     - nanopb
     - ObjectBox
+    - PostHog
     - PromisesObjC
     - PromisesSwift
     - PurchasesHybridCommon
@@ -1705,6 +1712,8 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/permission_handler_apple/ios"
   photo_manager:
     :path: ".symlinks/plugins/photo_manager/ios"
+  posthog_flutter:
+    :path: ".symlinks/plugins/posthog_flutter/ios"
   purchases_flutter:
     :path: ".symlinks/plugins/purchases_flutter/ios"
   rive_common:
@@ -1813,6 +1822,8 @@ SPEC CHECKSUMS:
   path_provider_foundation: 2b6b4c569c0fb62ec74538f866245ac84301af46
   permission_handler_apple: 9878588469a2b0d0fc1e048d9f43605f92e6cec2
   photo_manager: 4f6810b7dfc4feb03b461ac1a70dacf91fba7604
+  PostHog: cef6dfc3653d158a51e28ef16d614bedcd311627
+  posthog_flutter: e80defebf021b13375b351c838c9b87d769d7546
   PromisesObjC: f5707f49cb48b9636751c5b2e7d227e43fba9f47
   PromisesSwift: 9d77319bbe72ebf6d872900551f7eeba9bce2851
   purchases_flutter: cb5e74f8faccdb7608b4e57cb0b2146ae635019d

@@ -46,9 +46,10 @@ class AppLogger {
         },
       );
     } else {
-    Posthog().identify(
+      Posthog().identify(
         userId: userId,
-    );
+      );
+    }
   }
 
   Future<void> reportPreviousSessionErrors() async {
