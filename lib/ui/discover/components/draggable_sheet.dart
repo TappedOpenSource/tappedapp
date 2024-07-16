@@ -252,7 +252,7 @@ class DraggableSheet extends StatelessWidget {
                                                       .colorScheme.primary
                                                       .withOpacity(0.1),
                                                   child: Text(
-                                                    'build a show',
+                                                    'connect w/ venues',
                                                     style: TextStyle(
                                                       fontWeight:
                                                           FontWeight.bold,
