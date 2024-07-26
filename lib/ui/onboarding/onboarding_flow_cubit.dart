@@ -215,6 +215,11 @@ class OnboardingFlowCubit extends Cubit<OnboardingFlowState> {
         None() => Future.value(const None()),
       };
 
+      final genres = switch (state.spotifyArtist) {
+        Some(:final value) => value.genres,
+        None() => <String>[],
+      };
+
       final tiktokHandle = state.tiktokHandle.isNotEmpty
           ? Option.of(state.tiktokHandle)
           : const None();
@@ -234,8 +239,10 @@ class OnboardingFlowCubit extends Cubit<OnboardingFlowState> {
           instagramHandle: instagramHandle,
           instagramFollowers: state.instagramFollowers,
         ),
-        performerInfo: const Option.of(
-          PerformerInfo(),
+        performerInfo: Option.of(
+          PerformerInfo(
+            genres: genres,
+          ),
         ),
       );
 

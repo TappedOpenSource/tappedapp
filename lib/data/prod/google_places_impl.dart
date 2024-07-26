@@ -130,14 +130,12 @@ class GooglePlacesImpl implements PlacesRepository {
     try {
       final callable = _functions.httpsCallable('getPlaceIdByLatLng');
 
-      final results = await callable<Map<String, dynamic>>({
+      final results = await callable<String?>({
         'lat': lat,
         'lng': lng,
       });
       final data = results.data;
-      final placeId = Option.fromNullable(
-        data.getOrElse<String?>('placeId', null),
-      );
+      final placeId = Option.fromNullable(data);
 
       return placeId;
     } catch (e, s) {
