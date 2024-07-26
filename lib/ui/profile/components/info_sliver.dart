@@ -7,7 +7,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
-import 'package:flutter_google_places_sdk/flutter_google_places_sdk.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:fpdart/fpdart.dart';
 import 'package:intheloopapp/data/auth_repository.dart';
@@ -88,7 +87,7 @@ class InfoSliver extends StatelessWidget {
                             color: theme.colorScheme.onSurface.withOpacity(0.1),
                             border: Border(
                               bottom: BorderSide(
-                                color: theme.colorScheme.onBackground
+                                color: theme.colorScheme.onSurface
                                     .withOpacity(0.1),
                                 width: 0.5,
                               ),

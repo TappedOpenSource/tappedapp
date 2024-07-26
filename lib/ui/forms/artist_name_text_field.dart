@@ -14,32 +14,37 @@ class ArtistNameTextField extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return TextFormField(
-      initialValue: initialValue,
-      decoration: const InputDecoration(
-        prefixIcon: Icon(Icons.person),
-        labelText: 'username',
-        hintText: 'tapped_ai',
+    return Card(
+      child: Padding(
+        padding: const EdgeInsets.all(
+          18,
+        ),
+        child: TextFormField(
+          initialValue: initialValue,
+          decoration: const InputDecoration.collapsed(
+            hintText: 'performer name (e.g. Doja Cat)',
+          ),
+          validator: (input) {
+            if (input!.trim().isEmpty) {
+              return 'please enter a valid name';
+            }
+
+            return null;
+          },
+          onSaved: (input) async {
+            if (input == null || input.isEmpty) return;
+
+            input = input.trim();
+            onSaved?.call(input);
+          },
+          onChanged: (input) async {
+            if (input.isEmpty) return;
+
+            input = input.trim();
+            onChanged?.call(input);
+          },
+        ),
       ),
-      validator: (input) {
-        if (input!.trim().isEmpty) {
-          return 'please enter a valid name';
-        }
-
-        return null;
-      },
-      onSaved: (input) async {
-        if (input == null || input.isEmpty) return;
-
-        input = input.trim();
-        onSaved?.call(input);
-      },
-      onChanged: (input) async {
-        if (input.isEmpty) return;
-
-        input = input.trim();
-        onChanged?.call(input);
-      },
     );
   }
 }

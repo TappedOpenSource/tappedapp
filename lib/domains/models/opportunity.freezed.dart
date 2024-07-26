@@ -29,6 +29,8 @@ mixin _$Opportunity {
   DateTime get startTime => throw _privateConstructorUsedError;
   @DateTimeConverter()
   DateTime get endTime => throw _privateConstructorUsedError;
+  @OptionalDateTimeConverter()
+  Option<DateTime> get deadline => throw _privateConstructorUsedError;
   String get title => throw _privateConstructorUsedError;
   String get description => throw _privateConstructorUsedError;
   Option<String> get flierUrl => throw _privateConstructorUsedError;
@@ -59,6 +61,7 @@ abstract class $OpportunityCopyWith<$Res> {
       @DateTimeConverter() DateTime timestamp,
       @DateTimeConverter() DateTime startTime,
       @DateTimeConverter() DateTime endTime,
+      @OptionalDateTimeConverter() Option<DateTime> deadline,
       String title,
       String description,
       Option<String> flierUrl,
@@ -91,6 +94,7 @@ class _$OpportunityCopyWithImpl<$Res, $Val extends Opportunity>
     Object? timestamp = null,
     Object? startTime = null,
     Object? endTime = null,
+    Object? deadline = null,
     Object? title = null,
     Object? description = null,
     Object? flierUrl = null,
@@ -126,6 +130,10 @@ class _$OpportunityCopyWithImpl<$Res, $Val extends Opportunity>
           ? _value.endTime
           : endTime // ignore: cast_nullable_to_non_nullable
               as DateTime,
+      deadline: null == deadline
+          ? _value.deadline
+          : deadline // ignore: cast_nullable_to_non_nullable
+              as Option<DateTime>,
       title: null == title
           ? _value.title
           : title // ignore: cast_nullable_to_non_nullable
@@ -189,6 +197,7 @@ abstract class _$$OpportunityImplCopyWith<$Res>
       @DateTimeConverter() DateTime timestamp,
       @DateTimeConverter() DateTime startTime,
       @DateTimeConverter() DateTime endTime,
+      @OptionalDateTimeConverter() Option<DateTime> deadline,
       String title,
       String description,
       Option<String> flierUrl,
@@ -220,6 +229,7 @@ class __$$OpportunityImplCopyWithImpl<$Res>
     Object? timestamp = null,
     Object? startTime = null,
     Object? endTime = null,
+    Object? deadline = null,
     Object? title = null,
     Object? description = null,
     Object? flierUrl = null,
@@ -255,6 +265,10 @@ class __$$OpportunityImplCopyWithImpl<$Res>
           ? _value.endTime
           : endTime // ignore: cast_nullable_to_non_nullable
               as DateTime,
+      deadline: null == deadline
+          ? _value.deadline
+          : deadline // ignore: cast_nullable_to_non_nullable
+              as Option<DateTime>,
       title: null == title
           ? _value.title
           : title // ignore: cast_nullable_to_non_nullable
@@ -306,6 +320,7 @@ class _$OpportunityImpl implements _Opportunity {
       @DateTimeConverter() required this.timestamp,
       @DateTimeConverter() required this.startTime,
       @DateTimeConverter() required this.endTime,
+      @OptionalDateTimeConverter() this.deadline = const None(),
       this.title = '',
       this.description = '',
       this.flierUrl = const None(),
@@ -335,6 +350,10 @@ class _$OpportunityImpl implements _Opportunity {
   @override
   @DateTimeConverter()
   final DateTime endTime;
+  @override
+  @JsonKey()
+  @OptionalDateTimeConverter()
+  final Option<DateTime> deadline;
   @override
   @JsonKey()
   final String title;
@@ -371,7 +390,7 @@ class _$OpportunityImpl implements _Opportunity {
 
   @override
   String toString() {
-    return 'Opportunity(id: $id, userId: $userId, location: $location, timestamp: $timestamp, startTime: $startTime, endTime: $endTime, title: $title, description: $description, flierUrl: $flierUrl, isPaid: $isPaid, touched: $touched, deleted: $deleted, genres: $genres, venueId: $venueId, referenceEventId: $referenceEventId)';
+    return 'Opportunity(id: $id, userId: $userId, location: $location, timestamp: $timestamp, startTime: $startTime, endTime: $endTime, deadline: $deadline, title: $title, description: $description, flierUrl: $flierUrl, isPaid: $isPaid, touched: $touched, deleted: $deleted, genres: $genres, venueId: $venueId, referenceEventId: $referenceEventId)';
   }
 
   @override
@@ -388,6 +407,8 @@ class _$OpportunityImpl implements _Opportunity {
             (identical(other.startTime, startTime) ||
                 other.startTime == startTime) &&
             (identical(other.endTime, endTime) || other.endTime == endTime) &&
+            (identical(other.deadline, deadline) ||
+                other.deadline == deadline) &&
             (identical(other.title, title) || other.title == title) &&
             (identical(other.description, description) ||
                 other.description == description) &&
@@ -412,6 +433,7 @@ class _$OpportunityImpl implements _Opportunity {
       timestamp,
       startTime,
       endTime,
+      deadline,
       title,
       description,
       flierUrl,
@@ -444,6 +466,7 @@ abstract class _Opportunity implements Opportunity {
       @DateTimeConverter() required final DateTime timestamp,
       @DateTimeConverter() required final DateTime startTime,
       @DateTimeConverter() required final DateTime endTime,
+      @OptionalDateTimeConverter() final Option<DateTime> deadline,
       final String title,
       final String description,
       final Option<String> flierUrl,
@@ -472,6 +495,9 @@ abstract class _Opportunity implements Opportunity {
   @override
   @DateTimeConverter()
   DateTime get endTime;
+  @override
+  @OptionalDateTimeConverter()
+  Option<DateTime> get deadline;
   @override
   String get title;
   @override

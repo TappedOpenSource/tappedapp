@@ -1,5 +1,4 @@
 import 'package:badges/badges.dart' as badges;
-import 'package:card_banner/card_banner.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';

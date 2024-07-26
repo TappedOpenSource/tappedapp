@@ -34,7 +34,7 @@ class BookingHistoryView extends StatelessWidget {
       splashColor: Colors.transparent,
       child: Icon(
         icon,
-        color: theme.colorScheme.onBackground,
+        color: theme.colorScheme.onSurface,
       ),
     );
   }

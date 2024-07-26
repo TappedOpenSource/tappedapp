@@ -8,14 +8,25 @@ part of 'spotify_artist.dart';
 
 _$SpotifyArtistImpl _$$SpotifyArtistImplFromJson(Map<String, dynamic> json) =>
     _$SpotifyArtistImpl(
-      genres:
-          (json['genres'] as List<dynamic>?)?.map((e) => e as String).toList(),
-      href: json['href'] as String?,
       id: json['id'] as String,
-      name: json['name'] as String?,
-      popularity: (json['popularity'] as num?)?.toInt(),
-      type: json['type'] as String?,
       uri: json['uri'] as String,
+      type: json['type'] == null
+          ? const None()
+          : Option<String>.fromJson(json['type'], (value) => value as String),
+      genres: (json['genres'] as List<dynamic>?)
+              ?.map((e) => e as String)
+              .toList() ??
+          const [],
+      href: json['href'] == null
+          ? const None()
+          : Option<String>.fromJson(json['href'], (value) => value as String),
+      name: json['name'] == null
+          ? const None()
+          : Option<String>.fromJson(json['name'], (value) => value as String),
+      popularity: json['popularity'] == null
+          ? const None()
+          : Option<int>.fromJson(
+              json['popularity'], (value) => (value as num).toInt()),
       external_urls: json['external_urls'] == null
           ? const None()
           : Option<ExternalUrls>.fromJson(json['external_urls'],
@@ -32,13 +43,21 @@ _$SpotifyArtistImpl _$$SpotifyArtistImplFromJson(Map<String, dynamic> json) =>
 
 Map<String, dynamic> _$$SpotifyArtistImplToJson(_$SpotifyArtistImpl instance) =>
     <String, dynamic>{
-      'genres': instance.genres,
-      'href': instance.href,
       'id': instance.id,
-      'name': instance.name,
-      'popularity': instance.popularity,
-      'type': instance.type,
       'uri': instance.uri,
+      'type': instance.type.toJson(
+        (value) => value,
+      ),
+      'genres': instance.genres,
+      'href': instance.href.toJson(
+        (value) => value,
+      ),
+      'name': instance.name.toJson(
+        (value) => value,
+      ),
+      'popularity': instance.popularity.toJson(
+        (value) => value,
+      ),
       'external_urls': instance.external_urls.toJson(
         (value) => value.toJson(),
       ),

@@ -10,18 +10,6 @@ class OnboardingInitView extends StatelessWidget {
     return Column(
       children: [
         const SizedBox(height: 25),
-        Container(
-          height: MediaQuery.of(context).size.height / 2.5,
-          width: double.infinity,
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(25),
-            image: const DecorationImage(
-              fit: BoxFit.cover,
-              image: AssetImage('assets/splash.gif'),
-            ),
-          ),
-        ),
-        const SizedBox(height: 25),
         const Text(
           "let's get you set up...",
           style: TextStyle(

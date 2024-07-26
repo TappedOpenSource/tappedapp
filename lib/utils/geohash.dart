@@ -89,7 +89,6 @@ String formattedShortAddress(List<AddressComponent>? addressComponents) {
 
   final city = getAddressComponent(
     addressComponents,
-    type: PlaceType.LOCALITY,
     defaultIdent: '',
   );
 

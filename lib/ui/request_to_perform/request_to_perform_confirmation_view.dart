@@ -1,6 +1,5 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:fpdart/fpdart.dart';
 import 'package:intheloopapp/domains/models/user_model.dart';
 import 'package:intheloopapp/domains/navigation_bloc/navigation_bloc.dart';
@@ -87,8 +86,8 @@ class RequestToPerformConfirmationView extends StatelessWidget {
                           return Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              Padding(
-                                padding: const EdgeInsets.symmetric(
+                              const Padding(
+                                padding: EdgeInsets.symmetric(
                                   vertical: 12,
                                 ),
                                 child: Text(
@@ -105,7 +104,7 @@ class RequestToPerformConfirmationView extends StatelessWidget {
                                 text: TextSpan(
                                   text: 'these are the local performers we recommend you contact on instagram. ',
                                   style: TextStyle(
-                                    color: theme.colorScheme.onBackground,
+                                    color: theme.colorScheme.onSurface,
                                   ),
                                   children: [
                                     TextSpan(

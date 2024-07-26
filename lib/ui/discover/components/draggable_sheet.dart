@@ -358,7 +358,7 @@ class DraggableSheet extends StatelessWidget {
                                                             Scaffold(
                                                           appBar: AppBar(
                                                             title: const Text(
-                                                                'venues'),
+                                                                'venues',),
                                                           ),
                                                           body: Container(
                                                             padding:
@@ -379,7 +379,7 @@ class DraggableSheet extends StatelessWidget {
                                                                       .length,
                                                               itemBuilder:
                                                                   (context,
-                                                                      index) {
+                                                                      index,) {
                                                                 final venue =
                                                                     sortedVenueHits[
                                                                         index];

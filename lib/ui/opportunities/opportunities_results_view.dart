@@ -1,4 +1,3 @@
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -255,7 +254,7 @@ class _OpportunitiesResultsViewState extends State<OpportunitiesResultsView> {
                                     startTime,
                                   ),
                                   trailing: switch (isApplied) {
-                                    null => CupertinoActivityIndicator(),
+                                    null => const CupertinoActivityIndicator(),
                                     false =>
                                         Checkbox(
                                           value: result.selected,

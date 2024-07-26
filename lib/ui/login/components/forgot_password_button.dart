@@ -12,7 +12,7 @@ class ForgotPasswordButton extends StatelessWidget {
         context.push(ForgotPasswordPage()),
       },
       child: const Text(
-        'Forgot password?',
+        'forgot password?',
         style: TextStyle(
           fontSize: 12,
         ),

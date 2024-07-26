@@ -286,7 +286,7 @@ class ProfileCubit extends Cubit<ProfileState> {
           await trace.start();
           try {
             logger.d(
-              'initSpotifyTopTracks ${value}',
+              'initSpotifyTopTracks $value',
             );
             final topTracks = await spotify.getTopTracks(value);
             emit(state.copyWith(topTracks: topTracks));

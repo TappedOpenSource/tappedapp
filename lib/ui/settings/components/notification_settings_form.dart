@@ -50,7 +50,7 @@ class NotificationSettingsForm extends StatelessWidget {
                 onChanged: (selected) =>
                     context.read<SettingsCubit>().changeAppReleaseEmail(
                           selected: selected,
-                        )),
+                        ),),
             SettingsSwitch(
               label: 'new direct messages',
               activated: state.emailNotificationsDirectMessages,

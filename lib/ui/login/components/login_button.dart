@@ -30,7 +30,7 @@ class LoginButton extends StatelessWidget {
           },
           borderRadius: BorderRadius.circular(15),
           child: const Text(
-            'Login',
+            'login',
             style: TextStyle(
               color: Colors.white,
               fontWeight: FontWeight.w700,

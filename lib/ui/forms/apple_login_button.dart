@@ -9,21 +9,25 @@ class AppleLoginButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final onSurface = theme.colorScheme.onSurface;
     return CupertinoButton(
       onPressed: onPressed,
-      color: Colors.white,
+      color: onSurface.withOpacity(0.1),
       borderRadius: BorderRadius.circular(15),
-      child: const Row(
+      child: Row(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Icon(
             FontAwesomeIcons.apple,
+            size: 20,
+            color: onSurface,
           ),
-          SizedBox(width: 10),
+          const SizedBox(width: 10),
           Text(
             'Continue with Apple',
             style: TextStyle(
-              color: Colors.black,
+              color: onSurface,
               fontWeight: FontWeight.w700,
             ),
           ),

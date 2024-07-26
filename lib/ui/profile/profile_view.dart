@@ -315,7 +315,7 @@ class ProfileView extends StatelessWidget {
                   style: const TextStyle(
                     fontSize: 32,
                     fontWeight: FontWeight.w800,
-                  )
+                  ),
                 );
               },
             ),

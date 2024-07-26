@@ -7,7 +7,6 @@ import 'package:formz/formz.dart';
 import 'package:intheloopapp/domains/navigation_bloc/navigation_bloc.dart';
 import 'package:intheloopapp/ui/forms/apple_login_button.dart';
 import 'package:intheloopapp/ui/forms/google_login_button.dart';
-import 'package:intheloopapp/ui/loading/logo_wave.dart';
 import 'package:intheloopapp/ui/login/components/traditional_login.dart';
 import 'package:intheloopapp/ui/login/login_cubit.dart';
 import 'package:intheloopapp/utils/bloc_utils.dart';
@@ -39,13 +38,28 @@ class LoginForm extends StatelessWidget {
         alignment: const Alignment(0, -1 / 3),
         child: SingleChildScrollView(
           child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 30),
+            padding: const EdgeInsets.symmetric(horizontal: 20),
             child: Column(
               mainAxisSize: MainAxisSize.min,
               mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                const LogoWave(),
-                const SizedBox(height: 50),
+                const Text(
+                  'welcome back',
+                  style: TextStyle(
+                    fontSize: 30,
+                    fontWeight: FontWeight.w700,
+                  ),
+                ),
+                Text(
+                  'login with your email or social media account to get back in the action',
+                  style: TextStyle(
+                    color: Colors.white.withOpacity(0.5),
+                  ),
+                ),
+                const SizedBox(
+                  height: 20,
+                ),
                 const TraditionalLogin(),
                 const SizedBox(height: 10),
                 Row(

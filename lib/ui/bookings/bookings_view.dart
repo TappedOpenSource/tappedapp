@@ -7,8 +7,8 @@ import 'package:intheloopapp/domains/models/booking.dart';
 import 'package:intheloopapp/domains/navigation_bloc/navigation_bloc.dart';
 import 'package:intheloopapp/domains/navigation_bloc/tapped_route.dart';
 import 'package:intheloopapp/ui/bookings/components/bookings_list.dart';
-import 'package:intheloopapp/ui/discover/components/venue_card.dart';
 import 'package:intheloopapp/ui/common/opportunity_card.dart';
+import 'package:intheloopapp/ui/discover/components/venue_card.dart';
 import 'package:intheloopapp/utils/bloc_utils.dart';
 import 'package:intheloopapp/utils/current_user_builder.dart';
 import 'package:intheloopapp/utils/premium_builder.dart';
@@ -296,7 +296,7 @@ class BookingsView extends StatelessWidget {
             backgroundColor: Theme
                 .of(context)
                 .colorScheme
-                .background,
+                .surface,
             extendBodyBehindAppBar: true,
             body: BlocBuilder<BookingsBloc, BookingsState>(
               builder: (context, state) {

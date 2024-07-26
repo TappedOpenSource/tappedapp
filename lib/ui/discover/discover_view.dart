@@ -15,7 +15,6 @@ import 'package:intheloopapp/domains/onboarding_bloc/onboarding_bloc.dart';
 import 'package:intheloopapp/ui/discover/components/draggable_sheet.dart';
 import 'package:intheloopapp/ui/discover/components/map_base.dart';
 import 'package:intheloopapp/ui/discover/components/map_settings.dart';
-import 'package:intheloopapp/ui/discover/components/overlay_changer.dart';
 import 'package:intheloopapp/ui/discover/components/tapped_search_bar.dart';
 import 'package:intheloopapp/ui/discover/discover_cubit.dart';
 import 'package:intheloopapp/utils/bloc_utils.dart';
@@ -151,7 +150,7 @@ class DiscoverView extends StatelessWidget {
                                                     ),
                                                   ),
                                                 ),
-                                              ]
+                                              ],
                                             ),
                                           ),
                                         ),
@@ -209,7 +208,7 @@ class DiscoverView extends StatelessWidget {
                                                     ),
                                                   ),
                                                 ),
-                                              ]
+                                              ],
                                             ),
                                           ),
                                         ),
@@ -447,7 +446,7 @@ class DiscoverView extends StatelessWidget {
                                                 unreadMessagesCount.toString(),
                                                 style: TextStyle(
                                                   color: theme
-                                                      .colorScheme.onBackground,
+                                                      .colorScheme.onSurface,
                                                 ),
                                               ),
                                               position:

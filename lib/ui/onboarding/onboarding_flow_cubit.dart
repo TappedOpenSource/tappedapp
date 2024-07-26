@@ -19,8 +19,8 @@ import 'package:intheloopapp/domains/models/user_model.dart';
 import 'package:intheloopapp/domains/models/username.dart';
 import 'package:intheloopapp/domains/navigation_bloc/navigation_bloc.dart';
 import 'package:intheloopapp/domains/onboarding_bloc/onboarding_bloc.dart';
-import 'package:intheloopapp/ui/onboarding/username_input.dart';
 import 'package:intheloopapp/utils/app_logger.dart';
+import 'package:intheloopapp/utils/download_image.dart';
 import 'package:intheloopapp/utils/sanitize_username.dart';
 
 part 'onboarding_flow_state.dart';
@@ -37,9 +37,7 @@ class OnboardingFlowCubit extends Cubit<OnboardingFlowState> {
   }) : super(
           OnboardingFlowState(
             currentUserId: currentAuthUser.uid,
-            // artistName: ArtistNameInput.dirty(
-            //   value: currentAuthUser.displayName ?? '',
-            // ),
+            artistName: currentAuthUser.displayName ?? '',
           ),
         );
 
@@ -51,21 +49,40 @@ class OnboardingFlowCubit extends Cubit<OnboardingFlowState> {
   final DatabaseRepository databaseRepository;
   final User currentAuthUser;
 
-  void spotifyUrlChange(String input) => input.isEmpty
-      ? emit(
-          state.copyWith(
-            spotifyUrl: const None(),
+  void spotifyArtistChange(Option<SpotifyArtist> input) => switch (input) {
+        None() => emit(
+            state.copyWith(spotifyArtist: const None()),
           ),
-        )
-      : emit(
-          state.copyWith(
-            spotifyUrl: Option.of(input),
-          ),
-        );
+        Some(:final value) => (() async {
+            // get username from santitized spotify artist name
+            final artistName = value.name;
 
-  void usernameChange(String input) => emit(
+            // get profile picture from spotify artist images
+            final profilePicture = value.images.isNotEmpty
+                ? Option.of(value.images.first.url)
+                : const None();
+
+            final profilePicFile = await switch (profilePicture) {
+              Some(:final value) => () async {
+                  final file = await downloadImage(value);
+                  return file;
+                }(),
+              None() => Future.value(const None()),
+            };
+
+            emit(
+              state.copyWith(
+                spotifyArtist: Option.of(value),
+                artistName: artistName.toNullable(),
+                pickedPhoto: profilePicFile,
+              ),
+            );
+          })()
+      };
+
+  void artistNameChange(String input) => emit(
         state.copyWith(
-          username: UsernameInput.dirty(value: input),
+          artistName: input,
         ),
       );
 
@@ -100,15 +117,15 @@ class OnboardingFlowCubit extends Cubit<OnboardingFlowState> {
         ),
       );
 
-  Future<void> fetchSpotifyInfo() async {
+  Future<void> fetchSpotifyInfo(Option<String> spotifyUrl) async {
     emit(
       state.copyWith(
-        username: const UsernameInput.pure(),
+        artistName: '',
         photoUrl: const None(),
       ),
     );
 
-    final res = await switch (state.spotifyUrl) {
+    final res = await switch (spotifyUrl) {
       None() => Future<Option<SpotifyArtist>>.value(const None()),
       Some(:final value) => (() async {
           if (value.isEmpty) {
@@ -123,57 +140,6 @@ class OnboardingFlowCubit extends Cubit<OnboardingFlowState> {
 
     if (res.isNone()) {
       return;
-    }
-
-    // get username from santitized spotify artist name
-    final artistName = res.map((a) => a.name);
-    final usernameCandidate = artistName.fold(
-      () => '',
-      (e) {
-        if (e == null) {
-          return '';
-        }
-
-        return sanitizeUsername(e);
-      },
-    );
-
-    // check if username exists, if it does add a number to the end
-    final username = await switch (usernameCandidate.isEmpty) {
-      true => Future.value(''),
-      false => (() async {
-          final usernameAvailable =
-              await databaseRepository.checkUsernameAvailability(
-            usernameCandidate,
-            currentAuthUser.uid,
-          );
-
-          final sinceEpoch = DateTime.now().millisecondsSinceEpoch.toString();
-          final lastFour = sinceEpoch.substring(sinceEpoch.length - 4);
-          return usernameAvailable
-              ? usernameCandidate
-              : '$usernameCandidate$lastFour';
-        })(),
-    };
-
-    // get profile picture from spotify artist images
-    final profilePicture = res.fold(
-      () => const None(),
-      (a) => a.images.isNotEmpty ? Option.of(a.images.first.url) : const None(),
-    );
-
-    emit(
-      state.copyWith(
-        photoUrl: profilePicture,
-      ),
-    );
-
-    if (username.isNotEmpty) {
-      emit(
-        state.copyWith(
-          username: UsernameInput.dirty(value: username),
-        ),
-      );
     }
   }
 
@@ -215,6 +181,26 @@ class OnboardingFlowCubit extends Cubit<OnboardingFlowState> {
       throw Exception('you must agree to the EULA');
     }
 
+    final usernameCandidate = sanitizeUsername(state.artistName);
+
+    // check if username exists, if it does add a number to the end
+    final username = await switch (usernameCandidate.isEmpty) {
+      true => Future.value(''),
+      false => (() async {
+          final usernameAvailable =
+              await databaseRepository.checkUsernameAvailability(
+            usernameCandidate,
+            currentAuthUser.uid,
+          );
+
+          final sinceEpoch = DateTime.now().millisecondsSinceEpoch.toString();
+          final lastFour = sinceEpoch.substring(sinceEpoch.length - 4);
+          return usernameAvailable
+              ? usernameCandidate
+              : '$usernameCandidate$lastFour';
+        })(),
+    };
+
     emit(state.copyWith(status: FormzSubmissionStatus.inProgress));
 
     try {
@@ -239,8 +225,8 @@ class OnboardingFlowCubit extends Cubit<OnboardingFlowState> {
       final currentUser = emptyUser.copyWith(
         id: currentAuthUser.uid,
         email: currentAuthUser.email ?? '',
-        username: Username.fromString(state.username.value),
-        artistName: currentAuthUser.displayName ?? state.username.value,
+        username: Username.fromString(username),
+        artistName: state.artistName,
         profilePicture: profilePictureUrl,
         socialFollowing: SocialFollowing(
           tiktokHandle: tiktokHandle,

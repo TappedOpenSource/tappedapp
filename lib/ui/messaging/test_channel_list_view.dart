@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
+import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:intheloopapp/domains/navigation_bloc/navigation_bloc.dart';
 import 'package:intheloopapp/domains/navigation_bloc/tapped_route.dart';
 import 'package:intheloopapp/ui/common/easter_egg_placeholder.dart';
@@ -10,7 +11,6 @@ import 'package:intheloopapp/ui/messaging/search_text_field.dart';
 import 'package:intheloopapp/utils/bloc_utils.dart';
 import 'package:intheloopapp/utils/premium_builder.dart';
 import 'package:stream_chat_flutter/stream_chat_flutter.dart';
-import 'package:flutter_slidable/flutter_slidable.dart';
 
 class ChannelList extends StatefulWidget {
   const ChannelList({super.key});
@@ -113,7 +113,7 @@ class _ChannelList extends State<ChannelList> {
   late final TextEditingController _controller = TextEditingController()
     ..addListener(_channelQueryListener);
 
-  String _searchQuery = "";
+  String _searchQuery = '';
   bool _isSearchActive = false;
   Timer? _debounce;
 
@@ -174,7 +174,6 @@ class _ChannelList extends State<ChannelList> {
         },
         child: NestedScrollView(
           controller: _scrollController,
-          floatHeaderSlivers: false,
           headerSliverBuilder: (_, __) => [
             SliverToBoxAdapter(
               child: SearchTextField(
