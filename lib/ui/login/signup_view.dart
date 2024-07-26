@@ -7,7 +7,6 @@ import 'package:intheloopapp/ui/forms/apple_login_button.dart';
 import 'package:intheloopapp/ui/forms/email_text_field.dart';
 import 'package:intheloopapp/ui/forms/google_login_button.dart';
 import 'package:intheloopapp/ui/forms/password_text_field.dart';
-import 'package:intheloopapp/ui/loading/logo_wave.dart';
 import 'package:intheloopapp/ui/login/components/confirm_signup_button.dart';
 import 'package:intheloopapp/ui/login/login_cubit.dart';
 import 'package:intheloopapp/ui/themes.dart';
@@ -21,6 +20,17 @@ class SignUpView extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Theme.of(context).colorScheme.surface,
+      appBar: AppBar(
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.info_outline),
+            onPressed: () async {
+              final uri = Uri.parse('https://tapped.ai');
+              await launchUrl(uri);
+            },
+          ),
+        ],
+      ),
       body: BlocProvider(
         create: (context) => LoginCubit(
           auth: context.auth,
@@ -33,13 +43,26 @@ class SignUpView extends StatelessWidget {
               alignment: const Alignment(0, -1 / 3),
               child: SingleChildScrollView(
                 child: Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 30),
+                  padding: const EdgeInsets.symmetric(horizontal: 20),
                   child: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      const LogoWave(),
-                      const SizedBox(height: 50),
+                      const Text(
+                        "let's get started",
+                        style: TextStyle(
+                          fontSize: 30,
+                          fontWeight: FontWeight.w700,
+                        ),
+                      ),
+                      Text(
+                        'first, create an account to get you set up',
+                        style: TextStyle(
+                          color: Colors.white.withOpacity(0.5),
+                        ),
+                      ),
+                      const SizedBox(
+                        height: 20,
+                      ),
                       EmailTextField(
                         onChanged: (input) =>
                             context.read<LoginCubit>().updateEmail(input ?? ''),
@@ -64,7 +87,11 @@ class SignUpView extends StatelessWidget {
                       const SizedBox(
                         height: 20,
                       ),
-                      const ConfirmSignUpButton(),
+                      const Row(
+                        children: [
+                          Expanded(child: ConfirmSignUpButton()),
+                        ],
+                      ),
                       const SizedBox(
                         height: 25,
                       ),
@@ -104,17 +131,16 @@ class SignUpView extends StatelessWidget {
                               .signInWithGoogle()
                               .onError((error, stackTrace) {
                             scaffoldMessenger.showSnackBar(
-                              SnackBar(
+                              const SnackBar(
                                 behavior: SnackBarBehavior.floating,
                                 backgroundColor: Colors.red,
-                                content: Text(error.toString()),
+                                content: Text('could not sign in with Google'),
                               ),
                             );
                           });
-                          context.pop();
                         },
                       ),
-                      const SizedBox(height: 20),
+                      const SizedBox(height: 15),
                       if (Platform.isIOS)
                         AppleLoginButton(
                           onPressed: () {
@@ -123,10 +149,10 @@ class SignUpView extends StatelessWidget {
                                 .signInWithApple()
                                 .onError((error, stackTrace) {
                               scaffoldMessenger.showSnackBar(
-                                SnackBar(
+                                const SnackBar(
                                   behavior: SnackBarBehavior.floating,
                                   backgroundColor: Colors.red,
-                                  content: Text(error.toString()),
+                                  content: Text('could not sign in with Apple'),
                                 ),
                               );
                             });
@@ -162,7 +188,8 @@ class SignUpView extends StatelessWidget {
                             onPressed: () => launchUrl(
                               Uri(
                                 scheme: 'https',
-                                path: 'https://www.apple.com/legal/internet-services/itunes/dev/stdeula/',
+                                path:
+                                    'www.apple.com/legal/internet-services/itunes/dev/stdeula/',
                               ),
                             ),
                           ),

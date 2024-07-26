@@ -146,25 +146,18 @@ class DaysOfTheWeekChart extends StatelessWidget {
     switch (value.toInt()) {
       case 0:
         text = const Text('m', style: style);
-        break;
       case 1:
         text = const Text('t', style: style);
-        break;
       case 2:
         text = const Text('w', style: style);
-        break;
       case 3:
         text = const Text('t', style: style);
-        break;
       case 4:
         text = const Text('f', style: style);
-        break;
       case 5:
         text = const Text('s', style: style);
-        break;
       case 6:
         text = const Text('s', style: style);
-        break;
       default:
         text = const Text('', style: style);
         break;

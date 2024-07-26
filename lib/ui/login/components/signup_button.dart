@@ -12,7 +12,7 @@ class SignUpButton extends StatelessWidget {
         context.push(SignUpPage()),
       },
       child: const Text(
-        'Sign Up',
+        'sign up',
         style: TextStyle(
           fontSize: 12,
         ),

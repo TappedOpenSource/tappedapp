@@ -31,13 +31,13 @@ class SplashView extends StatelessWidget {
                       child: Padding(
                         padding: const EdgeInsets.symmetric(
                           vertical: 4,
-                          horizontal: 32,
+                          horizontal: 20,
                         ),
                         child: CupertinoButton.filled(
                           onPressed: () => context.push(SignUpPage()),
                           borderRadius: BorderRadius.circular(15),
                           child: const Text(
-                            'Get Started',
+                            'get started',
                             style: TextStyle(
                               fontWeight: FontWeight.w700,
                               color: Colors.white,
@@ -51,14 +51,14 @@ class SplashView extends StatelessWidget {
                       child: Padding(
                         padding: const EdgeInsets.symmetric(
                           vertical: 4,
-                          horizontal: 32,
+                          horizontal: 20,
                         ),
                         child: CupertinoButton(
                           onPressed: () => context.push(LoginPage()),
                           color: Colors.white.withOpacity(0.2),
                           borderRadius: BorderRadius.circular(15),
                           child: const Text(
-                            'Login',
+                            'login',
                             style: TextStyle(
                               fontWeight: FontWeight.w700,
                               color: Colors.white,

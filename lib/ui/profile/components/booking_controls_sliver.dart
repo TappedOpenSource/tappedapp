@@ -4,8 +4,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intheloopapp/domains/bookings_bloc/bookings_bloc.dart';
 import 'package:intheloopapp/domains/models/booking.dart';
 import 'package:intheloopapp/ui/bookings/components/bookings_list.dart';
-import 'package:intheloopapp/ui/discover/components/venue_card.dart';
 import 'package:intheloopapp/ui/common/opportunity_card.dart';
+import 'package:intheloopapp/ui/discover/components/venue_card.dart';
 import 'package:intheloopapp/utils/bloc_utils.dart';
 import 'package:intheloopapp/utils/current_user_builder.dart';
 import 'package:intheloopapp/utils/custom_claims_builder.dart';
@@ -207,7 +207,7 @@ class BookingControlsSliver extends StatelessWidget {
                             color: theme.colorScheme.onSurface.withOpacity(0.1),
                             border: Border(
                               bottom: BorderSide(
-                                color: theme.colorScheme.onBackground
+                                color: theme.colorScheme.onSurface
                                     .withOpacity(0.1),
                                 width: 0.5,
                               ),

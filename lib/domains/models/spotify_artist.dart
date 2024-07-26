@@ -9,13 +9,13 @@ part 'spotify_artist.g.dart';
 class SpotifyArtist with _$SpotifyArtist {
   @JsonSerializable(explicitToJson: true)
   const factory SpotifyArtist({
-    required List<String>? genres,
-    required String? href,
     required String id,
-    required String? name,
-    required int? popularity,
-    required String? type,
     required String uri,
+    @Default(None()) Option<String> type,
+    @Default([]) List<String> genres,
+    @Default(None()) Option<String> href,
+    @Default(None()) Option<String> name,
+    @Default(None()) Option<int> popularity,
     @Default(None()) Option<ExternalUrls> external_urls,
     @Default(None()) Option<Followers> followers,
     @Default([]) List<ArtistImage> images,

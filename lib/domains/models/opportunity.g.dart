@@ -16,6 +16,10 @@ _$OpportunityImpl _$$OpportunityImplFromJson(Map<String, dynamic> json) =>
       startTime:
           const DateTimeConverter().fromJson(json['startTime'] as Timestamp),
       endTime: const DateTimeConverter().fromJson(json['endTime'] as Timestamp),
+      deadline: json['deadline'] == null
+          ? const None()
+          : const OptionalDateTimeConverter()
+              .fromJson(json['deadline'] as Timestamp?),
       title: json['title'] as String? ?? '',
       description: json['description'] as String? ?? '',
       flierUrl: json['flierUrl'] == null
@@ -50,6 +54,7 @@ Map<String, dynamic> _$$OpportunityImplToJson(_$OpportunityImpl instance) =>
       'timestamp': const DateTimeConverter().toJson(instance.timestamp),
       'startTime': const DateTimeConverter().toJson(instance.startTime),
       'endTime': const DateTimeConverter().toJson(instance.endTime),
+      'deadline': const OptionalDateTimeConverter().toJson(instance.deadline),
       'title': instance.title,
       'description': instance.description,
       'flierUrl': instance.flierUrl.toJson(

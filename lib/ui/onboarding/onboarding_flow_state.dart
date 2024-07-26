@@ -3,8 +3,8 @@ part of 'onboarding_flow_cubit.dart';
 class OnboardingFlowState extends Equatable with FormzMixin {
   OnboardingFlowState({
     required this.currentUserId,
-    this.username = const UsernameInput.pure(),
-    this.spotifyUrl = const None(),
+    this.artistName = '',
+    this.spotifyArtist = const None(),
     this.tiktokHandle = '',
     this.tiktokFollowers = 0,
     this.instagramHandle = '',
@@ -19,8 +19,8 @@ class OnboardingFlowState extends Equatable with FormzMixin {
   }
 
   final String currentUserId;
-  final UsernameInput username;
-  final Option<String> spotifyUrl;
+  final String artistName;
+  final Option<SpotifyArtist> spotifyArtist;
   final String tiktokHandle;
   final int tiktokFollowers;
   final String instagramHandle;
@@ -35,7 +35,8 @@ class OnboardingFlowState extends Equatable with FormzMixin {
   @override
   List<Object?> get props => [
         currentUserId,
-        username,
+        spotifyArtist,
+        artistName,
         tiktokHandle,
         tiktokFollowers,
         instagramHandle,
@@ -47,8 +48,8 @@ class OnboardingFlowState extends Equatable with FormzMixin {
       ];
 
   OnboardingFlowState copyWith({
-    UsernameInput? username,
-    Option<String>? spotifyUrl,
+    String? artistName,
+    Option<SpotifyArtist>? spotifyArtist,
     String? tiktokHandle,
     int? tiktokFollowers,
     String? instagramHandle,
@@ -60,8 +61,8 @@ class OnboardingFlowState extends Equatable with FormzMixin {
   }) {
     return OnboardingFlowState(
       currentUserId: currentUserId,
-      username: username ?? this.username,
-      spotifyUrl: spotifyUrl ?? this.spotifyUrl,
+      artistName: artistName ?? this.artistName,
+      spotifyArtist: spotifyArtist ?? this.spotifyArtist,
       tiktokHandle: tiktokHandle ?? this.tiktokHandle,
       tiktokFollowers: tiktokFollowers ?? this.tiktokFollowers,
       instagramHandle: instagramHandle ?? this.instagramHandle,
@@ -73,9 +74,7 @@ class OnboardingFlowState extends Equatable with FormzMixin {
       formKey: formKey,
     );
   }
-  
+
   @override
-  List<FormzInput<String, Object>> get inputs => [
-    username,
-  ];
+  List<FormzInput> get inputs => [];
 }

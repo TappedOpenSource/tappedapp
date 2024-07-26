@@ -157,7 +157,7 @@ class _UserTileState extends State<UserTile> {
                       WidgetSpan(
                         child: isNewWidget,
                       ),
-                    ]
+                    ],
                   ],
                 ),
               ),

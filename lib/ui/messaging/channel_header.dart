@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:intheloopapp/ui/messaging/channel_name.dart';
 import 'package:stream_chat_flutter/stream_chat_flutter.dart' hide ChannelName;

@@ -189,7 +189,7 @@ class _CreateBookingFormState extends State<CreateBookingForm> {
                         fontSize: 22,
                         color: state.service.fold(
                           () => theme.colorScheme.primary,
-                          (t) => theme.colorScheme.onBackground,
+                          (t) => theme.colorScheme.onSurface,
                         ),
                       ),
                     ),

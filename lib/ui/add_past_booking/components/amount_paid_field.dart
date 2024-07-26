@@ -24,7 +24,7 @@ class AmountPaidField extends StatelessWidget {
           decoration: const InputDecoration(
             prefixIcon: Icon(Icons.attach_money),
             labelText: 'amount paid (optional)',
-            prefixText: r' ',
+            prefixText: ' ',
           ),
           inputFormatters: <TextInputFormatter>[_formatter],
           onChanged: (input) {

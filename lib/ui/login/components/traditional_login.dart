@@ -33,8 +33,8 @@ class TraditionalLogin extends StatelessWidget {
             const Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                SignUpButton(),
-                LoginButton(),
+                Expanded(child: SignUpButton()),
+                Expanded(child: LoginButton()),
               ],
             ),
             const ForgotPasswordButton(),

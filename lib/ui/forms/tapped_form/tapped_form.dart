@@ -36,57 +36,68 @@ class _TappedFormState extends State<TappedForm> {
   FutureOr<bool> Function() get _currValidator =>
       widget.questions[_index].validator ?? () => true;
 
-  Widget _buildNextButton() {
+  Widget _buildNextButton(bool? isValid) {
     final isLast = _index == _numQuestions - 1;
     final localOnNext = widget.questions[_index].onNext;
 
+    if (isValid == null) {
+      return const CupertinoButton(
+        onPressed: null,
+        child: CupertinoActivityIndicator(),
+      );
+    }
+
     return switch (isLast) {
       false => CupertinoButton(
-          onPressed: () async {
-            await EasyLoading.show();
-            await localOnNext?.call();
-            await widget.onNext?.call(_index);
+          onPressed: isValid
+              ? () async {
+                  await EasyLoading.show();
+                  await localOnNext?.call();
+                  await widget.onNext?.call(_index);
 
-            setState(() {
-              _index++;
-            });
-            await EasyLoading.dismiss();
-          },
+                  setState(() {
+                    _index++;
+                  });
+                  await EasyLoading.dismiss();
+                }
+              : null,
           borderRadius: BorderRadius.circular(12),
           color: tappedAccent,
-          child: const Text(
+          child: Text(
             'next',
             style: TextStyle(
-              color: Colors.white,
+              color: isValid ? Colors.white : Colors.black,
               fontWeight: FontWeight.w700,
             ),
           ),
         ),
       true => CupertinoButton(
-          onPressed: () {
-            try {
-              widget.onSubmit?.call();
-            } catch (e, s) {
-              logger.error(
-                'error submitting form',
-                error: e,
-                stackTrace: s,
-              );
-              ScaffoldMessenger.of(context).showSnackBar(
-                const SnackBar(
-                  behavior: SnackBarBehavior.floating,
-                  backgroundColor: Colors.red,
-                  content: Text('something went wrong'),
-                ),
-              );
-            }
-          },
+          onPressed: isValid
+              ? () {
+                  try {
+                    widget.onSubmit?.call();
+                  } catch (e, s) {
+                    logger.error(
+                      'error submitting form',
+                      error: e,
+                      stackTrace: s,
+                    );
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(
+                        behavior: SnackBarBehavior.floating,
+                        backgroundColor: Colors.red,
+                        content: Text('something went wrong'),
+                      ),
+                    );
+                  }
+                }
+              : null,
           borderRadius: BorderRadius.circular(12),
           color: tappedAccent,
-          child: const Text(
+          child: Text(
             'finish',
             style: TextStyle(
-              color: Colors.white,
+              color: isValid ? Colors.white : Colors.black,
               fontWeight: FontWeight.w700,
             ),
           ),
@@ -105,16 +116,19 @@ class _TappedFormState extends State<TappedForm> {
       );
     }
 
+    const horizPadding = 16.0;
     const segmentPadding = 4;
     final segmentWidth =
-        MediaQuery.of(context).size.width / numQuestions - (segmentPadding * 2);
+        (MediaQuery.of(context).size.width - (horizPadding * 2)) /
+            numQuestions -
+            (segmentPadding * 2);
 
     return Scaffold(
       backgroundColor: theme.colorScheme.surface,
       body: SafeArea(
         child: Padding(
           padding: const EdgeInsets.symmetric(
-            horizontal: 16,
+            horizontal: horizPadding,
             vertical: 12,
           ),
           child: Column(
@@ -175,11 +189,7 @@ class _TappedFormState extends State<TappedForm> {
                         )
                       else
                         const SizedBox.shrink(),
-                      switch (isValid) {
-                        null => const CupertinoActivityIndicator(),
-                        false => const SizedBox.shrink(),
-                        true => _buildNextButton(),
-                      },
+                      _buildNextButton(isValid),
                     ],
                   );
                 },

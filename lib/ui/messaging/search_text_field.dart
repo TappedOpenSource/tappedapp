@@ -2,11 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:stream_chat_flutter/stream_chat_flutter.dart';
 
 class SearchTextField extends StatelessWidget {
-  final TextEditingController? controller;
-  final ValueChanged<String>? onChanged;
-  final String hintText;
-  final VoidCallback? onTap;
-  final bool showCloseButton;
 
   const SearchTextField({
     required this.controller,
@@ -16,6 +11,11 @@ class SearchTextField extends StatelessWidget {
     this.showCloseButton = true,
     super.key,
   });
+  final TextEditingController? controller;
+  final ValueChanged<String>? onChanged;
+  final String hintText;
+  final VoidCallback? onTap;
+  final bool showCloseButton;
 
   @override
   Widget build(BuildContext context) {
@@ -58,7 +58,7 @@ class SearchTextField extends StatelessWidget {
                     color: StreamChatTheme.of(context)
                         .colorTheme
                         .textHighEmphasis
-                        .withOpacity(.5)),
+                        .withOpacity(.5),),
                 contentPadding: const EdgeInsets.all(0),
                 border: OutlineInputBorder(
                   borderSide: BorderSide.none,

@@ -17,6 +17,7 @@ class Opportunity with _$Opportunity {
     @DateTimeConverter() required DateTime timestamp,
     @DateTimeConverter() required DateTime startTime,
     @DateTimeConverter() required DateTime endTime,
+    @OptionalDateTimeConverter() @Default(None()) Option<DateTime> deadline,
     @Default('') String title,
     @Default('') String description,
     @Default(None()) Option<String> flierUrl,

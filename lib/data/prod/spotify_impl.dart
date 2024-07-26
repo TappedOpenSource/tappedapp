@@ -5,7 +5,6 @@ import 'package:fpdart/fpdart.dart';
 import 'package:intheloopapp/data/spotify_repository.dart';
 import 'package:intheloopapp/domains/models/spotify_artist.dart';
 import 'package:intheloopapp/domains/models/spotify_track.dart';
-import 'package:intheloopapp/utils/app_logger.dart';
 import 'package:intheloopapp/utils/map_tools.dart';
 
 final _functions = FirebaseFunctions.instance;

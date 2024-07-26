@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:intheloopapp/ui/messaging/test_channel_list_view.dart';
-import 'package:stream_chat_flutter/stream_chat_flutter.dart';
 
 class MessagingChannelListView extends StatelessWidget {
   const MessagingChannelListView({super.key});

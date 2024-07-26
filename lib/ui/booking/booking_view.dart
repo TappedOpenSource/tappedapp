@@ -244,7 +244,7 @@ class BookingView extends StatelessWidget {
                         border: Border(
                           bottom: BorderSide(
                             color:
-                                theme.colorScheme.onBackground.withOpacity(0.1),
+                                theme.colorScheme.onSurface.withOpacity(0.1),
                             width: 0.5,
                           ),
                         ),

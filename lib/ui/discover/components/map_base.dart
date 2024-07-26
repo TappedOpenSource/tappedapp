@@ -3,9 +3,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:flutter_map_tile_caching/flutter_map_tile_caching.dart';
 import 'package:intheloopapp/ui/app_theme_cubit.dart';
-import 'package:intheloopapp/ui/discover/components/bookings_heatmap_layer.dart';
-import 'package:intheloopapp/ui/discover/components/bookings_marker_layer.dart';
-import 'package:intheloopapp/ui/discover/components/bookings_polygon_layer.dart';
 import 'package:intheloopapp/ui/discover/components/current_location_layer.dart';
 import 'package:intheloopapp/ui/discover/components/opportunities_cluster_layer.dart';
 import 'package:intheloopapp/ui/discover/components/venue_marker_layer.dart';
@@ -50,7 +47,7 @@ class MapBase extends StatelessWidget {
                   options: MapOptions(
                     // minZoom: 10,
                     maxZoom: 18,
-                    initialZoom: 6,
+                    initialZoom: 11.5,
                     initialCenter: LatLng(data.$1, data.$2),
                     onPositionChanged: (position, hasGesture) {
                       context.read<DiscoverCubit>().onBoundsChange(

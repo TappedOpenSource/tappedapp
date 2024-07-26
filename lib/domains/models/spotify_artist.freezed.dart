@@ -20,13 +20,13 @@ SpotifyArtist _$SpotifyArtistFromJson(Map<String, dynamic> json) {
 
 /// @nodoc
 mixin _$SpotifyArtist {
-  List<String>? get genres => throw _privateConstructorUsedError;
-  String? get href => throw _privateConstructorUsedError;
   String get id => throw _privateConstructorUsedError;
-  String? get name => throw _privateConstructorUsedError;
-  int? get popularity => throw _privateConstructorUsedError;
-  String? get type => throw _privateConstructorUsedError;
   String get uri => throw _privateConstructorUsedError;
+  Option<String> get type => throw _privateConstructorUsedError;
+  List<String> get genres => throw _privateConstructorUsedError;
+  Option<String> get href => throw _privateConstructorUsedError;
+  Option<String> get name => throw _privateConstructorUsedError;
+  Option<int> get popularity => throw _privateConstructorUsedError;
   Option<ExternalUrls> get external_urls => throw _privateConstructorUsedError;
   Option<Followers> get followers => throw _privateConstructorUsedError;
   List<ArtistImage> get images => throw _privateConstructorUsedError;
@@ -44,13 +44,13 @@ abstract class $SpotifyArtistCopyWith<$Res> {
       _$SpotifyArtistCopyWithImpl<$Res, SpotifyArtist>;
   @useResult
   $Res call(
-      {List<String>? genres,
-      String? href,
-      String id,
-      String? name,
-      int? popularity,
-      String? type,
+      {String id,
       String uri,
+      Option<String> type,
+      List<String> genres,
+      Option<String> href,
+      Option<String> name,
+      Option<int> popularity,
       Option<ExternalUrls> external_urls,
       Option<Followers> followers,
       List<ArtistImage> images});
@@ -69,46 +69,46 @@ class _$SpotifyArtistCopyWithImpl<$Res, $Val extends SpotifyArtist>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? genres = freezed,
-    Object? href = freezed,
     Object? id = null,
-    Object? name = freezed,
-    Object? popularity = freezed,
-    Object? type = freezed,
     Object? uri = null,
+    Object? type = null,
+    Object? genres = null,
+    Object? href = null,
+    Object? name = null,
+    Object? popularity = null,
     Object? external_urls = null,
     Object? followers = null,
     Object? images = null,
   }) {
     return _then(_value.copyWith(
-      genres: freezed == genres
-          ? _value.genres
-          : genres // ignore: cast_nullable_to_non_nullable
-              as List<String>?,
-      href: freezed == href
-          ? _value.href
-          : href // ignore: cast_nullable_to_non_nullable
-              as String?,
       id: null == id
           ? _value.id
           : id // ignore: cast_nullable_to_non_nullable
               as String,
-      name: freezed == name
-          ? _value.name
-          : name // ignore: cast_nullable_to_non_nullable
-              as String?,
-      popularity: freezed == popularity
-          ? _value.popularity
-          : popularity // ignore: cast_nullable_to_non_nullable
-              as int?,
-      type: freezed == type
-          ? _value.type
-          : type // ignore: cast_nullable_to_non_nullable
-              as String?,
       uri: null == uri
           ? _value.uri
           : uri // ignore: cast_nullable_to_non_nullable
               as String,
+      type: null == type
+          ? _value.type
+          : type // ignore: cast_nullable_to_non_nullable
+              as Option<String>,
+      genres: null == genres
+          ? _value.genres
+          : genres // ignore: cast_nullable_to_non_nullable
+              as List<String>,
+      href: null == href
+          ? _value.href
+          : href // ignore: cast_nullable_to_non_nullable
+              as Option<String>,
+      name: null == name
+          ? _value.name
+          : name // ignore: cast_nullable_to_non_nullable
+              as Option<String>,
+      popularity: null == popularity
+          ? _value.popularity
+          : popularity // ignore: cast_nullable_to_non_nullable
+              as Option<int>,
       external_urls: null == external_urls
           ? _value.external_urls
           : external_urls // ignore: cast_nullable_to_non_nullable
@@ -134,13 +134,13 @@ abstract class _$$SpotifyArtistImplCopyWith<$Res>
   @override
   @useResult
   $Res call(
-      {List<String>? genres,
-      String? href,
-      String id,
-      String? name,
-      int? popularity,
-      String? type,
+      {String id,
       String uri,
+      Option<String> type,
+      List<String> genres,
+      Option<String> href,
+      Option<String> name,
+      Option<int> popularity,
       Option<ExternalUrls> external_urls,
       Option<Followers> followers,
       List<ArtistImage> images});
@@ -157,46 +157,46 @@ class __$$SpotifyArtistImplCopyWithImpl<$Res>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? genres = freezed,
-    Object? href = freezed,
     Object? id = null,
-    Object? name = freezed,
-    Object? popularity = freezed,
-    Object? type = freezed,
     Object? uri = null,
+    Object? type = null,
+    Object? genres = null,
+    Object? href = null,
+    Object? name = null,
+    Object? popularity = null,
     Object? external_urls = null,
     Object? followers = null,
     Object? images = null,
   }) {
     return _then(_$SpotifyArtistImpl(
-      genres: freezed == genres
-          ? _value._genres
-          : genres // ignore: cast_nullable_to_non_nullable
-              as List<String>?,
-      href: freezed == href
-          ? _value.href
-          : href // ignore: cast_nullable_to_non_nullable
-              as String?,
       id: null == id
           ? _value.id
           : id // ignore: cast_nullable_to_non_nullable
               as String,
-      name: freezed == name
-          ? _value.name
-          : name // ignore: cast_nullable_to_non_nullable
-              as String?,
-      popularity: freezed == popularity
-          ? _value.popularity
-          : popularity // ignore: cast_nullable_to_non_nullable
-              as int?,
-      type: freezed == type
-          ? _value.type
-          : type // ignore: cast_nullable_to_non_nullable
-              as String?,
       uri: null == uri
           ? _value.uri
           : uri // ignore: cast_nullable_to_non_nullable
               as String,
+      type: null == type
+          ? _value.type
+          : type // ignore: cast_nullable_to_non_nullable
+              as Option<String>,
+      genres: null == genres
+          ? _value._genres
+          : genres // ignore: cast_nullable_to_non_nullable
+              as List<String>,
+      href: null == href
+          ? _value.href
+          : href // ignore: cast_nullable_to_non_nullable
+              as Option<String>,
+      name: null == name
+          ? _value.name
+          : name // ignore: cast_nullable_to_non_nullable
+              as Option<String>,
+      popularity: null == popularity
+          ? _value.popularity
+          : popularity // ignore: cast_nullable_to_non_nullable
+              as Option<int>,
       external_urls: null == external_urls
           ? _value.external_urls
           : external_urls // ignore: cast_nullable_to_non_nullable
@@ -218,13 +218,13 @@ class __$$SpotifyArtistImplCopyWithImpl<$Res>
 @JsonSerializable(explicitToJson: true)
 class _$SpotifyArtistImpl implements _SpotifyArtist {
   const _$SpotifyArtistImpl(
-      {required final List<String>? genres,
-      required this.href,
-      required this.id,
-      required this.name,
-      required this.popularity,
-      required this.type,
+      {required this.id,
       required this.uri,
+      this.type = const None(),
+      final List<String> genres = const [],
+      this.href = const None(),
+      this.name = const None(),
+      this.popularity = const None(),
       this.external_urls = const None(),
       this.followers = const None(),
       final List<ArtistImage> images = const []})
@@ -234,28 +234,31 @@ class _$SpotifyArtistImpl implements _SpotifyArtist {
   factory _$SpotifyArtistImpl.fromJson(Map<String, dynamic> json) =>
       _$$SpotifyArtistImplFromJson(json);
 
-  final List<String>? _genres;
-  @override
-  List<String>? get genres {
-    final value = _genres;
-    if (value == null) return null;
-    if (_genres is EqualUnmodifiableListView) return _genres;
-    // ignore: implicit_dynamic_type
-    return EqualUnmodifiableListView(value);
-  }
-
-  @override
-  final String? href;
   @override
   final String id;
   @override
-  final String? name;
-  @override
-  final int? popularity;
-  @override
-  final String? type;
-  @override
   final String uri;
+  @override
+  @JsonKey()
+  final Option<String> type;
+  final List<String> _genres;
+  @override
+  @JsonKey()
+  List<String> get genres {
+    if (_genres is EqualUnmodifiableListView) return _genres;
+    // ignore: implicit_dynamic_type
+    return EqualUnmodifiableListView(_genres);
+  }
+
+  @override
+  @JsonKey()
+  final Option<String> href;
+  @override
+  @JsonKey()
+  final Option<String> name;
+  @override
+  @JsonKey()
+  final Option<int> popularity;
   @override
   @JsonKey()
   final Option<ExternalUrls> external_urls;
@@ -273,7 +276,7 @@ class _$SpotifyArtistImpl implements _SpotifyArtist {
 
   @override
   String toString() {
-    return 'SpotifyArtist(genres: $genres, href: $href, id: $id, name: $name, popularity: $popularity, type: $type, uri: $uri, external_urls: $external_urls, followers: $followers, images: $images)';
+    return 'SpotifyArtist(id: $id, uri: $uri, type: $type, genres: $genres, href: $href, name: $name, popularity: $popularity, external_urls: $external_urls, followers: $followers, images: $images)';
   }
 
   @override
@@ -281,14 +284,14 @@ class _$SpotifyArtistImpl implements _SpotifyArtist {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$SpotifyArtistImpl &&
+            (identical(other.id, id) || other.id == id) &&
+            (identical(other.uri, uri) || other.uri == uri) &&
+            (identical(other.type, type) || other.type == type) &&
             const DeepCollectionEquality().equals(other._genres, _genres) &&
             (identical(other.href, href) || other.href == href) &&
-            (identical(other.id, id) || other.id == id) &&
             (identical(other.name, name) || other.name == name) &&
             (identical(other.popularity, popularity) ||
                 other.popularity == popularity) &&
-            (identical(other.type, type) || other.type == type) &&
-            (identical(other.uri, uri) || other.uri == uri) &&
             (identical(other.external_urls, external_urls) ||
                 other.external_urls == external_urls) &&
             (identical(other.followers, followers) ||
@@ -300,13 +303,13 @@ class _$SpotifyArtistImpl implements _SpotifyArtist {
   @override
   int get hashCode => Object.hash(
       runtimeType,
+      id,
+      uri,
+      type,
       const DeepCollectionEquality().hash(_genres),
       href,
-      id,
       name,
       popularity,
-      type,
-      uri,
       external_urls,
       followers,
       const DeepCollectionEquality().hash(_images));
@@ -327,13 +330,13 @@ class _$SpotifyArtistImpl implements _SpotifyArtist {
 
 abstract class _SpotifyArtist implements SpotifyArtist {
   const factory _SpotifyArtist(
-      {required final List<String>? genres,
-      required final String? href,
-      required final String id,
-      required final String? name,
-      required final int? popularity,
-      required final String? type,
+      {required final String id,
       required final String uri,
+      final Option<String> type,
+      final List<String> genres,
+      final Option<String> href,
+      final Option<String> name,
+      final Option<int> popularity,
       final Option<ExternalUrls> external_urls,
       final Option<Followers> followers,
       final List<ArtistImage> images}) = _$SpotifyArtistImpl;
@@ -342,19 +345,19 @@ abstract class _SpotifyArtist implements SpotifyArtist {
       _$SpotifyArtistImpl.fromJson;
 
   @override
-  List<String>? get genres;
-  @override
-  String? get href;
-  @override
   String get id;
   @override
-  String? get name;
-  @override
-  int? get popularity;
-  @override
-  String? get type;
-  @override
   String get uri;
+  @override
+  Option<String> get type;
+  @override
+  List<String> get genres;
+  @override
+  Option<String> get href;
+  @override
+  Option<String> get name;
+  @override
+  Option<int> get popularity;
   @override
   Option<ExternalUrls> get external_urls;
   @override

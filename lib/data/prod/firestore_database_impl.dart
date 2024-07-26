@@ -10,7 +10,6 @@ import 'package:intheloopapp/data/database_repository.dart';
 import 'package:intheloopapp/domains/models/activity.dart';
 import 'package:intheloopapp/domains/models/badge.dart';
 import 'package:intheloopapp/domains/models/booking.dart';
-import 'package:intheloopapp/domains/models/contact_venue_request.dart';
 import 'package:intheloopapp/domains/models/opportunity.dart';
 import 'package:intheloopapp/domains/models/review.dart';
 import 'package:intheloopapp/domains/models/service.dart';
@@ -169,7 +168,7 @@ class FirestoreDatabaseImpl extends DatabaseRepository {
     try {
       await _analytics.logEvent(name: 'delete_user', parameters: {
         'user_id': userId,
-      });
+      },);
       await _usersRef.doc(userId).delete();
     } catch (e, s) {
       logger.error('deleteUser', error: e, stackTrace: s);

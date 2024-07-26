@@ -60,7 +60,7 @@ class SocialFollowingMenu extends StatelessWidget {
         color: theme.colorScheme.onSurface.withOpacity(0.1),
         border: Border(
           bottom: BorderSide(
-            color: theme.colorScheme.onBackground.withOpacity(0.1),
+            color: theme.colorScheme.onSurface.withOpacity(0.1),
             width: 0.5,
           ),
         ),
