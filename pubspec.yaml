@@ -101,7 +101,7 @@ dependencies:
   rive: 0.13.9
   rxdart: 0.27.7
   scroll_snap_list: 0.9.1
-  share_plus: 9.0.0
+  share_plus: 8.0.3
   sign_in_with_apple: 6.1.1
   skeleton_animation: 0.1.4
   skeleton_text: 3.0.1
@@ -116,8 +116,7 @@ dependencies:
 #      url: https://github.com/easyhour/stream-chat-flutter
 #      path: packages/stream_chat_flutter
 #      ref: beta
-  stream_chat_flutter: 7.3.0
-#  stream_chat_flutter: 8.0.0-beta.3
+  stream_chat_flutter: 8.0.0
 #  stream_video_flutter: 0.3.1
   timeago: 3.7.0
   timelines: 0.1.0
@@ -149,7 +148,6 @@ dev_dependencies:
 
 dependency_overrides:
   audio_video_progress_bar: 2.0.3
-  connectivity_plus: 5.0.2
   http: 0.13.3
   uuid: 4.2.1
   photo_manager: 3.0.0
