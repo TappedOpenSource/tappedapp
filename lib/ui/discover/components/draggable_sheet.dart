@@ -93,12 +93,15 @@ class DraggableSheet extends StatelessWidget {
                       return 0;
                     }
                   });
-                final topPerformerIds = sortedVenueHits.flatMap((v) {
-                  return v.venueInfo.fold(
-                    () => <String>[],
-                    (t) => t.topPerformerIds,
-                  );
-                }).toSet().toList();
+                final topPerformerIds = sortedVenueHits
+                    .flatMap((v) {
+                      return v.venueInfo.fold(
+                        () => <String>[],
+                        (t) => t.topPerformerIds,
+                      );
+                    })
+                    .toSet()
+                    .toList();
                 return FutureBuilder(
                   future: database.getFeaturedOpportunities(),
                   builder: (context, snapshot) {
@@ -358,7 +361,8 @@ class DraggableSheet extends StatelessWidget {
                                                             Scaffold(
                                                           appBar: AppBar(
                                                             title: const Text(
-                                                                'venues',),
+                                                              'venues',
+                                                            ),
                                                           ),
                                                           body: Container(
                                                             padding:
@@ -377,9 +381,10 @@ class DraggableSheet extends StatelessWidget {
                                                               itemCount:
                                                                   sortedVenueHits
                                                                       .length,
-                                                              itemBuilder:
-                                                                  (context,
-                                                                      index,) {
+                                                              itemBuilder: (
+                                                                context,
+                                                                index,
+                                                              ) {
                                                                 final venue =
                                                                     sortedVenueHits[
                                                                         index];
@@ -571,22 +576,25 @@ class DraggableSheet extends StatelessWidget {
                                         //     );
                                         //   },
                                         // ),
-                                        const Padding(
-                                          padding: EdgeInsets.symmetric(
-                                            vertical: 16,
-                                            horizontal: 8,
-                                          ),
-                                          child: Text(
-                                            'featured gigs',
-                                            style: TextStyle(
-                                              fontSize: 28,
-                                              fontWeight: FontWeight.bold,
+                                        if (featuredOpportunities.isNotEmpty)
+                                          const Padding(
+                                            padding: EdgeInsets.symmetric(
+                                              vertical: 16,
+                                              horizontal: 8,
+                                            ),
+                                            child: Text(
+                                              'featured gigs',
+                                              style: TextStyle(
+                                                fontSize: 28,
+                                                fontWeight: FontWeight.bold,
+                                              ),
                                             ),
                                           ),
-                                        ),
-                                        OpportunitiesList(
-                                          opportunities: featuredOpportunities,
-                                        ),
+                                        if (featuredOpportunities.isNotEmpty)
+                                          OpportunitiesList(
+                                            opportunities:
+                                                featuredOpportunities,
+                                          ),
                                         const SizedBox(height: 10),
                                         Padding(
                                           padding: const EdgeInsets.symmetric(
