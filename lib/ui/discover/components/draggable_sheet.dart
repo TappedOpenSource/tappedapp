@@ -255,7 +255,7 @@ class DraggableSheet extends StatelessWidget {
                                                       .colorScheme.primary
                                                       .withOpacity(0.1),
                                                   child: Text(
-                                                    'connect w/ venues',
+                                                    'search locations',
                                                     style: TextStyle(
                                                       fontWeight:
                                                           FontWeight.bold,
@@ -626,6 +626,10 @@ class DraggableSheet extends StatelessWidget {
                                                           .withOpacity(0.1),
                                                       padding:
                                                           const EdgeInsets.all(
+                                                        15,
+                                                      ),
+                                                      borderRadius:
+                                                          BorderRadius.circular(
                                                         15,
                                                       ),
                                                       child: const Text(

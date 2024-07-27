@@ -62,7 +62,6 @@ class FeedbackButton extends StatelessWidget {
           child: const Text(
             'feedback',
             style: TextStyle(
-              fontSize: 17,
               color: Colors.deepOrange,
               fontWeight: FontWeight.bold,
             ),
