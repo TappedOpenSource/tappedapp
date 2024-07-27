@@ -15,8 +15,10 @@ import 'package:intheloopapp/domains/onboarding_bloc/onboarding_bloc.dart';
 import 'package:intheloopapp/ui/discover/components/draggable_sheet.dart';
 import 'package:intheloopapp/ui/discover/components/map_base.dart';
 import 'package:intheloopapp/ui/discover/components/map_settings.dart';
+import 'package:intheloopapp/ui/discover/components/search_new_area_button.dart';
 import 'package:intheloopapp/ui/discover/components/tapped_search_bar.dart';
 import 'package:intheloopapp/ui/discover/discover_cubit.dart';
+import 'package:intheloopapp/ui/tasks/components/tasks_banner.dart';
 import 'package:intheloopapp/utils/bloc_utils.dart';
 import 'package:intheloopapp/utils/current_user_builder.dart';
 import 'package:intheloopapp/utils/premium_builder.dart';
@@ -466,6 +468,8 @@ class DiscoverView extends StatelessWidget {
                                 ),
                                 const SizedBox(height: 4),
                                 _buildPremiumBanner(context),
+                                const TasksBanner(),
+                                const SearchNewAreaButton(),
                               ],
                             ),
                           ),

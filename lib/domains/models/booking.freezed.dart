@@ -23,13 +23,13 @@ mixin _$Booking {
   String get id => throw _privateConstructorUsedError;
   String get requesteeId => throw _privateConstructorUsedError;
   BookingStatus get status => throw _privateConstructorUsedError;
-  bool get verified => throw _privateConstructorUsedError;
   @DateTimeConverter()
   DateTime get startTime => throw _privateConstructorUsedError;
   @DateTimeConverter()
   DateTime get endTime => throw _privateConstructorUsedError;
   @DateTimeConverter()
   DateTime get timestamp => throw _privateConstructorUsedError;
+  bool get verified => throw _privateConstructorUsedError;
   Option<String> get requesterId => throw _privateConstructorUsedError;
   Option<String> get name => throw _privateConstructorUsedError;
   String get note => throw _privateConstructorUsedError;
@@ -57,10 +57,10 @@ abstract class $BookingCopyWith<$Res> {
       {String id,
       String requesteeId,
       BookingStatus status,
-      bool verified,
       @DateTimeConverter() DateTime startTime,
       @DateTimeConverter() DateTime endTime,
       @DateTimeConverter() DateTime timestamp,
+      bool verified,
       Option<String> requesterId,
       Option<String> name,
       String note,
@@ -91,10 +91,10 @@ class _$BookingCopyWithImpl<$Res, $Val extends Booking>
     Object? id = null,
     Object? requesteeId = null,
     Object? status = null,
-    Object? verified = null,
     Object? startTime = null,
     Object? endTime = null,
     Object? timestamp = null,
+    Object? verified = null,
     Object? requesterId = null,
     Object? name = null,
     Object? note = null,
@@ -121,10 +121,6 @@ class _$BookingCopyWithImpl<$Res, $Val extends Booking>
           ? _value.status
           : status // ignore: cast_nullable_to_non_nullable
               as BookingStatus,
-      verified: null == verified
-          ? _value.verified
-          : verified // ignore: cast_nullable_to_non_nullable
-              as bool,
       startTime: null == startTime
           ? _value.startTime
           : startTime // ignore: cast_nullable_to_non_nullable
@@ -137,6 +133,10 @@ class _$BookingCopyWithImpl<$Res, $Val extends Booking>
           ? _value.timestamp
           : timestamp // ignore: cast_nullable_to_non_nullable
               as DateTime,
+      verified: null == verified
+          ? _value.verified
+          : verified // ignore: cast_nullable_to_non_nullable
+              as bool,
       requesterId: null == requesterId
           ? _value.requesterId
           : requesterId // ignore: cast_nullable_to_non_nullable
@@ -200,10 +200,10 @@ abstract class _$$BookingImplCopyWith<$Res> implements $BookingCopyWith<$Res> {
       {String id,
       String requesteeId,
       BookingStatus status,
-      bool verified,
       @DateTimeConverter() DateTime startTime,
       @DateTimeConverter() DateTime endTime,
       @DateTimeConverter() DateTime timestamp,
+      bool verified,
       Option<String> requesterId,
       Option<String> name,
       String note,
@@ -232,10 +232,10 @@ class __$$BookingImplCopyWithImpl<$Res>
     Object? id = null,
     Object? requesteeId = null,
     Object? status = null,
-    Object? verified = null,
     Object? startTime = null,
     Object? endTime = null,
     Object? timestamp = null,
+    Object? verified = null,
     Object? requesterId = null,
     Object? name = null,
     Object? note = null,
@@ -262,10 +262,6 @@ class __$$BookingImplCopyWithImpl<$Res>
           ? _value.status
           : status // ignore: cast_nullable_to_non_nullable
               as BookingStatus,
-      verified: null == verified
-          ? _value.verified
-          : verified // ignore: cast_nullable_to_non_nullable
-              as bool,
       startTime: null == startTime
           ? _value.startTime
           : startTime // ignore: cast_nullable_to_non_nullable
@@ -278,6 +274,10 @@ class __$$BookingImplCopyWithImpl<$Res>
           ? _value.timestamp
           : timestamp // ignore: cast_nullable_to_non_nullable
               as DateTime,
+      verified: null == verified
+          ? _value.verified
+          : verified // ignore: cast_nullable_to_non_nullable
+              as bool,
       requesterId: null == requesterId
           ? _value.requesterId
           : requesterId // ignore: cast_nullable_to_non_nullable
@@ -338,10 +338,10 @@ class _$BookingImpl implements _Booking {
       {required this.id,
       required this.requesteeId,
       required this.status,
-      this.verified = false,
       @DateTimeConverter() required this.startTime,
       @DateTimeConverter() required this.endTime,
       @DateTimeConverter() required this.timestamp,
+      this.verified = false,
       this.requesterId = const None(),
       this.name = const None(),
       this.note = '',
@@ -367,9 +367,6 @@ class _$BookingImpl implements _Booking {
   @override
   final BookingStatus status;
   @override
-  @JsonKey()
-  final bool verified;
-  @override
   @DateTimeConverter()
   final DateTime startTime;
   @override
@@ -378,6 +375,9 @@ class _$BookingImpl implements _Booking {
   @override
   @DateTimeConverter()
   final DateTime timestamp;
+  @override
+  @JsonKey()
+  final bool verified;
   @override
   @JsonKey()
   final Option<String> requesterId;
@@ -430,7 +430,7 @@ class _$BookingImpl implements _Booking {
 
   @override
   String toString() {
-    return 'Booking(id: $id, requesteeId: $requesteeId, status: $status, verified: $verified, startTime: $startTime, endTime: $endTime, timestamp: $timestamp, requesterId: $requesterId, name: $name, note: $note, rate: $rate, serviceId: $serviceId, addedByUser: $addedByUser, flierUrl: $flierUrl, eventUrl: $eventUrl, genres: $genres, location: $location, socialMediaLinks: $socialMediaLinks, referenceEventId: $referenceEventId)';
+    return 'Booking(id: $id, requesteeId: $requesteeId, status: $status, startTime: $startTime, endTime: $endTime, timestamp: $timestamp, verified: $verified, requesterId: $requesterId, name: $name, note: $note, rate: $rate, serviceId: $serviceId, addedByUser: $addedByUser, flierUrl: $flierUrl, eventUrl: $eventUrl, genres: $genres, location: $location, socialMediaLinks: $socialMediaLinks, referenceEventId: $referenceEventId)';
   }
 
   @override
@@ -442,13 +442,13 @@ class _$BookingImpl implements _Booking {
             (identical(other.requesteeId, requesteeId) ||
                 other.requesteeId == requesteeId) &&
             (identical(other.status, status) || other.status == status) &&
-            (identical(other.verified, verified) ||
-                other.verified == verified) &&
             (identical(other.startTime, startTime) ||
                 other.startTime == startTime) &&
             (identical(other.endTime, endTime) || other.endTime == endTime) &&
             (identical(other.timestamp, timestamp) ||
                 other.timestamp == timestamp) &&
+            (identical(other.verified, verified) ||
+                other.verified == verified) &&
             (identical(other.requesterId, requesterId) ||
                 other.requesterId == requesterId) &&
             (identical(other.name, name) || other.name == name) &&
@@ -478,10 +478,10 @@ class _$BookingImpl implements _Booking {
         id,
         requesteeId,
         status,
-        verified,
         startTime,
         endTime,
         timestamp,
+        verified,
         requesterId,
         name,
         note,
@@ -515,10 +515,10 @@ abstract class _Booking implements Booking {
       {required final String id,
       required final String requesteeId,
       required final BookingStatus status,
-      final bool verified,
       @DateTimeConverter() required final DateTime startTime,
       @DateTimeConverter() required final DateTime endTime,
       @DateTimeConverter() required final DateTime timestamp,
+      final bool verified,
       final Option<String> requesterId,
       final Option<String> name,
       final String note,
@@ -541,8 +541,6 @@ abstract class _Booking implements Booking {
   @override
   BookingStatus get status;
   @override
-  bool get verified;
-  @override
   @DateTimeConverter()
   DateTime get startTime;
   @override
@@ -551,6 +549,8 @@ abstract class _Booking implements Booking {
   @override
   @DateTimeConverter()
   DateTime get timestamp;
+  @override
+  bool get verified;
   @override
   Option<String> get requesterId;
   @override

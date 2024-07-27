@@ -41,6 +41,7 @@ import 'package:intheloopapp/ui/reviews/user_reviews_feed.dart';
 import 'package:intheloopapp/ui/services/service_view.dart';
 import 'package:intheloopapp/ui/settings/settings_view.dart';
 import 'package:intheloopapp/ui/share_profile/share_profile_view.dart';
+import 'package:intheloopapp/ui/tasks/tasks_view.dart';
 import 'package:intheloopapp/utils/hero_image.dart';
 import 'package:photo_view/photo_view.dart';
 import 'package:stream_chat_flutter/stream_chat_flutter.dart';
@@ -608,4 +609,12 @@ final class AddCollaboratorsPage extends TappedRoute {
   final void Function(UserModel)? onCollaboratorAdded;
   final void Function(UserModel)? onCollaboratorRemoved;
   final List<UserModel> initialCollaborators;
+}
+
+final class TasksPage extends TappedRoute {
+  TasksPage()
+      : super(
+          routeName: '/tasks',
+          view: const TasksView(),
+        );
 }

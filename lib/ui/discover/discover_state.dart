@@ -12,6 +12,7 @@ class DiscoverState with _$DiscoverState {
     @Default(RangeValues(0, 1000)) RangeValues capacityRange,
     @Default(37.5407246) double userLat,
     @Default(-77.4360481) double userLng,
+    @Default(false) bool resultsExpired,
     // @Default(false) bool showCurrentUser,
     LatLngBounds? bounds,
   }) = _DiscoverState;

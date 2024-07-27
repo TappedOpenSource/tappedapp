@@ -34,11 +34,11 @@ class DiscoverCubit extends Cubit<DiscoverState> {
     required this.places,
     this.suggestedMaxCapacity = 1000,
   }) : super(
-          DiscoverState(
-            genreFilters: initGenres,
-            capacityRange: RangeValues(0, suggestedMaxCapacity.toDouble()),
-          ),
-        );
+    DiscoverState(
+      genreFilters: initGenres,
+      capacityRange: RangeValues(0, suggestedMaxCapacity.toDouble()),
+    ),
+  );
 
   final UserModel currentUser;
   final SearchRepository search;
@@ -50,7 +50,6 @@ class DiscoverCubit extends Cubit<DiscoverState> {
 
   final _debouncer = Debouncer(
     const Duration(milliseconds: 500),
-    executionInterval: const Duration(milliseconds: 500),
   );
 
   Future<(double, double)> _determinePosition() async {
@@ -121,8 +120,8 @@ class DiscoverCubit extends Cubit<DiscoverState> {
       }
 
       return (
-        position?.latitude ?? Location.nyc.lat,
-        position?.longitude ?? Location.nyc.lng,
+      position?.latitude ?? Location.nyc.lat,
+      position?.longitude ?? Location.nyc.lng,
       );
     } catch (e) {
       return (Location.nyc.lat, Location.nyc.lng);
@@ -147,8 +146,8 @@ class DiscoverCubit extends Cubit<DiscoverState> {
   }
 
   void setGenreFilters(List<Genre> genres) {
-    onBoundsChange(
-      state.bounds,
+    searchNewBounds(
+      bounds: state.bounds,
       overlay: state.mapOverlay,
       genres: genres,
     );
@@ -169,8 +168,8 @@ class DiscoverCubit extends Cubit<DiscoverState> {
       genres.add(genre);
     }
 
-    onBoundsChange(
-      state.bounds,
+    searchNewBounds(
+      bounds: state.bounds,
       overlay: state.mapOverlay,
       genres: genres,
     );
@@ -238,38 +237,50 @@ class DiscoverCubit extends Cubit<DiscoverState> {
     return hits;
   }
 
-  void onMapOverlayChange(
-    MapOverlay overlay, {
+  void onMapOverlayChange(MapOverlay overlay, {
     List<Genre>? genres,
     int? minCapacity,
     int? maxCapacity,
   }) {
-    onBoundsChange(
-      state.bounds,
+    searchNewBounds(
+      bounds: state.bounds,
       overlay: overlay,
       genres: genres,
       minCapacity: minCapacity,
       maxCapacity: maxCapacity,
     );
+
+
     emit(state.copyWith(mapOverlay: overlay));
   }
 
-  void onBoundsChange(
-    LatLngBounds? bounds, {
-    MapOverlay? overlay,
-    List<Genre>? genres,
-    int? minCapacity,
-    int? maxCapacity,
-  }) {
-    if (bounds == null) return;
-
-    final mapType = overlay ?? state.mapOverlay;
-
+  void onBoundsChange(LatLngBounds? bounds) {
     emit(
       state.copyWith(
         bounds: bounds,
       ),
     );
+
+    _debouncer.run(() async {
+      emit(
+        state.copyWith(
+          resultsExpired: true,
+        ),
+      );
+    });
+  }
+
+  Future<void> searchNewBounds({
+    LatLngBounds? bounds,
+    MapOverlay? overlay,
+    List<Genre>? genres,
+    int? minCapacity,
+    int? maxCapacity,
+  }) async {
+    final searchBounds = bounds ?? state.bounds;
+    if (searchBounds == null) return;
+
+    final mapType = overlay ?? state.mapOverlay;
 
     final maxCap = (maxCapacity ?? state.capacityRangeEnd) == 1000
         ? 100000
@@ -279,82 +290,41 @@ class DiscoverCubit extends Cubit<DiscoverState> {
         ? genres.map((e) => e.name).toList()
         : state.genreFilterStrings;
 
-    _debouncer.run(
-      switch (mapType) {
-        MapOverlay.venues => () async {
-            final hits = await search.queryUsersInBoundingBox(
-              '',
-              occupations: ['Venue', 'venue'],
-              venueGenres: newGenres.isNotEmpty ? newGenres : null,
-              minCapacity: minCapacity ?? state.capacityRangeStart,
-              maxCapacity: maxCap,
-              swLatitude: bounds.southWest.latitude,
-              swLongitude: bounds.southWest.longitude,
-              neLatitude: bounds.northEast.latitude,
-              neLongitude: bounds.northEast.longitude,
-            );
-            emit(state.copyWith(venueHits: hits));
-          },
-        // MapOverlay.userBookings => () async {
-        //     final bookings = await database.getBookingsByRequestee(
-        //       currentUser.id,
-        //       // "XhiKXyPSJNRREiACgZPS68DcFWv2",
-        //       limit: 250,
-        //     );
-        //
-        //     emit(state.copyWith(userBookings: bookings));
-        //   },
-        // MapOverlay.bookings => () async {
-        //     final hits = await search.queryBookingsInBoundingBox(
-        //       '',
-        //       swLatitude: bounds.southWest.latitude,
-        //       swLongitude: bounds.southWest.longitude,
-        //       neLatitude: bounds.northEast.latitude,
-        //       neLongitude: bounds.northEast.longitude,
-        //       limit: 500,
-        //     );
-        //     emit(state.copyWith(bookingHits: hits));
-        //   },
-        MapOverlay.opportunities => () async {
-            final hits = await search.queryOpportunitiesInBoundingBox(
-              '',
-              swLatitude: bounds.southWest.latitude,
-              swLongitude: bounds.southWest.longitude,
-              neLatitude: bounds.northEast.latitude,
-              neLongitude: bounds.northEast.longitude,
-              limit: 500,
-              startTime: DateTime.now(),
-            );
-            emit(state.copyWith(opportunityHits: hits));
-          },
-      },
+    emit(
+      state.copyWith(
+        resultsExpired: false,
+      ),
     );
-  }
 
-// Future<void> viewCurrentUser(
-//     DraggableScrollableController dragController) async {
-//   emit(
-//     state.copyWith(
-//       showCurrentUser: true,
-//       mapOverlay: MapOverlay.userBookings,
-//     ),
-//   );
-//   onBoundsChange(
-//     state.bounds,
-//     overlay: MapOverlay.userBookings,
-//   );
-// }
-//
-// void quitCurrentUserView(DraggableScrollableController dragController) {
-//   emit(
-//     state.copyWith(
-//       showCurrentUser: false,
-//       mapOverlay: MapOverlay.venues,
-//     ),
-//   );
-//   onBoundsChange(
-//     state.bounds,
-//     overlay: MapOverlay.venues,
-//   );
-// }
+    return (switch (mapType) {
+      MapOverlay.venues =>
+          () async {
+        final hits = await search.queryUsersInBoundingBox(
+          '',
+          occupations: ['Venue', 'venue'],
+          venueGenres: newGenres.isNotEmpty ? newGenres : null,
+          minCapacity: minCapacity ?? state.capacityRangeStart,
+          maxCapacity: maxCap,
+          swLatitude: searchBounds.southWest.latitude,
+          swLongitude: searchBounds.southWest.longitude,
+          neLatitude: searchBounds.northEast.latitude,
+          neLongitude: searchBounds.northEast.longitude,
+        );
+        emit(state.copyWith(venueHits: hits));
+      },
+      MapOverlay.opportunities =>
+          () async {
+        final hits = await search.queryOpportunitiesInBoundingBox(
+          '',
+          swLatitude: searchBounds.southWest.latitude,
+          swLongitude: searchBounds.southWest.longitude,
+          neLatitude: searchBounds.northEast.latitude,
+          neLongitude: searchBounds.northEast.longitude,
+          limit: 500,
+          startTime: DateTime.now(),
+        );
+        emit(state.copyWith(opportunityHits: hits));
+      },
+    })();
+  }
 }

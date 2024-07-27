@@ -44,7 +44,7 @@ class BookingsSliver extends StatelessWidget {
                       ),
                       const SizedBox(width: 16),
                       Text(
-                        'Add Past Gigs',
+                        'add past gigs',
                         style: TextStyle(
                           color: theme.colorScheme.onSurface.withOpacity(0.5),
                         ),

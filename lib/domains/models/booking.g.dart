@@ -11,12 +11,12 @@ _$BookingImpl _$$BookingImplFromJson(Map<String, dynamic> json) =>
       id: json['id'] as String,
       requesteeId: json['requesteeId'] as String,
       status: $enumDecode(_$BookingStatusEnumMap, json['status']),
-      verified: json['verified'] as bool? ?? false,
       startTime:
           const DateTimeConverter().fromJson(json['startTime'] as Timestamp),
       endTime: const DateTimeConverter().fromJson(json['endTime'] as Timestamp),
       timestamp:
           const DateTimeConverter().fromJson(json['timestamp'] as Timestamp),
+      verified: json['verified'] as bool? ?? false,
       requesterId: json['requesterId'] == null
           ? const None()
           : Option<String>.fromJson(
@@ -62,10 +62,10 @@ Map<String, dynamic> _$$BookingImplToJson(_$BookingImpl instance) =>
       'id': instance.id,
       'requesteeId': instance.requesteeId,
       'status': _$BookingStatusEnumMap[instance.status]!,
-      'verified': instance.verified,
       'startTime': const DateTimeConverter().toJson(instance.startTime),
       'endTime': const DateTimeConverter().toJson(instance.endTime),
       'timestamp': const DateTimeConverter().toJson(instance.timestamp),
+      'verified': instance.verified,
       'requesterId': instance.requesterId.toJson(
         (value) => value,
       ),
