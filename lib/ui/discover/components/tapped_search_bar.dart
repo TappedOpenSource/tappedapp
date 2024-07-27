@@ -100,7 +100,6 @@ class _TappedSearchBarState extends State<TappedSearchBar> {
     _searchController.dispose();
   }
 
-
   Widget _buildPremiumBanner(BuildContext context) {
     return PremiumBuilder(
       builder: (context, isPremium) {
@@ -236,6 +235,31 @@ class _TappedSearchBarState extends State<TappedSearchBar> {
                 controller: _scrollController,
                 children: [
                   _buildPremiumBanner(context),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 20,
+                    ),
+                    child: Row(
+                      children: [
+                        Expanded(
+                          child: CupertinoButton(
+                            onPressed: () => context.push(
+                              GigSearchPage(),
+                            ),
+                            borderRadius: BorderRadius.circular(15),
+                            color: theme.colorScheme.primary.withOpacity(0.1),
+                            child: Text(
+                              'search locations',
+                              style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                                color: theme.colorScheme.primary,
+                              ),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
                   if (ops.isNotEmpty)
                     Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
