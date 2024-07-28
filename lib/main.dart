@@ -16,7 +16,7 @@ import 'package:intheloopapp/utils/error.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:stream_chat_flutter/stream_chat_flutter.dart';
 import 'package:url_launcher/url_launcher.dart';
-// import 'package:stream_video_flutter/stream_video_flutter.dart';
+
 
 Future<void> main() async {
   final widgetsBinding = WidgetsFlutterBinding.ensureInitialized();
