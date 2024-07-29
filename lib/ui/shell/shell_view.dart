@@ -152,7 +152,7 @@ class ShellView extends StatelessWidget {
                                       },
                                       borderRadius: BorderRadius.circular(15),
                                       child: const Text(
-                                        'unlock 3 day trial',
+                                        'unlock trial',
                                         style: TextStyle(
                                           color: Colors.white,
                                           fontWeight: FontWeight.bold,
