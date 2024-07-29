@@ -143,10 +143,13 @@ class ShellView extends StatelessWidget {
                                   mainAxisAlignment: MainAxisAlignment.center,
                                   children: [
                                     CupertinoButton.filled(
-                                      onPressed: () => _onPurchase(
-                                        context,
-                                        package: package,
-                                      ),
+                                      // onPressed: () => _onPurchase(
+                                      //   context,
+                                      //   package: package,
+                                      // ),
+                                      onPressed: () {
+                                        context.push(PaywallPage());
+                                      },
                                       borderRadius: BorderRadius.circular(15),
                                       child: const Text(
                                         'unlock 3 day trial',

@@ -63,7 +63,7 @@ final class ProfilePage extends TappedRoute {
     HeroImage? heroImage,
     String? titleHeroTag,
   }) : super(
-          routeName: '/user/$userId',
+          routeName: '/u/$userId',
           view: ProfileView(
             visitedUserId: userId,
             visitedUser: user,
@@ -110,7 +110,7 @@ final class CreateBookingPage extends TappedRoute {
     required this.service,
     required this.requesteeStripeConnectedAccountId,
   }) : super(
-          routeName: '/create_booking',
+          routeName: '/booking/create',
           view: CreateBookingView(
             service: service,
             requesteeId: requesteeId,
@@ -144,7 +144,7 @@ final class BookingConfirmationPage extends TappedRoute {
   BookingConfirmationPage({
     required this.booking,
   }) : super(
-          routeName: '/booking_confirmation/${booking.id}',
+          routeName: '/booking/${booking.id}/confirmation',
           view: BookingConfirmationView(booking: booking),
         );
 
@@ -167,7 +167,7 @@ final class BookingsPage extends TappedRoute {
 final class DiscoveryPage extends TappedRoute {
   DiscoveryPage()
       : super(
-          routeName: '/discovery',
+          routeName: '/map',
           view: const DiscoverView(),
         );
 }
@@ -202,7 +202,7 @@ final class CreateServicePage extends TappedRoute {
     required this.onSubmit,
     required this.service,
   }) : super(
-          routeName: '/create_service',
+          routeName: '/service/create',
           view: CreateServiceView(
             onSubmit: onSubmit,
             service: service,
@@ -269,7 +269,7 @@ final class ForgotPasswordPage extends TappedRoute {
 final class SignUpPage extends TappedRoute {
   SignUpPage()
       : super(
-          routeName: '/sign_up',
+          routeName: '/signup',
           view: const SignUpView(),
         );
 }
@@ -286,7 +286,7 @@ final class StreamChannelPage extends TappedRoute {
   StreamChannelPage({
     required this.channel,
   }) : super(
-          routeName: '/stream_channel/${channel.id}',
+          routeName: '/messaging/${channel.id}',
           view: StreamChannel(
             channel: channel,
             child: const ChannelView(),
@@ -299,7 +299,7 @@ final class StreamChannelPage extends TappedRoute {
 final class MessagingChannelListPage extends TappedRoute {
   MessagingChannelListPage()
       : super(
-          routeName: '/messaging_channel_list',
+          routeName: '/messaging',
           view: const MessagingChannelListView(),
         );
 }
@@ -443,7 +443,7 @@ final class RequestToPerformConfirmationPage extends TappedRoute {
   RequestToPerformConfirmationPage({
     required this.venues,
   }) : super(
-          routeName: '/request_to_perform_confirmation',
+          routeName: '/request_to_perform/confirmation',
           view: RequestToPerformConfirmationView(
             venues: venues,
           ),
@@ -565,7 +565,7 @@ final class ShareProfilePage extends TappedRoute {
     required this.userId,
     required this.user,
   }) : super(
-          routeName: '/share_profile/$userId',
+          routeName: '/u/$userId/share',
           view: ShareProfileView(
             userId: userId,
             user: user,
