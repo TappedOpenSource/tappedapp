@@ -5,14 +5,17 @@ export const newDirectMessage = ({ msg, senderDisplayName }: {
 }): string => `
 <p>
 hey!
-
-you have a new direct message on Tapped from ${senderDisplayName}!
-
-${msg}
-
-open up the Tapped App or visit https://app.tapped.ai/messages to respond!
-
 </p>
+
+<p>
+you have a new direct message on Tapped from ${senderDisplayName}!
+</p>
+
+<p>
+'${msg}'
+</p>
+
+<p>open up the Tapped App or visit https://app.tapped.ai/messages to respond!</p>
 
 <p>best,</p>
 <p>Tapped Team</p>
