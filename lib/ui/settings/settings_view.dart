@@ -79,16 +79,16 @@ class SettingsView extends StatelessWidget {
                           SaveButton(),
                         ],
                       ),
-                      SizedBox(height: 20),
-                      Text(
-                        'Payments',
-                        style: TextStyle(
-                          fontWeight: FontWeight.bold,
-                          fontSize: 22,
-                        ),
-                      ),
-                      SizedBox(height: 10),
-                      PaymentSettingsForm(),
+                      // SizedBox(height: 20),
+                      // Text(
+                      //   'Payments',
+                      //   style: TextStyle(
+                      //     fontWeight: FontWeight.bold,
+                      //     fontSize: 22,
+                      //   ),
+                      // ),
+                      // SizedBox(height: 10),
+                      // PaymentSettingsForm(),
                       SizedBox(height: 20),
                       Text(
                         'preferences',
