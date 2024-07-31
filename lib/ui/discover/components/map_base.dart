@@ -40,75 +40,59 @@ class MapBase extends StatelessWidget {
           null => const Center(
               child: CupertinoActivityIndicator(),
             ),
-          (double(), double()) => BlocBuilder<DiscoverCubit, DiscoverState>(
-              builder: (context, state) {
-                return FlutterMap(
-                  mapController: mapController,
-                  options: MapOptions(
-                    // minZoom: 10,
-                    maxZoom: 18,
-                    initialZoom: 11.5,
-                    initialCenter: LatLng(data.$1, data.$2),
-                    onPositionChanged: (position, hasGesture) {
-                      context.read<DiscoverCubit>().onBoundsChange(
-                            position.bounds,
-                          );
-                    },
-                  ),
-                  children: [
-                    BlocBuilder<AppThemeCubit, bool>(
-                      builder: (context, isDark) {
-                        final theme =
-                            isDark ? mapboxDarkStyle : mapboxLightStyle;
-                        return TileLayer(
-                          urlTemplate:
-                              'https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token={accessToken}',
-                          additionalOptions: {
-                            'accessToken': defaultMapboxToken,
-                            'id': theme,
-                          },
-                          tileProvider: const FMTCStore('mapStore')
-                              .getTileProvider(),
-                        );
+          (double(), double()) => FlutterMap(
+              mapController: mapController,
+              options: MapOptions(
+                // minZoom: 10,
+                maxZoom: 18,
+                initialZoom: 11.5,
+                initialCenter: LatLng(data.$1, data.$2),
+                onPositionChanged: (position, hasGesture) {
+                  context.read<DiscoverCubit>().onBoundsChange(
+                        position.bounds,
+                      );
+                },
+              ),
+              children: [
+                BlocBuilder<AppThemeCubit, bool>(
+                  builder: (context, isDark) {
+                    final theme = isDark ? mapboxDarkStyle : mapboxLightStyle;
+                    return TileLayer(
+                      urlTemplate:
+                          'https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token={accessToken}',
+                      additionalOptions: {
+                        'accessToken': defaultMapboxToken,
+                        'id': theme,
                       },
-                    ),
-                    ...switch (state.mapOverlay) {
-                      MapOverlay.venues => [
-                          const VenueMarkerLayer(),
-                        ],
-                      // MapOverlay.userBookings => [
-                        //   BookingsPolygonLayer(
-                        //     bookings: state.userBookings,
-                        //   ),
-                        //   BookingsMarkerLayer(
-                        //     bookings: state.userBookings,
-                        //     showFliers: true,
-                        //   ),
-                        // ],
-                      // MapOverlay.bookings => [
-                      //     BookingsHeatmapLayer(),
-                      //   ],
-                      MapOverlay.opportunities => [
-                          const OpportunitiesClusterLayer(),
-                        ],
-                    },
-                    const CurrentLocationLayer(),
-                    RichAttributionWidget(
-                      animationConfig: const ScaleRAWA(),
-                      // Or `FadeRAWA` as is default
-                      showFlutterMapAttribution: false,
-                      attributions: [
-                        TextSourceAttribution(
-                          'OpenStreetMap contributors',
-                          onTap: () => launchUrl(
-                            Uri.parse('https://openstreetmap.org/copyright'),
-                          ),
-                        ),
-                      ],
+                      tileProvider:
+                          const FMTCStore('mapStore').getTileProvider(),
+                    );
+                  },
+                ),
+                BlocBuilder<DiscoverCubit, DiscoverState>(
+                  builder: (context, state) {
+                    return switch (state.mapOverlay) {
+                      MapOverlay.venues => const VenueMarkerLayer(),
+                      MapOverlay.opportunities =>
+                        const OpportunitiesClusterLayer(),
+                    };
+                  },
+                ),
+                const CurrentLocationLayer(),
+                RichAttributionWidget(
+                  animationConfig: const ScaleRAWA(),
+                  // Or `FadeRAWA` as is default
+                  showFlutterMapAttribution: false,
+                  attributions: [
+                    TextSourceAttribution(
+                      'OpenStreetMap contributors',
+                      onTap: () => launchUrl(
+                        Uri.parse('https://openstreetmap.org/copyright'),
+                      ),
                     ),
                   ],
-                );
-              },
+                ),
+              ],
             ),
         };
       },

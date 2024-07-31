@@ -78,104 +78,63 @@ class ShellView extends StatelessWidget {
                 .updateTheme(isPremiumMode: isPremium);
             return BlocBuilder<NavigationBloc, NavigationState>(
               builder: (context, state) {
-                return FutureBuilder(
-                  future: Purchases.getOfferings(),
-                  builder: (context, snapshot) {
-                    if (snapshot.hasError) {
-                      logger.error(
-                        'error fetching offerings',
-                        error: snapshot.error,
-                        stackTrace: snapshot.stackTrace,
-                      );
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        SnackBar(
-                          backgroundColor: Colors.red,
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(10),
-                          ),
-                          content: const Text(
-                            'error fetching offerings',
-                            style: TextStyle(
-                              color: Colors.white,
+                return Scaffold(
+                  body: isPremium
+                      ? const DiscoverView()
+                      : Stack(
+                          fit: StackFit.expand,
+                          children: [
+                            ClipRRect(
+                              child: ImageFiltered(
+                                imageFilter: ImageFilter.blur(
+                                  sigmaX: 8,
+                                  sigmaY: 8,
+                                ),
+                                child: const DiscoverView(),
+                              ),
                             ),
-                          ),
-                        ),
-                      );
-                    }
-
-                    final offerings = snapshot.data;
-
-                    if (offerings == null) {
-                      return const Center(
-                        child: CupertinoActivityIndicator(),
-                      );
-                    }
-
-                    final offering = offerings.current;
-                    final packages = offering?.availablePackages ?? [];
-                    final package = packages.where((element) {
-                      return element.packageType == PackageType.monthly;
-                    }).first;
-
-                    return Scaffold(
-                      body: isPremium
-                          ? const DiscoverView()
-                          : Stack(
-                              fit: StackFit.expand,
+                            GestureDetector(
+                              child: Container(
+                                height: double.infinity,
+                                width: double.infinity,
+                                color: Colors.transparent,
+                              ),
+                            ),
+                            Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
                               children: [
-                                ClipRRect(
-                                  child: ImageFiltered(
-                                    imageFilter: ImageFilter.blur(
-                                      sigmaX: 8,
-                                      sigmaY: 8,
+                                CupertinoButton.filled(
+                                  // onPressed: () => _onPurchase(
+                                  //   context,
+                                  //   package: package,
+                                  // ),
+                                  onPressed: () {
+                                    context.push(PaywallPage());
+                                  },
+                                  borderRadius: BorderRadius.circular(15),
+                                  child: const Text(
+                                    'unlock trial',
+                                    style: TextStyle(
+                                      color: Colors.white,
+                                      fontWeight: FontWeight.bold,
                                     ),
-                                    child: const DiscoverView(),
                                   ),
                                 ),
-                                GestureDetector(
-                                  child: Container(
-                                    height: double.infinity,
-                                    width: double.infinity,
-                                    color: Colors.transparent,
+                                CupertinoButton(
+                                  onPressed: () {
+                                    context.authentication.add(LoggedOut());
+                                  },
+                                  child: Text(
+                                    'sign into a different account',
+                                    style: TextStyle(
+                                      color: Colors.red.withOpacity(0.8),
+                                    ),
                                   ),
-                                ),
-                                Column(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    CupertinoButton.filled(
-                                      // onPressed: () => _onPurchase(
-                                      //   context,
-                                      //   package: package,
-                                      // ),
-                                      onPressed: () {
-                                        context.push(PaywallPage());
-                                      },
-                                      borderRadius: BorderRadius.circular(15),
-                                      child: const Text(
-                                        'unlock trial',
-                                        style: TextStyle(
-                                          color: Colors.white,
-                                          fontWeight: FontWeight.bold,
-                                        ),
-                                      ),
-                                    ),
-                                    CupertinoButton(
-                                      onPressed: () {
-                                        context.authentication.add(LoggedOut());
-                                      },
-                                      child: Text(
-                                        'sign into a different account',
-                                        style: TextStyle(
-                                          color: Colors.red.withOpacity(0.8),
-                                        ),
-                                      ),
-                                    ),
-                                  ],
                                 ),
                               ],
                             ),
-                    );
-                  },
+                          ],
+                        ),
                 );
               },
             );
