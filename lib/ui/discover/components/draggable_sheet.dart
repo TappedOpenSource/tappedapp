@@ -78,34 +78,34 @@ class DraggableSheet extends StatelessWidget {
       builder: (context, currentUser) {
         return PremiumBuilder(
           builder: (context, isPremium) {
-            return BlocBuilder<DiscoverCubit, DiscoverState>(
-              builder: (context, state) {
-                final sortedVenueHits = List<UserModel>.from(state.venueHits)
-                  ..sort((a, b) {
-                    final aIsGoodFit = _isVenueGoodFit(currentUser, a);
-                    final bIsGoodFit = _isVenueGoodFit(currentUser, b);
+            return FutureBuilder(
+              future: database.getFeaturedOpportunities(),
+              builder: (context, snapshot) {
+                final featuredOpportunities = snapshot.data ?? [];
+                return BlocBuilder<DiscoverCubit, DiscoverState>(
+                  builder: (context, state) {
+                    final sortedVenueHits = List<UserModel>.from(state.venueHits)
+                      ..sort((a, b) {
+                        final aIsGoodFit = _isVenueGoodFit(currentUser, a);
+                        final bIsGoodFit = _isVenueGoodFit(currentUser, b);
 
-                    if (aIsGoodFit && !bIsGoodFit) {
-                      return -1;
-                    } else if (!aIsGoodFit && bIsGoodFit) {
-                      return 1;
-                    } else {
-                      return 0;
-                    }
-                  });
-                final topPerformerIds = sortedVenueHits
-                    .flatMap((v) {
-                      return v.venueInfo.fold(
-                        () => <String>[],
-                        (t) => t.topPerformerIds,
-                      );
-                    })
-                    .toSet()
-                    .toList();
-                return FutureBuilder(
-                  future: database.getFeaturedOpportunities(),
-                  builder: (context, snapshot) {
-                    final featuredOpportunities = snapshot.data ?? [];
+                        if (aIsGoodFit && !bIsGoodFit) {
+                          return -1;
+                        } else if (!aIsGoodFit && bIsGoodFit) {
+                          return 1;
+                        } else {
+                          return 0;
+                        }
+                      });
+                    final topPerformerIds = sortedVenueHits
+                        .flatMap((v) {
+                          return v.venueInfo.fold(
+                            () => <String>[],
+                            (t) => t.topPerformerIds,
+                          );
+                        })
+                        .toSet()
+                        .toList();
                     return FutureBuilder(
                       future: (() async {
                         final performers = (await Future.wait(
