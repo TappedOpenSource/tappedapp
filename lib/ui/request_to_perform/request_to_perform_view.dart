@@ -103,7 +103,7 @@ class _RequestToPerformViewState extends State<RequestToPerformView> {
                       'userId': currentUser.id,
                       'venueIds': _venues.map((venue) => venue.id).toList(),
                       'note': _note,
-                      'collaboratorIds': _collaborators.map((collaborator) {
+                      'collaborators': _collaborators.map((collaborator) {
                         return collaborator.id;
                       }).toList(),
                     });
