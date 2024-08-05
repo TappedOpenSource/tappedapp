@@ -102,6 +102,10 @@ class _RequestToPerformViewState extends State<RequestToPerformView> {
                     await callable<void>({
                       'userId': currentUser.id,
                       'venueIds': _venues.map((venue) => venue.id).toList(),
+                      'note': _note,
+                      'collaboratorIds': _collaborators.map((collaborator) {
+                        return collaborator.id;
+                      }).toList(),
                     });
                     await EasyLoading.dismiss();
                     nav.push(RequestToPerformConfirmationPage(venues: _venues));
