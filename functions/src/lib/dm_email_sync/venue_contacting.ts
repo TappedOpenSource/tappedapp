@@ -269,7 +269,6 @@ export const _appendNewContactRequestToThread = async ({
 }: {
   userId: string;
   venueId: string;
-  bookingEmail: string;
   collaboratorIds: string[];
   note: string;
   opportunityIds: string[];
@@ -618,8 +617,7 @@ export const genericContactVenues = onCall(
     const userId = request.data.userId as string | undefined;
     const venueIds = request.data.venueIds as string[] | undefined;
     const note = request.data.note as string | undefined;
-    const bookingEmail = request.data.bookingEmail as string | undefined;
-    const collaborators = request.data.collaborators as string[] | undefined;
+    const collaborators = request.data.collaborators as string[] | undefined ?? [];
 
     if (!userId) {
       throw new Error("no userId found");
@@ -633,17 +631,21 @@ export const genericContactVenues = onCall(
       throw new Error("no note found");
     }
 
-    if (!bookingEmail) {
-      throw new Error("no bookingEmail found");
-    }
-
-    if (!collaborators) {
-      throw new Error("no collaborators found");
-    }
-
     await Promise.all(
       venueIds.map(async (venueId) => {
         // for each venueId, check if user has open email thread with venue
+        const venueSnap = await usersRef.doc(venueId).get();
+        if (!venueSnap.exists) {
+          error(`no venue found for id ${venueId}`);
+          return;
+        }
+        const venueData = venueSnap.data() as UserModel;
+
+        const bookingEmail = venueData.venueInfo?.bookingEmail;
+        if (!bookingEmail) {
+          error(`no bookingEmail found for venue ${venueId}`);
+          return;
+        }
 
         const contactVenueSnap = await contactVenuesRef
           .doc(userId)
@@ -687,7 +689,6 @@ export const genericContactVenues = onCall(
         await _appendNewContactRequestToThread({
           userId,
           venueId,
-          bookingEmail,
           collaboratorIds: collaborators,
           note,
           opportunityIds: [],

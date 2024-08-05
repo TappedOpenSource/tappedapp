@@ -150,7 +150,7 @@ export const notifyVenueOfInterestedOpportunities = onCall(
         opportunityIds: ops.map((op) => op.id),
         note,
         collaboratorIds: [],
-        bookingEmail,
+        // bookingEmail,
         emailClient,
       });
     }
