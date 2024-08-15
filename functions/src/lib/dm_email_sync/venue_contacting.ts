@@ -27,7 +27,7 @@ import { Resend } from "resend";
 import { _sendEmailOnVenueContacting } from "../email_triggers";
 import { writeAiEmailReply, writeEmailWithAi } from "./compose_email";
 import { createEmailMessageId } from "./utils";
-import { dmAutoReply } from "./messaging";
+import { dmAutoReply, sendStreamMessage } from "./messaging";
 
 async function sendAsEmail({
   venueContactData,
@@ -37,7 +37,7 @@ async function sendAsEmail({
   venueContactData: VenueContactRequest;
   userId: string;
   venue: UserModel;
-}) {
+}): Promise<string | null> {
   const opIds = venueContactData.opportunityIds ?? [];
   const opportunities = (await Promise.all(
     opIds.map(async (id: string) => {
@@ -56,7 +56,7 @@ async function sendAsEmail({
   const bookingEmail = venueContactData.bookingEmail;
   if (!bookingEmail) {
     error("no bookingEmail found");
-    return;
+    return null;
   }
 
   const note = venueContactData.note ?? "";
@@ -64,7 +64,7 @@ async function sendAsEmail({
   const user = venueContactData.user as UserModel | undefined;
   if (user === undefined) {
     error("no user found");
-    return;
+    return null;
   }
 
   const username = user.username;
@@ -142,6 +142,8 @@ async function sendAsEmail({
 
   const res = await client.sendEmail(emailObj);
   debug({ res });
+
+  return body;
 }
 
 async function sendAsDirectMessage({
@@ -488,13 +490,13 @@ export const notifyFoundersOnVenueContact = onDocumentCreated(
 
       // if autoreply setup, send autoreply as DM;
       const autoReply = venueData.venueInfo?.autoReply ?? null;
-      await dmAutoReply({
-        streamClient: streamChat,
-        venueId,
-        userId,
-        autoReply,
-      });
       if (autoReply !== null) {
+        await dmAutoReply({
+          streamClient: streamChat,
+          venueId,
+          userId,
+          autoReply,
+        });
         return;
       }
 
@@ -511,10 +513,23 @@ export const notifyFoundersOnVenueContact = onDocumentCreated(
         return;
       }
 
-      await sendAsEmail({
+      const emailBody = await sendAsEmail({
         venueContactData,
         userId,
         venue: venueData,
+      });
+
+      if (emailBody === null) {
+        error("no emailBody found");
+        return;
+      }
+
+      await sendStreamMessage({
+        streamClient: streamChat,
+        receiverId: venueId,
+        senderId: userId,
+        message: emailBody,
+        freeze: true,
       });
     } catch (e: any) {
       error(e);

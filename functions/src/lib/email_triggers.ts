@@ -591,7 +591,7 @@ export async function sendEmailToPerformerFromStreamMessage({
     from: "no-reply@tapped.ai",
     to: [ email ],
     subject: `new message from ${senderUser.name}`,
-    html: `<div style="white-space: pre;>${html}</div>`,
+    html: `<div style="white-space: pre;">${html}</div>`,
     text: msg,
   });
 }
