@@ -631,7 +631,7 @@ export const genericContactVenues = onCall(
 
     const userId = request.data.userId as string | undefined;
     const venueIds = request.data.venueIds as string[] | undefined;
-    const note = request.data.note as string | undefined;
+    const note = request.data.note as string | undefined ?? "";
     const collaborators = request.data.collaborators as string[] | undefined ?? [];
 
     if (!userId) {
@@ -640,10 +640,6 @@ export const genericContactVenues = onCall(
 
     if (!venueIds) {
       throw new Error("no venueIds found");
-    }
-
-    if (!note) {
-      throw new Error("no note found");
     }
 
     await Promise.all(
