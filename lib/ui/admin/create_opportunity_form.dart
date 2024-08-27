@@ -268,19 +268,16 @@ class CreateOpportunityForm extends StatelessWidget {
 
                     return const None();
                   }).then((value) {
-                    if (value.isNone()) {
-                      context.pop();
-                    }
 
-                    final op = value.getOrElse(() => throw Exception());
-                    context
-                      ..pop()
-                      ..push(
+                    return switch (value)  {
+                      None() => context.pop(),
+                      Some(:final value) => context..pop()..push(
                         OpportunityPage(
-                          opportunityId: op.id,
-                          opportunity: value,
+                          opportunityId: value.id,
+                          opportunity: Option.of(value),
                         ),
-                      );
+                      ),
+                    };
                   });
                 },
                 borderRadius: BorderRadius.circular(15),
