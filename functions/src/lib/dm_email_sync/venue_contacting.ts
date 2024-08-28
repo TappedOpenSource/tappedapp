@@ -642,6 +642,13 @@ export const genericContactVenues = onCall(
       throw new Error("no venueIds found");
     }
 
+    const userSnap = await usersRef.doc(userId).get();
+    if (!userSnap.exists) {
+      throw new Error("no user found");
+    }
+
+    const userData = userSnap.data() as UserModel;
+
     await Promise.all(
       venueIds.map(async (venueId) => {
         // for each venueId, check if user has open email thread with venue
@@ -679,8 +686,8 @@ export const genericContactVenues = onCall(
               collaborators,
               note,
               bookingEmail,
-              user: null,
-              venue: null,
+              user: userData,
+              venue: venueData,
               allEmails: [ bookingEmail ],
               latestMessageId: null,
               originalMessageId: null,
