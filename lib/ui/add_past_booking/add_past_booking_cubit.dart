@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'dart:js_interop';
 
 import 'package:bloc/bloc.dart';
 import 'package:firebase_analytics/firebase_analytics.dart';
@@ -11,6 +12,7 @@ import 'package:intheloopapp/domains/models/booking.dart';
 import 'package:intheloopapp/domains/models/genre.dart';
 import 'package:intheloopapp/domains/models/location.dart';
 import 'package:intheloopapp/domains/models/user_model.dart';
+import 'package:intheloopapp/domains/onboarding_bloc/onboarding_bloc.dart';
 import 'package:intheloopapp/utils/app_logger.dart';
 import 'package:intl/intl.dart';
 import 'package:uuid/uuid.dart';
@@ -19,12 +21,14 @@ part 'add_past_booking_state.dart';
 
 class AddPastBookingCubit extends Cubit<AddPastBookingState> {
   AddPastBookingCubit({
+    required this.onboardingBloc,
     required this.database,
     required this.storage,
     required this.currentUserId,
   }) : super(AddPastBookingState());
 
   final String currentUserId;
+  final OnboardingBloc onboardingBloc;
   final DatabaseRepository database;
   final StorageRepository storage;
 
@@ -171,5 +175,20 @@ class AddPastBookingCubit extends Cubit<AddPastBookingState> {
     );
 
     await database.createBooking(booking);
+
+    final newCategory = (await database.classifyPerformer(user.id)).toNullable();
+    if (newCategory == null) {
+      return;
+    }
+
+    final updatedPerformer = user.copyWith(
+      performerInfo: user.performerInfo.map(
+        (t) => t.copyWith(
+          category: newCategory,
+        ),
+      ),
+    );
+
+    onboardingBloc.add(UpdateOnboardedUser(user: updatedPerformer));
   }
 }

@@ -11,10 +11,13 @@ import 'package:intheloopapp/domains/models/activity.dart';
 import 'package:intheloopapp/domains/models/badge.dart';
 import 'package:intheloopapp/domains/models/booking.dart';
 import 'package:intheloopapp/domains/models/opportunity.dart';
+import 'package:intheloopapp/domains/models/performer_info.dart';
 import 'package:intheloopapp/domains/models/review.dart';
 import 'package:intheloopapp/domains/models/service.dart';
+import 'package:intheloopapp/domains/models/social_following.dart';
 import 'package:intheloopapp/domains/models/user_model.dart';
 import 'package:intheloopapp/utils/app_logger.dart';
+import 'package:intheloopapp/utils/categroize.dart';
 import 'package:intheloopapp/utils/default_value.dart';
 import 'package:intheloopapp/utils/geohash.dart';
 import 'package:package_info_plus/package_info_plus.dart';
@@ -166,9 +169,12 @@ class FirestoreDatabaseImpl extends DatabaseRepository {
   @override
   Future<void> deleteUser(String userId) async {
     try {
-      await _analytics.logEvent(name: 'delete_user', parameters: {
-        'user_id': userId,
-      },);
+      await _analytics.logEvent(
+        name: 'delete_user',
+        parameters: {
+          'user_id': userId,
+        },
+      );
       await _usersRef.doc(userId).delete();
     } catch (e, s) {
       logger.error('deleteUser', error: e, stackTrace: s);
@@ -318,97 +324,6 @@ class FirestoreDatabaseImpl extends DatabaseRepository {
 
   @override
   @cached
-  Future<List<UserModel>> getRichmondVenues() async {
-    final leadersSnapshot = await _leadersRef.doc('leaders').get();
-
-    final leadingUsernames =
-        leadersSnapshot.getOrElse('richmondVenues', <dynamic>[]);
-
-    final leaders = await Future.wait(
-      leadingUsernames.map(
-        (username) async {
-          final user = await getUserByUsername(username as String);
-          return user;
-        },
-      ),
-    );
-
-    return leaders
-        .whereType<Some<UserModel>>()
-        .map((e) => e.toNullable())
-        .toList();
-  }
-
-  @override
-  @cached
-  Future<List<UserModel>> getDCVenues() async {
-    final leadersSnapshot = await _leadersRef.doc('leaders').get();
-
-    final leadingUsernames = leadersSnapshot.getOrElse('dcVenues', <dynamic>[]);
-
-    final leaders = await Future.wait(
-      leadingUsernames.map(
-        (username) async {
-          final user = await getUserByUsername(username as String);
-          return user;
-        },
-      ),
-    );
-
-    return leaders
-        .whereType<Some<UserModel>>()
-        .map((e) => e.toNullable())
-        .toList();
-  }
-
-  @override
-  @cached
-  Future<List<UserModel>> getNovaVenues() async {
-    final leadersSnapshot = await _leadersRef.doc('leaders').get();
-
-    final leadingUsernames =
-        leadersSnapshot.getOrElse('noVaVenues', <dynamic>[]);
-
-    final leaders = await Future.wait(
-      leadingUsernames.map(
-        (username) async {
-          final user = await getUserByUsername(username as String);
-          return user;
-        },
-      ),
-    );
-
-    return leaders
-        .whereType<Some<UserModel>>()
-        .map((e) => e.toNullable())
-        .toList();
-  }
-
-  @override
-  @cached
-  Future<List<UserModel>> getMarylandVenues() async {
-    final leadersSnapshot = await _leadersRef.doc('leaders').get();
-
-    final leadingUsernames =
-        leadersSnapshot.getOrElse('marylandVenues', <dynamic>[]);
-
-    final leaders = await Future.wait(
-      leadingUsernames.map(
-        (username) async {
-          final user = await getUserByUsername(username as String);
-          return user;
-        },
-      ),
-    );
-
-    return leaders
-        .whereType<Some<UserModel>>()
-        .map((e) => e.toNullable())
-        .toList();
-  }
-
-  @override
-  @cached
   Future<List<UserModel>> getBookingLeaders() async {
     try {
       final leadersSnapshot = await _leadersRef.doc('leaders').get();
@@ -463,7 +378,6 @@ class FirestoreDatabaseImpl extends DatabaseRepository {
     }
   }
 
-
   @override
   @cached
   Future<List<UserModel>> getFeaturedPerformers() async {
@@ -471,11 +385,11 @@ class FirestoreDatabaseImpl extends DatabaseRepository {
       final leadersSnapshot = await _leadersRef.doc('leaders').get();
 
       final leadingUsernames =
-      leadersSnapshot.getOrElse('featuredPerformers', <dynamic>[]);
+          leadersSnapshot.getOrElse('featuredPerformers', <dynamic>[]);
 
       final leaders = await Future.wait(
         leadingUsernames.map(
-              (username) async {
+          (username) async {
             final user = await getUserByUsername(username as String);
             return user;
           },
@@ -535,6 +449,46 @@ class FirestoreDatabaseImpl extends DatabaseRepository {
       logger.error('updateUserData', error: e, stackTrace: s);
       rethrow;
     }
+  }
+
+  @override
+  Future<Option<PerformerCategory>> classifyPerformer(String userId) async {
+    final user = (await getUserById(userId)).toNullable();
+    if (user == null) {
+      return const None();
+    }
+
+    final totalAudience = user.socialFollowing.audienceSize;
+    final bookings = await getBookingsByRequestee(userId);
+
+    final venueCapacities = await Future.wait(
+      bookings.map((booking) async {
+        final requesterId = booking.requesterId;
+        return switch (requesterId) {
+          None() => Future.value({'capacity': 0, 'startTime': DateTime.now()}),
+          Some(:final value) => (() async {
+              final requester = await getUserById(value);
+              final capacity = requester.flatMap((user) {
+                return user.venueInfo.map((venueInfo) {
+                  return venueInfo.capacity;
+                });
+              }).getOrElse(() => 0);
+
+              return {
+                'capacity': capacity,
+                'startTime': booking.startTime,
+              };
+            })(),
+        };
+      }),
+    );
+
+    final capacities =
+        venueCapacities.where((obj) => obj['capacity'] != 0).toList();
+
+    final category = categorizeWithWeightedDate(totalAudience, capacities);
+
+    return Option.of(category);
   }
 
   @override
@@ -838,9 +792,8 @@ class FirestoreDatabaseImpl extends DatabaseRepository {
   @override
   @cached
   Future<List<Booking>> getBookingsByEventId(String eventId) async {
-    final bookingSnapshot = await _bookingsRef
-        .where('referenceEventId', isEqualTo: eventId)
-        .get();
+    final bookingSnapshot =
+        await _bookingsRef.where('referenceEventId', isEqualTo: eventId).get();
 
     final bookingRequests = bookingSnapshot.docs.map(Booking.fromDoc).toList();
 
@@ -1353,15 +1306,16 @@ class FirestoreDatabaseImpl extends DatabaseRepository {
       final interestedUsers = (await Future.wait(
         interestedUsersSnapshot.docs.map((doc) async {
           try {
-
-          final userSnapshot = await _usersRef.doc(doc.id).get();
-          return UserModel.fromDoc(userSnapshot);
+            final userSnapshot = await _usersRef.doc(doc.id).get();
+            return UserModel.fromDoc(userSnapshot);
           } catch (e, s) {
             logger.error('getInterestedUsers', error: e, stackTrace: s);
             return null;
           }
         }),
-      )).whereType<UserModel>().toList();
+      ))
+          .whereType<UserModel>()
+          .toList();
 
       return interestedUsers;
     } catch (e, s) {

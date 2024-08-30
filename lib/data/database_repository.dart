@@ -4,6 +4,7 @@ import 'package:intheloopapp/domains/models/activity.dart';
 import 'package:intheloopapp/domains/models/badge.dart';
 import 'package:intheloopapp/domains/models/booking.dart';
 import 'package:intheloopapp/domains/models/opportunity.dart';
+import 'package:intheloopapp/domains/models/performer_info.dart';
 import 'package:intheloopapp/domains/models/review.dart';
 import 'package:intheloopapp/domains/models/service.dart';
 import 'package:intheloopapp/domains/models/user_model.dart';
@@ -32,15 +33,9 @@ abstract class DatabaseRepository {
 
   Future<void> updateUserData(UserModel user);
 
+  Future<Option<PerformerCategory>> classifyPerformer(String userId);
+
   Future<bool> checkUsernameAvailability(String username, String userid);
-
-  Future<List<UserModel>> getRichmondVenues();
-
-  Future<List<UserModel>> getDCVenues();
-
-  Future<List<UserModel>> getNovaVenues();
-
-  Future<List<UserModel>> getMarylandVenues();
 
   Future<List<UserModel>> getBookingLeaders();
 
