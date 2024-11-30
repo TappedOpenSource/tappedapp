@@ -4,7 +4,7 @@ import { POSTMARK_SERVER_ID, RESEND_API_KEY, SLACK_WEBHOOK_URL, contactVenuesRef
 import { addUserToPremiumChat, removeUserFromPremiumChat } from "./direct_messaging";
 import { debug, error, info } from "firebase-functions/logger";
 import { sendEmailSubscriptionExpiration, sendEmailSubscriptionPurchase, sendEmailToPerformerFromStreamMessage } from "./email_triggers";
-import { StreamChat, User } from "stream-chat";
+import { StreamChat, User, Message } from "stream-chat";
 import { UserModel } from "../types/models";
 import { sendEmailToVenueFromStreamMessage } from "./dm_email_sync/venue_contacting";
 import { sendStreamMessage } from "./dm_email_sync/messaging";
@@ -76,9 +76,7 @@ export const streamBeforeMessageWebhook = onRequest(
     const json = req.body as {
       user: User | undefined;
       message:
-      | {
-        text: string;
-      }
+      | Message
       | undefined;
       members:
       | {
@@ -102,6 +100,11 @@ export const streamBeforeMessageWebhook = onRequest(
     // get message
     const msg = json.message?.text;
     // debug({ msg });
+    const attachments = json.message?.attachments;
+
+    const imagesAttachments = attachments?.filter(
+      (a) => a.type === "image" && a.image_url
+    ).map((a) => a.image_url as string) ?? [];
 
     if (!senderUser || !receiverUser || !msg) {
       res.status(400).send("bad request");
@@ -127,6 +130,7 @@ export const streamBeforeMessageWebhook = onRequest(
       // send email if venue
       await sendEmailToVenueFromStreamMessage({
         msg,
+        attachments: imagesAttachments,
         receiverData,
         sender: senderUser,
         receiver: receiverUser,

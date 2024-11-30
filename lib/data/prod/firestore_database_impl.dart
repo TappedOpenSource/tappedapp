@@ -469,7 +469,7 @@ class FirestoreDatabaseImpl extends DatabaseRepository {
           Some(:final value) => (() async {
               final requester = await getUserById(value);
               final capacity = requester.flatMap((user) {
-                return user.venueInfo.map((venueInfo) {
+                return user.venueInfo.flatMap((venueInfo) {
                   return venueInfo.capacity;
                 });
               }).getOrElse(() => 0);

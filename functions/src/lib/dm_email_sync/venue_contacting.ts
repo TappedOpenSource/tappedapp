@@ -21,7 +21,7 @@ import { contactVenueTemplate } from "../../email_templates/contact_venue";
 import { Opportunity, UserModel, VenueContactRequest } from "../../types/models";
 import { slackNotification } from "../notifications";
 import { Timestamp } from "firebase-admin/firestore";
-import { authenticatedRequest } from "../utils";
+import { authenticatedRequest, imageUrlToBase64 } from "../utils";
 import { Resend } from "resend";
 // import _ from "lodash";
 import { _sendEmailOnVenueContacting } from "../email_triggers";
@@ -178,11 +178,13 @@ export async function sendEmailFromStreamMessage({
   user,
   venue,
   message,
+  attachments,
 }: {
   emailClient: postmark.ServerClient;
   user: User;
   venue: User;
   message: string;
+  attachments: string[];
 }): Promise<void> {
   // get venue contact info (i.e. messageId)
   const contactRequestSnap = await contactVenuesRef
@@ -215,7 +217,22 @@ export async function sendEmailFromStreamMessage({
 
   const messageId = createEmailMessageId();
 
-  const emailObj = {
+
+  const emailAttachments: postmark.Attachment[] = await Promise.all(
+    attachments.map(async (imageUrl) => {
+      const fileType = imageUrl.split(".").pop() ?? "png";
+      const fileName = imageUrl.split("/").pop() ?? `attachment.${fileType}`;
+      const base64String = await imageUrlToBase64(imageUrl);
+
+      return {
+        Name: fileName,
+        ContentType: "image",
+        Content: base64String,
+        ContentID: `cid:${fileName}`,
+      };
+    }),
+  );
+  const emailObj: postmark.Models.Message = {
     From: `${username}@booking.tapped.ai`,
     To: allEmails.join(","),
     Headers: [
@@ -236,6 +253,7 @@ export async function sendEmailFromStreamMessage({
     HtmlBody: message,
     TextBody: message,
     MessageStream: "outbound",
+    Attachments: emailAttachments,
   };
 
   await contactVenuesRef
@@ -410,12 +428,14 @@ export const sendEmailToVenueFromStreamMessage = async ({
   receiver,
   sender,
   msg,
+  attachments,
   postmarkServerId,
 }: {
   receiverData: UserModel,
   receiver: User;
   sender: User;
   msg: string;
+  attachments: string[];
   postmarkServerId: string;
 }): Promise<void> => {
   const occupations = receiverData.occupations ?? [];
@@ -447,6 +467,7 @@ export const sendEmailToVenueFromStreamMessage = async ({
     user: sender,
     venue: receiver,
     message: msg,
+    attachments,
     emailClient,
   });
 

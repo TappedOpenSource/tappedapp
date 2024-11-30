@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intheloopapp/data/database_repository.dart';
 import 'package:intheloopapp/data/storage_repository.dart';
+import 'package:intheloopapp/domains/onboarding_bloc/onboarding_bloc.dart';
 import 'package:intheloopapp/ui/add_past_booking/add_past_booking_cubit.dart';
 
 import 'package:intheloopapp/ui/add_past_booking/components/import_form.dart';
@@ -15,10 +16,12 @@ class AddPastBookingView extends StatelessWidget {
     final theme = Theme.of(context);
     final database = context.read<DatabaseRepository>();
     final storage = context.read<StorageRepository>();
+    final onboardingBloc = context.read<OnboardingBloc>();
     return CurrentUserBuilder(
       builder: (context, currentUser) {
         return BlocProvider(
           create: (context) => AddPastBookingCubit(
+            onboardingBloc: onboardingBloc,
             storage: storage,
             database: database,
             currentUserId: currentUser.id,

@@ -35,8 +35,7 @@ class SubscriptionBloc extends Bloc<SubscriptionEvent, SubscriptionState> {
       await Purchases.setLogLevel(LogLevel.debug);
       final configuration =
           PurchasesConfiguration(IapStoreConfig.instance.apiKey)
-            ..appUserID = currentUserId
-            ..observerMode = false;
+            ..appUserID = currentUserId;
       await Purchases.configure(configuration);
 
       final customerInfo = await Purchases.getCustomerInfo();

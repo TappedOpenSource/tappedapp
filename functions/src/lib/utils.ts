@@ -78,3 +78,41 @@ export const sanitizeUsername = (artistName: string): string => {
 
   return username;
 }
+
+export const imageUrlToBase64 = async (imageUrl: string): Promise<string> => {
+  try {
+    // Fetch the image
+    const response = await fetch(imageUrl);
+      
+    // Check if the fetch was successful
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
+    }
+      
+    // Get the image as a Blob
+    const blob = await response.blob();
+      
+    // Create a FileReader instance
+    const reader = new FileReader();
+      
+    // Create a promise to handle the asynchronous FileReader
+    const base64String: string = await new Promise<string>((resolve, reject) => {
+      reader.onloadend = () => {
+        if (typeof reader.result === "string") {
+          resolve(reader.result);
+        } else {
+          reject(new Error("FileReader result is not a string"));
+        }
+      };
+      reader.onerror = reject;
+      reader.readAsDataURL(blob);
+    });
+    
+      
+    // Remove the data URL prefix to get only the base64 string
+    return base64String.split(",")[1];
+  } catch (error) {
+    console.error("Error converting image to base64:", error);
+    throw error;
+  }
+}
